@@ -153,7 +153,7 @@
     </main>
 </div>
 
-<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
     id="PDF_VIEW" name="Bill Of Exchange Documents">
     <div class="p-2">
         <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Bill Of Exchange Documents" [src]="viewData" width="100%"

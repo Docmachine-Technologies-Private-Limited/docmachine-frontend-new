@@ -109,6 +109,10 @@ table .table-tr-1 {
     transition: opacity .5s ease-in-out;
 }
 
+.question-list.AutofillActive label {
+    background-color: #546295;
+}
+
 .table-type.table-active {
     background: #fbfbfb;
     padding: 10px;
@@ -209,10 +213,15 @@ table .table-tr-1 {
     top: 60px;
 }
 
-::ng-deep app-custom-model #AutofillLCTable.dropdown-controller{
+::ng-deep app-custom-model #AutofillLCTable.dropdown-controller {
     position: absolute !important;
     right: 0 !important;
     left: unset !important;
     width: 560px !important;
     background-color: transparent !important;
+}
+
+.fixed-width {
+    width: 700px !important;
+    max-width: 700px;
 }

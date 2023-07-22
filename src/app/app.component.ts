@@ -86,7 +86,6 @@ export class AppComponent implements OnInit, OnDestroy {
         let token = this.authGuard.loadFromLocalStorage();
         if (token != null) {
           this.doc.getPipoListNo('export', []);
-          this.Uploadvalidator.loaddata();
         }
       }
     });
@@ -113,9 +112,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.socketioservice.connectionOn();
-    this.userService.getUser_Profile().subscribe((res: any) => { }, (err: any) => {
-      console.log(err, 'asdjasdlksadsdasds')
-    })
     this.userService.getUserDetail().then((user: any) => {
       this.userData = user?.result
       let token = this.authGuard.loadFromLocalStorage();

@@ -73,7 +73,7 @@
     color: black;
     background-color: white;
     border: 0;
-
+    position: relative;
 }
 
 .lc-insurance-panel .table thead,
@@ -209,4 +209,23 @@
     width: 415px;
     border: none;
     border: 1px solid black;
+}
+
+.lc-insurance-thead tr {
+    position: relative;
+}
+
+.position-btn-right {
+    position: absolute;
+    right: -30px;
+    z-index: 999;
+    top: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: black;
+}
+
+.position-btn-right:hover {
+    color: #6322e2;
 }

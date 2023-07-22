@@ -26,6 +26,7 @@ export class NewLcInsuranceComponent implements OnInit {
   showSummaryPage: number = 0;
   bankDetail: any = [];
   LIST_OF_QUESTION: any = [];
+  ORIGINAL_LIST_OF_QUESTION: any = [];
   dynamicFormGroup: FormGroup;
   fields: any = [];
 
@@ -38,727 +39,1408 @@ export class NewLcInsuranceComponent implements OnInit {
     public mergerpdf: MergePdfService,
     public pdfmerge: MergePdfListService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService) {
-      this.LIST_OF_QUESTION = [
-        {
-          type: 'checkbox',
-          value: "",
-          label: "DATE & PLACE OF EXPIRY | 31D",
-          fieldName: '1',
-          option: [
-            {
-              value: "werwerwer",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "werwerwe",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "werwer",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "ewrewr",
-              text: "Credit Note Number*",
-            }
-          ]
-        },
-        {
-          type: "checkbox",
-          value: "",
-          label: "CURRENCY & AMOUNT OF CREDIT IN FIGURES AND INR | 32B",
-          fieldName: '2',
-          option: [
-            {
-              value: "sdfdsf",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "wedsfdsf",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "dsfsdfds",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "sdfdsfdsfdsf",
-              text: "Credit Note Number*",
-            }
-          ]
-        }, {
-          type: "checkbox",
-          value: "",
-          label: "PERCENTAGE CREDIT AMOUNT TOLERANCE | 39A",
-          fieldName: '3',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }, {
-          type: "radio",
-          value: "",
-          label: "MAXIMUM CREDIT AMOUNT | 39B",
-          fieldName: '4',
-          option: [
-           {
-              value: "test1",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "ets2",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "test333",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "test343434",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '5',
-          option: [
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '6',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '7',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '8',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '9',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '10',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '11',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '12',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '13',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '14',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '15',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '16',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '17',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '18',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '19',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '20',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '21',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '22',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '23',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '24',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '25',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '26',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '27',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '28',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '29',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-        , {
-          type: "radio",
-          value: "",
-          label: "Credit Note Number*",
-          fieldName: '30',
-          option: [
-           {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            },
-            {
-              value: "",
-              text: "Credit Note Number*",
-            }
-          ]
-        }
-      ]
-      console.log(this.LIST_OF_QUESTION, 'LIST_OF_QUESTION');
+    this.LIST_OF_QUESTION = [
+      {
+        type: "checkbox",
+        value: "",
+        label: "CURRENCY & AMOUNT OF CREDIT IN FIGURES AND INR | 32B",
+        fieldName: '2',
+        option: [
+          {
+            value: "sdfdsf",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "wedsfdsf",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "dsfsdfds",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "sdfdsfdsfdsf",
+            text: "Credit Note Number*",
+          }
+        ]
+      }, {
+        type: "checkbox",
+        value: "",
+        label: "PERCENTAGE CREDIT AMOUNT TOLERANCE | 39A",
+        fieldName: '3',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }, {
+        type: "radio",
+        value: "",
+        label: "MAXIMUM CREDIT AMOUNT | 39B",
+        fieldName: '4',
+        option: [
+          {
+            value: "test1",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "ets2",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "test333",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "test343434",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '5',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '6',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '7',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '8',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '9',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '10',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '11',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '12',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '13',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '14',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '15',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '16',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '17',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '18',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '19',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '20',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '21',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '22',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '23',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '24',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '25',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '26',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '27',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '28',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '29',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '30',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+    ]
+
+    this.ORIGINAL_LIST_OF_QUESTION = [
+      {
+        type: "checkbox",
+        value: "",
+        label: "CURRENCY & AMOUNT OF CREDIT IN FIGURES AND INR | 32B",
+        fieldName: '2',
+        option: [
+          {
+            value: "sdfdsf",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "wedsfdsf",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "dsfsdfds",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "sdfdsfdsfdsf",
+            text: "Credit Note Number*",
+          }
+        ]
+      }, {
+        type: "checkbox",
+        value: "",
+        label: "PERCENTAGE CREDIT AMOUNT TOLERANCE | 39A",
+        fieldName: '3',
+        option: [
+          {
+            value: "fdsfsdf",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "sdfsd",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "dsfds",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "dsfdsf",
+            text: "Credit Note Number*",
+          }
+        ]
+      }, {
+        type: "radio",
+        value: "",
+        label: "MAXIMUM CREDIT AMOUNT | 39B",
+        fieldName: '4',
+        option: [
+          {
+            value: "test1",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "ets2",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "test333",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "test343434",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '5',
+        option: [
+          {
+            value: "sdfsdf",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "sdfdsf",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "sdfds",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "sdfsdfdsf",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '6',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '7',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '8',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '9',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '10',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '11',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '12',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '13',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '14',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '15',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '16',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '17',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '18',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '19',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '20',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '21',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '22',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '23',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '24',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '25',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '26',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '27',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '28',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '29',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+      , {
+        type: "radio",
+        value: "",
+        label: "Credit Note Number*",
+        fieldName: '30',
+        option: [
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          },
+          {
+            value: "",
+            text: "Credit Note Number*",
+          }
+        ]
+      }
+    ]
+    this.ORIGINAL_LIST_OF_QUESTION.forEach((element, index) => {
+      element['index'] = index;
+      element['Active'] = false
+    });
+    this.LIST_OF_QUESTION.forEach((element, index) => {
+      element['index'] = index;
+      element['Active'] = false
+    });
+    console.log(this.LIST_OF_QUESTION, this.ORIGINAL_LIST_OF_QUESTION, 'LIST_OF_QUESTION');
   }
 
   async ngOnInit() {
@@ -771,7 +1453,7 @@ export class NewLcInsuranceComponent implements OnInit {
       error => {
         console.log("error")
       });
-   
+
   }
 
   showhideSummaryPage(val: any) { }
@@ -780,4 +1462,27 @@ export class NewLcInsuranceComponent implements OnInit {
     console.log(id, 'dfaasdasdasdas')
   }
 
+  TableEvent(value: any) {
+    this.LIST_OF_QUESTION = [];
+    let temp1 = this.ORIGINAL_LIST_OF_QUESTION.filter((item: any) => item?.label?.indexOf(value?.value) != -1);
+    let temp2 = this.ORIGINAL_LIST_OF_QUESTION.filter((item: any) => item?.label?.indexOf(value?.value) == -1);
+
+    temp1.forEach(element => {
+      element['Active'] = true
+      this.LIST_OF_QUESTION.push(element);
+    });
+
+    temp2.forEach(element => {
+      element['Active'] = false
+      this.LIST_OF_QUESTION.push(element);
+    });
+    console.log(temp1, temp2, value, this.LIST_OF_QUESTION, 'adadsdasdadadadadasdasdadasdadasd')
+  }
+
+  ResetQuestion() {
+    this.ORIGINAL_LIST_OF_QUESTION.forEach(element => {
+      element['Active'] = false
+    });
+    this.LIST_OF_QUESTION = this.ORIGINAL_LIST_OF_QUESTION;
+  }
 }

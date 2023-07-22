@@ -271,3 +271,26 @@
 .pagination ::ng-deep .mat-paginator .mat-flat-button {
     background-color: transparent !important;
 }
+
+::ng-deep app-custom-model #PDF_VIEW .PDF_VIEW {
+    height: 98vh;
+    margin: auto !important;
+    max-width: 70vw !important;
+    position: absolute;
+    right: -20px;
+    top: 60px;
+    height: calc(100vh - 60px) !important;
+    margin: 0px auto auto !important;
+}
+
+::ng-deep app-custom-model #PDF_VIEW.dropdown-controller {
+    position: absolute !important;
+    right: 0 !important;
+    left: unset !important;
+    width: 560px !important;
+    background-color: transparent !important;
+}
+
+::ng-deep app-custom-model #PDF_VIEW .height-controller {
+    max-height: calc(100vh - 118px) !important;
+}

@@ -3,13 +3,14 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, V
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
+import { Event, NavigationEnd, Router } from '@angular/router';
+import { AuthGuard } from '../../../service/authguard.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadServiceValidatorService implements OnInit {
   dynamicFormGroup: any = [];
-  fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
   COMMERICAL_NO: any = [];
@@ -37,9 +38,12 @@ export class UploadServiceValidatorService implements OnInit {
   bankDetail: any = [];
   Id: any = '';
   BANK_NAME_LIST_GLOABL: any = [];
+  FIELDS_DATA: any = [];
+  WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
+    public authGuard: AuthGuard,
     public userService: UserService) {
   }
 
@@ -47,89 +51,108 @@ export class UploadServiceValidatorService implements OnInit {
   }
 
   async loaddata() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    let USER_DATA: any = await this.userService.getUserDetail();
-    this.SHIPPING_BUNDEL = [];
-    this.origin = [];
-    this.BUYER_DETAILS = [];
-    this.ConsigneeNameList = [];
-    this.BENEFICIARY_DETAILS = [];
-    this.location = [];
-    this.commodity = [];
+    return new Promise(async (reslove, reject) => {
+      let token = this.authGuard.loadFromLocalStorage();
+      if (token!=undefined) {
+        this.documentService.getPipoListNo('export', []);
+        this.CURRENCY_LIST = this.documentService.getCurrencyList();
+        let USER_DATA: any = await this.userService.getUserDetail();
+        this.SHIPPING_BUNDEL = [];
+        this.origin = [];
+        this.BUYER_DETAILS = [];
+        this.ConsigneeNameList = [];
+        this.BENEFICIARY_DETAILS = [];
+        this.location = [];
+        this.commodity = [];
+        if (USER_DATA?.result?.sideMenu == 'import') {
+          await this.userService.getBene(1).subscribe((res: any) => {
+            res.data?.forEach(element => {
+              if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+                this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+              }
+              this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
+            });
+            console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
+          }, (err) => console.log('Error', err));
 
-    if (USER_DATA?.result?.sideMenu == 'import') {
-      this.userService.getBene(1).subscribe((res: any) => {
-        res.data?.forEach(element => {
-          if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-            this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-          }
-          this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
-        });
-        console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
-      }, (err) => console.log('Error', err));
+          await this.documentService.getBoe(1).subscribe((res: any) => {
+            console.log('Master Data File', res);
+            res.data.forEach((element, i) => {
+              element?.pipo.forEach((ele, j) => {
+                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+              });
+              this.origin[i] = { value: element.origin, id: element?._id };
+            });
+            console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
+          }, (err) => console.log(err));
+          await reslove(true)
+        } else if (USER_DATA?.result?.sideMenu == 'export') {
+          await this.userService.getBuyer(1).subscribe((res: any) => {
+            res.data?.forEach(element => {
+              if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+                this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+              }
+              this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
+            });
+            console.log('getBuyer Details', this.ConsigneeNameList, this.BUYER_DETAILS);
+          }, (err) => console.log('Error', err));
+          this.documentService.getMaster(1).subscribe((res: any) => {
+            console.log('Master Data File', res);
+            res.data.forEach((element, i) => {
+              element?.pipo?.forEach((ele, j) => {
+                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+              });
+              this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
+            });
+            console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
+          }, (err) => console.log(err));
+          await reslove(true)
+        } else {
+          reslove(true)
+        }
 
-      this.documentService.getBoe(1).subscribe((res: any) => {
-        console.log('Master Data File', res);
-        res.data.forEach((element, i) => {
-          element?.pipo.forEach((ele, j) => {
-            this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+        await this.userService.getTeam().subscribe(async (data) => {
+          console.log(data['data'][0]);
+          data['data'][0]['location']?.forEach(element => {
+            this.location.push({ value: element?.loc })
           });
-          this.origin[i] = { value: element.origin, id: element?._id };
-        });
-        console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
-      }, (err) => console.log(err));
-    } else if (USER_DATA?.result?.sideMenu == 'export') {
-      this.userService.getBuyer(1).subscribe((res: any) => {
-        res.data?.forEach(element => {
-          if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-            this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-          }
-          this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-        });
-        console.log('getBuyer Details', this.ConsigneeNameList, this.BUYER_DETAILS);
-      }, (err) => console.log('Error', err));
-      this.documentService.getMaster(1).subscribe((res: any) => {
-        console.log('Master Data File', res);
-        res.data.forEach((element, i) => {
-          element?.pipo?.forEach((ele, j) => {
-            this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+          data['data'][0]['commodity']?.forEach(element => {
+            this.commodity.push({ value: element?.como })
           });
-          this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
-        });
-        console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
-      }, (err) => console.log(err));
-    }
-
-    this.userService.getTeam().subscribe(async (data) => {
-      console.log(data['data'][0]);
-      data['data'][0]['location']?.forEach(element => {
-        this.location.push({ value: element?.loc })
-      });
-      data['data'][0]['commodity']?.forEach(element => {
-        this.commodity.push({ value: element?.como })
-      });
-      this.commodity = this.removeDuplicates(this.commodity, 'value');
-      this.location = this.removeDuplicates(this.location, 'value')
-      console.log(this.location);
-      console.log(this.commodity);
-      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-        this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+          this.commodity = this.removeDuplicates(this.commodity, 'value');
+          this.location = this.removeDuplicates(this.location, 'value')
+          console.log(this.location);
+          console.log(this.commodity);
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+          }
+        }, (error) => { console.log('error'); });
+      } else {
+        reslove(true);
       }
-    }, (error) => { console.log('error'); });
+    })
+  }
+
+  CheckIng(data: any, value: any) {
+    return value != '' && value != undefined && value != null ? data.filter((item: any) => item?.includes(value) == true) : []
   }
 
   async buildForm(model: any, id: any) {
-    this.fields[id] = [];
-    console.log("BANK_NAME_LIST_GLOABL", this.BANK_NAME_LIST_GLOABL)
-    const formGroupFields = await this.getFormControlsFields(model, id);
-    this.dynamicFormGroup[id] = await new FormGroup(formGroupFields);
-    console.log(this.dynamicFormGroup, 'dynamicFormGroup');
-    return await this.dynamicFormGroup;
+    this.loaddata().then(async (res: any) => {
+      console.log("BANK_NAME_LIST_GLOABL", res, this.BANK_NAME_LIST_GLOABL)
+      if (res == true) {
+        const formGroupFields = await this.getFormControlsFields(model, id);
+        this.dynamicFormGroup[id] = await new FormGroup(formGroupFields?.formGroupFields);
+        this.FIELDS_DATA[id] = formGroupFields?.fields;
+        console.log(this.dynamicFormGroup,formGroupFields, 'dynamicFormGroup');
+        await this.dynamicFormGroup;
+      }
+    })
   }
 
 
   setBankList(data: any) {
-    this.BANK_NAME_LIST_GLOABL=[];
+    this.BANK_NAME_LIST_GLOABL = [];
     setTimeout(() => {
       this.BANK_NAME_LIST_GLOABL = data;
     }, 200);
@@ -137,13 +160,14 @@ export class UploadServiceValidatorService implements OnInit {
 
   async getFormControlsFields(model: any, formid: any) {
     const formGroupFields = {};
+    let fields: any = [];
     for (let field of Object.keys(model)) {
       let id: any = field;
       const fieldProps: any = model[field];
       if (fieldProps?.type != "formArray") {
         formGroupFields[field] = new FormControl(fieldProps.value,
           this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
-        this.fields[formid].push({ ...fieldProps, fieldName: field });
+        fields.push({ ...fieldProps, fieldName: field });
       } else {
         var temp: any = [];
         var tempFormGroup: any = [];
@@ -162,17 +186,15 @@ export class UploadServiceValidatorService implements OnInit {
         fieldProps['RemoveListIndex'] = [{ START_INDEX: -1, LAST_INDEX: -1 }];
         if (fieldProps?.AutoFill == true && fieldProps?.AutoFill != undefined) {
           formGroupFields[field] = await new FormArray(tempFormGroup, hasDuplicateFormArray(fieldProps?.EqualList));
-          this.fields[formid].push({ ...fieldProps, fieldName: field });
-          console.log(id, fieldProps, tempFormGroup, this.fields[formid], 'hghjgjhghjgjh if')
+          fields.push({ ...fieldProps, fieldName: field });
         } else {
           formGroupFields[field] = await new FormArray(tempFormGroup);
-          this.fields[formid].push({ ...fieldProps, fieldName: field });
-          console.log(id, fieldProps, tempFormGroup, this.fields[formid], 'hghjgjhghjgjh else')
+          fields.push({ ...fieldProps, fieldName: field });
         }
       }
     }
-    console.log(this.fields, formGroupFields, 'hghjgjhghjgjh')
-    return formGroupFields;
+    console.log(fields, formGroupFields, 'hghjgjhghjgjh')
+    return { formGroupFields: formGroupFields, fields: fields };
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string): any {
@@ -260,25 +282,26 @@ export class UploadServiceValidatorService implements OnInit {
     }
     return true;
   }
+
   counter = 0;
   buildNewFormArray(field, index, element: any, formid: any, GroupLabel: any, MAX_LIMIT: any): any {
     return new Promise(async (resolve, reject) => {
       this.counter = GroupLabel.length + 1;
       var temp: any = [];
       var tempFormGroup: any = [];
-      let count: number = this.fields[formid][index]['NewformGroup'].length;
-      let count1: number = this.fields[formid][index]['NewformGroup'].length;
+      let count: number = this.FIELDS_DATA[formid][index]['NewformGroup'].length;
+      let count1: number = this.FIELDS_DATA[formid][index]['NewformGroup'].length;
       for (let field2 of Object.keys(element)) {
         temp.push({ ...element[field2], fieldName: field2, index: count });
-        this.fields[formid][index]['NewformGroup'].push({ ...element[field2], fieldName: field2, index: count });
+        this.FIELDS_DATA[formid][index]['NewformGroup'].push({ ...element[field2], fieldName: field2, index: count });
         tempFormGroup.push(new FormGroup({
           [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
             this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
         }));
         count++;
       }
-      await this.fields[formid][index]['formGroup'].push({ ...this.fields[formid][index]['formGroup'][0], fieldName: field });
-      await this.fields[formid][index]['RemoveListIndex'].push({ START_INDEX: count1, LAST_INDEX: count1 + MAX_LIMIT?.MAX_LIMIT });
+      await this.FIELDS_DATA[formid][index]['formGroup'].push({ ... this.FIELDS_DATA[formid][index]['formGroup'][0], fieldName: field });
+      await this.FIELDS_DATA[formid][index]['RemoveListIndex'].push({ START_INDEX: count1, LAST_INDEX: count1 + MAX_LIMIT?.MAX_LIMIT });
       await GroupLabel.push(GroupLabel[0].replace('1', GroupLabel?.length + 1));
       await resolve(await tempFormGroup);
     });
@@ -287,30 +310,30 @@ export class UploadServiceValidatorService implements OnInit {
   removeFormArray(formGroupKey, index, labelIndex: any, formid: any, MAX_LIMIT: any): any {
     return new Promise(async (resolve, reject) => {
       if (index != 0) {
-        let indexstore: any = this.fields[formid][index]['RemoveListIndex'][labelIndex];
+        let indexstore: any = this.FIELDS_DATA[formid][index]['RemoveListIndex'][labelIndex];
         for (var i = indexstore?.LAST_INDEX; i-- > indexstore?.START_INDEX;) {
           this.dynamicFormGroup[formid]?.controls[formGroupKey]?.removeAt(i)
         }
-        await this.fields[formid][index]['formGroup']?.splice(labelIndex, 1);
-        await this.fields[formid][index]['GroupLabel']?.splice(labelIndex, 1)
+        await this.FIELDS_DATA[formid][index]['formGroup']?.splice(labelIndex, 1);
+        await this.FIELDS_DATA[formid][index]['GroupLabel']?.splice(labelIndex, 1)
 
         for (let i = indexstore?.LAST_INDEX - 1; i >= indexstore?.START_INDEX; i--) {
-          this.fields[formid][index]['NewformGroup']?.splice(i, 1);
+          this.FIELDS_DATA[formid][index]['NewformGroup']?.splice(i, 1);
         }
 
-        for (let i = this.fields[formid][index]['RemoveListIndex']?.length - 1; i >= labelIndex; i--) {
-          this.fields[formid][index]['RemoveListIndex']?.splice(i, 1);
+        for (let i = this.FIELDS_DATA[formid][index]['RemoveListIndex']?.length - 1; i >= labelIndex; i--) {
+          this.FIELDS_DATA[formid][index]['RemoveListIndex']?.splice(i, 1);
         }
 
         if (indexstore?.START_INDEX != MAX_LIMIT?.MAX_LIMIT) {
-          this.fields[formid][index]['NewformGroup']?.forEach((element, index) => {
+          this.FIELDS_DATA[formid][index]['NewformGroup']?.forEach((element, index) => {
             element['index'] = index;
           });
-          this.fields[formid][index]['GroupLabel']?.forEach((element, i) => {
-            let tempelement = this.fields[formid][index]['GroupLabel'][0]?.replace('1', '');
-            this.fields[formid][index]['GroupLabel'][i] = tempelement + ' ' + (i + 1);
+          this.FIELDS_DATA[formid][index]['GroupLabel']?.forEach((element, i) => {
+            let tempelement = this.FIELDS_DATA[formid][index]['GroupLabel'][0]?.replace('1', '');
+            this.FIELDS_DATA[formid][index]['GroupLabel'][i] = tempelement + ' ' + (i + 1);
           });
-          this.removeIndexUpdate(this.fields[formid][index]['RemoveListIndex'], MAX_LIMIT?.MAX_LIMIT);
+          this.removeIndexUpdate(this.FIELDS_DATA[formid][index]['RemoveListIndex'], MAX_LIMIT?.MAX_LIMIT);
         }
       }
       await resolve('');
@@ -338,7 +361,7 @@ export class UploadServiceValidatorService implements OnInit {
   }
 
   setInputVisibilty(formid: any, index: any, key, value: any) {
-    this.fields[formid][index][key] = value;
+    this.FIELDS_DATA[formid][index][key] = value;
   }
 }
 

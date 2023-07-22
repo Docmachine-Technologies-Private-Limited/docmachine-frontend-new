@@ -3,7 +3,7 @@
     <form class="col-12" [formGroup]="this.validator.dynamicFormGroup[this.id]" onsubmit="return false;"
         [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}"
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
-        <div class="col-12" *ngFor="let field of this.validator?.fields[this.id];let fieldIndex=index">
+        <div class="col-12" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
                 <div class="form-group mb-3" *ngSwitchCase="'text'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>

@@ -34,7 +34,6 @@ export class UploadComponentsComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-    console.log(this.validator)
   }
 
   get onClickButton() {

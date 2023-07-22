@@ -299,7 +299,7 @@
         </div>
     </main>
 </div>
-<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
     id="PDF_VIEW" name="PI / PO Documents">
     <div class="p-2">
         <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="PI / PO Documents" [src]="viewData" width="100%"
@@ -307,7 +307,7 @@
     </div>
 </app-custom-model>
 
-<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
     id="OTHER_PANEL_OPEN" name="PI / PO Documents" #OTHER_PANEL>
     <div class="p-2">
         <div *ngIf="showInvoice && !toggle">

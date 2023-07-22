@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -10,6 +10,7 @@ export class LcInsuranceFormatComponent implements OnInit, OnChanges {
   @Input('data') data: any = [];
   @Input('pipodata') pipodata: any = [];
   @Input('bankdata') bankdata: any = [];
+  @Output('TableEvent') TableEvent: any = new EventEmitter();
 
   constructor() {
   }
@@ -22,5 +23,9 @@ export class LcInsuranceFormatComponent implements OnInit, OnChanges {
     if (changes?.data?.currentValue != undefined) {
       this.data = changes?.data?.currentValue;
     }
+  }
+
+  popupevent(val: any) {
+    this.TableEvent.emit({ value: val })
   }
 }

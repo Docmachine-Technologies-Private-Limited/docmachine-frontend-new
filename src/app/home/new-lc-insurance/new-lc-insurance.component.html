@@ -27,12 +27,13 @@
                             <div class="new_document_list_add_data">
                                 <form>
                                     <div class="row mb-2">
-                                        <div class="col-md-7 col-sm-12 col-12">
+                                        <div class="col-md-7 col-sm-12 col-12 fixed-width">
                                             <div class="new_left_sidedoc pdf_invoce_scroll">
                                                 <div id="first mt-2" style="margin-top: 20px;"
                                                     *ngIf="this.LIST_OF_QUESTION?.length!=0">
                                                     <lc-insurance-format [pipodata]="" [bankdata]=""
-                                                        [data]="this.LIST_OF_QUESTION"></lc-insurance-format>
+                                                        [data]="this.LIST_OF_QUESTION"
+                                                        (TableEvent)="TableEvent($event)"></lc-insurance-format>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,19 +82,22 @@
     [modalbodystyle]="{'max-height':'calc(100vh - 120px) !important','height':'calc(100vh - 120px) !important'}"
     height="98vh" id="AutofillLCTable" name="Autofill LC Table">
     <div class="grid-templeate">
-        <input type="text" name="search" class="form-control m-auto mt-3 col-10" id="">
+        <div class="row m-0">
+            <input type="text" name="search" class="form-control col-10" style="margin: auto;margin-top: 10px;">
+            <button type="submit" class="btn btn-primary" style="height: 35px;margin: auto;margin-top: 12px;" (click)="ResetQuestion()">Reset</button>
+        </div>
         <div class="col-12" *ngFor="let field of this.LIST_OF_QUESTION;let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
-                <div class="form-group mb-3 question-list" *ngSwitchCase="'checkbox'">
+                <div class="form-group mb-3 question-list" *ngSwitchCase="'checkbox'" [ngClass]="{'AutofillActive':field?.Active==true}">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{(fieldIndex+1)}} .
                         {{field.label}}</label>
-                    <custom-checkbox [items]="field?.option" [(ngModel)]="field.value">
+                    <custom-checkbox [items]="field?.option" [(ngModel)]="this.LIST_OF_QUESTION[field?.index].value">
                     </custom-checkbox>
                 </div>
-                <div class="form-group mb-3 question-list" *ngSwitchCase="'radio'">
+                <div class="form-group mb-3 question-list" *ngSwitchCase="'radio'" [ngClass]="{'AutofillActive':field?.Active==true}">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{(fieldIndex+1)}} .
                         {{field.label}}</label>
-                    <custom-radio-button [items]="field?.option" [(ngModel)]="field.value">
+                    <custom-radio-button [items]="field?.option" [(ngModel)]="this.LIST_OF_QUESTION[field?.index].value">
                     </custom-radio-button>
                 </div>
             </ng-container>
