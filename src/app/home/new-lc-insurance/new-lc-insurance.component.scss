@@ -205,12 +205,12 @@ table .table-tr-1 {
 }
 
 ::ng-deep app-custom-model #AutofillLCTable .AutofillLCTable {
-    height: 98vh;
+    height: auto !important;
     margin: auto !important;
     max-width: 41vw !important;
     position: absolute;
     right: -20px;
-    top: 60px;
+    top: 61px;
 }
 
 ::ng-deep app-custom-model #AutofillLCTable.dropdown-controller {

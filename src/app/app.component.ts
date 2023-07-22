@@ -191,10 +191,10 @@ export class AppComponent implements OnInit, OnDestroy {
     return bool;
   }
   logoutUser() {
+    this.router.navigate(["login"]);
     this.userService.loginlogout(false).subscribe((res: any) => {
       console.log(res, 'loginlogout');
       this.userService.authToken = null;
-      this.router.navigate(["login"]);
       sessionStorage.clear();
       localStorage.clear();
     })
