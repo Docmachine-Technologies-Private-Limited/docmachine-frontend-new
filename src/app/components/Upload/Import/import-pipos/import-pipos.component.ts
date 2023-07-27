@@ -89,6 +89,15 @@ export class ImportPIPOSComponent implements OnInit {
             required: true,
           }
         },
+        MaterialTypes: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Raw Material or Capital Goods",
+          checkboxlabel: [{ text: "Raw Material", value: 'Raw Material' }, { text: 'Capital Goods', value: 'Capital Goods' }],
+          rules: {
+            required: true,
+          }
+        },
         pi_poNo: {
           type: "text",
           value: "",
@@ -122,7 +131,7 @@ export class ImportPIPOSComponent implements OnInit {
           }
         },
         incoterm: {
-          type: "text",
+          type: "IncoTerm",
           value: "",
           label: "Incoterm",
           rules: {
@@ -201,6 +210,9 @@ export class ImportPIPOSComponent implements OnInit {
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
     e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
+    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+    e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
+    e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
     if (e.value?.document == 'PI') {
       e.value.doc = this.pipourl1
     }

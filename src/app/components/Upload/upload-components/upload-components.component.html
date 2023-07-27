@@ -118,6 +118,15 @@
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
+                <div class="form-group mb-3" *ngSwitchCase="'benne'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.validator?.BENEFICIARY_DETAILS?.length!=0"
+                        [items]="this.validator?.BENEFICIARY_DETAILS" bindLabel="value"
+                        [multiple]="false"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
+                    </ng-select>
+                </div>
                 <div class="form-group mb-3" *ngSwitchCase="'RemitterName'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-custom-dropdown *ngIf="this.validator?.INWARD_REMITTANCE_NAME_LIST?.length!=0"

@@ -54,15 +54,6 @@ export class UploadHeaderComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
-      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.validator.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
-        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
-        }
-      }
       this.UploadHeaderEvent.emit(event)
     } else {
       this.btndisabled = true;

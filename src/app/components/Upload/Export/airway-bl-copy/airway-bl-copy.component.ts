@@ -160,6 +160,6 @@ export class AirwayBlCopyComponent implements OnInit {
     } else {
       this.btndisabled = true;
     }
-    console.log(event, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(event, this.validator.SHIPPING_BUNDEL,this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
 }
