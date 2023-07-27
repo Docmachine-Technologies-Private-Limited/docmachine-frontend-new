@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-letterof-credit',
+  selector: 'import-letterof-credit',
   templateUrl: './import-letterof-credit.component.html',
   styleUrls: ['./import-letterof-credit.component.scss','../../commoncss/common.component.scss']
 })

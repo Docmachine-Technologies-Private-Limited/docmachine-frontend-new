@@ -120,9 +120,10 @@ export class ShippingBillComponent implements OnInit {
           }
         },
         buyerName: {
-          type: "buyer",
-          value: this.UPLOAD_FORM['buyerName'],
+          type: "text",
+          value: this.BUYER_LIST[0],
           label: "Buyer Name",
+          disabled:true,
           rules: {
             required: true,
           }
@@ -295,7 +296,7 @@ export class ShippingBillComponent implements OnInit {
     e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
-    e.value.buyerName = e.value.buyerName?.value != undefined ? [e.value.buyerName.value] : [e.value.buyerName];
+    e.value.buyerName = this.BUYER_LIST
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1?.doc;
     this.documentService.getInvoice_No({
@@ -314,7 +315,9 @@ export class ShippingBillComponent implements OnInit {
           this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
             console.log(data);
             this.toastr.success('shipping Bill added successfully.');
-            this.router.navigate(['/home/view-document/sb']);
+            if (this.validator.SELECTED_PIPO?.length==0) {
+              this.router.navigate(['/home/view-document/sb']);
+            }
           }, (error) => {
             console.log('error');
           }

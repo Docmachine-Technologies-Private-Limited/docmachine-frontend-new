@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -17,21 +17,24 @@ import { Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PipoDataService } from './service/homeservices/pipo.service';
 import { UploadServiceValidatorService } from './components/Upload/service/upload-service-validator.service';
+import { GlobalsAccessService } from './components/Upload/service/globals-access.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { IdleService } from './service/idle.service';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit {
   userData: any = [];
   userActivity;
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
   isOnline: boolean = true;
   WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
-  SET_TIMEOUT_TIME: number = 7200000;
-
+  SET_TIMEOUT_TIME: number = 720000;
   constructor(
     private translate: TranslateService,
     private router: Router,
@@ -44,12 +47,15 @@ export class AppComponent implements OnInit, OnDestroy {
     public socketioservice: SocketIoService,
     public validator: PipoDataService,
     public Uploadvalidator: UploadServiceValidatorService,
+    public globalsAccess: GlobalsAccessService,
+    private deviceService: DeviceDetectorService,
+    public idleservice:IdleService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
     this.createOnline$().subscribe(isOnline => this.isOnline = isOnline);
     this.setTimeoutNew();
-    this.validator.getPipoListNo('export', '');
-    console.log(sessionstorage.get('PERMISSION'), 'asdfsdfsdfsdfdfdfsdfd')
+    idleservice.callback(()=>this.logoutUser())
+    idleservice.wake$.subscribe(s => console.log('im awake!'));
     router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         var splitUrl: any = event?.url?.split('/')
@@ -74,18 +80,20 @@ export class AppComponent implements OnInit, OnDestroy {
               if (token != null) {
                 const jwtToken: any = jwt_decode.default(token);
                 const timeout = jwtToken.exp - new Date().getTime();
+
                 setTimeout(() => {
                   this.logoutUser();
                   this.toastr?.warning('Your token expired....')
                 }, timeout);
-                console.log('AppConfig', AppConfig, jwtToken.exp, timeout);
               }
             });
           }
         }
         let token = this.authGuard.loadFromLocalStorage();
         if (token != null) {
+          this.validator.getPipoListNo('export', '');
           this.doc.getPipoListNo('export', []);
+          this.ngAfterViewInit();
         }
       }
     });
@@ -154,9 +162,7 @@ export class AppComponent implements OnInit, OnDestroy {
     clearTimeout(this.userActivity);
     this.setTimeoutNew();
   }
-  ngOnDestroy(): void {
-    confirm('dgsdfjgfjfdgfdsjhgsdfjfdsg')
-  }
+ 
   doBeforeUnload(event) {
     console.log(window.event, 'window.event')
   }
@@ -191,12 +197,21 @@ export class AppComponent implements OnInit, OnDestroy {
     return bool;
   }
   logoutUser() {
+    this.userService.authToken = null;
+    sessionStorage.clear();
+    localStorage.clear();
     this.router.navigate(["login"]);
     this.userService.loginlogout(false).subscribe((res: any) => {
       console.log(res, 'loginlogout');
-      this.userService.authToken = null;
-      sessionStorage.clear();
-      localStorage.clear();
     })
   }
+
+  ngAfterViewInit() {
+    this.epicFunction();
+  }
+
+  epicFunction() {
+    console.log('hello `Home` component', this.deviceService.getDeviceInfo());
+  }
+
 }

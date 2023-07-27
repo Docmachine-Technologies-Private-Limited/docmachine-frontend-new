@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-commercial-invoices',
+  selector: 'import-commercial-invoices',
   templateUrl: './import-commercial-invoices.component.html',
   styleUrls: ['./import-commercial-invoices.component.scss','../../commoncss/common.component.scss']
 })

@@ -13,9 +13,8 @@
             <div class="overflow-expansion-panel">
                 <custom-table-expansion-panel>
                     <div class="table-type text-large custom-mat-badge"
-                        [matBadge]="item?.ITEMS_STATUS!=undefined?item?.ITEMS_STATUS:''" matBadgeOverlap="false"
                         *ngFor="let item of this.PAGINATOR_TABLE_DATA;let i=index"
-                        [ngClass]="{'table-active':item?.isExpand==true || item?.isExpand2==true,'accent':item?.ITEMS_STATUS=='New','warn':item?.ITEMS_STATUS=='Old'}">
+                        [ngClass]="{'table-active':item?.isExpand==true || item?.isExpand2==true}">
                         <tr class="table-tr custom-expansion-panel-tr"
                             [ngClass]="{'added-active':item?.isExpand==true || item?.isExpand2==true}"
                             title="click arrow icon see more details..." (click)="TrClickEvent(item,i)">
@@ -30,7 +29,7 @@
                                 <span *ngIf="item?.isExpand2==true" class="fa fa-chevron-up"></span>
                                 <span *ngIf="item?.isExpand2==false" class="fa fa-chevron-down"></span>
                             </td>
-                            <td scope="col" class="col-td-th-1" (click)="eventId!='' && j==eventId?TrClick(item,i):''"
+                            <td scope="col" class="col-td-th-1" (click)="eventId!='' && j==eventId?TdClick(item,i):''"
                                 [ngClass]="this.TableHeaderClass[j]" *ngFor="let objectitem of this.Keys;let j=index"
                                 [innerHTML]="item[objectitem]"></td>
 
@@ -40,7 +39,7 @@
                                     (click)="buttonitem?.callback(i,{data:item,index:i})" [ngClass]="buttonitem?.className"></p>
                             </td>
                             <td scope="col" class="col-td-th-1"
-                                *ngIf="item?.disabled==false && item?.RoleType!='Approver' && this.ActionRequired==true">
+                                *ngIf="item?.disabled==false && this.ActionRequired==true">
                                 <a title="View" *ngIf="this.ViewButton==true" (click)="View(item,i)" class="PopupOpen"
                                     popup-close="PDF_VIEW">
                                     <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW" aria-hidden="true"></i>
@@ -50,16 +49,16 @@
                                     <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage"
                                         aria-hidden="true"></i>
                                 </a>
-                                <a title="Delete" *ngIf="this.DeleteButton==true" (click)="Delete(item,i)"
+                                <a title="Delete" *ngIf="this.DeleteButton==true && item?.RoleType!='Approver'" (click)="Delete(item,i)"
                                     class="savBtn bgnone"><i class="fa fa-trash-o" aria-hidden="true"></i> </a>
                             </td>
                             <td scope="col" class="col-td-th-1"
-                                *ngIf="item?.disabled==true && item?.RoleType!='Approver'">
+                                *ngIf="item?.disabled==true">
                                 <p class="error-p">Check Status Panel...</p>
                             </td>
-                            <td scope="col" class="col-td-th-1" *ngIf="item?.RoleType=='Approver'">
+                            <!-- <td scope="col" class="col-td-th-1" *ngIf="item?.RoleType=='Approver'">
                                 <p class="error-p">Access Denied...</p>
-                            </td>
+                            </td> -->
                         </tr>
                         <tr class="table-tr table-tr-1 tr-box-shadow" *ngIf="this.Expansion==true"
                             [ngClass]="{'Table-Show':item?.isExpand==true,'Table-Hide':item?.isExpand==false}">

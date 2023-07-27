@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from "../../service/upload-service-validator.service";
 
 @Component({
-  selector: 'app-insurancedocuments',
+  selector: 'import-insurancedocuments',
   templateUrl: './import-insurancedocuments.component.html',
   styleUrls: ['./import-insurancedocuments.component.scss','../../commoncss/common.component.scss']
 })

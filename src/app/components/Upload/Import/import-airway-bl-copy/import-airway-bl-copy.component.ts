@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-airway-bl-copy',
+  selector: 'import-airway-bl-copy',
   templateUrl: './import-airway-bl-copy.component.html',
   styleUrls: ['./import-airway-bl-copy.component.scss','../../commoncss/common.component.scss']
 })

@@ -1,4 +1,4 @@
-<div class="content-wrap ml-0 scroll-bar-main">
+<div class="content-wrap ml-0 scroll-bar-main" *ngIf="this.VISIBILITY==true">
   <div class="container-fluid p-0">
     <div class="import_export_sec">
       <div class="row">
@@ -11,7 +11,6 @@
           <div class="float_right_page">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
-                <!-- <li class="breadcrumb-item"><a routerLink="/home/view-pipo">Documents</a></li> -->
                 <li class="breadcrumb-item"><a routerLink="/home/pipo">Transactions</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Inward remittance settlement or disposal</li>
               </ol>
@@ -23,11 +22,6 @@
     <div class="content_white_background">
       <main id="content" class="content22 table-padding" role="main">
         <div cla ss="analytics" *ngIf="proceed">
-          <!-- <div style="margin: 20px 50px;">
-                              <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
-                                      style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
-                                      [routerLink]="['/home/dashboardTask']">Back</span>
-                      </div> -->
           <div *ngIf="!selectPurpose">
             <p class="stp3">Select a Purpose code*</p>
             <div *ngIf="!purposeSelect" class="top_serah_section">
@@ -39,9 +33,7 @@
                 <br> Number of Purpose Group = {{ pgNumber }}
                 <br> Number of Purpose Code or Description = {{ pcNumber }}
               </div>
-              <!-- margin-bottom: 20px; margin-left:3px; -->
               <div *ngIf="selectedPurpose.length>0">
-                <!-- Selected Purpose Code -->
                 <div class='tag_list_left' style="margin-top: 15px;"
                   *ngFor="let code of selectedPurpose; let i = index"> <span class="tag_list">{{code}}<b
                       (click)="removeClick(i)" style="color: red;    cursor: pointer;padding: 0 0 0 8px;"><i
@@ -159,7 +151,6 @@
                             </div>
                           </div>
                           <div class="space_bottom"></div>
-                          <!-- <ng-select [items]="this.ThirdPartydata" bindLabel="buyerName" placeholder="Select Tripartite agreement" [(ngModel)]="ThirdPartydataselection" name="commodity" #ngSelect> </ng-select> -->
                         </div>
                         <div class="space_bottom"></div>
                       </div>
@@ -182,16 +173,6 @@
                           </div>
                         </div>
                       </div>
-                      <!-- <div class="form-group">
-                                                  <div class="form-group">
-                                                      <h3 style="margin-left: -7px;">Is Invoice reduction?
-                                                      </h3>
-                                                      <div class="toggle-button">
-                                                          <button [class]="ClassRetrun('InvoiceReduction2','Hide','btn no-button active1','btn btn-primary remove-no-button','no')" type="button" (click)="Changebutton('InvoiceReduction2','Hide','Show','no')"> <span class="icon_top"></span>No</button>
-                                                          <button [class]="ClassRetrun('InvoiceReduction2','Show','btn yes-button active','btn yes-button','yes')" type="button" (click)="Changebutton('InvoiceReduction2','Show','Hide','yes')"> <span class="icon_top"></span>Yes </button>
-                                                      </div>
-                                                  </div>
-                                              </div> -->
                       <div *ngIf="this.Lodgement[selection]['InvoiceReduction2']['Show']== 'yes'">
                         <button class="opt right_buttons_new" style="
                                                                                       width: 200px;"
@@ -199,9 +180,6 @@
                           Generate Invoice Reduction </button>
                       </div>
                       <div *ngIf="this.Lodgement[selection]['InvoiceReduction2']['Hide']== 'no'">
-                        <!-- <button class="opt right_buttons_new" style="margin-right: 1%"
-                          (click)='generateDoc2(this.Lodgement[selection]["InvoiceReduction2"]["Show"],code,j)'>
-                          Proceed to preview </button> -->
                           <button class="button1" style="margin-right: 10px; width:200px"
                               [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
                               (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
@@ -209,8 +187,6 @@
                       </div>
                     </div>
                     <div *ngIf="this.Lodgement[selection]['BuyerRemitterDifferent']['Hide']== 'no'">
-                      <!-- <Button class="button1" style="margin-bottom: 40px;" (click)="sendMail(j,code)">Send
-                        Mail</Button> -->
                         <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
                           <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
                             <button class="button1" style="margin-right: 10px; width:200px"
@@ -237,25 +213,6 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <div class="form-group">
-                      <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-8 col-8">
-                          <h3>Is Buyer remitter different?</h3>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-4 col-4">
-                          <div class="toggle-button">
-                            <button
-                              [class]="ClassRetrun('BuyerRemitter','Hide','btn no-button active1','btn btn-primary remove-no-button','no')"
-                              type="button" (click)="Changebutton('BuyerRemitter','Hide','Show','no')"> <span
-                                class="icon_top"></span>No</button>
-                            <button
-                              [class]="ClassRetrun('BuyerRemitter','Show','btn yes-button active','btn yes-button','yes')"
-                              type="button" (click)="Changebutton('BuyerRemitter','Show','Hide','yes')"> <span
-                                class="icon_top"></span>Yes </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
                     <div *ngIf='this.Lodgement[selection]["BuyerRemitter"]["Show"]=== "yes"'>
                       <div class="form-group">
                         <div class="row">
@@ -278,37 +235,7 @@
                           </div>
                         </div>
                       </div>
-                      <!-- <div  class="form-check" style="margin-left:0px;"
-                                                  *ngFor="let item of item4; let i = index;">
-                                                  <label class="form-check-label">
-                                                      <input class="form-check-input" type="checkbox"
-                                                          (change)=changeCheckbox2(item.thirdNumber)>
-                                                      {{item.triPartyAgreementNumber}}
-                                                      {{item.buyerName}}
-                                                  </label>
-                                              </div>
-                                              <label style="color: #5dc9e9;text-decoration: underline;"
-                                                  [routerLink]="['/home/upload']">Upload Tripartite agreement</label> -->
                     </div>
-                    <!-- <div class="form-group">
-                      <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-8 col-8">
-                          <h3>Is Invoice reduction?</h3>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-4 col-4">
-                          <div class="toggle-button">
-                            <button
-                              [class]="ClassRetrun('Invoicereduction','Hide','btn no-button active1','btn btn-primary remove-no-button','no')"
-                              type="button" (click)="Changebutton('Invoicereduction','Hide','Show','no')"> <span
-                                class="icon_top"></span>No</button>
-                            <button
-                              [class]="ClassRetrun('Invoicereduction','Show','btn yes-button active','btn yes-button','yes')"
-                              type="button" (click)="Changebutton('Invoicereduction','Show','Hide','yes')"> <span
-                                class="icon_top"></span>Yes </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
                     <div *ngIf='this.Lodgement[selection]["BuyerRemitter"]["Hide"]=== "no" ||
                                                      this.Lodgement[selection]["BuyerRemitter"]["Show"]=== "yes" &&
                                                      this.Lodgement[selection]["Invoicereduction"]["Show"]=="yes" ||
@@ -432,8 +359,6 @@
                   </div>
                   <div *ngIf="doneImportPurpose[j] == code">
                     <p>Setup: 3 Preview</p>
-                    <!-- <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
-                    <button class="button1" style="margin-bottom: 40px;">Send it via Email</button> -->
                     <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
                       <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
                         <button class="button1" style="margin-right: 10px; width:200px"
@@ -462,7 +387,7 @@
                     <h1 *ngIf="doneSbPurpose[j] != code" style="font-size:22px; color:#222;">Annex 7</h1>
                     <div id="mainId" class="bc" *ngIf="doneSbPurpose[j] != code">
                       <div id="first" class="bc">
-                        <div style="">
+                        <div>
                           <p class="heading">Request Letter for Export Bill Processing </p>
                         </div>
                         <div style="margin-top: 20px; width:100%;" class="bc">
@@ -1326,6 +1251,46 @@
   </div>
 </div>
 
+<button style="display: none;visibility: hidden;" type="button" id="POPUP_OPEN_CLOSE" class="PopupOpen"
+  [attr.popup-close]="'InwardRemittanceDisposal'"></button>
+  
+<app-custom-model [FooterButton]="true" EventButton="false"
+[customstyle]="{'margin':'90px auto auto !important','max-width': '55vw !important','margin-right': '0px !important'}"
+class="p-2" id="InwardRemittanceDisposal"
+[modalbodystyle]="{'height': '500px'}"
+(footerbutton)="ShowExportPage($event)"
+[condition]="this.REMITTANCE_DATA!=''?true:false"
+[buttondisabled]="this.REMITTANCE_DATA==''?true:false"
+name="Inward Remittance Disposal Selection Panel">
+<div class="col-12 pt-3">
+  <table class="table mb-0 mt-2">
+    <thead>
+      <tr class="table-tr">
+        <th scope="col" class="col-td-th-1">#</th>
+        <th scope="col" class="col-td-th-3">Bank Name</th>
+        <th scope="col" class="col-td-th-3">Ref. Number</th>
+        <th scope="col" class="col-td-th-3">Currency</th>
+        <th scope="col" class="col-td-th-3">Amount</th>
+        <th scope="col" class="col-td-th-3">Remitter Name</th>
+        <th scope="col" class="col-td-th-3">BL. Number</th>
+        <th scope="col" class="col-td-th-3">Disposal Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="table-tr" *ngFor='let item of this.Inward_Remittance_MT103_DATA; let i = index'>
+        <td class="col-td-th-1"><input type="checkbox" [checked]="item?.Checked" (change)="Remittancedata(item,i)" /></td>
+        <td class="col-td-th-3">{{item?.BankName}}</td>
+        <td class="col-td-th-3">{{item?.Inward_reference_number}}</td>
+        <td class="col-td-th-3">{{item?.currency}}</td>
+        <td class="col-td-th-3">{{item?.amount}}</td>
+        <td class="col-td-th-3">{{item?.Remitter_Name}}</td>
+        <td class="col-td-th-3">{{item?.Bill_lodgment_Number}}</td>
+        <td class="col-td-th-3">{{item?.Inward_amount_for_disposal}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</app-custom-model>
 
 <div class="other" #custommodal>
   <app-custom-model [FooterButton]="true" EventButton="false"
@@ -1366,25 +1331,6 @@
       </table>
     </div>
   </app-custom-model>
-  <!-- <div class="modal custom-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Search bank reference number</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-            (click)="custommodal.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
-        </div>
-        <div class="modal-body">
- <div id="new_popups_added" class="" *ngIf="this.Blcopyref.length!=0">
-            <label class="h5 class-append-text" *ngFor="let item of this.Blcopyref let i=index" (click)="ClickbankNumber(item['blcopyrefNumber'],
-                        '.bnk_reff',custommodal.style.display='none')">
-              {{item['blcopyrefNumber']}}</label>
-          </div> 
-          <div class="text-center" *ngIf="this.Blcopyref.length==0">Data not found..</div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>
 <!-- Shipping Bill number -->
 <div class="custom-div" #ShippingBillnumber>
@@ -1394,120 +1340,8 @@
     <div class="DDDD p-3" *ngIf="this.documentService.MT102_SUBJECT!=''">
       <app-pdf-viewer [htmlload]="true" class="pt-3" [downloadShow]="false" src="home/direct-dispatch" width="100%"
         height="500px"></app-pdf-viewer>
-      <!-- <div class="mt_bottom" style="margin-bottom:20px">
-      <div class="row">
-        <div class="col-md-6">
-          <app-ng-dropdown-custom
-          placeHolderText="Select Buyer Name"
-          [items]="this.buyerName" bindLabel="value"
-          [multiple]="false" (modelChanges)="ShippingBillnumberFil($event)" #buyerNameSelection>
-         </app-ng-dropdown-custom> 
-        </div>
-        <div class="col-md-3">
-          <button class="filter1 btn btn-primary" (click)="ShippingBillnumberFil('')">Reset</button>
-        </div>
-      </div>
-    </div> -->
-      <!-- <section style="width: 100%;" class="box-shadow">
-      <table class="table table-striped mb-0">
-        <thead style="width: 100% ;height: 54px;">
-          <tr class="table-tr">
-            <th scope="col" class="col-td-th-1">#</th>
-            <th scope="col" class="col-td-th-3">SB DATE</th>
-            <th scope="col" class="col-td-th-3">SB NUMBER</th>
-            <th scope="col" class="col-td-th-3">BUYER NAME</th>
-            <th scope="col" class="col-td-th-3">CURRENCY</th>
-            <th scope="col" class="col-td-th-3">SB AMOUNT</th>
-            <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-tr" *ngFor='let data of ShippingbillNumberfilter let i = index'>
-            <td class="col-td-th-1">
-              <input type="checkbox" (change)="changeCheckbox1(data.sbno, data); " />
-            </td>
-            <td class="col-td-th-3"> {{data.sbdate}} </td>
-            <td class="col-td-th-3"> {{data.sbno}} </td>
-            <td class="col-td-th-3"> {{data.buyerName}} </td>
-            <td class="col-td-th-3"> {{data.fobCurrency}} </td>
-            <td class="col-td-th-3"> {{data.fobValue}} </td>
-            <td class="col-td-th-3"> {{data.balanceAvai}} </td>
-          </tr>
-        </tbody>
-      </table>
-    </section> -->
     </div>
   </app-custom-model>
-  <!-- <div class="modal custom-modal row no-gutter Select Shipping bill number Select_Shipping" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Select Shipping bill number</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-            (click)="ShippingBillnumber.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
-        </div>
-        <div class="modal-body">
-          <div class="container_remove">
-            <div class="row_bt">
-              <div class="DDDD">
-                <div class="mt_bottom" style="margin-bottom:20px">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <select [(ngModel)]="SBBuyerName" class="form-control"
-                        (change)="ShippingBillnumberFil(SBBuyerName)">
-                        <option value="BuyerName">BuyerName</option>
-                        <option [value]="item" *ngFor="let item of buyerName ; let i = index;" style="color: black;">
-                          {{item}}</option>
-                      </select>
-                    </div>
-                    <div class="col-md-3">
-                      <button class="filter1 btn btn-primary" (click)="SBBuyerName = 'BuyerName';
-                                        ShippingBillnumberFil(SBBuyerName)">Reset</button>
-                    </div>
-                  </div>
-                </div>
-                <section style="width: 100%;" class="box-shadow">
-                  <table class="table table-striped mb-0">
-                    <thead style="width: 100% ;height: 54px;">
-                      <tr class="text-muted table-heading"
-                        style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                        <th scope="col"></th>
-                        <th scope="col">SB DATE</th>
-                        <th scope="col">SB NUMBER</th>
-                        <th scope="col">BUYER NAME</th>
-                        <th scope="col">CURRENCY</th>
-                        <th scope="col">SB AMOUNT</th>
-                        <th scope="col">AVAILABLE AMOUNT</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="table-row" *ngFor='let data of ShippingbillNumberfilter  let i = index'>
-                        <td>
-                          <input type="checkbox" (change)="changeCheckbox1(data.sbno, data); " />
-                        </td>
-                        <td> {{data.sbdate}} </td>
-                        <td> {{data.sbno}} </td>
-                        <td> {{data.buyerName}} </td>
-                        <td> {{data.fobCurrency}} </td>
-                        <td> {{data.fobValue}} </td>
-                        <td> {{data.balanceAvai}} </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </section>
-              </div>
-              <div class="submit_right_button" style="float:right;">
-                <button class="filter1 btn btn-secondary" aria-label="Close"
-                  (click)="ShippingBillnumber.style.display='none'">Cancel</button>
-                <button class="filter1 btn btn-primary" style="margin-left:16px"
-                  (click)="ShippingBillnumber.style.display='none'">Sumbit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>
 <div class="bg-black-opacity" #PIPONumbers>
   <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
@@ -1542,7 +1376,7 @@
                     </div>
                     <section style="width: 100%;overflow: auto;
                                         height: 350px;max-height: 800px;" class="box-shadow">
-                      <table style="" class="table table-striped mb-0">
+                      <table class="table table-striped mb-0">
                         <thead style="width: 100% ;height: 54px;">
                           <tr class="text-muted table-heading"
                             style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">

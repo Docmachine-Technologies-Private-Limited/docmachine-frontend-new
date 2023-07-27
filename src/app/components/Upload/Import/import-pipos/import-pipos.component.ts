@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-pipos',
+  selector: 'import-pipos',
   templateUrl: './import-pipos.component.html',
   styleUrls: ['./import-pipos.component.scss','../../commoncss/common.component.scss']
 })

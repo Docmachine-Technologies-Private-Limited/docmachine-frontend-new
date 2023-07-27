@@ -1,10 +1,11 @@
-import { Injectable, OnInit } from '@angular/core';
+import { AfterViewInit, ElementRef, Injectable, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
 import { Event, NavigationEnd, Router } from '@angular/router';
 import { AuthGuard } from '../../../service/authguard.service';
+import { GlobalsAccessService } from './globals-access.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class UploadServiceValidatorService implements OnInit {
   BUYER_ADDRESS_DETAILS: any = [];
   BENEFICIARY_DETAILS: any = [];
   BENEFICIARY_ADDRESS_DETAILS: any = [];
+  INWARD_REMITTANCE_NAME_LIST: any = [];
   ConsigneeNameList: any = [];
   PIPO_DATA: any = [];
   pipourl1: any = '';
@@ -39,7 +41,12 @@ export class UploadServiceValidatorService implements OnInit {
   Id: any = '';
   BANK_NAME_LIST_GLOABL: any = [];
   FIELDS_DATA: any = [];
-  WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
+  LOGIN_TOEKN: any = '';
+  userData: any = [];
+  BUYER_NOT_EXITS: boolean = false;
+  BENEFICIARY_NOT_EXITS: boolean = false;
+  SELECTED_PIPO: any = [];
+  SELECTED_PIPO_ID: any = [];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -53,33 +60,40 @@ export class UploadServiceValidatorService implements OnInit {
   async loaddata() {
     return new Promise(async (reslove, reject) => {
       let token = this.authGuard.loadFromLocalStorage();
+      this.LOGIN_TOEKN = token;
       if (token != undefined) {
-       
         this.CURRENCY_LIST = this.documentService.getCurrencyList();
         let USER_DATA: any = await this.userService.getUserDetail();
-        this.SHIPPING_BUNDEL = [];
-        this.origin = [];
-        this.BUYER_DETAILS = [];
-        this.ConsigneeNameList = [];
-        this.BENEFICIARY_DETAILS = [];
-        this.location = [];
-        this.commodity = [];
+        await this.userService.getUserDetail().then((res: any) => {
+          this.userData = res?.result;
+          console.log(this.userData, 'asdasdasdasdasdasdasdasdasdasdasd')
+        });
         if (USER_DATA?.result?.sideMenu == 'import') {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
             this.documentService.getPipoListNo('export', []);
           }
           await this.userService.getBene(1).subscribe((res: any) => {
+            this.BENEFICIARY_DETAILS = [];
+            this.ConsigneeNameList = [];
+
             res.data?.forEach(element => {
               if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
                 this.ConsigneeNameList.push({ value: element?.ConsigneeName })
               }
               this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
             });
+            if (this.BENEFICIARY_DETAILS.length == 0) {
+              this.BENEFICIARY_NOT_EXITS = true;
+            } else {
+              this.BENEFICIARY_NOT_EXITS = false;
+            }
             console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
           }, (err) => console.log('Error', err));
 
           await this.documentService.getBoe(1).subscribe((res: any) => {
+            this.SHIPPING_BUNDEL = [];
+            this.origin = [];
             console.log('Master Data File', res);
             res.data.forEach((element, i) => {
               element?.pipo.forEach((ele, j) => {
@@ -93,19 +107,27 @@ export class UploadServiceValidatorService implements OnInit {
         } else if (USER_DATA?.result?.sideMenu == 'export') {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length == 0)) {
-            this.documentService.getPipoListNo('export', []);
+            this.documentService.getPipoListNo('export', this.SELECTED_PIPO?.length != 0 ? this.SELECTED_PIPO : []);
           }
           await this.userService.getBuyer(1).subscribe((res: any) => {
+            this.BUYER_DETAILS = [];
+            this.ConsigneeNameList = [];
             res.data?.forEach(element => {
               if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
                 this.ConsigneeNameList.push({ value: element?.ConsigneeName })
               }
               this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
             });
+            if (this.BUYER_DETAILS.length == 0) {
+              this.BUYER_NOT_EXITS = true;
+            } else {
+              this.BUYER_NOT_EXITS = false;
+            }
             console.log('getBuyer Details', this.ConsigneeNameList, this.BUYER_DETAILS);
           }, (err) => console.log('Error', err));
           this.documentService.getMaster(1).subscribe((res: any) => {
             console.log('Master Data File', res);
+            this.origin = [];
             res.data.forEach((element, i) => {
               element?.pipo?.forEach((ele, j) => {
                 this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
@@ -114,6 +136,11 @@ export class UploadServiceValidatorService implements OnInit {
             });
             console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
           }, (err) => console.log(err));
+
+          this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
+            this.INWARD_REMITTANCE_NAME_LIST = res?.data;
+            console.log(res, 'getInward_remittanceName')
+          })
           await reslove(true)
         } else {
           reslove(true)
@@ -121,6 +148,8 @@ export class UploadServiceValidatorService implements OnInit {
 
         await this.userService.getTeam().subscribe(async (data) => {
           console.log(data['data'][0]);
+          this.location = [];
+          this.commodity = [];
           data['data'][0]['location']?.forEach(element => {
             this.location.push({ value: element?.loc })
           });
@@ -139,10 +168,6 @@ export class UploadServiceValidatorService implements OnInit {
         reslove(true);
       }
     })
-  }
-
-  CheckIng(data: any, value: any) {
-    return value != '' && value != undefined && value != null ? data.filter((item: any) => item?.includes(value) == true) : []
   }
 
   async buildForm(model: any, id: any) {
@@ -170,13 +195,8 @@ export class UploadServiceValidatorService implements OnInit {
     const formGroupFields = {};
     let fields: any = [];
     for (let field of Object.keys(model)) {
-      let id: any = field;
       const fieldProps: any = model[field];
-      if (fieldProps?.type != "formArray") {
-        formGroupFields[field] = new FormControl(fieldProps.value,
-          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
-        fields.push({ ...fieldProps, fieldName: field });
-      } else {
+      if (fieldProps?.type == "formArray") {
         var temp: any = [];
         var tempFormGroup: any = [];
         let count: number = 0;
@@ -199,12 +219,39 @@ export class UploadServiceValidatorService implements OnInit {
           formGroupFields[field] = await new FormArray(tempFormGroup);
           fields.push({ ...fieldProps, fieldName: field });
         }
+      } else if (fieldProps?.type == "OptionMultiCheckBox" && fieldProps?.option != undefined) {
+        var temp: any = [];
+        var tempFormGroup: any = [];
+        fieldProps?.option?.forEach(async (element) => {
+          let optiontemp: any = {};
+          let OptiontempFormGroup: any = {};
+          element?.forEach(optionelement => {
+            optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
+            OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
+              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+          });
+          await temp.push(optiontemp);
+          await tempFormGroup.push(new FormGroup(OptiontempFormGroup));
+        });
+        fieldProps['NewOption'] = temp;
+        fieldProps['RemoveListIndex'] = [{ START_INDEX: -1, LAST_INDEX: -1 }];
+        formGroupFields[field] = await new FormArray(tempFormGroup)
+        fields.push({ ...fieldProps, fieldName: field });
+        console.log('OptionMultiCheckBox', fields)
+      } else {
+        formGroupFields[field] = new FormControl({ value: fieldProps.value, disabled: fieldProps?.disabled != undefined ? true : false },
+          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
+        fields.push({ ...fieldProps, fieldName: field });
       }
     }
     console.log(fields, formGroupFields, 'hghjgjhghjgjh')
     return { formGroupFields: formGroupFields, fields: fields };
   }
 
+  ControlSetValue(id: any, key: any, value: any) {
+    console.log(value, 'asdasdasdasds')
+    this.FIELDS_DATA[id]?.[key]?.setValue(value);
+  }
   ConfirmedValidator(controlName: string, matchingControlName: string): any {
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
@@ -250,6 +297,10 @@ export class UploadServiceValidatorService implements OnInit {
       MatchedValue: rule?.required == true ? [Validators.required] : [],
       Underlying: rule?.required == true ? [Validators.required] : [],
       BuySell: rule?.required == true ? [Validators.required] : [],
+      IncoTerm: rule?.required == true ? [Validators.required] : [],
+      MultiCheckBox: rule?.required == true ? [Validators.required] : [],
+      OptionMultiCheckBox: rule?.required == true ? [Validators.required] : [],
+      RemitterName: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :

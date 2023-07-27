@@ -87,9 +87,10 @@
         <div class="data_table_new" #piposummery>
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
             [items]="this.FILTER_VALUE_LIST_NEW?.items"
+            [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId"
             [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
             [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
-            (TrEvent)="MouseHover($event,CustomHoverPanel)"
+            (event)="MouseHover($event,CustomHoverPanel)"
             (ViewChanges)="toView($event)"
             (EditChanges)="toEdit($event)" 
             (DeleteChanges)="handleDelete($event)">

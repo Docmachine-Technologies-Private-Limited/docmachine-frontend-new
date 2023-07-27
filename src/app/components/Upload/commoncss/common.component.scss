@@ -23,3 +23,23 @@
 .filter_right_new.padding_new_top {
     gap: 0px !important;
 }
+
+.upload-panel {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    padding: 10px;
+    gap: 10px;
+    margin-right: 10px;
+    position: absolute !important;
+    width: 100% !important;
+    top: 35px !important;
+}
+
+.form-container-fluid {
+    width: 100%;
+    padding: 10px;
+    overflow: auto;
+    max-height: 89vh !important;
+    border-radius: 10px;
+    margin: auto;
+}

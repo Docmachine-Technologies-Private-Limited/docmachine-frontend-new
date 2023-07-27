@@ -10,7 +10,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 import { BoeBill } from '../../../../../model/boe.model';
 
 @Component({
-  selector: 'app-shipping-bill',
+  selector: 'app-boe-bill',
   templateUrl: './boe.component.html',
   styleUrls: ['./boe.component.scss', '../../commoncss/common.component.scss']
 })

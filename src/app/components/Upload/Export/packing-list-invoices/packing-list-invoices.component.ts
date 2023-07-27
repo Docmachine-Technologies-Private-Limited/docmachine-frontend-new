@@ -7,11 +7,10 @@ import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-packing-list-invoices',
+  selector: 'export-packing-list-invoices',
   templateUrl: './packing-list-invoices.component.html',
   styleUrls: ['./packing-list-invoices.component.scss','../../commoncss/common.component.scss']
 })

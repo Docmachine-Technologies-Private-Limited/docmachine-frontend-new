@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from '../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { Router } from '@angular/router';
+import moment from 'moment';
 
 @Component({
   selector: 'app-pipo-export',
@@ -63,7 +64,7 @@ export class PipoExportComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1"
     ],
-    eventId: ''
+    eventId: '0'
   }
 
   constructor(public documentService: DocumentService,
@@ -141,7 +142,7 @@ export class PipoExportComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           "InvoiceNo": element['pi_poNo'],
-          "InvoiceDate": element['date'],
+          "InvoiceDate": moment(element['date']).format('DD-MM-YYYY'),
           "ConsigneeName": element['buyerName'],
           "BRANCH": element['location'],
           "Commodity": element['commodity'],
@@ -242,11 +243,14 @@ export class PipoExportComponent implements OnInit {
   }
 
   MouseHover(data: any, panel: any) {
-    this.HOVER_DATA = '';
-    this.HOVER_DATA = this.dataSource[data?.index]?._id;
-    setTimeout(() => {
-      panel?.displayShow
-    }, 200);
+    if (data != null && data != undefined) {
+      this.HOVER_DATA = '';
+      this.HOVER_DATA = this.dataSource[data?.index]?._id;
+      console.log('hgdsdsdasdsadas', data);
+      setTimeout(() => {
+        panel?.displayShow
+      }, 200);
+    }
   }
 
   exportToExcel() {

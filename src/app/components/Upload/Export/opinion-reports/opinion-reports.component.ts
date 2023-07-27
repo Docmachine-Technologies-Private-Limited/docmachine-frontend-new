@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-opinion-reports',
+  selector: 'export-opinion-reports',
   templateUrl: './opinion-reports.component.html',
   styleUrls: ['./opinion-reports.component.scss', '../../commoncss/common.component.scss']
 })

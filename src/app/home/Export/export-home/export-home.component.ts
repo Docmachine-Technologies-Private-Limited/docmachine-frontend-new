@@ -192,6 +192,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   Select_A_bank: any = [];
   GetDownloadStatus: any = [];
   Export_Direct_Dispatch: any = []
+  VISIBILITY: boolean = false;
 
   constructor(
     public documentService: DocumentService,
@@ -252,8 +253,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   USER_DATA: any = [];
   STORE_URL: any = [];
   Inward_Remittance_MT103: any = [];
+  Inward_Remittance_MT103_DATA: any = [];
   MT103_URL: any = '';
-
+  MT103_ID: any = ''
   async ngOnInit() {
     this.wininfo.set_controller_of_width(250, '.content_top_common')
     await this.userService.getUserDetail().then((res: any) => {
@@ -263,6 +265,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.redirectid = this.route.snapshot.paramMap.get('pipo')
     this.redirectindex = this.route.snapshot.paramMap.get('index')
     this.redirectpage = this.route.snapshot.paramMap.get('page')
+    this.MT103_ID = this.route.snapshot.paramMap.get('MT103_ID');
     console.log("pipoId", this.redirectid);
     for (let index = 0; index < data['default'].length; index++) {
       var temp: any = [];
@@ -279,23 +282,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.Blcopyref = res;
       this.Blcopyrefoldata = res;
       this.Export_Direct_Dispatch = res;
-      // this.Blcopyref.forEach(element => {
-      //   element?.pipo.forEach(pipoelement => {
-      //     pipoelement?.TransactionRef.forEach(Transactionelement => {
-      //       if (Transactionelement?.TypeTransaction=="Export-Direct-Dispatch") {
-      //         Transactionelement?.data?.extradata?.COMMERCIAL.forEach(Advance_reference_Numberelement => {
-      //           Advance_reference_Numberelement?.IRADVICE_INFO.forEach((IRADVICE_INFOElement:any) => {
-      //             IRADVICE_INFOElement['irDataItem']['SB_Amount_Realized']=Advance_reference_Numberelement?.SB_Amout_Realized
-      //             IRADVICE_INFOElement['irDataItem']['balanceAvai']=Advance_reference_Numberelement?.sbRef[0]?.balanceAvai
-      //             IRADVICE_INFOElement['irDataItem']['SB_Amount']=Advance_reference_Numberelement?.sbRef[0]?.fobValue
-      //             IRADVICE_INFOElement['irDataItem']['billrefno']=element?.blcopyrefNumber
-      //             this.Export_Direct_Dispatch.push(IRADVICE_INFOElement?.irDataItem)
-      //         });
-      //       });
-      //       }
-      //     });
-      //   });
-      // });
       console.log(res, this.Export_Direct_Dispatch, 'getBlcopyref')
 
     }).catch((error) => {
@@ -329,8 +315,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.dataJson = this.jsondata
     this.purposeFun(this.default_value)
     this.documentService.getInward_remittance().subscribe((res: any) => {
-      this.Inward_Remittance_MT103 = res?.data;
-      this.MT103_URL = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+      res?.data?.forEach(element => {
+        element['Checked'] = false;
+      });
+      this.Inward_Remittance_MT103_DATA = res?.data;
       console.log(res, 'getInward_remittance')
     })
 
@@ -663,7 +651,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     this.INPUT_SERACH = $('.search_box_new');
     console.log(this.mainDoc, 'dfsdfdfdfsd')
+    $('#POPUP_OPEN_CLOSE').click();
   }
+
   InputClick() {
     this.sessionstorage.set('MT102', JSON.stringify(this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]), 1)
     this.documentService.MT102_SUBJECT = (this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]);
@@ -4139,6 +4129,30 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(name, this.SELECT_bankreferencenumber, inputsetvalue, 'bnk_reff')
     this.bankRef = name;
   }
+
+  REMITTANCE_DATA: any = ''
+  Remittancedata(data: any,i:any) {
+    this.REMITTANCE_DATA = data;
+    this.Inward_Remittance_MT103_DATA?.forEach((element,index) => {
+       if (i!=index) {
+        element['Checked']=false;
+       }else{
+        element['Checked']=true;
+       }
+    });
+    this.MT103_URL = data?.file;
+    this.Inward_Remittance_MT103=[data];
+    console.log(this.REMITTANCE_DATA, 'REMITTANCE_DATA')
+    this.bankRef = name;
+  }
+  ShowExportPage(event:any){
+  console.log(event,'sfsdfsdfdsfsdfd')
+    if (this.REMITTANCE_DATA!='') {
+      this.VISIBILITY=true
+    }else{
+      this.VISIBILITY=false
+    }
+  }
   ArrayToString(array: any) {
     return array.length != 0 ? array.toString() : '';
   }
@@ -4238,15 +4252,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       return outputText;
     }
   }
- async SendApproval(Status: string, UniqueId: any, code: any) {
+  async SendApproval(Status: string, UniqueId: any, code: any) {
     var temp_doc: any = [];
     var approval_data: any = [];
-    var UpdatedUrl:any=[];
+    var UpdatedUrl: any = [];
     if (code == 'P0102') {
-      temp_doc[0] = {name:'P0102',pdf:this.P102_PDF};
-      temp_doc[1] = {name:'Inward_Remittance_MT103',pdf:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file};
+      temp_doc[0] = { name: 'P0102', pdf: this.P102_PDF };
+      temp_doc[1] = { name: 'Inward_Remittance_MT103', pdf: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file };
       for (let index = 0; index < this.selectedPdfs.length; index++) {
-        temp_doc.push({name:'documents_'+(index+1),pdf:this.selectedPdfs[index]})
+        temp_doc.push({ name: 'documents_' + (index + 1), pdf: this.selectedPdfs[index] })
       }
       for (let index = 0; index < temp_doc.length; index++) {
         if (temp_doc[index]?.pdf != '' && temp_doc[index]?.pdf != undefined) {
@@ -4262,7 +4276,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
             UpdatedUrl.push(temp_doc[index]?.pdf)
           }
         }
-        if ((index+1==temp_doc.length)) {
+        if ((index + 1 == temp_doc.length)) {
           var filterValue: any = {
             Amount: [],
             Number: [],
@@ -4295,7 +4309,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
           updatedata['documents'] = UpdatedUrl;
           updatedata['extradata'] = P102_DATA;
-          updatedata['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
+          updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
@@ -4326,16 +4340,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           }
         }
       }
-     
+
     } else {
       if (this.value != '' && this.value != null) {
-        temp_doc[0] = {name:'Bank format',pdf:'data:application/pdf;base64,' + this.value};
-        temp_doc[1] = {name:'Inward_Remittance_MT103',pdf:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file};
+        temp_doc[0] = { name: 'Bank format', pdf: 'data:application/pdf;base64,' + this.value };
+        temp_doc[1] = { name: 'Inward_Remittance_MT103', pdf: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file };
       } else {
-        temp_doc[0] ={name:'Inward_Remittance_MT103',pdf:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file};
+        temp_doc[0] = { name: 'Inward_Remittance_MT103', pdf: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file };
       }
       for (let index = 0; index < this.mainDoc[0].length; index++) {
-        temp_doc.push({name:'documents'+(index+1),pdf:this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity})
+        temp_doc.push({ name: 'documents' + (index + 1), pdf: this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity })
       }
       for (let index = 0; index < temp_doc.length; index++) {
         if (temp_doc[index]?.pdf != '' && temp_doc[index]?.pdf != undefined) {
@@ -4351,7 +4365,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
             UpdatedUrl.push(temp_doc[index]?.pdf)
           }
         }
-        if ((index+1==temp_doc.length)) {
+        if ((index + 1 == temp_doc.length)) {
           approval_data = {
             id: 'Inward_Remitance_Dispoal' + '_' + UniqueId,
             tableName: 'Inward-Remitance-Dispoal',
@@ -4370,7 +4384,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           }
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
           updatedata['documents'] = UpdatedUrl;
-          updatedata['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
+          updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
 
           if (Status == '' || Status == null || Status == 'Rejected') {
@@ -4406,7 +4420,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
   }
 
- async SendApproval_2(Status: string, UniqueId: any, code: any) {
+  async SendApproval_2(Status: string, UniqueId: any, code: any) {
     var temp_doc: any = [];
     var approval_data: any = [];
     this.checkapproval('IRDR').then(async (res) => {
@@ -4444,7 +4458,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
         updatedata['documents'] = temp_doc;
         updatedata['extradata'] = P102_DATA;
-        updatedata['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
+        updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
         console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, P102_DATA, 'approval_data')
         if (Status == '' || Status == null || Status == 'Rejected') {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {

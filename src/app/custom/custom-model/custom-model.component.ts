@@ -31,7 +31,7 @@ export class CustomModelComponent implements OnInit {
   @Input('id') id: any;
   @Output('ModelChange') ModelChange = new EventEmitter<any>();
   @Input('condition') condition: any = '';
-  @Output('footerbutton') footerbutton = new EventEmitter<any>();
+  @Output('footerbutton') FOOTER_BUTTON_EVENT = new EventEmitter<any>();
   @Output('headerbutton') headerbutton = new EventEmitter<any>();
   @ViewChild('PopUpOpenClose') PopUpOpenClose: ElementRef;
   @Input('buttondisabled') buttondisabled: boolean = false;
@@ -39,37 +39,40 @@ export class CustomModelComponent implements OnInit {
   @Input('minimizedisabled') minimizedisabled: boolean = true;
   @Input('removebg') removebg: boolean = true;
   @Input('RemoveBgTop') RemoveBgTop: boolean = true;
+  @Input('HIDDEN_SHOW') HIDDEN_SHOW: boolean = false;
 
+  toggleminimize: boolean = false;
   footerbuttontext: any = [];
-  
+
   constructor() { }
-  
+
   ngOnInit(): void {
     this.footerbuttontext[this.id] = this.condition;
   }
 
   get displayHidden() {
-    return $('.upload-modal#'+this.id).css('display', 'none');
+    return $('.upload-modal#' + this.id).css('display', 'none');
   }
-  
+
   get displayShow() {
-    return $('.PopupOpen#'+this.id).click()
+    return $('.PopupOpen#' + this.id).click()
   }
-  
+
   ClosePopup() {
     this.displayHidden
     this.ModelChange.emit('null');
   }
-  
-  OKBUTTON(PopUpOpenClose: any) {
+
+  OKBUTTON() {
+    console.log(this.condition, 'FOOTER_BUTTON_EVENT')
     if (this.condition == true) {
-      this.footerbutton.emit(this.condition);
-      PopUpOpenClose.style.display = "none";
+      this.FOOTER_BUTTON_EVENT.emit(this.condition);
+      this.displayHidden
     } else {
-      this.footerbutton.emit(false);
+      this.FOOTER_BUTTON_EVENT.emit(false);
     }
   }
-  
+
   HEADERBUTTON(PopUpOpenClose: any) {
     if (this.condition == true) {
       this.headerbutton.emit(this.condition);

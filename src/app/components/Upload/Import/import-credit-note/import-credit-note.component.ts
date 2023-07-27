@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 @Component({
-  selector: 'app-credit-note',
+  selector: 'import-credit-note',
   templateUrl: './import-credit-note.component.html',
   styleUrls: ['./import-credit-note.component.scss','../../commoncss/common.component.scss']
 })

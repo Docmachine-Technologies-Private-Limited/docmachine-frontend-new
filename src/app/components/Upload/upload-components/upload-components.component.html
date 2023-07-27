@@ -118,21 +118,69 @@
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'benne'">
+                <div class="form-group mb-3" *ngSwitchCase="'RemitterName'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <ng-select *ngIf="this.validator?.BENEFICIARY_DETAILS?.length!=0"
-                        [items]="this.validator?.BENEFICIARY_DETAILS" bindLabel="value" [multiple]="false"
+                    <ng-custom-dropdown *ngIf="this.validator?.INWARD_REMITTANCE_NAME_LIST?.length!=0"
+                        [items]="this.validator?.INWARD_REMITTANCE_NAME_LIST" bindLabel="Remitter_Name"
+                        [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [name]="field.fieldName" [(ngModel)]="field.value"></ng-custom-dropdown>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'consignee'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.validator?.ConsigneeNameList?.length!=0"
+                        [items]="this.validator?.ConsigneeNameList" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'consignee'">
+                <div class="form-group mb-3" *ngSwitchCase="'MultiCheckBox'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <ng-select *ngIf="this.validator?.BUYER_DETAILS?.length!=0" [items]="this.validator?.BUYER_DETAILS"
-                        bindLabel="value" [multiple]="false"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
-                    </ng-select>
+                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [(ngModel)]="field.value">
+                    </custom-checkbox>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'" [formArrayName]="field.fieldName">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName"
+                        (event)="field.value=$event">
+                    </custom-checkbox>
+
+                    <div class="col-12 p-0" *ngIf="field.value=='Yes'">
+                        <div class="col-12 p-0" *ngFor="let Optionfield of field?.NewOption;let OptionfieldIndex=index"
+                            [formGroupName]="OptionfieldIndex">
+                            <div class="col-12 p-0"
+                                *ngFor="let FormOptionfield of Optionfield | keyvalue;let FormOptionfieldIndex=index">
+                                <ng-container [ngSwitch]="FormOptionfield?.value?.type">
+                                    <div class="form-group mb-3" *ngSwitchCase="'text'">
+                                        <label
+                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
+                                        <input
+                                            [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]"
+                                            [type]="FormOptionfield?.value?.type"
+                                            [name]="FormOptionfield?.value?.fieldName"
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            class="form-control" [style]="FormOptionfield?.value?.style" />
+                                    </div>
+                                    <div class="form-group mb-3" *ngSwitchCase="'number'">
+                                        <div class="form-group mb-3"
+                                            *ngIf="FormOptionfield?.value?.visible==true || FormOptionfield?.value?.visible==undefined">
+                                            <label
+                                                *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
+                                            <input
+                                                [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]"
+                                                [type]="FormOptionfield?.value?.type"
+                                                [name]="FormOptionfield?.value?.fieldName"
+                                                [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                                class="form-control" [style]="FormOptionfield?.value?.style" />
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
+                                    [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex]"
+                                    [fieldName]="FormOptionfield?.value?.fieldName"></inner-dynamic-error>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'commodity'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
@@ -185,6 +233,20 @@
                         [name]="field.fieldName" [(ngModel)]="field.value" required>
                     </ng-select>
                 </div>
+                <div class="form-group mb-3" *ngSwitchCase="'IncoTerm'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <div class="row m-0">
+                        <ng-select style="width: 86% !important;"
+                            [items]="[{value:'EXW | Ex-Works or Ex-Warehouse'},{value:'FCA | Free to Carrier'},{value:'FAS | Free Alongside Ship'},{value:'FOB | Free on Board'},
+                        {value:'CFR | Cost and Freight'},{value:'CIF | Cost, Insurance and Freight'},{value:'CPT | Carriage Paid To'},{value:'CIP | Carriage and Insurance Paid To'},
+                        {value:'DAP | Delivered at Place'},{value:'DPU | Delivered at Place Unloaded (replaces Incoterm® 2010 DAT)'},{value:'DDP | Delivered Duty Paid'}]"
+                            bindLabel="value" [multiple]="false"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            [name]="field.fieldName" [(ngModel)]="field.value" required>
+                        </ng-select>
+                        <button type="button" class="btn btn-primary PopupOpen" popup-close="IncoTerm">view</button>
+                    </div>
+                </div>
                 <div class="form-group mb-3" *ngSwitchCase="'Bank'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.bankDetail?.length!=0" [items]="this.validator?.bankDetail"
@@ -227,7 +289,7 @@
                     <div [formArrayName]="field.fieldName">
                         <div class="division-panel"
                             *ngFor="let GroupLabelItem of field?.GroupLabel;let labelIndex=index;">
-                            <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="this.validator?.AddNewRequried==true">
+                            <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="this.AddNewRequried==true">
                                 <label>{{GroupLabelItem}}</label>
                                 <button type="button" class="btn btn-primary"
                                     *ngIf="(field?.GroupLabel?.length-1)==labelIndex"
@@ -310,8 +372,9 @@
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'consignee'">
                                         <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
-                                        <ng-select *ngIf="this.validator?.BUYER_DETAILS?.length!=0"
-                                            [items]="this.validator?.BUYER_DETAILS" bindLabel="value" [multiple]="false"
+                                        <ng-select *ngIf="this.validator?.ConsigneeNameList?.length!=0"
+                                            [items]="this.validator?.ConsigneeNameList" bindLabel="value"
+                                            [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
                                             [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value">
                                         </ng-select>
@@ -447,6 +510,14 @@
     [RemoveBgTop]="false" class="p-2 mt-2" id="Add_New_Bank_Name" [customstyle]="{'max-width':'40vw !important'}"
     height="30vh" [name]="'Add New Bank Name'" #Add_New_Bank_NamePanel>
     <div class="p-2">
-        <upload-components id="AddNewBankName" (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)"></upload-components>
+        <upload-components id="AddNewBankName"
+            (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)"></upload-components>
+    </div>
+</app-custom-model>
+
+<app-custom-model [minimizedisabled]="false" EventButton="false" [RemoveBgTop]="false" class="p-2 mt-2" id="IncoTerm"
+    [customstyle]="{'max-width':'60vw !important','margin-top':'100px !important'}" height="40vh" [name]="'Inco Term'">
+    <div class="p-2">
+        <img src="../../../../assets/images/incoterm.png" alt="Inco Term" class="img-popup">
     </div>
 </app-custom-model>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
@@ -9,9 +9,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-pipos',
+  selector: 'export-app-pipos',
   templateUrl: './pipos.component.html',
-  styleUrls: ['./pipos.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./pipos.component.scss', '../../commoncss/common.component.scss']
 })
 export class PIPOSComponent implements OnInit {
   publicUrl: any = '';
@@ -45,9 +45,7 @@ export class PIPOSComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-   
   }
-
 
   response(args: any) {
     this.publicUrl = '';
@@ -67,6 +65,31 @@ export class PIPOSComponent implements OnInit {
           type: "commodity",
           value: "",
           label: "Choose commodity",
+          rules: {
+            required: true,
+          }
+        },
+        MaterialTypes: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Raw Material or Capital Goods",
+          checkboxlabel: [{ text: "Raw Material", value: 'Raw Material' }, { text: 'Capital Goods', value: 'Capital Goods' }],
+          rules: {
+            required: true,
+          }
+        },
+        ConsigneeName: {
+          type: "consignee",
+          value: "",
+          label: "Consignee Name",
+          rules: {
+            required: true,
+          }
+        },
+        RemitterName: {
+          type: "RemitterName",
+          value: "",
+          label: "Remitter Name",
           rules: {
             required: true,
           }
@@ -112,7 +135,7 @@ export class PIPOSComponent implements OnInit {
           }
         },
         incoterm: {
-          type: "text",
+          type: "IncoTerm",
           value: "",
           label: "Incoterm",
           rules: {
@@ -135,22 +158,50 @@ export class PIPOSComponent implements OnInit {
             required: true,
           }
         },
-        pcRefNo: {
-          type: "text",
+        PCReferanceDetails: {
+          type: "OptionMultiCheckBox",
           value: "",
           label: "PC reference number",
+          checkboxlabel: [{ text: "Yes", value: 'Yes' }, { text: 'No', value: 'No' }],
           rules: {
-            required: false,
-          }
+            required: true,
+          },
+          option: [
+            [{
+              type: "text",
+              value: "",
+              label: "Amount of PC",
+              name: 'amount',
+              rules: {
+                required: false,
+              }
+            }, {
+              type: "number",
+              value: "",
+              label: "Tenor",
+              name: 'Tenor',
+              rules: {
+                required: false,
+              },
+            }, {
+              type: "text",
+              value: "",
+              name: 'pcRefNo',
+              label: "PC reference number",
+              rules: {
+                required: false,
+              }
+            }, {
+              type: "date",
+              value: "",
+              label: "Due date",
+              name: 'dueDate',
+              rules: {
+                required: false,
+              }
+            }],
+          ]
         },
-        dueDate: {
-          type: "date",
-          value: "",
-          label: "Due date",
-          rules: {
-            required: false,
-          }
-        },  
         paymentTerm: {
           type: "formArray",
           label: "Payment Terms",
@@ -159,7 +210,7 @@ export class PIPOSComponent implements OnInit {
           rules: {
             required: true,
           },
-          formGroup:[{
+          formGroup: [{
             date: {
               type: "date",
               value: "",
@@ -207,6 +258,9 @@ export class PIPOSComponent implements OnInit {
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
     e.value.buyerName = e.value.buyerName?.value != undefined ? e.value.buyerName.value : e.value.buyerName;
+    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+    e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
+    e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
     if (e.value?.document == 'PI') {
       e.value.doc = this.pipourl1
     }
@@ -221,7 +275,9 @@ export class PIPOSComponent implements OnInit {
         this.documentService.addPipo(e.value).subscribe(
           (res) => {
             this.toastr.success('PI/PO added successfully.');
-            this.router.navigateByUrl("/home/pipo");
+            if (this.validator.SELECTED_PIPO?.length == 0) {
+              this.router.navigateByUrl("/home/pipo");
+            }
           },
           (err) => console.log("Error adding pipo")
         );

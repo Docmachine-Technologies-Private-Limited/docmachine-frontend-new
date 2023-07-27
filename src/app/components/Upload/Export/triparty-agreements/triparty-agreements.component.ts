@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-triparty-agreements',
+  selector: 'export-triparty-agreements',
   templateUrl: './triparty-agreements.component.html',
   styleUrls: ['./triparty-agreements.component.scss','../../commoncss/common.component.scss']
 })

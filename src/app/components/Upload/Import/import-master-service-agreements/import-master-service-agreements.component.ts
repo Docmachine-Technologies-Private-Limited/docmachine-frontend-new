@@ -12,7 +12,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 
 
 @Component({
-  selector: 'app-master-service-agreements',
+  selector: 'import-master-service-agreements',
   templateUrl: './import-master-service-agreements.component.html',
   styleUrls: ['./import-master-service-agreements.component.scss','../../commoncss/common.component.scss']
 })

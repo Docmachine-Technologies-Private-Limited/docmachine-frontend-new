@@ -79,18 +79,22 @@ img{
 }
 
 .btn-primary{
-    background:	#B52AB4;
-    color: #fff !important;
-    border-radius:0 !important;
-    letter-spacing: 1px; 
+  background: transparent;
+  color: blue !important;
+  border-radius: 0!important;
+  letter-spacing: 1px;
+  border: 0;
+  outline: none;
+  text-decoration: underline;
 }
-
 
 .btn-primary:hover{
-    background:	#B52AB4;
+    background:	transparent;
+    color: aquamarine !important;
 }
 .btn-primary:focus{
-    background:	#B52AB4 !important;
+    background:	transparent !important;
+    color: aquamarine !important;
 }
 
 .btn-success{

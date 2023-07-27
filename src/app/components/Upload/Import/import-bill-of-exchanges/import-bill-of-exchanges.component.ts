@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-bill-of-exchanges',
+  selector: 'import-bill-of-exchanges',
   templateUrl: './import-bill-of-exchanges.component.html',
   styleUrls: ['./import-bill-of-exchanges.component.scss','../../commoncss/common.component.scss']
 })

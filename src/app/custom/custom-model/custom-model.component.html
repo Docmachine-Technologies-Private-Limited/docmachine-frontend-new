@@ -1,16 +1,15 @@
 <div class="modal dropdown-controller upload-modal" [id]="id" tabindex="-1" CommonDirective
-  [style]="RemoveBgTop==true?'background-color: #0000004d;':'background: transparent;'" role="dialog" #PopUpOpenClose>
+  [style]="RemoveBgTop==true?'background-color: #0000004d;':'background: transparent;'" role="dialog" [ngClass]="{'Full-Screen-Page':toggleminimize==true}" #PopUpOpenClose>
   <div [class]="'col-12 mt-2 '+id" Minimize_Maximize_PopUp [id]="id" role="document" [style.width]="width"
     [style.height]="height" [style]="customstyle" style="height: 63vh;margin: auto !important;">
     <div [ngClass]="{'modal-content':removebg==true}">
       <div [ngClass]="{'modal-header':removebg==true}">
         <h5 class="modal-title" *ngIf="removebg==true">{{name}}</h5>
         <div class="row" style="margin-right: 0 !important;align-items: center;gap: 10px;justify-content: center;">
-          <!-- <button type="button" *ngIf="HeaderEventButton!=''" style="padding: 0; margin: auto;" (click)="HEADERBUTTON(PopUpOpenClose)"> {{this.HeaderEventButton}}</button> -->
           <button type="button" style="padding: 0;
             margin: auto;" class="close full-screen" *ngIf="this.minimizedisabled==true" data-dismiss="modal"
             aria-label="Close"><img style="width: 15px;" [attr.popup-close]="id" class="full-screen-img"
-              src="../../assets/minimize-svgrepo-com.svg" alt="">
+              src="../../assets/minimize-svgrepo-com.svg" alt="" (click)="toggleminimize=!toggleminimize">
           </button>
           <button type="button"
             style="margin: auto;display: flex;padding: 0;align-items: center;justify-content: unset;" class="close"
@@ -28,7 +27,7 @@
       </div>
       <div class="modal-footer p-0" *ngIf="this.FooterButton!=false">
         <button type="button" class="footer-btn" [ngClass]="{'btn-disabled-popup':buttondisabled}">
-          <span class="close-popup" [attr.popup-close]="id" (click)="ClosePopup()">{{this.FooterButtonText}}</span>
+          <span class="close-popup" [attr.popup-close]="id" (click)="ClosePopup();OKBUTTON();">{{this.FooterButtonText}}</span>
         </button>
       </div>
     </div>

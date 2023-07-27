@@ -1,0 +1,392 @@
+.master-upload-components {
+    margin: 0;
+}
+
+.master-upload-components #content {
+    width: 100%;
+    padding: 0;
+    min-height: 100vh;
+    transition: all .3s;
+    display: flex;
+    margin: 0 auto auto;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 2px #e1dfdf;
+}
+
+.master-upload-components .filter_section_top {
+    display: grid;
+    width: 100%;
+    background-color: #22343f !important;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: 5px 0 10px 5px #597a8a;
+    padding: 2px;
+}
+
+.master-upload-components ::ng-deep .mat-tab-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    width: 100%;
+}
+
+.master-upload-components ::ng-deep .mat-tab-labels .mat-tab-label {
+    height: 48px;
+    padding: 0 24px;
+    cursor: pointer;
+    box-sizing: border-box;
+    opacity: .6;
+    min-width: 160px;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    position: relative;
+    width: 100%;
+}
+
+.master-upload-components ::ng-deep .mat-tab-body-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    padding: 10px;
+}
+
+.master-upload-components ::ng-deep .mat-tab-body-content {
+    height: 100%;
+    overflow: hidden;
+}
+
+.master-upload-components .right-panel ::ng-deep upload-components-header .upload-panel {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    padding: 10px;
+    gap: 10px;
+    margin-right: 10px;
+    position: absolute!important;
+    width: 100%!important;
+    top: 45px!important;
+    height: 70vh;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.master-upload-components .right-panel ::ng-deep upload-components-header .upload-panel upload-components .form-container-fluid {
+    height: auto !important;
+}
+
+.master-upload-components ::ng-deep export-app-pipos upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep app-shipping-bill upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-credit-note upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-debit-note upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-insurancedocuments upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-letterof-credit upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-master-service-agreements upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-triparty-agreements upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-opinion-reports upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-inward-remittance-advice upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-airway-bl-copy upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-bill-of-exchanges upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-destruction-certificates upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-commercial-invoices upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep export-packing-list-invoices upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-pipos upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep app-boe-bill upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-credit-note upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-debit-note upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-insurancedocuments upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-letterof-credit upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-master-service-agreements upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-triparty-agreements upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-opinion-reports upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-inward-remittance-advice upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-airway-bl-copy upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-bill-of-exchanges upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-destruction-certificates upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-commercial-invoices upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+.master-upload-components ::ng-deep import-packing-list-invoices upload-components-header .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 480px) !important;
+}
+
+// Summary Page
+
+.right-panel .right-panel .mat-tab-body-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    padding: 10px;
+    overflow: auto;
+    height: 80vh;
+}
+
+.master-upload-components ::ng-deep export-airway-blcopy-summary .content-wrap {
+    position: unset !important;
+    width: calc(100vw - 470px) !important;
+}
+
+.master-upload-components ::ng-deep export-airway-blcopy-summary .custom-expansion-panel .table .custom-expansion-tbody {
+    height: calc(100vh - 400px) !important;
+    overflow: auto;
+}
+
+.side-menu {
+    color: #fff;
+    width: 200px;
+    padding-left: 0;
+    background-image: linear-gradient(30deg, #17202e, #566878);
+    border-radius: 10px;
+}
+
+.side-menu .side-menu-h5 {
+    font-size: 12px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 12px;
+    padding-left: 30px;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+
+}
+
+.side-menu .side-menu-h5:hover {
+    color: #3f5efb;
+    background: #fff;
+    outline: none;
+    position: relative;
+    background-color: #fff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.side-menu .side-menu-h5 i {
+    margin-right: 5px;
+}
+
+.side-menu .side-menu-h5:hover::after {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    bottom: 100%;
+    right: 0;
+    height: 35px;
+    width: 35px;
+    border-bottom-right-radius: 18px;
+    box-shadow: 0 20px 0 0 #fff;
+}
+
+.side-menu .side-menu-h5:hover::before {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    top: 38px;
+    right: 0;
+    height: 35px;
+    width: 35px;
+    border-top-right-radius: 18px;
+    box-shadow: 0 -20px 0 0 #fff;
+}
+
+.side-menu p {
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    background: #002040;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.master-upload-panel {
+    display: grid;
+    grid-template-columns: 200px calc(100% - 200px);
+}
+
+.master-upload-panel .left-panel .over-panel-tag {
+    height: 79vh;
+    overflow: auto;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+.master-upload-panel .left-panel .over-panel-tag::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+.master-upload-panel .left-panel .over-panel-tag::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px #00000075;
+    border-radius: 10px;
+}
+
+.master-upload-panel .left-panel .over-panel-tag::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 10px;
+}
+
+.master-upload-panel .right-panel {
+    height: 84vh;
+    overflow: hidden;
+}
+
+.side-menu .side-menu-h5.Active-SideMenu {
+    color: #3f5efb;
+    background: #fff;
+    outline: none;
+    position: relative;
+    background-color: #fff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.side-menu .side-menu-h5.Active-SideMenu::after {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    bottom: 100%;
+    right: 0;
+    height: 35px;
+    width: 35px;
+    border-bottom-right-radius: 18px;
+    box-shadow: 0 20px 0 0 #fff;
+}
+
+.side-menu .side-menu-h5.Active-SideMenu::before {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    top: 38px;
+    right: 0;
+    height: 35px;
+    width: 35px;
+    border-top-right-radius: 18px;
+    box-shadow: 0 -20px 0 0 #fff;
+}
+
+.side-menu .upload-button {
+    color: #fff;
+    background-color: transparent;
+    border-color: unset;
+    box-shadow: inset 0 1px #ffffff26, 0 1px 1px #00000013;
+    border: none;
+}

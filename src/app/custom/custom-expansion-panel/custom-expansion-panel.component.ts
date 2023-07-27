@@ -67,9 +67,10 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
     this.EditChanges.emit({ item: data, index: index });
   }
 
-  TrClick(data: any, index: any) {
+  TdClick(data: any, index: any) {
     this.event.emit({ item: data, index: index });
   }
+  
   TrClickEvent(data: any, index: any) {
     this.TrEvent.emit({ item: data, index: index });
   }

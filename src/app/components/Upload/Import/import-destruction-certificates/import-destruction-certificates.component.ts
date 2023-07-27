@@ -11,7 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-destruction-certificates',
+  selector: 'import-destruction-certificates',
   templateUrl: './import-destruction-certificates.component.html',
   styleUrls: ['./import-destruction-certificates.component.scss','../../commoncss/common.component.scss']
 })

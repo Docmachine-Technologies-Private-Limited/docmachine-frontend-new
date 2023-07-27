@@ -50,6 +50,8 @@ import { JoinPipePipe } from './join-pipe.pipe';
 import { ResetOTPComponent } from './forgot-password/reset-otp/reset-otp.component';
 import { BehaviorSubjectListService } from "./home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
 import { RoleVerifyEmailComponent } from './RoleVerifyEmail/role-verify-email/role-verify-email.component';
+import { IdleService } from "./service/idle.service";
+import { CustomMatTabComponent } from './custom/custom-mat-tab/custom-mat-tab.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: "https://httpbin.org/post",
@@ -80,7 +82,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AuthorizationComponent,
     JoinPipePipe,
     ResetOTPComponent,
-    RoleVerifyEmailComponent
+    RoleVerifyEmailComponent,
+    CustomMatTabComponent,
   ],
   providers: [
     WindowInformationService,
@@ -93,7 +96,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AdminMemberGuard,
     DateFormatService,
     BehaviorSubjectListService,
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    IdleService
   ],
   bootstrap: [AppComponent],
   imports: [

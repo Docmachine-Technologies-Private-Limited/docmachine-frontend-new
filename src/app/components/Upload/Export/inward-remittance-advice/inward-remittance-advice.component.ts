@@ -12,7 +12,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 
 
 @Component({
-  selector: 'app-inward-remittance-advice',
+  selector: 'export-inward-remittance-advice',
   templateUrl: './inward-remittance-advice.component.html',
   styleUrls: ['./inward-remittance-advice.component.scss','../../commoncss/common.component.scss']
 })

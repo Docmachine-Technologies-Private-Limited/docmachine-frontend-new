@@ -68,6 +68,9 @@ import { LcInsuranceFormatComponent } from "./new-lc-insurance/lc-insurance-form
 import { TemplateMainPageComponent } from '../components/template-main-page/template-main-page.component';
 import { CustomCheckboxComponent } from "../custom/custom-checkbox/custom-checkbox.component";
 import { CustomRadioComponent } from "../custom/custom-radio/custom-radio.component";
+import { GlobalsAccessService } from "../components/Upload/service/globals-access.service";
+import { UploadHeaderComponent } from "../components/Upload/upload-components/upload-components-header/upload-components-header.component";
+import { NgCustomDropdownComponent } from "../custom/ng-custom-dropdown/ng-custom-dropdown.component";
 
 @NgModule({
   declarations: [
@@ -112,7 +115,9 @@ import { CustomRadioComponent } from "../custom/custom-radio/custom-radio.compon
     LcInsuranceFormatComponent,
     TemplateMainPageComponent,
     CustomCheckboxComponent,
-    CustomRadioComponent
+    CustomRadioComponent,
+    UploadHeaderComponent,
+    NgCustomDropdownComponent
   ],
   imports: [
     CommonModule,
@@ -135,7 +140,7 @@ import { CustomRadioComponent } from "../custom/custom-radio/custom-radio.compon
     MatIconModule
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService],
+  providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     FilternewPipe,
@@ -196,7 +201,9 @@ import { CustomRadioComponent } from "../custom/custom-radio/custom-radio.compon
     LcInsuranceFormatComponent,
     TemplateMainPageComponent,
     CustomCheckboxComponent,
-    CustomRadioComponent
+    CustomRadioComponent,
+    UploadHeaderComponent,
+    NgCustomDropdownComponent
   ],
 })
 export class SharedHomeModule { }

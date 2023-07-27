@@ -655,11 +655,19 @@ export class DocumentService {
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
   }
+
   getInward_remittance() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.get(`${this.api_base}/Inward_remittance/get`, httpOptions);
+  }
+
+  getInward_remittanceName() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    return this.http.get(`${this.api_base}/Inward_remittance/getSomeInfo`, httpOptions);
   }
 
   getPipoByType(type) {
@@ -1110,14 +1118,14 @@ export class DocumentService {
       httpOptions
     );
   }
-  getAirwayBlcopy() {
+
+  getAirwayBlcopy(pipono: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-
-    return this.http.get(`${this.api_base}/airwayBlCopy/get`, httpOptions);
+    return this.http.post(`${this.api_base}/airwayBlCopy/get`, { PipoNo: pipono }, httpOptions);
   }
 
   getAirwayBlcopyByBlValue(id) {
@@ -2879,11 +2887,11 @@ export class DocumentService {
       { "name": "Zimbabwe", "code": "ZW" },
     ]
   }
-  
-  removeAllSpecialChar(string:any){
+
+  removeAllSpecialChar(string: any) {
     return string?.replace(/[^a-zA-Z ]/g, "");
   }
-  
+
   addNewBankInfo(bank) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

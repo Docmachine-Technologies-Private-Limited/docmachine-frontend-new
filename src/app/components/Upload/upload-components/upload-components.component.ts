@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injectable, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injectable, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
@@ -8,13 +8,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../service/upload-service-validator.service';
 import $ from 'jquery';
+import { AuthGuard } from '../../../service/authguard.service';
 
 @Component({
   selector: 'upload-components',
   templateUrl: './upload-components.component.html',
   styleUrls: ['./upload-components.component.scss']
 })
-export class UploadComponentsComponent implements OnInit {
+export class UploadComponentsComponent implements OnInit,AfterViewInit {
   SUBMIT_ERROR: boolean = false;
   @Input('id') id: any = '';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
@@ -23,7 +24,14 @@ export class UploadComponentsComponent implements OnInit {
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
   @Input('KEY_ENTER_ENABLED') KEY_ENTER_ENABLED: any = false;
   @Input('ADD_NEW_BUTTON_VISIBLE') ADD_NEW_BUTTON_VISIBLE: any = '';
-
+  @ViewChild('BuyerNotFoundPanel') BuyerNotFound: ElementRef | any;
+  @ViewChild('BeneficiaryNotFoundPanel') BeneficiaryNotFound: ElementRef | any
+  LOGIN_TOEKN: any = '';
+  POPUP_VISIBLILTY: any = {
+    BuyerNotFound: '',
+    BeneficiaryNotFound: ''
+  }
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -31,6 +39,7 @@ export class UploadComponentsComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public authGuard: AuthGuard,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -129,4 +138,32 @@ export class UploadComponentsComponent implements OnInit {
   removeAllSpecialChar(string: any) {
     return string?.replace(/[^a-zA-Z ]/g, "");
   }
+  
+  ngAfterViewInit() {
+    let token = this.authGuard.loadFromLocalStorage();
+    if (token != null) {
+      this.validator.loaddata().then((res: any) => {
+        if (this.validator?.BUYER_DETAILS?.length == 0 && this?.validator?.userData?.sideMenu == 'export') {
+          this.POPUP_VISIBLILTY.BuyerNotFound = true;
+          this.BuyerNotFound?.displayShow
+        } else {
+          this.POPUP_VISIBLILTY.BuyerNotFound = false;
+          this.BuyerNotFound?.displayHidden
+        }
+
+        if (this.validator?.BENEFICIARY_DETAILS?.length == 0 && this?.validator?.userData?.sideMenu == 'import') {
+          this.POPUP_VISIBLILTY.BeneficiaryNotFound = true;
+          this.BeneficiaryNotFound?.displayShow
+        } else {
+          this.POPUP_VISIBLILTY.BeneficiaryNotFound = false
+          this.BeneficiaryNotFound?.displayHidden
+        }
+      });
+      this.LOGIN_TOEKN = 'asdasasddasds'
+      console.log('sdasjdasdkjagsdkjasdgaskdjagsdasdaskjdgasdkasdgaskdgasds',this.BuyerNotFound,this.BeneficiaryNotFound)
+    } else {
+      this.LOGIN_TOEKN = ''
+    }
+  }
+
 }

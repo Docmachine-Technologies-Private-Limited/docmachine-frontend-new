@@ -70,7 +70,6 @@ import { CreateNoteComponent } from "./upload/Import/create-note/create-note.com
 import { DebitNoteComponent } from "./upload/Import/debit-note/debit-note.component";
 import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/export-credit-note.component";
 import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
-import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
 import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance/add-advance-outward-remittance.component';
@@ -80,11 +79,7 @@ import { PhoneValidatorDirective } from './Validator/phone/phone-validator.direc
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
-import { ImportOpinionReportsComponent } from "./import-opinion-reports/import-opinion-reports.component";
 import { EditCompanyComponent } from "./edit-company/edit-company.component";
-import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/letter-of-credit-import-lc.component";
-import { MasterServiceComponent } from "./master-service/master-service.component";
-import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
 import { PdfViewerModule } from "ng2-pdf-viewer";
 import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
 import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
@@ -134,8 +129,37 @@ import { ImportDestructionCertificatesComponent } from '../components/Upload/Imp
 import { ImportPackingListInvoicesComponent } from '../components/Upload/Import/import-packing-list-invoices/import-packing-list-invoices.component';
 import { ImportCommercialInvoicesComponent } from '../components/Upload/Import/import-commercial-invoices/import-commercial-invoices.component';
 import { ImportDebitNotesComponent } from "../components/Upload/Import/import-debit-note/import-debit-note.component";
-import { UploadServiceValidatorService } from "../components/Upload/service/upload-service-validator.service";
 import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.component";
+import { MasterUploadComponent } from "../components/Upload/master-upload/master-upload.component";
+import { InwardRemittanceDisposalComponent } from "./SummaryPage/Export/inward-remittance-disposal/inward-remittance-disposal.component";
+import { InwardUploadDocumentsComponent } from "./Transaction/Inward-Remittance-Disposal/inward-upload-doc.component";
+import { BillOfExchangeComponent } from "./SummaryPage/Export/bill-of-exchange/bill-of-exchange.component";
+import { CommercialComponent } from "./SummaryPage/Export/commercial/commercial.component";
+import { AirwayBLCopyComponent } from "./SummaryPage/Export/airway-blcopy/airway-blcopy.component";
+import { DestructionComponent } from "./SummaryPage/Export/destruction/destruction.component";
+import { LetterOfCreditExportLCComponent } from "./SummaryPage/Export/letter-of-credit-export-lc/letter-of-credit-export-lc.component";
+import { MasterServiceComponent } from "./SummaryPage/Export/master-service/master-service.component";
+import { ExportOpinionReportsComponent } from "./SummaryPage/Export/opinion-reports/opinion-reports.component";
+import { ExportTryPartyAgreementsComponent } from "./SummaryPage/Export/try-party-agreements/try-party-agreements.component";
+import { ImportBOEComponent } from "./SummaryPage/Import/boe/boe.component";
+import { ImportAirwayBlcopyComponent } from "./SummaryPage/Import/import-airway-blcopy/import-airway-blcopy.component";
+import { ImportBillOfExchangeComponent } from "./SummaryPage/Import/import-bill-of-exchange/import-bill-of-exchange.component";
+import { ImportCommercialComponent } from "./SummaryPage/Import/import-commercial/import-commercial.component";
+import { ImportDebitNoteComponent } from "./SummaryPage/Import/import-debit-note/import-debit-note.component";
+import { ImportDestructionComponent } from "./SummaryPage/Import/import-destruction/import-destruction.component";
+import { ImportInsuranceComponent } from "./SummaryPage/Import/import-insurance/import-insurance.component";
+import { ImportMasterServiceComponent } from "./SummaryPage/Import/import-master-service/import-master-service.component";
+import { ImportOpinionReportsComponent } from "./SummaryPage/Import/import-opinion-reports/import-opinion-reports.component";
+import { ImportOutwardRemittanceSheetComponent } from "./SummaryPage/Import/import-outward-remittance-sheet/import-outward-remittance-sheet.component";
+import { ImportTriPartyComponent } from "./SummaryPage/Import/import-tri-party/import-tri-party.component";
+import { ImportsCreditNoteComponent } from "./SummaryPage/Import/imports-credit-note/imports-credit-note.component";
+import { LetterOfCreditImportLCComponent } from "./SummaryPage/Import/letter-of-credit-import-lc/letter-of-credit-import-lc.component";
+import { OtherDocumentsComponent } from "./SummaryPage/Export/other-documents/other-documents.component";
+import { ImportOtherDocumentsComponent } from "./SummaryPage/Import/import-other-documents/import-other-documents.component";
+import { InwardRemittanceAdviceSummaryComponent } from "./SummaryPage/Export/inward-remittance-advice/inward-remittance-advice.component";
+import { InsuranceDocumentComponent } from "./SummaryPage/Export/insurance-document/insurance-document.component";
+import { CreditNoteSummaryComponent } from "./SummaryPage/Export/credit-note/credit-note.component";
+import { DebitNoteSummaryComponent } from "./SummaryPage/Export/debit-note/debit-note.component";
 
 @NgModule({
   declarations: [
@@ -220,7 +244,46 @@ import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.com
     ImportDebitNotesComponent,
     ImportMasterServiceAgreementsComponent,
     ImportOpinionReportComponent,
-    NewLcInsuranceComponent
+    NewLcInsuranceComponent,
+    MasterUploadComponent,
+    InwardRemittanceDisposalComponent,
+    InwardUploadDocumentsComponent,
+    AirwayBLCopyComponent,
+    BillOfExchangeComponent,
+    CommercialComponent,
+    CreditNoteComponent,
+    DestructionComponent,
+    LetterOfCreditExportLCComponent,
+    MasterServiceComponent,
+    ExportOpinionReportsComponent,
+    ExportTryPartyAgreementsComponent,
+    ImportBOEComponent,
+    LetterOfCreditImportLCComponent,
+    ImportsCreditNoteComponent,
+    ImportTriPartyComponent,
+    ImportOutwardRemittanceSheetComponent,
+    ImportOpinionReportsComponent,
+    ImportMasterServiceComponent,
+    ImportInsuranceComponent,
+    ImportDestructionComponent,
+    ImportCommercialComponent,
+    ImportBillOfExchangeComponent,
+    ImportAirwayBlcopyComponent,
+    ImportBOEComponent,
+    ExportTryPartyAgreementsComponent,
+    MasterServiceComponent,
+    LetterOfCreditExportLCComponent,
+    DestructionComponent,
+    AirwayBLCopyComponent,
+    CommercialComponent,
+    BillOfExchangeComponent,
+    ImportDebitNoteComponent,
+    OtherDocumentsComponent,
+    ImportOtherDocumentsComponent,
+    InwardRemittanceAdviceSummaryComponent,
+    InsuranceDocumentComponent,
+    CreditNoteSummaryComponent,
+    DebitNoteSummaryComponent
   ],
   imports: [
     SharedHomeModule,
@@ -253,17 +316,33 @@ import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.com
           },
           { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule), canActivate: [MemberGuard] },
           { path: "pipo-doc", loadChildren: () => import('./pipo-documents/pipo-documents.module').then(mod => mod.PipoDocumentsModule), canActivate: [MemberGuard] },
-          { path: "boe", loadChildren: () => import('./boe/boe.module').then(mod => mod.BoeModule), canActivate: [MemberGuard] },
-          { path: "importCredit", loadChildren: () => import('./imports-credit-note/imports-credit-note.module').then(mod => mod.ImportsCreditNoteModule), canActivate: [MemberGuard] },
-          { path: "importDebit", loadChildren: () => import('./import-debit-note/import-debit-note.module').then(mod => mod.ImportDebitNoteModule), canActivate: [MemberGuard] },
-          { path: "importInsurance", loadChildren: () => import('./import-insurance/imports-insurance.module').then(mod => mod.ImportsInsuranceModule), canActivate: [MemberGuard] },
-          { path: "importTriParty", loadChildren: () => import('./import-tri-party/imports-tri-party.module').then(mod => mod.ImportsTriPartyModule) },
+          {
+            path: "boe", component: ImportBOEComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "importCredit", component: ImportsCreditNoteComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "importDebit", component: ImportDebitNoteComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "importInsurance", component: ImportInsuranceComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "importTriParty", component: ImportTriPartyComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
           { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward-remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule), canActivate: [MemberGuard] },
           { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule), canActivate: [MemberGuard] },
           { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule), canActivate: [MemberGuard] },
           { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule), canActivate: [MemberGuard] },
           {
-            path: "lc-isurance", component: NewLcInsuranceComponent,
+            path: "lc-isurance",
+            component: NewLcInsuranceComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
@@ -271,29 +350,95 @@ import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.com
           { path: "buyer-credit", loadChildren: () => import('./buyers-credit-request/buyers-credit-request-module').then(mod => mod.BuyersCreditRequestModule), canActivate: [MemberGuard] },
           { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule), canActivate: [MemberGuard] },
           { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule), canActivate: [MemberGuard] },
-          { path: "packing-list", loadChildren: () => import('./other-documents/other-documents.module').then(mod => mod.OtherDocumentsModule), canActivate: [MemberGuard] },
-          { path: "import-packing-list", loadChildren: () => import('./import-other-documents/import-other-documents.module').then(mod => mod.ImportOtherDocumentsModule), canActivate: [MemberGuard] },
-          { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule), canActivate: [MemberGuard] },
-          { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule), canActivate: [MemberGuard] },
-          { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule), canActivate: [MemberGuard] },
-          { path: "import-destruction", loadChildren: () => import('./import-destruction/import-destruction.module').then(mod => mod.ImportDestructionModule), canActivate: [MemberGuard] },
-          { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule), canActivate: [MemberGuard] },
-          { path: "import-bill-of-exchange", loadChildren: () => import('./import-bill-of-exchange/import-bill-of-exchange.module').then(mod => mod.ImportBillOfExchangeModule), canActivate: [MemberGuard] },
-          { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule), canActivate: [MemberGuard] },
-          { path: "import-airway-bl-copy", loadChildren: () => import('./import-airway-blcopy/import-airway-blcopy.module').then(mod => mod.ImportAirwayBlcopyModule), canActivate: [MemberGuard] },
-          { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule), canActivate: [MemberGuard] },
-          { path: "outward-remittance-advice", loadChildren: () => import('./import-outward-remittance-sheet/outward-remittance-advice.module').then(mod => mod.OutwardRemittanceAdviceModule), canActivate: [MemberGuard] },
-          { path: "opinion-report", loadChildren: () => import('./opinion-reports/opinion-reports.module').then(mod => mod.OpinionReportsModule), canActivate: [MemberGuard] },
-          { path: "import-opinion-report", loadChildren: () => import('./import-opinion-reports/import-opinion-reports.module').then(mod => mod.ImportOpinionReportsModule), canActivate: [MemberGuard] },
-          { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule), canActivate: [MemberGuard] },
-          { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule), canActivate: [MemberGuard] },
-          { path: "import-master-services", loadChildren: () => import('./import-master-service/import-master-service.module').then(mod => mod.ImportMasterServiceModule), canActivate: [MemberGuard] },
-          { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule), canActivate: [MemberGuard] },
-          { path: "letterofcredit-import-lc", loadChildren: () => import('./letter-of-credit-import-lc/letter-of-credit-import-lc.module').then(mod => mod.LetterOfCreditImportLCModule), canActivate: [MemberGuard] },
-          { path: "insurance-document", loadChildren: () => import('./insurance-document/insurance-document.module').then(mod => mod.InsuranceDocumentModule), canActivate: [MemberGuard] },
-          { path: "debit-note", loadChildren: () => import('./debit-note/debit-note.module').then(mod => mod.DebitNoteModule), canActivate: [MemberGuard] },
-          { path: "credit-note", loadChildren: () => import('./credit-note/credit-note.module').then(mod => mod.CreditNoteModule), canActivate: [MemberGuard] },
-          { path: "view-document", loadChildren: () => import('./view-document/view-document.module').then(mod => mod.ViewDocumentModule), canActivate: [MemberGuard] },
+          {
+            path: "packing-list", component: OtherDocumentsComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "import-packing-list", component: ImportOtherDocumentsComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "commercial",
+            component: CommercialComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "import-commercial", component: ImportCommercialComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "destruction", component: DestructionComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "import-destruction", component: ImportDestructionComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "bill-of-exchange",
+            component: BillOfExchangeComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "import-bill-of-exchange", component: ImportBillOfExchangeComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          { path: "airway-bl-copy", component: AirwayBLCopyComponent, pathMatch: "full", canActivate: [MemberGuard] },
+          {
+            path: "import-airway-bl-copy", component: ImportAirwayBlcopyComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "inward-remittance-advice", component: InwardRemittanceAdviceSummaryComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "outward-remittance-advice", component: ImportOutwardRemittanceSheetComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "opinion-report", component: ExportOpinionReportsComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "import-opinion-report", component: ImportOpinionReportsComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "try-party", component: ExportTryPartyAgreementsComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "master-services", component: MasterServiceComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "import-master-services", component: ImportMasterServiceComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "letterofcredit-lc", component: LetterOfCreditExportLCComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "letterofcredit-import-lc", component: LetterOfCreditImportLCComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "insurance-document", component: InsuranceDocumentComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "debit-note", component: DebitNoteSummaryComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          {
+            path: "credit-note", component: CreditNoteSummaryComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
+          { path: "view-document", loadChildren: () => import('./SummaryPage/Export/view-document/view-document.module').then(mod => mod.ViewDocumentModule), canActivate: [MemberGuard] },
           { path: "edpms-recon-table", loadChildren: () => import('./edpms-recon-table/edpms-recon-table.module').then(mod => mod.EdpmsReconTableModule), canActivate: [MemberGuard] },
           { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule), canActivate: [MemberGuard] },
           { path: "idpms-recon-table", loadChildren: () => import('./idpms-recon-table/idpms-recon-table.module').then(mod => mod.IdpmsReconTableModule), canActivate: [MemberGuard] },
@@ -301,6 +446,7 @@ import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.com
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule), canActivate: [MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule), canActivate: [MemberGuard] },
           { path: "export-home", component: ExportHomeComponent, canActivate: [MemberGuard] },
+          { path: "export-home/:id", component: ExportHomeComponent, canActivate: [MemberGuard] },
           { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule), canActivate: [MemberGuard] },
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule), canActivate: [MemberGuard] },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule), canActivate: [MemberGuard] },
@@ -707,6 +853,24 @@ import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.com
             canActivate: [MemberGuard]
           },
           {
+            path: "master-upload",
+            component: MasterUploadComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "Inward-Remittance-Disposal",
+            component: InwardRemittanceDisposalComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "Upload-Inward-Remittance-Disposal",
+            component: InwardUploadDocumentsComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
             path: "Sheduler-Calender",
             component: CustomJPXSchedulerComponent,
             pathMatch: "full",
@@ -762,5 +926,5 @@ import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.com
   exports: [MatProgressBarModule, MatTabsModule, SharedHomeModule],
 })
 export class HomeModule {
- 
+
 }

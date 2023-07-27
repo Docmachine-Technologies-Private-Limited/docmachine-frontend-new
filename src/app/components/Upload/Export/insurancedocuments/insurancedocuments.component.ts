@@ -8,9 +8,10 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-insurancedocuments',
+  selector: 'export-insurancedocuments',
   templateUrl: './insurancedocuments.component.html',
   styleUrls: ['./insurancedocuments.component.scss','../../commoncss/common.component.scss']
 })
@@ -48,27 +49,11 @@ export class InsurancedocumentsComponent implements OnInit {
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
-    private fb: FormBuilder,
+    public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    this.userService.getBuyer(1).subscribe((res: any) => {
-      res.data?.forEach(element => {
-        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-        }
-        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-      });
-      console.log('Benne Detail111', this.ConsigneeNameList, this.BUYER_DETAILS);
-    }, (err) => console.log('Error', err));
-    await this.pipoDataService.getPipoList('export').then(async (data) => {
-      console.log(data, 'data..................')
-      this.pipoDataService.pipolistModel$.subscribe((data) => {
-        this.PIPO_DATA = data;
-        console.log(data, 'data2222..................')
-      });
-    });
+   
   }
 
   response(args: any) {
@@ -76,7 +61,7 @@ export class InsurancedocumentsComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
-      this.buildForm({
+      this.validator.buildForm({
         insuranceNumber: {
           type: "text",
           value: "",
@@ -101,17 +86,14 @@ export class InsurancedocumentsComponent implements OnInit {
             required: true,
           }
         }
-      });
+      },'ExportInsuranceCopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
   onSubmit(e: any) {
-    console.log(e, 'value')
-    if (e.status == 'VALID') {
-      this.SUBMIT_ERROR = false;
-      e.value.file = 'export';
+    e.value.file = 'export';
       e.value.pipo = this.pipoArr;
       e.value.doc = this.pipourl1;
       e.value.buyerName = this.BUYER_LIST;
@@ -145,9 +127,6 @@ export class InsurancedocumentsComponent implements OnInit {
           this.toastr.error(`Please check this sb no. : ${e.value.insuranceNumber} already exit...`);
         }
       });
-    } else {
-      this.SUBMIT_ERROR = true
-    }
   }
 
   clickPipo(event: any) {
@@ -161,44 +140,5 @@ export class InsurancedocumentsComponent implements OnInit {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
-  }
-
-  buildForm(model: any) {
-    this.fields = [];
-    const formGroupFields = this.getFormControlsFields(model);
-    this.dynamicFormGroup = new FormGroup(formGroupFields);
-    console.log(this.dynamicFormGroup, 'dynamicFormGroup')
-  }
-
-  getFormControlsFields(model: any) {
-    const formGroupFields = {};
-    for (let field of Object.keys(model)) {
-      let id: any = field;
-      const fieldProps = model[field];
-      if (fieldProps?.type != "formArray") {
-        formGroupFields[field] = new FormControl(fieldProps.value, Validators.required);
-        this.fields.push({ ...fieldProps, fieldName: field });
-      } else {
-        let control: any = fieldProps?.formGroup?.map(r =>
-          new FormGroup(Object.entries(r).reduce((acc, [k, v]) => {
-            let vk: any = v;
-            acc[k] = new FormControl(vk?.value || "", Validators.required);
-            return acc;
-          }, {})));
-        formGroupFields[field] = control[0];
-        console.log(id, fieldProps, control, this.fields, 'hghjgjhghjgjh')
-        let control2: any = fieldProps?.formGroup?.map(r => {
-          var temp: any = [];
-          for (let field_1 of Object.keys(r)) {
-            temp.push({ ...r[field_1], fieldName: field_1 })
-          }
-          return temp;
-        });
-        fieldProps['formGroup'] = control2[0];
-        this.fields.push({ ...fieldProps, fieldName: field });
-      }
-    }
-    console.log(this.fields, 'hghjgjhghjgjh')
-    return formGroupFields;
   }
 }
