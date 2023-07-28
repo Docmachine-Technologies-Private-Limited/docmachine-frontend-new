@@ -91,7 +91,7 @@ export class PIPOSComponent implements OnInit {
           value: "",
           label: "Remitter Name",
           rules: {
-            required: true,
+            required: false,
           }
         },
         document: {
@@ -203,47 +203,53 @@ export class PIPOSComponent implements OnInit {
           ]
         },
         paymentTerm: {
-          type: "formArray",
+          type: "formGroup",
           label: "Payment Terms",
           GroupLabel: ['Payment Terms 1'],
-          MAX_LIMIT: 4,
+          AddNewRequried:true,
           rules: {
-            required: true,
+            required: false,
           },
-          formGroup: [{
-            date: {
-              type: "date",
-              value: "",
-              label: "Last date of shipment",
-              rules: {
-                required: true,
+          formArray: [
+            [
+              {
+                type: "date",
+                value: "",
+                label: "Last date of shipment",
+                name: 'date',
+                rules: {
+                  required: true,
+                },
               },
-            },
-            type: {
-              type: "PaymentTermType",
-              value: "",
-              label: "Type",
-              rules: {
-                required: true,
+              {
+                type: "PaymentTermType",
+                value: "",
+                label: "Type",
+                name: 'type',
+                rules: {
+                  required: true,
+                },
               },
-            },
-            amount: {
-              type: "text",
-              value: "",
-              label: "Amount",
-              rules: {
-                required: true,
+              {
+                type: "text",
+                value: "",
+                label: "Amount",
+                name: 'amount',
+                rules: {
+                  required: true,
+                },
               },
-            },
-            currency: {
-              type: "currency",
-              value: "",
-              label: "Currency",
-              rules: {
-                required: true,
-              }
-            },
-          }]
+              {
+                type: "currency",
+                value: "",
+                label: "Currency",
+                name: 'currency',
+                rules: {
+                  required: true,
+                }
+              },
+            ]
+          ]
         },
       }, 'PIPO_EXPORT');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')

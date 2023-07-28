@@ -126,9 +126,12 @@ export class UploadServiceValidatorService implements OnInit {
           this.documentService.getMaster(1).subscribe((res: any) => {
             console.log('Master Data File', res);
             this.origin = [];
+            this.SHIPPING_BUNDEL = [];
             res.data.forEach((element, i) => {
               element?.pipo?.forEach((ele, j) => {
-                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+                if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
+                  this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+                }
               });
               this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
             });
@@ -169,15 +172,18 @@ export class UploadServiceValidatorService implements OnInit {
   }
 
   async buildForm(model: any, id: any) {
-    this.loaddata().then(async (res: any) => {
-      console.log("BANK_NAME_LIST_GLOABL", res, this.BANK_NAME_LIST_GLOABL)
-      if (res == true) {
-        const formGroupFields = await this.getFormControlsFields(model, id);
-        this.dynamicFormGroup[id] = await new FormGroup(formGroupFields?.formGroupFields);
-        this.FIELDS_DATA[id] = formGroupFields?.fields;
-        console.log(this.dynamicFormGroup, formGroupFields, 'dynamicFormGroup');
-        await this.dynamicFormGroup;
-      }
+    return new Promise((resolve, reject) => {
+      this.loaddata().then(async (res: any) => {
+        console.log("BANK_NAME_LIST_GLOABL", res, this.BANK_NAME_LIST_GLOABL)
+        if (res == true) {
+          const formGroupFields = await this.getFormControlsFields(model, id);
+          this.dynamicFormGroup[id] = await new FormGroup(formGroupFields?.formGroupFields);
+          this.FIELDS_DATA[id] = formGroupFields?.fields;
+          console.log(this.dynamicFormGroup, formGroupFields, 'dynamicFormGroup');
+          await this.dynamicFormGroup;
+          await resolve(this.dynamicFormGroup);
+        }
+      })
     })
   }
 
@@ -229,7 +235,7 @@ export class UploadServiceValidatorService implements OnInit {
               this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
-          await tempFormGroup.push(new FormGroup(OptiontempFormGroup));
+          await tempFormGroup.push(new FormGroup(OptiontempFormGroup,null));
         });
         fieldProps['NewOption'] = temp;
         formGroupFields[field] = await new FormArray(tempFormGroup)
@@ -247,10 +253,10 @@ export class UploadServiceValidatorService implements OnInit {
               this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
-          await tempFormGroup.push(new FormGroup(OptiontempFormGroup));
+          await tempFormGroup.push(new FormGroup(OptiontempFormGroup,null));
         });
         fieldProps['NewformArray'] = temp;
-        formGroupFields[field] = await new FormArray(tempFormGroup,{validators:RemoveValidator})
+        formGroupFields[field] = await new FormArray(tempFormGroup);
         fields.push({ ...fieldProps, fieldName: field });
         console.log('formGroup', fields)
       } else {
@@ -267,6 +273,17 @@ export class UploadServiceValidatorService implements OnInit {
     console.log(value, 'asdasdasdasds')
     this.FIELDS_DATA[id]?.[key]?.setValue(value);
   }
+
+  setValueFromArray(id:any,form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any) {
+    const myForm: any = form?.controls[fieldName] as FormGroup;
+    let currentVal = value;
+    myForm.value[OptionfieldIndex][FormOptionfieldName] = currentVal;
+    myForm['touched'] = true;
+    myForm['status'] = 'VALID';
+    this.dynamicFormGroup[id].get(fieldName).clearValidators(); // 6. Clear All Validators
+    this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
+  }
+
   ConfirmedValidator(controlName: string, matchingControlName: string): any {
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
@@ -317,6 +334,7 @@ export class UploadServiceValidatorService implements OnInit {
       OptionMultiCheckBox: rule?.required == true ? [Validators.required] : [],
       RemitterName: rule?.required == true ? [Validators.required] : [],
       formGroup: rule?.required == true ? [Validators.required] : [],
+      benne: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :
@@ -488,7 +506,7 @@ export function hasDuplicateFormArray(data: any): ValidatorFn {
 
 export function RemoveValidator(): ValidatorFn {
   return (formArray: FormArray | any): { [key: string]: any } | null | any => {
-    console.log(formArray,'formArray')
+    console.log(formArray, 'formArray')
     return null
   };
 }

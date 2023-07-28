@@ -71,6 +71,7 @@ import { CustomRadioComponent } from "../custom/custom-radio/custom-radio.compon
 import { GlobalsAccessService } from "../components/Upload/service/globals-access.service";
 import { UploadHeaderComponent } from "../components/Upload/upload-components/upload-components-header/upload-components-header.component";
 import { NgCustomDropdownComponent } from "../custom/ng-custom-dropdown/ng-custom-dropdown.component";
+import { NgInputComponent } from "../custom/ng-input/ng-input.component";
 
 @NgModule({
   declarations: [
@@ -117,7 +118,8 @@ import { NgCustomDropdownComponent } from "../custom/ng-custom-dropdown/ng-custo
     CustomCheckboxComponent,
     CustomRadioComponent,
     UploadHeaderComponent,
-    NgCustomDropdownComponent
+    NgCustomDropdownComponent,
+    NgInputComponent
   ],
   imports: [
     CommonModule,
@@ -203,7 +205,8 @@ import { NgCustomDropdownComponent } from "../custom/ng-custom-dropdown/ng-custo
     CustomCheckboxComponent,
     CustomRadioComponent,
     UploadHeaderComponent,
-    NgCustomDropdownComponent
+    NgCustomDropdownComponent,
+    NgInputComponent
   ],
 })
 export class SharedHomeModule { }

@@ -11,7 +11,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'import-pipos',
   templateUrl: './import-pipos.component.html',
-  styleUrls: ['./import-pipos.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-pipos.component.scss', '../../commoncss/common.component.scss']
 })
 export class ImportPIPOSComponent implements OnInit {
   publicUrl: any = '';
@@ -89,15 +89,6 @@ export class ImportPIPOSComponent implements OnInit {
             required: true,
           }
         },
-        MaterialTypes: {
-          type: "MultiCheckBox",
-          value: "",
-          label: "Raw Material or Capital Goods",
-          checkboxlabel: [{ text: "Raw Material", value: 'Raw Material' }, { text: 'Capital Goods', value: 'Capital Goods' }],
-          rules: {
-            required: true,
-          }
-        },
         pi_poNo: {
           type: "text",
           value: "",
@@ -158,51 +149,54 @@ export class ImportPIPOSComponent implements OnInit {
           type: "formGroup",
           label: "Payment Terms",
           GroupLabel: ['Payment Terms 1'],
+          AddNewRequried:true,
           rules: {
             required: false,
           },
-          formArray:[
-          [
-            {
-              type: "date",
-              value: "",
-              label: "Last date of shipment",
-              name: 'date',
-              rules: {
-                required: true,
+          formArray: [
+            [
+              {
+                type: "date",
+                value: "",
+                label: "Last date of shipment",
+                name: 'date',
+                rules: {
+                  required: true,
+                },
               },
-            },
-             {
-              type: "PaymentTermType",
-              value: "",
-              label: "Type",
-              name: 'type',
-              rules: {
-                required: true,
+              {
+                type: "PaymentTermType",
+                value: "",
+                label: "Type",
+                name: 'type',
+                rules: {
+                  required: true,
+                },
               },
-            },
-            {
-              type: "text",
-              value: "",
-              label: "Amount",
-              name: 'amount',
-              rules: {
-                required: true,
+              {
+                type: "text",
+                value: "",
+                label: "Amount",
+                name: 'amount',
+                rules: {
+                  required: true,
+                },
               },
-            },
-             {
-              type: "currency",
-              value: "",
-              label: "Currency",
-              name: 'currency',
-              rules: {
-                required: true,
-              }
-            },
-          ]
+              {
+                type: "currency",
+                value: "",
+                label: "Currency",
+                name: 'currency',
+                rules: {
+                  required: true,
+                }
+              },
+            ]
           ]
         },
-      }, 'PIPO_IMPORT');
+      }, 'PIPO_IMPORT').then((res: any) => {
+        console.log(res, 'PIPO_IMPORT')
+      });
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -216,8 +210,6 @@ export class ImportPIPOSComponent implements OnInit {
     e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
     e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
     e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
-    e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
-    e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
     if (e.value?.document == 'PI') {
       e.value.doc = this.pipourl1
     }
@@ -247,7 +239,7 @@ export class ImportPIPOSComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;

@@ -171,13 +171,13 @@ export class CommercialInvoicesComponent implements OnInit {
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.SHIPPING_BILL_LIST = [];
       this.validator.SHIPPING_BILL_LIST = [];
       for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
         if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
           this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
         }
       }
+      console.log(event, this.validator.SHIPPING_BUNDEL, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
     } else {
       this.btndisabled = true;
     }

@@ -112,26 +112,10 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
             required: true,
           }
         },
-        recievedDate: {
-          type: "date",
-          value: res?.recievedDate,
-          label: "Recieved Date",
-          rules: {
-            required: true,
-          }
-        },
         commision: {
           type: "number",
           value: res?.commision,
           label: "Commission",
-          rules: {
-            required: true,
-          }
-        },
-        conversionDate: {
-          type: "date",
-          value: res?.conversionDate,
-          label: "Conversion Date",
           rules: {
             required: true,
           }

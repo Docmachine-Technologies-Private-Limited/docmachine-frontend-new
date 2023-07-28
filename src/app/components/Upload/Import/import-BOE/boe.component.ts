@@ -81,7 +81,7 @@ export class BOEComponent implements OnInit {
           formGroup: [{
             boeDate: {
               type: "date",
-              value: this.UPLOAD_FORM['boeDate'],
+              value: this.UPLOAD_FORM['boeDate']?.replace('/','-'),
               label: "Boe Date",
               rules: {
                 required: true,

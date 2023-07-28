@@ -31,7 +31,7 @@ import { TermsAndConditionComponent } from './terms-and-condition/terms-and-cond
 import { InwardRemittanceComponent } from "./yesBank/inwardRemittance/inwardRemittance.component";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ProgressBarModule } from "angular-progress-bar"
-import { PipoExportComponent } from './pipo-export/pipo-export.component';
+import { PipoExportComponent } from './SummaryPage/Export/pipo-export/pipo-export.component';
 import { EditPipoComponent } from './edit-pipo/edit-pipo.component';
 import { ViewPipoComponent } from './view-pipo/view-pipo.component';
 import { AddPipoComponent } from './add-pipo/add-pipo.component';

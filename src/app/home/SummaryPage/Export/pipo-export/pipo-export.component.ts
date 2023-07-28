@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { DocumentService } from "../../service/document.service";
-import { UserService } from '../../service/user.service';
+import { DocumentService } from "../../../../service/document.service";
+import { UserService } from '../../../../service/user.service';
 import * as xlsx from 'xlsx';
-import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-import { WindowInformationService } from '../../service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
+import { WindowInformationService } from '../../../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { Router } from '@angular/router';
 import moment from 'moment';
 
@@ -147,7 +147,7 @@ export class PipoExportComponent implements OnInit {
           "BRANCH": element['location'],
           "Commodity": element['commodity'],
           "Amount": element['amount'],
-          "PaymentTerm": element['paymentTerm'][1]?.type?.value,
+          "PaymentTerm": element['paymentTerm'][0]?.type?.value,
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,

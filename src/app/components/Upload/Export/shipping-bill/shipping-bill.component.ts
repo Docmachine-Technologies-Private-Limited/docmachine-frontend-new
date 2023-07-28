@@ -60,40 +60,46 @@ export class ShippingBillComponent implements OnInit {
       let removeother: any = this.date_format.removeUnadvantageText(this.UPLOAD_FORM['sbdate'], '__—_—');
       this.UPLOAD_FORM['sbdate'] = this.date_format.formatDate(this.date_format.removeAllUnderscore(removeother), '-');
       this.pipourl1 = args[1].data;
-      const defaultinvoice: any = [{
-        sno: {
-          type: "text",
-          value: "",
-          label: "Invoices Sno.",
-          rules: {
-            required: true,
+      const defaultinvoice: any = [
+        [
+          {
+            type: "text",
+            value: "1",
+            label: "Invoices Sno.",
+            name: 'sno',
+            rules: {
+              required: true,
+            },
+          },
+          {
+            type: "text",
+            value: "",
+            label: "Invoices No.",
+            name: 'invoiceno',
+            rules: {
+              required: true,
+            }
+          },
+          {
+            type: "currency",
+            value: "",
+            label: "Invoices Currency",
+            name: 'currency',
+            rules: {
+              required: true,
+            }
+          },
+          {
+            type: "text",
+            value: "",
+            label: "Invoices Amount",
+            name: 'amount',
+            rules: {
+              required: true,
+            }
           }
-        },
-        invoiceno: {
-          type: "text",
-          value: "",
-          label: "Invoices No.",
-          rules: {
-            required: true,
-          }
-        },
-        currency: {
-          type: "currency",
-          value: "",
-          label: "Invoices Currency",
-          rules: {
-            required: true,
-          }
-        },
-        amount: {
-          type: "text",
-          value: "",
-          label: "Invoices Amount",
-          rules: {
-            required: true,
-          }
-        }
-      }]
+        ]
+      ]
       this.validator.buildForm({
         sbdate: {
           type: "date",
@@ -123,7 +129,7 @@ export class ShippingBillComponent implements OnInit {
           type: "text",
           value: this.BUYER_LIST[0],
           label: "Buyer Name",
-          disabled:true,
+          disabled: true,
           rules: {
             required: true,
           }
@@ -234,47 +240,53 @@ export class ShippingBillComponent implements OnInit {
           }
         },
         invoices: {
-          type: "formArray",
+          type: "formGroup",
           label: "Invoices Info",
           GroupLabel: ['Invoices 1'],
-          MAX_LIMIT: 4,
+          AddNewRequried: true,
           rules: {
-            required: true,
+            required: false,
           },
-          formGroup: this.UPLOAD_FORM['invoices'] != undefined ? [{
-            sno: {
-              type: "text",
-              value: this.UPLOAD_FORM['invoices'][0]['sno'],
-              label: "Invoices Sno.",
-              rules: {
-                required: true,
+          formArray: this.UPLOAD_FORM['invoices'] != undefined ? [
+            [
+              {
+                type: "text",
+                value: this.UPLOAD_FORM['invoices'][0]['sno'],
+                label: "Invoices Sno.",
+                name: 'sno',
+                rules: {
+                  required: true,
+                },
               },
-            },
-            invoiceno: {
-              type: "text",
-              value: this.UPLOAD_FORM['invoices'][0]['invoiceno'],
-              label: "Invoices No.",
-              rules: {
-                required: true,
+              {
+                type: "text",
+                value: this.UPLOAD_FORM['invoices'][0]['invoiceno'],
+                label: "Invoices No.",
+                name: 'invoiceno',
+                rules: {
+                  required: true,
+                }
+              },
+              {
+                type: "currency",
+                value: this.UPLOAD_FORM['invoices'][0]['currency'],
+                label: "Invoices Currency",
+                name: 'currency',
+                rules: {
+                  required: true,
+                }
+              },
+              {
+                type: "text",
+                value: this.UPLOAD_FORM['invoices'][0]['amount'],
+                label: "Invoices Amount",
+                name: 'amount',
+                rules: {
+                  required: true,
+                }
               }
-            },
-            currency: {
-              type: "currency",
-              value: this.UPLOAD_FORM['invoices'][0]['currency'],
-              label: "Invoices Currency",
-              rules: {
-                required: true,
-              }
-            },
-            amount: {
-              type: "text",
-              value: this.UPLOAD_FORM['invoices'][0]['amount'],
-              label: "Invoices Amount",
-              rules: {
-                required: true,
-              }
-            }
-          }] : defaultinvoice
+            ]
+          ] : defaultinvoice
         }
       }, 'ShippingBill');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
@@ -290,7 +302,6 @@ export class ShippingBillComponent implements OnInit {
       invoices = Object.assign(e?.invoices[i], invoices)
     }
     console.log(invoices);
-    e.value.invoices = invoices.length != 0 ? invoices : this.INVOICE_LIST;
     e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
     e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
     e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
@@ -315,7 +326,7 @@ export class ShippingBillComponent implements OnInit {
           this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
             console.log(data);
             this.toastr.success('shipping Bill added successfully.');
-            if (this.validator.SELECTED_PIPO?.length==0) {
+            if (this.validator.SELECTED_PIPO?.length == 0) {
               this.router.navigate(['/home/view-document/sb']);
             }
           }, (error) => {

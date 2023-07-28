@@ -1,0 +1,7 @@
+<ng-container>
+    <div class="input-container">
+      <label class="input-container-label" [innerHTML]="item?.label"></label>
+      <input class="form-control" name="input" [type]="item?.type" [(ngModel)]="item.value"
+      (ngModelChange)="onModelChange($event,item?.value)" />
+    </div>
+  </ng-container>
