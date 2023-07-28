@@ -80,8 +80,8 @@ export class ManageCustomerComponent implements OnInit {
           console.log(data["data"], 'getBene');
           this.item2 = data["data"];
           this.BuyerBeneficiaryTable(this.item2)
-        },(error) => {console.log("errrrror")});
-        
+        }, (error) => { console.log("errrrror") });
+
         this.loginForm = this.formBuilder.group({
           benneName: ['', Validators.required],
           beneAdrs: ['', Validators.required],
@@ -112,6 +112,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Beneficiary Address",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -141,6 +142,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Beneficiary’s bank’s address including country",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -160,7 +162,7 @@ export class ManageCustomerComponent implements OnInit {
             label: "Sort Code",
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           },
           iban: {
@@ -169,16 +171,17 @@ export class ManageCustomerComponent implements OnInit {
             label: "IBAN",
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           },
           interBankSwiftCode: {
             type: "text",
             value: "",
             label: "Intermediary Bank details (if applicable) SWIFT Code",
+            maxLength: 300,
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           },
           interBankName: {
@@ -187,10 +190,10 @@ export class ManageCustomerComponent implements OnInit {
             label: "Intermediary Bank Name (if any)",
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           }
-        },'CreateNewBeneficiary');
+        }, 'CreateNewBeneficiary');
         this.validator.buildForm({
           benneName: {
             type: "text",
@@ -207,6 +210,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Beneficiary Address",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -236,6 +240,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Beneficiary’s bank’s address including country",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -255,7 +260,7 @@ export class ManageCustomerComponent implements OnInit {
             label: "Sort Code",
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           },
           iban: {
@@ -264,16 +269,17 @@ export class ManageCustomerComponent implements OnInit {
             label: "IBAN",
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           },
           interBankSwiftCode: {
             type: "text",
             value: "",
             label: "Intermediary Bank details (if applicable) SWIFT Code",
+            maxLength: 300,
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           },
           interBankName: {
@@ -282,11 +288,11 @@ export class ManageCustomerComponent implements OnInit {
             label: "Intermediary Bank Name (if any)",
             placeholderText: '',
             rules: {
-              required: true,
+              required: false,
             }
           }
-        },'CreateNewBeneficiaryMember');
-        
+        }, 'CreateNewBeneficiaryMember');
+
       }
       else if (this.file === "export") {
         this.validator.BANK_NAME_LIST_GLOABL = await this.documentService.getBankNameList();
@@ -332,6 +338,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Buyer Address",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -351,6 +358,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Consignee Address",
             placeholderText: 'Ex: Consignee street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -370,11 +378,12 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "BANK ADDRESS",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
           }
-        },'CreateNewBuyer');
+        }, 'CreateNewBuyer');
         this.validator.buildForm({
           buyerName: {
             type: "text",
@@ -391,6 +400,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Buyer Address",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -410,6 +420,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Consignee Address",
             placeholderText: 'Ex: Consignee street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -429,18 +440,19 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "BANK ADDRESS",
             placeholderText: 'Ex: street address, City. PIN',
+            maxLength: 300,
             rules: {
               required: true,
             }
           }
-        },'CreateNewBuyerwithConsignee');
+        }, 'CreateNewBuyerwithConsignee');
       }
     });
     this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
     });
-    
+
     this.buyerForm = this.formBuilder.group({
       buyerName: ['', Validators.required],
       buyerAdrs: ['', Validators.required],
@@ -507,9 +519,9 @@ export class ManageCustomerComponent implements OnInit {
     return await new Promise(async (resolve, reject) => { await resolve(data) });
   }
 
-  onSubmit(e:any,panel: any) {
-    e.value.beneBankName=e?.value?.beneBankName?.value!=undefined?e?.value?.beneBankName?.value:e?.value?.beneBankName;
-    e.value.interBankName=e?.value?.interBankName?.value!=undefined?e?.value?.interBankName?.value:e?.value?.beneBankName
+  onSubmit(e: any, panel: any) {
+    e.value.beneBankName = e?.value?.beneBankName?.value != undefined ? e?.value?.beneBankName?.value : e?.value?.beneBankName;
+    e.value.interBankName = e?.value?.interBankName?.value != undefined ? e?.value?.interBankName?.value : e?.value?.beneBankName
     this.userService.creatBene(e.value).subscribe(data => {
       console.log("king123")
       console.log(data)
@@ -520,8 +532,8 @@ export class ManageCustomerComponent implements OnInit {
     });
   }
 
-  onSubmitBuyer(e:any,panel: any) {
-    e.value.buyerbank=e?.value?.buyerbank?.value!=undefined?e?.value?.buyerbank?.value:e?.value?.buyerbank;
+  onSubmitBuyer(e: any, panel: any) {
+    e.value.buyerbank = e?.value?.buyerbank?.value != undefined ? e?.value?.buyerbank?.value : e?.value?.buyerbank;
     this.userService.creatBuyer(e?.value).subscribe(data => {
       console.log("king123")
       console.log(data)
@@ -575,7 +587,7 @@ export class ManageCustomerComponent implements OnInit {
   }
 
   onSubmitBuyerMember(e: any) {
-    e.value.buyerbank=e?.value?.buyerbank?.value!=undefined?e?.value?.buyerbank?.value:e?.value?.buyerbank;
+    e.value.buyerbank = e?.value?.buyerbank?.value != undefined ? e?.value?.buyerbank?.value : e?.value?.buyerbank;
     let approval_data = {
       id: 'BuyerMember' + '_' + this.guid(),
       tableName: '',
@@ -594,9 +606,9 @@ export class ManageCustomerComponent implements OnInit {
     });
   }
 
-  onSubmitBeneficiaryMember(e:any) {
-    e.value.beneBankName=e?.value?.beneBankName?.value!=undefined?e?.value?.beneBankName?.value:e?.value?.beneBankName;
-    e.value.interBankName=e?.value?.interBankName?.value!=undefined?e?.value?.interBankName?.value:e?.value?.beneBankName
+  onSubmitBeneficiaryMember(e: any) {
+    e.value.beneBankName = e?.value?.beneBankName?.value != undefined ? e?.value?.beneBankName?.value : e?.value?.beneBankName;
+    e.value.interBankName = e?.value?.interBankName?.value != undefined ? e?.value?.interBankName?.value : e?.value?.beneBankName
     let approval_data = {
       id: 'BeneficiaryMember' + '_' + this.guid(),
       tableName: '',

@@ -13,7 +13,6 @@ export class PDfLibComponent implements OnInit {
   value: any;
 
   constructor(private httpClient: HttpClient ,private route: ActivatedRoute ,private sanitizer: DomSanitizer) { }
--
   ngOnInit(){this.fillForm}
 
     async fillForm() {

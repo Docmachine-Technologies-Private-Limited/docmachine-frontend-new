@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Event, NavigationEnd,Router} from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { AppConfig } from '../environments/environment';
 import '../sass/application.scss';
 import { AuthenticateService } from './service/authenticate.service';
 import { AuthGuard } from './service/authguard.service';
@@ -20,7 +19,6 @@ import { UploadServiceValidatorService } from './components/Upload/service/uploa
 import { GlobalsAccessService } from './components/Upload/service/globals-access.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { IdleService } from './service/idle.service';
-
 
 @Component({
   selector: 'app-root',

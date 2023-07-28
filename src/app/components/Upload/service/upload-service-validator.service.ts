@@ -3,9 +3,7 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, V
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
-import { Event, NavigationEnd, Router } from '@angular/router';
 import { AuthGuard } from '../../../service/authguard.service';
-import { GlobalsAccessService } from './globals-access.service';
 
 @Injectable({
   providedIn: 'root'
@@ -234,10 +232,27 @@ export class UploadServiceValidatorService implements OnInit {
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup));
         });
         fieldProps['NewOption'] = temp;
-        fieldProps['RemoveListIndex'] = [{ START_INDEX: -1, LAST_INDEX: -1 }];
         formGroupFields[field] = await new FormArray(tempFormGroup)
         fields.push({ ...fieldProps, fieldName: field });
         console.log('OptionMultiCheckBox', fields)
+      } else if (fieldProps?.type == "formGroup" && fieldProps?.formArray != undefined) {
+        var temp: any = [];
+        var tempFormGroup: any = [];
+        fieldProps?.formArray?.forEach(async (element) => {
+          let optiontemp: any = {};
+          let OptiontempFormGroup: any = {};
+          element?.forEach(optionelement => {
+            optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
+            OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
+              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+          });
+          await temp.push(optiontemp);
+          await tempFormGroup.push(new FormGroup(OptiontempFormGroup));
+        });
+        fieldProps['NewformArray'] = temp;
+        formGroupFields[field] = await new FormArray(tempFormGroup,{validators:RemoveValidator})
+        fields.push({ ...fieldProps, fieldName: field });
+        console.log('formGroup', fields)
       } else {
         formGroupFields[field] = new FormControl({ value: fieldProps.value, disabled: fieldProps?.disabled != undefined ? true : false },
           this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
@@ -301,6 +316,7 @@ export class UploadServiceValidatorService implements OnInit {
       MultiCheckBox: rule?.required == true ? [Validators.required] : [],
       OptionMultiCheckBox: rule?.required == true ? [Validators.required] : [],
       RemitterName: rule?.required == true ? [Validators.required] : [],
+      formGroup: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :
@@ -364,6 +380,41 @@ export class UploadServiceValidatorService implements OnInit {
       await GroupLabel.push(GroupLabel[0].replace('1', GroupLabel?.length + 1));
       await resolve(await tempFormGroup);
     });
+  }
+
+  async addNewFormArray(id: any, index: any, fieldName: any) {
+    let optiontemp: any = {};
+    let OptiontempFormGroup: any = {};
+    let dumpformdata: any = this.FIELDS_DATA[id][index]?.NewformArray[this.FIELDS_DATA[id][index]?.NewformArray?.length - 1];
+    for (const key in dumpformdata) {
+      const fieldProps: any = dumpformdata[key];
+      optiontemp[fieldProps?.name] = ({ ...fieldProps, fieldName: fieldProps?.name });
+      OptiontempFormGroup[fieldProps?.name] = new FormControl({ value: "", disabled: fieldProps?.disabled != undefined ? true : false },
+        this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, id)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type])
+    }
+    this.dynamicFormGroup[id]?.controls[fieldName]?.controls?.push(new FormGroup(OptiontempFormGroup));
+    this.dynamicFormGroup[id]?.controls[fieldName]?.value?.push(this.emptyvalue(this.dynamicFormGroup[id]?.controls[fieldName]?.value[this.dynamicFormGroup[id]?.controls[fieldName]?.value?.length - 1]));
+    this.FIELDS_DATA[id][index]['NewformArray']?.push(optiontemp);
+    await this.FIELDS_DATA[id][index]?.GroupLabel?.push(this.FIELDS_DATA[id][index]?.GroupLabel[0]?.replace('1', this.FIELDS_DATA[id][index]?.GroupLabel?.length + 1));
+    console.log('New formGroup', this.FIELDS_DATA, this.dynamicFormGroup[id])
+  }
+
+  emptyvalue(data: any) {
+    var temp: any = {};
+    for (const key in data) {
+      temp[key] = ''
+    }
+    return temp;
+  }
+
+  async removeNewFormArray(id: any, index: any, fieldName: any, OptionfieldIndex: any) {
+    this.dynamicFormGroup[id]?.controls[fieldName]?.controls?.splice(OptionfieldIndex, 1);
+    this.dynamicFormGroup[id]?.controls[fieldName]?.value?.splice(OptionfieldIndex, 1);
+    this.FIELDS_DATA[id][index]['NewformArray']?.splice(OptionfieldIndex, 1);
+    this.FIELDS_DATA[id][index]['NewformArray']?.forEach((element, index) => {
+      this.FIELDS_DATA[id][index]?.GroupLabel?.push(this.FIELDS_DATA[id][index]?.GroupLabel[0]?.replace('1', (index + 1)));
+    });
+    console.log('New formGroup', this.FIELDS_DATA, this.dynamicFormGroup[id])
   }
 
   removeFormArray(formGroupKey, index, labelIndex: any, formid: any, MAX_LIMIT: any): any {
@@ -432,6 +483,13 @@ export function hasDuplicateFormArray(data: any): ValidatorFn {
     } else {
       return null;
     }
+  };
+}
+
+export function RemoveValidator(): ValidatorFn {
+  return (formArray: FormArray | any): { [key: string]: any } | null | any => {
+    console.log(formArray,'formArray')
+    return null
   };
 }
 

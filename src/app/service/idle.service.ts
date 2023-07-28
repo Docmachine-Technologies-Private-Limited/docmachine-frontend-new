@@ -9,33 +9,27 @@ export class IdleService {
   public wake$: Subject<boolean> = new Subject();
 
   isIdle = false;
-  private idleAfterSeconds = 72000;
+  private idleAfterSeconds = 7200000;
   private countDown;
 
-  constructor() {
-
-  }
+  constructor() {}
 
   callback(functioncall: any) {
-    // Setup events
     fromEvent(document, 'mousemove').subscribe(() => this.onInteraction(functioncall));
     fromEvent(document, 'touchstart').subscribe(() => this.onInteraction(functioncall));
     fromEvent(document, 'keydown').subscribe(() => this.onInteraction(functioncall));
   }
   onInteraction(functioncall:any) {
-    // Is idle and interacting, emit Wake
     if (this.isIdle) {
       this.isIdle = false;
       this.wake$.next(true);
     }
 
-    // User interaction, reset start-idle-timer
     clearTimeout(this.countDown);
     this.countDown = setTimeout(() => {
-      // Countdown done without interaction - emit Idle
       this.isIdle = true;
       this.idle$.next(true);
       functioncall();
-    }, this.idleAfterSeconds * 1000)
+    }, this.idleAfterSeconds);
   }
 }

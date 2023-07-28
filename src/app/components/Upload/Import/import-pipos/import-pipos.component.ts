@@ -155,47 +155,52 @@ export class ImportPIPOSComponent implements OnInit {
           }
         },
         paymentTerm: {
-          type: "formArray",
+          type: "formGroup",
           label: "Payment Terms",
           GroupLabel: ['Payment Terms 1'],
-          MAX_LIMIT: 4,
           rules: {
-            required: true,
+            required: false,
           },
-          formGroup:[{
-            date: {
+          formArray:[
+          [
+            {
               type: "date",
               value: "",
               label: "Last date of shipment",
+              name: 'date',
               rules: {
                 required: true,
               },
             },
-            type: {
+             {
               type: "PaymentTermType",
               value: "",
               label: "Type",
+              name: 'type',
               rules: {
                 required: true,
               },
             },
-            amount: {
+            {
               type: "text",
               value: "",
               label: "Amount",
+              name: 'amount',
               rules: {
                 required: true,
               },
             },
-            currency: {
+             {
               type: "currency",
               value: "",
               label: "Currency",
+              name: 'currency',
               rules: {
                 required: true,
               }
             },
-          }]
+          ]
+          ]
         },
       }, 'PIPO_IMPORT');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
