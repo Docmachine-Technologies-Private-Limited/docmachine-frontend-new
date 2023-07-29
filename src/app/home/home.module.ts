@@ -160,6 +160,10 @@ import { InwardRemittanceAdviceSummaryComponent } from "./SummaryPage/Export/inw
 import { InsuranceDocumentComponent } from "./SummaryPage/Export/insurance-document/insurance-document.component";
 import { CreditNoteSummaryComponent } from "./SummaryPage/Export/credit-note/credit-note.component";
 import { DebitNoteSummaryComponent } from "./SummaryPage/Export/debit-note/debit-note.component";
+import { EdpmsReconTableModule } from "./edpms-recon-table/edpms-recon-table.module";
+import { EdpmsReconComponent } from "./edpms-recon/edpms-recon.component";
+import { IdpmsReconTableComponent } from "./idpms-recon-table/idpms-recon-table.component";
+import { IdpmsReconComponent } from "./idpms-recon/idpms-recon.component";
 
 @NgModule({
   declarations: [
@@ -283,7 +287,9 @@ import { DebitNoteSummaryComponent } from "./SummaryPage/Export/debit-note/debit
     InwardRemittanceAdviceSummaryComponent,
     InsuranceDocumentComponent,
     CreditNoteSummaryComponent,
-    DebitNoteSummaryComponent
+    DebitNoteSummaryComponent,
+    EdpmsReconComponent,
+    IdpmsReconComponent
   ],
   imports: [
     SharedHomeModule,
@@ -302,6 +308,7 @@ import { DebitNoteSummaryComponent } from "./SummaryPage/Export/debit-note/debit
     ProgressBarModule,
     ReactiveFormsModule,
     PdfViewerModule,
+    EdpmsReconTableModule,
     RouterModule.forChild([
       {
         path: "",
@@ -440,9 +447,16 @@ import { DebitNoteSummaryComponent } from "./SummaryPage/Export/debit-note/debit
           },
           { path: "view-document", loadChildren: () => import('./SummaryPage/Export/view-document/view-document.module').then(mod => mod.ViewDocumentModule), canActivate: [MemberGuard] },
           { path: "edpms-recon-table", loadChildren: () => import('./edpms-recon-table/edpms-recon-table.module').then(mod => mod.EdpmsReconTableModule), canActivate: [MemberGuard] },
-          { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule), canActivate: [MemberGuard] },
+          {
+            path: "edpms-recon",
+            component: EdpmsReconComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
           { path: "idpms-recon-table", loadChildren: () => import('./idpms-recon-table/idpms-recon-table.module').then(mod => mod.IdpmsReconTableModule), canActivate: [MemberGuard] },
-          { path: "idpms-recon", loadChildren: () => import('./idpms-recon/idpms-recon.module').then(mod => mod.IdpmsReconModule), canActivate: [MemberGuard] },
+          {
+            path: "idpms-recon", component: IdpmsReconComponent,
+            pathMatch: "full", canActivate: [MemberGuard]
+          },
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule), canActivate: [MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule), canActivate: [MemberGuard] },
           { path: "export-home", component: ExportHomeComponent, canActivate: [MemberGuard] },
@@ -923,7 +937,41 @@ import { DebitNoteSummaryComponent } from "./SummaryPage/Export/debit-note/debit
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal, SharedDataService, MergePdfListService, BoeBillService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  exports: [MatProgressBarModule, MatTabsModule, SharedHomeModule],
+  exports: [
+    MatProgressBarModule,
+    MatTabsModule,
+    SharedHomeModule,
+    ShippingBillComponent,
+    InsurancedocumentsComponent,
+    LetterofCreditComponent,
+    MasterServiceAgreementsComponent,
+    TripartyAgreementsComponent,
+    AirwayBlCopyComponent,
+    BillOfExchangesComponent,
+    DestructionCertificatesComponent,
+    PackingListInvoicesComponent,
+    CommercialInvoicesComponent,
+    OpinionReportsComponent,
+    InwardRemittanceAdviceComponent,
+    CreditNoteComponent,
+    DebitNotesComponent,
+    PIPOSComponent,
+    BOEComponent,
+    ImportInsurancedocumentsComponent,
+    ImportLetterofCreditComponent,
+    ImportMasterServiceAgreementsComponent,
+    ImportTripartyAgreementsComponent,
+    ImportAirwayBlCopyComponent,
+    ImportBillOfExchangesComponent,
+    ImportDestructionCertificatesComponent,
+    ImportPackingListInvoicesComponent,
+    ImportCommercialInvoicesComponent,
+    ImportOpinionReportsComponent,
+    ImportOutwardRemittanceAdviceComponent,
+    ImportCreditNoteComponent,
+    ImportDebitNotesComponent,
+    ImportPIPOSComponent
+  ],
 })
 export class HomeModule {
 

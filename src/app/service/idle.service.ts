@@ -9,7 +9,7 @@ export class IdleService {
   public wake$: Subject<boolean> = new Subject();
 
   isIdle = false;
-  private idleAfterSeconds = 7200000;
+  private idleAfterSeconds = 720000;
   private countDown;
 
   constructor() {}
@@ -24,7 +24,6 @@ export class IdleService {
       this.isIdle = false;
       this.wake$.next(true);
     }
-
     clearTimeout(this.countDown);
     this.countDown = setTimeout(() => {
       this.isIdle = true;

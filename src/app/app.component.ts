@@ -137,13 +137,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   };
 
   setTimeoutNew() {
-    if (this.SET_TIMEOUT_TIME != 0) {
-      this.userActivity = setTimeout(() => {
-        this.userInactive.next(undefined);
-        this.logoutUser();
-        this.SET_TIMEOUT_TIME = 0;
-      }, this.SET_TIMEOUT_TIME);
-    }
+    // if (this.SET_TIMEOUT_TIME != 0) {
+    //   this.userActivity = setTimeout(() => {
+    //     this.userInactive.next(undefined);
+    //     this.logoutUser();
+    //     this.SET_TIMEOUT_TIME = 0;
+    //   }, this.SET_TIMEOUT_TIME);
+    // }
   }
 
   addMinutes(minutes) {

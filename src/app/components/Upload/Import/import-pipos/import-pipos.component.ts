@@ -89,6 +89,15 @@ export class ImportPIPOSComponent implements OnInit {
             required: true,
           }
         },
+        MaterialTypes: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Raw Material or Capital Goods",
+          checkboxlabel: [{ text: "Raw Material", value: 'Raw Material' }, { text: 'Capital Goods', value: 'Capital Goods' }],
+          rules: {
+            required: true,
+          }
+        },
         pi_poNo: {
           type: "text",
           value: "",

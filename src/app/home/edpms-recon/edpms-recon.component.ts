@@ -443,31 +443,31 @@ export class EdpmsReconComponent implements OnInit {
     if (data?.pipo) {
       this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/add-pipo/export', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
       this.pipoArrayListdata.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=sb', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
       this.pipoArrayListdata.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
       this.pipoArrayListdata.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
       this.pipoArrayListdata.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -484,31 +484,31 @@ export class EdpmsReconComponent implements OnInit {
     if (data?.pipo) {
       this.pipoArrayListdata2.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/add-pipo/export', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
       this.pipoArrayListdata2.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=sb', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
       this.pipoArrayListdata2.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
       this.pipoArrayListdata2.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
       this.pipoArrayListdata2.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -518,31 +518,31 @@ export class EdpmsReconComponent implements OnInit {
     if (data?.pipo) {
       this.pipoArrayListdata3.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/add-pipo/export', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
       this.pipoArrayListdata3.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=sb', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
       this.pipoArrayListdata3.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
       this.pipoArrayListdata3.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
       this.pipoArrayListdata3.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
