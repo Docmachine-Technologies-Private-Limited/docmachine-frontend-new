@@ -559,16 +559,16 @@
                                                                     class="fa fa-chevron-down"></span>
                                                             </td>
                                                             <td scope="col" class="col-td-th-2">
-                                                                {{item?.CI_DETAILS?.commercialDate}}</td>
+                                                                {{item?.CI_DETAILS?.data?.commercialDate}}</td>
                                                             <td scope="col" class="col-td-th-3">
-                                                                {{item?.CI_DETAILS?.commercialNumber}}</td>
+                                                                {{item?.CI_DETAILS?.data?.commercialNumber}}</td>
                                                             <td scope="col" class="col-td-th-2">
-                                                                {{item?.CI_DETAILS?.buyerName[0]}}</td>
+                                                                {{item?.CI_DETAILS?.data?.buyerName[0]}}</td>
                                                             <td scope="col" class="col-td-th-3">
-                                                                {{item?.CI_DETAILS?.currency}}
+                                                                {{item?.CI_DETAILS?.data?.currency}}
                                                             </td>
                                                             <td scope="col" class="col-td-th-3">
-                                                                {{item?.CI_DETAILS?.amount}}
+                                                                {{item?.CI_DETAILS?.data?.amount}}
                                                             </td>
                                                         </tr>
                                                         <tr class="table-tr table-tr-2 tr-box-shadow"
@@ -576,7 +576,7 @@
                                                             <td colspan="4" style="width: 100%;border: none;">
                                                                 <div class="header">
                                                                     <h5>ORM Advice Against to this CI No. :
-                                                                        {{item?.CI_DETAILS?.commercialNumber}}
+                                                                        {{item?.CI_DETAILS?.data?.commercialNumber}}
                                                                     </h5>
                                                                 </div>
                                                                 <div class="center-panel">
@@ -593,14 +593,14 @@
                                                                         <tbody>
                                                                             <tr class="table-tr">
                                                                                 <td class="col-td-th-2">{{
-                                                                                    item?.CI_DETAILS?.AdvanceNo }}</td>
+                                                                                    item?.CI_DETAILS?.data?.AdvanceNo }}</td>
                                                                                 <td class="col-td-th-2">{{
-                                                                                    item?.CI_DETAILS?.buyerName}}</td>
+                                                                                    item?.CI_DETAILS?.data?.buyerName}}</td>
                                                                                 <td class="col-td-th-2">{{
-                                                                                    item?.CI_DETAILS?.AdvanceCurrency}}
+                                                                                    item?.CI_DETAILS?.data?.AdvanceCurrency}}
                                                                                 </td>
                                                                                 <td class="col-td-th-2">{{
-                                                                                    item?.CI_DETAILS?.AdvanceAmount }}
+                                                                                    item?.CI_DETAILS?.data?.AdvanceAmount }}
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
