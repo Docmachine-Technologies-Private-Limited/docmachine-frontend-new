@@ -16,7 +16,7 @@ import { DocumentService } from '../../service/document.service';
 @Component({
   selector: 'app-edit-company',
   templateUrl: './edit-company.component.html',
-  styleUrls: ['../../../sass/application.scss', './edit-company.component.scss']
+  styleUrls: ['./edit-company.component.scss']
 })
 export class EditCompanyComponent implements OnInit {
   @Input() que: any;
@@ -56,7 +56,7 @@ export class EditCompanyComponent implements OnInit {
   showLess = false;
   jsondata: any;
   dataJson: any;
-  bankName:any = [];
+  bankName: any = [];
   currencyName = [];
   toggle: boolean;
   dataJson1: any;
@@ -161,9 +161,10 @@ export class EditCompanyComponent implements OnInit {
       }
       console.log(this.CURRENCY_LIST, 'CURRENCY_LIST')
     });
-
-    this.BANK_NAME_LIST = this.docservice.getBankNameList();
-    console.log(this.BANK_NAME_LIST, 'BANK_NAME_LIST')
+    this.docservice.getBankNameList().then((res: any) => {
+      this.BANK_NAME_LIST = res;
+      console.log(this.BANK_NAME_LIST, 'BANK_NAME_LIST')
+    })
     this.jsondata = data['default'];
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];
@@ -345,7 +346,7 @@ export class EditCompanyComponent implements OnInit {
         if (caEmail == true && chaEmail == true) {
           var chaEmail: any = this.IEC_validation('iec', this.UPDATED_DETAILS['iec']);
           this.UPDATED_DETAILS['file'] = this.file;
-          this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;          
+          this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;
           console.log(this.UPDATED_DETAILS, 'this.UPDATED_DETAILS');
           this.userService.updateTeamById(this.UPDATED_DETAILS, id).subscribe(
             data => {
@@ -384,9 +385,9 @@ export class EditCompanyComponent implements OnInit {
       }
     }
   }
-  letterheadUrl:any=''
-  letterheadView(url:any){
-   this.letterheadUrl=url;
+  letterheadUrl: any = ''
+  letterheadView(url: any) {
+    this.letterheadUrl = url;
   }
   public loadFromLocalStorage() {
     const token = sessionStorage.getItem('token');
@@ -465,16 +466,16 @@ export class EditCompanyComponent implements OnInit {
   view_bank_details(id) {
     this.ID = id;
   }
-  fileinput:any=''
-  letterheadUpload(f:any){
-    this.fileinput=f;
+  fileinput: any = ''
+  letterheadUpload(f: any) {
+    this.fileinput = f;
   }
   uploadletterhead(id) {
     var input = this.fileinput.target;
     var reader = new FileReader();
-    reader.onload = (event:any)=> {
+    reader.onload = (event: any) => {
       var dataUri = event.target.result;
-      this.userService.updateTeamById({letterHead:dataUri}, id).subscribe(
+      this.userService.updateTeamById({ letterHead: dataUri }, id).subscribe(
         data => {
           console.log("king123")
           this.toastr.success('update letter head successfully.');
@@ -486,14 +487,14 @@ export class EditCompanyComponent implements OnInit {
           console.log("error")
         });
     };
-    reader.onerror = function (event:any) {
+    reader.onerror = function (event: any) {
       console.log("File could not be read: " + event.target.error.code);
     };
     reader.readAsDataURL(input.files[0]);
   }
   bankClick(e, i) {
     this.bankName[i] = e;
-    this.UPDATED_DETAILS.bankDetails[i]['BankUniqueId']=e?.BankUniqueId
-    console.log(this.bankName,e,'this.loginForm.value.bankDetails.')    
+    this.UPDATED_DETAILS.bankDetails[i]['BankUniqueId'] = e?.BankUniqueId
+    console.log(this.bankName, e, 'this.loginForm.value.bankDetails.')
   }
 }
