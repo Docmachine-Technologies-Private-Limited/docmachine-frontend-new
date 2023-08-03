@@ -572,6 +572,7 @@ table,
 }
 
 #content {
+  position: relative;
   min-height: auto !important;
 }
 
@@ -620,7 +621,7 @@ table td {
 }
 
 .col-td-th-1 {
-  width: 80px;
+  width: 100px;
   border: 0 !important;
   margin: auto;
   display: flex;

@@ -23,7 +23,7 @@ export class UploadComponentsComponent implements OnInit,AfterViewInit {
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
   @Input('KEY_ENTER_ENABLED') KEY_ENTER_ENABLED: any = false;
-  @Input('ADD_NEW_BUTTON_VISIBLE') ADD_NEW_BUTTON_VISIBLE: any = '';
+  @Input('ADD_NEW_BUTTON_VISIBLE') ADD_NEW_BUTTON_VISIBLE: boolean = false;
   @ViewChild('BuyerNotFoundPanel') BuyerNotFound: ElementRef | any;
   @ViewChild('BeneficiaryNotFoundPanel') BeneficiaryNotFound: ElementRef | any
   LOGIN_TOEKN: any = '';

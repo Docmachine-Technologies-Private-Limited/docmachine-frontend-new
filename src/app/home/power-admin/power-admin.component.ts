@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-power-admin',
   templateUrl: './power-admin.component.html',
-  styleUrls: ['../../../sass/application.scss', './power-admin.component.scss']
+  styleUrls: ['./power-admin.component.scss']
 })
 export class PowerAdminComponent implements OnInit {
   item2: any;

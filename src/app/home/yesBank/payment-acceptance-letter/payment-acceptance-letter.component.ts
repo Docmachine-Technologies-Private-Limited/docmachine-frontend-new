@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-payment-acceptance-letter',
   templateUrl: './payment-acceptance-letter.component.html',
-  styleUrls: ['../../../../sass/application.scss', './payment-acceptance-letter.component.scss']
+  styleUrls: [ './payment-acceptance-letter.component.scss']
 })
 export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
   item: any;

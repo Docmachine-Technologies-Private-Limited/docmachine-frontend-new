@@ -9,7 +9,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-a2cum-aplication',
   templateUrl: './a2cum-aplication.component.html',
-  styleUrls: ['../../../../sass/application.scss', './a2cum-aplication.component.scss']
+  styleUrls: [ './a2cum-aplication.component.scss']
 })
 export class A2cumAplicationComponent implements OnInit, OnDestroy {
   item: any;
@@ -49,7 +49,7 @@ export class A2cumAplicationComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router
   ) {
-    router.events.subscribe((event: NavigationStart) => {
+    router.events.subscribe((event: NavigationStart | any) => {
       if (event.navigationTrigger === "popstate") {
         // Perform actions
         console.log("Pressed Back");

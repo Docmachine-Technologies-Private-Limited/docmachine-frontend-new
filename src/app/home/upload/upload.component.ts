@@ -43,7 +43,7 @@ import { SocketIoService } from '../../service/SocketIo/socket-io.service';
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
-  styleUrls: ['../../../sass/application.scss', './upload.component.scss'],
+  styleUrls: ['./upload.component.scss'],
 })
 export class UploadComponent implements OnInit {
   @Input() que: any;

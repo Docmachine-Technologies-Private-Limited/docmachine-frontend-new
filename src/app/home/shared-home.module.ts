@@ -28,9 +28,7 @@ import { PipoDataService } from "../service/homeservices/pipo.service";
 import { TreeViewComponent } from "./tree-view/tree-view.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from '@angular/material/radio';
-import { PopupOpenDirective } from "../custom/PopupOpen/popup-open.directive";
 import { CustomModelComponent } from '../custom/custom-model/custom-model.component';
-import { OpenPopUpDirective } from "../custom/custom-model/CustomPopupOpen/open-pop-up.directive";
 import { MergePdfService } from "../service/MergePdf/merge-pdf.service";
 import { NgDropdownCustomComponent } from "../custom/ng-dropdown-custom/ng-dropdown-custom.component";
 import { NgCustomCarouselComponent } from '../custom/ng-custom-carousel/ng-custom-carousel.component';
@@ -38,7 +36,6 @@ import { CarouselItemDirective } from '../custom/ng-custom-carousel/carousel-ite
 import { CarouselItemElementDirective } from '../custom/ng-custom-carousel/carousel-item-element.directive';
 import { CustomsliderComponent } from '../custom/customslider/customslider.component';
 import { MatStepperModule } from '@angular/material/stepper';
-import { CustomEventDirective } from "../custom/custom-model/custom-event.directive";
 import { NgCustomTooltipsComponent } from "../custom/ng-custom-tooltips/ng-custom-tooltips.component";
 import { CustomHeaderTooltipsComponent } from "../custom/ng-custom-tooltips/custom-header-tooltips/custom-header-tooltips.component";
 import { CustomFooterTooltipsComponent } from "../custom/ng-custom-tooltips/custom-footer-tooltips/custom-footer-tooltips.component";
@@ -72,6 +69,18 @@ import { GlobalsAccessService } from "../components/Upload/service/globals-acces
 import { UploadHeaderComponent } from "../components/Upload/upload-components/upload-components-header/upload-components-header.component";
 import { NgCustomDropdownComponent } from "../custom/ng-custom-dropdown/ng-custom-dropdown.component";
 import { NgInputComponent } from "../custom/ng-input/ng-input.component";
+import { FederalBankREMITTANCEADVANCEAGAINSTComponent } from "./AllBankFormat/FederalBank/remittanceadvanceagainst/remittanceadvanceagainst.component";
+import { FederalBankBillSubmissionFormatComponent } from "./AllBankFormat/FederalBank/bill-submission-format/bill-submission-format.component";
+import { ExportInwardRemittanceDisposalFormatComponent } from "./AllBankFormat/FederalBank/export-inward-remittance-disposal-format/export-inward-remittance-disposal-format.component";
+import { FederalBankRevisedFormA2BANKFormatComponent } from "./AllBankFormat/FederalBank/revised-form-a2-bank-format/revised-form-a2-bank-format.component";
+import { hdfcbankREMITTANCEADVANCEAGAINSTComponent } from "./AllBankFormat/HDFC-Bank/remittanceadvanceagainst/remittanceadvanceagainst.component";
+import { hdfcbankBillSubmissionFormatComponent } from "./AllBankFormat/HDFC-Bank/export-bill-submission-format/export-bill-submission-format.component";
+import { hdfcbankInwardRemittanceDisposalFormatComponent } from "./AllBankFormat/HDFC-Bank/export-inward-remittance-disposal-format/export-inward-remittance-disposal-format.component";
+import { hdfcbankRevisedFormA2BANKFormatComponent } from "./AllBankFormat/HDFC-Bank/export-revised-form-a2-bank-format/export-revised-form-a2-bank-format.component";
+import { CommonOpenPopUpDirective } from "../custom/custom-model/CustomPopupOpen/open-pop-up.directive";
+import { PopupOpenDirective } from "../custom/PopupOpen/popup-open.directive";
+import { FederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterhead/exportletterhead.component";
+import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBank/import-letter-head/import-letter-head.component";
 
 @NgModule({
   declarations: [
@@ -83,8 +92,8 @@ import { NgInputComponent } from "../custom/ng-input/ng-input.component";
     CustomDropdownComponent,
     PDFVIEWERComponent,
     FilterToggleDirective,
+    CommonOpenPopUpDirective,
     PopupOpenDirective,
-    OpenPopUpDirective,
     TreeViewComponent,
     CustomModelComponent,
     NgDropdownCustomComponent,
@@ -92,7 +101,6 @@ import { NgInputComponent } from "../custom/ng-input/ng-input.component";
     CarouselItemDirective,
     CarouselItemElementDirective,
     CustomsliderComponent,
-    CustomEventDirective,
     NgCustomTooltipsComponent,
     CustomHeaderTooltipsComponent,
     CustomFooterTooltipsComponent,
@@ -119,7 +127,17 @@ import { NgInputComponent } from "../custom/ng-input/ng-input.component";
     CustomRadioComponent,
     UploadHeaderComponent,
     NgCustomDropdownComponent,
-    NgInputComponent
+    NgInputComponent,
+    FederalBankREMITTANCEADVANCEAGAINSTComponent,
+    FederalBankBillSubmissionFormatComponent,
+    ExportInwardRemittanceDisposalFormatComponent,
+    FederalBankRevisedFormA2BANKFormatComponent,
+    hdfcbankREMITTANCEADVANCEAGAINSTComponent,
+    hdfcbankBillSubmissionFormatComponent,
+    hdfcbankInwardRemittanceDisposalFormatComponent,
+    hdfcbankRevisedFormA2BANKFormatComponent,
+    FederalBankExportletterheadComponent,
+    FederalBankImportLetterHeadComponent
   ],
   imports: [
     CommonModule,
@@ -161,8 +179,6 @@ import { NgInputComponent } from "../custom/ng-input/ng-input.component";
     CustomDropdownComponent,
     PDFVIEWERComponent,
     FilterToggleDirective,
-    PopupOpenDirective,
-    OpenPopUpDirective,
     TreeViewComponent,
     MatExpansionModule,
     MatCheckboxModule,
@@ -174,7 +190,6 @@ import { NgInputComponent } from "../custom/ng-input/ng-input.component";
     CarouselItemElementDirective,
     CustomsliderComponent,
     MatStepperModule,
-    CustomEventDirective,
     NgCustomTooltipsComponent,
     CustomHeaderTooltipsComponent,
     CustomFooterTooltipsComponent,
@@ -206,7 +221,19 @@ import { NgInputComponent } from "../custom/ng-input/ng-input.component";
     CustomRadioComponent,
     UploadHeaderComponent,
     NgCustomDropdownComponent,
-    NgInputComponent
+    NgInputComponent,
+    FederalBankREMITTANCEADVANCEAGAINSTComponent,
+    FederalBankBillSubmissionFormatComponent,
+    ExportInwardRemittanceDisposalFormatComponent,
+    FederalBankRevisedFormA2BANKFormatComponent,
+    hdfcbankREMITTANCEADVANCEAGAINSTComponent,
+    hdfcbankBillSubmissionFormatComponent,
+    hdfcbankInwardRemittanceDisposalFormatComponent,
+    hdfcbankRevisedFormA2BANKFormatComponent,
+    CommonOpenPopUpDirective,
+    PopupOpenDirective,
+    FederalBankExportletterheadComponent,
+    FederalBankImportLetterHeadComponent
   ],
 })
 export class SharedHomeModule { }

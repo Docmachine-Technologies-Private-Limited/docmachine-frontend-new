@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 @Component({
   selector: 'app-edit-buyer',
   templateUrl: './edit-buyer.component.html',
-  styleUrls: ["../../../sass/application.scss", './edit-buyer.component.scss']
+  styleUrls: [ './edit-buyer.component.scss']
 })
 export class EditBuyerComponent implements OnInit {
   item: any;

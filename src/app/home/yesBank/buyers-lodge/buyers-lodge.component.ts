@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-buyers-lodge',
   templateUrl: './buyers-lodge.component.html',
-  styleUrls: ['../../../../sass/application.scss', './buyers-lodge.component.scss']
+  styleUrls: [ './buyers-lodge.component.scss']
 })
 export class BuyersLodgeComponent implements OnInit, OnDestroy {
   item: any;

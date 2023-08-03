@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-buyers-credit-axis',
   templateUrl: './buyers-credit-axis.component.html',
-  styleUrls: ['../../../../sass/application.scss', './buyers-credit-axis.component.scss']
+  styleUrls: [ './buyers-credit-axis.component.scss']
 })
 export class BuyersCreditAxisComponent implements OnInit, OnDestroy {
   item: any;

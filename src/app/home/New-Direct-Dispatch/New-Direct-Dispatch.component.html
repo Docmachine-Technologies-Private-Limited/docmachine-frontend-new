@@ -34,20 +34,12 @@
             <form [formGroup]="this.ExportBillLodgement_Form">
               <div class="row pb-2">
                 <div class="col-md-7 col-sm-12 col-12">
-                  <div *ngIf='isGenerate'>
-                    <div>
-                      <div id="mainId" class="bc mt-2 mb-2"
-                        *ngIf="isProceed == false && this.bankformat.length!=0 && this.bankformat[0]?.urlpdf!=''">
-                        <app-pdf-viewer [downloadShow]="false" name="Bill Lodgement Pdf Viewer" [src]="selItems"
-                          *ngFor="let selItems of  [this.formerge]" width="100%" height="500px"></app-pdf-viewer>
-                      </div>
-                      <div id="first" #dataToExport>
-                        <app-letterhead *ngIf="this.bankformat[0]?.urlpdf==''"
-                          [data]="[this.itemArray,this.advanceArray,this.newBankArray]"
-                          [SB_NO]="this.SB_NO_FILTER"></app-letterhead>
-                      </div>
-                    </div>
-                  </div>
+                  <federal-bank-bill-submission-format [BankId]="this.bankValue"
+                    [data]="[this.itemArray,this.advanceArray,this.newBankArray,this.CUSTOMER_DETAILS,this.Lodgement,this.SB_NO_FILTER,this.SELECT_BUYER_DETAILS]" [RequiredLetterHead]="true"
+                    (event)="this.UrlList=$event" id="first"></federal-bank-bill-submission-format>
+                  <!-- <hdfc-bank-remittance-advance-against [BankId]="this.bankValue"
+                    [data]="[this.itemArray,this.advanceArray,this.newBankArray]"
+                    id="first"></hdfc-bank-remittance-advance-against> -->
                   <div class="new_left_sidedoc p-2 pdf_invoce_scroll" *ngIf="this.PDF_LIST.length!=0">
                     <div *ngFor="let selItems of this.PDF_LIST">
                       <app-pdf-viewer [downloadShow]="false" [name]="selItems?.name" [src]="selItems?.pdf" width="100%"
@@ -73,11 +65,11 @@
                                 <div class="row">
                                   <div class="col-md-10 mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
-                                    <app-ng-dropdown-custom placeHolderText="Select Bank Name" #Bank_Name
-                                      [items]="this.bankDetail" bindLabel="value" [ngModel]="form?.bank_name"
-                                      formControlName="bank_name" (modelChanges)="form.bank_name=$event?.value"
+                                    <ng-custom-dropdown placeHolderText="Select Bank Name" #Bank_Name
+                                      [items]="this.bankDetail" bindLabel="value" [(ngModel)]="ExportBillLodgement_Form.controls.bank_name"
+                                      formControlName="bank_name"
                                       bindValue="id" [multiple]="false" (modelChanges)="setradio($event)">
-                                    </app-ng-dropdown-custom>
+                                    </ng-custom-dropdown>
                                   </div>
                                   <div class="col-md-8 mt-2 col-sm-8 col-7"
                                     *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
@@ -931,7 +923,7 @@
       <div class="modal-header">
         <h5 class="modal-title">Preview Pdf</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-          (click)="PREVIEW_PAGE.style.display='none'"><span aria-hidden="true">&times;</span></button>
+          (click)="PREVIEW_PAGE.style.display='none'"></button>
       </div>
       <div class="modal-body">
         <div class="content_white_background Preview-Page" *ngIf="this.itemArray.length!=0">

@@ -4,14 +4,14 @@ import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
-import { WindowInformationService } from "src/app/service/window-information.service";
+import { WindowInformationService } from "../../../service/window-information.service";
 
 
 @Component({
   selector: "app-advance-remitance",
   templateUrl: "./advance-remitance.component.html",
   styleUrls: [
-    "../../../../sass/application.scss",
+   
     "./advance-remitance.component.scss",
   ],
 })
@@ -46,7 +46,7 @@ export class AdvanceRemitanceComponent implements OnInit, OnDestroy {
     public wininfo: WindowInformationService,
     private router: Router
   ) {
-    router.events.subscribe((event: NavigationStart) => {
+    router.events.subscribe((event: NavigationStart | any) => {
       if (event.navigationTrigger === "popstate") {
         // Perform actions
         console.log("Pressed Back");
@@ -159,7 +159,7 @@ export class AdvanceRemitanceComponent implements OnInit, OnDestroy {
 
   exportAsPDF(div_id) {
     const height =
-      Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
+      Math.round($("#mainId").outerHeight() as any * 0.0104166667 * 10)  / 10 ;
     console.log($("#mainId").html());
     this.documentService
       .getPDF({

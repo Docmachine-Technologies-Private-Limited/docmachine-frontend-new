@@ -32,8 +32,8 @@
                           <img src="./assets/new-img/header_not1.svg" />
                         </span></a></li>
                     <li>
-                      <a routerLinkActive="active " ariaCurrentWhenActive="page ">
-                        <span class="icon "><img src="./assets/new-img/header-user.svg " class="TOOLTIPS_OPEN_CLOSE"
+                      <a routerLinkActive="active" ariaCurrentWhenActive="page" [attr.ng-tooltips-popup]="'UserToolTips'" >
+                        <span class="icon" [attr.ng-tooltips-popup]="'UserToolTips'"><img src="./assets/new-img/header-user.svg " class="TOOLTIPS_OPEN_CLOSE"
                             [attr.ng-tooltips-popup]="'UserToolTips'" />
                         </span>
                       </a>
@@ -166,6 +166,15 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-upload')">Master Upload</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Import-Bill-Lodgement-Referance-AdviceCopy')">Bill-Lodgement-Referance-AdviceCopy</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Realisation-Cretificate')">Realisation-Cretificate</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Swift-Copy-Documents')">Swift-Copy-Documents</h6>
                 </li>
               </ul>
             </li>
@@ -329,6 +338,15 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-upload')">Master Upload</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Export-Bill-Lodgement-Referance-AdviceCopy')">Bill-Lodgement-Referance-AdviceCopy</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Export-Realisation-Cretificate')">Realisation-Cretificate</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Export-Swift-Copy-Documents')">Swift-Copy-Documents</h6>
                 </li>
               </ul>
             </li>

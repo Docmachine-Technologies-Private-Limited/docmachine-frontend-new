@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-request-letter',
   templateUrl: './request-letter.component.html',
-  styleUrls: ['../../../../sass/application.scss', './request-letter.component.scss']
+  styleUrls: [ './request-letter.component.scss']
 })
 export class RequestLetterComponent implements OnInit, OnDestroy {
   item: any;

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import $ from 'jquery'
 import { UserService } from '../../../service/user.service';
 
@@ -7,7 +7,7 @@ import { UserService } from '../../../service/user.service';
   templateUrl: './letterhead.component.html',
   styleUrls: ['./letterhead.component.scss']
 })
-export class LetterheadComponent implements OnInit {
+export class LetterheadComponent implements OnInit, OnChanges {
   @Input('data') data: any = [];
   TOTAL_SUM_FIREX: any = 0;
   TOTAL_SUM_FIREX_COMMISION: any = 0
@@ -19,7 +19,7 @@ export class LetterheadComponent implements OnInit {
   }
   TOTAL_PIPO_AMOUNT: any = 0;
   @Input('SB_NO') SB_NO: any = '';
-  FILETR_AMOUNT:any=[];
+  FILETR_AMOUNT: any = [];
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class LetterheadComponent implements OnInit {
         }
       })
     });
-    this.FILETR_AMOUNT=this.data[0].filter((item:any)=>item?.sbno?.includes(this.SB_NO))
+    this.FILETR_AMOUNT = this.data[0].filter((item: any) => item?.sbno?.includes(this.SB_NO))
     this.TOTAL_PIPO_AMOUNT = this.FILETR_AMOUNT[0]?.invoices[0]?.amount
     this.TOTAL_SUM_FIREX += this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
     this.TOTAL_SUM_FIREX_COMMISION += this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
@@ -50,5 +50,23 @@ export class LetterheadComponent implements OnInit {
   }
   ARRAY_TO_STRING(arr: any) {
     return arr.join(',')
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.data = changes?.data?.currentValue;
+    console.log(changes,'LetterheadComponent')
+    this.FILETR_AMOUNT = this.data[0].filter((item: any) => item?.sbno?.includes(this.SB_NO))
+    this.TOTAL_PIPO_AMOUNT = this.FILETR_AMOUNT[0]?.invoices[0]?.amount;
+    this.TOTAL_SUM_FIREX=0;
+    this.TOTAL_SUM_FIREX_COMMISION=0;
+    this.TOTAL_SUM_FIREX += this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
+    this.TOTAL_SUM_FIREX_COMMISION += this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
+    this.CURRENCY = this.FILETR_AMOUNT[0]?.currency;
+    this.FIRX_DATE_NO['NUMBER']=[];
+    this.FIRX_DATE_NO['DATE']=[];
+    this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
+      this.FIRX_DATE_NO?.NUMBER?.push(element?.irDataItem?.billNo)
+      this.FIRX_DATE_NO?.DATE?.push(element?.irDataItem?.date)
+    });
+    console.log(this.data, this.TOTAL_SUM_FIREX, 'LetterheadComponent')
   }
 }

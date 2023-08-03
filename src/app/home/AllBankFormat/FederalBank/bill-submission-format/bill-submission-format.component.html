@@ -1,0 +1,7 @@
+<app-pdf-viewer *ngIf="this.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" [downloadShow]="false" name="Bank Pdf"
+    [src]="this.PREVIWES_URL" width="100%" height="500px"></app-pdf-viewer>
+
+<div id="federal-bank-letter-head">
+    <federal-bank-exportletterhead
+        *ngIf="this.RequiredLetterHead==true && this.VISIBLITY_PDF==true"></federal-bank-exportletterhead>
+</div>

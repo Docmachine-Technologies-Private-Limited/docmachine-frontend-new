@@ -7,7 +7,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-completed-task',
   templateUrl: './completed-task.component.html',
-  styleUrls: ['../../../sass/application.scss', './completed-task.component.scss']
+  styleUrls: ['./completed-task.component.scss']
 })
 export class CompletedTaskComponent implements OnInit {
   id: any;

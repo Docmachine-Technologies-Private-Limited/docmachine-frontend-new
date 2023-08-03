@@ -11,7 +11,7 @@ import { WindowInformationService } from "src/app/service/window-information.ser
   selector: "app-axisbank",
   templateUrl: "./inwardRemittance.component.html",
   styleUrls: [
-    "../../../../sass/application.scss",
+   
     "./inwardRemittance.component.scss",
   ],
 })

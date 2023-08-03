@@ -6,14 +6,9 @@ import { UserService } from './../../../../service/user.service'
 import * as data1 from '../../../../currency.json';
 
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject,
-  Input,
   OnInit,
-  PLATFORM_ID,
   ViewChild
 } from '@angular/core';
 import * as xlsx from 'xlsx';

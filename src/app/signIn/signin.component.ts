@@ -11,7 +11,7 @@ import { StorageEncryptionDecryptionService } from '../Storage/storage-encryptio
 import { UploadServiceValidatorService } from '../components/Upload/service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-detail',
+  selector: 'user-login-page',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss']
 })

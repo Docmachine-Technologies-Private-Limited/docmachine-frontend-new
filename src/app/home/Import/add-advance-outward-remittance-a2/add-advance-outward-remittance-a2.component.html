@@ -19,13 +19,14 @@
                                     <div class="row">
                                         <div class="col-md-7 col-sm-12 col-12">
                                             <div class="new_left_sidedoc pdf_invoce_scroll">
-                                                <app-pdf-viewer *ngIf="this.PREVIWES_URL!=''" [downloadShow]="false"
-                                                    name="Bank Pdf" [src]="this.PREVIWES_URL" width="100%"
-                                                    height="500px"></app-pdf-viewer>
-                                                <div id="first">
-                                                    <app-import-letterhead *ngIf="this.OTHER_BANK_VISIBLE==true"
-                                                        [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"></app-import-letterhead>
-                                                </div>
+                                                <federal-bank-revised-form-a2-bank-format
+                                                    [BankId]="this.selectedBankName"
+                                                    [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"
+                                                    [RequiredLetterHead]="true" (event)="this.UrlList=$event"
+                                                    id="first"></federal-bank-revised-form-a2-bank-format>
+                                                <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName"
+                                                    [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"
+                                                    id="first"></hdfc-bank-remittance-advance-against>
                                                 <div class="new_left_sidedoc pdf_invoce_scroll"
                                                     *ngIf="selectedItems.length!=0">
                                                     <div class="content_white_background">
@@ -277,15 +278,18 @@
                                                                 <p class="mb-0"
                                                                     *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000">
                                                                     <mat-checkbox formControlName="EXTRA_DOC_1">EXTRA
-                                                                        DOC 1</mat-checkbox></p>
+                                                                        DOC 1</mat-checkbox>
+                                                                </p>
                                                                 <p class="mb-0"
                                                                     *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000">
                                                                     <mat-checkbox formControlName="EXTRA_DOC_2">EXTRA
-                                                                        DOC 2</mat-checkbox></p>
+                                                                        DOC 2</mat-checkbox>
+                                                                </p>
                                                                 <p class="mb-0"
                                                                     *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000">
                                                                     <mat-checkbox formControlName="EXTRA_DOC_3">EXTRA
-                                                                        DOC 3</mat-checkbox></p>
+                                                                        DOC 3</mat-checkbox>
+                                                                </p>
                                                             </section>
                                                         </div>
                                                     </div>

@@ -9,7 +9,7 @@ import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 @Component({
   selector: "app-sidenav",
   templateUrl: "./sidenav.component.html",
-  styleUrls: ["../../../sass/application.scss", "./sidenav.component.scss"],
+  styleUrls: [ "./sidenav.component.scss"],
 })
 
 export class SidenavComponent implements OnInit {

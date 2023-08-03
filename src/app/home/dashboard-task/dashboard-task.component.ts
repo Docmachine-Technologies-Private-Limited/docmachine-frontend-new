@@ -13,7 +13,7 @@ import { WindowInformationService } from '../../service/window-information.servi
 @Component({
   selector: 'app-dashboard-task',
   templateUrl: './dashboard-task.component.html',
-  styleUrls: ['../../../sass/application.scss', './dashboard-task.component.scss']
+  styleUrls: ['./dashboard-task.component.scss']
 })
 
 export class DashboardTaskComponent implements OnInit {

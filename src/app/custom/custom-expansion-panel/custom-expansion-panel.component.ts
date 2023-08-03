@@ -70,7 +70,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   TdClick(data: any, index: any) {
     this.event.emit({ item: data, index: index });
   }
-  
+
   TrClickEvent(data: any, index: any) {
     this.TrEvent.emit({ item: data, index: index });
   }
@@ -86,7 +86,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     let changesdata: any = changes;
     this.ORIGNAL_DATA = changesdata?.items?.currentValue;
-
+    this.Keys = changesdata?.Keys?.currentValue;
     console.log(changes, this.ORIGNAL_DATA, 'ngOnChanges');
     setTimeout(() => {
       this.PAGINATOR_DATA = [];

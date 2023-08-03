@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-inward-remittance-boe',
   templateUrl: './inward-remittance-boe.component.html',
-  styleUrls: ["../../../../sass/application.scss", './inward-remittance-boe.component.scss']
+  styleUrls: [ './inward-remittance-boe.component.scss']
 })
 export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
   item: any;

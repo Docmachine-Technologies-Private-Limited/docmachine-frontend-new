@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-manage-user',
   templateUrl: './manage-user.component.html',
-  styleUrls: ['../../../sass/application.scss', './manage-user.component.scss']
+  styleUrls: ['./manage-user.component.scss']
 })
 export class ManageUserComponent implements OnInit, AfterViewInit {
   @Input() que: any;

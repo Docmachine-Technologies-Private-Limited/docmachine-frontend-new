@@ -5,7 +5,7 @@ import { UserService } from '../../service/user.service';
 @Component({
   selector: 'app-dashboard-new',
   templateUrl: './dashboard-new.component.html',
-  styleUrls: ['../../../sass/application.scss', './dashboard-new.component.scss']
+  styleUrls: ['./dashboard-new.component.scss']
 })
 export class DashboardNewComponent implements OnInit {
   id: any;

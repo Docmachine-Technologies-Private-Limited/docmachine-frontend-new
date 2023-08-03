@@ -3,90 +3,80 @@ import {
   Renderer2,
   ElementRef,
   HostListener,
+  OnInit,
+  Input,
 } from '@angular/core';
 import { WindowInformationService } from '../../../service/window-information.service';
 import $ from 'jquery'
 
 @Directive({
-  selector: '[CommonDirective]'
+  selector: '[PopupCommonDirective]',
 })
-export class OpenPopUpDirective {
+export class CommonOpenPopUpDirective implements OnInit {
   constructor(private elementRef: ElementRef,
     private renderer: Renderer2,
     public wininfo: WindowInformationService) {
   }
 
-  @HostListener('window:mouseenter', ['$event']) mouseover(event: any) {
-    var CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID: any = $(event.target).attr('hover-popup-open-close');
-    var NgCustomTooltipsDirectiveMouseEnter_ID: any = $(event.target).attr('tooltips-close');
-    // console.log(event, 'sdfsdhjdhdgfdgdfg')
-    // if (CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID == 'open') {
-    //   this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event);
-    // }
-    // if (NgCustomTooltipsDirectiveMouseEnter_ID == 'open') {
-    //   this.NgCustomTooltipsDirectiveMouseEnter(event)
-    // }
+  ngOnInit() {
   }
-
-  @HostListener('window:mouseleave', ['$event']) mouseleave(event: Event) {
-    // this.CUSTOM_HOVER_PANEL_MOUSE_LEAVE(event);
-    // this.NgCustomTooltipsDirectiveMouseLeave(event);
-  }
-  @HostListener('document:mousedown', ['$event'])
-  onGlobalClick(event): void {
-
-  }
+  
   @HostListener('document:click', ['$event'])
   onClick(event): void {
     let panel_id: any = $(event.target).attr('popup-close');
     let hoverpopupopenclose: any = $(event.target).attr('hover-popup-open-close');
     let ngtooltipspopup: any = $(event.target).attr('ng-tooltips-popup');
-    if (panel_id == $(this.elementRef.nativeElement).attr('id')) {
+    let modelpopupref= panel_id!=undefined && panel_id!=null && panel_id!=''?$('.upload-modal#' + panel_id).attr('id'):'';
+    let modelngtooltipspopupref= ngtooltipspopup!=undefined && ngtooltipspopup!=null && ngtooltipspopup!=''?$('.tooltips-modal#' + ngtooltipspopup).attr('id'):'';
+
+    if (panel_id ==modelpopupref && panel_id!=undefined && panel_id!='' && panel_id!=null) {
       this.CUSTOM_MODEL_POPEN_CLOSE(event);
-    } else if (hoverpopupopenclose == 'open') {
+    }  else if (ngtooltipspopup == modelngtooltipspopupref && ngtooltipspopup!=undefined && ngtooltipspopup!='' && ngtooltipspopup!=null) {
+      this.CUSTOM_TOOLTIPS_CLICK(event);
+    }else if (hoverpopupopenclose == 'open' && hoverpopupopenclose!=undefined) {
       this.CUSTOM_HOVER_PANEL_CLICK(event);
       this.NgCustomTooltipsDirectiveMouseClick(event);
-    } else if (ngtooltipspopup == $(this.elementRef.nativeElement).attr('id')) {
-      this.CUSTOM_TOOLTIPS_CLICK(event);
     }
-    
     if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.renderer.removeClass(this.elementRef.nativeElement,'custom-dropdown-active');
+      this.renderer.removeClass(this.elementRef.nativeElement, 'custom-dropdown-active');
     }
   }
 
   CUSTOM_MODEL_POPEN_CLOSE(event: any) {
     var panel_id: any = $(event.target).attr('popup-close');
+    let modelpopupref= panel_id!=undefined && panel_id!=null && panel_id!=''?$('.upload-modal#' + panel_id).attr('id'):'';
     // this.registerDragElement('.dropdown-controller#' + panel_id +' .'+panel_id)
-    var ClassList: any = []
-    for (let index = 0; index < event?.target?.classList.length; index++) {
-      ClassList.push(event?.target?.classList[index])
-    }
-    if (ClassList.length == 0) {
-      ClassList = event.target.className.split(' ')
-    }
-    let children: any = Array.from($('.dropdown-controller#' + panel_id).find('*'));
-    if (ClassList?.includes('PopupOpen') == true || ClassList?.includes('ng-option-label') == true) {
-      if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
-        $('.dropdown-controller#' + panel_id).css('display', 'flex');
-        setTimeout(() => {
-          $(children[0]).css({ 'transform': 'translateY(0)', 'transition-duration': '.5s' });
-        }, 100)
+    if (panel_id ==modelpopupref && panel_id!=undefined) {
+      var ClassList: any = []
+      for (let index = 0; index < event?.target?.classList.length; index++) {
+        ClassList.push(event?.target?.classList[index])
       }
-    }
-    if (['close-popup', 'btn btn-primary mt-3 PopupClose','PopupClose'].includes(event.target.className)) {
-      if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
-        $(children[0]).css({ 'transform': 'translateY(-200%)', 'transition-duration': '.5s' });
-        setTimeout(() => {
-          $('.dropdown-controller#' + panel_id).css('display', 'none');
-        }, 300)
+      if (ClassList.length == 0) {
+        ClassList = event?.target?.className?.split(' ')
       }
-      if (ClassList?.includes('close-popup') == true || ClassList?.includes('PopupClose') == true) {
-        if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
+      let children: any = Array.from($('.dropdown-controller#' + panel_id).find('*'));
+      if (ClassList?.includes('PopupOpen') == true || ClassList?.includes('ng-option-label') == true) {
+        if ($('.upload-modal#' + panel_id).attr('id') === panel_id) {
+          $('.dropdown-controller#' + panel_id).css('display', 'flex');
+          setTimeout(() => {
+            $(children[0]).css({ 'transform': 'translateY(0)', 'transition-duration': '.5s' });
+          }, 100)
+        }
+      }
+      if (['close-popup', 'btn btn-primary mt-3 PopupClose', 'PopupClose'].includes(event.target.className)) {
+        if ($('.upload-modal#' + panel_id).attr('id') === panel_id) {
           $(children[0]).css({ 'transform': 'translateY(-200%)', 'transition-duration': '.5s' });
           setTimeout(() => {
             $('.dropdown-controller#' + panel_id).css('display', 'none');
           }, 300)
+        }
+        if (ClassList?.includes('close-popup') == true || ClassList?.includes('PopupClose') == true) {
+          if ($('.upload-modal#' + panel_id).attr('id') === panel_id) {
+            $(children[0]).css({ 'transform': 'translateY(-200%)', 'transition-duration': '.5s' });
+            setTimeout(() => {
+              $('.dropdown-controller#' + panel_id).css('display', 'none');
+            }, 300)
+          }
         }
       }
     }
@@ -99,10 +89,10 @@ export class OpenPopUpDirective {
       ClassList.push(event?.target?.classList[index])
     }
     if (ClassList.length == 0) {
-      ClassList = event.target.className.split(' ')
+      ClassList = event?.target?.className?.split(' ')
     }
     if (ClassList?.includes('TOOLTIPS_OPEN_CLOSE') == true || ClassList?.includes('ng-option-label') == true) {
-      if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
+      if ($('.tooltips-modal#' + panel_id).attr('id') === panel_id) {
         $('.ng-custom-tooltips#' + panel_id).css('display', 'flex');
       } else {
         $('.ng-custom-tooltips#' + panel_id).css('display', 'none');
@@ -141,7 +131,7 @@ export class OpenPopUpDirective {
       ClassList.push(event?.target?.classList[index])
     }
     if (ClassList.length == 0) {
-      ClassList = event.target.className.split(' ')
+      ClassList = event?.target?.className?.split(' ')
     }
     this.getAllClassNameList().then((res: any) => {
       var panel_id: any = $(event.target).attr('hover-popup-open-close');
@@ -285,9 +275,9 @@ export class OpenPopUpDirective {
     });
     return bool;
   }
-  
-  private registerDragElement(id:any) {
-    const elmnt:any = document.querySelector(id);
+
+  private registerDragElement(id: any) {
+    const elmnt: any = document.querySelector(id);
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     const dragMouseDown = (e) => {
       e = e || window.event;
@@ -319,22 +309,22 @@ export class OpenPopUpDirective {
 
     if (document.getElementById(elmnt.id + 'header')) {
       /* if present, the header is where you move the DIV from:*/
-      let temp:any=document.getElementById(elmnt.id + 'header');
+      let temp: any = document.getElementById(elmnt.id + 'header');
       temp.onmousedown = dragMouseDown;
     } else {
       /* otherwise, move the DIV from anywhere inside the DIV:*/
       elmnt.onmousedown = dragMouseDown;
     }
   }
-  
+
   public allowDrop(ev): void {
     ev.preventDefault();
   }
-  
+
   public drag(ev): void {
     ev.dataTransfer.setData("text", ev.target.id);
   }
-  
+
   public drop(ev): void {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");

@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 @Component({
   selector: "app-edit-bene",
   templateUrl: "./edit-bene.component.html",
-  styleUrls: ["../../../sass/application.scss", "./edit-bene.component.scss"],
+  styleUrls: [ "./edit-bene.component.scss"],
 })
 export class EditBeneComponent implements OnInit {
   item: any;

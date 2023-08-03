@@ -43,7 +43,7 @@ import { PipoDisplayListViewItem, PipoDisplayListView } from '../../../model/pip
   selector: 'app-pipo-doc-export',
   templateUrl: './pipo-doc-export.component.html',
   styleUrls: [
-    '../../../sass/application.scss',
+    
     './pipo-doc-export.component.scss',
   ],
 })

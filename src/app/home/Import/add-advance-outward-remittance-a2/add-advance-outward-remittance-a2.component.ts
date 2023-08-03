@@ -145,7 +145,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     EXTRA_DOC_2: new FormControl({ value: false, disabled: true }),
     EXTRA_DOC_3: new FormControl({ value: false, disabled: true }),
   });
-
+  UrlList: any = '';
+  
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -385,7 +386,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     console.log(this.temp1, temp2, this.EXTRA_DOCUMENTS, 'selectedItemsselectedItems')
     this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.balanceAmount), 0);
     this.showOpinionReport = 0;
-    this.fillForm();
     this.OTHER_BANK_VISIBLE = false;
 
     if (temp2.length != 0) {
@@ -421,7 +421,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
     if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
       this.OTHER_BANK_VISIBLE = false;
-      this.fillForm();
     } else {
       this.OTHER_BANK_VISIBLE = true;
     }
@@ -434,142 +433,9 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   OUR_SHA_BEN: any = '';
   ORIGINAL_PDF: any = '';
   bankformat: any = ''
-  async fillForm() {
-    this.bankformat = ''
-    this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
-    console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
-    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
-      const formUrl = './../../assets/advanceoutward.pdf'
-      const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-      const pdfDoc = await PDFDocument.load(formPdfBytes)
-      const form = pdfDoc.getForm()
-      const pages = pdfDoc.getPages()
-      const firstpage = pages[0]
-      var INVOICE_NO: any = [];
-      for (let index = 0; index < this.ITEM_FILL_PDF.length; index++) {
-        INVOICE_NO.push(this.ITEM_FILL_PDF[index][0]?.pi_poNo);
-      }
-      console.log(this.selectedBenne, this.ITEM_FILL_PDF, INVOICE_NO, 'fillForm')
-      const textField = form.createTextField('best.text')
-      let result = this.selectedBenne?.benneName.concat(" ", this.selectedBenne?.beneAdrs);
-      textField.setText(result)
-      textField.addToPage(firstpage, {
-        x: 409, y: 570, width: 132,
-        height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
 
-      const text1Field = form.createTextField('best.text1')
-      text1Field.setText(this.REMIITANCE_SUM.toString())
-      text1Field.addToPage(firstpage, {
-        x: 409, y: 555, width: 132,
-        height: 12, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-
-      const text2Field = form.createTextField('best.text2')
-      text2Field.setText(INVOICE_NO.toString())
-      text2Field.addToPage(firstpage, {
-        x: 409, y: 538, width: 132,
-        height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-      const text3Field = form.createTextField('best.text3')
-      text3Field.setText('')
-      text3Field.addToPage(firstpage, {
-        x: 409, y: 515, width: 132,
-        height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-
-      let result1 = this.selectedBenne?.beneBankName.concat(" ", this.selectedBenne?.beneBankAdress);
-      const text4Field = form.createTextField('best.text4')
-      text4Field.setText(result1)
-      text4Field.addToPage(firstpage, {
-        x: 409, y: 464, width: 132,
-        height: 47, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-
-      const text5Field = form.createTextField('best.text5')
-      text5Field.setText(this.selectedBenne?.beneAccNo)
-      text5Field.addToPage(firstpage, {
-        x: 409, y: 442, width: 132,
-        height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-      let result2 = this.selectedBenne?.interBankName.concat(" ", this.selectedBenne?.interBankSwiftCode);
-      const text6Field = form.createTextField('best.text6')
-      text6Field.setText(result2)
-      text6Field.addToPage(firstpage, {
-        x: 409, y: 420, width: 132,
-        height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-
-      const text7Field = form.createTextField('best.text7')
-      text7Field.setText(this.selectedBenne?.iban)
-      text7Field.addToPage(firstpage, {
-        x: 409, y: 390, width: 132,
-        height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-
-      const text8Field = form.createTextField('best.text8')
-      text8Field.setText(this.OUR_SHA_BEN)
-      text8Field.addToPage(firstpage, {
-        x: 409, y: 364, width: 132,
-        height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-      })
-
-      const pdfBytes = await pdfDoc.save()
-      console.log(pdfDoc, "pdf")
-      console.log(pdfBytes, "pdfBytes")
-      // this.getPdfFile(pdfBytes);
-      console.log(form, "form")
-      var base64String = this._arrayBufferToBase64(pdfBytes)
-      const x = 'data:application/pdf;base64,' + base64String;
-      const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-      console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
-      this.formerge = x
-      this.remittanceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(x);
-      const mergedPdf = await PDFDocument.create();
-      const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-      copiedPages.forEach((page) => {
-        mergedPdf.addPage(page);
-      });
-      const mergedPdfFile = await mergedPdf.save();
-      const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-      await this.disabledTextbox(pdfDoc)
-      const mergedPdfFileload = await mergedPdfload.save();
-      var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-      const x1 = 'data:application/pdf;base64,' + base64String1;
-      console.log("line no. 1735", this.remittanceUrl)
-      this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
-      console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-      this.ORIGINAL_PDF = pdfBytes;
-    }
-  }
   OUR_SHA_BEN_FUNC(data: any) {
     this.OUR_SHA_BEN = data;
-    this.fillForm();
-  }
-
-  async getPdfFile(item: any) {
-    let array = new Uint8Array(item);
-    let blob = new Blob([array], { type: 'application/pdf' });
-    var urlCreator = window.URL || window.webkitURL;
-    let url = urlCreator.createObjectURL(blob);
-    let fileName: string = new Date().toLocaleDateString();
-    try {
-      const link = document.createElement('a');
-      if (link.download !== undefined) {
-        link.setAttribute('href', url);
-        link.setAttribute('download', fileName);
-        link.target = '_blank';
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        var evt = document.createEvent('MouseEvents');
-        evt.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
-        link.dispatchEvent(evt);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } catch (e) {
-      console.error('BlobToSaveAs error', e);
-    }
   }
 
   async disabledTextbox(pdfDoc: any) {
@@ -616,8 +482,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   public onUploadInit(args: any): void {
     console.log("onUploadInit:", args);
   }
-
-
+  
   public onUploadSuccess(args: any): void {
     console.log("------ onUploadSuccess called")
     console.log('args', args);
@@ -683,7 +548,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   InputKeyPress(index: any) {
     this.OTHER_BANK_VISIBLE = false;
     setTimeout(() => {
-      this.fillForm()
       this.OTHER_BANK_VISIBLE = true;
       this.REMIITANCE_SUM = this.pipoForm?.controls?.pipoTerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
       this.REMIITANCE_AMOUNT[index] = this.pipoForm?.controls?.pipoTerm?.value[index]?.remittanceAmount;
@@ -728,18 +592,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
           this.PDF_LIST[i].push({
             pdf: this.temp1[i][index]?.pdf,
             name: this.temp1[i][index]['name']
-          })
-          // this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
-          //   res.arrayBuffer().then((data: any) => {
-          //     var base64String = this._arrayBufferToBase64(data);
-          //     const x = 'data:application/pdf;base64,' + base64String;
-          //     this.PDF_LIST[i].push({
-          //       pdf: x,
-          //       name: this.temp1[i][index]['name']
-          //     })
-          //     console.log('downloadEachFile', data, this.PDF_LIST);
-          //   });
-          // });
+          });
         }
       }
     }
@@ -750,12 +603,25 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
-    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
-      this.PromiseReturn().then(async (data: any) => {
-        var fitertemp: any = data.filter(n => n)
-        await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+    this.PromiseReturn().then(async (data: any) => {
+      this.getS3Url().then(async (element: any) => {
+        await element?.forEach(urlelement => {
+          data.push(urlelement);
+        });
+        this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].forEach(element => {
+          data.push(element)
+        });
+        this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].forEach(element => {
+          data.push(element)
+        });
+        this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'].forEach(element => {
+          data.push(element)
+        });
+        var fitertemp: any = await data.filter(n => n)
+        await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+          this.PREVIEWS_URL_LIST = [];
+          console.log(merge?.pdfurl, 'mergepdfresponse?.pdfurl')
           this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-          console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
           this.PREVIEWS_URL_STRING = '';
           setTimeout(() => {
             this.PREVIEWS_URL_STRING = merge?.pdfurl;
@@ -763,59 +629,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
           model.style.display = 'block';
           console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
         });
-      })
-    } else {
-      this.PromiseReturn().then(async (data: any) => {
-        $(document).ready(() => {
-          kendo.pdf.defineFont({
-            "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
-            "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
-            "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-            "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-            "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
-          });
-          kendo.drawing.drawDOM($("#first"), {
-            paperSize: "A4",
-            margin: [-10, 0, 0, 0],
-            scale: 0.7,
-          }).then(function (group) {
-            return kendo.drawing.exportPDF(group, {
-              paperSize: "A4",
-              margin: [-10, 0, 0, 0],
-            });
-          }).done(async (pdfdata) => {
-            await this.userService?.UploadS3Buket({
-              fileName: this.guid() + '.pdf', buffer: pdfdata,
-              type: 'application/pdf'
-            }).subscribe(async (pdfresponse: any) => {
-              console.log('exportPDF', data, data)
-              data.push(pdfresponse?.url)
-              this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].forEach(element => {
-                data.push(element)
-              });
-              this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].forEach(element => {
-                data.push(element)
-              });
-              this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'].forEach(element => {
-                data.push(element)
-              });
-              var fitertemp: any = data.filter(n => n)
-              await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                this.PREVIEWS_URL_LIST = [];
-                console.log(merge?.pdfurl, 'mergepdfresponse?.pdfurl')
-                this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-                this.PREVIEWS_URL_STRING = '';
-                setTimeout(() => {
-                  this.PREVIEWS_URL_STRING = merge?.pdfurl;
-                }, 200);
-                model.style.display = 'block';
-                console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
-              });
-            });
-          });
-        });
-      })
-    }
+      });
+    })
     this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
@@ -833,6 +648,26 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       }
     })
   }
+  
+  async getS3Url() {
+    return new Promise(async (reslove, reject) => {
+      let temp: any = [];
+      await this.userService?.UploadS3Buket({
+        fileName: this.guid() + '.pdf', buffer: this.UrlList?.BankUrl,
+        type: 'application/pdf'
+      }).subscribe(async (pdfresponse: any) => {
+        temp.push(pdfresponse?.url)
+        await this.userService?.UploadS3Buket({
+          fileName: this.guid() + '.pdf', buffer: this.UrlList?.LetterHeadUrl,
+          type: 'application/pdf'
+        }).subscribe(async (pdfresponse1: any) => {
+          temp.push(pdfresponse1?.url);
+          reslove(temp);
+        });
+      });
+    })
+  }
+  
   guid() {
     let s4 = () => {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -841,6 +676,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     }
     return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
+  
   PromiseReturn() {
     var temp: any = [];
     temp[0] = this.formerge;

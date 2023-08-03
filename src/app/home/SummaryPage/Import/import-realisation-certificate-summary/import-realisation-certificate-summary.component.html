@@ -1,0 +1,148 @@
+<div class="content-wrap pb-2 scroll-bar-main">
+    
+    <main id="content" class="content table-padding" role="main">
+        <div class="filter_section_top p-2">
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">Realisation-Cretificate ({{this.FILTER_VALUE_LIST?.length}})</h3>
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top p-0">
+                        <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
+                                class="ex_icon"></span>Export</button>
+                        <div class="filter_posit">
+                            <button (click)="filter_Popup.style.display='block'" type="button"
+                                class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
+                                appFilterToggle>
+                                <form class="select_filter_options">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                name="Buyer_Name"
+                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                <option value="">Buyer name</option>
+                                                <option [value]="Buyer_Name"
+                                                    *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
+                                                    {{Buyer_Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                                name="Company_Name">
+                                                <option value="">PI/PO No.</option>
+                                                <option [value]="PI_PO_No"
+                                                    *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No
+                                                    }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Bill Of Exchange
+                                                No.</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'billExchangeNumber');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">Bill Of Exchange No.</option>
+                                                <option
+                                                    *ngFor="let Origin of this.ALL_FILTER_DATA?.Bill_Of_Exchange_No">{{
+                                                    Origin }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">DATE</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'billOfExchangeDate');filter_Popup.style.display='none'"
+                                                name="date">
+                                                <option value="">DATE</option>
+                                                <option [value]="SB_DATE"
+                                                    *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="footer_buttons">
+                                        <button type="button" class="btn btn-light"
+                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                    </div>
+                                </form>
+                                <i></i>
+                            </div>
+                        </div>
+                        <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Import/Realisation-Cretificate']">
+                            <span class="add_icon"></span> ADD NEW
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="analytics">
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
+            [items]="this.FILTER_VALUE_LIST_NEW?.items"
+            [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+            [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
+            >
+        </custom-expansion-panel>
+        </div>
+    </main>
+</div>
+
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
+    id="PDF_VIEW" name="Realisation-Cretificate Documents">
+    <div class="p-2">
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Realisation-Cretificate Documents" [src]="viewData" width="100%"
+        height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>
+
+
+<!-- <app-custom-model *ngIf="this.SELECTED_VALUE!=''"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2"
+    id="EditSummaryPage" [name]="'Bill Of Exchange Documents Update || Bill Of Exchange Documents No. : '+this.SELECTED_VALUE?.billExchangeNumber"
+    #EditSummaryPagePanel>
+    <div class="ml-0 p-3 col-12">
+        <div class="container-fluid m-auto p-0">
+            <div class="content_white_background" style="height: auto;">
+                <main id="content" class="table-padding" role="main" style="border-radius: 10px;">
+                    <div class="new_document_list1">
+                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest" style="flex-direction: column;">
+                            <div class="row col-12 mt-0 p-0">
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">DATE</label>
+                                        <ng-custom-input type="date" [(ngInput)]="this.EDIT_FORM_DATA.billOfExchangeDate"
+                                            placeHolderText="O R DATE"></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Bill Of Exchange No.</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.billExchangeNumber"
+                                            placeHolderText="Bill Of Exchange No."></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Beneficiary Name</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.buyerName"
+                                            placeHolderText="Beneficiary Name"></ng-custom-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-12 mt-0 p-0 pl-2 pb-2">
+                                <button class="btn btn-primary"
+                                    (click)="toSaveNew(this.EDIT_FORM_DATA,this.SELECTED_VALUE?._id,EditSummaryPagePanel)">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</app-custom-model> -->

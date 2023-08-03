@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-fbg-buyer-file',
   templateUrl: './fbg-buyer-file.component.html',
-  styleUrls: ['../../../../sass/application.scss', './fbg-buyer-file.component.scss']
+  styleUrls: [ './fbg-buyer-file.component.scss']
 })
 export class FbgBuyerFileComponent implements OnInit, OnDestroy {
   item: any;

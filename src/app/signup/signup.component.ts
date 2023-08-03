@@ -8,11 +8,10 @@ import { UploadServiceValidatorService } from '../components/Upload/service/uplo
 import { AppConfig } from '../../environments/environment';
 
 @Component({
-  selector: 'app-home',
+  selector: 'user-registration-page',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-
 
 export class SignupComponent implements OnInit {
   password = 'password';

@@ -12,7 +12,7 @@ import { WindowInformationService } from "src/app/service/window-information.ser
 @Component({
   selector: 'app-a2cum-application-yes-bank',
   templateUrl: './a2cum-application-yes-bank.component.html',
-  styleUrls: ['../../../../sass/application.scss', './a2cum-application-yes-bank.component.scss']
+  styleUrls: [ './a2cum-application-yes-bank.component.scss']
 })
 export class A2cumApplicationYesBankComponent implements OnInit, OnDestroy {
   item: any;

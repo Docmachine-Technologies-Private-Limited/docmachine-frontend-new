@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-trade-request-letter',
   templateUrl: './trade-request-letter.component.html',
-  styleUrls: ['../../../../sass/application.scss', './trade-request-letter.component.scss']
+  styleUrls: [ './trade-request-letter.component.scss']
 })
 export class TradeRequestLetterComponent implements OnInit, OnDestroy {
   item: any;

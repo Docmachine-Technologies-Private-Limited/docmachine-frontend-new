@@ -22,7 +22,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": "css",
             "allowedCommonJsDependencies": [
               "rxjs-compat",
               "lodash"
@@ -38,7 +38,6 @@
               }
             ],
             "styles": [
-              "src/sass/application.scss",
               "src/styles.scss",
               "src/assets/css/css-style.css",
               "src/assets/LoginPage/vendor/bootstrap/css/bootstrap.min.css",
@@ -219,7 +218,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": "css",
             "assets": [
               "src/favicon.ico",
               "src/assets",

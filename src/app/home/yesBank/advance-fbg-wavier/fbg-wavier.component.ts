@@ -8,7 +8,7 @@ import { WindowInformationService } from '../../../.././app/service/window-infor
 @Component({
   selector: "app-fbg-wavier",
   templateUrl: "./fbg-wavier.component.html",
-  styleUrls: ['../../../../sass/application.scss', "./fbg-wavier.component.scss"],
+  styleUrls: [ "./fbg-wavier.component.scss"],
 })
 export class FbgWavierComponent implements OnInit, OnDestroy {
   item: any;

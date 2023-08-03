@@ -4,20 +4,15 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { SharedModule } from "./shared/shared.module";
-import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
 import {
   DropzoneModule,
-  DropzoneConfigInterface,
-  DROPZONE_CONFIG,
 } from "ngx-dropzone-wrapper";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { SignupModule } from "./signup/signup.module";
-import { SigninModule } from "./signIn/signin.module";
 import { AppComponent } from "./app.component";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { CreateTeamComponent } from "./create-team/create-team.component";
@@ -52,13 +47,7 @@ import { BehaviorSubjectListService } from "./home/CommanSubjectApi/BehaviorSubj
 import { RoleVerifyEmailComponent } from './RoleVerifyEmail/role-verify-email/role-verify-email.component';
 import { IdleService } from "./service/idle.service";
 import { CustomMatTabComponent } from './custom/custom-mat-tab/custom-mat-tab.component';
-const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
-  // Change this to your upload POST address:
-  url: "https://httpbin.org/post",
-  acceptedFiles: "image/*",
-  maxFilesize: 3,
-  createImageThumbnails: true,
-};
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -108,12 +97,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DropzoneModule,
     DragDropModule,
     SharedModule,
-    SignupModule,
     BsDatepickerModule.forRoot(),
-    SigninModule,
-    AppRoutingModule,
     HomeModule,
     NgSelectModule,
+    AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

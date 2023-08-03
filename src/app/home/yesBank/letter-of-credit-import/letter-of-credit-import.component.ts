@@ -8,7 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-letter-of-credit-import',
   templateUrl: './letter-of-credit-import.component.html',
-  styleUrls: ['../../../../sass/application.scss', './letter-of-credit-import.component.scss']
+  styleUrls: [ './letter-of-credit-import.component.scss']
 })
 export class LetterOfCreditImportComponent implements OnInit, OnDestroy {
   item: any;

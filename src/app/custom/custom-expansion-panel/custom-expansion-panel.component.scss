@@ -273,24 +273,27 @@
 }
 
 ::ng-deep app-custom-model #PDF_VIEW .PDF_VIEW {
+    display: flex;
     height: 98vh;
-    margin: auto !important;
-    max-width: 70vw !important;
+    max-width: 70vw!important;
     position: absolute;
-    right: -20px;
-    top: 60px;
-    height: calc(100vh - 60px) !important;
-    margin: 0px auto auto !important;
+    right: 0;
+    top: 79px;
+    margin: auto;
+    height: calc(100vh - 138px)!important;
+    margin: 0 auto auto!important;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 ::ng-deep app-custom-model #PDF_VIEW.dropdown-controller {
-    position: absolute !important;
-    right: 0 !important;
-    left: unset !important;
+    position: absolute!important;
+    right: -15px!important;
+    left: unset!important;
     width: 560px;
-    background-color: transparent !important;
+    background-color: transparent!important;
 }
 
 ::ng-deep app-custom-model #PDF_VIEW .height-controller {
-    max-height: calc(100vh - 118px) !important;
+    max-height: calc(100vh - 123px)!important;
 }

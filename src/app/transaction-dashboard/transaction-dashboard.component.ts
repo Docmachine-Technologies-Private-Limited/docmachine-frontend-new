@@ -392,5 +392,13 @@ export class TransactionDashboardComponent implements OnInit {
     });
     return temp.join(',')
   }
+  
+  getPipoId(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?._id);
+    });
+    return temp.join(',')
+  }
 
 }

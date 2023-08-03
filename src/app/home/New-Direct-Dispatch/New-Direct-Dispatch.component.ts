@@ -1,18 +1,13 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../service/user.service";
-import { async, timer } from "rxjs";
+import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import * as data from './../../inward.json';
 import $ from 'jquery'
-import { PDFDocument } from 'pdf-lib';
-import importedSaveAs from 'file-saver';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
-import * as XLSX from 'xlsx';
-declare var kendo: any;
-
 import {
   DropzoneDirective,
   DropzoneConfigInterface,
@@ -20,11 +15,9 @@ import {
 import {
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup, Validators
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { DocumentService } from "../../service/document.service";
@@ -33,7 +26,6 @@ import { WindowInformationService } from '../../service/window-information.servi
 import { ShippingbillDataService } from '../../service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MergePdfListService } from '../merge-pdf-list.service';
 import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
 import { StorageEncryptionDecryptionService } from '../../Storage/storage-encryption-decryption.service';
@@ -74,7 +66,6 @@ export class NewDirectDispatchComponent implements OnInit {
 
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
-  // ----------------------------------
   pipourl1: any;
   tryPartyAgreement: any = [];
   creditNote: any = [];
@@ -326,10 +317,6 @@ export class NewDirectDispatchComponent implements OnInit {
   id: any;
   private genDoc: any;
   airwayBlCopy: any;
-
-  advanceForm = new FormGroup({
-    advance: new FormArray([this.initCourse()], Validators.required),
-  });
   sbDataArray: any[] = [];
   invoiceArr: any[];
   filterToggle = false;
@@ -356,7 +343,11 @@ export class NewDirectDispatchComponent implements OnInit {
     FILTER_COMMERCIAL: [],
     PIPO: []
   };
+  UrlList: any = '';
   public ExportBillLodgement_Form: FormGroup;
+  CUSTOMER_DETAILS: any = [];
+  BUYER_DETAILS: any=[];
+
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -401,9 +392,6 @@ export class NewDirectDispatchComponent implements OnInit {
       Url_Redirect: [{}, [Validators.required]],
       extradata: [[], [Validators.required]]
     });
-    //  await this.userService.SubjectListService.getUserDetail().then((value:any)=>{
-    //     console.log(value,'behaviorsubjectlist')
-    //   })
     this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
@@ -431,27 +419,21 @@ export class NewDirectDispatchComponent implements OnInit {
   }
 
   getDropdownData() {
-    this.userService.getTeam()
-      .subscribe(
-        data => {
-          this.commodity = data['data'][0]['commodity']
-          this.LocationData = data['data'][0]['location']
-          var temp: any = []
-          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
-          }
-          // var unique: any = temp.filter((value, index, array) => array?.value.indexOf(value) === index);
-          // for (let index = 0; index < unique.length; index++) {
-          //   this.bankDetail.push({
-          //     bank: unique[index]
-          //   })
-          // }
-        }, error => {
-          console.log("error")
-        });
-
-    this.userService.getBene(1).subscribe((res: any) => {
-      this.benneDetail = res.data
+    this.userService.getTeam().subscribe(data => {
+      this.CUSTOMER_DETAILS = data['data'][0]
+      this.commodity = data['data'][0]['commodity']
+      this.LocationData = data['data'][0]['location']
+      var temp: any = []
+      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+        this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+      }
+      console.log(data, 'adasdasdsdasdadsd')
+    }, error => {
+      console.log("error")
+    });
+    this.userService.getBuyer(1).subscribe((res: any) => {
+      this.BUYER_DETAILS = res.data;
+      console.log(this.BUYER_DETAILS,'BUYER_DETAILS')
     }, (err) => console.log("Error", err));
   }
 
@@ -904,66 +886,6 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log('line no.505 question5 data', this.Question5);
     }
   }
-  searchData1(a) {
-    console.log('hello', a);
-    console.log(a.length);
-    if (a.length > 0) {
-      let arr: any = [];
-      for (let value of this.item1) {
-        console.log('value of buyername****', value);
-        console.log('value of buyername', value.buyerName);
-        if (value.buyerName.includes(a) || value.sbno.includes(a)) {
-          console.log('shaile***************', value.buyerName);
-          arr.push(value);
-        }
-      }
-      this.itemArray = arr;
-      this.filterToggle = true;
-      // console.log("shaile***************", this.itemArray)
-    } else {
-      this.filterToggle = false;
-      console.log('else');
-    }
-
-    // console.log("shailendra buyerName", a.buyerName)
-  }
-
-  fireEvent() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-      this.table.nativeElement
-    );
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    console.log(wb);
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    console.log(wb);
-    /* save to file */
-    XLSX.writeFile(wb, 'SheetJS.xlsx');
-  }
-
-  changeCheckbox3(value) {
-    let j = this.lcArray.indexOf(value);
-    if (j == -1) {
-      this.lcArray.push(value);
-    } else {
-      this.lcArray.splice(j, 1);
-    }
-
-    console.log(this.lcArray);
-  }
-
-  initCourse() {
-    return this.formBuilder.group({
-      value: new FormArray([this.initCourse1()], Validators.required),
-    });
-  }
-
-  initCourse1() {
-    return this.formBuilder.group({
-      valueInternal: ['', Validators.required],
-      sb: ['', Validators.required],
-    });
-  }
-
 
   async generateDoc1(form: any) {
     console.log(form, 'generateDoc1generateDoc1');
@@ -1108,11 +1030,8 @@ export class NewDirectDispatchComponent implements OnInit {
               console.log('fggfgfgf', mainArr);
             }
           });
-          console.log(this.advanceForm.value);
-
           mainArr.forEach((value1, index) => {
             console.log('shshsh');
-            console.log(this.advanceForm.value.advance);
             for (let a of adArr) {
               if (a.sb == value1.sbno) {
                 const newVal: any = { ...value1 };
@@ -1224,7 +1143,6 @@ export class NewDirectDispatchComponent implements OnInit {
 
       console.log(this.generate1);
       console.log(this.c);
-      this.fillForm(pipoValue, 'SB_' + this.itemArray[0]?.sbno);
       this.newTask[0] = {
         sbNumbers: this.sbArray,
         sbUrls: this.mainDoc1,
@@ -1382,11 +1300,8 @@ export class NewDirectDispatchComponent implements OnInit {
                 console.log('fggfgfgf', mainArr);
               }
             });
-            console.log(this.advanceForm.value);
-
             mainArr.forEach((value1, index) => {
               console.log('shshsh');
-              console.log(this.advanceForm.value.advance);
               for (let a of adArr) {
                 if (a.sb == value1.sbno) {
                   const newVal = { ...value1 };
@@ -1500,7 +1415,6 @@ export class NewDirectDispatchComponent implements OnInit {
 
         console.log(this.generate1);
         console.log(this.c);
-        this.fillForm(pipoValue, 'SB_' + this.itemArray[0]?.sbno);
         this.newTask[0] = {
           sbNumbers: this.sbArray,
           sbUrls: this.mainDoc1,
@@ -1563,1080 +1477,7 @@ export class NewDirectDispatchComponent implements OnInit {
     console.log(this.str);
   }
   bankformat: any = ''
-  async fillForm(a, sbno: any) {
-    return new Promise(async (resolve, reject) => {
-      this.bankformat = ''
-      this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
-      console.log(this.newBankArray, this.bankformat, 'this.newBankArray')
-      if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
-        this.buyer1 = a.buyerName;
-        this.completewords3 = this.buyer1;;
-        this.devideContent3 = this.completewords3.length;
-        for (let i = 0; i < this.completewords3.length; i++) {
-          if (i < 6) {
-            this.buyer2.push(this.completewords3[i]);
-          } else if (i > 5 && i <= 11) {
-            this.buyer3.push(this.completewords3[i]);
-          }
-        }
 
-        this.buyName1 = this.buyer2.join(' ');
-        this.buyName2 = this.buyer3.join(' ');
-
-        console.log('Shailendra *************', this.buyName1);
-        console.log('Shailendra *************', this.buyName2);
-
-        const formUrl = this.bankformat[0]?.urlpdf;
-
-        const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
-
-        const pdfDoc = await PDFDocument.load(formPdfBytes);
-
-        const form = pdfDoc.getForm();
-        const pages = pdfDoc.getPages();
-        const firstpage = pages[0];
-
-        const text1 = form.createTextField('favorite0');
-        text1.setText('');
-        text1.addToPage(firstpage, {
-          x: 156,
-          y: 752,
-          width: 250,
-          height: 12,
-          borderWidth: 0,
-          //backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text2 = form.createTextField('favorite1');
-        text2.setText('');
-        text2.addToPage(firstpage, {
-          x: 482,
-          y: 752,
-          width: 20,
-          height: 13,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const textf3 = form.createTextField('favorite2');
-        textf3.setText('');
-        textf3.addToPage(firstpage, {
-          x: 510,
-          y: 752,
-          width: 20,
-          height: 13,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text4 = form.createTextField('favorite3');
-        text4.setText('');
-        text4.addToPage(firstpage, {
-          x: 539,
-          y: 752,
-          width: 15,
-          height: 13,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text5 = form.createTextField('favorite4');
-        text5.setText('');
-        text5.addToPage(firstpage, {
-          x: 570,
-          y: 752,
-          width: 12,
-          height: 13,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //exporter
-
-        const text6 = form.createTextField('favorite5');
-        text6.setText(this.team1);
-        text6.addToPage(firstpage, {
-          x: 18,
-          y: 684,
-          width: 295,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text7 = form.createTextField('favorite6');
-        // if(this.team2.length > 0){
-        text7.setText(this.team2);
-        text7.addToPage(firstpage, {
-          x: 18,
-          y: 665,
-          width: 295,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-        // }
-        // else{
-        //   text7.setText(this.item5.adress)
-        //   text7.addToPage(firstpage, {
-
-        //     x: 18,
-        //     y: 665,
-        //     width: 295,
-        //     height: 14,
-        //     borderWidth: 0,
-        //     // backgroundColor: rgb(255, 255, 255)
-        //   })
-        // }
-
-        const text8 = form.createTextField('favorite7');
-        // if(this.team2.length > 0 && this.team3.length == 0){
-        text8.setText(this.address1);
-        text8.addToPage(firstpage, {
-          x: 18,
-          y: 646,
-          width: 295,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-        // }
-        // else{
-        //   text8.setText(this.team3)
-        //   text8.addToPage(firstpage, {
-        //     x: 18,
-        //     y: 646,
-        //     width: 295,
-        //     height: 14,
-        //     borderWidth: 0,
-        //     // backgroundColor: rgb(255, 255, 255)
-
-        //   })
-        // }
-
-        const text9 = form.createTextField('favorite8');
-        //  if(this.team2.length > 0 && this.team3.length > 0){
-        text9.setText(this.address2);
-        text9.addToPage(firstpage, {
-          x: 18,
-          y: 628,
-          width: 295,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-        // }
-
-        const text10 = form.createTextField('favorite9');
-        text10.setText(this.address3);
-        text10.addToPage(firstpage, {
-          x: 18,
-          y: 612,
-          width: 295,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text11 = form.createTextField('favorite10');
-        text11.setText('');
-        text11.addToPage(firstpage, {
-          x: 18,
-          y: 594,
-          width: 295,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //buyer
-
-        const text12 = form.createTextField('favorite11');
-        text12.setText(this.buyName1);
-        text12.addToPage(firstpage, {
-          x: 320,
-          y: 684,
-          width: 255,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text13 = form.createTextField('favorite12');
-        text13.setText(this.buyName2);
-        text13.addToPage(firstpage, {
-          x: 320,
-          y: 665,
-          width: 255,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text14 = form.createTextField('favorite13');
-        text14.setText(this.buyerAds1);
-        text14.addToPage(firstpage, {
-          x: 320,
-          y: 646,
-          width: 255,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text15 = form.createTextField('favorite14');
-        text15.setText(this.buyerAds2);
-        text15.addToPage(firstpage, {
-          x: 320,
-          y: 628,
-          width: 255,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text16 = form.createTextField('favorite15');
-        text16.setText(this.buyerAds3);
-        text16.addToPage(firstpage, {
-          x: 320,
-          y: 612,
-          width: 255,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text17 = form.createTextField('favorite16');
-        text17.setText('');
-        text17.addToPage(firstpage, {
-          x: 320,
-          y: 594,
-          width: 255,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //checkbox
-
-        const checkbox1 = form.createCheckBox('check1');
-        checkbox1.addToPage(firstpage, {
-          x: 150,
-          y: 575,
-          width: 8,
-          height: 8,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const checkbox2 = form.createCheckBox('check2');
-        checkbox2.addToPage(firstpage, {
-          x: 369,
-          y: 575,
-          width: 8,
-          height: 8,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const checkbox3 = form.createCheckBox('check3');
-        checkbox3.addToPage(firstpage, {
-          x: 570,
-          y: 575,
-          width: 8,
-          height: 8,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //draw bank details
-
-        const text18 = form.createTextField('favorite17');
-        text18.setText('');
-        text18.addToPage(firstpage, {
-          x: 219,
-          y: 553,
-          width: 360,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text19 = form.createTextField('favorite18');
-        text19.setText('');
-        text19.addToPage(firstpage, {
-          x: 219,
-          y: 538,
-          width: 360,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text20 = form.createTextField('favorite19');
-        text20.setText('');
-        text20.addToPage(firstpage, {
-          x: 219,
-          y: 521,
-          width: 360,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text21 = form.createTextField('favorite20');
-        text21.setText('');
-        text21.addToPage(firstpage, {
-          x: 219,
-          y: 506,
-          width: 360,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text22 = form.createTextField('favorite21');
-        text22.setText('');
-        text22.addToPage(firstpage, {
-          x: 219,
-          y: 491,
-          width: 360,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text23 = form.createTextField('favorite22');
-        text23.setText('');
-        text23.addToPage(firstpage, {
-          x: 219,
-          y: 478,
-          width: 360,
-          height: 10,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //checkbox
-
-        const checkbox4 = form.createCheckBox('check4');
-        checkbox4.addToPage(firstpage, {
-          x: 245,
-          y: 456,
-          width: 5,
-          height: 5,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const checkbox5 = form.createCheckBox('check5');
-        checkbox5.addToPage(firstpage, {
-          x: 453,
-          y: 463,
-          width: 5,
-          height: 5,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //text
-
-        const text24 = form.createTextField('favorite23');
-        text24.setText('');
-        text24.addToPage(firstpage, {
-          x: 219,
-          y: 412,
-          width: 360,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text25 = form.createTextField('favorite24');
-        text25.setText('');
-        text25.addToPage(firstpage, {
-          x: 219,
-          y: 390,
-          width: 360,
-          height: 16,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //checkbox
-
-        const checkbox6 = form.createCheckBox('check6');
-        checkbox6.addToPage(firstpage, {
-          x: 389,
-          y: 375,
-          width: 8,
-          height: 8,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const checkbox7 = form.createCheckBox('check7');
-        checkbox7.addToPage(firstpage, {
-          x: 550,
-          y: 375,
-          width: 8,
-          height: 8,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        // firx
-        var tp: any = {
-          firxNumber: [],
-          firxDate: [],
-          firxCurrency: [],
-          firxAmount: [],
-          firxCommision: [],
-          firxRecAmo: []
-        };
-        for (let index = 0; index < this.advanceArray[sbno]?.length; index++) {
-          const element: any = this.advanceArray[sbno][index];
-          tp['firxNumber'].push(element?.irDataItem?.billNo)
-          tp['firxDate'].push(element?.irDataItem?.date)
-          tp['firxCurrency'].push(element?.irDataItem?.currency)
-          tp['firxAmount'].push(element?.irDataItem?.amount)
-          tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
-          tp['firxRecAmo'].push(0)
-        }
-        const text26 = form.createTextField('favorite25');
-        text26.setText(tp?.firxNumber.toString());
-        text26.addToPage(firstpage, {
-          x: 128,
-          y: 348,
-          width: 187,
-          height: 20,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text27 = form.createTextField('favorite26');
-        text27.setText(tp?.firxCurrency.toString());
-        text27.addToPage(firstpage, {
-          x: 128,
-          y: 324,
-          width: 187,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text28 = form.createTextField('favorite27');
-        text28.setText(tp?.firxDate.toString());
-        text28.addToPage(firstpage, {
-          x: 421,
-          y: 348,
-          width: 160,
-          height: 20,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const SumfirxAmount: any = tp?.firxAmount.reduce((partialSum, a) => partialSum + a, 0);
-        const text29 = form.createTextField('favorite28');
-        text29.setText(SumfirxAmount.toString());
-        text29.addToPage(firstpage, {
-          x: 421,
-          y: 324,
-          width: 160,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //bill details
-        // firx
-        var tp_bill: any = {
-          SbNumber: [],
-          SbDate: [],
-          SbCurrency: [],
-          SbAmount: []
-        };
-        var filterSB: any = this.itemArray.filter((item: any) => 'SB_' + item.sbno == sbno)
-        for (let index = 0; index < filterSB?.length; index++) {
-          const element = filterSB[index];
-          tp_bill['SbNumber'].push(element?.sbno)
-          tp_bill['SbDate'].push(element?.sbdate)
-          tp_bill['SbCurrency'].push(element?.fobCurrency)
-          tp_bill['SbAmount'].push(element?.fobValue)
-        }
-        const text30 = form.createTextField('favorite29');
-        text30.setText(tp_bill?.SbCurrency.toString());
-        text30.addToPage(firstpage, {
-          x: 128,
-          y: 287,
-          width: 140,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text31 = form.createTextField('favorite30');
-        text31.setText(tp_bill?.SbAmount.toString());
-        text31.addToPage(firstpage, {
-          x: 128,
-          y: 266,
-          width: 140,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text32 = form.createTextField('favorite31');
-        text32.setText(this.ConvertNumberToWords(tp_bill?.SbAmount.toString()));
-        text32.addToPage(firstpage, {
-          x: 388,
-          y: 287,
-          width: 188,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text33 = form.createTextField('favorite32');
-        text33.setText('');
-        text33.addToPage(firstpage, {
-          x: 388,
-          y: 266,
-          width: 188,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //checkbox
-
-        const checkbox8 = form.createCheckBox('check8');
-        checkbox8.addToPage(firstpage, {
-          x: 141,
-          y: 251,
-          width: 5,
-          height: 5,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const checkbox9 = form.createCheckBox('check9');
-        checkbox9.addToPage(firstpage, {
-          x: 288,
-          y: 251,
-          width: 5,
-          height: 5,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text01 = form.createTextField('favorite01');
-        text01.setText('');
-        text01.addToPage(firstpage, {
-          x: 393,
-          y: 253,
-          width: 30,
-          height: 10,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text02 = form.createTextField('favorite02');
-        text02.setText('');
-        text02.addToPage(firstpage, {
-          x: 453,
-          y: 242,
-          width: 60,
-          height: 10,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        // description of goods
-
-        const text34 = form.createTextField('favorite33');
-        text34.setText('');
-        text34.addToPage(firstpage, {
-          x: 128,
-          y: 211,
-          width: 250,
-          height: 20,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text35 = form.createTextField('favorite34');
-        text35.setText('');
-        text35.addToPage(firstpage, {
-          x: 128,
-          y: 190,
-          width: 140,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text36 = form.createTextField('favorite35');
-        text36.setText('');
-        text36.addToPage(firstpage, {
-          x: 448,
-          y: 211,
-          width: 132,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text37 = form.createTextField('favorite36');
-        text37.setText('');
-        text37.addToPage(firstpage, {
-          x: 388,
-          y: 190,
-          width: 188,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text38 = form.createTextField('favorite37');
-        text38.setText('');
-        text38.addToPage(firstpage, {
-          x: 275,
-          y: 170,
-          width: 300,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text39 = form.createTextField('favorite38');
-        text39.setText(tp_bill?.SbNumber.toString());
-        text39.addToPage(firstpage, {
-          x: 275,
-          y: 146,
-          width: 300,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text40 = form.createTextField('favorite39');
-        text40.setText('');
-        text40.addToPage(firstpage, {
-          x: 128,
-          y: 126,
-          width: 140,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text41 = form.createTextField('favorite40');
-        text41.setText(
-          `${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`
-        );
-        // console.log(this.myArr[0])
-        // console.log(this.myArr[this.myArr.length - 1])
-        text41.addToPage(firstpage, {
-          x: 388,
-          y: 126,
-          width: 188,
-          height: 18,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        // const texta41 = form.createTextField('favorite404')
-        // texta41.setText(`${this.myArr.length}`)
-        // // console.log(this.myArr[0])
-        // // console.log(this.myArr[this.myArr.length - 1])
-        // texta41.addToPage(firstpage, {
-        //   x: 266,
-        //   y: 106,
-        //   width: 188,
-        //   height: 18,
-        //   borderWidth: 0,
-        //   // backgroundColor: rgb(255, 255, 255)
-        // })
-
-        //table1
-        const text421 = form.createTextField('favorite411');
-        text421.setText(`${this.myArr.length}`);
-        text421.addToPage(firstpage, {
-          x: 228,
-          y: 108,
-          width: 10,
-          height: 16,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text42 = form.createTextField('favorite41');
-        text42.setText('');
-        text42.addToPage(firstpage, {
-          x: 97,
-          y: 62,
-          width: 45,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text43 = form.createTextField('favorite42');
-        text43.setText('');
-        text43.addToPage(firstpage, {
-          x: 148,
-          y: 62,
-          width: 50,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text44 = form.createTextField('favorite43');
-        text44.setText('');
-        text44.addToPage(firstpage, {
-          x: 206,
-          y: 62,
-          width: 65,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text45 = form.createTextField('favorite44');
-        text45.setText('');
-        text45.addToPage(firstpage, {
-          x: 276,
-          y: 62,
-          width: 41,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text46 = form.createTextField('favorite45');
-        text46.setText('');
-        text46.addToPage(firstpage, {
-          x: 320,
-          y: 62,
-          width: 45,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text47 = form.createTextField('favorite46');
-        text47.setText('');
-        text47.addToPage(firstpage, {
-          x: 370,
-          y: 62,
-          width: 33,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text48 = form.createTextField('favorite47');
-        text48.setText('');
-        text48.addToPage(firstpage, {
-          x: 408,
-          y: 62,
-          width: 80,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text49 = form.createTextField('favorite48');
-        text49.setText('');
-        text49.addToPage(firstpage, {
-          x: 492,
-          y: 62,
-          width: 50,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text50 = form.createTextField('favorite49');
-        text50.setText('');
-        text50.addToPage(firstpage, {
-          x: 547,
-          y: 62,
-          width: 33,
-          height: 14,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text51 = form.createTextField('favorite50');
-        text51.setText('');
-        text51.addToPage(firstpage, {
-          x: 97,
-          y: 51,
-          width: 45,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text52 = form.createTextField('favorite51');
-        text52.setText('');
-        text52.addToPage(firstpage, {
-          x: 148,
-          y: 51,
-          width: 50,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text53 = form.createTextField('favorite52');
-        text53.setText('');
-        text53.addToPage(firstpage, {
-          x: 206,
-          y: 51,
-          width: 65,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text54 = form.createTextField('favorite53');
-        text54.setText('');
-        text54.addToPage(firstpage, {
-          x: 276,
-          y: 51,
-          width: 41,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text55 = form.createTextField('favorite54');
-        text55.setText('');
-        text55.addToPage(firstpage, {
-          x: 320,
-          y: 51,
-          width: 45,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text56 = form.createTextField('favorite55');
-        text56.setText('');
-        text56.addToPage(firstpage, {
-          x: 370,
-          y: 51,
-          width: 33,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text57 = form.createTextField('favorite56');
-        text57.setText('');
-        text57.addToPage(firstpage, {
-          x: 408,
-          y: 51,
-          width: 80,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text58 = form.createTextField('favorite57');
-        text58.setText('');
-        text58.addToPage(firstpage, {
-          x: 492,
-          y: 51,
-          width: 50,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text59 = form.createTextField('favorite58');
-        text59.setText('');
-        text59.addToPage(firstpage, {
-          x: 547,
-          y: 51,
-          width: 33,
-          height: 9,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        //table2
-
-        const text60 = form.createTextField('favorite59');
-        text60.setText(this.charge[0]);
-        text60.addToPage(firstpage, {
-          x: 135,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text61 = form.createTextField('favorite60');
-        text61.setText(this.charge[1]);
-        text61.addToPage(firstpage, {
-          x: 167,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text62 = form.createTextField('favorite61');
-        text62.setText(this.charge[2]);
-        text62.addToPage(firstpage, {
-          x: 201,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text63 = form.createTextField('favorite62');
-        text63.setText(this.charge[3]);
-        text63.addToPage(firstpage, {
-          x: 235,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text64 = form.createTextField('favorite63');
-        text64.setText(this.charge[4]);
-        text64.addToPage(firstpage, {
-          x: 266,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text65 = form.createTextField('favorite64');
-        text65.setText(this.charge[5]);
-        text65.addToPage(firstpage, {
-          x: 300,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text66 = form.createTextField('favorite65');
-        text66.setText(this.charge[6]);
-        text66.addToPage(firstpage, {
-          x: 331,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text67 = form.createTextField('favorite66');
-        text67.setText(this.charge[7]);
-        text67.addToPage(firstpage, {
-          x: 363,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text68 = form.createTextField('favorite67');
-        text68.setText(this.charge[8]);
-        text68.addToPage(firstpage, {
-          x: 397,
-          y: 10,
-          width: 34,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text69 = form.createTextField('favorite68');
-        text69.setText(this.charge[9]);
-        text69.addToPage(firstpage, {
-          x: 434,
-          y: 10,
-          width: 30,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text70 = form.createTextField('favorite69');
-        text70.setText(this.charge[10]);
-        text70.addToPage(firstpage, {
-          x: 469,
-          y: 10,
-          width: 27,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text71 = form.createTextField('favorite70');
-        text71.setText(this.charge[11]);
-        text71.addToPage(firstpage, {
-          x: 501,
-          y: 10,
-          width: 28,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text72 = form.createTextField('favorite71');
-        text72.setText(this.charge[12]);
-        text72.addToPage(firstpage, {
-          x: 534,
-          y: 10,
-          width: 28,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const text73 = form.createTextField('favorite72');
-        text73.setText(this.charge[13]);
-        text73.addToPage(firstpage, {
-          x: 565,
-          y: 10,
-          width: 15,
-          height: 25,
-          borderWidth: 0,
-          // backgroundColor: rgb(255, 255, 255)
-        });
-
-        const pdfBytes = await pdfDoc.save();
-        console.log(pdfBytes, 'pdf');
-        console.log(pdfBytes, 'pdf');
-        var base64String = this._arrayBufferToBase64(pdfBytes);
-        const x = 'data:application/pdf;base64,' + base64String;
-        this.formerge = x;
-        this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
-        this.newTask[0].generateDoc1 = x;
-        resolve(x)
-      }
-    })
-  }
   ConvertNumberToWords(number: any) {
     var words = new Array();
     words[0] = '';
@@ -2718,6 +1559,7 @@ export class NewDirectDispatchComponent implements OnInit {
     }
     return words_string;
   }
+
   _arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array(buffer);
@@ -2726,164 +1568,6 @@ export class NewDirectDispatchComponent implements OnInit {
       binary += String.fromCharCode(bytes[i]);
     }
     return window.btoa(binary);
-  }
-
-  doneDox(genDoc: any) {
-    this.doneToDox();
-    console.log('genDoc', genDoc);
-    console.log(this.newTask);
-    console.log(this.invoiceArr);
-    if (this.documentService.draft) {
-      this.documentService
-        .updateExportTask(
-          {
-            task: this.newTask,
-            completed: 'yes',
-            fileType: 'BL',
-          },
-          this.documentService.task._id
-        )
-        .subscribe(
-          (data) => {
-            console.log('king123');
-            console.log(data);
-            this.documentService.draft = false;
-            this.documentService.task.id = '';
-            this.isDoneAll = true;
-            this.userService
-              .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
-              .subscribe(
-                (data) => {
-                  console.log('king123');
-                  console.log(data);
-                  if (this.Question5 == 'yes') {
-                    this.userService
-                      .updateManyPipo(
-                        this.arrayPipo,
-                        'invoiceReduction',
-                        this.invoiceArr
-                      )
-                      .subscribe(
-                        (data1) => {
-                          console.log('king123');
-                          console.log(data1);
-                          this.toastr.success(
-                            'Task saved as completed successfully!'
-                          );
-                          if (this.redirectid) {
-                            // this.router.navigate([
-                            //   'home/pipo-export',
-                            //   {
-                            //     id: this.redirectid,
-                            //     page: this.redirectpage,
-                            //     index: this.redirectindex,
-                            //   },
-                            // ]);
-                          } else {
-                            window.location.reload();
-                          }
-                          //this.router.navigate(["/home/advance-outward-remittance"]);
-                        },
-                        (error) => {
-                          // this.toastr.error('Invalid inputs, please check!');
-                          console.log('error');
-                        }
-                      );
-                  } else {
-                    this.toastr.success(
-                      'Task saved as completed successfully!'
-                    );
-                    // this.router.navigate(["/home/dashboardTask"]);
-                  }
-
-                  // this.toastr.success('Task saved as completed successfully!');
-                  // this.router.navigate(["/home/dashboardTask"]);
-                  //this.router.navigate(["/home/advance-outward-remittance"]);
-                },
-                (error) => {
-                  // this.toastr.error('Invalid inputs, please check!');
-                  console.log('error');
-                }
-              );
-            //this.router.navigate(["/home/dashboardTask"]);
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
-          },
-          (error) => {
-            console.log('error');
-          }
-        );
-    } else {
-      this.documentService
-        .addExportTask({
-          task: this.newTask,
-          completed: 'yes',
-          fileType: 'BL',
-        })
-        .subscribe(
-          (res) => {
-            this.isDoneAll = true;
-            //this.toastr.success('Task saved successfully!');
-            console.log('Transaction Saved');
-            this.userService
-              .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
-              .subscribe(
-                (data) => {
-                  console.log('king123');
-                  console.log(data);
-                  if (this.Question5 == 'yes') {
-                    this.userService
-                      .updateManyPipo(
-                        this.arrayPipo,
-                        'invoiceReduction',
-                        this.invoiceArr
-                      )
-                      .subscribe(
-                        (data1) => {
-                          console.log('king123');
-                          console.log(data1);
-                          this.toastr.success(
-                            'Task saved as completed successfully!'
-                          );
-                          if (this.redirectid) {
-                            // this.router.navigate([
-                            //   'home/pipo-export',
-                            //   {
-                            //     id: this.redirectid,
-                            //     page: this.redirectpage,
-                            //     index: this.redirectindex,
-                            //   },
-                            // ]);
-                          } else {
-                            // window.location.reload();
-                          }
-                          //this.router.navigate(["/home/advance-outward-remittance"]);
-                        },
-                        (error) => {
-                          // this.toastr.error('Invalid inputs, please check!');
-                          console.log('error');
-                        }
-                      );
-                  } else {
-                    this.toastr.success(
-                      'Task saved as completed successfully!'
-                    );
-                    // this.router.navigate(["/home/dashboardTask"]);
-                  }
-                  //this.router.navigate(["/home/advance-outward-remittance"]);
-                },
-                (error) => {
-                  // this.toastr.error('Invalid inputs, please check!');
-                  console.log('error');
-                }
-              );
-            //this.router.navigate(["/home/dashboardTask"]);
-          },
-          (err) => {
-            this.toastr.error('Error!');
-            console.log('Error saving the transaction');
-          }
-        );
-    }
   }
 
   change(e) {
@@ -2896,14 +1580,14 @@ export class NewDirectDispatchComponent implements OnInit {
     this.LcNumber = e.target.value;
   }
 
-  setradio(a) {
+  setradio(a: any) {
     console.log(a, 'setradio');
-    this.bankToggle = a?.id;
-    this.bankValue = a?.id;
+    this.bankToggle = a;
+    this.bankValue = a;
     this.newBankArray = [];
     console.log(this.bankArray, 'this.bankArray')
     this.bankArray.forEach((value, index) => {
-      if (value?.BankUniqueId?.includes(a?.id) == true) {
+      if (value?.BankUniqueId?.includes(a) == true) {
         this.newBankArray.push(value)
       }
     });
@@ -3153,506 +1837,6 @@ export class NewDirectDispatchComponent implements OnInit {
   TO_FIXED(amount: any, fixed_position: any) {
     return !isNaN(amount) ? parseFloat(amount).toFixed(fixed_position) : 0;
   }
-  exportToExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-      this.billLodge.nativeElement
-    );
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    if (this.Question5 == 'yes') {
-      XLSX.writeFile(wb, 'Invoice Reduction.XLSX');
-    } else if (this.Question5 == 'no') {
-      XLSX.writeFile(wb, 'Shipping Details.XLSX');
-    }
-  }
-
-
-  currentDownloadPdf: any = [];
-  openToPdf(content3, pipo) {
-    this.generateChecked = true;
-    this.currentDownloadPdf = pipo;
-    this.selectedPdfs = [];
-    this.selectedPdfs2 = [];
-
-    console.log('selectedPdfs in line no 2958', this.selectedPdfs);
-    console.log('selectedPdfs in line no 2959', this.selectedPdfs2);
-
-    if (this.currentDownloadPdf.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.currentDownloadPdf.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.creditNote.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.creditNote.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.debitNote.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.debitNote.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.ebrc.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(this.ebrc.changingThisBreaksApplicationSecurity);
-    }
-    if (this.blcopyref.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.blcopyref.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.irAdvice.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.irAdvice.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.swiftCopy.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.tryPartyAgreement.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.airwayBlCopy.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.billOfExchange.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.destruction.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.destruction.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.commercial.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.commercial.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.packingList.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        this.packingList.changingThisBreaksApplicationSecurity
-      );
-    }
-    if (this.lcCopy.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(this.lcCopy.changingThisBreaksApplicationSecurity);
-    }
-
-    console.log('selectedPDFs', this.selectedPdfs);
-
-    this.modalService
-      .open(content3, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
-  }
-
-  addPdfToSelectedPdf(value: any, e: any) {
-    if (e.target.checked) {
-      if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
-        this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
-      }
-    } else if (!e.target.checked) {
-      this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
-    }
-    console.log(this.selectedPdfs);
-  }
-
-  addPdfToSelectedPdf2(value, e) {
-    if (e.target.checked) {
-      this.generateChecked = true;
-    } else {
-      this.generateChecked = false;
-    }
-  }
-
-  downloadAsSingleFile = async (pdfDoc: any) => {
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-    //const byteCharacters = atob(data_pdf);
-    if (this.generateChecked == true) {
-      var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
-
-      const mergedPdf = await PDFDocument.create();
-      const pdfA = await PDFDocument.load(this.formerge);
-      const pdfB = await PDFDocument.load(merge);
-      const copiedPagesA = await mergedPdf.copyPages(
-        pdfA,
-        pdfA.getPageIndices()
-      );
-      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-
-      const copiedPagesB = await mergedPdf.copyPages(
-        pdfB,
-        pdfB.getPageIndices()
-      );
-      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-      const mergedPdfFile = await mergedPdf.save();
-      var base64String = this._arrayBufferToBase64(mergedPdfFile);
-      console.log('merge doc', base64String);
-      var genDoc: any = 'data:application/pdf;base64,' + base64String;
-      const byteCharacters = atob(base64String);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-        // console.log("bytenumbers", byteNumbers[i])
-      }
-
-      this.doneDox(genDoc);
-      const byteArray = new Uint8Array(byteNumbers);
-      importedSaveAs(
-        new Blob([byteArray], { type: 'application/pdf' }),
-        'BankAttachment'
-      );
-    } else {
-      const byteCharacters1 = atob(data_pdf);
-      const byteNumbers1 = new Array(byteCharacters1.length);
-      for (let i = 0; i < byteCharacters1.length; i++) {
-        byteNumbers1[i] = byteCharacters1.charCodeAt(i);
-        // console.log("bytenumbers", byteNumbers[i])
-      }
-
-      this.doneDox(genDoc);
-      const byteArray1 = new Uint8Array(byteNumbers1);
-      importedSaveAs(
-        new Blob([byteArray1], { type: 'application/pdf' }),
-        'BankAttachment'
-      );
-    }
-  };
-
-  sendMail = async (pdfDoc: any) => {
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    console.log('5417****', pdfDataUri);
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-    const byteCharacters = atob(data_pdf);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers)
-    console.log('**user id', this.id);
-    console.log('99999999999999999999999', data_pdf);
-
-    if (this.generateChecked == true) {
-      var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
-
-      const mergedPdf = await PDFDocument.create();
-      console.log('xx');
-      const pdfA = await PDFDocument.load(this.formerge);
-      console.log('a');
-      const pdfB = await PDFDocument.load(merge);
-      console.log('b');
-      const copiedPagesA = await mergedPdf.copyPages(
-        pdfA,
-        pdfA.getPageIndices()
-      );
-      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-
-      const copiedPagesB = await mergedPdf.copyPages(
-        pdfB,
-        pdfB.getPageIndices()
-      );
-      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-      const mergedPdfFile = await mergedPdf.save();
-      var base64String = this._arrayBufferToBase64(mergedPdfFile);
-      var genDoc = 'data:application/pdf;base64,' + base64String;
-      this.doneDox(genDoc);
-
-      this.userService.documentSend(this.id, base64String).subscribe(
-        (data) => {
-          console.log('king123');
-          console.log(data);
-        },
-        (error) => {
-          console.log('error');
-        }
-      );
-    } else {
-      this.userService.documentSend(this.id, data_pdf).subscribe(
-        (data) => {
-          console.log('king123');
-          console.log(data);
-        },
-        (error) => { console.log('error'); }
-      );
-    }
-  };
-
-  mergeAllPDFs = async (type: String) => {
-    let urls: any = this.selectedPdfs;
-    const numDocs = urls.length;
-    const pdfDoc = await PDFDocument.create();
-    var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-      if (currentpage < docLength) {
-        console.log('Inside Page', currentpage, 'total pages', docLength);
-        const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
-        pdfDoc.addPage(donorPage);
-        await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
-      }
-    };
-    var appendEachFile = async (bytes) => {
-      const donorPdfDoc = await PDFDocument.load(bytes);
-      const docLength = donorPdfDoc.getPageCount();
-      console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
-      await appendEachPage(donorPdfDoc, 0, docLength);
-    };
-    var appendAllFiles = async (pdflist, currentfile) => {
-      if (currentfile < numDocs) {
-        await appendEachFile(pdflist[currentfile]);
-        console.log('Inside file', currentfile);
-        await appendAllFiles(pdflist, currentfile + 1);
-      } else {
-        if (type == 'download') {
-          this.downloadAsSingleFile(pdfDoc);
-        } else {
-          this.sendMail(pdfDoc);
-        }
-      }
-    };
-
-    // download single file;
-    let downloadEachFile = (filename) => {
-      return new Promise((resolve, reject) => {
-        this.userService.mergePdf(filename).subscribe(
-          (res: any) => {
-            console.log('res', res);
-            resolve(res.arrayBuffer());
-          },
-          (err) => reject('Failed to fetch the pdf')
-        );
-      });
-    };
-    // download all the pdfs
-    let downloadAllFiles = () => {
-      var promises: any = [];
-      for (var i = 0; i < numDocs; i++) {
-        let filename: any = urls[i].substring(urls[i].lastIndexOf('/') + 1);
-        promises.push(downloadEachFile(filename));
-      }
-      Promise.all(promises).then(
-        (pdfList) => {
-          appendAllFiles(pdfList, 0);
-          console.log('pdfList2', pdfList);
-        },
-        (error) => {
-          // write code to send error to user
-          // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
-        }
-      );
-    };
-    downloadAllFiles();
-  };
-
-  downloadFile2 = (blob, fileName) => {
-    const link = document.createElement('a');
-    // create a blobURI pointing to our Blob
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    // some browser needs the anchor to be in the doc
-    document.body.append(link);
-    link.click();
-    link.remove();
-    // in case the Blob uses a lot of memory
-    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
-  };
-
-  // downloadFile(new Blob(['random data']), "myfile.txt");
-
-  downloadAll = async (type: String) => {
-    var proceedtoDownloadPdf = async (download, sbno) => {
-      console.log('line 3377', download);
-      let urls = download;
-      const numDocs = urls.length;
-      const pdfDoc = await PDFDocument.create();
-
-      var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-        console.log('line 3383', currentpage);
-        if (currentpage < docLength) {
-          console.log('Inside Page', currentpage, 'total pages', docLength);
-          const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [
-            currentpage,
-          ]);
-          pdfDoc.addPage(donorPage);
-          await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
-        }
-      };
-      var appendEachFile = async (bytes) => {
-        const donorPdfDoc = await PDFDocument.load(bytes);
-        const docLength = donorPdfDoc.getPageCount();
-        console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
-        await appendEachPage(donorPdfDoc, 0, docLength);
-      };
-      var appendAllFiles = async (pdflist, currentfile) => {
-        if (currentfile < numDocs) {
-          await appendEachFile(pdflist[currentfile]);
-          console.log('Inside file', currentfile);
-          await appendAllFiles(pdflist, currentfile + 1);
-        } else {
-          if (type == 'download') {
-            console.log(pdfDoc);
-            await this.BulkDOwnload(pdfDoc, sbno);
-          }
-        }
-      };
-
-      // download single file;
-      let downloadEachFile = (filename) => {
-        return new Promise((resolve, reject) => {
-          this.userService.mergePdf(filename).subscribe(
-            (res: any) => {
-              console.log('res', res);
-              resolve(res.arrayBuffer());
-            },
-            (err) => reject('Failed to fetch the pdf')
-          );
-        });
-      };
-      // download all the pdfs
-      let downloadAllFiles = () => {
-        var promises: any = [];
-        for (var i = 0; i < numDocs; i++) {
-          let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
-          promises.push(downloadEachFile(filename));
-        }
-        Promise.all(promises).then(
-          (pdfList) => {
-            appendAllFiles(pdfList, 0);
-            console.log('pdfList2', pdfList);
-          },
-          (error) => {
-            // write code to send error to user
-            // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
-          }
-        );
-      };
-      downloadAllFiles();
-    };
-
-    var bulkDownloadSingle = async (mainDoc1, index) => {
-      if (mainDoc1[index]) {
-        let sb: any = mainDoc1[index];
-        var downloadALL: any = [];
-        downloadALL.push(sb.changingThisBreaksApplicationSecurity);
-        if (this.creditNote.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.creditNote.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.debitNote.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.debitNote.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.ebrc.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(this.ebrc.changingThisBreaksApplicationSecurity);
-        }
-        if (this.blcopyref.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.blcopyref.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.irAdvice.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(this.irAdvice.changingThisBreaksApplicationSecurity);
-        }
-        if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.swiftCopy.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.tryPartyAgreement.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.airwayBlCopy.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.billOfExchange.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.destruction.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.destruction.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.commercial.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.commercial.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.packingList.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(
-            this.packingList.changingThisBreaksApplicationSecurity
-          );
-        }
-        if (this.lcCopy.changingThisBreaksApplicationSecurity) {
-          downloadALL.push(this.lcCopy.changingThisBreaksApplicationSecurity);
-        }
-
-        for (let lc of this.mainDoc4) {
-          downloadALL.push(lc.changingThisBreaksApplicationSecurity);
-        }
-
-        for (let tri of this.mainDoc3) {
-          downloadALL.push(tri.changingThisBreaksApplicationSecurity);
-        }
-        console.log('line 3448', downloadALL);
-
-        await proceedtoDownloadPdf(downloadALL, this.sbArray[index]);
-        await bulkDownloadSingle(mainDoc1, index + 1);
-      }
-    };
-
-    await bulkDownloadSingle(this.mainDoc1, 0);
-  };
-
-  BulkDOwnload = async (pdfDoc: any, sbno: string) => {
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-    var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
-
-    const mergedPdf = await PDFDocument.create();
-    const pdfA = await PDFDocument.load(this.formerge);
-    const pdfB = await PDFDocument.load(merge);
-    const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
-    copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-
-    const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
-    copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-    const mergedPdfFile = await mergedPdf.save();
-    var base64String = this._arrayBufferToBase64(mergedPdfFile);
-    console.log('mergeDoc', base64String);
-    var genDoc = 'data:application/pdf;base64,' + base64String;
-    const byteCharacters = atob(base64String);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-      // console.log("bytenumbers", byteNumbers[i])
-    }
-    this.doneDox(genDoc);
-    let filenameforDoc = sbno && sbno.length ? sbno : 'BankAttachment';
-    const byteArray = new Uint8Array(byteNumbers);
-    importedSaveAs(
-      new Blob([byteArray], { type: 'application/pdf' }),
-      filenameforDoc
-    );
-  };
 
   public mergeIr() {
     let filterSBdata: any = [];
@@ -3759,55 +1943,6 @@ export class NewDirectDispatchComponent implements OnInit {
     console.log("filterForex", filterIrdata, this.item13)
   }
 
-  doneToDox() {
-    console.log('All Details', this.invoiceArr);
-
-    let iradvice = {};
-    function checkIfSbExist(list, checker) {
-      for (let i in list) {
-        if (list[i] == checker) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    for (let i in this.invoiceArr) {
-      console.log('2758', this.invoiceArr[i].advance);
-      if (iradvice[this.invoiceArr[i].advance] == undefined) {
-        iradvice[this.invoiceArr[i].advance] = {
-          sbNo: [this.invoiceArr[i]._id],
-          billNo: this.invoiceArr[i].irAdviceId,
-        };
-      } else {
-        if (
-          !checkIfSbExist(
-            iradvice[this.invoiceArr[i].advance].sbNo,
-            this.invoiceArr[i]._id
-          )
-        ) {
-          iradvice[this.invoiceArr[i].advance].sbNo.push(
-            this.invoiceArr[i]._id
-          );
-        }
-      }
-    }
-
-    console.log('My details', iradvice);
-
-    if (this.Question6 == 'yes') {
-      for (let ir in iradvice) {
-        this.documentService
-          .updateByIr(iradvice[ir], iradvice[ir].billNo)
-          .subscribe((data) => {
-            console.log('my ir', ir);
-            console.log('IrAdvice and sb connected successfully');
-            console.log('2759', iradvice);
-            console.log('line no. 2760', data);
-          });
-      }
-    }
-  }
   ShowPopup(callback: any) {
 
   }
@@ -3912,33 +2047,31 @@ export class NewDirectDispatchComponent implements OnInit {
     var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
     console.log(this.newBankArray, bankformat, id, 'this.newBankArray')
     if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
-      this.fillForm(sbfilter[0], 'SB_' + sbfilter[0]?.sbno).then(async () => {
-        for (let index = 0; index < this.temp[id].length; index++) {
-          if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
-            temp.push(this.temp[id][index]?.pdf)
-            this.PDF_LIST.push({
-              pdf: this.temp[id][index]?.pdf,
-              name: this.temp[id][index]['name']
-            })
-            // this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-            //   console.log('downloadEachFile', res);
-            //   res.arrayBuffer().then((data: any) => {
-            //     var base64String = this._arrayBufferToBase64(data);
-            //     const x = 'data:application/pdf;base64,' + base64String;
+      for (let index = 0; index < this.temp[id].length; index++) {
+        if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
+          temp.push(this.temp[id][index]?.pdf)
+          this.PDF_LIST.push({
+            pdf: this.temp[id][index]?.pdf,
+            name: this.temp[id][index]['name']
+          })
+          // this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+          //   console.log('downloadEachFile', res);
+          //   res.arrayBuffer().then((data: any) => {
+          //     var base64String = this._arrayBufferToBase64(data);
+          //     const x = 'data:application/pdf;base64,' + base64String;
 
-            //     console.log('downloadEachFile', data);
-            //   });
-            // });
-          }
-          if ((index + 1) == this.temp[id].length) {
-            var fitertemp: any = temp.filter(n => n)
-            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((data: any) => {
-              console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
-              this.MERGE_ALL_PDF[0] = data.toString();
-            })
-          }
+          //     console.log('downloadEachFile', data);
+          //   });
+          // });
         }
-      });
+        if ((index + 1) == this.temp[id].length) {
+          var fitertemp: any = temp.filter(n => n)
+          await this.pdfmerge._multiple_merge_pdf(fitertemp).then((data: any) => {
+            console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+            this.MERGE_ALL_PDF[0] = data.toString();
+          })
+        }
+      }
     } else {
       for (let index = 0; index < this.temp[id].length; index++) {
         if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
@@ -3970,123 +2103,73 @@ export class NewDirectDispatchComponent implements OnInit {
       }
     }
   }
+  temp_pdf_lits: any = [];
 
   async PreviewSlideToggle(event: any) {
+    this.temp_pdf_lits = [];
     const id: any = event?.tab?.content?.viewContainerRef?.element?.nativeElement?.id != undefined ? event.tab.content.viewContainerRef.element.nativeElement.id : event;
     var tempfilter: any = this.itemArray.filter((item: any) => item?.sbno == id);
     var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
-
-    if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
-      await this.fillForm(tempfilter[0], 'SB_' + id).then(async (fillpdf: any) => {
-        this.PREVIEWS_URL_LIST = [];
-        var tep: any = [];
-        var temppdflits: any = [];
-        tep[tempfilter[0]?._id] = []
-        tep[tempfilter[0]?._id][0] = fillpdf;
-        temppdflits[0] = fillpdf;
-
-        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-          tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
-          if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-            temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
-          }
-          if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
-            var fitertemp: any = temppdflits.filter(n => n)
-            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
-              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-              console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-            });
-          }
-        }
-        for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
-          const element: any = this.advanceArray['SB_' + id][index];
-          this.tp['firxNumber'].push(element?.irDataItem?.billNo)
-          this.tp['firxDate'].push(element?.irDataItem?.date)
-          this.tp['firxCurrency'].push(element?.irDataItem?.currency)
-          this.tp['firxAmount'].push(element?.irDataItem?.amount)
-          this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
-          this.tp['firxRecAmo'].push(0);
-          this.tp['id'].push(element?.irDataItem?._id)
-        }
-        this.temp_doc = [];
-        this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
-        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-          if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-            this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
-          }
-        }
-      });
-    } else {
-      this.PREVIEWS_URL_LIST = [];
-      var tep: any = [];
-      var temppdflits: any = [];
-      tep[tempfilter[0]?._id] = []
-
-      $(document).ready(() => {
-        kendo.pdf.defineFont({
-          "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
-          "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
-          "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-          "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-          "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
-        });
-        kendo.drawing.drawDOM($("#first"), {
-          paperSize: "A4",
-          margin: "0cm",
-          scale: 0.7,
-          forcePageBreak: ".page-break"
-        }).then(function (group) {
-          return kendo.drawing.exportPDF(group, {
-            paperSize: "A4",
-            margin: "0cm",
-            scale: 0.7,
-            forcePageBreak: ".page-break"
+    this.PREVIEWS_URL_LIST = [];
+    var tep: any = [];
+    tep[tempfilter[0]?._id] = []
+    for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+      tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
+      if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+        this.temp_pdf_lits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+      }
+      if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
+        this.getS3Url().then(async (element: any) => {
+          await element?.forEach(urlelement => {
+            this.temp_pdf_lits.push(urlelement);
           });
-        }).done(async (data) => {
-          console.log('exportPDF', data, tep)
-          await this.userService?.UploadS3Buket({
-            fileName: this.guid() + '.pdf', buffer: data,
-            type: 'application/pdf'
-          }).subscribe(async (pdfresponse: any) => {
-            console.log(pdfresponse, 'response')
-            await temppdflits.push(pdfresponse?.url);
-            for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-              tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
-              if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-                temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
-              }
-              if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
-                var fitertemp: any = await temppdflits.filter(n => n)
-                await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                  this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-                  console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-                });
-              }
-            }
-            for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
-              const element: any = this.advanceArray['SB_' + id][index];
-              this.tp['firxNumber'].push(element?.irDataItem?.billNo)
-              this.tp['firxDate'].push(element?.irDataItem?.recievedDate)
-              this.tp['firxCurrency'].push(element?.irDataItem?.currency)
-              this.tp['firxAmount'].push(element?.irDataItem?.amount)
-              this.tp['firxCommision'].push(element?.irDataItem?.commision)
-              this.tp['firxRecAmo'].push(0);
-              this.tp['id'].push(element?.irDataItem?._id)
-            }
-            this.temp_doc = [];
-            this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
-            this.temp_doc[1] = { pdf: data, name: bankformat[0]?.value };
-            for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-              if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-                this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
-              }
-            }
-          })
-
+          var fitertemp: any = await this.temp_pdf_lits.filter(n => n)
+          await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+            this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+            console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+          });
         });
-      });
+      }
+    }
+    for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
+      const element: any = this.advanceArray['SB_' + id][index];
+      this.tp['firxNumber'].push(element?.irDataItem?.billNo)
+      this.tp['firxDate'].push(element?.irDataItem?.recievedDate)
+      this.tp['firxCurrency'].push(element?.irDataItem?.currency)
+      this.tp['firxAmount'].push(element?.irDataItem?.amount)
+      this.tp['firxCommision'].push(element?.irDataItem?.commision)
+      this.tp['firxRecAmo'].push(0);
+      this.tp['id'].push(element?.irDataItem?._id)
+    }
+    this.temp_doc = [];
+    this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
+    this.temp_doc[1] = { pdf: data, name: bankformat[0]?.value };
+    for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+      if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+        this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
+      }
     }
   }
+
+  async getS3Url() {
+    return new Promise(async (reslove, reject) => {
+      let temp: any = [];
+      await this.userService?.UploadS3Buket({
+        fileName: this.guid() + '.pdf', buffer: this.UrlList?.BankUrl,
+        type: 'application/pdf'
+      }).subscribe(async (pdfresponse: any) => {
+        temp.push(pdfresponse?.url)
+        await this.userService?.UploadS3Buket({
+          fileName: this.guid() + '.pdf', buffer: this.UrlList?.LetterHeadUrl,
+          type: 'application/pdf'
+        }).subscribe(async (pdfresponse1: any) => {
+          temp.push(pdfresponse1?.url);
+          reslove(temp);
+        });
+      });
+    })
+  }
+
   guid() {
     let s4 = () => {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -4097,21 +2180,22 @@ export class NewDirectDispatchComponent implements OnInit {
   }
   async SendApproval(Status: string, UniqueId: any, event: any) {
     var UpdatedUrl: any = []
-    for (let index = 0; index < this.temp_doc.length; index++) {
-      if (this.temp_doc[index]?.pdf != '' && this.temp_doc[index]?.pdf != undefined) {
-        if (this.temp_doc[index]?.pdf.indexOf('data:application/pdf;base64,') != -1) {
-          await this.userService?.UploadS3Buket({
-            fileName: this.temp_doc[index]?.name + '.pdf', buffer: this.temp_doc[index]?.pdf,
-            type: 'application/pdf'
-          }).subscribe((response: any) => {
-            console.log(response, 'response')
-            UpdatedUrl.push(response?.url)
-          })
-        } else {
-          UpdatedUrl.push(this.temp_doc[index]?.pdf)
-        }
-      }
-      if ((index + 1) == this.temp_doc.length) {
+    for (let index = 0; index < this.temp_pdf_lits.length; index++) {
+      UpdatedUrl.push(this.temp_pdf_lits[index])
+      // if (this.temp_doc[index]?.pdf != '' && this.temp_doc[index]?.pdf != undefined) {
+      //   if (this.temp_doc[index]?.pdf.indexOf('data:application/pdf;base64,') != -1) {
+      //     await this.userService?.UploadS3Buket({
+      //       fileName: this.temp_doc[index]?.name + '.pdf', buffer: this.temp_doc[index]?.pdf,
+      //       type: 'application/pdf'
+      //     }).subscribe((response: any) => {
+      //       console.log(response, 'response')
+      //       UpdatedUrl.push(response?.url)
+      //     })
+      //   } else {
+      //     UpdatedUrl.push(this.temp_doc[index]?.pdf)
+      //   }
+      // }
+      if ((index + 1) == this.temp_pdf_lits.length) {
         if (UniqueId != null) {
           var approval_data: any = {};
           let sbAmountSum: any = this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
@@ -4149,7 +2233,7 @@ export class NewDirectDispatchComponent implements OnInit {
           var pipo: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0]?.pipo;
           var pipo_id: any = [];
           var pipo_name: any = [];
-         (pipo != 'NF' ? pipo : []).forEach(element => {
+          (pipo != 'NF' ? pipo : []).forEach(element => {
             pipo_id.push(element?._id)
             pipo_name.push(element?.pi_poNo)
           });
@@ -4358,10 +2442,12 @@ export class NewDirectDispatchComponent implements OnInit {
       this.HIDE_SHOW[key] = true;
     }
   }
+  SELECT_BUYER_DETAILS:any=[];
   filterBuyerName($event) {
     if ($event != 'Select Buyer Name') {
       this.nameSearch4 = $event;
       var temp_filter: any = this.item13.filter((item: any) => item?.buyerName.includes($event));
+      this.SELECT_BUYER_DETAILS=this.BUYER_DETAILS.filter((item:any)=>item?.buyerName.includes($event))[0];
       this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAvail), 0)).toFixed(3);
     } else {
       this.nameSearch4 = ''

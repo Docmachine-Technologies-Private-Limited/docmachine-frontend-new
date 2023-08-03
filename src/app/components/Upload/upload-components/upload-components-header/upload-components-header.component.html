@@ -7,7 +7,7 @@
                         <h3 class="heading_common_tag">{{this.title}}</h3>
                     </div>
                 </div>
-                <div class="col-md-8 col-sm-8 col-12">
+                <div class="col-12">
                     <div class="filter_right_new padding_new_top p-0"
                         *ngIf="this.validator?.BUYER_NOT_EXITS==false && this.validator?.userData?.sideMenu=='export'">
                         <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && 

@@ -1,34 +1,14 @@
 import {
   Directive,
-  OnInit,
-  Renderer2,
   ElementRef,
-  HostListener,
-  Input,
-  HostBinding
+  HostListener
 } from '@angular/core';
 
 @Directive({
   selector: '[Minimize_Maximize_PopUp]'
 })
 export class PopupOpenDirective {
-  @HostBinding('style.backgroundColor') backgroundColor: string;
-
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {
-  }
-
-  ngOnInit() {
-  }
-  @HostListener('mouseenter') mouseover(eventData: Event) {
-  }
-
-  @HostListener('mouseleave') mouseleave(eventData: Event) {
-  }
-  @HostListener('document:mousedown', ['$event'])
-  onGlobalClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-
-    }
+  constructor(private elementRef: ElementRef) {
   }
   @HostListener('document:click', ['$event'])
   onClick(event): void {

@@ -9,7 +9,7 @@ import { WindowInformationService } from "src/app/service/window-information.ser
 @Component({
   selector: 'app-advance-remitance-fbg',
   templateUrl: './advance-remitance-fbg.component.html',
-  styleUrls: ['../../../../sass/application.scss', './advance-remitance-fbg.component.scss']
+  styleUrls: [ './advance-remitance-fbg.component.scss']
 })
 export class AdvanceRemitanceFbgComponent implements OnInit, OnDestroy {
   item: any;

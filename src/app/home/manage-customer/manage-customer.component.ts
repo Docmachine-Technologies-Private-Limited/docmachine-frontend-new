@@ -14,7 +14,7 @@ import { UploadServiceValidatorService } from "../../components/Upload/service/u
   selector: "app-manage-customer",
   templateUrl: "./manage-customer.component.html",
   styleUrls: [
-    "../../../sass/application.scss",
+    
     "./manage-customer.component.scss",
   ],
 })

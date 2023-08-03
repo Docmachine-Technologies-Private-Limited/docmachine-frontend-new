@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 @Component({
   selector: 'app-create-bene',
   templateUrl: './create-bene.component.html',
-  styleUrls: ['../../../sass/application.scss', './create-bene.component.scss']
+  styleUrls: ['./create-bene.component.scss']
 })
 export class CreateBeneComponent implements OnInit {
   loginForm: FormGroup;

@@ -11,7 +11,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'upload-components-header',
   templateUrl: './upload-components-header.component.html',
-  styleUrls: ['./upload-components-header.component.scss']
+  styleUrls: ['./upload-components-header.component.scss','../../commoncss/common.component.scss']
 })
 export class UploadHeaderComponent implements OnInit {
   @Output('UploadHeaderEvent') UploadHeaderEvent: any = new EventEmitter();

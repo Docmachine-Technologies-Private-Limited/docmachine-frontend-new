@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { Event, NavigationEnd,Router} from '@angular/router';
+import { Event, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import '../sass/application.scss';
 import { AuthenticateService } from './service/authenticate.service';
 import { AuthGuard } from './service/authguard.service';
 import { DocumentService } from './service/document.service';
@@ -27,12 +26,13 @@ import { IdleService } from './service/idle.service';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   userData: any = [];
-  userActivity;
+  userActivity: any = '';
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
   isOnline: boolean = true;
   WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
-  SET_TIMEOUT_TIME: number = 720000;
+  SET_TIMEOUT_TIME: any = new Date();
+
   constructor(
     private translate: TranslateService,
     private router: Router,
@@ -47,13 +47,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     public Uploadvalidator: UploadServiceValidatorService,
     public globalsAccess: GlobalsAccessService,
     private deviceService: DeviceDetectorService,
-    public idleservice:IdleService,
+    public idleservice: IdleService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
     this.createOnline$().subscribe(isOnline => this.isOnline = isOnline);
     this.setTimeoutNew();
-    idleservice.callback(()=>this.logoutUser())
-    idleservice.wake$.subscribe(s => console.log('im awake!'));
+    // idleservice.callback(()=>this.logoutUser())
+    // idleservice.wake$.subscribe(s => console.log('im awake!'));
     router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         var splitUrl: any = event?.url?.split('/')
@@ -112,6 +112,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   CheckIng(data: any, value: any) {
     return value != '' && value != undefined && value != null ? data.filter((item: any) => item?.includes(value) == true) : []
   }
@@ -137,33 +138,29 @@ export class AppComponent implements OnInit, AfterViewInit {
   };
 
   setTimeoutNew() {
-    // if (this.SET_TIMEOUT_TIME != 0) {
-    //   this.userActivity = setTimeout(() => {
-    //     this.userInactive.next(undefined);
-    //     this.logoutUser();
-    //     this.SET_TIMEOUT_TIME = 0;
-    //   }, this.SET_TIMEOUT_TIME);
-    // }
+    this.SET_TIMEOUT_TIME=new Date();
+    this.SET_TIMEOUT_TIME.setHours(120);
+    // console.log(this.SET_TIMEOUT_TIME.getTime(),'asdhaskjdahsdkjasdjksad')
+    // this.userActivity = setTimeout(() => {
+    //   this.logoutUser();
+    // }, this.SET_TIMEOUT_TIME.getTime());
   }
 
   addMinutes(minutes) {
     return new Date(new Date().getTime() + minutes * 60000);
   }
 
-  @HostListener('window:mousemove') refreshUserState() {
-    console.log('restart active session 2hours')
-    clearTimeout(this.userActivity);
-    this.setTimeoutNew();
-  }
-  @HostListener('window:click') onclick() {
-    console.log('restart active session 2hours')
-    clearTimeout(this.userActivity);
-    this.setTimeoutNew();
-  }
- 
-  doBeforeUnload(event) {
-    console.log(window.event, 'window.event')
-  }
+  // @HostListener('window:mousemove') refreshUserState() {
+  //   console.log('restart active session 2hours')
+  //   clearTimeout(this.userActivity);
+  //   this.setTimeoutNew();
+  // }
+
+  // @HostListener('window:click') onclick() {
+  //   console.log('restart active session 2hours')
+  //   clearTimeout(this.userActivity);
+  //   this.setTimeoutNew();
+  // }
 
   getTokenExpirationDate(token: string): any {
     const decodedToken: any = jwt_decode.default(token);
@@ -182,9 +179,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         sub.complete();
       }));
   }
+
   reload() {
     window.location.reload()
   }
+
   getTokenExit(data: any, token: any) {
     let bool: boolean = false;
     data.forEach(element => {
@@ -194,6 +193,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
     return bool;
   }
+
   logoutUser() {
     this.userService.authToken = null;
     sessionStorage.clear();

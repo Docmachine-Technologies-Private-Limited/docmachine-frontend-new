@@ -12,7 +12,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     useExisting: forwardRef(() => NgCustomDropdownComponent)
   }]
 })
-export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
+export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, OnChanges {
   @Input('placeholder') placeHolderText: any = ''
   @Input('items') items: any = [];
   @Output('modelChanges') modelChanges: any = new EventEmitter<any>();
@@ -33,7 +33,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
   FILTER_DROPDOWN: any = [];
   onChange: any = () => { };
   onTouch: any = () => { };
-  
+
   constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
   ngOnInit(): void {
     this.id = this.randomNameGenerator();
@@ -76,7 +76,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
       }
     }
   }
-  
+
   filterdropdown($event: any, val: any) {
     var uq_id: any = $($event.target).parent().attr('id')
     this.FILTER_DROPDOWN = this.items.filter((item: any) => item[this.LABLE_BIND_LIST[uq_id]?.bindLabel]?.toLowerCase()?.indexOf(val.toLowerCase()) != -1);
@@ -85,7 +85,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
       this.FILTER_DROPDOWN = this.items;
     }
   }
-  
+
   filterdropdownKeyPress($event: any, val: any) {
     this.keyEvent.emit(val);
     this.modelChanges.emit(val);
@@ -94,7 +94,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
       this.FILTER_DROPDOWN = this.items;
     }
   }
-  
+
   clearInput(inputid) {
     $(inputid).val('');
     this.modelChanges.emit('');
@@ -102,7 +102,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
     this.selectedItems = '';
     this.onChange('');
   }
-  
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -110,15 +110,15 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
-  
+
   updateChanges() {
     this.onChange(this.value);
   }
-  
+
   writeValue(value: any): void {
     this.updateChanges();
   }
-  
+
   randomNameGenerator() {
     return Math.floor(Math.random() * 1000000000);
   };
@@ -134,5 +134,10 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.renderer.removeClass(this.elementRef.nativeElement, 'custom-dropdown-active');
     }
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    this.items = changes?.items?.currentValue
+    console.log(changes, 'sdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdsdfsdfd')
   }
 }

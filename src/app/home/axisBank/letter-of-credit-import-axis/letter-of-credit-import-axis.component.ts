@@ -9,7 +9,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-letter-of-credit-import-axis',
   templateUrl: './letter-of-credit-import-axis.component.html',
-  styleUrls: ['../../../../sass/application.scss', './letter-of-credit-import-axis.component.scss']
+  styleUrls: [ './letter-of-credit-import-axis.component.scss']
 })
 export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
   item: any;

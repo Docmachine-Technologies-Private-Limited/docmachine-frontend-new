@@ -1,11 +1,7 @@
 import { NgModule } from "@angular/core";
-import { Routes, RouterModule, Router } from "@angular/router";
+import { Routes, RouterModule } from "@angular/router";
 import { PageNotFoundComponent } from "./shared/components";
-
-import { SignupRoutingModule } from "./signup/signup-routing.module";
-import { SigninRoutingModule } from "./signIn/signin-routing.module";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
-import { CreateTeamComponent } from "./create-team/create-team.component";
 import { AddMemberComponent } from "./add-member/add-member.component";
 import { MatDialogModule } from '@angular/material/dialog';
 
@@ -22,11 +18,24 @@ import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { ResetOTPComponent } from "./forgot-password/reset-otp/reset-otp.component";
 import { RoleVerifyEmailComponent } from "./RoleVerifyEmail/role-verify-email/role-verify-email.component";
 import { SharedHomeModule } from "./home/shared-home.module";
+import { SigninComponent } from "./signIn/signin.component";
+import { SignupComponent } from "./signup/signup.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 const routes: Routes = [
   {
     path: "",
     redirectTo: "login",
+    pathMatch: "full",
+  },
+  {
+    path: "login",
+    component: SigninComponent,
+    pathMatch: "full",
+  },
+  {
+    path: "signup",
+    component: SignupComponent,
     pathMatch: "full",
   },
   {
@@ -74,17 +83,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  declarations: [SigninComponent, SignupComponent],
   imports: [
     RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" }),
-    SignupRoutingModule,
-    SigninRoutingModule,
     MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
     SharedHomeModule
   ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {
-  constructor(public router: Router) {
-  }
 
 }

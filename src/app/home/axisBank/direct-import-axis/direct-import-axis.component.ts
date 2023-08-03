@@ -9,7 +9,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-direct-import-axis',
   templateUrl: './direct-import-axis.component.html',
-  styleUrls: ["../../../../sass/application.scss",
+  styleUrls: [
     './direct-import-axis.component.scss']
 })
 export class DirectImportAxisComponent implements OnInit, OnDestroy {

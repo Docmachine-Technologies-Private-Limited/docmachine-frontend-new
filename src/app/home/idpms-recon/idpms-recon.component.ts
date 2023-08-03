@@ -431,31 +431,31 @@ export class IdpmsReconComponent implements OnInit {
     if (data?.pipo) {
       this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=pipo', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
       this.pipoArrayListdata.push({ status: true, text: 'BOE doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=boe', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/BOE', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
       this.pipoArrayListdata.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
       this.pipoArrayListdata.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
       this.pipoArrayListdata.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -472,31 +472,31 @@ export class IdpmsReconComponent implements OnInit {
     if (data?.pipo) {
       this.pipoArrayListdata2.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=pipo', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
       this.pipoArrayListdata2.push({ status: true, text: 'BOE doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=boe', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/BOE', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
       this.pipoArrayListdata2.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
       this.pipoArrayListdata2.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL +  'home/upload-documents/Import/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
       this.pipoArrayListdata2.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -506,31 +506,31 @@ export class IdpmsReconComponent implements OnInit {
     if (data?.pipo) {
       this.pipoArrayListdata3.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=pipo', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
       this.pipoArrayListdata3.push({ status: true, text: 'BOE doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=boe', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/BOE', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
       this.pipoArrayListdata3.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
       this.pipoArrayListdata3.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL +  'home/upload-documents/Import/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
       this.pipoArrayListdata3.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 

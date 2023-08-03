@@ -6,7 +6,7 @@ import { DocumentService } from './../../../service/document.service';
 @Component({
   selector: 'app-against-advance',
   templateUrl: './against-advance.component.html',
-  styleUrls: ['../../../../sass/application.scss','./against-advance.component.scss']
+  styleUrls: ['./against-advance.component.scss']
 })
 export class AgainstAdvanceComponent implements OnInit {
   item: any;
