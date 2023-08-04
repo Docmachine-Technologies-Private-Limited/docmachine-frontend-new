@@ -16,37 +16,37 @@
             <span style='font-family:"Arial",sans-serif;'>Dear Sir,</span></p>
         <p
             style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <strong><u><span style='font-family:"Arial",sans-serif;'>Sub: Foreign Outward remittance of USD___________  </span></u></strong></p>
+            <strong><u><span style='font-family:"Arial",sans-serif;'>Sub: Foreign Outward remittance of {{data[1][0]?.currency}} </span></u></strong></p>
         <p
             style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <strong><u><span style='font-family:"Arial",sans-serif;'>Ref Cash Credit A/c No.11895500003769</span></u></strong></p>
+            <strong><u><span style='font-family:"Arial",sans-serif;'>Ref Cash Credit A/c No.{{data[0]?.accNumber}}</span></u></strong></p>
         <p
             style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <span style='font-family:"Arial",sans-serif;'>We request you to please transfer USD _________ to the beneficiary, details of which are mentioned below, towards payment of import of Raw material.</span></p>
+            <span style='font-family:"Arial",sans-serif;'>We request you to please transfer {{data[1][0]?.currency}} to the beneficiary, details of which are mentioned below, towards payment of import of Raw material.</span></p>
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><span
                 style='font-family:"Arial",sans-serif;color:black;'>&nbsp;</span></p>
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><span
                 style='font-family:"Arial",sans-serif;color:black;'>DEBIT ACCOUNT</span><span
                 style='font-family:"Arial",sans-serif;'>:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; USD EEFC 11891300000154&nbsp;</span></p>
+                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; {{data[4]?.currency}} {{data[4]?.accType}} {{data[4]?.accNumber}}&nbsp;</span></p>
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><span
                 style='font-family:"Arial",sans-serif;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
         <p
             style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <span style='font-family:"Arial",sans-serif;'>NAME&nbsp;OF&nbsp;BENEFICIARY:&nbsp;</span></p>
+            <span style='font-family:"Arial",sans-serif;'>NAME&nbsp;OF&nbsp;BENEFICIARY:&nbsp; {{data[2]?.benneName}}</span></p>
         <p
             style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <span style='font-family:"Arial",sans-serif;'>NAME OF BANK:</span></p>
+            <span style='font-family:"Arial",sans-serif;'>NAME OF BANK: {{data[2]?.beneBankName}}</span></p>
         <p
             style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <span style='font-family:"Arial",sans-serif;'>BRANCH:</span></p>
+            <span style='font-family:"Arial",sans-serif;'>BRANCH: </span></p>
         <p
             style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <span style='font-family:"Arial",sans-serif;'>IBAN NO</span></p>
+            <span style='font-family:"Arial",sans-serif;'>IBAN NO : {{data[2]?.iban}}</span></p>
         <p
             style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
-            <span style='font-family:"Arial",sans-serif;'>SWIFT/BIC CODE:</span></p>
+            <span style='font-family:"Arial",sans-serif;'>SWIFT/BIC CODE: {{data[2]?.beneBankSwiftCode}}</span></p>
         <p
             style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
             <span style='font-family:"Arial",sans-serif;'>&nbsp;</span></p>

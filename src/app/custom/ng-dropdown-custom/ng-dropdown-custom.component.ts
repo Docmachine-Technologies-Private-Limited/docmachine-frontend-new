@@ -10,7 +10,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     provide: NG_VALUE_ACCESSOR,
     multi: true,
     useExisting: forwardRef(() => NgDropdownCustomComponent)
-  }]
+  }],
+  host: { '(document:click)': 'onClick($event)' },
 })
 export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   @Input('placeHolderText') placeHolderText: any = ''
@@ -59,7 +60,6 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   dropdownHide($event, val, inputid) {
     var uq_id: any = $($event.target).parent().parent().attr('id')
     $('.custom-dropdown').removeClass('custom-dropdown-active');
-    console.log(val,'adhfkjdfhsdfkjdfdsfd')
     if (this.LABLE_BIND_LIST[uq_id]?.bindValue != '') {
       this.NgModal.emit(this.LABLE_BIND_LIST[uq_id]?.bindValue != '' ? val[this.LABLE_BIND_LIST[uq_id]?.bindValue] : val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
       this.selectedItems = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
@@ -160,16 +160,16 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
     return Math.floor(Math.random() * 1000000000);
   };
 
-  @HostListener('document:mousedown', ['$event'])
-  onGlobalClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.renderer.removeClass(this.elementRef.nativeElement, 'custom-dropdown-active');
-    }
+  get displayHidden() {
+    return  $('.custom-dropdown#'+this.id).removeClass('custom-dropdown-active');
   }
-  @HostListener('document:click', ['$event'])
-  onClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.renderer.removeClass(this.elementRef.nativeElement, 'custom-dropdown-active');
-    }
+
+  get displayShow() {
+    return  $('.custom-dropdown#'+this.id).addClass('custom-dropdown-active');
+  }
+  
+  onClick(event:any) {
+    if (!this.elementRef.nativeElement.contains(event.target))
+      this.displayHidden;
   }
 }

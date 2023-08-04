@@ -417,15 +417,45 @@ export class NewDirectDispatchComponent implements OnInit {
     };
     this.getBill_Lodgments();
   }
-
+  
+  HS_CODE_DATA: any = [];
+  FILTER_HS_CODE_DATA: any = [];
+  ToChargesAccountdata: any = [];
+  ToCreditAccountdata: any = [];
+  COMPANY_INFO: any = [];
+  BANK_LIST_DROPDOWN:any=[];
+  
   getDropdownData() {
     this.userService.getTeam().subscribe(data => {
       this.CUSTOMER_DETAILS = data['data'][0]
       this.commodity = data['data'][0]['commodity']
       this.LocationData = data['data'][0]['location']
-      var temp: any = []
       for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-        this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+      }
+      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+          value: data['data'][0]['bankDetails'][index],
+          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          org: data['data'][0]['bankDetails'][index]
+        })
+        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+          value: data['data'][0]['bankDetails'][index],
+          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          org: data['data'][0]['bankDetails'][index]
+        })
+        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+          value: data['data'][0]['bankDetails'][index],
+          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          org: data['data'][0]['bankDetails'][index]
+        })
+        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+          this.BANK_LIST_DROPDOWN.push({
+            value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+          })
+        }
       }
       console.log(data, 'adasdasdsdasdadsd')
     }, error => {
@@ -435,6 +465,8 @@ export class NewDirectDispatchComponent implements OnInit {
       this.BUYER_DETAILS = res.data;
       console.log(this.BUYER_DETAILS,'BUYER_DETAILS')
     }, (err) => console.log("Error", err));
+    this.HS_CODE_DATA = this.documentService.getHSCODE();
+    this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA;
   }
 
   changepipo(value) {
@@ -2498,6 +2530,47 @@ export class NewDirectDispatchComponent implements OnInit {
   }
   ObjectLength(data) {
     return Object.keys(data)?.length;
+  }
+  
+  filtertimeout: any = ''
+  filterHSCode(value: any) {
+    clearTimeout(this.filtertimeout);
+    this.filtertimeout = setTimeout(() => {
+      this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA.filter((item: any) => item?.hscode?.indexOf(value) != -1 || item?.description?.toLowerCase()?.indexOf(value?.toLowerCase()) != -1);
+      if (this.FILTER_HS_CODE_DATA.length == 0) {
+        this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA;
+      }
+    }, 200);
+  }
+  
+  ToForwardContract_Selected: any = []
+  ToHSCode_Selected: any = [];
+  ToForwardContract(event: any, value: any, index: any) {
+    if (event?.target?.checked == true) {
+      this.ToForwardContract_Selected[0] = value;
+    } else {
+      this.ToForwardContract_Selected[0] = '';
+    }
+  }
+
+  ToHSCode(event: any, value: any, index: any) {
+    console.log(event, 'adasdasdsad')
+    if (event?.target?.checked == true) {
+      this.ToHSCode_Selected[index] = value;
+    } else {
+      this.ToHSCode_Selected[index] = '';
+    }
+  }
+  ALL_DATA_HSCODE_FORWARD: any = {};
+  DoneButton() {
+    let temp2: any = [];
+    this.ToHSCode_Selected.forEach(element => {
+      temp2.push(element?.hscode);
+    });
+    this.ALL_DATA_HSCODE_FORWARD = {
+      HS_CODE: temp2?.join(','),
+      FORWARD_CONTRACT: this.ToForwardContract_Selected
+    };
   }
 }
 

@@ -35,7 +35,7 @@
               <div class="row pb-2">
                 <div class="col-md-7 col-sm-12 col-12">
                   <federal-bank-bill-submission-format [BankId]="this.bankValue"
-                    [data]="[this.itemArray,this.advanceArray,this.newBankArray,this.CUSTOMER_DETAILS,this.Lodgement,this.SB_NO_FILTER,this.SELECT_BUYER_DETAILS]" [RequiredLetterHead]="true"
+                    [data]="[this.itemArray,this.advanceArray,this.newBankArray,this.CUSTOMER_DETAILS,this.Lodgement,this.SB_NO_FILTER,this.SELECT_BUYER_DETAILS,this.ALL_DATA_HSCODE_FORWARD]" [RequiredLetterHead]="true"
                     (event)="this.UrlList=$event" id="first"></federal-bank-bill-submission-format>
                   <!-- <hdfc-bank-remittance-advance-against [BankId]="this.bankValue"
                     [data]="[this.itemArray,this.advanceArray,this.newBankArray]"
@@ -66,7 +66,7 @@
                                   <div class="col-md-10 mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
                                     <ng-custom-dropdown placeHolderText="Select Bank Name" #Bank_Name
-                                      [items]="this.bankDetail" bindLabel="value" [(ngModel)]="ExportBillLodgement_Form.controls.bank_name"
+                                      [items]="this.BANK_LIST_DROPDOWN" bindLabel="value" [(ngModel)]="ExportBillLodgement_Form.controls.bank_name"
                                       formControlName="bank_name"
                                       bindValue="id" [multiple]="false" (modelChanges)="setradio($event)">
                                     </ng-custom-dropdown>
@@ -380,6 +380,10 @@
                                       <br>
                                     </div>
                                   </div>
+                                  
+                                  <button type="button" class="btn btn-success PopupOpen"
+                                  popup-close="HS_CODE_POPUP">
+                                  Select HS Code</button>
                                   <!-- <div class="col-md-4 col-sm-4 col-5 column" style="display: grid;
                                   grid-template-columns: repeat(2,1fr);
                                   max-width: 93%;
@@ -952,3 +956,34 @@
     </div>
   </div>
 </div>
+
+<app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="HS_CODE_POPUP"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
+    <div class="col-12 mt-2 mb-2">
+        <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
+            (event)="filterHSCode($event)"></ng-input>
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-1">Section</th>
+                    <th scope="col" class="col-td-th-1">HS Code</th>
+                    <th scope="col" class="col-td-th-3" [style.width]="'430px'">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.FILTER_HS_CODE_DATA;let i=index">
+                    <td scope="col" class="col-td-th-1"><input type="checkbox" (change)="ToHSCode($event,item,i)"></td>
+                    <td scope="col" class="col-td-th-1">{{item?.section}}</td>
+                    <td scope="col" class="col-td-th-1">{{item?.hscode}}</td>
+                    <td scope="col" class="col-td-th-3" [style.width]="'430px'">{{item?.description}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+        <div style="display:flex;" class="mt-3">
+            <button type="button" class="btn btn-primary" (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
+        </div>
+    </div>
+</app-custom-model>

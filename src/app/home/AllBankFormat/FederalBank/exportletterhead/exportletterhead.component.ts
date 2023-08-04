@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { UserService } from '../../../../service/user.service';
 
 @Component({
@@ -6,7 +6,8 @@ import { UserService } from '../../../../service/user.service';
   templateUrl: './exportletterhead.component.html',
   styleUrls: ['./exportletterhead.component.scss']
 })
-export class FederalBankExportletterheadComponent implements OnInit {
+export class FederalBankExportletterheadComponent implements OnInit,OnChanges {
+  @Input('data') data: any = [];
 
   constructor(private userService: UserService) { }
 
@@ -21,4 +22,9 @@ export class FederalBankExportletterheadComponent implements OnInit {
     });
   }
 
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    this.data = changes?.data?.currentValue;
+    console.log(changes, 'FederalBankExportletterheadComponent')
+  }
 }

@@ -30,15 +30,15 @@
                                 <div class="col-12 p-0">
                                     <div class="new_left_sidedoc pdf_invoce_scroll">
                                         <federal-bank-remittance-advance-against [BankId]="this.selectedBankName"
-                                            [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"
-                                            [RequiredLetterHead]="true"
-                                            (event)="this.UrlList=$event"
+                                            [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
+                                            this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
+                                            [RequiredLetterHead]="true" (event)="this.UrlList=$event"
                                             id="first"></federal-bank-remittance-advance-against>
-                                        <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName"
-                                            [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"
+                                        <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName" [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
+                                            this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
                                             id="first"></hdfc-bank-remittance-advance-against>
                                         <div>
-                                            
+
                                         </div>
                                         <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
                                             <div class="content_white_background">
@@ -92,10 +92,25 @@
                                                 <label for="exampleInputEmail1" class="form-label">Select
                                                     bank*</label>
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank Name" #Bank_Name
-                                                    [items]="this.bankDetail" bindLabel="value" formControlName="bank"
-                                                    (modelChanges)="form.bank=$event?.value" bindValue="id"
-                                                    [multiple]="false" (modelChanges)="onSelectBank($event)">
+                                                    [items]="this.BANK_LIST_DROPDOWN" bindLabel="value"
+                                                    formControlName="bank" (modelChanges)="form.bank=$event?.value"
+                                                    bindValue="id" [multiple]="false"
+                                                    (modelChanges)="onSelectBank($event)">
                                                 </app-ng-dropdown-custom>
+                                                <div class="col-12 mt-2 p-0">
+                                                    <label for="exampleInputEmail1" class="form-label">
+                                                        To Credit Account no. & Account Type*</label>
+                                                    <custom-radio-button
+                                                        [items]="this.ToCreditAccountdata[this.selectedBankName]"
+                                                        (event)="ToCreditAccount($event)"></custom-radio-button>
+                                                </div>
+                                                <div class="col-12 mt-2 p-0">
+                                                    <label for="exampleInputEmail1" class="form-label">
+                                                        To Charges Account no. & Account Type*</label>
+                                                    <custom-radio-button
+                                                        [items]="this.ToChargesAccountdata[this.selectedBankName]"
+                                                        (event)="ToChargesAccount($event)"></custom-radio-button>
+                                                </div>
                                                 <div *ngIf="submitted && form.bank.errors" class='errorText'>
                                                     <div *ngIf="form.bank.errors.required">Select bank is required
                                                     </div>
@@ -198,6 +213,12 @@
                                                 <div class="add_new_buttons">
                                                     <button type="button" class="btn btn-success"
                                                         (click)="addItems(pipoForm)">+ Add PI</button>
+                                                    <button type="button" class="btn btn-success PopupOpen"
+                                                        popup-close="FORWARD_CONTRACT">
+                                                        Select FDC</button>
+                                                    <button type="button" class="btn btn-success PopupOpen"
+                                                        popup-close="HS_CODE_POPUP">
+                                                        Select HS Code</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -384,3 +405,70 @@
         </app-custom-model>
     </div>
 </div>
+
+<app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="HS_CODE_POPUP"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
+    <div class="col-12 mt-2 mb-2">
+        <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
+            (event)="filterHSCode($event)"></ng-input>
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-1">Section</th>
+                    <th scope="col" class="col-td-th-1">HS Code</th>
+                    <th scope="col" class="col-td-th-3" [style.width]="'430px'">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.FILTER_HS_CODE_DATA;let i=index">
+                    <td scope="col" class="col-td-th-1"><input type="checkbox" (change)="ToHSCode($event,item,i)"></td>
+                    <td scope="col" class="col-td-th-1">{{item?.section}}</td>
+                    <td scope="col" class="col-td-th-1">{{item?.hscode}}</td>
+                    <td scope="col" class="col-td-th-3" [style.width]="'430px'">{{item?.description}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+        <div style="display:flex;" class="mt-3">
+            <button type="button" class="btn btn-primary" (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
+        </div>
+    </div>
+</app-custom-model>
+
+<app-custom-model [customstyle]="{'max-width':'690vw !important'}" class="p-2" height="75vh" id="FORWARD_CONTRACT"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select FORWARD CONTRACT View" #FORWARD_CONTRACTPANEL>
+    <div class="col-12 mt-2 mb-2">
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-2">Forward Ref No</th>
+                    <th scope="col" class="col-td-th-3">Booking Date</th>
+                    <th scope="col" class="col-td-th-2">Forward Contract Amount</th>
+                    <th scope="col" class="col-td-th-3">Due Date</th>
+                    <th scope="col" class="col-td-th-3">Amount to be utilised</th>
+                    <th scope="col" class="col-td-th-3">Exchange rate as per FWC</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.ForwardContractDATA;let i=index">
+                    <td scope="col" class="col-td-th-1"><input type="checkbox"
+                            (change)="ToForwardContract($event,item,i)"></td>
+                    <td scope="col" class="col-td-th-2">{{item?.ForwardRefNo}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.BookingDate}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.BookingAmount}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.ToDate}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.AvailableAmount}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.NetRate}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+        <div style="display:flex;" class="mt-3">
+            <button type="button" class="btn btn-primary" (click)="DoneButton();FORWARD_CONTRACTPANEL?.displayHidden">Done</button>
+        </div>
+    </div>
+</app-custom-model>

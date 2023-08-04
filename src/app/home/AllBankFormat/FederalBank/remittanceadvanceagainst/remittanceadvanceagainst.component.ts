@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib';
 import $ from 'jquery'
-import { UserService } from '../../../../service/user.service';
 declare var kendo: any;
 
 @Component({
@@ -18,8 +16,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
   @Input('RequiredLetterHead') RequiredLetterHead: boolean = false;
   @Output('event') event = new EventEmitter();
 
-  constructor(private sanitizer: DomSanitizer,
-    private userService: UserService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.fillForm(this.data)
@@ -44,107 +41,115 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
             if (elementvalue[0]?.encodedName == '/Tx') {
               element?.setFontSize(11);
               element?.enableReadOnly();
-              const [widget] :any = element?.acroField?.getWidgets();
+              const [widget]: any = element?.acroField?.getWidgets();
               widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
               element?.enableCombing(); // trying to restore combing
             }
           });
-          getAllFields[0]?.setText('Helllo Abhishek');
-          getAllFields[1]?.setText('Helllo Abhishek');
-          getAllFields[2]?.setText('Helllo Abhishek');
-          getAllFields[3]?.setText('Helllo Abhishek');
-          getAllFields[4]?.setText('Helllo Abhishek');
-          getAllFields[5]?.setText('Helllo Abhishek');
-          getAllFields[6]?.setText('Helllo Abhishek');
-          getAllFields[7]?.setText('Helllo Abhishek');
-          getAllFields[8]?.setText('Helllo Abhishek');
-          getAllFields[9]?.setText('Helllo Abhishek');
-          getAllFields[10]?.setText('Helllo Abhishek');
-          getAllFields[11]?.check()
-          getAllFields[12]?.check()
-          getAllFields[13]?.setText('Helllo Abhishek');
-          getAllFields[14]?.setText('Helllo Abhishek');
-          getAllFields[15]?.check();
-          getAllFields[16]?.check();
-          getAllFields[17]?.setText('Helllo Abhishek');
+          getAllFields[0]?.setText('');
+          getAllFields[1]?.setText('');
+          getAllFields[2]?.setText(filldata[1][0]?.balanceAmount+' & '+filldata[1][0]?.currency);
+          getAllFields[3]?.setText(filldata[1][0]?.balanceAmount?.toString());
+          getAllFields[4]?.setText('');
+          getAllFields[5]?.setText('');
+          getAllFields[6]?.setText('');
+          getAllFields[7]?.setText('');
+          getAllFields[8]?.setText('');
+          getAllFields[9]?.setText(filldata[1][0]?.balanceAmount!=undefined?this.ConvertNumberToWords(filldata[1][0]?.balanceAmount):'-');
+          getAllFields[10]?.setText('');
+          getAllFields[11]?.uncheck()
+          getAllFields[12]?.uncheck()
+          getAllFields[13]?.setText('-');
+          getAllFields[14]?.setText('-');
+          getAllFields[15]?.uncheck();
+          getAllFields[16]?.uncheck();
+          getAllFields[17]?.setText(filldata[5][0]?.teamName + '\n' + filldata[5][0]?.adress);
           getAllFields[18]?.setText(filldata[2]?.benneName + '\n' + filldata[2]?.beneAdrs);
           getAllFields[19]?.setText(filldata[2]?.beneBankName + '\n' + filldata[2]?.beneBankAdress);
-          getAllFields[20]?.setText('Helllo Abhishek');
-          getAllFields[21]?.setText(filldata[2]?.beneBankName + '\n' + filldata[2]?.iban);
-          getAllFields[22]?.setText('Helllo Abhishek');
-          getAllFields[23]?.setText('Helllo Abhishek');
-          getAllFields[24]?.setText('Helllo Abhishek');
-          getAllFields[25]?.setText('Helllo Abhishek');
-          getAllFields[26]?.check();
-          getAllFields[27]?.check();
-          getAllFields[28]?.setText('Helllo Abhishek');
-          getAllFields[29]?.setText('Helllo Abhishek');
-          getAllFields[30]?.setText('Helllo Abhishek');
-          getAllFields[31]?.setText('Helllo Abhishek');
-          getAllFields[32]?.setText('Helllo Abhishek');
-          getAllFields[33]?.setText('Helllo Abhishek');
-          getAllFields[34]?.setText('Helllo Abhishek');
-          getAllFields[35]?.setText('Helllo Abhishek');
-          getAllFields[36]?.setText('Helllo Abhishek');
-          getAllFields[37]?.setText('Helllo Abhishek');
-          getAllFields[38]?.setText('Helllo Abhishek');
-          getAllFields[39]?.setText('Helllo Abhishek');
-          getAllFields[40]?.setText('Helllo Abhishek');
-          getAllFields[41]?.setText('Helllo Abhishek');
-          getAllFields[42]?.setText('Helllo Abhishek');
-          getAllFields[43]?.setText('Helllo Abhishek');
-          getAllFields[44]?.setText('Helllo Abhishek');
-          getAllFields[45]?.setText('Helllo Abhishek');
-          getAllFields[46]?.setText('Helllo Abhishek');
-          getAllFields[47]?.setText('Helllo Abhishek');
-          getAllFields[48]?.setText('Helllo Abhishek');
-          getAllFields[49]?.setText('Helllo Abhishek');
-          getAllFields[50]?.setText('Helllo Abhishek');
-          getAllFields[51]?.setText('Helllo Abhishek');
-          getAllFields[52]?.setText('Helllo Abhishek');
-          getAllFields[53]?.setText('Helllo Abhishek');
-          getAllFields[54]?.setText('Helllo Abhishek');
-          getAllFields[55]?.setText('Helllo Abhishek');
-          getAllFields[56]?.setText('Helllo Abhishek');
-          getAllFields[57]?.setText('Helllo Abhishek');
-          getAllFields[58]?.setText('Helllo Abhishek');
-          getAllFields[59]?.setText('Helllo Abhishek');
-          getAllFields[60]?.setText('Helllo Abhishek');
-          getAllFields[61]?.setText('Helllo Abhishek');
-          getAllFields[62]?.setText('Helllo Abhishek');
-          getAllFields[63]?.setText('Helllo Abhishek');
-          getAllFields[64]?.setText('Helllo Abhishek');
-          getAllFields[65]?.setText('Helllo Abhishek');
-          getAllFields[67]?.setText('Helllo Abhishek');
-          getAllFields[68]?.setText('Helllo Abhishek');
-          getAllFields[69]?.setText('Helllo Abhishek');
-          getAllFields[70]?.setText('Helllo Abhishek');
-          getAllFields[71]?.setText('Helllo Abhishek');
-          getAllFields[72]?.setText('Helllo Abhishek');
-          getAllFields[73]?.setText('Helllo Abhishek');
-          getAllFields[74]?.setText('Helllo Abhishek');
-          getAllFields[75]?.setText('Helllo Abhishek');
-          getAllFields[76]?.setText('Helllo Abhishek');
-          getAllFields[77]?.setText('Helllo Abhishek');
-          getAllFields[78]?.setText('Helllo Abhishek');
-          getAllFields[79]?.setText('Helllo Abhishek');
-          getAllFields[80]?.setText('Helllo Abhishek');
-          getAllFields[81]?.setText('Helllo Abhishek');
-          getAllFields[82]?.setText('Helllo Abhishek');
-          getAllFields[83]?.setText('Helllo Abhishek');
-          getAllFields[84]?.setText('Helllo Abhishek');
-          getAllFields[85]?.setText('Helllo Abhishek');
-          getAllFields[86]?.setText('Helllo Abhishek');
-          getAllFields[87]?.check();
-          getAllFields[88]?.check()
-          getAllFields[89]?.check();
-          getAllFields[90]?.check();
-          getAllFields[91]?.check();
-          getAllFields[92]?.check();
-          getAllFields[93]?.setText('Helllo Abhishek');
-          getAllFields[94]?.setText('Helllo Abhishek');
-          getAllFields[95]?.setText('Helllo Abhishek');
-          getAllFields[96]?.setText('Helllo Abhishek');
+          getAllFields[20]?.setText('');
+          getAllFields[21]?.setText(filldata[2]?.beneAccNo + '\n' + filldata[2]?.iban);
+          getAllFields[22]?.setText(filldata[2]?.beneBankSwiftCode);
+          getAllFields[23]?.setText(filldata[2]?.sortCode);
+          getAllFields[24]?.setText('');
+          getAllFields[25]?.setText(filldata[2]?.beneBankSwiftCode);
+          getAllFields[26]?.uncheck();
+          getAllFields[27]?.uncheck();
+          getAllFields[28]?.setText(filldata[1][0]?.commodity?.join(','));
+          getAllFields[29]?.setText(filldata[6]?.HS_CODE);
+          
+          getAllFields[30]?.setText(filldata[0]?.accNumber?.split('')[0]);
+          getAllFields[31]?.setText(filldata[0]?.accNumber?.split('')[1]);
+          getAllFields[32]?.setText(filldata[0]?.accNumber?.split('')[2]);
+          getAllFields[33]?.setText(filldata[0]?.accNumber?.split('')[3]);
+          getAllFields[34]?.setText(filldata[0]?.accNumber?.split('')[4]);
+          getAllFields[35]?.setText(filldata[0]?.accNumber?.split('')[5]);
+          getAllFields[36]?.setText(filldata[0]?.accNumber?.split('')[6]);
+          getAllFields[37]?.setText(filldata[0]?.accNumber?.split('')[7]);
+          getAllFields[38]?.setText(filldata[0]?.accNumber?.split('')[8]);
+          getAllFields[39]?.setText(filldata[0]?.accNumber?.split('')[9]);
+          getAllFields[40]?.setText(filldata[0]?.accNumber?.split('')[10]);
+          getAllFields[41]?.setText(filldata[0]?.accNumber?.split('')[11]);
+          getAllFields[42]?.setText(filldata[0]?.accNumber?.split('')[12]);
+          getAllFields[43]?.setText(filldata[0]?.accNumber?.split('')[13]);
+          
+          getAllFields[44]?.setText(filldata[4]?.accNumber?.split('')[0]);
+          getAllFields[45]?.setText(filldata[4]?.accNumber?.split('')[1]);
+          getAllFields[46]?.setText(filldata[4]?.accNumber?.split('')[2]);
+          getAllFields[47]?.setText(filldata[4]?.accNumber?.split('')[3]);
+          getAllFields[48]?.setText(filldata[4]?.accNumber?.split('')[4]);
+          getAllFields[49]?.setText(filldata[4]?.accNumber?.split('')[5]);
+          getAllFields[50]?.setText(filldata[4]?.accNumber?.split('')[6]);
+          getAllFields[51]?.setText(filldata[4]?.accNumber?.split('')[7]);
+          getAllFields[52]?.setText(filldata[4]?.accNumber?.split('')[8]);
+          getAllFields[53]?.setText(filldata[4]?.accNumber?.split('')[9]);
+          getAllFields[54]?.setText(filldata[4]?.accNumber?.split('')[10]);
+          getAllFields[55]?.setText(filldata[4]?.accNumber?.split('')[11]);
+          getAllFields[56]?.setText(filldata[4]?.accNumber?.split('')[12]);
+          getAllFields[57]?.setText(filldata[4]?.accNumber?.split('')[13]);
+          
+          if (filldata[6]?.FORWARD_CONTRACT!=undefined) {
+            let booking_date:any=filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
+            let due_date:any=filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
+            getAllFields[58]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.ForwardRefNo);
+            getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
+            getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
+            getAllFields[61]?.setText(booking_date[1]?.split('')[0]);
+            getAllFields[62]?.setText(booking_date[1]?.split('')[1]);
+            getAllFields[63]?.setText(booking_date[0]?.split('')[0]);
+            getAllFields[64]?.setText(booking_date[0]?.split('')[1]);
+            getAllFields[65]?.setText(booking_date[0]?.split('')[2]);
+            getAllFields[66]?.setText(booking_date[0]?.split('')[3]);
+            getAllFields[67]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.BookingAmount);
+            
+            getAllFields[68]?.setText(due_date[2]?.split('')[0]);
+            getAllFields[69]?.setText(due_date[2]?.split('')[1]);
+            getAllFields[70]?.setText(due_date[1]?.split('')[0]);
+            getAllFields[71]?.setText(due_date[1]?.split('')[1]);
+            getAllFields[72]?.setText(due_date[0]?.split('')[0]);
+            getAllFields[73]?.setText(due_date[0]?.split('')[1]);
+            getAllFields[74]?.setText(due_date[0]?.split('')[2]);
+            getAllFields[75]?.setText(due_date[0]?.split('')[3]);
+            
+            getAllFields[76]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.UtilizedAmount);
+            getAllFields[77]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.NetRate);
+          }
+          getAllFields[80]?.setText(filldata[6]?.HS_CODE);
+          getAllFields[81]?.setText('');
+          getAllFields[82]?.setText('');
+          getAllFields[83]?.setText('');
+          getAllFields[84]?.setText('');
+          getAllFields[85]?.setText('');
+          getAllFields[86]?.setText('');
+          getAllFields[87]?.uncheck();
+          getAllFields[88]?.uncheck()
+          getAllFields[89]?.uncheck();
+          getAllFields[90]?.uncheck();
+          getAllFields[91]?.uncheck();
+          getAllFields[92]?.uncheck();
+          getAllFields[93]?.setText('');
+          getAllFields[94]?.setText('');
+          getAllFields[95]?.setText('');
+          getAllFields[96]?.setText('');
         }
         const pdfBytes = await pdfDoc.save()
         console.log(pdfDoc, "pdf")
@@ -191,7 +196,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
               this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: pdfdata });
             });
           });
-          this.modifyPdf();
+          // this.modifyPdf();
         }, 200);
       }
     }
@@ -225,46 +230,136 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
     return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
 
-  async modifyPdf() {
-    // Fetch an existing PDF document
-    const url = './../../assets/pdf/FedralBank/Remittance_Advance_Against_Imports_Edit.pdf'
-    const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
-    const pdfDoc = await PDFDocument.load(existingPdfBytes)
-    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
-    const pages = pdfDoc.getPages()
-    const firstPage = pages[0]
-    const {
-      width,
-      height
-    } = firstPage.getSize()
+  // async modifyPdf() {
+  //   // Fetch an existing PDF document
+  //   const url = './../../assets/pdf/FedralBank/Remittance_Advance_Against_Imports_Edit.pdf'
+  //   const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+  //   const pdfDoc = await PDFDocument.load(existingPdfBytes)
+  //   const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
+  //   const pages = pdfDoc.getPages()
+  //   const firstPage = pages[0]
+  //   const {
+  //     width,
+  //     height
+  //   } = firstPage.getSize()
 
-    firstPage.drawText('Firmado por <?php echo $usuarionombre;?>, en fecha <?php echo $fechafirma;?>!', {
-      x: 12,
-      y: height / 2 - 300,
-      size: 12,
-      font: helveticaFont,
-      color: rgb(0.95, 0.1, 0.1),
-      rotate: degrees(90),
-      //original ajustes.
-      // x: 5,
-      //y: height / 2 + 300,
-      //size: 12,
-      //font: helveticaFont,
-      //color: rgb(0.95, 0.1, 0.1),
-      //rotate: degrees(-90),
-    })
+  //   firstPage.drawText('Firmado por <?php echo $usuarionombre;?>, en fecha <?php echo $fechafirma;?>!', {
+  //     x: 12,
+  //     y: height / 2 - 300,
+  //     size: 12,
+  //     font: helveticaFont,
+  //     color: rgb(0.95, 0.1, 0.1),
+  //     rotate: degrees(90),
+  //     //original ajustes.
+  //     // x: 5,
+  //     //y: height / 2 + 300,
+  //     //size: 12,
+  //     //font: helveticaFont,
+  //     //color: rgb(0.95, 0.1, 0.1),
+  //     //rotate: degrees(-90),
+  //   })
 
-    // Serialize the PDFDocument to bytes (a Uint8Array)
-    const pdfBytes = await pdfDoc.save()
-    var blob = new Blob([pdfBytes])
-    var reader = new FileReader();
-    reader.onload = function (event: any) {
-      var base64: any = event.target.result
-      var res = base64.replace("data:application/octet-stream;base64,", "");
-      var sites = ['data:application/pdf;base64, ' + res]
-      console.log(sites, 'asfsdfsdfsdf')
+  //   // Serialize the PDFDocument to bytes (a Uint8Array)
+  //   const pdfBytes = await pdfDoc.save()
+  //   var blob = new Blob([pdfBytes])
+  //   var reader = new FileReader();
+  //   reader.onload = function (event: any) {
+  //     var base64: any = event.target.result
+  //     var res = base64.replace("data:application/octet-stream;base64,", "");
+  //     var sites = ['data:application/pdf;base64, ' + res]
+  //     console.log(sites, 'asfsdfsdfsdf')
+  //   };
+
+  //   reader.readAsDataURL(blob);
+  // }
+  
+  pipodata(){
+    let data:any={
+     Amount:[],
+     Currency:[]
     };
-
-    reader.readAsDataURL(blob);
+    return data;
+  }
+  
+  ConvertNumberToWords(number: any) {
+    var words = new Array();
+    words[0] = '';
+    words[1] = 'One';
+    words[2] = 'Two';
+    words[3] = 'Three';
+    words[4] = 'Four';
+    words[5] = 'Five';
+    words[6] = 'Six';
+    words[7] = 'Seven';
+    words[8] = 'Eight';
+    words[9] = 'Nine';
+    words[10] = 'Ten';
+    words[11] = 'Eleven';
+    words[12] = 'Twelve';
+    words[13] = 'Thirteen';
+    words[14] = 'Fourteen';
+    words[15] = 'Fifteen';
+    words[16] = 'Sixteen';
+    words[17] = 'Seventeen';
+    words[18] = 'Eighteen';
+    words[19] = 'Nineteen';
+    words[20] = 'Twenty';
+    words[30] = 'Thirty';
+    words[40] = 'Forty';
+    words[50] = 'Fifty';
+    words[60] = 'Sixty';
+    words[70] = 'Seventy';
+    words[80] = 'Eighty';
+    words[90] = 'Ninety';
+    number = number.toString();
+    var atemp = number.split(".");
+    var number = atemp[0].split(",").join("");
+    var n_length = number.length;
+    var words_string = "";
+    if (n_length <= 9) {
+      var n_array: any = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+      var received_n_array = new Array();
+      for (var i = 0; i < n_length; i++) {
+        received_n_array[i] = number.substr(i, 1);
+      }
+      for (var i = 9 - n_length, j = 0; i < 9; i++, j++) {
+        n_array[i] = received_n_array[j];
+      }
+      for (var i = 0, j = 1; i < 9; i++, j++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          if (n_array[i] == 1) {
+            n_array[j] = 10 + parseInt(n_array[j]);
+            n_array[i] = 0;
+          }
+        }
+      }
+      var value: any = "";
+      for (var i = 0; i < 9; i++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          value = n_array[i] * 10;
+        } else {
+          value = n_array[i];
+        }
+        if (value != 0) {
+          words_string += words[value] + " ";
+        }
+        if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Crores ";
+        }
+        if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Lakhs ";
+        }
+        if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Thousand ";
+        }
+        if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
+          words_string += "Hundred and ";
+        } else if (i == 6 && value != 0) {
+          words_string += "Hundred ";
+        }
+      }
+      words_string = words_string.split("  ").join(" ");
+    }
+    return words_string;
   }
 }

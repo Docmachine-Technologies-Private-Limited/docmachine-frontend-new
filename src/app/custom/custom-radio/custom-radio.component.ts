@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export interface RadioButtonItem {
@@ -24,7 +24,7 @@ let nextUniqueId = 0;
 export class CustomRadioComponent  implements ControlValueAccessor, OnInit,OnChanges {
   private _name: string = `group-${nextUniqueId++}`;
   @Input() items: any=[];
-
+  @Output('event') event:any= new EventEmitter();
   get name(): string { return this._name; }
   set name(value: string) {
     this._name = value;
@@ -42,8 +42,8 @@ export class CustomRadioComponent  implements ControlValueAccessor, OnInit,OnCha
     }
   }
 
-  onChange: Function;
-  onTouched: Function;
+  onChange: any = () => { };
+  onTouched: any = () => { };
 
   writeValue(value: string | number | boolean) {
     if (value !== this.innerValue) {
@@ -63,7 +63,8 @@ export class CustomRadioComponent  implements ControlValueAccessor, OnInit,OnCha
     this.innerValue = value;
     this.onChange(value);
     this.onTouched(value);
-    this.removeAllToggle(index)
+    this.removeAllToggle(index);
+    this.event.emit(value)
   }
   
   ngOnInit(): void {

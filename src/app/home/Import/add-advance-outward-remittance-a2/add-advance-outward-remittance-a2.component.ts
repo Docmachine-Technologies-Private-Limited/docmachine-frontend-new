@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../../service/user.service";
-import { async, timer } from "rxjs";
+import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
@@ -8,9 +8,7 @@ import $ from 'jquery'
 import A2_JOSN from '../../../../assets/JSON/A2.json';
 import {
   MAT_CHECKBOX_DEFAULT_OPTIONS,
-  MatCheckboxDefaultOptions
 } from '@angular/material/checkbox';
-declare var kendo: any;
 
 import {
   DropzoneDirective,
@@ -28,7 +26,6 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { DocumentService } from "../../../service/document.service";
 import { PipoDataService } from "../../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../../service/window-information.service';
-import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { AprrovalPendingRejectTransactionsService } from '../../../service/aprroval-pending-reject-transactions.service';
 import { MergePdfService } from '../../../service/MergePdf/merge-pdf.service';
 import { MergePdfListService } from '../../merge-pdf-list.service';
@@ -56,8 +53,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   SHIPPING_BILL_LIST: any = [{ value: 'Select BOE' }];
 
   public type: string = "directive";
-  public res;
-  public size;
+  public res:any;
+  public size:any;
   public uploadUrl: any = '';
   public uploadUrl_Original: any = '';
 
@@ -155,7 +152,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     public documentService: DocumentService,
     public pipoDataService: PipoDataService,
     public router: Router,
-    private route: ActivatedRoute,
     public mergerpdf: MergePdfService,
     public wininfo: WindowInformationService,
     public pdfmerge: MergePdfListService,
@@ -250,15 +246,45 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   startDate: any = '';
   endDate: any = '';
   ORIGNAL_BANK_DETAILS: any = [];
+  BANK_LIST_DROPDOWN: any = [];
+  ForwardContractDATA: any = [];
+  HS_CODE_DATA: any = [];
+  FILTER_HS_CODE_DATA: any = [];
+  ToChargesAccountdata: any = [];
+  ToCreditAccountdata: any = [];
+  COMPANY_INFO: any = [];
   getDropdownData() {
     this.userService.getTeam()
       .subscribe(
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-          // this.bankDetail = data['data'][0]['bankDetails']
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId, org: data['data'][0]['bankDetails'][index] })
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+          }
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+              this.BANK_LIST_DROPDOWN.push({
+                value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+              })
+            }
           }
         },
         error => {
@@ -272,8 +298,12 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       },
       (err) => console.log("Error", err)
     );
-
-
+    this.documentService.ForwardContractget().subscribe((res: any) => {
+      this.ForwardContractDATA = res?.data;
+      console.log(res, 'daasdasdasdasdasdadsd')
+    });
+    this.HS_CODE_DATA = this.documentService.getHSCODE();
+    this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA;
   }
 
   changepipo(id) {
@@ -1043,5 +1073,58 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   randomId(length = 6) {
     return Math.random().toString(36).substring(2, length+2);
   };
+  
+  filtertimeout: any = ''
+  filterHSCode(value: any) {
+    clearTimeout(this.filtertimeout);
+    this.filtertimeout = setTimeout(() => {
+      this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA.filter((item: any) => item?.hscode?.indexOf(value) != -1 || item?.description?.toLowerCase()?.indexOf(value?.toLowerCase()) != -1);
+      if (this.FILTER_HS_CODE_DATA.length == 0) {
+        this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA;
+      }
+    }, 200);
+  }
+  ToCreditAccount_Selected: any = ''
+  ToChargesAccount_Selected: any = ''
+
+  ToCreditAccount(value: any) {
+    console.log(value, 'asfaffsdfsdfsdf')
+    this.ToCreditAccount_Selected = value
+  }
+
+  ToChargesAccount(value: any) {
+    console.log(value, 'asfaffsdfsdfsdf')
+    this.ToChargesAccount_Selected = value
+  }
+
+  ToForwardContract_Selected: any = []
+  ToHSCode_Selected: any = [];
+  ToForwardContract(event: any, value: any, index: any) {
+    if (event?.target?.checked == true) {
+      this.ToForwardContract_Selected[0] = value;
+    } else {
+      this.ToForwardContract_Selected[0] = '';
+    }
+  }
+
+  ToHSCode(event: any, value: any, index: any) {
+    console.log(event, 'adasdasdsad')
+    if (event?.target?.checked == true) {
+      this.ToHSCode_Selected[index] = value;
+    } else {
+      this.ToHSCode_Selected[index] = '';
+    }
+  }
+  ALL_DATA_HSCODE_FORWARD: any = {};
+  DoneButton() {
+    let temp2: any = [];
+    this.ToHSCode_Selected.forEach(element => {
+      temp2.push(element?.hscode);
+    });
+    this.ALL_DATA_HSCODE_FORWARD = {
+      HS_CODE: temp2?.join(','),
+      FORWARD_CONTRACT: this.ToForwardContract_Selected
+    };
+  }
 }
 

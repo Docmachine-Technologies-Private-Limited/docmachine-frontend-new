@@ -40,6 +40,8 @@
                         class="fa fa-times" aria-hidden="true"></i></b></span> </div>
                 <br />
                 <button style="margin-top: 10px;" class="button1" (click)="proceedClick()">Proceed</button>
+                <button style="width: 210px; margin-left: 10px;" class="button1 PopupOpen" popup-close="FORWARD_CONTRACT">Add forward Contract
+                </button>
               </div>
               <table class="table table-striped mb-0 change_theheading"
                 style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
@@ -101,7 +103,8 @@
                       <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                         <h3> bank reference number</h3><br>
                         <input #bnk_reff [value]="this.ArrayToString(SELECT_bankreferencenumber)" id="bnk_reff"
-                          class="bnk_reff form-control PopupOpen" type="text" popup-close="BillLodgementNumber" autocomplete="off" (keyup)="change($event)"
+                          class="bnk_reff form-control PopupOpen" type="text" popup-close="BillLodgementNumber"
+                          autocomplete="off" (keyup)="change($event)"
                           (click)="loadPopup(searchbankname,custommodal.style.display='flex');"
                           (change)="change($event)">
                       </div>
@@ -180,21 +183,21 @@
                           Generate Invoice Reduction </button>
                       </div>
                       <div *ngIf="this.Lodgement[selection]['InvoiceReduction2']['Hide']== 'no'">
-                          <button class="button1" style="margin-right: 10px; width:200px"
-                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
-                              (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
-                              for Approval</button>
+                        <button class="button1" style="margin-right: 10px; width:200px"
+                          [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                          (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
+                          for Approval</button>
                       </div>
                     </div>
                     <div *ngIf="this.Lodgement[selection]['BuyerRemitterDifferent']['Hide']== 'no'">
-                        <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                          <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                            <button class="button1" style="margin-right: 10px; width:200px"
-                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
-                              (click)="SendApproval_2(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
-                              for Approval</button>
-                          </div>
+                      <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                        <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                          <button class="button1" style="margin-right: 10px; width:200px"
+                            [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                            (click)="SendApproval_2(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
+                            for Approval</button>
                         </div>
+                      </div>
                     </div>
                   </div>
                   <div *ngIf='this.Lodgement[selection]["Lodgement"]["Hide"]==="no"'>
@@ -254,11 +257,12 @@
                   </div>
                 </div>
                 <div [style.display]="code === c && importPurpose[j] == code?'block':'none'">
-                  <div id="HTML_PDF_TABLE" #tablefulld_width class="bc" [style.display]="doneImportPurpose[j] != code?'block':'none'">
+                  <div id="HTML_PDF_TABLE" #tablefulld_width class="bc"
+                    [style.display]="doneImportPurpose[j] != code?'block':'none'">
                     <div id="first" class="bc">
                       <div class="bc new_table_lits_view">
                         <div class="tablefulld_width">
-                        Our Ref No.: <span style="outline: none; display: inline-block;width: 150px;"
+                          Our Ref No.: <span style="outline: none; display: inline-block;width: 150px;"
                             contenteditable="true"></span>
                           <br> Date: <span style="outline: none; display: inline-block;width: 150px;"
                             contenteditable="true"></span>
@@ -302,21 +306,29 @@
                             </td>
                           </tr>
                           <tr class="border1" *ngFor="let item of this.GENRATE_DOCMENTS_FILL;let i=index">
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">{{(i+1)}}</span> </td>
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">--</span> </td>
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">{{item?.blcopyrefNumber}}</span> </td>
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">{{item?.SbRef[0]?.buyerName}}</span> </td>
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">{{item?.blcopyrefNumber}}</span> </td>
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">{{item?.amount}}</span> </td>
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">{{item?.blcopyrefNumber}}</span> </td>
-                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                            <td class="wtd3 border1"> <span
+                                style="border:1px solid black;display: inline-block;width: 90px;"
                                 contenteditable="true">NA</span> </td>
                           </tr>
                         </table>
@@ -356,6 +368,7 @@
                                                       display: block;">
                     <div class="button1" title="Share As PDF" (click)="exportAsPDF2(code,j)">Proceed to Preview
                     </div>
+
                   </div>
                   <div *ngIf="doneImportPurpose[j] == code">
                     <p>Setup: 3 Preview</p>
@@ -873,21 +886,29 @@
                               </td>
                             </tr>
                             <tr class="border1">
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block; width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block; width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span
+                                  style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
                             </tr>
                           </table>
@@ -1023,7 +1044,7 @@
                   <button class="opt" style="float:right" (click)='generateDoc(code,j)'> Generate Document </button>
                 </div>
                 <div *ngIf='code === c && generatePurpose[j] == code'>
-                  <div >
+                  <div>
                     <div id="mainId" class="bc" *ngIf="donePurpose[j] != code && value!='' && value!=undefined">
                       <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
                         name="Documents" [src]="'data:application/pdf;base64,'+value" width="700px"
@@ -1054,8 +1075,9 @@
                         style="margin-right: 10px; width:200px"
                         (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL)">Send Mail /
                         Download</button>
-                      <button *ngIf='!newDone' id="ProceedPreview" class="button1" style="margin-right: 10px; margin-bottom: 30px;"
-                        (click)="showPreview(code)">Proceed to Preview</button>
+                      <button *ngIf='!newDone' id="ProceedPreview" class="button1"
+                        style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to
+                        Preview</button>
                     </div>
                   </div>
                 </div>
@@ -1104,61 +1126,6 @@
                     </div>
                   </app-custom-model>
                 </div>
-                <!-- <ng-template #content2 let-modal>
-                  <div class="modal-body2">
-                    <div class="row no-gutter">
-                      <div class="col-md-7" style="margin: 10px;">
-                        <div class="login d-flex py-5" style="padding: 0px !important;">
-                          <div class="container popup">
-                            <div class="row">
-                              <div class="col-lg-10 col-xl-7 mrg">
-                                <p class="display-5" style="text-align: center; margin-left: 180px;"> Select Document
-                                  To Download</p>
-                                <div class="docStyle">
-                                  <p class="display-4" style="margin-top: 10px;width: 6 0px;
-                                                      border-bottom: 4px solid #49A2D7;">Generated Document</p>
-                                  <input type="checkBox" checked (change)="addPdfToSelectedPdf(value,$event)">
-                                    <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false" name="Documents" [src]="'data:application/pdf;base64,'+value" width="700px" height="500px"></app-pdf-viewer>
-                                </div>
-                                <div *ngIf='newDone'>
-                                  <div class="docStyle" *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
-                                    <input type="checkBox" checked (change)="addPdfToSelectedPdf(pipo , $event)">
-                                      <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false" [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
-                                  </div>
-                                </div>
-                                <div
-                                  style="display: flex; width:100%; margin-left: 240px; margin-top: 20px; margin-bottom:20px; ">
-                                  <div
-                                    *ngIf="this.GetDownloadStatus?.status=='Approved' && this.USER_DATA?.RoleCheckbox!='' && this.USER_DATA?.RoleCheckbox!=null">
-                                    <button type="submit" class="submitBTN" (click)="mergeAllPDFs('download')"
-                                      (click)="modal.dismiss('Cross click')">Download PDF</button>
-                                    <button type="submit" class="submitBTN" (click)="mergeAllPDFs('sendMail')"
-                                      (click)="modal.dismiss('Cross click')">Send Mail</button>
-                                  </div>
-                                  <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                                    <div
-                                      *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                                      <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
-                                        [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
-                                        (click)="SendApproval(this.GetDownloadStatus?.status,code+'_'+this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
-                                        for Approval</button>
-                                    </div>
-                                    <div
-                                      *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
-                                      <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
-                                        [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'">Wait
-                                        for Approval</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </ng-template> -->
               </div>
             </div>
           </div>
@@ -1169,10 +1136,8 @@
               <div class="row no-gutter" style="margin-right: -3px !important;">
                 <button type="button" class="button2 topright" aria-label="Close"
                   (click)="modal.dismiss('Cross click')"> <span aria-hidden="true">OK</span> </button>
-                <!-- The content half -->
                 <div class="col-md-7 ">
                   <div class="login d-flex py-5" style="padding: 0px !important;">
-                    <!-- Demo content-->
                     <div class="container">
                       <div class="row">
                         <div class="col-lg-10 col-xl-7 mrg">
@@ -1239,7 +1204,6 @@
                         </div>
                       </div>
                     </div>
-                    <!-- End -->
                   </div>
                 </div>
               </div>
@@ -1253,55 +1217,53 @@
 
 <button style="display: none;visibility: hidden;" type="button" id="POPUP_OPEN_CLOSE" class="PopupOpen"
   [attr.popup-close]="'InwardRemittanceDisposal'"></button>
-  
+
 <app-custom-model [FooterButton]="true" EventButton="false"
-[customstyle]="{'margin':'90px auto auto !important','max-width': '55vw !important','margin-right': '0px !important'}"
-class="p-2" id="InwardRemittanceDisposal"
-[modalbodystyle]="{'height': '500px'}"
-(footerbutton)="ShowExportPage($event)"
-[condition]="this.REMITTANCE_DATA!=''?true:false"
-[buttondisabled]="this.REMITTANCE_DATA==''?true:false"
-name="Inward Remittance Disposal Selection Panel">
-<div class="col-12 pt-3">
-  <table class="table mb-0 mt-2">
-    <thead>
-      <tr class="table-tr">
-        <th scope="col" class="col-td-th-1">#</th>
-        <th scope="col" class="col-td-th-3">Bank Name</th>
-        <th scope="col" class="col-td-th-3">Ref. Number</th>
-        <th scope="col" class="col-td-th-3">Currency</th>
-        <th scope="col" class="col-td-th-3">Amount</th>
-        <th scope="col" class="col-td-th-3">Remitter Name</th>
-        <th scope="col" class="col-td-th-3">BL. Number</th>
-        <th scope="col" class="col-td-th-3">Disposal Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="table-tr" *ngFor='let item of this.Inward_Remittance_MT103_DATA; let i = index'>
-        <td class="col-td-th-1"><input type="checkbox" [checked]="item?.Checked" (change)="Remittancedata(item,i)" /></td>
-        <td class="col-td-th-3">{{item?.BankName}}</td>
-        <td class="col-td-th-3">{{item?.Inward_reference_number}}</td>
-        <td class="col-td-th-3">{{item?.currency}}</td>
-        <td class="col-td-th-3">{{item?.amount}}</td>
-        <td class="col-td-th-3">{{item?.Remitter_Name}}</td>
-        <td class="col-td-th-3">{{item?.Bill_lodgment_Number}}</td>
-        <td class="col-td-th-3">{{item?.Inward_amount_for_disposal}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  [customstyle]="{'margin':'90px auto auto !important','max-width': '55vw !important','margin-right': '0px !important'}"
+  class="p-2" id="InwardRemittanceDisposal" [modalbodystyle]="{'height': '500px'}"
+  (footerbutton)="ShowExportPage($event)" [condition]="this.REMITTANCE_DATA!=''?true:false"
+  [buttondisabled]="this.REMITTANCE_DATA==''?true:false" name="Inward Remittance Disposal Selection Panel">
+  <div class="col-12 pt-3">
+    <table class="table mb-0 mt-2">
+      <thead>
+        <tr class="table-tr">
+          <th scope="col" class="col-td-th-1">#</th>
+          <th scope="col" class="col-td-th-3">Bank Name</th>
+          <th scope="col" class="col-td-th-3">Ref. Number</th>
+          <th scope="col" class="col-td-th-3">Currency</th>
+          <th scope="col" class="col-td-th-3">Amount</th>
+          <th scope="col" class="col-td-th-3">Remitter Name</th>
+          <th scope="col" class="col-td-th-3">BL. Number</th>
+          <th scope="col" class="col-td-th-3">Disposal Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-tr" *ngFor='let item of this.Inward_Remittance_MT103_DATA; let i = index'>
+          <td class="col-td-th-1"><input type="checkbox" [checked]="item?.Checked" (change)="Remittancedata(item,i)" />
+          </td>
+          <td class="col-td-th-3">{{item?.BankName}}</td>
+          <td class="col-td-th-3">{{item?.Inward_reference_number}}</td>
+          <td class="col-td-th-3">{{item?.currency}}</td>
+          <td class="col-td-th-3">{{item?.amount}}</td>
+          <td class="col-td-th-3">{{item?.Remitter_Name}}</td>
+          <td class="col-td-th-3">{{item?.Bill_lodgment_Number}}</td>
+          <td class="col-td-th-3">{{item?.Inward_amount_for_disposal}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </app-custom-model>
 
 <div class="other" #custommodal>
   <app-custom-model [FooterButton]="true" EventButton="false"
     [customstyle]="{'margin':'90px auto auto !important','max-width': '55vw !important','margin-right': '0px !important'}"
-    class="p-2" id="BillLodgementNumber"
-    [modalbodystyle]="{'height': '500px'}"
+    class="p-2" id="BillLodgementNumber" [modalbodystyle]="{'height': '500px'}"
     name="Bill Lodgement Number Selection Panel">
     <div class="col-12 pt-3">
       <div class="col-5" *ngIf="this.PARTY_NAME.length!=0">
-        <ng-select [items]="this.PARTY_NAME" placeholder="Search party name" (change)="SearchSelectValue(PARTY_NAMEselection)"
-          [(ngModel)]="PARTY_NAMEselection" name="commodity" #ngSelect> </ng-select>
+        <ng-select [items]="this.PARTY_NAME" placeholder="Search party name"
+          (change)="SearchSelectValue(PARTY_NAMEselection)" [(ngModel)]="PARTY_NAMEselection" name="commodity"
+          #ngSelect> </ng-select>
       </div>
       <table class="table mb-0 mt-2">
         <thead>
@@ -1318,7 +1280,8 @@ name="Inward Remittance Disposal Selection Panel">
         </thead>
         <tbody>
           <tr class="table-tr" *ngFor='let item of this.Export_Direct_Dispatch let i = index'>
-            <td class="col-td-th-1"><input type="checkbox" (change)="ClickbankNumber(item?.blcopyrefNumber,'.bnk_reff','')" /></td>
+            <td class="col-td-th-1"><input type="checkbox"
+                (change)="ClickbankNumber(item?.blcopyrefNumber,'.bnk_reff','')" /></td>
             <td class="col-td-th-3">{{item?.pipo[0]?.buyerName}}</td>
             <td class="col-td-th-3">{{item?.SbRef[0]?.sbno}}</td>
             <td class="col-td-th-3">{{item?.blcopyrefNumber}}</td>
@@ -1424,4 +1387,40 @@ name="Inward Remittance Disposal Selection Panel">
     </div>
   </div>
 </div>
+
 <!-- PI/PO numbers -->
+<app-custom-model [customstyle]="{'max-width':'690vw !important'}" class="p-2" height="75vh" id="FORWARD_CONTRACT"
+  [minimizedisabled]="false" modalbodyheight="70vh" name="Select FORWARD CONTRACT View" #FORWARD_CONTRACTPANEL>
+  <div class="col-12 mt-2 mb-2">
+    <table class="table">
+      <thead>
+        <tr class="table-tr pr-3">
+          <th scope="col" class="col-td-th-1">#</th>
+          <th scope="col" class="col-td-th-2">Forward Ref No</th>
+          <th scope="col" class="col-td-th-3">Booking Date</th>
+          <th scope="col" class="col-td-th-2">Forward Contract Amount</th>
+          <th scope="col" class="col-td-th-3">Due Date</th>
+          <th scope="col" class="col-td-th-3">Amount to be utilised</th>
+          <th scope="col" class="col-td-th-3">Exchange rate as per FWC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.ForwardContractDATA;let i=index">
+          <td scope="col" class="col-td-th-1"><input type="checkbox" (change)="ToForwardContract($event,item,i)"></td>
+          <td scope="col" class="col-td-th-2">{{item?.ForwardRefNo}}</td>
+          <td scope="col" class="col-td-th-3">{{item?.BookingDate}}</td>
+          <td scope="col" class="col-td-th-2">{{item?.BookingAmount}}</td>
+          <td scope="col" class="col-td-th-3">{{item?.ToDate}}</td>
+          <td scope="col" class="col-td-th-3">{{item?.AvailableAmount}}</td>
+          <td scope="col" class="col-td-th-3">{{item?.NetRate}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+    <div style="display:flex;" class="mt-3">
+      <button type="button" class="btn btn-primary"
+        (click)="DoneButton();FORWARD_CONTRACTPANEL?.displayHidden">Done</button>
+    </div>
+  </div>
+</app-custom-model>

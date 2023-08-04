@@ -1,13 +1,11 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren } from "@angular/core";
 import { DocumentService } from "../../../service/document.service";
-import { FormGroup, FormControl } from "@angular/forms";
-import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import * as data from '../../../inward.json';
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
-import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
-import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, rgb } from 'pdf-lib';
 import { formatDate } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as importedSaveAs from 'file-saver';
@@ -19,7 +17,6 @@ import { PipoDataService } from "../../../service/homeservices/pipo.service";
 import { StorageEncryptionDecryptionService } from "../../../Storage/storage-encryption-decryption.service";
 import { MergePdfListService } from "../../merge-pdf-list.service";
 import $ from "jquery";
-import htmlToPdfmake from 'html-to-pdfmake';
 declare var kendo: any;
 
 @Component({
@@ -193,6 +190,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   GetDownloadStatus: any = [];
   Export_Direct_Dispatch: any = []
   VISIBILITY: boolean = false;
+  ForwardContractDATA: any=[];
 
   constructor(
     public documentService: DocumentService,
@@ -202,14 +200,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private userService: UserService,
     private modalService: NgbModal,
-    private confirmDialogService: ConfirmDialogService,
     public wininfo: WindowInformationService,
     public pipoDataService: PipoDataService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public sessionstorage: StorageEncryptionDecryptionService,
-    public pdfmerge: MergePdfListService,
-  ) {
+    public pdfmerge: MergePdfListService) {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
     console.log(this.jstoday)
@@ -651,6 +647,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     this.INPUT_SERACH = $('.search_box_new');
     console.log(this.mainDoc, 'dfsdfdfdfsd')
+    this.documentService.ForwardContractget().subscribe((res: any) => {
+      this.ForwardContractDATA = res?.data;
+      console.log(res, 'daasdasdasdasdasdadsd')
+    });
     $('#POPUP_OPEN_CLOSE').click();
   }
 
@@ -942,27 +942,26 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           element?.enableCombing(); // trying to restore combing
         }
       });
-      getAllFields[0].setText('KOZHIKODE')
-      getAllFields[1].setText(this.item5.teamName)
-      getAllFields[2].setText(this.charge[0])
-      getAllFields[3].setText(this.charge[1])
-      getAllFields[4].setText(this.charge[2])
-      getAllFields[5].setText(this.charge[3])
-      getAllFields[6].setText(this.charge[4])
-      getAllFields[7].setText(this.charge[5])
-      getAllFields[8].setText(this.charge[6])
-      getAllFields[9].setText(this.charge[7])
-      getAllFields[10].setText(this.charge[8])
-      getAllFields[11].setText(this.charge[9])
-      getAllFields[12].setText(this.charge[10])
-      getAllFields[13].setText(this.charge[11])
-      getAllFields[14].setText(this.charge[12])
-      getAllFields[15].setText(this.charge[13])
-      getAllFields[16].setText('Export')
+      getAllFields[0].setText('')
+      getAllFields[3].setText(this.item5.teamName)
+      getAllFields[4].setText(this.charge[0])
+      getAllFields[5].setText(this.charge[1])
+      getAllFields[6].setText(this.charge[2])
+      getAllFields[7].setText(this.charge[3])
+      getAllFields[8].setText(this.charge[4])
+      getAllFields[9].setText(this.charge[5])
+      getAllFields[10].setText(this.charge[6])
+      getAllFields[11].setText(this.charge[7])
+      getAllFields[12].setText(this.charge[8])
+      getAllFields[13].setText(this.charge[9])
+      getAllFields[14].setText(this.charge[10])
+      getAllFields[15].setText(this.charge[11])
+      getAllFields[16].setText(this.charge[12])
+      getAllFields[17].setText(this.charge[13])
+      getAllFields[18].setText('Export')
       getAllFields[19].setText('')
       getAllFields[20].setText(a['currency'])
       var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      console.log(updatedata, 'updatedata')
       getAllFields[21].setText(updatedata?.Inward_amount_for_disposal)
       getAllFields[22].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
       getAllFields[23].setText(this.buyerAds)
@@ -970,7 +969,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[25].setText('ADVANCE AGAINST EXPORT')
       getAllFields[26].setText(this.generatePurpose[0])
       
-      //line4
       getAllFields[77].setText(this.credit[0])
       getAllFields[78].setText(this.credit[1])
       getAllFields[79].setText(this.credit[2])
@@ -1001,6 +999,30 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[117].setText(this.charge[12])
       getAllFields[118].setText(this.charge[13])
       
+      let bookingdatesplit=this.ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-','')?.split('');
+      let duedatesplit=this.ToForwardContract_Selected[0]?.ToDate?.replaceAll('-','')?.split('');
+      getAllFields[119].setText(this.ToForwardContract_Selected[0]?.ForwardRefNo)
+      getAllFields[120].setText(bookingdatesplit[6])
+      getAllFields[121].setText(bookingdatesplit[7])
+      getAllFields[122].setText(bookingdatesplit[4])
+      getAllFields[123].setText(bookingdatesplit[5])
+      getAllFields[124].setText(bookingdatesplit[0])
+      getAllFields[125].setText(bookingdatesplit[1])
+      getAllFields[126].setText(bookingdatesplit[2])
+      getAllFields[127].setText(bookingdatesplit[3])
+      
+      getAllFields[128].setText(duedatesplit[6])
+      getAllFields[129].setText(duedatesplit[7])
+      getAllFields[130].setText(duedatesplit[4])
+      getAllFields[131].setText(duedatesplit[5])
+      getAllFields[132].setText(duedatesplit[0])
+      getAllFields[133].setText(duedatesplit[1])
+      getAllFields[134].setText(duedatesplit[2])
+      getAllFields[135].setText(duedatesplit[3])
+      
+      getAllFields[136].setText(this.ToForwardContract_Selected[0]?.BookingAmount)
+      getAllFields[137].setText(this.ToForwardContract_Selected[0]?.UtilizedAmount)
+      getAllFields[138].setText(this.ToForwardContract_Selected[0]?.NetRate);
       getAllFields[139].setText(this.jstoday)
 
       var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
@@ -3562,7 +3584,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       })
     })
   }
-
+  
+  ToForwardContract_Selected: any = []
+  ToForwardContract(event: any, value: any, index: any) {
+    if (event?.target?.checked == true) {
+      this.ToForwardContract_Selected[0] = value;
+    } else {
+      this.ToForwardContract_Selected[0] = '';
+    }
+   
+  }
+  
+  ALL_DATA_HSCODE_FORWARD: any = {};
+  DoneButton() {
+    this.ALL_DATA_HSCODE_FORWARD = {
+      FORWARD_CONTRACT: this.ToForwardContract_Selected
+    };
+    let pipoValue = this.itemArray[0];
+    this.fillForm(pipoValue);
+  }
 
 }
 

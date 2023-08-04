@@ -27,6 +27,8 @@
     border: 1px solid rgba(0,0,0,.54);
     align-items: center;
     justify-content: center;
+    position: absolute;
+    left: 0;
 }
 
 .checkmark-border-color{
@@ -49,4 +51,8 @@
     margin-bottom: 10px;
     margin-left: 15px;
     gap: 10px;
+}
+
+.radio-span-text{
+    margin-left: 30px;
 }

@@ -5,15 +5,14 @@ import {
   Output,
   forwardRef,
   HostListener,
-  ViewChild,
-  TemplateRef,
-  EventEmitter
+  EventEmitter,
+  ElementRef
 } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
   ControlValueAccessor,
 } from '@angular/forms';
-import { Observable, BehaviorSubject, isEmpty } from 'rxjs';
+import { BehaviorSubject} from 'rxjs';
 declare var $: any;
 import { CustomdropdownservicesService } from './customdropdownservices.service';
 export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
@@ -31,13 +30,18 @@ enum DropdownMouseState {
   selector: 'app-custom-dropdown',
   templateUrl: './custom-dropdown.component.html',
   styleUrls: ['./custom-dropdown.component.css'],
-  providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR],
+  providers: [{
+    provide: [NG_VALUE_ACCESSOR,CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR],
+    multi: true,
+    useExisting: forwardRef(() => CustomDropdownComponent)
+  }],
+  host: { '(document:click)': 'onClick($event)' },
 })
 export class CustomDropdownComponent implements OnInit, ControlValueAccessor {
   showMenu: boolean;
   isDisabled: boolean;
   selectedItem: any;
-
+  
   propagateChange = (_: any) => { };
 
   state: DropdownMouseState;
@@ -100,7 +104,7 @@ export class CustomDropdownComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  constructor(public customdrop: CustomdropdownservicesService) {
+  constructor(public customdrop: CustomdropdownservicesService,private _eref: ElementRef) {
     this.showMenu = false;
     $('#dropdown').hide();
     this.isDisabled = false;
@@ -229,5 +233,18 @@ export class CustomDropdownComponent implements OnInit, ControlValueAccessor {
     } else {
       return e.target.value.length < $(e.target).attr("maxLength");
     }
+  }
+  
+  get displayHidden() {
+    return $('.tooltips-modal#' + this.id).css('display', 'none')
+  }
+
+  get displayShow() {
+    return $('.tooltips-modal#' + this.id).css('display', 'block')
+  }
+  
+  onClick(event:any) {
+    if (!this._eref.nativeElement.contains(event.target))
+      this.displayHidden;
   }
 }

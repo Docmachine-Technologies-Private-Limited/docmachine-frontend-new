@@ -14,8 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class NgInputComponent implements OnInit,ControlValueAccessor {
   @Input('item') item: any = {};
-  @Output('event') event: any = new EventEmitter();
-
+  @Output('event') event: any = new EventEmitter();   
   onChange: any = () => { };
   onTouch: any = () => { };
 

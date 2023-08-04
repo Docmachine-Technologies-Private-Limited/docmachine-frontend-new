@@ -5,7 +5,7 @@
                     class="checkmark-after" *ngIf="item?.isToggle==true"></span></span>
             <input type="radio" [value]="item?.value" [ngModel]="value"
                 (ngModelChange)="change($event,i);item.isToggle=!item?.isToggle" name="radio" />
-            {{item?.text}}
+            <span class="radio-span-text">{{item?.text}}</span>
         </label>
     </div>
 </ng-container>

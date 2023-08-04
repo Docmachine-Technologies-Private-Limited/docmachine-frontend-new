@@ -52,12 +52,12 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
         if (elementvalue[0]?.encodedName == '/Tx') {
           element?.setFontSize(11);
           element?.enableReadOnly();
-          const [widget] :any = element?.acroField?.getWidgets();
+          const [widget]: any = element?.acroField?.getWidgets();
           widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
           element?.enableCombing(); // trying to restore combing
         }
       });
-      
+
       getAllFields[0]?.setText('');
       getAllFields[1]?.setText('');
       getAllFields[2]?.setText('');
@@ -78,45 +78,46 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[16]?.setText('');
       getAllFields[17]?.setText('');
       getAllFields[18]?.setText('');
-      getAllFields[19]?.check()
-      getAllFields[20]?.check()
-      getAllFields[21]?.setText(filldata[2][0]?.bank);
-      getAllFields[22]?.setText(filldata[2][0]?.bicAddress);
-      getAllFields[23]?.setText(filldata[0][0] != undefined ? filldata[0][0]['commercialdetails'][0]?.commercialNumber : '');
-      getAllFields[24]?.check()
-      getAllFields[25]?.check()
-      getAllFields[26]?.setText(this.SELECT_BUYER_DETAILS?.buyerbank + '' + this.SELECT_BUYER_DETAILS?.buyerbankaddress);
-      getAllFields[29]?.setText(this.FIRX_DATE_NO?.NUMBER.join(','));
-      getAllFields[30]?.setText(this.FIRX_DATE_NO?.DATE.join(','));
-      getAllFields[31]?.setText(this.CURRENCY);
-      getAllFields[32]?.setText(!isNaN(this.TOTAL_SUM_FIREX) ? this.TOTAL_SUM_FIREX.toString() : '0');
-      getAllFields[33]?.setText(filldata[0][0]?.invoices[0]?.currency);
-      getAllFields[34]?.setText(filldata[0][0]?.invoices[0]?.amount);
-      if (filldata[0][0]?.balanceAvai!=undefined) {
-        if (filldata[0][0]?.balanceAvai> (this.TOTAL_SUM_FIREX+this.TOTAL_SUM_FIREX_COMMISION)) {
-          getAllFields[35]?.check();
-          getAllFields[36]?.uncheck();
-          getAllFields[27]?.check()
-          getAllFields[28]?.uncheck()
-        } else {
-          getAllFields[36]?.check();
-          getAllFields[35]?.uncheck();
+      getAllFields[19]?.uncheck()
+      getAllFields[20]?.uncheck()
+      getAllFields[21]?.setText(filldata[2][0]?.bank + '\n' + filldata[2][0]?.bicAddress);
+      getAllFields[22]?.uncheck()
+      getAllFields[23]?.uncheck()
+      getAllFields[24]?.setText(filldata[0][0] != undefined ? filldata[0][0]['commercialdetails'][0]?.commercialNumber : '');
+      getAllFields[25]?.setText(this.SELECT_BUYER_DETAILS?.buyerbank + '' + this.SELECT_BUYER_DETAILS?.buyerbankaddress);
+
+      if (filldata[0][0]?.balanceAvai != undefined) {
+        if (filldata[0][0]?.balanceAvai > (this.TOTAL_SUM_FIREX + this.TOTAL_SUM_FIREX_COMMISION)) {
+          getAllFields[26]?.check()
           getAllFields[27]?.uncheck()
-          getAllFields[28]?.check()
+        } else {
+          getAllFields[26]?.uncheck()
+          getAllFields[27]?.check()
         }
+      }else{
+        getAllFields[26]?.uncheck()
+        getAllFields[27]?.uncheck()
       }
-      getAllFields[37]?.setText(filldata[0][0]?.invoices[0]?.amount != undefined ? this.ConvertNumberToWords(filldata[0][0]?.invoices[0]?.amount) : '0');
+      getAllFields[28]?.setText(this.FIRX_DATE_NO?.NUMBER.join(','));
+      getAllFields[29]?.setText(this.FIRX_DATE_NO?.DATE.join(','));
+      getAllFields[30]?.setText(this.CURRENCY);
+      getAllFields[31]?.setText(!isNaN(this.TOTAL_SUM_FIREX) ? this.TOTAL_SUM_FIREX.toString() : '0');
+      getAllFields[32]?.setText(this.CURRENCY);
+      getAllFields[33]?.setText(filldata[0][0]?.invoices[0]?.amount != undefined ? this.ConvertNumberToWords(filldata[0][0]?.invoices[0]?.amount) : '0');
+      getAllFields[34]?.setText(filldata[0][0]?.invoices[0]?.amount);
+      getAllFields[35]?.uncheck();
+      getAllFields[36]?.uncheck();
+      getAllFields[37]?.setText('');
       getAllFields[38]?.setText('');
       getAllFields[39]?.setText('');
-      getAllFields[40]?.setText('');
+      getAllFields[40]?.setText(filldata[7]?.HS_CODE);
       getAllFields[41]?.setText('');
-      getAllFields[42]?.setText('');
-      getAllFields[43]?.setText(filldata[0][0]?.countryOfFinaldestination);
-      getAllFields[44]?.setText(filldata[0][0] != undefined ? filldata[0][0]['blcopydetails'][0]?.airwayBlCopyNumber : '');
-      getAllFields[45]?.setText(this.SB_NO?.toString());
-      getAllFields[46]?.setText(filldata[0][0]?.portCode);
-      getAllFields[47]?.setText(filldata[0][0]?.sbdate);
-
+      getAllFields[42]?.setText(filldata[0][0]?.countryOfFinaldestination);
+      getAllFields[43]?.setText(filldata[0][0] != undefined ? filldata[0][0]['blcopydetails'][0]?.airwayBlCopyNumber : '');
+      getAllFields[44]?.setText(this.SB_NO?.toString());
+      getAllFields[45]?.setText(filldata[0][0]?.portCode);
+      getAllFields[46]?.setText(filldata[0][0]?.sbdate);
+      getAllFields[47]?.setText('');
       getAllFields[48]?.setText('');
       getAllFields[49]?.setText('');
       getAllFields[50]?.setText('');
@@ -125,41 +126,57 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[53]?.setText('');
       getAllFields[54]?.setText('');
       getAllFields[55]?.setText('');
-      
-      //  OD/CC/CA
-      getAllFields[67]?.setText(filldata[2][0]?.accNumber?.split('')[0]);
-      getAllFields[68]?.setText(filldata[2][0]?.accNumber?.split('')[1]);
-      getAllFields[69]?.setText(filldata[2][0]?.accNumber?.split('')[2]);
-      getAllFields[70]?.setText(filldata[2][0]?.accNumber?.split('')[3]);
-      getAllFields[71]?.setText(filldata[2][0]?.accNumber?.split('')[4]);
-      getAllFields[72]?.setText(filldata[2][0]?.accNumber?.split('')[5]);
-      getAllFields[73]?.setText(filldata[2][0]?.accNumber?.split('')[6]);
-      getAllFields[74]?.setText(filldata[2][0]?.accNumber?.split('')[7]);
-      getAllFields[75]?.setText(filldata[2][0]?.accNumber?.split('')[8]);
-      getAllFields[76]?.setText(filldata[2][0]?.accNumber?.split('')[9]);
-      getAllFields[78]?.setText(filldata[2][0]?.accNumber?.split('')[10]);
-      getAllFields[79]?.setText(filldata[2][0]?.accNumber?.split('')[11]);
-      getAllFields[80]?.setText(filldata[2][0]?.accNumber?.split('')[12]);
-      // getAllFields[81]?.setText(filldata[2][0]?.accNumber?.split('')[13]);
-      getAllFields[89]?.setText();
-      // End 
-      
-      // getAllFields[90]?.setText(this.FIRX_DATE_NO?.NUMBER.join(','));
-      // getAllFields[91]?.setText(this.TOTAL_SUM_FIREX.toString());
-      // getAllFields[92]?.setText(this.SB_NO?.toString());
-      // getAllFields[93]?.setText('');
-      // getAllFields[94]?.setText('');
-      // getAllFields[95]?.setText('');
+      getAllFields[56]?.setText('');
+      getAllFields[57]?.setText('');
+      getAllFields[58]?.setText('');
+      getAllFields[59]?.setText('');
+      getAllFields[60]?.setText('');
+      getAllFields[61]?.setText('');
+      getAllFields[62]?.setText('');
+      getAllFields[63]?.setText('');
+      getAllFields[64]?.setText('');
+      // OD/CC/CA
+      getAllFields[65]?.setText(filldata[2][0]?.accNumber?.split('')[0]);
+      getAllFields[66]?.setText(filldata[2][0]?.accNumber?.split('')[1]);
+      getAllFields[67]?.setText(filldata[2][0]?.accNumber?.split('')[2]);
+      getAllFields[68]?.setText(filldata[2][0]?.accNumber?.split('')[3]);
+      getAllFields[69]?.setText(filldata[2][0]?.accNumber?.split('')[4]);
+      getAllFields[70]?.setText(filldata[2][0]?.accNumber?.split('')[5]);
+      getAllFields[71]?.setText(filldata[2][0]?.accNumber?.split('')[6]);
+      getAllFields[72]?.setText(filldata[2][0]?.accNumber?.split('')[7]);
+      getAllFields[73]?.setText(filldata[2][0]?.accNumber?.split('')[8]);
+      getAllFields[74]?.setText(filldata[2][0]?.accNumber?.split('')[9]);
+      getAllFields[75]?.setText(filldata[2][0]?.accNumber?.split('')[10]);
+      getAllFields[76]?.setText(filldata[2][0]?.accNumber?.split('')[11]);
+      getAllFields[77]?.setText(filldata[2][0]?.accNumber?.split('')[12]);
+      getAllFields[78]?.setText('');
+      getAllFields[79]?.uncheck();
+      getAllFields[80]?.uncheck();
+      getAllFields[81]?.uncheck();
+      getAllFields[82]?.uncheck();
+      getAllFields[83]?.uncheck();
+      getAllFields[84]?.setText('');
+      getAllFields[85]?.uncheck();
+      getAllFields[86]?.uncheck();
+      getAllFields[87]?.uncheck();
+      getAllFields[88]?.setText('');
+      getAllFields[89]?.uncheck();
+      getAllFields[90]?.uncheck();
+      getAllFields[91]?.uncheck();
+      getAllFields[92]?.uncheck();
+      getAllFields[93]?.uncheck();
+      getAllFields[94]?.uncheck();
+      getAllFields[95]?.setText('');
       getAllFields[96]?.setText('');
       getAllFields[97]?.setText('');
       getAllFields[98]?.setText('');
       getAllFields[99]?.setText('');
       getAllFields[100]?.setText('');
-      getAllFields[101]?.setText('');
-      getAllFields[102]?.setText(this.FIRX_DATE_NO?.DATE.join(','));
-      getAllFields[103]?.setText(this.FIRX_DATE_NO?.NUMBER?.join(','));
-      getAllFields[104]?.setText(this.TOTAL_SUM_FIREX?.toString());
-      getAllFields[105]?.setText(this.SB_NO?.toString());
+      getAllFields[101]?.setText(this.FIRX_DATE_NO?.DATE.join(','));
+      getAllFields[102]?.setText(this.FIRX_DATE_NO?.NUMBER?.join(','));
+      getAllFields[103]?.setText(this.TOTAL_SUM_FIREX?.toString());
+      getAllFields[104]?.setText(this.SB_NO?.toString());
+      getAllFields[105]?.setText('');
       getAllFields[106]?.setText('');
       getAllFields[107]?.setText('');
       getAllFields[108]?.setText('');
@@ -168,7 +185,7 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[111]?.setText('');
       getAllFields[112]?.setText('');
       getAllFields[113]?.setText('');
-
+  
       const pdfBytes = await pdfDoc.save()
       console.log(pdfDoc, "pdf")
       console.log(pdfBytes, "pdfBytes")
