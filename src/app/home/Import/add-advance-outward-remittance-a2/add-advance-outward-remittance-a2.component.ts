@@ -257,6 +257,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     this.userService.getTeam()
       .subscribe(
         data => {
+          this.COMPANY_INFO = data['data'];
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
