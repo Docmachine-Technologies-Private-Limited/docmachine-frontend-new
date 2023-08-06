@@ -103,7 +103,7 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     }, 'blcopyref').subscribe((resp: any) => {
       console.log('blcopyref Invoice_No', resp)
       if (resp.data.length == 0) {
-        this.documentService.addBlcopyref(e.form.value).subscribe((res: any) => {
+        this.documentService.addBlcopyref(e.value).subscribe((res: any) => {
           console.log(res, 'addBlcopyref');
           this.toastr.success(`Blcopyref Document Added Successfully`);
           var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
@@ -129,7 +129,7 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
 
               var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
               if (Transaction_id != '') {
-                this.documentService.UpdateTransaction({ id: Transaction_id, data: { blCopyRef: e.form.value } }).subscribe((res: any) => {
+                this.documentService.UpdateTransaction({ id: Transaction_id, data: { blCopyRef: e.value } }).subscribe((res: any) => {
                   this.router.navigate(['home/Summary/Export/Bill-Lodgement-Referance-AdviceCopy']);
                 });
               } else {

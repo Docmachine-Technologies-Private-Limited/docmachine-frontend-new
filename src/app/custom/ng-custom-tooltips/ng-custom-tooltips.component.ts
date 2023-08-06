@@ -11,7 +11,8 @@ declare var $: any;
     multi: true,
     useExisting: forwardRef(() => NgCustomTooltipsComponent)
   }],
-  host: { '(document:click)': 'onClick($event)' },
+  host: {
+    '(document:click)': 'onClick($event)'},
 })
 export class NgCustomTooltipsComponent implements OnInit {
   @Input('name') name: any;

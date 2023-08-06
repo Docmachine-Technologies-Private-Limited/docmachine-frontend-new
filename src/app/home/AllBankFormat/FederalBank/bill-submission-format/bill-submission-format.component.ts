@@ -252,6 +252,8 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
     this.SB_NO = changes?.data?.currentValue[5];
     this.FILETR_AMOUNT = this.data[0].filter((item: any) => item?.sbno?.includes(this.SB_NO))
     this.TOTAL_PIPO_AMOUNT = this.FILETR_AMOUNT[0]?.invoices[0]?.amount
+    this.FIRX_DATE_NO['NUMBER']=[];
+    this.FIRX_DATE_NO['DATE']=[];
     this.TOTAL_SUM_FIREX = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
     this.TOTAL_SUM_FIREX_COMMISION = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
     this.CURRENCY = this.FILETR_AMOUNT[0]?.currency;

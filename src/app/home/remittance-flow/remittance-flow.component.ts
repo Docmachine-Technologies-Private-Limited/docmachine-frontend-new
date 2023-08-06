@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatChipsModule } from '@angular/material/chips';
 import { DocumentService } from "../../service/document.service";
 import { UserService } from '../../service/user.service';
 import * as xlsx from 'xlsx';
 import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 
 /**
  * @title Table with pagination

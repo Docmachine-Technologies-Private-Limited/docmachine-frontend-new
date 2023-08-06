@@ -39,7 +39,7 @@ import { UploadBankIntimationComponent } from './upload-bank-intimation/upload-b
 import { FooterComponent } from './footer/footer.component'
 import { MatTableModule } from '@angular/material/table'
 import { MatPaginatorModule } from '@angular/material/paginator'
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatTabsModule } from "@angular/material/tabs";
 import { InwardRemittanceBoeComponent } from './yesBank/inward-remittance-boe/inward-remittance-boe.component';
@@ -56,13 +56,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ConfirmDialogBoxComponent } from './confirm-dialog-box/confirm-dialog-box.component';
-import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.component";
 import { ExcelDownloaderCompComponent } from "./excel-downloader-comp/excel-downloader-comp.component";
 import { DatatableComponent } from "./datatable/datatable.component";
-import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-lodgement.component";
-import { ApprovalPanelComponent } from "./StatusPanel/approval-panel/approval-panel.component";
-import { PendingPanelComponent } from './StatusPanel/pending-panel/pending-panel.component';
-import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.component';
 import { AdminGuard } from "../service/RolePermission/Admin/admin.guard";
 import { SuperGuard } from "../service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "../service/RolePermission/Member/member.guard";
@@ -72,7 +67,6 @@ import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/ex
 import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
-import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance/add-advance-outward-remittance.component';
 import { UserProfilesComponent } from "./user-profiles/user-profiles.component";
 import { EmailValidatorDirective } from './Validator/email/email-validator.directive';
 import { PhoneValidatorDirective } from './Validator/phone/phone-validator.directive';
@@ -82,21 +76,14 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
 import { EditCompanyComponent } from "./edit-company/edit-company.component";
 import { PdfViewerModule } from "ng2-pdf-viewer";
 import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
-import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
 import { ImportNewDirectDispatchComponent } from "./Import-New-Direct-Dispatch/Import-New-Direct-Dispatch.component";
 import { MergePdfListService } from "./merge-pdf-list.service";
 import { BoeBillService } from '../service/homeservices/BoeBill/boe-bill.service';
-import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
-import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
-import { TransactionDashboardComponent } from "../transaction-dashboard/transaction-dashboard.component";
 import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.component';
 import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
-import { ExportHomeComponent } from "./Export/export-home/export-home.component";
-import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credit-Panel.component";
 import { ForwardContractAddComponent } from './Import/Treasury/ForwardContract/forward-contract-add/forward-contract-add.component';
 import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContract/forward-contract-summary/forward-contract-summary.component';
 import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-based-sing-up.component";
-import { AddAdvanceOutwardRemittanceA2Component } from "./Import/add-advance-outward-remittance-a2/add-advance-outward-remittance-a2.component";
 import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxscheduler.component";
 import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.component";
 import { MasterUploadComponent } from "../components/Upload/master-upload/master-upload.component";
@@ -129,7 +116,6 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
     FooterComponent,
     ConfirmDialogBoxComponent,
     ExcelDownloaderCompComponent,
-    SubBillLodgementComponent,
     RemittanceFlowComponent,
     EditBuyerComponent,
     EditBeneComponent,
@@ -139,20 +125,11 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
     EditRemittanceComponent,
     RemittanceSummaryComponent,
     AddRemittanceComponent,
-    AddAdvanceOutwardRemittanceComponent,
-    AddAdvanceOutwardRemittanceA2Component,
     EditCompanyComponent,
     NewBillUnderCollectionComponent,
-    NewDirectDispatchComponent,
     ImportNewDirectDispatchComponent,
-    ImportDirectPaymentComponent,
-    PackingCreditRequestComponent,
-    TransactionDashboardComponent,
     AdminPanelComponent,
     SuperAdminPanelComponent,
-    ExportHomeComponent,
-    UploadDocComponent,
-    BuyerCreditPanelComponent,
     ForwardContractAddComponent,
     ForwardContractSummaryComponent,
     RoleBasedSingUpComponent,
@@ -199,6 +176,9 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
 
           { path: "Status", loadChildren: () => import('./StatusPanel/status-panel.module').then(mod => mod.StatusPanelModule), canActivate: [MemberGuard] },
           
+          { path: "Transaction/Export", loadChildren: () => import('./Transaction/Export/export-transaction.module').then(mod => mod.ExportTransactionModule), canActivate: [MemberGuard] },
+          { path: "Transaction/Import", loadChildren: () => import('./Transaction/Import/import-transaction.module').then(mod => mod.ImportTransactionModule), canActivate: [MemberGuard] },
+          
           { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward-remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule), canActivate: [MemberGuard] },
           { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule), canActivate: [MemberGuard] },
           { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule), canActivate: [MemberGuard] },
@@ -211,19 +191,14 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
           { path: "edpms-recon", component: EdpmsReconComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "idpms-recon-table", loadChildren: () => import('./idpms-recon-table/idpms-recon-table.module').then(mod => mod.IdpmsReconTableModule), canActivate: [MemberGuard] },
           { path: "idpms-recon", component: IdpmsReconComponent, pathMatch: "full", canActivate: [MemberGuard] },
-          { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule), canActivate: [MemberGuard] },
-          { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule), canActivate: [MemberGuard] },
-          { path: "export-home", component: ExportHomeComponent, canActivate: [MemberGuard] },
-          { path: "export-home/:id", component: ExportHomeComponent, canActivate: [MemberGuard] },
           { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule), canActivate: [MemberGuard] },
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule), canActivate: [MemberGuard] },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule), canActivate: [MemberGuard] },
-          { path: "Pdf-Upload", component: UploadDocComponent },
           { path: "Excel-Downloader", component: ExcelDownloaderCompComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "account", component: EditCompanyComponent, canActivate: [AdminMemberGuard] },
           { path: "user-profiles", component: UserProfilesComponent, pathMatch: "full", canActivate: [AdminMemberGuard] },
           { path: "data-table", component: DatatableComponent, pathMatch: "full", canActivate: [MemberGuard] },
-          { path: "Sub-bill-Lodgement", component: SubBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
+         
           { path: "createBene", component: CreateBeneComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "inwardRemittance", component: InwardRemittanceComponent, pathMatch: "full", canActivate: [MemberGuard] },
 
@@ -463,55 +438,14 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
             canActivate: [MemberGuard]
           },
           {
-            path: "add-advance-outward-remittance",
-            component: AddAdvanceOutwardRemittanceComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "add-advance-outward-remittance-a2",
-            component: AddAdvanceOutwardRemittanceA2Component,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "Import-Direct-Payment",
-            component: ImportDirectPaymentComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "Buyer-Credit-Panel",
-            component: BuyerCreditPanelComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
             path: "new-Bill-Under-Collection",
             component: NewBillUnderCollectionComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
           {
-            path: "direct-dispatch",
-            component: NewDirectDispatchComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "Packing-Credit-Request-New",
-            component: PackingCreditRequestComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
             path: "import-direct-dispatch",
             component: ImportNewDirectDispatchComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          }, {
-            path: "Transaction-Dashboard/:id",
-            component: TransactionDashboardComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
