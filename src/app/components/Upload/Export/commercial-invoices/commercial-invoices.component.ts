@@ -142,7 +142,7 @@ export class CommercialInvoicesComponent implements OnInit {
             console.log('commercial', data);
             this.documentService.updateMasterBySb(e.value, selectedShippingBill?.sbno, selectedShippingBill?._id).subscribe((data) => {
               console.log('DATA', data);
-              this.router.navigate(['home/commercial']);
+              this.router.navigate(['home/Summary/Export/commercial']);
             },
               (error) => {
                 console.log('error');

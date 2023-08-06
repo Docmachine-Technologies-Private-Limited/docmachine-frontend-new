@@ -108,7 +108,7 @@ export class ImportCreditNoteComponent implements OnInit {
               (data) => {
                 console.log(' credit Note document', this.pipourl1);
                 console.log(data);
-                this.router.navigate(['home/importCredit']);
+                this.router.navigate(['home/Summary/Import/Credit']);
               },
               (error) => {
                 console.log('error');

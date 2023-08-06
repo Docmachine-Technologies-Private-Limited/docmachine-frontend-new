@@ -120,7 +120,7 @@ export class MasterServiceAgreementsComponent implements OnInit {
                 (data) => {
                   console.log('king123');
                   console.log(data);
-                  this.router.navigate(['/home/master-services']);
+                  this.router.navigate(['home/Summary/Export/master-services']);
                 },
                 (error) => {
                   console.log('error');

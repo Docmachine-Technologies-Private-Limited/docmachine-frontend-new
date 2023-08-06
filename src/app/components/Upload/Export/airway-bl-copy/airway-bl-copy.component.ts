@@ -123,7 +123,7 @@ export class AirwayBlCopyComponent implements OnInit {
               selectedShippingBill?._id
             ).subscribe((data) => {
               console.log('DATA', data);
-              this.router.navigate(['/home/airway-bl-copy']);
+              this.router.navigate(['home/Summary/Export/airway-bl-copy']);
             },
               (error) => {
                 console.log('error');

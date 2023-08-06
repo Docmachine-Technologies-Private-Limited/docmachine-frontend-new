@@ -104,7 +104,7 @@ export class BillOfExchangesComponent implements OnInit {
             }
             this.userService.updateManyPipo(this.pipoArr, 'billOfExchange', this.pipourl1, updatedData).subscribe((data) => {
               console.log(data);
-              this.router.navigate(['/home/bill-of-exchange']);
+              this.router.navigate(['home/Summary/Export/bill-of-exchange']);
             }, (error) => {
               console.log('error');
             }

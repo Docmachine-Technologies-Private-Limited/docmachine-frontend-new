@@ -100,7 +100,7 @@ export class ImportAirwayBlCopyComponent implements OnInit {
           }
           this.userService.updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData).subscribe((data) => {
             console.log(data);
-            this.router.navigate(['home/import-airway-bl-copy']);
+            this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);
           },
             (error) => {
               console.log('error');

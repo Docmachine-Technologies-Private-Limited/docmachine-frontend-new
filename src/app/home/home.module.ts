@@ -98,84 +98,14 @@ import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContra
 import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-based-sing-up.component";
 import { AddAdvanceOutwardRemittanceA2Component } from "./Import/add-advance-outward-remittance-a2/add-advance-outward-remittance-a2.component";
 import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxscheduler.component";
-import { ShippingBillComponent } from '../components/Upload/Export/shipping-bill/shipping-bill.component';
-import { CreditNoteComponent } from '../components/Upload/Export/credit-note/credit-note.component';
-import { InsurancedocumentsComponent } from '../components/Upload/Export/insurancedocuments/insurancedocuments.component';
-import { LetterofCreditComponent } from '../components/Upload/Export/letterof-credit/letterof-credit.component';
-import { MasterServiceAgreementsComponent } from '../components/Upload/Export/master-service-agreements/master-service-agreements.component';
-import { TripartyAgreementsComponent } from '../components/Upload/Export/triparty-agreements/triparty-agreements.component';
-import { OpinionReportsComponent } from '../components/Upload/Export/opinion-reports/opinion-reports.component';
-import { InwardRemittanceAdviceComponent } from '../components/Upload/Export/inward-remittance-advice/inward-remittance-advice.component';
-import { AirwayBlCopyComponent } from '../components/Upload/Export/airway-bl-copy/airway-bl-copy.component';
-import { BillOfExchangesComponent } from '../components/Upload/Export/bill-of-exchanges/bill-of-exchanges.component';
-import { DestructionCertificatesComponent } from '../components/Upload/Export/destruction-certificates/destruction-certificates.component';
-import { PackingListInvoicesComponent } from '../components/Upload/Export/packing-list-invoices/packing-list-invoices.component';
-import { CommercialInvoicesComponent } from '../components/Upload/Export/commercial-invoices/commercial-invoices.component';
-import { DebitNotesComponent } from "../components/Upload/Export/debit-note/debit-note.component";
-import { PIPOSComponent } from "../components/Upload/Export/pipos/pipos.component";
-
-import { ImportPIPOSComponent } from "../components/Upload/Import/import-pipos/import-pipos.component";
-import { BOEComponent } from "./../components/Upload/Import/import-BOE/boe.component";
-import { ImportCreditNoteComponent } from '../components/Upload/Import/import-credit-note/import-credit-note.component';
-import { ImportInsurancedocumentsComponent } from '../components/Upload/Import/import-insurancedocuments/import-insurancedocuments.component';
-import { ImportLetterofCreditComponent } from '../components/Upload/Import/import-letterof-credit/import-letterof-credit.component';
-import { ImportMasterServiceAgreementsComponent } from '../components/Upload/Import/import-master-service-agreements/import-master-service-agreements.component';
-import { ImportTripartyAgreementsComponent } from '../components/Upload/Import/import-triparty-agreements/import-triparty-agreements.component';
-import { ImportOpinionReportComponent } from '../components/Upload/Import/import-opinion-reports/import-opinion-reports.component';
-import { ImportOutwardRemittanceAdviceComponent } from '../components/Upload/Import/import-outward-remittance-advice/import-inward-remittance-advice.component';
-import { ImportAirwayBlCopyComponent } from '../components/Upload/Import/import-airway-bl-copy/import-airway-bl-copy.component';
-import { ImportBillOfExchangesComponent } from '../components/Upload/Import/import-bill-of-exchanges/import-bill-of-exchanges.component';
-import { ImportDestructionCertificatesComponent } from '../components/Upload/Import/import-destruction-certificates/import-destruction-certificates.component';
-import { ImportPackingListInvoicesComponent } from '../components/Upload/Import/import-packing-list-invoices/import-packing-list-invoices.component';
-import { ImportCommercialInvoicesComponent } from '../components/Upload/Import/import-commercial-invoices/import-commercial-invoices.component';
-import { ImportDebitNotesComponent } from "../components/Upload/Import/import-debit-note/import-debit-note.component";
 import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.component";
 import { MasterUploadComponent } from "../components/Upload/master-upload/master-upload.component";
-import { InwardRemittanceDisposalComponent } from "./SummaryPage/Export/inward-remittance-disposal/inward-remittance-disposal.component";
-import { InwardUploadDocumentsComponent } from "./Transaction/Inward-Remittance-Disposal/inward-upload-doc.component";
-import { BillOfExchangeComponent } from "./SummaryPage/Export/bill-of-exchange/bill-of-exchange.component";
-import { CommercialComponent } from "./SummaryPage/Export/commercial/commercial.component";
-import { AirwayBLCopyComponent } from "./SummaryPage/Export/airway-blcopy/airway-blcopy.component";
-import { DestructionComponent } from "./SummaryPage/Export/destruction/destruction.component";
-import { LetterOfCreditExportLCComponent } from "./SummaryPage/Export/letter-of-credit-export-lc/letter-of-credit-export-lc.component";
-import { MasterServiceComponent } from "./SummaryPage/Export/master-service/master-service.component";
-import { ExportOpinionReportsComponent } from "./SummaryPage/Export/opinion-reports/opinion-reports.component";
-import { ExportTryPartyAgreementsComponent } from "./SummaryPage/Export/try-party-agreements/try-party-agreements.component";
-import { ImportBOEComponent } from "./SummaryPage/Import/boe/boe.component";
-import { ImportAirwayBlcopyComponent } from "./SummaryPage/Import/import-airway-blcopy/import-airway-blcopy.component";
-import { ImportBillOfExchangeComponent } from "./SummaryPage/Import/import-bill-of-exchange/import-bill-of-exchange.component";
-import { ImportCommercialComponent } from "./SummaryPage/Import/import-commercial/import-commercial.component";
-import { ImportDebitNoteComponent } from "./SummaryPage/Import/import-debit-note/import-debit-note.component";
-import { ImportDestructionComponent } from "./SummaryPage/Import/import-destruction/import-destruction.component";
-import { ImportInsuranceComponent } from "./SummaryPage/Import/import-insurance/import-insurance.component";
-import { ImportMasterServiceComponent } from "./SummaryPage/Import/import-master-service/import-master-service.component";
-import { ImportOpinionReportsComponent } from "./SummaryPage/Import/import-opinion-reports/import-opinion-reports.component";
-import { ImportOutwardRemittanceSheetComponent } from "./SummaryPage/Import/import-outward-remittance-sheet/import-outward-remittance-sheet.component";
-import { ImportTriPartyComponent } from "./SummaryPage/Import/import-tri-party/import-tri-party.component";
-import { ImportsCreditNoteComponent } from "./SummaryPage/Import/imports-credit-note/imports-credit-note.component";
-import { LetterOfCreditImportLCComponent } from "./SummaryPage/Import/letter-of-credit-import-lc/letter-of-credit-import-lc.component";
-import { OtherDocumentsComponent } from "./SummaryPage/Export/other-documents/other-documents.component";
-import { ImportOtherDocumentsComponent } from "./SummaryPage/Import/import-other-documents/import-other-documents.component";
-import { InwardRemittanceAdviceSummaryComponent } from "./SummaryPage/Export/inward-remittance-advice/inward-remittance-advice.component";
-import { InsuranceDocumentComponent } from "./SummaryPage/Export/insurance-document/insurance-document.component";
-import { CreditNoteSummaryComponent } from "./SummaryPage/Export/credit-note/credit-note.component";
-import { DebitNoteSummaryComponent } from "./SummaryPage/Export/debit-note/debit-note.component";
-import { EdpmsReconTableModule } from "./edpms-recon-table/edpms-recon-table.module";
 import { EdpmsReconComponent } from "./edpms-recon/edpms-recon.component";
 import { IdpmsReconComponent } from "./idpms-recon/idpms-recon.component";
-import { ExportSwiftCopyDocumentComponent } from '../components/Upload/Export/export-swift-copy-document/export-swift-copy-document.component';
-import { ExportBilllodgementreferencenumberadvicecopyComponent } from '../components/Upload/Export/export-billlodgementreferencenumberadvicecopy/export-billlodgementreferencenumberadvicecopy.component';
-import { ExportRealisationCertificateComponent } from '../components/Upload/Export/export-realisation-certificate/export-realisation-certificate.component';
-import { ImportSwiftCopyDocumentComponent } from '../components/Upload/Import/import-swift-copy-document/import-swift-copy-document.component';
-import { ImportRealisationCertificateComponent } from '../components/Upload/Import/import-realisation-certificate/import-realisation-certificate.component';
-import { ImportBilllodgementreferencenumberadvicecopyComponent } from '../components/Upload/Import/import-billlodgementreferencenumberadvicecopy/import-billlodgementreferencenumberadvicecopy.component';
-import { ExportBilllodgementreferencenumberadvicecopySummaryComponent } from "./SummaryPage/Export/export-billlodgementreferencenumberadvicecopy-summary/export-billlodgementreferencenumberadvicecopy-summary.component";
-import { ExportRealisationCertificateSummaryComponent } from "./SummaryPage/Export/export-realisation-certificate-summary/export-realisation-certificate-summary.component";
-import { ExportSwiftCopyDocumentSummaryComponent } from "./SummaryPage/Export/export-swift-copy-document-summary/export-swift-copy-document-summary.component";
-import { ImportBilllodgementreferencenumberadvicecopySummaryComponent } from "./SummaryPage/Import/import-billlodgementreferencenumberadvicecopy-summary/import-billlodgementreferencenumberadvicecopy-summary.component";
-import { ImportRealisationCertificateSummaryComponent } from "./SummaryPage/Import/import-realisation-certificate-summary/import-realisation-certificate-summary.component";
-import { ImportSwiftCopyDocumentSummaryComponent } from "./SummaryPage/Import/import-swift-copy-document-summary/import-swift-copy-document-summary.component";
-import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo-documents.component";
+import { ExportUploadModule } from "../components/Upload/Export/export-upload.module";
+import { ImportUploadModule } from "../components/Upload/Import/import-upload.module";
+import { ExportSummaryModule } from "./SummaryPage/Export/export-summary.module";
+import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module";
 
 @NgModule({
   declarations: [
@@ -200,9 +130,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
     ConfirmDialogBoxComponent,
     ExcelDownloaderCompComponent,
     SubBillLodgementComponent,
-    ApprovalPanelComponent,
-    PendingPanelComponent,
-    RejectPanelComponent,
     RemittanceFlowComponent,
     EditBuyerComponent,
     EditBeneComponent,
@@ -229,92 +156,10 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
     ForwardContractAddComponent,
     ForwardContractSummaryComponent,
     RoleBasedSingUpComponent,
-    ShippingBillComponent,
-    CreditNoteComponent,
-    InsurancedocumentsComponent,
-    LetterofCreditComponent,
-    MasterServiceAgreementsComponent,
-    TripartyAgreementsComponent,
-    OpinionReportsComponent,
-    InwardRemittanceAdviceComponent,
-    AirwayBlCopyComponent,
-    BillOfExchangesComponent,
-    DestructionCertificatesComponent,
-    PackingListInvoicesComponent,
-    CommercialInvoicesComponent,
-    DebitNotesComponent,
-    PIPOSComponent,
-    ImportPIPOSComponent,
-    BOEComponent,
-    ImportCreditNoteComponent,
-    ImportInsurancedocumentsComponent,
-    ImportLetterofCreditComponent,
-    ImportTripartyAgreementsComponent,
-    ImportOpinionReportComponent,
-    ImportOutwardRemittanceAdviceComponent,
-    ImportAirwayBlCopyComponent,
-    ImportBillOfExchangesComponent,
-    ImportDestructionCertificatesComponent,
-    ImportPackingListInvoicesComponent,
-    ImportCommercialInvoicesComponent,
-    ImportDebitNotesComponent,
-    ImportMasterServiceAgreementsComponent,
-    ImportOpinionReportComponent,
     NewLcInsuranceComponent,
     MasterUploadComponent,
-    InwardRemittanceDisposalComponent,
-    InwardUploadDocumentsComponent,
-    AirwayBLCopyComponent,
-    BillOfExchangeComponent,
-    CommercialComponent,
-    CreditNoteComponent,
-    DestructionComponent,
-    LetterOfCreditExportLCComponent,
-    MasterServiceComponent,
-    ExportOpinionReportsComponent,
-    ExportTryPartyAgreementsComponent,
-    ImportBOEComponent,
-    LetterOfCreditImportLCComponent,
-    ImportsCreditNoteComponent,
-    ImportTriPartyComponent,
-    ImportOutwardRemittanceSheetComponent,
-    ImportOpinionReportsComponent,
-    ImportMasterServiceComponent,
-    ImportInsuranceComponent,
-    ImportDestructionComponent,
-    ImportCommercialComponent,
-    ImportBillOfExchangeComponent,
-    ImportAirwayBlcopyComponent,
-    ImportBOEComponent,
-    ExportTryPartyAgreementsComponent,
-    MasterServiceComponent,
-    LetterOfCreditExportLCComponent,
-    DestructionComponent,
-    AirwayBLCopyComponent,
-    CommercialComponent,
-    BillOfExchangeComponent,
-    ImportDebitNoteComponent,
-    OtherDocumentsComponent,
-    ImportOtherDocumentsComponent,
-    InwardRemittanceAdviceSummaryComponent,
-    InsuranceDocumentComponent,
-    CreditNoteSummaryComponent,
-    DebitNoteSummaryComponent,
     EdpmsReconComponent,
     IdpmsReconComponent,
-    ExportSwiftCopyDocumentComponent,
-    ExportBilllodgementreferencenumberadvicecopyComponent,
-    ExportRealisationCertificateComponent,
-    ImportSwiftCopyDocumentComponent,
-    ImportRealisationCertificateComponent,
-    ImportBilllodgementreferencenumberadvicecopyComponent,
-    ExportBilllodgementreferencenumberadvicecopySummaryComponent,
-    ExportRealisationCertificateSummaryComponent,
-    ExportSwiftCopyDocumentSummaryComponent,
-    ImportBilllodgementreferencenumberadvicecopySummaryComponent,
-    ImportRealisationCertificateSummaryComponent,
-    ImportSwiftCopyDocumentSummaryComponent,
-    PipoDocumentsComponent
   ],
   imports: [
     SharedHomeModule,
@@ -333,7 +178,10 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
     ProgressBarModule,
     ReactiveFormsModule,
     PdfViewerModule,
-    EdpmsReconTableModule,
+    ExportUploadModule,
+    ImportUploadModule,
+    ExportSummaryModule,
+    ImportSummaryModule,
     RouterModule.forChild([
       {
         path: "",
@@ -341,159 +189,28 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
         children: [
           { path: "dashboardTask", loadChildren: () => import('./dashboard-task/dashboard-task.module').then(mod => mod.DashboardTaskModule) },
           { path: "upload", loadChildren: () => import('./upload/upload.module').then(mod => mod.UploadModule), canActivate: [MemberGuard] },
-          {
-            path: "manage-customer",
-            loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule),
-            canActivate: [AdminMemberGuard]
-          },
+          { path: "manage-customer", loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule), canActivate: [AdminMemberGuard] },
           { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule), canActivate: [MemberGuard] },
-          {
-            path: "pipo-doc", component: PipoDocumentsComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "boe", component: ImportBOEComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "importCredit", component: ImportsCreditNoteComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "importDebit", component: ImportDebitNoteComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "importInsurance", component: ImportInsuranceComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "importTriParty", component: ImportTriPartyComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
+          { path: "upload-documents/Export", loadChildren: () => import('../components/Upload/Export/export-upload.module').then(mod => mod.ExportUploadModule), canActivate: [MemberGuard] },
+          { path: "upload-documents/Import", loadChildren: () => import('../components/Upload/Import/import-upload.module').then(mod => mod.ImportUploadModule), canActivate: [MemberGuard] },
 
-          { path: "Export-Bill-Lodgement-Referance-AdviceCopy", component: ExportBilllodgementreferencenumberadvicecopySummaryComponent, canActivate: [MemberGuard] },
-          { path: "Export-Realisation-Cretificate", component: ExportRealisationCertificateSummaryComponent, canActivate: [MemberGuard] },
-          { path: "Export-Swift-Copy-Documents", component: ExportSwiftCopyDocumentSummaryComponent, canActivate: [MemberGuard] },
+          { path: "Summary/Export", loadChildren: () => import('./SummaryPage/Export/export-summary.module').then(mod => mod.ExportSummaryModule), canActivate: [MemberGuard] },
+          { path: "Summary/Import", loadChildren: () => import('./SummaryPage/Import/import-summary.module').then(mod => mod.ImportSummaryModule), canActivate: [MemberGuard] },
 
-          { path: "Import-Bill-Lodgement-Referance-AdviceCopy", component: ImportBilllodgementreferencenumberadvicecopySummaryComponent, canActivate: [MemberGuard] },
-          { path: "Import-Realisation-Cretificate", component: ImportRealisationCertificateSummaryComponent, canActivate: [MemberGuard] },
-          { path: "Import-Swift-Copy-Documents", component: ImportSwiftCopyDocumentSummaryComponent, canActivate: [MemberGuard] },
-
+          { path: "Status", loadChildren: () => import('./StatusPanel/status-panel.module').then(mod => mod.StatusPanelModule), canActivate: [MemberGuard] },
+          
           { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward-remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule), canActivate: [MemberGuard] },
           { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule), canActivate: [MemberGuard] },
           { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule), canActivate: [MemberGuard] },
           { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule), canActivate: [MemberGuard] },
-          {
-            path: "lc-isurance",
-            component: NewLcInsuranceComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
+          { path: "lc-isurance", component: NewLcInsuranceComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "lc-isurance1", loadChildren: () => import('./lc-isurence/lc-isurance.module').then(mod => mod.LcIsuranceModule), canActivate: [MemberGuard] },
           { path: "buyer-credit", loadChildren: () => import('./buyers-credit-request/buyers-credit-request-module').then(mod => mod.BuyersCreditRequestModule), canActivate: [MemberGuard] },
           { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule), canActivate: [MemberGuard] },
           { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule), canActivate: [MemberGuard] },
-          {
-            path: "packing-list", component: OtherDocumentsComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "import-packing-list", component: ImportOtherDocumentsComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "commercial",
-            component: CommercialComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "import-commercial", component: ImportCommercialComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "destruction", component: DestructionComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "import-destruction", component: ImportDestructionComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "bill-of-exchange",
-            component: BillOfExchangeComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "import-bill-of-exchange", component: ImportBillOfExchangeComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          { path: "airway-bl-copy", component: AirwayBLCopyComponent, pathMatch: "full", canActivate: [MemberGuard] },
-          {
-            path: "import-airway-bl-copy", component: ImportAirwayBlcopyComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "inward-remittance-advice", component: InwardRemittanceAdviceSummaryComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "outward-remittance-advice", component: ImportOutwardRemittanceSheetComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "opinion-report", component: ExportOpinionReportsComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "import-opinion-report", component: ImportOpinionReportsComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "try-party", component: ExportTryPartyAgreementsComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "master-services", component: MasterServiceComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "import-master-services", component: ImportMasterServiceComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "letterofcredit-lc", component: LetterOfCreditExportLCComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "letterofcredit-import-lc", component: LetterOfCreditImportLCComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "insurance-document", component: InsuranceDocumentComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "debit-note", component: DebitNoteSummaryComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          {
-            path: "credit-note", component: CreditNoteSummaryComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
-          { path: "view-document", loadChildren: () => import('./SummaryPage/Export/view-document/view-document.module').then(mod => mod.ViewDocumentModule), canActivate: [MemberGuard] },
-          { path: "edpms-recon-table", loadChildren: () => import('./edpms-recon-table/edpms-recon-table.module').then(mod => mod.EdpmsReconTableModule), canActivate: [MemberGuard] },
-          {
-            path: "edpms-recon",
-            component: EdpmsReconComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
+          { path: "edpms-recon", component: EdpmsReconComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "idpms-recon-table", loadChildren: () => import('./idpms-recon-table/idpms-recon-table.module').then(mod => mod.IdpmsReconTableModule), canActivate: [MemberGuard] },
-          {
-            path: "idpms-recon", component: IdpmsReconComponent,
-            pathMatch: "full", canActivate: [MemberGuard]
-          },
+          { path: "idpms-recon", component: IdpmsReconComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule), canActivate: [MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule), canActivate: [MemberGuard] },
           { path: "export-home", component: ExportHomeComponent, canActivate: [MemberGuard] },
@@ -502,43 +219,13 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule), canActivate: [MemberGuard] },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule), canActivate: [MemberGuard] },
           { path: "Pdf-Upload", component: UploadDocComponent },
-          {
-            path: "Excel-Downloader",
-            component: ExcelDownloaderCompComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
+          { path: "Excel-Downloader", component: ExcelDownloaderCompComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "account", component: EditCompanyComponent, canActivate: [AdminMemberGuard] },
-          {
-            path: "user-profiles",
-            component: UserProfilesComponent,
-            pathMatch: "full",
-            canActivate: [AdminMemberGuard]
-          },
-          {
-            path: "data-table",
-            component: DatatableComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "Sub-bill-Lodgement",
-            component: SubBillLodgementComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "createBene",
-            component: CreateBeneComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "inwardRemittance",
-            component: InwardRemittanceComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
+          { path: "user-profiles", component: UserProfilesComponent, pathMatch: "full", canActivate: [AdminMemberGuard] },
+          { path: "data-table", component: DatatableComponent, pathMatch: "full", canActivate: [MemberGuard] },
+          { path: "Sub-bill-Lodgement", component: SubBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
+          { path: "createBene", component: CreateBeneComponent, pathMatch: "full", canActivate: [MemberGuard] },
+          { path: "inwardRemittance", component: InwardRemittanceComponent, pathMatch: "full", canActivate: [MemberGuard] },
 
           {
             path: "edit-remittance",
@@ -655,8 +342,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
-
-          // { path: "fbg-wavier", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule) },
           {
             path: "advance-remittance-fbg",
             component: AdvanceRemitanceFbgComponent,
@@ -669,22 +354,12 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
-          // {
-          //   path: "completedTask/:id",
-          //   component: CompletedTaskComponent,
-          //   pathMatch: "full",
-          // },
           {
             path: "inwardRemittanceBoe",
             component: InwardRemittanceBoeComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
-          // {
-          //   path: "paymentAcceptance",
-          //   component: PaymentAcceptanceLetterComponent,
-          //   pathMatch: "full",
-          // },
           {
             path: "tradeRequestLetter",
             component: TradeRequestLetterComponent,
@@ -723,11 +398,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
-          // {
-          //   path: "tasks/:file",
-          //   component: AllTaskComponent,
-          //   pathMatch: "full",
-          // },
           {
             path: "inwardRemmitancep0103",
             component: InwardRemmitancep0103Component,
@@ -763,22 +433,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
             pathMatch: "full",
           },
           {
-            path: "approvalpanel",
-            component: ApprovalPanelComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "pendingpanel",
-            component: PendingPanelComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          }, {
-            path: "rejectpanel",
-            component: RejectPanelComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          }, {
             path: "ImportCredit",
             component: CreateNoteComponent,
             pathMatch: "full",
@@ -787,36 +441,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
           {
             path: "ImportDebit",
             component: DebitNoteComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "ImportBillOfExchange",
-            component: ImportBillOfExchangeComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "ImportOpinionReports",
-            component: ImportOpinionReportsComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "letterOfCreditLCImport",
-            component: LetterOfCreditImportLCComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "MasterService",
-            component: MasterServiceComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "ImportMasterService",
-            component: ImportMasterServiceComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
@@ -910,18 +534,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
             canActivate: [MemberGuard]
           },
           {
-            path: "Inward-Remittance-Disposal",
-            component: InwardRemittanceDisposalComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "Upload-Inward-Remittance-Disposal",
-            component: InwardUploadDocumentsComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
             path: "Sheduler-Calender",
             component: CustomJPXSchedulerComponent,
             pathMatch: "full",
@@ -930,48 +542,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
           { path: "SuperAdminPanel", pathMatch: "full", component: SuperAdminPanelComponent, canActivate: [SuperGuard] },
           { path: "AdminPanel", pathMatch: "full", component: AdminPanelComponent, canActivate: [AdminGuard] },
           { path: "RoleBase", component: RoleBasedSingUpComponent, pathMatch: "full", canActivate: [SuperGuard] },
-
-          // Export Upload
-          { path: "upload-documents/Export/Shippingbill", component: ShippingBillComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/Insurancedocuments", component: InsurancedocumentsComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/LetterofCredit", component: LetterofCreditComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/MasterServiceAgreements", component: MasterServiceAgreementsComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/TripartyAgreements", component: TripartyAgreementsComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/AirwayBlCopy", component: AirwayBlCopyComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/BillOfExchanges", component: BillOfExchangesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/DestructionCertificates", component: DestructionCertificatesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/PackingListInvoices", component: PackingListInvoicesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/CommercialInvoices", component: CommercialInvoicesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/OpinionReports", component: OpinionReportsComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/InwardRemittanceAdvice", component: InwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/InwardRemittanceAdvice/:id?", component: InwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/CreditNoteDocument", component: CreditNoteComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/DebitNoteDocument", component: DebitNotesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/PIPO", component: PIPOSComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/Bill-Lodgement-Referance-AdviceCopy", component: ExportBilllodgementreferencenumberadvicecopyComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/Realisation-Cretificate", component: ExportRealisationCertificateComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Export/Swift-Copy-Documents", component: ExportSwiftCopyDocumentComponent, canActivate: [MemberGuard] },
-
-          // Import Upload
-          { path: "upload-documents/Import/Boe", component: BOEComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/Insurancedocuments", component: ImportInsurancedocumentsComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/LetterofCredit", component: ImportLetterofCreditComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/MasterServiceAgreements", component: ImportMasterServiceAgreementsComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/TripartyAgreements", component: ImportTripartyAgreementsComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/AirwayBlCopy", component: ImportAirwayBlCopyComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/BillOfExchanges", component: ImportBillOfExchangesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/DestructionCertificates", component: ImportDestructionCertificatesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/PackingListInvoices", component: ImportPackingListInvoicesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/CommercialInvoices", component: ImportCommercialInvoicesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/OpinionReports", component: ImportOpinionReportComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/OutwardRemittanceAdvice", component: ImportOutwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/OutwardRemittanceAdvice/:id?", component: ImportOutwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/CreditNoteDocument", component: ImportCreditNoteComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/DebitNoteDocument", component: ImportDebitNotesComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/PIPO", component: ImportPIPOSComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/Bill-Lodgement-Referance-AdviceCopy", component: ImportBilllodgementreferencenumberadvicecopyComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/Realisation-Cretificate", component: ImportRealisationCertificateComponent, canActivate: [MemberGuard] },
-          { path: "upload-documents/Import/Swift-Copy-Documents", component: ImportSwiftCopyDocumentComponent, canActivate: [MemberGuard] }
         ],
       },
     ]),
@@ -984,36 +554,6 @@ import { PipoDocumentsComponent } from "./SummaryPage/Import/pipo-documents/pipo
     MatProgressBarModule,
     MatTabsModule,
     SharedHomeModule,
-    ShippingBillComponent,
-    InsurancedocumentsComponent,
-    LetterofCreditComponent,
-    MasterServiceAgreementsComponent,
-    TripartyAgreementsComponent,
-    AirwayBlCopyComponent,
-    BillOfExchangesComponent,
-    DestructionCertificatesComponent,
-    PackingListInvoicesComponent,
-    CommercialInvoicesComponent,
-    OpinionReportsComponent,
-    InwardRemittanceAdviceComponent,
-    CreditNoteComponent,
-    DebitNotesComponent,
-    PIPOSComponent,
-    BOEComponent,
-    ImportInsurancedocumentsComponent,
-    ImportLetterofCreditComponent,
-    ImportMasterServiceAgreementsComponent,
-    ImportTripartyAgreementsComponent,
-    ImportAirwayBlCopyComponent,
-    ImportBillOfExchangesComponent,
-    ImportDestructionCertificatesComponent,
-    ImportPackingListInvoicesComponent,
-    ImportCommercialInvoicesComponent,
-    ImportOpinionReportsComponent,
-    ImportOutwardRemittanceAdviceComponent,
-    ImportCreditNoteComponent,
-    ImportDebitNotesComponent,
-    ImportPIPOSComponent
   ],
 })
 export class HomeModule {

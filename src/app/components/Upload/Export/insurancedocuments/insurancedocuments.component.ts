@@ -114,7 +114,7 @@ export class InsurancedocumentsComponent implements OnInit {
               this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData).subscribe(
                 (data) => {
                   console.log(data);
-                  this.router.navigate(['/home/insurance-document']);
+                  this.router.navigate(['home/Summary/Export/insurance-document']);
                 },
                 (error) => {
                   console.log('error');

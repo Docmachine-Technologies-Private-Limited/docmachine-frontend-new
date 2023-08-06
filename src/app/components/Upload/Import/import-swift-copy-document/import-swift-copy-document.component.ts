@@ -89,7 +89,7 @@ export class ImportSwiftCopyDocumentComponent implements OnInit {
               (data) => {
                 console.log('swiftcopies document', this.pipourl1);
                 console.log(data);
-                this.router.navigate(['home/Import-Swift-Copy-Documents']);
+                this.router.navigate(['home/Summary/Import/Swift-Copy-Documents']);
               },
               (error) => {
                 console.log('error');

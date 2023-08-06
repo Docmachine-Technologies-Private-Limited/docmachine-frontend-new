@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImportOpinionReportsComponent } from './import-opinion-reports.component';
+import { ImportOpinionReportComponent } from './import-opinion-reports.component';
 
-describe('ImportOpinionReportsComponent', () => {
-  let component: ImportOpinionReportsComponent;
-  let fixture: ComponentFixture<ImportOpinionReportsComponent>;
+describe('ImportOpinionReportComponent', () => {
+  let component: ImportOpinionReportComponent;
+  let fixture: ComponentFixture<ImportOpinionReportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ImportOpinionReportsComponent ]
+      declarations: [ ImportOpinionReportComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ImportOpinionReportsComponent);
+    fixture = TestBed.createComponent(ImportOpinionReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

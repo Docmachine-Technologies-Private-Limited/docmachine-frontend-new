@@ -32,8 +32,10 @@
                           <img src="./assets/new-img/header_not1.svg" />
                         </span></a></li>
                     <li>
-                      <a routerLinkActive="active" ariaCurrentWhenActive="page" [attr.ng-tooltips-popup]="'UserToolTips'" >
-                        <span class="icon" [attr.ng-tooltips-popup]="'UserToolTips'"><img src="./assets/new-img/header-user.svg " class="TOOLTIPS_OPEN_CLOSE"
+                      <a routerLinkActive="active" ariaCurrentWhenActive="page"
+                        [attr.ng-tooltips-popup]="'UserToolTips'">
+                        <span class="icon" [attr.ng-tooltips-popup]="'UserToolTips'"><img
+                            src="./assets/new-img/header-user.svg " class="TOOLTIPS_OPEN_CLOSE"
                             [attr.ng-tooltips-popup]="'UserToolTips'" />
                         </span>
                       </a>
@@ -107,74 +109,94 @@
               <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Documents</a>
               <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo-doc')">PI/PO</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Pipo')">PI/PO</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/boe')">BOE</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/boe')">BOE</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importCredit')">Credit Notes</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Credit')">Credit Notes
+                  </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importDebit')">Debit notes</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Debit')">Debit notes
+                  </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importInsurance')">Insurance Documents</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Insurance-Document')">Insurance
+                    Documents</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-import-lc')">Letter of
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Letter-Of-Credit-Lc')">
+                    Letter of
                     Credit
                     (LC)</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-master-services')">Master Service
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Master-Services')">
+                    Master Service
                     Agreement
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importTriParty')">Tri party agreements</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/TripartyAgreements')">Tri party
+                    agreements</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-opinion-report')">Opinion Reports
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Opinion-Report')">
+                    Opinion Reports
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/outward-remittance-advice')">Outward
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Outward-Remittance-Advice')">
+                    Outward
                     Remittance
                     Advice</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-airway-bl-copy')">Airway/BL Copy
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Airway-bl-Copy')">
+                    Airway/BL Copy
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-bill-of-exchange')">Bill Of Exchange
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Bill-Of-Exchange')">
+                    Bill Of Exchange
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-destruction')">Destruction
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Destruction')">
+                    Destruction
                     Certificate
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-commercial')">Commercial Invoices
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Commercial')">
+                    Commercial Invoices
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-packing-list')">Packing List Invoice
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Packing-List')">
+                    Packing List Invoice
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-upload')">Master Upload</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-upload')">Master
+                    Upload</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Import-Bill-Lodgement-Referance-AdviceCopy')">Bill-Lodgement-Referance-AdviceCopy</h6>
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Import/Bill-Lodgement-Referance-AdviceCopy')">
+                    Bill-Lodgement-Referance-AdviceCopy</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Realisation-Cretificate')">Realisation-Cretificate</h6>
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Import/Realisation-Cretificate')">
+                    Realisation-Cretificate</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Swift-Copy-Documents')">Swift-Copy-Documents</h6>
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Import/Swift-Copy-Documents')">Swift-Copy-Documents
+                  </h6>
                 </li>
               </ul>
             </li>
@@ -275,60 +297,61 @@
                 class="dropdown-toggle">Documents</a>
               <ul class="collapse list-unstyled" id="ExportDocuments">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo')">PI/PO Summary <i
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Pipo')">PI/PO Summary <i
                       style="font-size: 12px; margin-left:10px;" class="fas fa-plus-circle">
                     </i></h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Inward-Remittance-Disposal')">Inward Remittance Tracker</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Inward-Remittance-Disposal')">Inward
+                    Remittance Tracker</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/sb')">Shipping Bill</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Shipping-bill')">Shipping Bill</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/credit-note')">Credit Notes</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/credit-note')">Credit Notes</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/debit-note')">Debit Notes</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/debit-note')">Debit Notes</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/insurance-document')">Insurance Documents
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/insurance-document')">Insurance Documents
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-lc')">Letter of Credit (LC)
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/letterofcredit-lc')">Letter of Credit (LC)
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-services')">Master Service Agreement
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/master-services')">Master Service Agreement
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/try-party')">Triparty Agreements</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/try-party')">Triparty Agreements</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/opinion-report')">Opinion Reports</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/opinion-report')">Opinion Reports</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/inward-remittance-advice')">Inward
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/inward-remittance-advice')">Inward
                     Remittance
                     Advice</h6>
                 </li>
 
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/airway-bl-copy')">Airway/BL Copy</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/airway-bl-copy')">Airway/BL Copy</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-of-exchange')">Bill Of Exchange</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/bill-of-exchange')">Bill Of Exchange</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/destruction')">Destruction Certificate</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/destruction')">Destruction Certificate</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/commercial')">Commercial Invoices</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/commercial')">Commercial Invoices</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-list')">Packing List Invoices</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/packing-list')">Packing List Invoices</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Sub-bill-Lodgement')">Bill-Lodgement</h6>
@@ -340,13 +363,17 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-upload')">Master Upload</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Export-Bill-Lodgement-Referance-AdviceCopy')">Bill-Lodgement-Referance-AdviceCopy</h6>
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Export/Bill-Lodgement-Referance-AdviceCopy')">
+                    Bill-Lodgement-Referance-AdviceCopy</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Export-Realisation-Cretificate')">Realisation-Cretificate</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Realisation-Cretificate')">
+                    Realisation-Cretificate</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Export-Swift-Copy-Documents')">Swift-Copy-Documents</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Swift-Copy-Documents')">
+                    Swift-Copy-Documents</h6>
                 </li>
               </ul>
             </li>
@@ -470,49 +497,16 @@
                 Panel</a>
               <ul class="collapse list-unstyled" id="ApprovalPanel">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pendingpanel')">Pending</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Status/pendingpanel')">Pending</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/approvalpanel')">Approved</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Status/approvalpanel')">Approved</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/rejectpanel')">Reject</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Status/rejectpanel')">Reject</h6>
                 </li>
               </ul>
             </li>
-            <!-- <li *ngIf="this.userData['role']=='member'">
-              <a href="#Other" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Other</a>
-              <ul class="collapse list-unstyled" id="Other">
-                <li class="nav-item">
-                  <a [routerLink]="[ '/home/upload'] " class="sidebar-content ">
-                    <span class="icon side-icon "><img src="./assets/new-img/upload.svg " /></span> Upload Documents
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="sidebar-content ">
-                    <span class="icon side-icon ">
-                      <img src="./assets/new-img/transport.svg " />
-                    </span> Transaction
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#ViewDocument" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">View
-                    Document </a>
-                  <ul id="ViewDocument" class="collapse list-unstyled">
-                    <li class="nav-item">
-                      <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/sb')">Shipping Bill</h6>
-                    </li>
-                    <li class="nav-item">
-                      <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/boe')">BOE Documents</h6>
-                    </li>
-                    <li class="nav-item">
-                      <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/pipo')">PI/PO Documents
-                      </h6>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li> -->
             <li *ngIf="this.userData['role']=='manager'">
               <a href="#ManagerPanel" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manager
                 Panel</a>

@@ -214,7 +214,7 @@ export class ImportTripartyAgreementsComponent implements OnInit {
           this.userService
             .updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
               console.log(data);
-              this.router.navigate(['/home/importTriParty']);
+              this.router.navigate(['home/Summary/Import/TripartyAgreements']);
             }, (error) => {
               console.log('error');
             }

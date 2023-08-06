@@ -116,7 +116,7 @@ export class OpinionReportsComponent implements OnInit {
             this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData).subscribe(
               (data) => {
                 console.log(data);
-                this.router.navigate(['/home/opinion-report']);
+                this.router.navigate(['home/Summary/Export/opinion-report']);
               },
               (error) => {
                 console.log('error');

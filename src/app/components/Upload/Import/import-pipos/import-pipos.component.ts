@@ -233,7 +233,7 @@ export class ImportPIPOSComponent implements OnInit {
         this.documentService.addPipo(e.value).subscribe(
           (res) => {
             this.toastr.success('PI/PO added successfully.');
-            this.router.navigateByUrl("/home/pipo-doc");
+            this.router.navigateByUrl("home/Summary/Import/Pipo");
           },
           (err) => console.log("Error adding pipo")
         );

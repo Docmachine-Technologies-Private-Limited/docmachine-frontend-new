@@ -162,7 +162,7 @@ export class DebitNotesComponent implements OnInit {
                   ).subscribe(
                     (data) => {
                       console.log('DATA', data);
-                      this.router.navigate(['home/debit-note']);
+                      this.router.navigate(['home/Summary/Export/debit-note']);
                     },
                     (error) => {
                       console.log('error');

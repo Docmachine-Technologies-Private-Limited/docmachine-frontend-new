@@ -118,7 +118,7 @@ export class ImportMasterServiceAgreementsComponent implements OnInit {
                 (data) => {
                   console.log('king123');
                   console.log(data);
-                  this.router.navigate(['/home/import-master-services']);
+                  this.router.navigate(['home/Summary/Import/Master-Services']);
                 },
                 (error) => {
                   console.log('error');

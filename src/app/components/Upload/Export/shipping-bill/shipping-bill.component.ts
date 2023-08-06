@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
@@ -37,7 +37,8 @@ export class ShippingBillComponent implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
-
+  @Input('PipoId') Pipoid:any='';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -327,7 +328,7 @@ export class ShippingBillComponent implements OnInit {
             console.log(data);
             this.toastr.success('shipping Bill added successfully.');
             if (this.validator.SELECTED_PIPO?.length == 0) {
-              this.router.navigate(['/home/view-document/sb']);
+              this.router.navigate(['home/Summary/Export/Shipping-bill']);
             }
           }, (error) => {
             console.log('error');

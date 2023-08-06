@@ -282,7 +282,7 @@ export class PIPOSComponent implements OnInit {
           (res) => {
             this.toastr.success('PI/PO added successfully.');
             if (this.validator.SELECTED_PIPO?.length == 0) {
-              this.router.navigateByUrl("/home/pipo");
+              this.router.navigateByUrl("home/Summary/Export/Pipo");
             }
           },
           (err) => console.log("Error adding pipo")

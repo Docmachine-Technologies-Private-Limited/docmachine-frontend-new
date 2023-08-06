@@ -117,7 +117,7 @@ export class ImportLetterofCreditComponent implements OnInit {
               (data) => {
                 console.log('king123');
                 console.log(data);
-                this.router.navigate(['/home/letterofcredit-import-lc']);
+                this.router.navigate(['home/Summary/Import/Letter-Of-Credit-Lc']);
               }, (error) => {
                 console.log('error');
               }

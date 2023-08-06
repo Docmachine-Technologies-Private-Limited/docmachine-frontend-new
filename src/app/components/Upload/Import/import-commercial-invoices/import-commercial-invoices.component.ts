@@ -206,7 +206,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           }
           this.userService.updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData).subscribe((data) => {
             console.log('commercial', data);
-            this.router.navigate(['home/import-commercial']);
+            this.router.navigate(['home/Summary/Import/Commercial']);
           }, (error) => {
             console.log('error');
           }

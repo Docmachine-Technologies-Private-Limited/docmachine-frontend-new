@@ -95,7 +95,7 @@ export class ImportBilllodgementreferencenumberadvicecopyComponent implements On
               (data) => {
                 console.log('Blcopyref Document document', this.pipourl1);
                 console.log(data);
-                this.router.navigate(['home/Import-Bill-Lodgement-Referance-AdviceCopy']);
+                this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
               },
               (error) => {
                 console.log('error');

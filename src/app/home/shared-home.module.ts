@@ -233,7 +233,7 @@ import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBan
     CommonOpenPopUpDirective,
     PopupOpenDirective,
     FederalBankExportletterheadComponent,
-    FederalBankImportLetterHeadComponent
+    FederalBankImportLetterHeadComponent,
   ],
 })
 export class SharedHomeModule { }

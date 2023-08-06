@@ -91,7 +91,7 @@ export class ExportSwiftCopyDocumentComponent implements OnInit {
               (data) => {
                 console.log('swiftcopies document', this.pipourl1);
                 console.log(data);
-                this.router.navigate(['home/Export-Swift-Copy-Documents']);
+                this.router.navigate(['home/Summary/Export/Swift-Copy-Documents']);
               },
               (error) => {
                 console.log('error');

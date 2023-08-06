@@ -91,7 +91,7 @@ export class ExportRealisationCertificateComponent implements OnInit {
               (data) => {
                 console.log('ebrcs document', this.pipourl1);
                 console.log(data);
-                this.router.navigate(['home/Export-Realisation-Cretificate']);
+                this.router.navigate(['home/Summary/Export/Realisation-Cretificate']);
               },
               (error) => {
                 console.log('error');

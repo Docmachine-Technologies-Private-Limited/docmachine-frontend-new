@@ -109,7 +109,7 @@ export class ImportDebitNotesComponent implements OnInit {
           this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
             console.log('debit Note document', this.pipourl1);
             console.log(data);
-            this.router.navigate(['home/importDebit']);
+            this.router.navigate(['home/Summary/Import/Debit']);
           });
         },
           (err) => console.log('Error adding pipo'));

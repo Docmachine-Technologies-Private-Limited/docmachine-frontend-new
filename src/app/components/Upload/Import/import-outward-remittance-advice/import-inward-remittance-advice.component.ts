@@ -203,16 +203,16 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           }
           this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
             this.toastr.success('Firex Document added successfully.');
-            this.router.navigate(['/home/outward-remittance-advice']);
+            this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
             var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
             if (Transaction_id != '') {
               this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.value } }).subscribe((res: any) => {
                 this.toastr.success('Firex Document added successfully.');
-                this.router.navigate(['/home/outward-remittance-advice']);
+                this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
               });
             } else {
               this.toastr.success('Firex Document added successfully.');
-              this.router.navigate(['/home/outward-remittance-advice']);
+              this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
             }
           }, (error) => {
             console.log('error');

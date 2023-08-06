@@ -98,7 +98,7 @@ export class DestructionCertificatesComponent implements OnInit {
           }
           this.userService.updateManyPipo(this.pipoArr, 'destruction', this.pipourl1, updatedData).subscribe((data) => {
             console.log(data);
-            this.router.navigate(['/home/destruction']);
+            this.router.navigate(['home/Summary/Export/destruction']);
           }, (error) => {
             console.log('error');
           });

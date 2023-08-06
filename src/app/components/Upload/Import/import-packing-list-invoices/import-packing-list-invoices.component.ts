@@ -176,7 +176,7 @@ export class ImportPackingListInvoicesComponent implements OnInit {
                   (data) => {
                     console.log('king123');
                     console.log('DATA', data);
-                    this.router.navigate(['/home/import-packing-list']);
+                    this.router.navigate(['home/Summary/Import/Packing-List']);
                   },
                   (error) => {
                     console.log('error');

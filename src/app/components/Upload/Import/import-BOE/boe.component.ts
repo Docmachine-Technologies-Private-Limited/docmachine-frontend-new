@@ -444,7 +444,7 @@ export class BOEComponent implements OnInit {
           this.userService.updateManyPipo(this.pipoArr, 'import', '', updatedData1).subscribe((data_res) => {
             console.log('updateManyPipo', data_res);
             this.toastr.success('Boe added successfully.');
-            this.router.navigate(['/home/boe']);
+            this.router.navigate(['home/Summary/Import/boe']);
           }, (error) => {
             console.log('error');
           }

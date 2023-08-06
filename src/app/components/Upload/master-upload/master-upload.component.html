@@ -1,6 +1,6 @@
 <div class="content-wrap pb-2 scroll-bar-main master-upload-components">
     <main id="content" class="content table-padding" role="main">
-        <mat-tab-group>
+        <mat-tab-group (selectedTabChange)="onTabToggleChanged($event);">
             <mat-tab label="Export" *ngIf="this.USER_DATA?.result?.sideMenu=='export'">
                 <div class="master-upload-panel">
                     <div class="left-panel">
@@ -23,44 +23,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="right-panel">
+                    <div class="right-panel" *ngIf="this.validator.SELECTED_PIPO_ID!=''">
                         <mat-tab-group (selectedTabChange)="onTabChanged($event);">
-                            <mat-tab label="Shippingbill" id="export-shipping"><app-shipping-bill
-                                    *ngIf="this.SELECTED_ID=='export-shipping'"></app-shipping-bill></mat-tab>
-                            <mat-tab label="CreditNoteDocument" id="export-CreditNoteDocument"><export-credit-note
-                                    *ngIf="this.SELECTED_ID=='export-CreditNoteDocument'"></export-credit-note></mat-tab>
-                            <mat-tab label="DebitNoteDocument" id="export-DebitNoteDocument"><export-debit-note
-                                    *ngIf="this.SELECTED_ID=='export-DebitNoteDocument'"></export-debit-note></mat-tab>
-                            <mat-tab label="Insurancedocuments"
-                                id="export-Insurancedocuments"><export-insurancedocuments
-                                    *ngIf="this.SELECTED_ID=='export-Insurancedocuments'"></export-insurancedocuments></mat-tab>
-                            <mat-tab label="LetterofCredit" id="export-LetterofCredit"><export-letterof-credit
-                                    *ngIf="this.SELECTED_ID=='export-LetterofCredit'"></export-letterof-credit></mat-tab>
-                            <mat-tab label="MasterServiceAgreements"
-                                id="export-MasterServiceAgreements"><export-master-service-agreements
-                                    *ngIf="this.SELECTED_ID=='export-MasterServiceAgreements'"></export-master-service-agreements></mat-tab>
-                            <mat-tab label="TripartyAgreements"
-                                id="export-TripartyAgreements"><export-triparty-agreements
-                                    *ngIf="this.SELECTED_ID=='export-TripartyAgreements'"></export-triparty-agreements></mat-tab>
-                            <mat-tab label="OpinionReports" id="export-OpinionReports"><export-opinion-reports
-                                    *ngIf="this.SELECTED_ID=='export-OpinionReports'"></export-opinion-reports></mat-tab>
-                            <mat-tab label="InwardRemittanceAdvice"
-                                id="export-InwardRemittanceAdvice"><export-inward-remittance-advice
-                                    *ngIf="this.SELECTED_ID=='export-InwardRemittanceAdvice'"></export-inward-remittance-advice></mat-tab>
-                            <mat-tab label="AirwayBlCopy" id="export-AirwayBlCopy"><export-airway-bl-copy
-                                    *ngIf="this.SELECTED_ID=='export-AirwayBlCopy'"></export-airway-bl-copy></mat-tab>
-                            <mat-tab label="BillOfExchanges" id="export-BillOfExchanges"><export-bill-of-exchanges
-                                    *ngIf="this.SELECTED_ID=='export-BillOfExchanges'"></export-bill-of-exchanges></mat-tab>
-                            <mat-tab label="DestructionCertificates"
-                                id="export-DestructionCertificates"><export-destruction-certificates
-                                    *ngIf="this.SELECTED_ID=='export-DestructionCertificates'"></export-destruction-certificates></mat-tab>
-                            <mat-tab label="CommercialInvoices"
-                                id="export-CommercialInvoices"><export-commercial-invoices
-                                    *ngIf="this.SELECTED_ID=='export-CommercialInvoices'"></export-commercial-invoices></mat-tab>
-                            <mat-tab label="PackingListInvoices"
-                                id="export-PackingListInvoices"><export-packing-list-invoices
-                                    *ngIf="this.SELECTED_ID=='export-PackingListInvoices'"></export-packing-list-invoices></mat-tab>
+                            <mat-tab label="Shippingbill" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="CreditNoteDocument" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="DebitNoteDocument" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="Insurancedocuments" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="LetterofCredit" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="MasterServiceAgreements" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="TripartyAgreements" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="OpinionReports" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="InwardRemittanceAdvice" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="AirwayBlCopy" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="BillOfExchanges" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="DestructionCertificates" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="CommercialInvoices" id="Upload" index="ExportUpload"></mat-tab>
+                            <mat-tab label="PackingListInvoices" id="Upload" index="ExportUpload"></mat-tab>
                         </mat-tab-group>
+                        <ng-container #UploadContainer></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -82,44 +62,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="right-panel">
+                    <div class="right-panel" *ngIf="this.validator.SELECTED_PIPO_ID!=''">
                         <mat-tab-group (selectedTabChange)="onSummaryTabChanged($event);">
-                            <mat-tab label="Shippingbill" id="export-shipping"><app-shipping-bill
-                                    *ngIf="this.SELECTED_ID=='export-shipping'"></app-shipping-bill></mat-tab>
-                            <mat-tab label="CreditNoteDocument" id="export-CreditNoteDocument"><export-credit-note
-                                    *ngIf="this.SELECTED_ID=='export-CreditNoteDocument'"></export-credit-note></mat-tab>
-                            <mat-tab label="DebitNoteDocument" id="export-DebitNoteDocument"><export-debit-note
-                                    *ngIf="this.SELECTED_ID=='export-DebitNoteDocument'"></export-debit-note></mat-tab>
-                            <mat-tab label="Insurancedocuments"
-                                id="export-Insurancedocuments"><export-insurancedocuments
-                                    *ngIf="this.SELECTED_ID=='export-Insurancedocuments'"></export-insurancedocuments></mat-tab>
-                            <mat-tab label="LetterofCredit" id="export-LetterofCredit"><export-letterof-credit
-                                    *ngIf="this.SELECTED_ID=='export-LetterofCredit'"></export-letterof-credit></mat-tab>
-                            <mat-tab label="MasterServiceAgreements"
-                                id="export-MasterServiceAgreements"><export-master-service-agreements
-                                    *ngIf="this.SELECTED_ID=='export-MasterServiceAgreements'"></export-master-service-agreements></mat-tab>
-                            <mat-tab label="TripartyAgreements"
-                                id="export-TripartyAgreements"><export-triparty-agreements
-                                    *ngIf="this.SELECTED_ID=='export-TripartyAgreements'"></export-triparty-agreements></mat-tab>
-                            <mat-tab label="OpinionReports" id="export-OpinionReports"><export-opinion-reports
-                                    *ngIf="this.SELECTED_ID=='export-OpinionReports'"></export-opinion-reports></mat-tab>
-                            <mat-tab label="InwardRemittanceAdvice"
-                                id="export-InwardRemittanceAdvice"><export-inward-remittance-advice 
-                                    *ngIf="this.SELECTED_ID=='export-InwardRemittanceAdvice'"></export-inward-remittance-advice></mat-tab>
-                            <mat-tab label="AirwayBlCopy" id="export-airway-blcopy-summary"><export-airway-blcopy-summary [PipoId]="this.validator.SELECTED_PIPO_ID"
-                                    *ngIf="this.SELECTED_ID=='export-airway-blcopy-summary' && this.validator.SELECTED_PIPO_ID!=''"></export-airway-blcopy-summary></mat-tab>
-                            <mat-tab label="BillOfExchanges" id="export-BillOfExchanges"><export-bill-of-exchanges
-                                    *ngIf="this.SELECTED_ID=='export-BillOfExchanges'"></export-bill-of-exchanges></mat-tab>
-                            <mat-tab label="DestructionCertificates"
-                                id="export-DestructionCertificates"><export-destruction-certificates
-                                    *ngIf="this.SELECTED_ID=='export-DestructionCertificates'"></export-destruction-certificates></mat-tab>
-                            <mat-tab label="CommercialInvoices"
-                                id="export-CommercialInvoices"><export-commercial-invoices
-                                    *ngIf="this.SELECTED_ID=='export-CommercialInvoices'"></export-commercial-invoices></mat-tab>
-                            <mat-tab label="PackingListInvoices"
-                                id="export-PackingListInvoices"><export-packing-list-invoices
-                                    *ngIf="this.SELECTED_ID=='export-PackingListInvoices'"></export-packing-list-invoices></mat-tab>
+                            <mat-tab label="Shippingbill" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="CreditNoteDocument" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="DebitNoteDocument" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="Insurancedocuments" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="LetterofCredit" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="MasterServiceAgreements" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="TripartyAgreements" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="OpinionReports" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="InwardRemittanceAdvice" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="AirwayBlCopy" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="BillOfExchanges" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="DestructionCertificates" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="CommercialInvoices" id="Summary" index="ExportSummary"></mat-tab>
+                            <mat-tab label="PackingListInvoices" id="Summary" index="ExportSummary"></mat-tab>
                         </mat-tab-group>
+                        <ng-container #SummaryContainer></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -145,81 +105,69 @@
                             </div>
                         </div>
                     </div>
-                    <div class="right-panel">
+                    <div class="right-panel" *ngIf="this.validator.SELECTED_PIPO_ID!=''">
                         <mat-tab-group (selectedTabChange)="onTabChanged($event);">
-                            <mat-tab label="Bill Of Entry" id="Bill-Of-Entry"><app-boe-bill *ngIf="this.SELECTED_ID=='Bill-Of-Entry'"></app-boe-bill></mat-tab>
-                            <mat-tab label="CreditNoteDocument" id="import-CreditNoteDocument"><import-credit-note
-                                    *ngIf="this.SELECTED_ID=='import-CreditNoteDocument'"></import-credit-note></mat-tab>
-                            <mat-tab label="DebitNoteDocument" id="import-DebitNoteDocument"><import-debit-note
-                                    *ngIf="this.SELECTED_ID=='import-DebitNoteDocument'"></import-debit-note></mat-tab>
-                            <mat-tab label="Insurancedocuments"
-                                id="import-Insurancedocuments"><import-insurancedocuments
-                                    *ngIf="this.SELECTED_ID=='import-Insurancedocuments'"></import-insurancedocuments></mat-tab>
-                            <mat-tab label="LetterofCredit" id="import-LetterofCredit"><import-letterof-credit
-                                    *ngIf="this.SELECTED_ID=='import-LetterofCredit'"></import-letterof-credit></mat-tab>
-                            <mat-tab label="MasterServiceAgreements"
-                                id="import-MasterServiceAgreements"><import-master-service-agreements
-                                    *ngIf="this.SELECTED_ID=='import-MasterServiceAgreements'"></import-master-service-agreements></mat-tab>
-                            <mat-tab label="TripartyAgreements"
-                                id="import-TripartyAgreements"><import-triparty-agreements
-                                    *ngIf="this.SELECTED_ID=='import-TripartyAgreements'"></import-triparty-agreements></mat-tab>
-                            <mat-tab label="OpinionReports" id="import-OpinionReports"><import-opinion-reports
-                                    *ngIf="this.SELECTED_ID=='import-OpinionReports'"></import-opinion-reports></mat-tab>
-                            <mat-tab label="InwardRemittanceAdvice"
-                                id="import-InwardRemittanceAdvice"><import-outward-remittance-advice
-                                    *ngIf="this.SELECTED_ID=='import-InwardRemittanceAdvice'"></import-outward-remittance-advice></mat-tab>
-                            <mat-tab label="AirwayBlCopy" id="import-AirwayBlCopy"><import-airway-bl-copy
-                                    *ngIf="this.SELECTED_ID=='import-AirwayBlCopy'"></import-airway-bl-copy></mat-tab>
-                            <mat-tab label="BillOfExchanges" id="import-BillOfExchanges"><import-bill-of-exchanges
-                                    *ngIf="this.SELECTED_ID=='import-BillOfExchanges'"></import-bill-of-exchanges></mat-tab>
-                            <mat-tab label="DestructionCertificates"
-                                id="import-DestructionCertificates"><import-destruction-certificates
-                                    *ngIf="this.SELECTED_ID=='import-DestructionCertificates'"></import-destruction-certificates></mat-tab>
-                            <mat-tab label="CommercialInvoices"
-                                id="import-CommercialInvoices"><import-commercial-invoices
-                                    *ngIf="this.SELECTED_ID=='import-CommercialInvoices'"></import-commercial-invoices></mat-tab>
-                            <mat-tab label="PackingListInvoices"
-                                id="import-PackingListInvoices"><import-packing-list-invoices
-                                    *ngIf="this.SELECTED_ID=='import-PackingListInvoices'"></import-packing-list-invoices></mat-tab>
+                            <mat-tab label="Bill-of-Entry" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="CreditNoteDocument" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="DebitNoteDocument" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="Insurancedocuments" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="LetterofCredit" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="MasterServiceAgreements" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="TripartyAgreements" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="OpinionReports" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="OuwardRemittanceAdvice" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="AirwayBlCopy" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="BillOfExchanges" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="DestructionCertificates" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="CommercialInvoices" id="Upload" index="ImportUpload"></mat-tab>
+                            <mat-tab label="PackingListInvoices" id="Upload" index="ImportUpload"></mat-tab>
                         </mat-tab-group>
+                        <ng-container #UploadContainer></ng-container>
                     </div>
                 </div>
-
             </mat-tab>
             <mat-tab label="Import Summary" *ngIf="this.USER_DATA?.result?.sideMenu=='import'">
-                <mat-tab-group (selectedTabChange)="onTabChanged($event);">
-                    <mat-tab label="Bill Of Entry" id="import-shipping"><app-boe-bill
-                            *ngIf="this.SELECTED_ID=='import-shipping'"></app-boe-bill></mat-tab>
-                    <mat-tab label="CreditNoteDocument" id="import-CreditNoteDocument"><import-credit-note
-                            *ngIf="this.SELECTED_ID=='import-CreditNoteDocument'"></import-credit-note></mat-tab>
-                    <mat-tab label="DebitNoteDocument" id="import-DebitNoteDocument"><import-debit-note
-                            *ngIf="this.SELECTED_ID=='import-DebitNoteDocument'"></import-debit-note></mat-tab>
-                    <mat-tab label="Insurancedocuments" id="import-Insurancedocuments"><import-insurancedocuments
-                            *ngIf="this.SELECTED_ID=='import-Insurancedocuments'"></import-insurancedocuments></mat-tab>
-                    <mat-tab label="LetterofCredit" id="import-LetterofCredit"><import-letterof-credit
-                            *ngIf="this.SELECTED_ID=='import-LetterofCredit'"></import-letterof-credit></mat-tab>
-                    <mat-tab label="MasterServiceAgreements"
-                        id="import-MasterServiceAgreements"><import-master-service-agreements
-                            *ngIf="this.SELECTED_ID=='import-MasterServiceAgreements'"></import-master-service-agreements></mat-tab>
-                    <mat-tab label="TripartyAgreements" id="import-TripartyAgreements"><import-triparty-agreements
-                            *ngIf="this.SELECTED_ID=='import-TripartyAgreements'"></import-triparty-agreements></mat-tab>
-                    <mat-tab label="OpinionReports" id="import-OpinionReports"><import-opinion-reports
-                            *ngIf="this.SELECTED_ID=='import-OpinionReports'"></import-opinion-reports></mat-tab>
-                    <mat-tab label="InwardRemittanceAdvice"
-                        id="import-InwardRemittanceAdvice"><import-outward-remittance-advice
-                            *ngIf="this.SELECTED_ID=='import-InwardRemittanceAdvice'"></import-outward-remittance-advice></mat-tab>
-                    <mat-tab label="AirwayBlCopy" id="import-AirwayBlCopy"><import-airway-bl-copy
-                            *ngIf="this.SELECTED_ID=='import-AirwayBlCopy'"></import-airway-bl-copy></mat-tab>
-                    <mat-tab label="BillOfExchanges" id="import-BillOfExchanges"><import-bill-of-exchanges
-                            *ngIf="this.SELECTED_ID=='import-BillOfExchanges'"></import-bill-of-exchanges></mat-tab>
-                    <mat-tab label="DestructionCertificates"
-                        id="import-DestructionCertificates"><import-destruction-certificates
-                            *ngIf="this.SELECTED_ID=='import-DestructionCertificates'"></import-destruction-certificates></mat-tab>
-                    <mat-tab label="CommercialInvoices" id="import-CommercialInvoices"><import-commercial-invoices
-                            *ngIf="this.SELECTED_ID=='import-CommercialInvoices'"></import-commercial-invoices></mat-tab>
-                    <mat-tab label="PackingListInvoices" id="import-PackingListInvoices"><import-packing-list-invoices
-                            *ngIf="this.SELECTED_ID=='import-PackingListInvoices'"></import-packing-list-invoices></mat-tab>
-                </mat-tab-group>
+                <div class="master-upload-panel">
+                    <div class="left-panel">
+                        <div class="side-menu">
+                            <p>Pipo List ({{this.PIPOLIST?.length}})
+                                <button class="upload-button btn btn-success PopupOpen" popup-close="EXPORT_PIPO_UPLOAD"
+                                    (click)="PipoUpload()"><i class="fa fa-upload PopupOpen"
+                                        popup-close="EXPORT_PIPO_UPLOAD" aria-hidden="true"
+                                        (click)="PipoUpload()"></i></button>
+                                <button class="upload-button btn btn-success" (click)="reloadPipo()">
+                                    <i class="fa fa-refresh" aria-hidden="true" (click)="reloadPipo()"></i></button>
+                            </p>
+                            <div class="over-panel-tag">
+                                <h5 class="side-menu-h5" *ngFor="let item of this.PIPOLIST;let i=index"
+                                    [ngClass]="{'Active-SideMenu':item?.isActive}"
+                                    (click)="removeAllActive(i,item);item.isActive=true">
+                                    {{item?.pi_poNo}}
+                                    <!-- <span>{{item?.buyerName}}</span> -->
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-panel" *ngIf="this.validator.SELECTED_PIPO_ID!=''">
+                        <mat-tab-group (selectedTabChange)="onSummaryTabChanged($event);">
+                            <mat-tab label="Bill-of-Entry" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="CreditNoteDocument" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="DebitNoteDocument" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="Insurancedocuments" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="LetterofCredit" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="MasterServiceAgreements" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="TripartyAgreements" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="OpinionReports" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="OutwardRemittanceAdvice" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="AirwayBlCopy" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="BillOfExchanges" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="DestructionCertificates" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="CommercialInvoices" id="Summary" index="ImportSummary"></mat-tab>
+                            <mat-tab label="PackingListInvoices" id="Summary" index="ImportSummary"></mat-tab>
+                        </mat-tab-group>
+                        <ng-container #SummaryContainer></ng-container>
+                    </div>
+                </div>
             </mat-tab>
         </mat-tab-group>
     </main>
