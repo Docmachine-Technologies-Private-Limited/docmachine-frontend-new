@@ -101,6 +101,7 @@ export class ManageCustomerComponent implements OnInit {
             type: "text",
             value: "",
             label: "Beneficiary Name",
+            maxLength:300,
             placeholderText: 'Beneficiary name',
             rules: {
               required: true,
@@ -187,6 +188,7 @@ export class ManageCustomerComponent implements OnInit {
           interBankName: {
             type: "BankList",
             value: "",
+            maxLength:300,
             label: "Intermediary Bank Name (if any)",
             placeholderText: '',
             rules: {
@@ -199,6 +201,7 @@ export class ManageCustomerComponent implements OnInit {
             type: "text",
             value: "",
             label: "Beneficiary Name",
+            maxLength: 300,
             placeholderText: 'Beneficiary name',
             rules: {
               required: true,
@@ -220,6 +223,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Beneficiary Bank Name",
             placeholderText: 'Enter Bank Name',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -287,6 +291,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Intermediary Bank Name (if any)",
             placeholderText: '',
+            maxLength: 300,
             rules: {
               required: false,
             }
@@ -328,6 +333,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Buyer Name",
             placeholderText: 'Buyer’s name',
+            maxLength: 300,
             rules: {
               required: true,
             }
@@ -347,6 +353,7 @@ export class ManageCustomerComponent implements OnInit {
             type: "text",
             value: "",
             label: "Consignee Name",
+            maxLength: 300,
             placeholderText: 'Enter Consignee Name',
             rules: {
               required: true,
@@ -367,6 +374,7 @@ export class ManageCustomerComponent implements OnInit {
             type: "BankList",
             value: "",
             label: "BUYER BANK NAME",
+            maxLength: 300,
             placeholderText: 'Select Bank Name',
             rules: {
               required: true,
@@ -409,6 +417,7 @@ export class ManageCustomerComponent implements OnInit {
             type: "text",
             value: "",
             label: "Consignee Name",
+            maxLength: 300,
             placeholderText: 'Enter Consignee Name',
             rules: {
               required: true,
@@ -429,6 +438,7 @@ export class ManageCustomerComponent implements OnInit {
             type: "BankList",
             value: "",
             label: "BUYER BANK NAME",
+            maxLength: 300,
             placeholderText: 'Select Bank Name',
             rules: {
               required: true,
