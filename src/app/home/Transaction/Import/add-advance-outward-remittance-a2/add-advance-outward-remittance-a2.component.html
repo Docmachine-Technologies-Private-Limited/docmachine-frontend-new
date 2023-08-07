@@ -21,11 +21,11 @@
                                             <div class="new_left_sidedoc pdf_invoce_scroll">
                                                 <federal-bank-revised-form-a2-bank-format [BankId]="this.selectedBankName"
                                                 [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
-                                                this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
+                                                this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData,this.SELECTED_PURPOSE_CODE_DATA]"
                                                 [RequiredLetterHead]="true" (event)="this.UrlList=$event"
                                                 id="first"></federal-bank-revised-form-a2-bank-format>
                                             <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName" [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
-                                                this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
+                                                this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData,this.SELECTED_PURPOSE_CODE_DATA]"
                                                 id="first"></hdfc-bank-remittance-advance-against>
                                                 <div class="new_left_sidedoc pdf_invoce_scroll"
                                                     *ngIf="selectedItems.length!=0">
@@ -90,17 +90,29 @@
                                                         </app-ng-dropdown-custom>
                                                         <div class="col-12 mt-2 p-0">
                                                             <label for="exampleInputEmail1" class="form-label">
-                                                                To Credit Account no. & Account Type*</label>
+                                                                To Debit Account no. & Account Type*</label>
                                                             <custom-radio-button
                                                                 [items]="this.ToCreditAccountdata[this.selectedBankName]"
                                                                 (event)="ToCreditAccount($event)"></custom-radio-button>
                                                         </div>
                                                         <div class="col-12 mt-2 p-0">
                                                             <label for="exampleInputEmail1" class="form-label">
-                                                                To Charges Account no. & Account Type*</label>
+                                                                To Debit Charges Account no. & Account Type*</label>
                                                             <custom-radio-button
                                                                 [items]="this.ToChargesAccountdata[this.selectedBankName]"
                                                                 (event)="ToChargesAccount($event)"></custom-radio-button>
+                                                        </div>
+                                                        <div class="col-12 mt-2 p-0">
+                                                            <label for="exampleInputEmail1" class="form-label">Name of AD Branch</label>
+                                                            <input type="text" class="form-control" formControlName="BRANCH_NAME" [(ngModel)]="form['BRANCH_NAME'].value">
+                                                        </div>
+                                                        <div class="col-12 mt-2 p-0">
+                                                            <label for="exampleInputEmail1" class="form-label">Customer ID *</label>
+                                                            <input type="text" class="form-control" formControlName="CustomerID" maxlength="10" [(ngModel)]="form['CustomerID'].value">
+                                                        </div>
+                                                        <div class="col-12 mt-2 p-0">
+                                                            <label for="exampleInputEmail1" class="form-label">PAN No.</label>
+                                                            <input type="text" class="form-control" formControlName="PANNo" maxlength="10" [(ngModel)]="form['PANNo'].value">
                                                         </div>
                                                         <div *ngIf="submitted && form.bank.errors" class='errorText'>
                                                             <div *ngIf="form.bank.errors.required">Select bank is
@@ -218,12 +230,6 @@
                                                         <div class="add_new_buttons">
                                                             <button type="button" class="btn btn-success"
                                                                 (click)="addItems(pipoForm)">+ Add PI</button>
-                                                            <button type="button" class="btn btn-success PopupOpen"
-                                                                popup-close="FORWARD_CONTRACT">
-                                                                Select FDC</button>
-                                                            <button type="button" class="btn btn-success PopupOpen"
-                                                                popup-close="HS_CODE_POPUP">
-                                                                Select HS Code</button>
                                                         </div>
                                                     </div>
                                                 </div>

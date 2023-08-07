@@ -43,7 +43,6 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
               element?.enableReadOnly();
               const [widget]: any = element?.acroField?.getWidgets();
               widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
-              element?.enableCombing(); // trying to restore combing
             }
           });
           getAllFields[0]?.setText('');

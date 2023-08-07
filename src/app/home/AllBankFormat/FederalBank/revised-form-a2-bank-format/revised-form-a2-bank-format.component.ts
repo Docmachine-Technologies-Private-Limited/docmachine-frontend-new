@@ -47,133 +47,170 @@ export class FederalBankRevisedFormA2BANKFormatComponent implements OnInit, OnCh
               // element?.enableCombing(); // trying to restore combing
             }
           });
-
-          getAllFields[0]?.setText('Helllo Abhishek');
-          getAllFields[1]?.setText('Helllo Abhishek');
-          getAllFields[2]?.setText('Helllo Abhishek');
-          getAllFields[3]?.setText('Helllo Abhishek');
-          getAllFields[4]?.setText('Helllo Abhishek');
-          getAllFields[5]?.setText('Helllo Abhishek');
-          getAllFields[6]?.setText('Helllo Abhishek');
-          getAllFields[7]?.setText('Helllo Abhishek');
-          getAllFields[8]?.setText('Helllo Abhishek');
-          getAllFields[9]?.setText('Helllo Abhishek');
-          getAllFields[10]?.setText('Helllo Abhishek');
-          getAllFields[11]?.setText('Helllo Abhishek');
-          getAllFields[12]?.setText('Helllo Abhishek');
-          getAllFields[13]?.setText('Helllo Abhishek');
-          getAllFields[14]?.setText('Helllo Abhishek');
-          getAllFields[15]?.setText('Helllo Abhishek');
-          getAllFields[16]?.setText('Helllo Abhishek');
-          getAllFields[17]?.setText('Helllo Abhishek');
-          getAllFields[18]?.setText('Helllo Abhishek');
-          getAllFields[19]?.setText('Helllo Abhishek');
-          getAllFields[20]?.setText('Helllo Abhishek');
-          getAllFields[21]?.setText('Helllo Abhishek');
-          getAllFields[22]?.setText('Helllo Abhishek');
-          getAllFields[23]?.setText('Helllo Abhishek');
-          getAllFields[24]?.setText('Helllo Abhishek');
-          getAllFields[25]?.setText('Helllo Abhishek');
-          getAllFields[26]?.setText('Helllo Abhishek');
-          getAllFields[27]?.setText('Helllo Abhishek');
-          getAllFields[28]?.setText('Helllo Abhishek');
-          getAllFields[29]?.setText('Helllo Abhishek');
-          getAllFields[30]?.setText('Helllo Abhishek');
-          getAllFields[31]?.setText('Helllo Abhishek');
-          getAllFields[32]?.setText('Helllo Abhishek');
-          getAllFields[33]?.setText('Helllo Abhishek');
-          getAllFields[34]?.setText('Helllo Abhishek');
+          
+          getAllFields[0]?.setText('');
+          getAllFields[1]?.setText('');
+          getAllFields[2]?.setText('');
+          getAllFields[3]?.setText('');
+          getAllFields[4]?.setText('');
+          getAllFields[5]?.setText('');
+          getAllFields[6]?.setText('');
+          getAllFields[7]?.setText('');
+          getAllFields[8]?.setText(filldata[5][0]?.teamName);
+          getAllFields[9]?.setText(filldata[7]?.BRANCH_NAME);
+       
+          let remitancedata:any={
+           Currency: filldata[1][0]?.currency,
+           CurrencyAmount:[],
+           ExchangeRate:[],
+           INREquivalentAmount:[]
+          }
+          filldata[7]?.pipoTerm?.forEach(element => {
+            remitancedata?.CurrencyAmount.push(element?.remittanceAmount);
+          });
+          getAllFields[10]?.setText(remitancedata?.Currency);
+          getAllFields[11]?.setText(remitancedata?.CurrencyAmount?.join(','));
+          getAllFields[12]?.setText('');
+          getAllFields[13]?.setText('');
+          getAllFields[14]?.setText(filldata[5][0]?.teamName+'\n'+filldata[5][0]?.adress);
+          
+          let splitcustomerid:any=filldata[7]?.CustomerID?.split('')
+          getAllFields[15]?.setText(splitcustomerid[0]);
+          getAllFields[16]?.setText(splitcustomerid[1]);
+          getAllFields[17]?.setText(splitcustomerid[2]);
+          getAllFields[18]?.setText(splitcustomerid[3]);
+          getAllFields[19]?.setText(splitcustomerid[4]);
+          getAllFields[20]?.setText(splitcustomerid[5]);
+          getAllFields[21]?.setText(splitcustomerid[6]);
+          getAllFields[22]?.setText(splitcustomerid[7]);
+          getAllFields[23]?.setText(splitcustomerid[8]);
+          getAllFields[24]?.setText(splitcustomerid[9]);
+          
+          let splitPANNo:any=filldata[7]?.PANNo?.split('')
+          getAllFields[25]?.setText(splitPANNo[0]);
+          getAllFields[26]?.setText(splitPANNo[1]);
+          getAllFields[27]?.setText(splitPANNo[2]);
+          getAllFields[28]?.setText(splitPANNo[3]);
+          getAllFields[29]?.setText(splitPANNo[4]);
+          getAllFields[30]?.setText(splitPANNo[5]);
+          getAllFields[31]?.setText(splitPANNo[6]);
+          getAllFields[32]?.setText(splitPANNo[7]);
+          getAllFields[33]?.setText(splitPANNo[8]);
+          getAllFields[34]?.setText(splitPANNo[9]);
+          
           getAllFields[35]?.uncheck();
           getAllFields[36]?.uncheck();
           getAllFields[37]?.uncheck();
           getAllFields[38]?.uncheck();
           getAllFields[39]?.uncheck();
-          getAllFields[40]?.setText('Helllo Abhishek');
-          getAllFields[41]?.setText('Helllo Abhishek');
-          getAllFields[42]?.setText('Helllo Abhishek');
-          getAllFields[43]?.setText('Helllo Abhishek');
-          getAllFields[44]?.setText('Helllo Abhishek');
-          getAllFields[45]?.setText('Helllo Abhishek');
-          getAllFields[46]?.setText('Helllo Abhishek');
-          getAllFields[47]?.setText('Helllo Abhishek');
-          getAllFields[48]?.setText('Helllo Abhishek');
-          getAllFields[49]?.setText('Helllo Abhishek');
-          getAllFields[50]?.setText('Helllo Abhishek');
-          getAllFields[51]?.setText('Helllo Abhishek');
-          getAllFields[52]?.setText('Helllo Abhishek');
-          getAllFields[53]?.setText('Helllo Abhishek');
-          getAllFields[54]?.setText('Helllo Abhishek');
-          getAllFields[55]?.setText('Helllo Abhishek');
-          getAllFields[56]?.setText('Helllo Abhishek');
-          getAllFields[57]?.setText('Helllo Abhishek');
-          getAllFields[58]?.setText('Helllo Abhishek');
-          getAllFields[59]?.setText('Helllo Abhishek');
-          getAllFields[60]?.setText('Helllo Abhishek');
-          getAllFields[61]?.setText('Helllo Abhishek');
-          getAllFields[62]?.setText('Helllo Abhishek');
-          getAllFields[63]?.setText('Helllo Abhishek');
-          getAllFields[64]?.setText('Helllo Abhishek');
-          getAllFields[65]?.setText('Helllo Abhishek');
-          getAllFields[66]?.setText('Helllo Abhishek');
-          getAllFields[67]?.setText('Helllo Abhishek');
-          getAllFields[68]?.setText('Helllo Abhishek');
-          getAllFields[69]?.setText('Helllo Abhishek');
-          getAllFields[70]?.setText('Helllo Abhishek');
-          getAllFields[71]?.setText('Helllo Abhishek');
-          getAllFields[72]?.setText('Helllo Abhishek');
-          getAllFields[73]?.setText('Helllo Abhishek');
-          getAllFields[74]?.setText('Helllo Abhishek');
-          getAllFields[75]?.setText('Helllo Abhishek');
-          getAllFields[76]?.setText('Helllo Abhishek');
-          getAllFields[78]?.setText('Helllo Abhishek');
-          getAllFields[79]?.setText('Helllo Abhishek');
-          getAllFields[80]?.setText('Helllo Abhishek');
-          getAllFields[81]?.setText('Helllo Abhishek');
-          getAllFields[82]?.setText('Helllo Abhishek');
-          getAllFields[83]?.setText('Helllo Abhishek');
-          getAllFields[84]?.setText('Helllo Abhishek');
-          getAllFields[85]?.setText('Helllo Abhishek');
-          getAllFields[86]?.setText('Helllo Abhishek');
-          getAllFields[87]?.setText('Helllo Abhishek');
-          getAllFields[88]?.setText('Helllo Abhishek');
-          getAllFields[89]?.setText('Helllo Abhishek');
-          getAllFields[90]?.setText('Helllo Abhishek');
-          getAllFields[91]?.setText('Helllo Abhishek');
-          getAllFields[92]?.setText('Helllo Abhishek');
-          getAllFields[93]?.setText('Helllo Abhishek');
-          getAllFields[94]?.setText('Helllo Abhishek');
-          getAllFields[95]?.setText('Helllo Abhishek');
-          getAllFields[96]?.setText('Helllo Abhishek');
-          getAllFields[97]?.setText('Helllo Abhishek');
+          
+          let splitDebitAccount:any=filldata[0]?.accNumber?.split('');
+          if (splitDebitAccount!=undefined) {
+            getAllFields[40]?.setText(splitDebitAccount[0]);
+            getAllFields[41]?.setText(splitDebitAccount[1]);
+            getAllFields[42]?.setText(splitDebitAccount[2]);
+            getAllFields[43]?.setText(splitDebitAccount[3]);
+            getAllFields[44]?.setText(splitDebitAccount[4]);
+            getAllFields[45]?.setText(splitDebitAccount[5]);
+            getAllFields[46]?.setText(splitDebitAccount[6]);
+            getAllFields[47]?.setText(splitDebitAccount[7]);
+            getAllFields[48]?.setText(splitDebitAccount[8]);
+            getAllFields[49]?.setText(splitDebitAccount[9]);
+            getAllFields[50]?.setText(splitDebitAccount[10]);
+            getAllFields[51]?.setText(splitDebitAccount[11]);
+            getAllFields[52]?.setText(splitDebitAccount[12]);
+            getAllFields[53]?.setText(splitDebitAccount[13]);   
+          }
+                   
+          let splitDebitChargesAccount:any=filldata[4]?.accNumber?.split('')
+          if (splitDebitChargesAccount!=undefined) {
+            getAllFields[54]?.setText(splitDebitChargesAccount[0]);
+            getAllFields[55]?.setText(splitDebitChargesAccount[1]);
+            getAllFields[56]?.setText(splitDebitChargesAccount[2]);
+            getAllFields[57]?.setText(splitDebitChargesAccount[3]);
+            getAllFields[58]?.setText(splitDebitChargesAccount[4]);
+            getAllFields[59]?.setText(splitDebitChargesAccount[5]);
+            getAllFields[60]?.setText(splitDebitChargesAccount[6]);
+            getAllFields[61]?.setText(splitDebitChargesAccount[7]);
+            getAllFields[62]?.setText(splitDebitChargesAccount[8]);
+            getAllFields[63]?.setText(splitDebitChargesAccount[9]);
+            getAllFields[64]?.setText(splitDebitChargesAccount[10]);
+            getAllFields[65]?.setText(splitDebitChargesAccount[11]);
+            getAllFields[66]?.setText(splitDebitChargesAccount[12]);
+            getAllFields[67]?.setText(splitDebitChargesAccount[13]);   
+          }
+                   
+          getAllFields[68]?.setText('');
+          getAllFields[69]?.setText('');
+                    
+          getAllFields[70]?.setText(filldata[2]?.benneName);
+          getAllFields[71]?.setText(filldata[2]?.beneAdrs);
+          getAllFields[72]?.setText(filldata[2]?.beneAccNo+'\n'+filldata[2]?.iban);
+          getAllFields[73]?.setText(filldata[2]?.beneBankName+''+filldata[2]?.beneBankAdress);
+          
+          let spliSwiftCode:any=filldata[2]?.beneBankSwiftCode?.split('');
+          if (spliSwiftCode!=undefined) {
+            getAllFields[74]?.setText(spliSwiftCode[0]);
+            getAllFields[75]?.setText(spliSwiftCode[1]);
+            getAllFields[76]?.setText(spliSwiftCode[2]);
+            getAllFields[77]?.setText(spliSwiftCode[3]);
+            getAllFields[78]?.setText(spliSwiftCode[4]);
+            getAllFields[79]?.setText(spliSwiftCode[5]);
+            getAllFields[80]?.setText(spliSwiftCode[6]);
+            getAllFields[81]?.setText(spliSwiftCode[7]);
+            getAllFields[82]?.setText(spliSwiftCode[8]);
+            getAllFields[83]?.setText(spliSwiftCode[9]);
+            getAllFields[84]?.setText(spliSwiftCode[10]); 
+          }        
+          getAllFields[85]?.setText(filldata[2]?.sortCode);
+          getAllFields[86]?.setText(filldata[2]?.interBankName);
+          
+          let spliIntermediarySwiftCode:any=filldata[2]?.interBankSwiftCode?.split('')
+          if (spliIntermediarySwiftCode!=undefined) {
+            getAllFields[87]?.setText(spliIntermediarySwiftCode[0]);
+            getAllFields[88]?.setText(spliIntermediarySwiftCode[1]);
+            getAllFields[89]?.setText(spliIntermediarySwiftCode[2]);
+            getAllFields[90]?.setText(spliIntermediarySwiftCode[3]);
+            getAllFields[91]?.setText(spliIntermediarySwiftCode[4]);
+            getAllFields[92]?.setText(spliIntermediarySwiftCode[5]);
+            getAllFields[93]?.setText(spliIntermediarySwiftCode[6]);
+            getAllFields[94]?.setText(spliIntermediarySwiftCode[7]);
+            getAllFields[95]?.setText(spliIntermediarySwiftCode[8]);
+            getAllFields[96]?.setText(spliIntermediarySwiftCode[9]);
+            getAllFields[97]?.setText(spliIntermediarySwiftCode[10]);
+          }
+          let purppose:any={Code:[],Description:[]}
+          filldata[8]?.forEach(element => {
+            purppose?.Code?.push(element?.RBI_Purpose_Code?.join(','))
+            purppose?.Description?.push(element?.Purpose?.join(','))
+          });
           getAllFields[98]?.uncheck();
           getAllFields[99]?.uncheck();
-          getAllFields[100]?.setText('Helllo Abhishek');
-          getAllFields[101]?.setText('Helllo Abhishek');
-          getAllFields[102]?.setText('Helllo Abhishek');
-          getAllFields[103]?.setText('Helllo Abhishek');
-          getAllFields[104]?.setText('Helllo Abhishek');
-          getAllFields[105]?.setText('Helllo Abhishek');
-          getAllFields[106]?.setText('Helllo Abhishek');
-          getAllFields[107]?.setText('Helllo Abhishek');
-          getAllFields[108]?.setText('Helllo Abhishek');
-          getAllFields[109]?.setText('Helllo Abhishek');
-          getAllFields[110]?.setText('Helllo Abhishek');
-          getAllFields[111]?.setText('Helllo Abhishek');
-          getAllFields[112]?.setText('Helllo Abhishek');
-          getAllFields[113]?.setText('Helllo Abhishek');
-          getAllFields[114]?.setText('Helllo Abhishek');
-          getAllFields[115]?.setText('Helllo Abhishek');
-          getAllFields[116]?.setText('Helllo Abhishek');
-          getAllFields[117]?.setText('Helllo Abhishek');
-          getAllFields[118]?.setText('Helllo Abhishek');
-          getAllFields[119]?.setText('Helllo Abhishek');
-          getAllFields[120]?.setText('Helllo Abhishek');
-          getAllFields[121]?.setText('Helllo Abhishek');
-          getAllFields[122]?.setText('Helllo Abhishek');
-          getAllFields[123]?.setText('Helllo Abhishek');
-          getAllFields[124]?.setText('Helllo Abhishek');
-          getAllFields[125]?.setText('Helllo Abhishek');
-          getAllFields[126]?.setText('Helllo Abhishek');
+          getAllFields[103]?.setText('');
+          getAllFields[104]?.setText('');
+          getAllFields[105]?.setText('');
+          getAllFields[106]?.setText(purppose?.Code?.join(','));
+          getAllFields[107]?.setText(purppose?.Description?.join(','));
+          getAllFields[108]?.setText('');
+         
+          getAllFields[109]?.setText('');
+          getAllFields[110]?.setText('');
+          getAllFields[111]?.setText('');
+          getAllFields[112]?.setText('');
+          getAllFields[113]?.setText('');
+          getAllFields[114]?.setText('');
+          getAllFields[115]?.setText('');
+          getAllFields[116]?.setText('');
+          getAllFields[117]?.setText('');
+          getAllFields[118]?.setText();
+          getAllFields[119]?.setText('');
+          getAllFields[120]?.setText('');
+          getAllFields[121]?.setText('');
+          getAllFields[122]?.setText('');
+          getAllFields[123]?.setText('');
+          getAllFields[124]?.setText('');
+          getAllFields[125]?.setText('');
+          getAllFields[126]?.setText('');
         }
         const pdfBytes = await pdfDoc.save()
         console.log(pdfDoc, "pdf")

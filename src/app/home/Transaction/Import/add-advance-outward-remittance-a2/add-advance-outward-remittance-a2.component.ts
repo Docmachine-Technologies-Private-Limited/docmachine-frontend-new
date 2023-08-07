@@ -159,6 +159,17 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   ) {
     this.loadFromLocalStorage();
     this.api_base = this.userService?.api_base;
+    this.pipoForm = this.formBuilder.group({
+      bank: new FormControl('', Validators.required),
+      benneName: new FormControl('', Validators.required),
+      RemittanceTotalAmount: new FormControl("", Validators.required),
+      pipoTerm: new FormArray([this.initItems()]),
+      Total_PI_Amount: new FormControl('', Validators.required),
+      CustomerID: new FormControl('', Validators.required),
+      PANNo: new FormControl('', Validators.required),
+      BRANCH_NAME: new FormControl('', Validators.required)
+    });
+    this.FormData=this.pipoForm?.value;
   }
 
   async ngOnInit() {
@@ -221,14 +232,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
 
     // buyerName commodity doc
     this.getDropdownData()
-    this.pipoForm = this.formBuilder.group({
-      bank: new FormControl('', Validators.required),
-      benneName: new FormControl('', Validators.required),
-      RemittanceTotalAmount: new FormControl("", Validators.required),
-      pipoTerm: new FormArray([this.initItems()]),
-      Total_PI_Amount: new FormControl('', Validators.required)
-    }
-    );
+   
   }
 
   initItems() {
@@ -589,7 +593,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
         this.REMIITANCE_AMOUNT[index] = this.selectedItems[index]?.balanceAmount
       }
     }, 500)
-    console.log(this.pipoForm.controls.pipoTerm, this.selectedItems, 'this.pipoForm.controls.pipoTerm')
+    console.log(this.pipoForm.controls, this.selectedItems, 'this.pipoForm.controls')
   }
 
   getItems(form) {
@@ -1126,6 +1130,10 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       HS_CODE: temp2?.join(','),
       FORWARD_CONTRACT: this.ToForwardContract_Selected
     };
+  }
+  FormData:any=[]
+  fillForm(){
+    this.FormData=this.pipoForm?.value
   }
 }
 
