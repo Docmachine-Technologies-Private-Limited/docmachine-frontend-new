@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentService } from '../../../../service/document.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as xlsx from 'xlsx';
 import * as data1 from '../../../../currency.json';
@@ -23,7 +23,6 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
-import { async } from 'rxjs';
 import moment from 'moment';
 
 @Component({
@@ -168,94 +167,95 @@ export class ViewDocumentComponent implements OnInit {
 
     this.route.params.subscribe((params) => {
       this.file = this.route.snapshot.params['file'];
-      if (this.file === 'sb') {
-        this.doc = 'Shipping Bill';
-        this.pipo = false;
-        this.boe = false;
-        this.sb = true;
-        this.shippingBillService.getShippingBillList_Master().then((data: any) => {
-          console.log('getShippingBillList_Master', data)
-          this.item1 = data;
-          this.item1.forEach(element => {
-            let totalFirxAmount: any = 0;
-            let tp: any = {
-              firxNumber: [],
-              firxDate: [],
-              firxCurrency: [],
-              firxAmount: [],
-              firxCommision: [],
-              firxRecAmo: [],
-              id: [],
-            };
-            for (let index = 0; index < element?.firxdetails.length; index++) {
-              const elementfirxdetails = element?.firxdetails[index];
-              totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
+      // if (this.file === 'sb') {
+      //   this.doc = 'Shipping Bill';
+      //   this.pipo = false;
+      //   this.boe = false;
+      //   this.sb = true;
+     
+      // } else if (this.file === 'boe') {
+      //   this.doc = 'BOE';
+      //   this.pipo = false;
+      //   this.boe = true;
+      //   this.sb = false;
+      //   this.documentService.getBoe(1).subscribe(
+      //     (res: any) => {
+      //       console.log(res), (this.item2 = res.data);
+      //     },
+      //     (err) => console.log(err)
+      //   );
+      // } else if (this.file === 'pipo') {
+      //   this.doc = 'PI/PO';
+      //   this.pipo = true;
+      //   this.boe = false;
+      //   this.sb = false;
+      //   this.documentService.getPipo().subscribe(
+      //     (res: any) => {
+      //       console.log('Data fetched successfully', res);
+      //       this.item2 = res.data;
+      //     },
+      //     (err) => console.log(err)
+      //   );
+      // }
+      this.shippingBillService.getShippingBillList_Master().then((data: any) => {
+        console.log('getShippingBillList_Master', data)
+        this.item1 = data;
+        this.item1.forEach(element => {
+          let totalFirxAmount: any = 0;
+          let tp: any = {
+            firxNumber: [],
+            firxDate: [],
+            firxCurrency: [],
+            firxAmount: [],
+            firxCommision: [],
+            firxRecAmo: [],
+            id: [],
+          };
+          for (let index = 0; index < element?.firxdetails.length; index++) {
+            const elementfirxdetails = element?.firxdetails[index];
+            totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
 
-              elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
-                tp?.firxNumber?.push(firxelementno)
-              });
-              elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
-                tp?.firxDate?.push(firxDateelement)
-              });
-              elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
-                tp?.firxCurrency?.push(firxCurrencyelement)
-              });
-              elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
-                tp?.firxAmount?.push(firxAmountelement)
-              });
-              elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
-                tp?.firxCommision?.push(firxCommisionelement)
-              });
-            }
-            element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
-            element['FIRX_INFO'] = tp;
-          });
-
-          this.ShippingBillTable(data);
-          this.FILTER_VALUE_LIST = data;
-
-          for (let index = 0; index < data.length; index++) {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
-            }
-            if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
-              this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
-            }
-            if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
-              this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
-            }
-            if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
-              this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
-            }
-            if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
-              this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
-            }
+            elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
+              tp?.firxNumber?.push(firxelementno)
+            });
+            elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
+              tp?.firxDate?.push(firxDateelement)
+            });
+            elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
+              tp?.firxCurrency?.push(firxCurrencyelement)
+            });
+            elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
+              tp?.firxAmount?.push(firxAmountelement)
+            });
+            elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
+              tp?.firxCommision?.push(firxCommisionelement)
+            });
           }
+          element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
+          element['FIRX_INFO'] = tp;
         });
-      } else if (this.file === 'boe') {
-        this.doc = 'BOE';
-        this.pipo = false;
-        this.boe = true;
-        this.sb = false;
-        this.documentService.getBoe(1).subscribe(
-          (res: any) => {
-            console.log(res), (this.item2 = res.data);
-          },
-          (err) => console.log(err)
-        );
-      } else if (this.file === 'pipo') {
-        this.doc = 'PI/PO';
-        this.pipo = true;
-        this.boe = false;
-        this.sb = false;
-        this.documentService.getPipo().subscribe(
-          (res: any) => {
-            console.log('Data fetched successfully', res);
-            this.item2 = res.data;
-          },
-          (err) => console.log(err)
-        );
-      }
+
+        this.ShippingBillTable(data);
+        this.FILTER_VALUE_LIST = data;
+
+        for (let index = 0; index < data.length; index++) {
+          if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
+          }
+          if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
+            this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
+          }
+          if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
+            this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
+          }
+          if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
+            this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
+          }
+          if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
+            this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
+          }
+        }
+      });
       this.showInvoice = false;
       console.log('hello');
       // setTimeout(()=>{this.documentService.loading=false;},1000)
@@ -276,7 +276,7 @@ export class ViewDocumentComponent implements OnInit {
     this.filtervisible = !this.filtervisible
   }
 
-  exportToExcel(data: any) {
+  exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ShippingBillFormat(this.FILTER_VALUE_LIST).getShippingBill());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
@@ -328,9 +328,11 @@ export class ViewDocumentComponent implements OnInit {
     );
   }
 
-  getInvoicesNew(data: any) {
+  getInvoicesNew(data: any,panel:any) {
     if (data != null) {
+      this.lastIndex = data?.index;
       this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[data?.index]['doc']);
+      panel?.displayShow;
       return (
         (this.selectedRow = this.FILTER_VALUE_LIST[data?.index]),
         (this.showInvoice = true),

@@ -150,7 +150,6 @@ export class EditCompanyComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(250, '.content-wrap');
     await this.userService.getUserDetail().then((user: any) => {
       this.userData = user?.result
       console.log("userData", this.userData)

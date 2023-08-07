@@ -27,14 +27,15 @@
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 col-12">
                                     <div class="new_left_sidedoc pdf_invoce_scroll">
-                                        <iframe class='iframe-controller' *ngIf="this.PREVIWES_URL!=''"
-                                            style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1"
-                                            height="600px" width="100%"></iframe>
-                                        <div id="first">
-                                            <app-import-letterhead type="Import-Direct-Payment"
-                                                *ngIf="this.OTHER_BANK_VISIBLE==true"
-                                                [data]="[this.BANK_DETAILS,this.MAIN_DATA,this.selectedBenne,this.Remittance_Amount]"></app-import-letterhead>
-                                        </div>
+                                        <federal-bank-revised-form-a2-bank-format [BankId]="this.selectedBankName"
+                                            [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
+                                        this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData]"
+                                            [RequiredLetterHead]="true" (event)="this.UrlList=$event"
+                                            id="first"></federal-bank-revised-form-a2-bank-format>
+                                        <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName"
+                                            [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
+                                        this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData]"
+                                            id="first"></hdfc-bank-remittance-advance-against>
                                         <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
                                             <div class="content_white_background">
                                                 <h5 class="header-text">BOE or Advance Outward remittance Details
@@ -74,17 +75,10 @@
                                                 <app-ng-dropdown-custom placeHolderText="Select beneficiary"
                                                     [items]="this.benneDetail" bindLabel="benneName"
                                                     bindValue="benneName" [multiple]="false" [ngModel]="form?.benneName"
-                                                    formControlName="benneName" (modelChanges)="form.benneName=$event?.benneName"
+                                                    formControlName="benneName"
+                                                    (modelChanges)="form.benneName=$event?.benneName"
                                                     (modelChanges)="changepipo($event)" #select_ben>
                                                 </app-ng-dropdown-custom>
-                                                <!-- <select class="form-select" aria-label="Default select example"
-                                                    [ngModel]="form?.benneName" formControlName="benneName"
-                                                    (change)="changepipo($event.target.value)" #select_ben>
-                                                    <option value="">Select beneficiary</option>
-                                                    <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
-                                                            ">{{ bene.benneName }}
-                                                    </option>
-                                                </select> -->
                                                 <div *ngIf="submitted && form?.benneName.errors" class='errorText'>
                                                     <div *ngIf="form?.benneName.errors.required">Select beneficiary is
                                                         required
@@ -94,14 +88,6 @@
                                             <div class="col-md-6 col-12">
                                                 <label for="exampleInputEmail1" class="form-label">Select
                                                     bank*</label>
-                                                <!-- <select class="form-select" aria-label="Default select example"
-                                                    [ngModel]="form?.bank" formControlName="bank"
-                                                    (change)="onSelectBank($event.target.value)" autocomplete="off">
-                                                    <option value="">Select bank</option>
-                                                    <option value="{{banklist.accNumber}}" *ngFor="let banklist of bankDetail
-                                                          ">{{ banklist.bank }}
-                                                    </option>
-                                                </select> -->
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank"
                                                     [items]="this.bankDetail" bindLabel="value" bindValue="id"
                                                     [multiple]="false" [ngModel]="form?.bank" formControlName="bank"
@@ -138,18 +124,19 @@
                                                         <div class="col-md-6 col-12">
                                                             <label for="BOE_Number" class="form-label">BOE No.</label>
                                                             <input type="text" disabled class="form-control"
-                                                                [value]="item?.boeNumber"
-                                                                placeholder="BOE Number" autocomplete="off">
+                                                                [value]="item?.boeNumber" placeholder="BOE Number"
+                                                                autocomplete="off">
                                                         </div>
                                                         <div class="col-md-6 col-12" style="display: none;">
                                                             <label for="BOE_Number" class="form-label">BOE No.</label>
                                                             <input type="text" disabled class="form-control"
                                                                 formControlName="BOE_Number" id="BOE_Number"
-                                                                [ngModel]="item?._id"
-                                                                placeholder="BOE Number" autocomplete="off">
+                                                                [ngModel]="item?._id" placeholder="BOE Number"
+                                                                autocomplete="off">
                                                             <div *ngIf="submitted && form.BOE_Number.errors"
                                                                 class='errorText'>
-                                                                <div *ngIf="form.BOE_Number.errors.required">BOE BOE_Number is
+                                                                <div *ngIf="form.BOE_Number.errors.required">BOE
+                                                                    BOE_Number is
                                                                     required</div>
                                                             </div>
                                                         </div>
@@ -170,7 +157,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                     </div>
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-md-6 col-12">
                                                             <label for="Amount" class="form-label">BOE Amount</label>
@@ -187,8 +174,8 @@
                                                         <div class="col-md-6 col-12">
                                                             <label for="balanceAmount" class="form-label">Balance
                                                                 Amount</label>
-                                                            <input type="text" disabled class="form-control" id="balanceAmount"
-                                                                [value]="item?.balanceAmount"
+                                                            <input type="text" disabled class="form-control"
+                                                                id="balanceAmount" [value]="item?.balanceAmount"
                                                                 placeholder="Payable Amount" autocomplete="off">
                                                             <div *ngIf="submitted && form.payableAmount.errors"
                                                                 class='errorText'>
@@ -203,7 +190,8 @@
                                                                 Amount</label>
                                                             <input type="text" class="form-control"
                                                                 formControlName="remittanceAmount" id="remittanceAmount"
-                                                                placeholder="Remittance Amount" ngModel autocomplete="off"
+                                                                placeholder="Remittance Amount" ngModel
+                                                                autocomplete="off"
                                                                 maxlength="this.sumTotalAmount.length"
                                                                 [ngModel]="item?.Remittance_Amount"
                                                                 (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
@@ -229,6 +217,12 @@
                                                 <div class="add_new_buttons">
                                                     <button type="button" class="btn btn-success"
                                                         (click)="addItems(pipoForm)">+ Add BOE</button>
+                                                        <button type="button" class="btn btn-success PopupOpen"
+                                                        popup-close="FORWARD_CONTRACT">
+                                                        Select FDC</button>
+                                                    <button type="button" class="btn btn-success PopupOpen"
+                                                        popup-close="HS_CODE_POPUP">
+                                                        Select HS Code</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -593,14 +587,17 @@
                                                                         <tbody>
                                                                             <tr class="table-tr">
                                                                                 <td class="col-td-th-2">{{
-                                                                                    item?.CI_DETAILS?.data?.AdvanceNo }}</td>
+                                                                                    item?.CI_DETAILS?.data?.AdvanceNo }}
+                                                                                </td>
                                                                                 <td class="col-td-th-2">{{
-                                                                                    item?.CI_DETAILS?.data?.buyerName}}</td>
+                                                                                    item?.CI_DETAILS?.data?.buyerName}}
+                                                                                </td>
                                                                                 <td class="col-td-th-2">{{
                                                                                     item?.CI_DETAILS?.data?.AdvanceCurrency}}
                                                                                 </td>
                                                                                 <td class="col-td-th-2">{{
-                                                                                    item?.CI_DETAILS?.data?.AdvanceAmount }}
+                                                                                    item?.CI_DETAILS?.data?.AdvanceAmount
+                                                                                    }}
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -709,3 +706,72 @@
         </div>
     </app-custom-model>
 </div>
+
+<app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="HS_CODE_POPUP"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
+    <div class="col-12 mt-2 mb-2">
+        <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
+            (event)="filterHSCode($event)"></ng-input>
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-1">Section</th>
+                    <th scope="col" class="col-td-th-1">HS Code</th>
+                    <th scope="col" class="col-td-th-3" [style.width]="'430px'">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.FILTER_HS_CODE_DATA;let i=index">
+                    <td scope="col" class="col-td-th-1"><input type="checkbox" (change)="ToHSCode($event,item,i)"></td>
+                    <td scope="col" class="col-td-th-1">{{item?.section}}</td>
+                    <td scope="col" class="col-td-th-1">{{item?.hscode}}</td>
+                    <td scope="col" class="col-td-th-3" [style.width]="'430px'">{{item?.description}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+        <div style="display:flex;" class="mt-3">
+            <button type="button" class="btn btn-primary"
+                (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
+        </div>
+    </div>
+</app-custom-model>
+
+<app-custom-model [customstyle]="{'max-width':'690vw !important'}" class="p-2" height="75vh" id="FORWARD_CONTRACT"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select FORWARD CONTRACT View" #FORWARD_CONTRACTPANEL>
+    <div class="col-12 mt-2 mb-2">
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-2">Forward Ref No</th>
+                    <th scope="col" class="col-td-th-3">Booking Date</th>
+                    <th scope="col" class="col-td-th-2">Forward Contract Amount</th>
+                    <th scope="col" class="col-td-th-3">Due Date</th>
+                    <th scope="col" class="col-td-th-3">Amount to be utilised</th>
+                    <th scope="col" class="col-td-th-3">Exchange rate as per FWC</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.ForwardContractDATA;let i=index">
+                    <td scope="col" class="col-td-th-1"><input type="checkbox"
+                            (change)="ToForwardContract($event,item,i)"></td>
+                    <td scope="col" class="col-td-th-2">{{item?.ForwardRefNo}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.BookingDate}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.BookingAmount}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.ToDate}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.AvailableAmount}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.NetRate}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+        <div style="display:flex;" class="mt-3">
+            <button type="button" class="btn btn-primary"
+                (click)="DoneButton();FORWARD_CONTRACTPANEL?.displayHidden">Done</button>
+        </div>
+    </div>
+</app-custom-model>

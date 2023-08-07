@@ -1,4 +1,4 @@
-<div class="content-wrap scroll-bar-main" style="position: absolute;left: 245px;margin: auto;margin-top: 0;">
+<div class="content-wrap scroll-bar-main">
   <main id="content" class="content p-0" role="main"
     style="border-radius: 10px;box-shadow: 0px 0px 2px 2px #cdc9c9;background: white;">
     <div class="container-fluid p-0 m-0">
@@ -87,28 +87,8 @@
                             (click)="letterImageView.style.display='flex';letterheadView(this.item?.letterHead)">View</button>
                         </div>
                       </div>
-
-                      <!-- <div class="form-group">
-                        <label for="exampleInputEmail1">Issues date</label>
-                        <input type="date" name="Issuesdate" disabled class="form-control"
-                  [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.Issuesdate"
-                          style="border-radius: 5px;" aria-describedby="emailHelp">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Expiry Date</label>
-                        <input type="date" name="ExpiryDate" disabled class="form-control"
-                  [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.ExpiryDate"
-                          style="border-radius: 5px;" aria-describedby="emailHelp">
-                      </div> -->
                     </div>
-                    <!-- <div class="sb2">
-                      <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
-                    </div> -->
                   </div>
-                  <!-- <img [src]="this.item?.letterHead" style="width: 360px;
-                  height: 360px;
-                  border-radius: 5px;
-                  box-shadow: 0px 0px 2px 2px #d6d5d5;"> -->
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Round Seal</label>
@@ -134,23 +114,7 @@
                             (click)="Starhousecertificate_Details.style.display='flex';">View</button>
                         </div>
                       </div>
-
-                      <!-- <div class="form-group">
-                        <label for="exampleInputEmail1">Issues date</label>
-                        <input type="date" name="Issuesdate" disabled class="form-control"
-                  [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.Issuesdate"
-                          style="border-radius: 5px;" aria-describedby="emailHelp">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Expiry Date</label>
-                        <input type="date" name="ExpiryDate" disabled class="form-control"
-                  [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.ExpiryDate"
-                          style="border-radius: 5px;" aria-describedby="emailHelp">
-                      </div> -->
                     </div>
-                    <!-- <div class="sb2">
-                      <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
-                    </div> -->
                   </div>
                 </div>
                 <div class="form-group" style="display: flex;align-items: end;">
@@ -173,9 +137,7 @@
                     class="form-control" [value]="this.UPDATED_DETAILS?.iec" maxlength="10" #iec>
                   <span [style]="iec.value.length<10 ? 'display:block' : 'display:none'" class="invalid-feedback">ICE
                     should contains only 10 numbers</span>
-                  <!-- <div *ngIf="iec.value.length<10" [style]="iec.value.length<10 ? 'display:block' : 'display:none'" class="invalid-feedback">ICE should contains only 10 numbers</div>
-                    <div *ngIf="iec.pattern"  [style]="iec.pattern ? 'display:block' : 'display:none'" class="invalid-feedback">IEC should be numerics with 10 letters EX: 12121ABVEW</div> -->
-                </div>
+                    </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Company Address</label>
                   <input type="text" (keyup)="add_Form_value('adress',$event.target.value)" class="form-control"
@@ -257,9 +219,6 @@
                       </div>
                       <div class="column">
                         <label class="bank">*Bank Name</label>
-                        <!-- <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'bank',$event.target.value)"
-                          placeholder="bank name" [value]="course?.bank"
-                          class="form-control rounded-pill password password1"> -->
                         <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST"
                           bindLabel="value" [multiple]="false" placeholder="Select Bank Name" name="accType"
                           [ngModel]="course?.bank"
@@ -378,7 +337,7 @@
         <div class="modal-header">
           <h5 class="modal-title">Bank Details | {{item?.bankDetails[ID].bank}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-            (click)="bank_details.style.display='none'"><span>&#215;</span></button>
+            (click)="bank_details.style.display='none'"></button>
         </div>
         <div class="modal-body">
           <label class="bank">Bic Address</label>
@@ -410,7 +369,7 @@
         <div class="modal-header">
           <h5 class="modal-title">Star house certificate</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-            (click)="Starhousecertificate_Details.style.display='none'"><span>&#215;</span></button>
+            (click)="Starhousecertificate_Details.style.display='none'"></button>
         </div>
         <div class="modal-body">
           <div class="col-12">
@@ -448,7 +407,7 @@
         <div class="modal-header">
           <h5 class="modal-title">Letter Head Image View</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-            (click)="letterImageView.style.display='none'"><span>&#215;</span></button>
+            (click)="letterImageView.style.display='none'"></button>
         </div>
         <div class="modal-body">
           <div class="col-12">

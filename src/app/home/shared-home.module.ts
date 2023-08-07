@@ -81,6 +81,8 @@ import { CommonOpenPopUpDirective } from "../custom/custom-model/CustomPopupOpen
 import { PopupOpenDirective } from "../custom/PopupOpen/popup-open.directive";
 import { FederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterhead/exportletterhead.component";
 import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBank/import-letter-head/import-letter-head.component";
+import { DirectExportPaymentComponent } from "./AllBankFormat/HDFC-Bank/direct-import-payment/direct-import-payment.component";
+import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/FederalBank/direct-import-payment/direct-import-payment.component";
 
 @NgModule({
   declarations: [
@@ -137,7 +139,9 @@ import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBan
     hdfcbankInwardRemittanceDisposalFormatComponent,
     hdfcbankRevisedFormA2BANKFormatComponent,
     FederalBankExportletterheadComponent,
-    FederalBankImportLetterHeadComponent
+    FederalBankImportLetterHeadComponent,
+    DirectExportPaymentComponent,
+    FederalBankDirectImportPaymentComponent
   ],
   imports: [
     CommonModule,
@@ -234,6 +238,8 @@ import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBan
     PopupOpenDirective,
     FederalBankExportletterheadComponent,
     FederalBankImportLetterHeadComponent,
+    DirectExportPaymentComponent,
+    FederalBankDirectImportPaymentComponent
   ],
 })
 export class SharedHomeModule { }
