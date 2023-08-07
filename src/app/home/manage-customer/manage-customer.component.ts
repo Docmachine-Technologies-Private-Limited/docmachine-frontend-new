@@ -398,6 +398,7 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Buyer Name",
             placeholderText: 'Buyer’s name',
+            maxLength: 300,
             rules: {
               required: true,
             }
