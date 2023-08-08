@@ -23,7 +23,7 @@ export class hdfcbankRevisedFormA2BANKFormatComponent implements OnInit, OnChang
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     if (this.BankId != '') {
-      if (this.BankId == 'F_B_L_6') {
+      if (this.BankId == 'H_B_L_7') {
         formUrl = './../../assets/pdf/FedralBank/Revised_Form_A2_BLANK.pdf'
       }
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())

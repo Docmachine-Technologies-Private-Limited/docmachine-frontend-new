@@ -21,7 +21,7 @@ import { TransactionDashboardComponent } from './transaction-dashboard/transacti
   imports: [
     CommonModule,
     SharedHomeModule,
-    ImportTransactionRoutingModule
+    ImportTransactionRoutingModule,
   ]
 })
 export class ImportTransactionModule { }

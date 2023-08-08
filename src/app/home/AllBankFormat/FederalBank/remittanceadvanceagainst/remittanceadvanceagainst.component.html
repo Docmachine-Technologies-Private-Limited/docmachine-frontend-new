@@ -1,7 +1,7 @@
 <app-pdf-viewer *ngIf="this.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" [downloadShow]="false" name="Federal Bank Pdf"
     [src]="this.PREVIWES_URL" width="100%" height="500px"></app-pdf-viewer>
 
-<div id="federal-bank-letter-head">
-    <federal-bank-import-letter-head *ngIf="this.RequiredLetterHead==true && this.VISIBLITY_PDF==true"
-        [data]="this.data"></federal-bank-import-letter-head>
+<div id="federal-bank-letter-head" *ngIf="this.RequiredLetterHead==true && this.VISIBLITY_PDF==true">
+    <federal-bank-import-letter-head 
+        [data]="this.data" (url)="urlletterhead($event)"></federal-bank-import-letter-head>
 </div>

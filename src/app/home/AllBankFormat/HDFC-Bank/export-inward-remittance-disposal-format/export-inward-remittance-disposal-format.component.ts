@@ -23,7 +23,7 @@ export class hdfcbankInwardRemittanceDisposalFormatComponent implements OnInit, 
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     if (this.BankId != '') {
-      if (this.BankId == 'F_B_L_6') {
+      if (this.BankId == 'H_B_L_7') {
         formUrl = './../../assets/pdf/FedralBank/Inward_Remittance_disposal_format.pdf'
       }
       const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())

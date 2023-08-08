@@ -190,7 +190,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   GetDownloadStatus: any = [];
   Export_Direct_Dispatch: any = []
   VISIBILITY: boolean = false;
-  ForwardContractDATA: any=[];
+  ForwardContractDATA: any = [];
 
   constructor(
     public documentService: DocumentService,
@@ -930,14 +930,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     if (data_temp == undefined || data_temp == null || data_temp == '') {
       const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
       const pdfDoc = await PDFDocument.load(formPdfBytes)
-      const form:any = pdfDoc.getForm()
+      const form: any = pdfDoc.getForm()
       const getAllFields = form?.getFields();
       getAllFields?.forEach(element => {
         const elementvalue: any = element?.acroField?.dict?.values();
         if (elementvalue[0]?.encodedName == '/Tx') {
           element?.setFontSize(11);
           element?.enableReadOnly();
-          const [widget] :any = element?.acroField?.getWidgets();
+          const [widget]: any = element?.acroField?.getWidgets();
           widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
           element?.enableCombing(); // trying to restore combing
         }
@@ -968,7 +968,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[24].setText(a['buyerName'])
       getAllFields[25].setText('ADVANCE AGAINST EXPORT')
       getAllFields[26].setText(this.generatePurpose[0])
-      
+
       getAllFields[77].setText(this.credit[0])
       getAllFields[78].setText(this.credit[1])
       getAllFields[79].setText(this.credit[2])
@@ -983,7 +983,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[88].setText(this.credit[11])
       getAllFields[89].setText(this.credit[12])
       getAllFields[90].setText(this.credit[13])
-      
+
       getAllFields[105].setText(this.charge[0])
       getAllFields[106].setText(this.charge[1])
       getAllFields[107].setText(this.charge[2])
@@ -998,9 +998,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[116].setText(this.charge[11])
       getAllFields[117].setText(this.charge[12])
       getAllFields[118].setText(this.charge[13])
-      
-      let bookingdatesplit=this.ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-','')?.split('');
-      let duedatesplit=this.ToForwardContract_Selected[0]?.ToDate?.replaceAll('-','')?.split('');
+
+      let bookingdatesplit = this.ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-', '')?.split('');
+      let duedatesplit = this.ToForwardContract_Selected[0]?.ToDate?.replaceAll('-', '')?.split('');
       getAllFields[119].setText(this.ToForwardContract_Selected[0]?.ForwardRefNo)
       getAllFields[120].setText(bookingdatesplit[6])
       getAllFields[121].setText(bookingdatesplit[7])
@@ -1010,7 +1010,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[125].setText(bookingdatesplit[1])
       getAllFields[126].setText(bookingdatesplit[2])
       getAllFields[127].setText(bookingdatesplit[3])
-      
+
       getAllFields[128].setText(duedatesplit[6])
       getAllFields[129].setText(duedatesplit[7])
       getAllFields[130].setText(duedatesplit[4])
@@ -1019,7 +1019,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[133].setText(duedatesplit[1])
       getAllFields[134].setText(duedatesplit[2])
       getAllFields[135].setText(duedatesplit[3])
-      
+
       getAllFields[136].setText(this.ToForwardContract_Selected[0]?.BookingAmount)
       getAllFields[137].setText(this.ToForwardContract_Selected[0]?.UtilizedAmount)
       getAllFields[138].setText(this.ToForwardContract_Selected[0]?.NetRate);
@@ -3210,26 +3210,26 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   }
 
   REMITTANCE_DATA: any = ''
-  Remittancedata(data: any,i:any) {
+  Remittancedata(data: any, i: any) {
     this.REMITTANCE_DATA = data;
-    this.Inward_Remittance_MT103_DATA?.forEach((element,index) => {
-       if (i!=index) {
-        element['Checked']=false;
-       }else{
-        element['Checked']=true;
-       }
+    this.Inward_Remittance_MT103_DATA?.forEach((element, index) => {
+      if (i != index) {
+        element['Checked'] = false;
+      } else {
+        element['Checked'] = true;
+      }
     });
     this.MT103_URL = data?.file;
-    this.Inward_Remittance_MT103=[data];
+    this.Inward_Remittance_MT103 = [data];
     console.log(this.REMITTANCE_DATA, 'REMITTANCE_DATA')
     this.bankRef = name;
   }
-  ShowExportPage(event:any){
-  console.log(event,'sfsdfsdfdsfsdfd')
-    if (this.REMITTANCE_DATA!='') {
-      this.VISIBILITY=true
-    }else{
-      this.VISIBILITY=false
+  ShowExportPage(event: any) {
+    console.log(event, 'sfsdfsdfdsfsdfd')
+    if (this.REMITTANCE_DATA != '') {
+      this.VISIBILITY = true
+    } else {
+      this.VISIBILITY = false
     }
   }
   ArrayToString(array: any) {
@@ -3538,6 +3538,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         updatedata['documents'] = temp_doc;
         updatedata['extradata'] = P102_DATA;
         updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
+        updatedata['ALL_DATA_HSCODE_FORWARD'] = this.ALL_DATA_HSCODE_FORWARD
         console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, P102_DATA, 'approval_data')
         if (Status == '' || Status == null || Status == 'Rejected') {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
@@ -3584,7 +3585,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       })
     })
   }
-  
+
   ToForwardContract_Selected: any = []
   ToForwardContract(event: any, value: any, index: any) {
     if (event?.target?.checked == true) {
@@ -3592,9 +3593,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     } else {
       this.ToForwardContract_Selected[0] = '';
     }
-   
+
   }
-  
+
   ALL_DATA_HSCODE_FORWARD: any = {};
   DoneButton() {
     this.ALL_DATA_HSCODE_FORWARD = {

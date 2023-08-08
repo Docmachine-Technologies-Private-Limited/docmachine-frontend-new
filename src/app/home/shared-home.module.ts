@@ -141,7 +141,7 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     FederalBankExportletterheadComponent,
     FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
-    FederalBankDirectImportPaymentComponent
+    FederalBankDirectImportPaymentComponent,
   ],
   imports: [
     CommonModule,
@@ -161,7 +161,7 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     jqxSchedulerModule,
     MatBadgeModule,
     MatButtonModule, 
-    MatIconModule
+    MatIconModule,
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
@@ -239,7 +239,7 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     FederalBankExportletterheadComponent,
     FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
-    FederalBankDirectImportPaymentComponent
+    FederalBankDirectImportPaymentComponent,
   ],
 })
 export class SharedHomeModule { }

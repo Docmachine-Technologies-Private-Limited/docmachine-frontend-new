@@ -4,7 +4,7 @@ import $ from 'jquery'
 declare var kendo: any;
 
 @Component({
-  selector: 'HDFC-bank-direct-export-payment',
+  selector: 'hdfc-bank-direct-export-payment',
   templateUrl: './direct-import-payment.component.html',
   styleUrls: ['./direct-import-payment.component.scss']
 })
@@ -26,7 +26,7 @@ export class DirectExportPaymentComponent implements OnInit, OnChanges {
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     if (this.BankId != '') {
-      if (this.BankId == 'F_B_L_6') {
+      if (this.BankId == 'H_B_L_7') {
         formUrl = './../../assets/pdf/FedralBank/Remittance_Advance_Against_Imports_Edit.pdf'
         console.log(filldata, 'filldata')
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())

@@ -15,13 +15,18 @@ export class FederalBankRevisedFormA2BANKFormatComponent implements OnInit, OnCh
   VISIBLITY_PDF: boolean = false;
   @Input('RequiredLetterHead') RequiredLetterHead: boolean = false;
   @Output('event') event = new EventEmitter();
-
+  LETTER_HEAD_URL:any='';
+  
   constructor() { }
 
   ngOnInit(): void {
     this.fillForm(this.data)
   }
-
+ 
+  urlletterhead(url:any){
+    this.LETTER_HEAD_URL=url;
+  }
+  
   async fillForm(filldata: any) {
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
@@ -234,29 +239,9 @@ export class FederalBankRevisedFormA2BANKFormatComponent implements OnInit, OnCh
         setTimeout(() => {
           this.PREVIWES_URL = x1;
           this.VISIBLITY_PDF = true;
-          console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-          $(document).ready(() => {
-            kendo.pdf.defineFont({
-              "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
-              "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
-              "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-              "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-              "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
-            });
-            kendo.drawing.drawDOM($("#federal-bank-letter-head"), {
-              paperSize: "A4",
-              margin: [-10, 0, 0, 0],
-              scale: 0.7,
-            }).then(function (group) {
-              return kendo.drawing.exportPDF(group, {
-                paperSize: "A4",
-                margin: [-10, 0, 0, 0],
-              });
-            }).done(async (pdfdata) => {
-              console.log(pdfdata, 'sdfsfsdfdsfdffsd')
-              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: pdfdata });
-            });
-          });
+          setTimeout(() => {
+            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+          }, 200);
         }, 200);
       }
     }

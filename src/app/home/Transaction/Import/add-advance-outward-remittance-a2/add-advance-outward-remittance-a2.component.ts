@@ -786,7 +786,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                 documents: temp_doc,
                 pipo_1: this.selectedItems,
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
-                extra_data: this.EXTRA_DOCUMENTS
+                extra_data: this.EXTRA_DOCUMENTS,
+                ALL_DATA_HSCODE_FORWARD:this.ALL_DATA_HSCODE_FORWARD
               },
               TypeTransaction: 'Advance-Remittance-A2',
               fileType: 'Import',

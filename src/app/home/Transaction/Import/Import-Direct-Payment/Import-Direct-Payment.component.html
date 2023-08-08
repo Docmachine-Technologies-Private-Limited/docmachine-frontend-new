@@ -27,15 +27,15 @@
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 col-12">
                                     <div class="new_left_sidedoc pdf_invoce_scroll">
-                                        <federal-bank-revised-form-a2-bank-format [BankId]="this.selectedBankName"
+                                        <federal-bank-direct-import-payment [BankId]="this.selectedBankName"
                                             [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
                                         this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData]"
                                             [RequiredLetterHead]="true" (event)="this.UrlList=$event"
-                                            id="first"></federal-bank-revised-form-a2-bank-format>
-                                        <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName"
+                                            id="first"></federal-bank-direct-import-payment>
+                                        <hdfc-bank-direct-export-payment [BankId]="this.selectedBankName"
                                             [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
                                         this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData]"
-                                            id="first"></hdfc-bank-remittance-advance-against>
+                                            id="first"></hdfc-bank-direct-export-payment>
                                         <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
                                             <div class="content_white_background">
                                                 <h5 class="header-text">BOE or Advance Outward remittance Details
@@ -69,7 +69,7 @@
                                 <div class="col-md-5 col-sm-12 col-12" *ngIf="showSummaryPage == 0">
                                     <div class="right_form_new">
                                         <div class="row">
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-12">
                                                 <label for="exampleInputPassword1" class="form-label">Select
                                                     beneficiary</label>
                                                 <app-ng-dropdown-custom placeHolderText="Select beneficiary"
@@ -85,15 +85,29 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-12">
                                                 <label for="exampleInputEmail1" class="form-label">Select
                                                     bank*</label>
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank"
-                                                    [items]="this.bankDetail" bindLabel="value" bindValue="id"
+                                                [items]="this.BANK_LIST_DROPDOWN" bindLabel="value" bindValue="id"
                                                     [multiple]="false" [ngModel]="form?.bank" formControlName="bank"
                                                     (modelChanges)="form.bank=$event?.value"
                                                     (modelChanges)="onSelectBank($event)" #multiplepipo>
                                                 </app-ng-dropdown-custom>
+                                                <div class="col-12 mt-2 p-0">
+                                                    <label for="exampleInputEmail1" class="form-label">
+                                                        To Debit Account no. & Account Type*</label>
+                                                    <custom-radio-button
+                                                        [items]="this.ToCreditAccountdata[this.selectedBankName]"
+                                                        (event)="ToCreditAccount($event)"></custom-radio-button>
+                                                </div>
+                                                <div class="col-12 mt-2 p-0">
+                                                    <label for="exampleInputEmail1" class="form-label">
+                                                        To Debit Charges Account no. & Account Type*</label>
+                                                    <custom-radio-button
+                                                        [items]="this.ToChargesAccountdata[this.selectedBankName]"
+                                                        (event)="ToChargesAccount($event)"></custom-radio-button>
+                                                </div>
                                                 <div *ngIf="submitted && form?.bank.errors" class='errorText'>
                                                     <div *ngIf="form?.bank.errors.required">Select bank is required
                                                     </div>
@@ -121,13 +135,13 @@
                                                 <div *ngFor="let item of this.MAIN_DATA;let i=index"
                                                     [formGroupName]="i">
                                                     <div class="row">
-                                                        <div class="col-md-6 col-12">
+                                                        <div class="col-12">
                                                             <label for="BOE_Number" class="form-label">BOE No.</label>
                                                             <input type="text" disabled class="form-control"
                                                                 [value]="item?.boeNumber" placeholder="BOE Number"
                                                                 autocomplete="off">
                                                         </div>
-                                                        <div class="col-md-6 col-12" style="display: none;">
+                                                        <div class="col-12" style="display: none;">
                                                             <label for="BOE_Number" class="form-label">BOE No.</label>
                                                             <input type="text" disabled class="form-control"
                                                                 formControlName="BOE_Number" id="BOE_Number"
@@ -140,7 +154,7 @@
                                                                     required</div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 col-12">
+                                                        <div class="col-12">
                                                             <label for="Currency" class="form-label">Currency</label>
                                                             <app-ng-dropdown-custom [disabled]="true" bindLabel="type"
                                                                 placeHolderText="Select Currency"
@@ -159,7 +173,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-6 col-12">
+                                                        <div class="col-12">
                                                             <label for="Amount" class="form-label">BOE Amount</label>
                                                             <input type="text" disabled class="form-control"
                                                                 formControlName="amount" id="invoice_amount"
@@ -171,7 +185,7 @@
                                                                     required</div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 col-12">
+                                                        <div class="col-12">
                                                             <label for="balanceAmount" class="form-label">Balance
                                                                 Amount</label>
                                                             <input type="text" disabled class="form-control"
@@ -206,6 +220,7 @@
                                                                 <button style="width:100%" type="button"
                                                                     class="btn btn-primary"
                                                                     (click)="removeItems(i)">-</button>
+                                                                <button type="button" class="btn btn-success" (click)="fillForm()">Fill Pdf</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -227,14 +242,14 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6 col-sm-6 col-12">
+                                            <div class="col-12">
                                                 <label for="TotalPIamount" class="form-label">Total BOE
                                                     amount</label>
                                                 <input type="text" class="form-control" id="TotalPIamount"
                                                     [ngModel]="sumTotalAmount" formControlName="sumTotalAmount"
                                                     placeholder="Total PI amount" readonly>
                                             </div>
-                                            <div class="col-md-6 col-sm-6 col-12">
+                                            <div class="col-12">
                                                 <label for="totalremittanceAmount" class="form-label">Remittance
                                                     amount</label>
                                                 <input type="text" ngModel formControlName="totalremittanceAmount"
@@ -691,9 +706,9 @@
 <div tabindex="-1" #PREVIEW_PAGE>
     <app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
         name="Document View">
-        <div class="col-12 mt-2 mb-2" *ngIf="this.PREVIEWS_URL_LIST!=''">
+        <div class="col-12 mt-2 mb-2" *ngIf="this.PREVIEWS_URL_STRING!=''">
             <app-pdf-viewer [downloadShow]="false" name="All Documents Merge"
-                *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
+               [src]="this.PREVIEWS_URL_STRING" width="100%" height="500px"></app-pdf-viewer>
         </div>
         <div class="modal-footer">
             <div style="display:flex;" class="mt-3">

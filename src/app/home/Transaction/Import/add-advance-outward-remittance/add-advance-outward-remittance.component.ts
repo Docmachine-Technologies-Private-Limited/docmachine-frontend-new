@@ -526,18 +526,17 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         fileName: this.guid() + '.pdf', buffer: this.UrlList?.BankUrl,
         type: 'application/pdf'
       }).subscribe(async (pdfresponse: any) => {
-        temp.push(pdfresponse?.url)
+        temp[0] = pdfresponse?.url;
         await this.userService?.UploadS3Buket({
           fileName: this.guid() + '.pdf', buffer: this.UrlList?.LetterHeadUrl,
           type: 'application/pdf'
         }).subscribe(async (pdfresponse1: any) => {
-          temp.push(pdfresponse1?.url);
+          temp[1] = pdfresponse1?.url;
           reslove(temp);
         });
       });
     })
   }
-
   PromiseReturn() {
     var temp: any = [];
     temp[0] = this.uploadUrl;
@@ -606,7 +605,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
                 formdata: this.pipoForm.value,
                 documents: temp_doc,
                 pipo_1: this.selectedItems,
-                Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() }
+                Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
+                ALL_DATA_HSCODE_FORWARD:this.ALL_DATA_HSCODE_FORWARD
               },
               TypeTransaction: 'Advance-Remittance-flow',
               fileType: 'Import',

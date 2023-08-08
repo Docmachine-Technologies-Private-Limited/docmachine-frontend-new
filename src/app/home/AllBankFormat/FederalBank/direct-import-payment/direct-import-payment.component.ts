@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { PDFDocument} from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib';
 import $ from 'jquery'
 declare var kendo: any;
 
@@ -15,24 +15,30 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
   VISIBLITY_PDF: boolean = false;
   @Input('RequiredLetterHead') RequiredLetterHead: boolean = false;
   @Output('event') event = new EventEmitter();
-
+  LETTER_HEAD_URL:any='';
+   
   constructor() { }
 
   ngOnInit(): void {
     this.fillForm(this.data)
   }
-
+  
+  urlletterhead(url:any){
+    this.LETTER_HEAD_URL=url;
+  }
+  
   async fillForm(filldata: any) {
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     if (this.BankId != '') {
       if (this.BankId == 'F_B_L_6') {
-        formUrl = './../../assets/pdf/FedralBank/Direct_Import_Bills.pdf'
+        formUrl = './../../assets/pdf/FedralBank/Direct_Import_Bills_new.pdf'
         console.log(filldata, 'filldata')
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
         const pdfDoc = await PDFDocument.load(formPdfBytes)
         const form: any = pdfDoc.getForm()
         const getAllFields = form?.getFields();
+        console.log(form, 'dadasdasddas')
         if (filldata != undefined && filldata != null && filldata != '') {
           getAllFields.forEach(element => {
             const elementvalue: any = element?.acroField?.dict?.values();
@@ -43,37 +49,62 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
               widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
             }
           });
+          let remitancedata: any = {
+            Currency: filldata[7][0]!=undefined?filldata[7][0]?.currency:'',
+            BillofEntryNumber: [],
+            Date: [],
+            PortCode: [],
+            BillofEntryAmount: [],
+            SumAmount:0
+          }
+          filldata[7]?.forEach(element => {
+            remitancedata?.BillofEntryNumber.push(element?.boeNumber);
+            remitancedata?.Date.push(element?.boeDate);
+            remitancedata?.PortCode.push(element?.dischargePort);
+            remitancedata?.BillofEntryAmount.push(element?.InputAmount);
+            remitancedata.SumAmount+=parseFloat(element?.InputAmount);
+          });
           getAllFields[0]?.setText('');
           getAllFields[1]?.setText('');
-          getAllFields[2]?.setText(filldata[1][0]?.balanceAmount+' & '+filldata[1][0]?.currency);
-          getAllFields[3]?.setText(filldata[1][0]?.balanceAmount?.toString());
-          getAllFields[4]?.setText('');
-          getAllFields[5]?.setText('');
-          getAllFields[6]?.setText('');
-          getAllFields[7]?.setText('');
-          getAllFields[8]?.setText('');
-          getAllFields[9]?.setText(filldata[1][0]?.balanceAmount!=undefined?this.ConvertNumberToWords(filldata[1][0]?.balanceAmount):'-');
+          getAllFields[2]?.setText(remitancedata?.Currency +' & ' +  remitancedata?.SumAmount);
+          
+          if (remitancedata?.Date[0]!=undefined) {
+            let due_date: any = remitancedata?.Date[0]?.split('-');
+            // getAllFields[3]?.setText(due_date[2]?.split('')[0]);
+            // getAllFields[4]?.setText(due_date[2]?.split('')[1]);
+            // getAllFields[5]?.setText(due_date[1]?.split('')[0]);
+            // getAllFields[6]?.setText(due_date[1]?.split('')[1]);
+            // getAllFields[7]?.setText(due_date[0]?.split('')[0]);
+            // getAllFields[8]?.setText(due_date[0]?.split('')[1]);
+          }
+          getAllFields[9]?.setText(remitancedata?.SumAmount != undefined ? this.ConvertNumberToWords(remitancedata?.SumAmount) : '-');
           getAllFields[10]?.setText('');
           getAllFields[11]?.uncheck()
           getAllFields[12]?.uncheck()
-          getAllFields[13]?.setText('-');
-          getAllFields[14]?.setText('-');
-          getAllFields[15]?.uncheck();
-          getAllFields[16]?.uncheck();
-          getAllFields[17]?.setText(filldata[5][0]?.teamName + '\n' + filldata[5][0]?.adress);
-          getAllFields[18]?.setText(filldata[2]?.benneName + '\n' + filldata[2]?.beneAdrs);
-          getAllFields[19]?.setText(filldata[2]?.beneBankName + '\n' + filldata[2]?.beneBankAdress);
-          getAllFields[20]?.setText('');
-          getAllFields[21]?.setText(filldata[2]?.beneAccNo + '\n' + filldata[2]?.iban);
-          getAllFields[22]?.setText(filldata[2]?.beneBankSwiftCode);
-          getAllFields[23]?.setText(filldata[2]?.sortCode);
-          getAllFields[24]?.setText('');
-          getAllFields[25]?.setText(filldata[2]?.beneBankSwiftCode);
-          getAllFields[26]?.uncheck();
-          getAllFields[27]?.uncheck();
-          getAllFields[28]?.setText(filldata[1][0]?.commodity?.join(','));
-          getAllFields[29]?.setText(filldata[6]?.HS_CODE);
-          
+          getAllFields[13]?.uncheck();
+          getAllFields[14]?.uncheck();
+          getAllFields[15]?.setText('');
+          getAllFields[16]?.setText(filldata[5][0]?.teamName + '\n' + filldata[5][0]?.adress);
+          getAllFields[17]?.uncheck();
+          getAllFields[18]?.uncheck();
+
+
+          getAllFields[19]?.setText(remitancedata?.BillofEntryNumber?.join(','));
+          getAllFields[20]?.setText(remitancedata?.Date?.join(','));
+          getAllFields[21]?.setText(remitancedata?.PortCode?.join(','));
+          getAllFields[22]?.setText(remitancedata?.BillofEntryAmount?.join(','));
+
+          getAllFields[23]?.setText(filldata[2]?.benneName + '\n' + filldata[2]?.beneAdrs);
+          getAllFields[24]?.setText(filldata[2]?.beneAccNo + '\n' + filldata[2]?.iban);
+          getAllFields[24].setFontSize(8)
+          getAllFields[25]?.setText(filldata[2]?.sortCode);
+          getAllFields[26]?.setText(filldata[2]?.beneBankName + '\n' + filldata[2]?.beneBankAdress);
+          getAllFields[26].setFontSize(9)
+          getAllFields[27]?.setText(filldata[2]?.beneBankSwiftCode);
+
+          getAllFields[28]?.setText(filldata[2]?.interBankName);
+          getAllFields[29]?.setText(filldata[2]?.interBankSwiftCode);
+
           getAllFields[30]?.setText(filldata[0]?.accNumber?.split('')[0]);
           getAllFields[31]?.setText(filldata[0]?.accNumber?.split('')[1]);
           getAllFields[32]?.setText(filldata[0]?.accNumber?.split('')[2]);
@@ -88,7 +119,7 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
           getAllFields[41]?.setText(filldata[0]?.accNumber?.split('')[11]);
           getAllFields[42]?.setText(filldata[0]?.accNumber?.split('')[12]);
           getAllFields[43]?.setText(filldata[0]?.accNumber?.split('')[13]);
-          
+
           getAllFields[44]?.setText(filldata[4]?.accNumber?.split('')[0]);
           getAllFields[45]?.setText(filldata[4]?.accNumber?.split('')[1]);
           getAllFields[46]?.setText(filldata[4]?.accNumber?.split('')[2]);
@@ -103,10 +134,10 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
           getAllFields[55]?.setText(filldata[4]?.accNumber?.split('')[11]);
           getAllFields[56]?.setText(filldata[4]?.accNumber?.split('')[12]);
           getAllFields[57]?.setText(filldata[4]?.accNumber?.split('')[13]);
-          
-          if (filldata[6]?.FORWARD_CONTRACT!=undefined) {
-            let booking_date:any=filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
-            let due_date:any=filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
+
+          if (filldata[6]?.FORWARD_CONTRACT != undefined && filldata[6]?.FORWARD_CONTRACT?.length !=0) {
+            let booking_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
+            let due_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
             getAllFields[58]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.ForwardRefNo);
             getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
             getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
@@ -117,7 +148,7 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
             getAllFields[65]?.setText(booking_date[0]?.split('')[2]);
             getAllFields[66]?.setText(booking_date[0]?.split('')[3]);
             getAllFields[67]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.BookingAmount);
-            
+
             getAllFields[68]?.setText(due_date[2]?.split('')[0]);
             getAllFields[69]?.setText(due_date[2]?.split('')[1]);
             getAllFields[70]?.setText(due_date[1]?.split('')[0]);
@@ -126,27 +157,28 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
             getAllFields[73]?.setText(due_date[0]?.split('')[1]);
             getAllFields[74]?.setText(due_date[0]?.split('')[2]);
             getAllFields[75]?.setText(due_date[0]?.split('')[3]);
-            
+
             getAllFields[76]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.UtilizedAmount);
             getAllFields[77]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.NetRate);
           }
           getAllFields[80]?.setText(filldata[6]?.HS_CODE);
-          getAllFields[81]?.setText('');
-          getAllFields[82]?.setText('');
-          getAllFields[83]?.setText('');
-          getAllFields[84]?.setText('');
-          getAllFields[85]?.setText('');
-          getAllFields[86]?.setText('');
-          getAllFields[87]?.uncheck();
-          getAllFields[88]?.uncheck()
-          getAllFields[89]?.uncheck();
-          getAllFields[90]?.uncheck();
-          getAllFields[91]?.uncheck();
-          getAllFields[92]?.uncheck();
-          getAllFields[93]?.setText('');
-          getAllFields[94]?.setText('');
-          getAllFields[95]?.setText('');
-          getAllFields[96]?.setText('');
+          getAllFields[80].setFontSize(9)
+          // getAllFields[81]?.setText('');
+          // getAllFields[82]?.setText('');
+          // getAllFields[83]?.setText('');
+          // getAllFields[84]?.setText('');
+          // getAllFields[85]?.setText('');
+          // getAllFields[86]?.setText('');
+          // getAllFields[87]?.uncheck();
+          // getAllFields[88]?.uncheck()
+          // getAllFields[89]?.uncheck();
+          // getAllFields[90]?.uncheck();
+          // getAllFields[91]?.uncheck();
+          // getAllFields[92]?.uncheck();
+          // getAllFields[93]?.setText('');
+          // getAllFields[94]?.setText('');
+          // getAllFields[95]?.setText('');
+          // getAllFields[96]?.setText('');
         }
         const pdfBytes = await pdfDoc.save()
         console.log(pdfDoc, "pdf")
@@ -154,7 +186,6 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
         var base64String = this._arrayBufferToBase64(pdfBytes)
         const x = 'data:application/pdf;base64,' + base64String;
         const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-        console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
         const mergedPdf = await PDFDocument.create();
         const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
         copiedPages.forEach((page) => {
@@ -165,34 +196,13 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
         const mergedPdfFileload = await mergedPdfload.save();
         var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
         const x1 = 'data:application/pdf;base64,' + base64String1;
-        console.log(x1, 'ghjhgjgjhgjhgjhgjhgj')
         this.PREVIWES_URL = ''
         setTimeout(() => {
           this.PREVIWES_URL = x1;
           this.VISIBLITY_PDF = true;
-          console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-          $(document).ready(() => {
-            kendo.pdf.defineFont({
-              "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
-              "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
-              "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-              "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-              "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
-            });
-            kendo.drawing.drawDOM($("#federal-bank-letter-head"), {
-              paperSize: "A4",
-              margin: [-10, 0, 0, 0],
-              scale: 0.7,
-            }).then(function (group) {
-              return kendo.drawing.exportPDF(group, {
-                paperSize: "A4",
-                margin: [-10, 0, 0, 0],
-              });
-            }).done(async (pdfdata) => {
-              console.log(pdfdata, 'sdfsfsdfdsfdffsd')
-              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: pdfdata });
-            });
-          });
+          setTimeout(() => {
+            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+          }, 200);
           // this.modifyPdf();
         }, 200);
       }
@@ -269,15 +279,15 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
 
   //   reader.readAsDataURL(blob);
   // }
-  
-  pipodata(){
-    let data:any={
-     Amount:[],
-     Currency:[]
+
+  pipodata() {
+    let data: any = {
+      Amount: [],
+      Currency: []
     };
     return data;
   }
-  
+
   ConvertNumberToWords(number: any) {
     var words = new Array();
     words[0] = '';
