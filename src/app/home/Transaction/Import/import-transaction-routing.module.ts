@@ -6,6 +6,7 @@ import { MemberGuard } from '../../../service/RolePermission/Member/member.guard
 import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
 import { BuyerCreditPanelComponent } from './BuyerCreditPanel/Buyer-Credit-Panel.component';
 import { TransactionDashboardComponent } from './transaction-dashboard/transaction-dashboard.component';
+import { NewLcInsuranceComponent } from './new-lc-insurance/new-lc-insurance.component';
 
 const routes: Routes = [
   {
@@ -32,7 +33,9 @@ const routes: Routes = [
     pathMatch: "full",
     canActivate: [MemberGuard]
   },
-  { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },          
+  { path: "lc-isurance", component: NewLcInsuranceComponent, pathMatch: "full", canActivate: [MemberGuard] },
+
 ];
 
 @NgModule({

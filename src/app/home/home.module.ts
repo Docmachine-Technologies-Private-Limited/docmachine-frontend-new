@@ -85,7 +85,6 @@ import { ForwardContractAddComponent } from './Import/Treasury/ForwardContract/f
 import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContract/forward-contract-summary/forward-contract-summary.component';
 import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-based-sing-up.component";
 import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxscheduler.component";
-import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.component";
 import { MasterUploadComponent } from "../components/Upload/master-upload/master-upload.component";
 import { EdpmsReconComponent } from "./edpms-recon/edpms-recon.component";
 import { IdpmsReconComponent } from "./idpms-recon/idpms-recon.component";
@@ -133,7 +132,6 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
     ForwardContractAddComponent,
     ForwardContractSummaryComponent,
     RoleBasedSingUpComponent,
-    NewLcInsuranceComponent,
     MasterUploadComponent,
     EdpmsReconComponent,
     IdpmsReconComponent,
@@ -183,7 +181,6 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
           { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule), canActivate: [MemberGuard] },
           { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule), canActivate: [MemberGuard] },
           { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule), canActivate: [MemberGuard] },
-          { path: "lc-isurance", component: NewLcInsuranceComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "lc-isurance1", loadChildren: () => import('./lc-isurence/lc-isurance.module').then(mod => mod.LcIsuranceModule), canActivate: [MemberGuard] },
           { path: "buyer-credit", loadChildren: () => import('./buyers-credit-request/buyers-credit-request-module').then(mod => mod.BuyersCreditRequestModule), canActivate: [MemberGuard] },
           { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule), canActivate: [MemberGuard] },

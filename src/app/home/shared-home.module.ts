@@ -61,7 +61,6 @@ import { DynamicErrorComponent } from "../components/dynamic-error/dynamic-error
 import { InnerDynamicErrorComponent } from "../components/Upload/upload-components/inner-dynamic-error/inner-dynamic-error.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { LcInsuranceFormatComponent } from "./new-lc-insurance/lc-insurance-format/lc-insurance-format.component";
 import { TemplateMainPageComponent } from '../components/template-main-page/template-main-page.component';
 import { CustomCheckboxComponent } from "../custom/custom-checkbox/custom-checkbox.component";
 import { CustomRadioComponent } from "../custom/custom-radio/custom-radio.component";
@@ -123,7 +122,6 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     CustomSlicePipePipe,
     UploadComponentsComponent,
     InnerDynamicErrorComponent,
-    LcInsuranceFormatComponent,
     TemplateMainPageComponent,
     CustomCheckboxComponent,
     CustomRadioComponent,
@@ -219,7 +217,6 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     MatBadgeModule,
     MatButtonModule, 
     MatIconModule,
-    LcInsuranceFormatComponent,
     TemplateMainPageComponent,
     CustomCheckboxComponent,
     CustomRadioComponent,

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, } from '@angular/core';
-import { UserService } from "../../service/user.service";
+import { UserService } from "../../../../service/user.service";
 import { Router } from "@angular/router";
 import $ from 'jquery'
 declare var kendo: any;
@@ -8,13 +8,12 @@ import {
   FormGroup, NgForm, Validators
 } from '@angular/forms';
 
-import { DocumentService } from "../../service/document.service";
-import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { WindowInformationService } from '../../service/window-information.service';
-import { PDFDocument, rgb } from 'pdf-lib';
-import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
-import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
-import { MergePdfListService } from '../merge-pdf-list.service';
+import { DocumentService } from "../../../../service/document.service";
+import { PipoDataService } from "../../../../service/homeservices/pipo.service";
+import { WindowInformationService } from '../../../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
+import { MergePdfService } from '../../../../service/MergePdf/merge-pdf.service';
+import { MergePdfListService } from '../../../merge-pdf-list.service';
 
 @Component({
   selector: 'app-new-lc-insurance',
