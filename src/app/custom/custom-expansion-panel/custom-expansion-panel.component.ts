@@ -9,6 +9,7 @@ import { CustomExpansionPanelService } from './custom-expansion-panel.service';
 export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('header') header: any = [];
   @Input('items') items: any = [];
+  @Input('data') data: any = [];
   @Input('Keys') Keys: any = [];
   @Input('eventId') eventId: any = '';
   @Input('ViewButton') ViewButton: boolean = true;
@@ -85,8 +86,16 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     let changesdata: any = changes;
-    this.ORIGNAL_DATA = changesdata?.items?.currentValue;
-    this.Keys = changesdata?.Keys?.currentValue;
+    this.ORIGNAL_DATA = changesdata?.items?.currentValue!=undefined?changesdata?.items?.currentValue:[];
+    // this.Keys = changesdata?.Keys?.currentValue!=undefined?changesdata?.Keys?.currentValue:[];
+    // this.header= changesdata?.header?.currentValue!=undefined?changesdata?.header?.currentValue:[]; 
+    // this.ExpansionKeys= changesdata?.ExpansionKeys?.currentValue!=undefined?changesdata?.ExpansionKeys?.currentValue:[];
+    // this.ExpansionKeys2=changesdata?.ExpansionKeys2?.currentValue!=undefined?changesdata?.ExpansionKeys2?.currentValue:[];
+    // this.ExpansionTitle=changesdata?.ExpansionTitle?.currentValue!=undefined?changesdata?.ExpansionTitle?.currentValue:[];
+    // this.ExpansionTitle2=changesdata?.ExpansionTitle2?.currentValue!=undefined?changesdata?.ExpansionTitle2?.currentValue:[];
+    // this.Expansionitems=changesdata?.Expansionitems?.currentValue!=undefined?changesdata?.Expansionitems?.currentValue:[];
+    // this.Expansionheader=changesdata?.Expansionheader?.currentValue!=undefined?changesdata?.Expansionheader?.currentValue:[];
+    // this.Expansionheader2=changesdata?.Expansionheader2?.currentValue!=undefined?changesdata?.Expansionheader2?.currentValue:[];
     console.log(changes, this.ORIGNAL_DATA, 'ngOnChanges');
     setTimeout(() => {
       this.PAGINATOR_DATA = [];

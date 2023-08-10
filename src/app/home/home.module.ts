@@ -92,6 +92,8 @@ import { ExportUploadModule } from "../components/Upload/Export/export-upload.mo
 import { ImportUploadModule } from "../components/Upload/Import/import-upload.module";
 import { ExportSummaryModule } from "./SummaryPage/Export/export-summary.module";
 import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module";
+import { ImportTransactionModule } from "./Transaction/Import/import-transaction.module";
+import { ExportTransactionModule } from "./Transaction/Export/export-transaction.module";
 
 @NgModule({
   declarations: [
@@ -157,6 +159,8 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
     ImportUploadModule,
     ExportSummaryModule,
     ImportSummaryModule,
+    ExportTransactionModule,
+    ImportTransactionModule,
     RouterModule.forChild([
       {
         path: "",

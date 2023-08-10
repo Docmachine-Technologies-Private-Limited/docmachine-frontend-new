@@ -33,7 +33,7 @@
                                                     *ngIf="this.LIST_OF_QUESTION?.length!=0">
                                                     <lc-insurance-format [pipodata]="" [bankdata]=""
                                                         [data]="this.LIST_OF_QUESTION"
-                                                        (TableEvent)="TableEvent($event)"></lc-insurance-format>
+                                                        (TableEvent)="TableEvent($event);AutofillLCTablePanel?.displayShow"></lc-insurance-format>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,7 +80,7 @@
 </div>
 <app-custom-model [FooterButton]="false" [minimizedisabled]="false"
     [modalbodystyle]="{'max-height':'calc(100vh - 120px) !important','height':'calc(100vh - 120px) !important'}"
-    height="98vh" id="AutofillLCTable" name="Autofill LC Table">
+    height="98vh" id="AutofillLCTable" name="Autofill LC Table" #AutofillLCTablePanel>
     <div class="grid-templeate">
         <div class="row m-0">
             <input type="text" name="search" class="form-control col-10" style="margin: auto;margin-top: 10px;">

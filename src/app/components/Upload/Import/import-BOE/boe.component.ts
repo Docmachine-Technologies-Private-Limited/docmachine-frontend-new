@@ -123,6 +123,7 @@ export class BOEComponent implements OnInit {
               type: "text",
               value: this.UPLOAD_FORM['iecName'],
               label: "IEC NAME",
+              maxLength:200,
               rules: {
                 required: true,
               }
@@ -249,7 +250,7 @@ export class BOEComponent implements OnInit {
             },
             freightValue: {
               type: "text",
-              value: this.UPLOAD_FORM['freightValue'],
+              value: this.UPLOAD_FORM['freightAmount'],
               label: "FREIGHT VALUE",
               rules: {
                 required: true,

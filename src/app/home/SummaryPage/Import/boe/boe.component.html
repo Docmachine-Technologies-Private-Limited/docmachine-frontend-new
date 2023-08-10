@@ -143,7 +143,9 @@
         [ExpansionKeys]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys"
         [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass" [ExpansionTitle]="'Bill of Entry extra data'"
         [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)" (EditChanges)="toEdit($event)"
-        [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId" (DeleteChanges)="handleDelete($event)">
+        [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId"
+        [data]="this.FILTER_VALUE_LIST_NEW"
+        (DeleteChanges)="handleDelete($event)">
       </custom-expansion-panel>
     </div>
   </main>
