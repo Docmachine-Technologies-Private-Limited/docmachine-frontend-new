@@ -53,7 +53,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[0]?.setText('');
           getAllFields[1]?.setText('');
           getAllFields[2]?.setText(filldata[3][0]?.currency + ' ' + filldata[3][0]?.remittanceAmount);
-          if (filldata[1][0]?.date!=undefined) {
+          if (filldata[1][0]?.date != undefined) {
             let date: any = filldata[1][0]?.date?.split('-');
             getAllFields[3]?.setText(date[2]?.split('')[0]);
             getAllFields[4]?.setText(date[2]?.split('')[1]);
@@ -63,7 +63,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
             getAllFields[8]?.setText(date[0]?.split('')[3]);
           }
 
-          getAllFields[9]?.setText(filldata[3][0]?.remittanceAmount != undefined ? filldata[3][0]?.currency+' '+this.ConvertNumberToWords(filldata[3][0]?.remittanceAmount) : '-');
+          getAllFields[9]?.setText(filldata[3][0]?.remittanceAmount != undefined ? filldata[3][0]?.currency + ' ' + this.ConvertNumberToWords(filldata[3][0]?.remittanceAmount) : '-');
           getAllFields[10]?.setText('');
           getAllFields[11]?.uncheck()
           getAllFields[12]?.uncheck()
@@ -119,24 +119,30 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
             let booking_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
             let due_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
             getAllFields[58]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.ForwardRefNo);
-            getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
-            getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
-            getAllFields[61]?.setText(booking_date[1]?.split('')[0]);
-            getAllFields[62]?.setText(booking_date[1]?.split('')[1]);
-            getAllFields[63]?.setText(booking_date[0]?.split('')[0]);
-            getAllFields[64]?.setText(booking_date[0]?.split('')[1]);
-            getAllFields[65]?.setText(booking_date[0]?.split('')[2]);
-            getAllFields[66]?.setText(booking_date[0]?.split('')[3]);
+            
+            if (booking_date != undefined) {
+              getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
+              getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
+              getAllFields[61]?.setText(booking_date[1]?.split('')[0]);
+              getAllFields[62]?.setText(booking_date[1]?.split('')[1]);
+              getAllFields[63]?.setText(booking_date[0]?.split('')[0]);
+              getAllFields[64]?.setText(booking_date[0]?.split('')[1]);
+              getAllFields[65]?.setText(booking_date[0]?.split('')[2]);
+              getAllFields[66]?.setText(booking_date[0]?.split('')[3]);
+            }
+
             getAllFields[67]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.BookingAmount);
 
-            getAllFields[68]?.setText(due_date[2]?.split('')[0]);
-            getAllFields[69]?.setText(due_date[2]?.split('')[1]);
-            getAllFields[70]?.setText(due_date[1]?.split('')[0]);
-            getAllFields[71]?.setText(due_date[1]?.split('')[1]);
-            getAllFields[72]?.setText(due_date[0]?.split('')[0]);
-            getAllFields[73]?.setText(due_date[0]?.split('')[1]);
-            getAllFields[74]?.setText(due_date[0]?.split('')[2]);
-            getAllFields[75]?.setText(due_date[0]?.split('')[3]);
+            if (due_date != undefined) {
+              getAllFields[68]?.setText(due_date[2]?.split('')[0]);
+              getAllFields[69]?.setText(due_date[2]?.split('')[1]);
+              getAllFields[70]?.setText(due_date[1]?.split('')[0]);
+              getAllFields[71]?.setText(due_date[1]?.split('')[1]);
+              getAllFields[72]?.setText(due_date[0]?.split('')[0]);
+              getAllFields[73]?.setText(due_date[0]?.split('')[1]);
+              getAllFields[74]?.setText(due_date[0]?.split('')[2]);
+              getAllFields[75]?.setText(due_date[0]?.split('')[3]);
+            }
 
             getAllFields[76]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.UtilizedAmount);
             getAllFields[77]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.NetRate);
