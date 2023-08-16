@@ -467,10 +467,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
     }
   }
-
+  
+  NEW_PREVIEWS_URL_LIST:any=[];
   PREVIEWS_URL_STRING: any = '';
   async PREVIEWS_URL(model, id) {
     this.PREVIEWS_URL_LIST = [];
+    this.NEW_PREVIEWS_URL_LIST=[];
     this.PREVIEWS_URL_STRING = '';
     console.log(this.UrlList, 'UrlList')
     this.PromiseReturn().then(async (data: any) => {
@@ -478,7 +480,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         await element?.forEach(urlelement => {
           data.push(urlelement);
         });
-        var fitertemp: any = await data.filter(n => n)
+        var fitertemp: any = await data.filter(n => n);
+        this.NEW_PREVIEWS_URL_LIST = fitertemp;
         await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
           this.PREVIEWS_URL_LIST = [];
           console.log(merge?.pdfurl, 'mergepdfresponse?.pdfurl')
@@ -557,26 +560,13 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   SendApproval(Status: string, UniqueId: any) {
     if (UniqueId != null) {
-      var temp_doc: any = [];
-      if (this.PREVIWES_URL?.changingThisBreaksApplicationSecurity == null) {
-        temp_doc[0] = this.PREVIEWS_URL_STRING;
-      } else {
-        temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
-      }
       var pipo_id: any = [];
       var pipo_name: any = [];
       for (let index = 0; index < this.selectedItems.length; index++) {
         pipo_id.push(this.selectedItems[index]?.pipo_id)
         pipo_name.push(this.selectedItems[index]?.pipo_no)
       }
-      temp_doc[1] = this.uploadUrl_Original;
-      for (let i = 0; i < this.selectedItems.length; i++) {
-        for (let index = 0; index < this.temp1[i].length; index++) {
-          if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
-            temp_doc.push(this.temp1[i][index]?.pdf)
-          }
-        }
-      }
+     
       this.pipoForm.value.bank = this.pipoForm.controls?.bank
       this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
       var approval_data: any = {
@@ -585,7 +575,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
-        documents: temp_doc,
+        documents: this.NEW_PREVIEWS_URL_LIST,
         Types: 'downloadPDF',
         TypeOfPage: 'Transaction',
         FileType: this.USER_DATA?.sideMenu
@@ -603,7 +593,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
             var data: any = {
               data: {
                 formdata: this.pipoForm.value,
-                documents: temp_doc,
+                documents: this.NEW_PREVIEWS_URL_LIST,
                 pipo_1: this.selectedItems,
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
                 ALL_DATA_HSCODE_FORWARD:this.ALL_DATA_HSCODE_FORWARD
@@ -736,6 +726,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       HS_CODE: temp2?.join(','),
       FORWARD_CONTRACT: this.ToForwardContract_Selected
     };
+    this.FORM_VALUE=this.pipoForm?.controls?.pipoTerm?.value;
+  }
+  fillData(){
     this.FORM_VALUE=this.pipoForm?.controls?.pipoTerm?.value;
   }
 }

@@ -52,7 +52,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           });
           getAllFields[0]?.setText('');
           getAllFields[1]?.setText('');
-          getAllFields[2]?.setText(filldata[3][0]?.currency + ' & ' + filldata[3][0]?.remittanceAmount);
+          getAllFields[2]?.setText(filldata[3][0]?.currency + ' ' + filldata[3][0]?.remittanceAmount);
           if (filldata[1][0]?.date!=undefined) {
             let date: any = filldata[1][0]?.date?.split('-');
             getAllFields[3]?.setText(date[2]?.split('')[0]);
@@ -63,7 +63,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
             getAllFields[8]?.setText(date[0]?.split('')[3]);
           }
 
-          getAllFields[9]?.setText(filldata[3][0]?.remittanceAmount != undefined ? this.ConvertNumberToWords(filldata[3][0]?.remittanceAmount) : '-');
+          getAllFields[9]?.setText(filldata[3][0]?.remittanceAmount != undefined ? filldata[3][0]?.currency+' '+this.ConvertNumberToWords(filldata[3][0]?.remittanceAmount) : '-');
           getAllFields[10]?.setText('');
           getAllFields[11]?.uncheck()
           getAllFields[12]?.uncheck()

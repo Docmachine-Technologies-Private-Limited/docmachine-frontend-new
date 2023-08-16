@@ -31,12 +31,15 @@ export class SigninComponent implements OnInit {
   rolebaseddata: any = ['Buyer Credit Aggregator', 'Insurance', 'CA', 'Auditor']
   API_URL: any = AppConfig?.environment;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService,
+  constructor(
+    private userService: UserService,
     public documentService: DocumentService,
     private router: Router, public authGuard: AuthGuard,
     public sessionstorage: StorageEncryptionDecryptionService,
     public validator: UploadServiceValidatorService,
     private toastr: ToastrService, private modalService: NgbModal) {
+    sessionStorage.clear();
+    localStorage.clear();
   }
 
   ngOnInit(): void {

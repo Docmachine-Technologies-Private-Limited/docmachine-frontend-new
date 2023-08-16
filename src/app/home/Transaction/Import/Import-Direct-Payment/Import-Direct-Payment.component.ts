@@ -657,7 +657,8 @@ export class ImportDirectPaymentComponent implements OnInit {
         await element?.forEach(urlelement => {
           data.push(urlelement);
         });
-        var fitertemp: any = await data.filter(n => n)
+        var fitertemp: any = await data.filter(n => n);
+        this.ALL_DOCUMENTS=fitertemp;
         await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
           this.PREVIEWS_URL_LIST = [];
           console.log(merge?.pdfurl, 'mergepdfresponse?.pdfurl')
@@ -738,33 +739,19 @@ export class ImportDirectPaymentComponent implements OnInit {
 
   SendApproval(Status: string, UniqueId: any) {
     if (UniqueId != null) {
-      var temp_doc: any = [];
-      if (this.PREVIWES_URL?.changingThisBreaksApplicationSecurity == null) {
-        temp_doc[0] = this.PREVIEWS_URL_STRING;
-      } else {
-        temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
-      }
       var pipo_id: any = [];
       var pipo_name: any = [];
       for (let index = 0; index < this.selectedItems.length; index++) {
         pipo_id.push(this.selectedItems[index]?.pipo_id)
         pipo_name.push(this.selectedItems[index]?.pipo_no)
       }
-      temp_doc[1] = this.uploadUrl_Original;
-      this.temp1?.forEach(element => {
-        for (let index = 0; index < element.length; index++) {
-          if (element[index]?.pdf != '' && element[index]?.pdf != undefined) {
-            temp_doc.push(element[index]?.pdf)
-          }
-        }
-      });
       var approval_data: any = {
         id: UniqueId + '_' + this.randomId(10),
         tableName: 'Import-Direct-Payment',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
-        documents: temp_doc,
+        documents: this.ALL_DOCUMENTS,
         Types: 'downloadPDF',
         TypeOfPage: 'Transaction',
         FileType: this.USER_DATA?.sideMenu
@@ -784,7 +771,7 @@ export class ImportDirectPaymentComponent implements OnInit {
           var data: any = {
             data: {
               formdata: this.pipoForm.value,
-              documents: temp_doc,
+              documents: this.ALL_DOCUMENTS,
               pipo_1: [this.ITEM_FILL_PDF, this.selectedItems],
               Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
               ALL_DATA_HSCODE_FORWARD: this.ALL_DATA_HSCODE_FORWARD
