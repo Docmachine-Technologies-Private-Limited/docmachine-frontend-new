@@ -271,7 +271,7 @@ export class PIPOSComponent implements OnInit {
       e.value.doc = this.pipourl1
     }
     else if (e.value?.document == 'PO') {
-      e.value.doc1 = this.pipourl1
+      e.value.doc = this.pipourl1
     }
     this.documentService.getInvoice_No({
       pi_poNo: e.value.pi_poNo
