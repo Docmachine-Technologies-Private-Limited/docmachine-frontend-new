@@ -298,7 +298,7 @@ export class ExportBilllodgementreferencenumberadvicecopySummaryComponent implem
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
-        dummydata: this.item1[index],
+        dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
         FileType: this.USER_DATA?.result?.sideMenu

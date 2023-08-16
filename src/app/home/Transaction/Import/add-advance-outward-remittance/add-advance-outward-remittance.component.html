@@ -31,11 +31,11 @@
                                     <div class="new_left_sidedoc pdf_invoce_scroll">
                                         <federal-bank-remittance-advance-against [BankId]="this.selectedBankName"
                                             [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
-                                            this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
+                                            this.FORM_VALUE,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
                                             [RequiredLetterHead]="true" (event)="this.UrlList=$event"
                                             id="first"></federal-bank-remittance-advance-against>
                                         <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName" [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
-                                            this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
+                                        this.FORM_VALUE,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
                                             id="first"></hdfc-bank-remittance-advance-against>
                                         <div>
 
@@ -99,14 +99,14 @@
                                                 </app-ng-dropdown-custom>
                                                 <div class="col-12 mt-2 p-0">
                                                     <label for="exampleInputEmail1" class="form-label">
-                                                        To Credit Account no. & Account Type*</label>
+                                                        To Debit Account no. & Account Type*</label>
                                                     <custom-radio-button
                                                         [items]="this.ToCreditAccountdata[this.selectedBankName]"
                                                         (event)="ToCreditAccount($event)"></custom-radio-button>
                                                 </div>
                                                 <div class="col-12 mt-2 p-0">
                                                     <label for="exampleInputEmail1" class="form-label">
-                                                        To Charges Account no. & Account Type*</label>
+                                                        To Debit Charges Account no. & Account Type*</label>
                                                     <custom-radio-button
                                                         [items]="this.ToChargesAccountdata[this.selectedBankName]"
                                                         (event)="ToChargesAccount($event)"></custom-radio-button>

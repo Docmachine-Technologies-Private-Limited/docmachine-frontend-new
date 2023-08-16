@@ -709,6 +709,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   ToForwardContract_Selected: any = []
   ToHSCode_Selected: any = [];
+  FORM_VALUE:any=[];
   ToForwardContract(event: any, value: any, index: any) {
     if (event?.target?.checked == true) {
       this.ToForwardContract_Selected[0] = value;
@@ -735,5 +736,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       HS_CODE: temp2?.join(','),
       FORWARD_CONTRACT: this.ToForwardContract_Selected
     };
+    this.FORM_VALUE=this.pipoForm?.controls?.pipoTerm?.value;
   }
 }

@@ -289,7 +289,7 @@ export class OtherDocumentsComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
-        dummydata: this.item[index],
+        dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
         FileType: this.USER_DATA?.result?.sideMenu

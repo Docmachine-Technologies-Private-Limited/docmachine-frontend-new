@@ -15,16 +15,16 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
   VISIBLITY_PDF: boolean = false;
   @Input('RequiredLetterHead') RequiredLetterHead: boolean = false;
   @Output('event') event = new EventEmitter();
-  LETTER_HEAD_URL:any='';
-  
+  LETTER_HEAD_URL: any = '';
+
   constructor() { }
 
   ngOnInit(): void {
     this.fillForm(this.data)
   }
-  
-  urlletterhead(url:any){
-    this.LETTER_HEAD_URL=url;
+
+  urlletterhead(url: any) {
+    this.LETTER_HEAD_URL = url;
   }
 
   async fillForm(filldata: any) {
@@ -52,14 +52,18 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           });
           getAllFields[0]?.setText('');
           getAllFields[1]?.setText('');
-          getAllFields[2]?.setText(filldata[1][0]?.balanceAmount+' & '+filldata[1][0]?.currency);
-          getAllFields[3]?.setText(filldata[1][0]?.balanceAmount?.toString());
-          getAllFields[4]?.setText('');
-          getAllFields[5]?.setText('');
-          getAllFields[6]?.setText('');
-          getAllFields[7]?.setText('');
-          getAllFields[8]?.setText('');
-          getAllFields[9]?.setText(filldata[1][0]?.balanceAmount!=undefined?this.ConvertNumberToWords(filldata[1][0]?.balanceAmount):'-');
+          getAllFields[2]?.setText(filldata[3][0]?.currency + ' & ' + filldata[3][0]?.remittanceAmount);
+          if (filldata[1][0]?.date!=undefined) {
+            let date: any = filldata[1][0]?.date?.split('-');
+            getAllFields[3]?.setText(date[2]?.split('')[0]);
+            getAllFields[4]?.setText(date[2]?.split('')[1]);
+            getAllFields[5]?.setText(date[1]?.split('')[0]);
+            getAllFields[6]?.setText(date[1]?.split('')[1]);
+            getAllFields[7]?.setText(date[0]?.split('')[2]);
+            getAllFields[8]?.setText(date[0]?.split('')[3]);
+          }
+
+          getAllFields[9]?.setText(filldata[3][0]?.remittanceAmount != undefined ? this.ConvertNumberToWords(filldata[3][0]?.remittanceAmount) : '-');
           getAllFields[10]?.setText('');
           getAllFields[11]?.uncheck()
           getAllFields[12]?.uncheck()
@@ -80,7 +84,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[27]?.uncheck();
           getAllFields[28]?.setText(filldata[1][0]?.commodity?.join(','));
           getAllFields[29]?.setText(filldata[6]?.HS_CODE);
-          
+
           getAllFields[30]?.setText(filldata[0]?.accNumber?.split('')[0]);
           getAllFields[31]?.setText(filldata[0]?.accNumber?.split('')[1]);
           getAllFields[32]?.setText(filldata[0]?.accNumber?.split('')[2]);
@@ -95,7 +99,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[41]?.setText(filldata[0]?.accNumber?.split('')[11]);
           getAllFields[42]?.setText(filldata[0]?.accNumber?.split('')[12]);
           getAllFields[43]?.setText(filldata[0]?.accNumber?.split('')[13]);
-          
+
           getAllFields[44]?.setText(filldata[4]?.accNumber?.split('')[0]);
           getAllFields[45]?.setText(filldata[4]?.accNumber?.split('')[1]);
           getAllFields[46]?.setText(filldata[4]?.accNumber?.split('')[2]);
@@ -110,10 +114,10 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[55]?.setText(filldata[4]?.accNumber?.split('')[11]);
           getAllFields[56]?.setText(filldata[4]?.accNumber?.split('')[12]);
           getAllFields[57]?.setText(filldata[4]?.accNumber?.split('')[13]);
-          
-          if (filldata[6]?.FORWARD_CONTRACT!=undefined) {
-            let booking_date:any=filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
-            let due_date:any=filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
+
+          if (filldata[6]?.FORWARD_CONTRACT != undefined) {
+            let booking_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
+            let due_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
             getAllFields[58]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.ForwardRefNo);
             getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
             getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
@@ -124,7 +128,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
             getAllFields[65]?.setText(booking_date[0]?.split('')[2]);
             getAllFields[66]?.setText(booking_date[0]?.split('')[3]);
             getAllFields[67]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.BookingAmount);
-            
+
             getAllFields[68]?.setText(due_date[2]?.split('')[0]);
             getAllFields[69]?.setText(due_date[2]?.split('')[1]);
             getAllFields[70]?.setText(due_date[1]?.split('')[0]);
@@ -133,7 +137,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
             getAllFields[73]?.setText(due_date[0]?.split('')[1]);
             getAllFields[74]?.setText(due_date[0]?.split('')[2]);
             getAllFields[75]?.setText(due_date[0]?.split('')[3]);
-            
+
             getAllFields[76]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.UtilizedAmount);
             getAllFields[77]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.NetRate);
           }
@@ -156,12 +160,8 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[96]?.setText('');
         }
         const pdfBytes = await pdfDoc.save()
-        console.log(pdfDoc, "pdf")
-        console.log(pdfBytes, "pdfBytes")
         var base64String = this._arrayBufferToBase64(pdfBytes)
         const x = 'data:application/pdf;base64,' + base64String;
-        const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-        console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
         const mergedPdf = await PDFDocument.create();
         const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
         copiedPages.forEach((page) => {
@@ -172,7 +172,6 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
         const mergedPdfFileload = await mergedPdfload.save();
         var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
         const x1 = 'data:application/pdf;base64,' + base64String1;
-        console.log(x1, 'ghjhgjgjhgjhgjhgjhgj')
         this.PREVIWES_URL = ''
         setTimeout(() => {
           this.PREVIWES_URL = x1;
@@ -256,15 +255,15 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
 
   //   reader.readAsDataURL(blob);
   // }
-  
-  pipodata(){
-    let data:any={
-     Amount:[],
-     Currency:[]
+
+  pipodata() {
+    let data: any = {
+      Amount: [],
+      Currency: []
     };
     return data;
   }
-  
+
   ConvertNumberToWords(number: any) {
     var words = new Array();
     words[0] = '';
