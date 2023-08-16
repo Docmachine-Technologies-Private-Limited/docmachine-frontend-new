@@ -1630,9 +1630,11 @@ export class NewDirectDispatchComponent implements OnInit {
     this.credit = n.split('');
     console.log(this.credit);
   }
-
+   
+  CHARGE_TO_DATA:any=[];
   chargesTo(a) {
     var n = a.accNumber;
+    this.CHARGE_TO_DATA[0]=a;
     this.charge = n.split('');
     if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
       this.generateDoc1(this.ExportBillLodgement_Form);
@@ -2190,12 +2192,12 @@ export class NewDirectDispatchComponent implements OnInit {
         fileName: this.guid() + '.pdf', buffer: this.UrlList?.BankUrl,
         type: 'application/pdf'
       }).subscribe(async (pdfresponse: any) => {
-        temp.push(pdfresponse?.url)
+        temp[0]=pdfresponse?.url
         await this.userService?.UploadS3Buket({
           fileName: this.guid() + '.pdf', buffer: this.UrlList?.LetterHeadUrl,
           type: 'application/pdf'
         }).subscribe(async (pdfresponse1: any) => {
-          temp.push(pdfresponse1?.url);
+          temp[1]=pdfresponse1?.url;
           reslove(temp);
         });
       });

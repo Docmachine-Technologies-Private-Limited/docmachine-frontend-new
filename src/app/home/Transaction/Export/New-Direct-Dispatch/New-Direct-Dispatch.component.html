@@ -35,8 +35,9 @@
               <div class="row pb-2">
                 <div class="col-md-7 col-sm-12 col-12">
                   <federal-bank-bill-submission-format [BankId]="this.bankValue"
-                    [data]="[this.itemArray,this.advanceArray,this.newBankArray,this.CUSTOMER_DETAILS,this.Lodgement,this.SB_NO_FILTER,this.SELECT_BUYER_DETAILS,this.ALL_DATA_HSCODE_FORWARD]" [RequiredLetterHead]="true"
-                    (event)="this.UrlList=$event" id="first"></federal-bank-bill-submission-format>
+                    [data]="[this.itemArray,this.advanceArray,this.CHARGE_TO_DATA,this.CUSTOMER_DETAILS,this.Lodgement,this.SB_NO_FILTER,this.SELECT_BUYER_DETAILS,this.ALL_DATA_HSCODE_FORWARD]"
+                    [RequiredLetterHead]="true"
+                    (event)="this.UrlList=$event"></federal-bank-bill-submission-format>
                   <!-- <hdfc-bank-remittance-advance-against [BankId]="this.bankValue"
                     [data]="[this.itemArray,this.advanceArray,this.newBankArray]"
                     id="first"></hdfc-bank-remittance-advance-against> -->

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UserService } from '../../../../service/user.service';
 import $ from 'jquery'
-import { async } from 'rxjs';
 declare var kendo: any;
 
 @Component({

@@ -28,11 +28,16 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
   SB_NO: any = '';
   FILETR_AMOUNT: any = [];
   SELECT_BUYER_DETAILS: any = '';
-
+  LETTER_HEAD_URL: any = '';
+  
   constructor() { }
 
   ngOnInit(): void {
     this.fillForm(this.data)
+  }
+  
+  urlletterhead(url: any) {
+    this.LETTER_HEAD_URL = url;
   }
 
   async fillForm(filldata: any) {
@@ -187,12 +192,9 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[113]?.setText('');
   
       const pdfBytes = await pdfDoc.save()
-      console.log(pdfDoc, "pdf")
-      console.log(pdfBytes, "pdfBytes")
       var base64String = this._arrayBufferToBase64(pdfBytes)
       const x = 'data:application/pdf;base64,' + base64String;
-      const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-      console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
+      
       const mergedPdf = await PDFDocument.create();
       const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
       copiedPages.forEach((page) => {
@@ -203,36 +205,15 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       const mergedPdfFileload = await mergedPdfload.save();
       var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
       const x1 = 'data:application/pdf;base64,' + base64String1;
-      console.log(x1, 'ghjhgjgjhgjhgjhgjhgj')
       this.PREVIWES_URL = '';
       setTimeout(() => {
         this.PREVIWES_URL = x1;
         this.VISIBLITY_PDF = true;
-        console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-        $(document).ready(() => {
-          kendo.pdf.defineFont({
-            "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
-            "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
-            "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-            "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-            "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
-          });
-          kendo.drawing.drawDOM($("#federal-bank-letter-head"), {
-            paperSize: "A4",
-            margin: [-10, 0, 0, 0],
-            scale: 0.7,
-          }).then(function (group) {
-            return kendo.drawing.exportPDF(group, {
-              paperSize: "A4",
-              margin: [-10, 0, 0, 0],
-            });
-          }).done(async (pdfdata) => {
-            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: pdfdata });
-          });
-        });
+        setTimeout(() => {
+          this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+        }, 200);
       }, 200);
     }
-
   }
 
   _arrayBufferToBase64(buffer) {
@@ -246,25 +227,30 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.data = changes?.data?.currentValue;
+    this.data = changes?.data?.currentValue!=undefined? changes?.data?.currentValue:this.data;
     console.log(changes, 'asdasdasdasdasdasds')
-    this.BankId = changes?.data?.currentValue[2][0]?.BankUniqueId;
-    this.SB_NO = changes?.data?.currentValue[5];
-    this.FILETR_AMOUNT = this.data[0].filter((item: any) => item?.sbno?.includes(this.SB_NO))
-    this.TOTAL_PIPO_AMOUNT = this.FILETR_AMOUNT[0]?.invoices[0]?.amount
-    this.FIRX_DATE_NO['NUMBER']=[];
-    this.FIRX_DATE_NO['DATE']=[];
-    this.TOTAL_SUM_FIREX = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
-    this.TOTAL_SUM_FIREX_COMMISION = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
-    this.CURRENCY = this.FILETR_AMOUNT[0]?.currency;
-    this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
-      this.FIRX_DATE_NO?.NUMBER?.push(element?.irDataItem?.billNo)
-      this.FIRX_DATE_NO?.DATE?.push(element?.irDataItem?.date)
-    });
-    this.SELECT_BUYER_DETAILS = changes?.data?.currentValue[6]
-    setTimeout(() => {
-      this.fillForm(this.data);
-    }, 200);
+    this.BankId = changes?.data?.currentValue[2][0]?.BankUniqueId!=undefined?changes?.data?.currentValue[2][0]?.BankUniqueId:this.BankId;
+    if (this.data!=undefined) {
+      this.SB_NO = changes?.data?.currentValue[5];
+      if (this.data[0].length!=0) {
+        this.FILETR_AMOUNT = this.data[0].filter((item: any) => item?.sbno?.includes(this.SB_NO))
+        this.TOTAL_PIPO_AMOUNT = this.FILETR_AMOUNT[0]?.invoices[0]?.amount
+        this.FIRX_DATE_NO['NUMBER']=[];
+        this.FIRX_DATE_NO['DATE']=[];
+        this.TOTAL_SUM_FIREX = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
+        this.TOTAL_SUM_FIREX_COMMISION = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
+        this.CURRENCY = this.FILETR_AMOUNT[0]?.currency;
+        this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
+          this.FIRX_DATE_NO?.NUMBER?.push(element?.irDataItem?.billNo)
+          this.FIRX_DATE_NO?.DATE?.push(element?.irDataItem?.date)
+        });
+      }
+    
+      this.SELECT_BUYER_DETAILS = changes?.data?.currentValue[6]
+      setTimeout(() => {
+        this.fillForm(this.data);
+      }, 200);
+    }
   }
 
   ConvertNumberToWords(number: any) {
