@@ -181,8 +181,6 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
           // getAllFields[96]?.setText('');
         }
         const pdfBytes = await pdfDoc.save()
-        console.log(pdfDoc, "pdf")
-        console.log(pdfBytes, "pdfBytes")
         var base64String = this._arrayBufferToBase64(pdfBytes)
         const x = 'data:application/pdf;base64,' + base64String;
         const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
