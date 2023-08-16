@@ -218,12 +218,6 @@ export class FederalBankRevisedFormA2BANKFormatComponent implements OnInit, OnCh
           getAllFields[126]?.setText('');
         }
         const pdfBytes = await pdfDoc.save()
-        console.log(pdfDoc, "pdf")
-        console.log(pdfBytes, "pdfBytes")
-        var base64String = this._arrayBufferToBase64(pdfBytes)
-        const x = 'data:application/pdf;base64,' + base64String;
-        const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-        console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
         const mergedPdf = await PDFDocument.create();
         const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
         copiedPages.forEach((page) => {
@@ -234,7 +228,6 @@ export class FederalBankRevisedFormA2BANKFormatComponent implements OnInit, OnCh
         const mergedPdfFileload = await mergedPdfload.save();
         var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
         const x1 = 'data:application/pdf;base64,' + base64String1;
-        console.log(x1, 'ghjhgjgjhgjhgjhgjhgj')
         this.PREVIWES_URL = ''
         setTimeout(() => {
           this.PREVIWES_URL = x1;

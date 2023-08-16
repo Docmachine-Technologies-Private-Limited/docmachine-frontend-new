@@ -636,7 +636,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   NEW_PREVIEWS_URL_LIST:any=[];
   async PREVIEWS_URL(model, id) {
     this.PREVIEWS_URL_LIST = [];
-    this.bankformat = ''
+    this.bankformat = '';
+    this.NEW_PREVIEWS_URL_LIST=[];
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
     this.PromiseReturn().then(async (data: any) => {
@@ -693,12 +694,12 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
         fileName: this.guid() + '.pdf', buffer: this.UrlList?.BankUrl,
         type: 'application/pdf'
       }).subscribe(async (pdfresponse: any) => {
-        temp.push(pdfresponse?.url)
+        temp[0] = pdfresponse?.url;
         await this.userService?.UploadS3Buket({
           fileName: this.guid() + '.pdf', buffer: this.UrlList?.LetterHeadUrl,
           type: 'application/pdf'
         }).subscribe(async (pdfresponse1: any) => {
-          temp.push(pdfresponse1?.url);
+          temp[1] = pdfresponse1?.url;
           reslove(temp);
         });
       });
