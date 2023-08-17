@@ -170,6 +170,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       BRANCH_NAME: new FormControl('', Validators.required)
     });
     this.FormData=this.pipoForm?.value;
+    this.getDropdownData();
   }
 
   async ngOnInit() {
@@ -203,9 +204,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
     console.log(this.A2_JSON_DATA, this.PURPOSE_CODE_FILTER_DATA, this.PURPOSE_CODE_LIST_DATA, 'A2_JOSN')
 
-    await this.userService.getUserDetail().then((res: any) => {
-      this.USER_DATA = res['result'];
-    });
     await this.userService.getUserDetail().then((res: any) => {
       this.USER_DATA = res['result'];
       this.userService.getTeambyId(res?.result?.companyId).subscribe((COMPANY_DETAILS_RES: any) => {
@@ -258,9 +256,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   ToCreditAccountdata: any = [];
   COMPANY_INFO: any = [];
   getDropdownData() {
-    this.userService.getTeam()
-      .subscribe(
-        data => {
+    this.userService.getTeam().subscribe(data => {
           this.COMPANY_INFO = data['data'];
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
@@ -291,18 +287,12 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
               })
             }
           }
-        },
-        error => {
-          console.log("error")
-        });
+        },error => console.log("error"));
 
-    this.userService.getBene(1).subscribe(
-      (res: any) => {
+    this.userService.getBene(1).subscribe((res: any) => {
         console.log('benneDetail', res.data);
         this.benneDetail = res.data
-      },
-      (err) => console.log("Error", err)
-    );
+      },(err) => console.log("Error", err));
     this.documentService.ForwardContractget().subscribe((res: any) => {
       this.ForwardContractDATA = res?.data;
       console.log(res, 'daasdasdasdasdasdadsd')
@@ -841,7 +831,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     })
   }
   text_array(text: any) {
-    let split_text: any = text.split('\n')
+    let split_text: any = text?.split('\n')
     return split_text;
   }
   RequestforBCQuoteSubmitbtn: boolean = false;
@@ -991,17 +981,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.CA_DUMP_SLEECTION[index] = '';
       this.CA_SELECTION_INDEX[index] = false;
     }
-    this.CA_SELECTION_DATA = [];
-    this.EXTRA_DOCUMENTS['CA_DOCUMENTS'] = [];
-    this.CA_DUMP_SLEECTION.forEach(element => {
-      this.CA_SELECTION_DATA.push(element)
-      this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].push(element?.document);
-    });
-    if (this.CA_SELECTION_DATA.length != 0) {
-      this.toppings.controls._CA.setValue(true);
-    } else {
-      this.toppings.controls._CA.setValue(false);
-    }
+    
   }
 
   CB_SELECTION_DATA: any = [];
@@ -1017,17 +997,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.CB_DUMP_SLEECTION[index] = ''
       this.CB_SELECTION_INDEX[index] = false;
     }
-    this.CB_SELECTION_DATA = [];
-    this.EXTRA_DOCUMENTS['CB_DOCUMENTS'] = [];
-    this.CB_DUMP_SLEECTION.forEach(element => {
-      this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].push(element?.document);
-      this.CB_SELECTION_DATA.push(element)
-    });
-    if (this.CB_SELECTION_DATA.length != 0) {
-      this.toppings.controls._CB.setValue(true);
-    } else {
-      this.toppings.controls._CB.setValue(false);
-    }
+   
   }
 
   filterData(data: any) {
@@ -1049,12 +1019,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = ''
       this.SELECTED_PURPOSE_CODE_INDEX[index] = false;
     }
-    this.SELECTED_PURPOSE_CODE_DATA = [];
-    this.EXTRA_DOCUMENTS['PURPOSE_CODE_DATA'] = [];
-    this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION.forEach(element => {
-      this.EXTRA_DOCUMENTS['PURPOSE_CODE_DATA'].push(element);
-      this.SELECTED_PURPOSE_CODE_DATA.push(element)
-    });
+   
   }
   randomId(length = 6) {
     return Math.random().toString(36).substring(2, length+2);
@@ -1115,6 +1080,43 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   FormData:any=[]
   fillForm(){
     this.FormData=this.pipoForm?.value
+  }
+  
+  addCA(){
+    this.CA_SELECTION_DATA = [];
+    this.EXTRA_DOCUMENTS['CA_DOCUMENTS'] = [];
+    this.CA_DUMP_SLEECTION.forEach(element => {
+      this.CA_SELECTION_DATA.push(element)
+      this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].push(element?.document);
+    });
+    if (this.CA_SELECTION_DATA.length != 0) {
+      this.toppings.controls._CA.setValue(true);
+    } else {
+      this.toppings.controls._CA.setValue(false);
+    }
+  }
+  
+  addCB(){
+    this.CB_SELECTION_DATA = [];
+    this.EXTRA_DOCUMENTS['CB_DOCUMENTS'] = [];
+    this.CB_DUMP_SLEECTION.forEach(element => {
+      this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].push(element?.document);
+      this.CB_SELECTION_DATA.push(element)
+    });
+    if (this.CB_SELECTION_DATA.length != 0) {
+      this.toppings.controls._CB.setValue(true);
+    } else {
+      this.toppings.controls._CB.setValue(false);
+    }
+  }
+  
+  addA2_DATA(){
+    this.SELECTED_PURPOSE_CODE_DATA = [];
+    this.EXTRA_DOCUMENTS['PURPOSE_CODE_DATA'] = [];
+    this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION.forEach(element => {
+      this.EXTRA_DOCUMENTS['PURPOSE_CODE_DATA'].push(element);
+      this.SELECTED_PURPOSE_CODE_DATA.push(element)
+    });
   }
 }
 

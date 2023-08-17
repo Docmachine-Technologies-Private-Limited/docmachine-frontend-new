@@ -15,18 +15,18 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
   VISIBLITY_PDF: boolean = false;
   @Input('RequiredLetterHead') RequiredLetterHead: boolean = false;
   @Output('event') event = new EventEmitter();
-  LETTER_HEAD_URL:any='';
-   
+  LETTER_HEAD_URL: any = '';
+
   constructor() { }
 
   ngOnInit(): void {
     this.fillForm(this.data)
   }
-  
-  urlletterhead(url:any){
-    this.LETTER_HEAD_URL=url;
+
+  urlletterhead(url: any) {
+    this.LETTER_HEAD_URL = url;
   }
-  
+
   async fillForm(filldata: any) {
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
@@ -38,7 +38,6 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
         const pdfDoc = await PDFDocument.load(formPdfBytes)
         const form: any = pdfDoc.getForm()
         const getAllFields = form?.getFields();
-        console.log(form, 'dadasdasddas')
         if (filldata != undefined && filldata != null && filldata != '') {
           getAllFields.forEach(element => {
             const elementvalue: any = element?.acroField?.dict?.values();
@@ -50,34 +49,38 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
             }
           });
           let remitancedata: any = {
-            Currency: filldata[7][0]!=undefined?filldata[7][0]?.currency:'',
+            Currency: filldata[7][0] != undefined ? filldata[7][0]?.currency : '',
             BillofEntryNumber: [],
             Date: [],
             PortCode: [],
             BillofEntryAmount: [],
-            SumAmount:0
+            SumAmount: 0
           }
           filldata[7]?.forEach(element => {
             remitancedata?.BillofEntryNumber.push(element?.boeNumber);
             remitancedata?.Date.push(element?.boeDate);
             remitancedata?.PortCode.push(element?.dischargePort);
             remitancedata?.BillofEntryAmount.push(element?.InputAmount);
-            remitancedata.SumAmount+=parseFloat(element?.InputAmount);
+            remitancedata.SumAmount += parseFloat(element?.InputAmount);
           });
           getAllFields[0]?.setText('');
           getAllFields[1]?.setText('');
-          getAllFields[2]?.setText(remitancedata?.Currency +' & ' +  remitancedata?.SumAmount);
+          getAllFields[2]?.setText(remitancedata?.Currency + ' ' + remitancedata?.SumAmount);
           
-          if (remitancedata?.Date[0]!=undefined) {
-            let due_date: any = remitancedata?.Date[0]?.split('-');
-            // getAllFields[3]?.setText(due_date[2]?.split('')[0]);
-            // getAllFields[4]?.setText(due_date[2]?.split('')[1]);
-            // getAllFields[5]?.setText(due_date[1]?.split('')[0]);
-            // getAllFields[6]?.setText(due_date[1]?.split('')[1]);
-            // getAllFields[7]?.setText(due_date[0]?.split('')[0]);
-            // getAllFields[8]?.setText(due_date[0]?.split('')[1]);
-          }
-          getAllFields[9]?.setText(remitancedata?.SumAmount != undefined ? this.ConvertNumberToWords(remitancedata?.SumAmount) : '-');
+          var today: any = new Date();
+          var dd = String(today.getDate()).padStart(2, '0');
+          var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+          var yyyy = today.getFullYear();
+          today = yyyy+"-"+mm+"-"+dd;
+          today=today?.split("-")
+          getAllFields[3]?.setText(today[2]?.split('')[0]);
+          getAllFields[4]?.setText(today[2]?.split('')[1]);
+          getAllFields[5]?.setText(today[1]?.split('')[0]);
+          getAllFields[6]?.setText(today[1]?.split('')[1]);
+          getAllFields[7]?.setText(today[0]?.split('')[2]);
+          getAllFields[8]?.setText(today[0]?.split('')[3]);
+          
+          getAllFields[9]?.setText(remitancedata?.SumAmount != undefined ? remitancedata?.Currency + ' ' + this.ConvertNumberToWords(remitancedata?.SumAmount) : '-');
           getAllFields[10]?.setText('');
           getAllFields[11]?.uncheck()
           getAllFields[12]?.uncheck()
@@ -135,7 +138,7 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
           getAllFields[56]?.setText(filldata[4]?.accNumber?.split('')[12]);
           getAllFields[57]?.setText(filldata[4]?.accNumber?.split('')[13]);
 
-          if (filldata[6]?.FORWARD_CONTRACT != undefined && filldata[6]?.FORWARD_CONTRACT?.length !=0) {
+          if (filldata[6]?.FORWARD_CONTRACT != undefined && filldata[6]?.FORWARD_CONTRACT?.length != 0) {
             let booking_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
             let due_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
             getAllFields[58]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.ForwardRefNo);

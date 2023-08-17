@@ -53,16 +53,20 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[0]?.setText('');
           getAllFields[1]?.setText('');
           getAllFields[2]?.setText(filldata[3][0]?.currency + ' ' + filldata[3][0]?.remittanceAmount);
-          if (filldata[1][0]?.date != undefined) {
-            let date: any = filldata[1][0]?.date?.split('-');
-            getAllFields[3]?.setText(date[2]?.split('')[0]);
-            getAllFields[4]?.setText(date[2]?.split('')[1]);
-            getAllFields[5]?.setText(date[1]?.split('')[0]);
-            getAllFields[6]?.setText(date[1]?.split('')[1]);
-            getAllFields[7]?.setText(date[0]?.split('')[2]);
-            getAllFields[8]?.setText(date[0]?.split('')[3]);
-          }
-
+         
+          var today: any = new Date();
+          var dd = String(today.getDate()).padStart(2, '0');
+          var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+          var yyyy = today.getFullYear();
+          today = yyyy+"-"+mm+"-"+dd;
+          today=today?.split("-")
+          getAllFields[3]?.setText(today[2]?.split('')[0]);
+          getAllFields[4]?.setText(today[2]?.split('')[1]);
+          getAllFields[5]?.setText(today[1]?.split('')[0]);
+          getAllFields[6]?.setText(today[1]?.split('')[1]);
+          getAllFields[7]?.setText(today[0]?.split('')[2]);
+          getAllFields[8]?.setText(today[0]?.split('')[3]);
+          
           getAllFields[9]?.setText(filldata[3][0]?.remittanceAmount != undefined ? filldata[3][0]?.currency + ' ' + this.ConvertNumberToWords(filldata[3][0]?.remittanceAmount) : '-');
           getAllFields[10]?.setText('');
           getAllFields[11]?.uncheck()

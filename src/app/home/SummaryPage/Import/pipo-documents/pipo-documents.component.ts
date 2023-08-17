@@ -286,6 +286,7 @@ export class PipoDocumentsComponent implements OnInit {
         console.log('Data fetched successfully', res);
         this.item = res.data;
         console.log(this.item);
+        this.item1=[];
         this.pipoDataService.setPipoData(res.data, 'import');
         this.pipoDataService.pipo$.subscribe((data) => {
           for (let value of data) {
@@ -316,6 +317,7 @@ export class PipoDocumentsComponent implements OnInit {
         console.log(this.item);
         this.pipoDataService.setPipoData(res.data, 'import');
         this.pipoDataService.pipo$.subscribe((data) => {
+          this.item1=[];
           for (let value of data) {
             this.item1.push(value);
             this.mergeBoe();
@@ -1070,6 +1072,8 @@ export class PipoDocumentsComponent implements OnInit {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
     this.removeEmpty(data).then(async (newdata: any) => {
+      this.FILTER_VALUE_LIST_NEW['items'] = [];
+      this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
       await newdata?.forEach(async (element) => {
         let boedata: any = [];
         (element?.boeRef != 'NF' ? element?.boeRef : [{
