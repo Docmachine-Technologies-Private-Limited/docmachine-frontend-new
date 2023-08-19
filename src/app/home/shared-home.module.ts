@@ -82,7 +82,6 @@ import { FederalBankExportletterheadComponent } from "./AllBankFormat/FederalBan
 import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBank/import-letter-head/import-letter-head.component";
 import { DirectExportPaymentComponent } from "./AllBankFormat/HDFC-Bank/direct-import-payment/direct-import-payment.component";
 import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/FederalBank/direct-import-payment/direct-import-payment.component";
-import { LcInsuranceFormatComponent } from "./Transaction/Import/new-lc-insurance/lc-insurance-format/lc-insurance-format.component";
 
 @NgModule({
   declarations: [
@@ -141,7 +140,6 @@ import { LcInsuranceFormatComponent } from "./Transaction/Import/new-lc-insuranc
     FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
-    LcInsuranceFormatComponent,
   ],
   imports: [
     CommonModule,

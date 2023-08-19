@@ -19,28 +19,31 @@
                 </div>
             </div>
         </div>
-        <div class="content_white_background" style="height: auto;">
+        <div class="content_white_background" style="height: 88.8vh;">
             <main id="content" class="table-padding" role="main">
                 <div class="new_document_list1">
                     <mat-tab-group>
                         <mat-tab label="FLC Application">
-                            <div class="new_document_list_add_data">
+                            <div class="new_document_list_add_data" style="height: 80vh;">
                                 <form>
-                                    <div class="row mb-2">
+                                    <div class="row mb-2" style="display: grid;
+                                    grid-template-columns: 60% 40%;">
                                         <div class="col-md-7 col-sm-12 col-12 fixed-width">
                                             <div class="new_left_sidedoc pdf_invoce_scroll">
                                                 <div id="first mt-2" style="margin-top: 20px;"
-                                                    *ngIf="this.LIST_OF_QUESTION?.length!=0">
+                                                    *ngIf="this.LIST_OF_QUESTION2?.length!=0">
                                                     <lc-insurance-format [pipodata]="" [bankdata]=""
-                                                        [data]="this.LIST_OF_QUESTION"
-                                                        (TableEvent)="TableEvent($event);AutofillLCTablePanel?.displayShow"></lc-insurance-format>
+                                                        [data]="this.LIST_OF_QUESTION2"
+                                                        [Moredata]="[this.LIST_OF_QUESTION2,this.BENE_INFO,this.TEAM_DETAILS,this.PIPO_INFO,
+                                                        this.LIST_OF_QUESTION,this.LIST_OF_QUESTION_VALUE,this.SELECTED_BANK_NAME]"
+                                                        (TableEvent)="TableEvent($event);AutofillLCTablePanel?.displayShow"  (url)="this.URL_PDF=$event" #LC_PANEL></lc-insurance-format>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-5 col-sm-12 col-12" *ngIf="showSummaryPage == 0">
+                                        <div class="col-12" *ngIf="showSummaryPage == 0">
                                             <div class="right_form_new">
                                                 <div class="row">
-                                                    <div class="col-md-6 col-12">
+                                                    <div class="col-12">
                                                         <label for="exampleInputPassword1" class="form-label">Select
                                                             Pipo</label>
                                                         <app-ng-dropdown-custom placeHolderText="Select Pipo"
@@ -49,19 +52,25 @@
                                                             (modelChanges)="piposelect($event)" #select_ben>
                                                         </app-ng-dropdown-custom>
                                                     </div>
-                                                    <div class="col-md-6 col-12">
+                                                    <div class="col-12">
                                                         <label for="exampleInputEmail1" class="form-label">Select
                                                             bank*</label>
                                                         <app-ng-dropdown-custom placeHolderText="Select Bank"
-                                                            [items]="this.bankDetail" bindLabel="value" bindValue="id"
-                                                            [multiple]="false" #multiplepipo>
+                                                            [items]="this.BANK_LIST_DROPDOWN" bindLabel="value" bindValue="id"
+                                                            [multiple]="false"
+                                                            (modelChanges)="onSelectBank($event)" #multiplepipo>
                                                         </app-ng-dropdown-custom>
+                                                        <label for="exampleInputEmail1" class="form-label">
+                                                            Select Account no. & Account Type*</label>
+                                                        <custom-radio-button
+                                                            [items]="this.ToCreditAccountdata[this.selectedBankName]"
+                                                            (event)="ToCreditAccount($event)"></custom-radio-button>
                                                     </div>
                                                 </div>
                                                 <div class="bottom_submit_section">
                                                     <button type="button" class="btn btn-primary">CANCEL</button>
                                                     <button type="button" class="btn btn-secondary"
-                                                        (click)="showhideSummaryPage(1)">PROCEED</button>
+                                                        (click)="PREVIEWS_URL(PREVIEWS_PANEL,LC_PANEL);LC_PANEL?.pdfgenrated">PREVIEWS</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -106,5 +115,26 @@
                 </div>
             </ng-container>
         </div>
+        <div class="modal-footer" style="position: fixed;
+        bottom: 40px;
+        right: 20px;
+        border: none;">
+            <div style="display:flex;" class="mt-3">
+                <button type="button" class="btn btn-primary" (click)="DoneButton();AutofillLCTablePanel?.displayHidden">Done</button>
+            </div>
+        </div>
     </div>
+</app-custom-model>
+
+<app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
+name="Document View" #PREVIEWS_PANEL>
+<div class="col-12 mt-2 mb-2">
+    <app-pdf-viewer *ngIf="this.PREVIEWS_URL_STRING!=''" [downloadShow]="false"
+        [src]="this.PREVIEWS_URL_STRING" name="Documents" width="100%" height="100%"></app-pdf-viewer>
+</div>
+<div class="modal-footer">
+    <div style="display:flex;" class="mt-3">
+        <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,this.randomId(10));">Send for Approval</button>
+    </div>
+</div>
 </app-custom-model>

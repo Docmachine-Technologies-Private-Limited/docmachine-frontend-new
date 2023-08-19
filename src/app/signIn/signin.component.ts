@@ -146,7 +146,7 @@ export class SigninComponent implements OnInit {
                 this.otp = true;
                 this.validator.setInputVisibilty('UserLoginPage', 2, 'visible', true);
                 this.userService.getUser().subscribe(data1 => {
-                  console.log(data1), 'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
+                  console.log(data1);
                   this.data1 = data1
                 }, error1 => {
                   this.loginError('Login unsuccessful!, Please check the details');

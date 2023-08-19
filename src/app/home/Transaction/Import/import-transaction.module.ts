@@ -9,6 +9,7 @@ import { BuyerCreditPanelComponent } from './BuyerCreditPanel/Buyer-Credit-Panel
 import { SharedHomeModule } from '../../shared-home.module';
 import { TransactionDashboardComponent } from './transaction-dashboard/transaction-dashboard.component';
 import { NewLcInsuranceComponent } from './new-lc-insurance/new-lc-insurance.component';
+import { LcInsuranceFormatComponent } from './new-lc-insurance/lc-insurance-format/lc-insurance-format.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NewLcInsuranceComponent } from './new-lc-insurance/new-lc-insurance.com
     BuyerCreditPanelComponent,
     TransactionDashboardComponent,
     NewLcInsuranceComponent,
+    LcInsuranceFormatComponent
   ],
   imports: [
     CommonModule,

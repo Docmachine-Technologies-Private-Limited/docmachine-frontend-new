@@ -782,7 +782,7 @@
 </div>
 <div class="temp" #content2>
   <app-custom-model [FooterButton]="true" EventButton="false"
-    [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}"
+    [customstyle]="{'margin':'auto !important','max-width': '65vw !important','margin-top': '50px !important'}"
     class="p-2" height="400px" id="FIRX" [name]="'FIRX Number Against of : '+nameSearch4">
     <div class="container-fluid mt-2 mb-2">
       <div class="middle_bts">
@@ -804,7 +804,8 @@
                   <tr class="table-tr">
                     <th scope="col" class="col-td-th-1">#</th>
                     <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
-                    <th scope="col" class="col-td-th-2">Recieved Amount USD</th>
+                    <th scope="col" class="col-td-th-2">Recieved Amount</th>
+                    <th scope="col" class="col-td-th-2">Commision Amount</th>
                     <th scope="col" class="col-td-th-2">Available Balance</th>
                   </tr>
                 </thead>
@@ -818,6 +819,9 @@
                     </td>
                     <td class="col-td-th-2">
                       {{data.amount}}
+                    </td>
+                    <td class="col-td-th-2">
+                      {{data.commision}}
                     </td>
                     <td class="col-td-th-2">
                       {{data.BalanceAvail}}

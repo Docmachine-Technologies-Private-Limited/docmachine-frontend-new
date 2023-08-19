@@ -7,6 +7,7 @@ import { data } from "jquery";
 
 @Injectable({ providedIn: "root" })
 export class PipoDataService {
+ 
   public pipolistSubsciber = new BehaviorSubject([]);
   public pipolistModelSubsciber = new BehaviorSubject([]);
   public pipoSingleSubsciber = new BehaviorSubject(new PipoDisplayListViewItem({}));
@@ -15,7 +16,7 @@ export class PipoDataService {
     PI_PO_BENNE_NAME: [],
     PIPO_TRANSACTION: []
   };
-  
+
   PIPO_LIST: any = []
   constructor(public documentService: DocumentService) {
 
@@ -41,39 +42,39 @@ export class PipoDataService {
   getPipoList = (type) => {
     return new Promise((resolve, reject) => {
       this.documentService.getPipo().subscribe((res: any) => {
-          console.log(res, 'resssss.................')
-          let temppipo: any = new PipoDisplayListView(res.data, type);
-          this.pipolistModelSubsciber.next(temppipo.pipoModelList);
-          this.pipolistSubsciber.next(temppipo.pipolist);
-          console.log(temppipo, 'temppipo')
-          this.pipolistModelSubsciber.subscribe((pipo_lits: any) => {
-            var data: any = pipo_lits;
-            this.PI_PO_NUMBER_LIST = {
-              PI_PO_BUYER_NAME: [],
-              PI_PO_BENNE_NAME: [],
-              PIPO_TRANSACTION: []
-            };
-            this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME']=[];
-            this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME']=[];
-            
-            for (let index = 0; index < data.length; index++) {
-              if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
-                this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
-                  pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
-                  id: [data[index].pi_poNo, data[index]?.buyerName],
-                  _id: data[index]?._id
-                })
-                this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
-                  pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
-                  id: [data[index].pi_poNo, data[index]?.benneName],
-                  _id: data[index]?._id
-                })
-              }
-           }
-            console.log(this.PI_PO_NUMBER_LIST, type, 'PI_PO_NUMBER_LIST')
-          })
-          resolve(temppipo);
-        },
+        console.log(res, 'resssss.................')
+        let temppipo: any = new PipoDisplayListView(res.data, type);
+        this.pipolistModelSubsciber.next(temppipo.pipoModelList);
+        this.pipolistSubsciber.next(temppipo.pipolist);
+        console.log(temppipo, 'temppipo')
+        this.pipolistModelSubsciber.subscribe((pipo_lits: any) => {
+          var data: any = pipo_lits;
+          this.PI_PO_NUMBER_LIST = {
+            PI_PO_BUYER_NAME: [],
+            PI_PO_BENNE_NAME: [],
+            PIPO_TRANSACTION: []
+          };
+          this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'] = [];
+          this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'] = [];
+
+          for (let index = 0; index < data.length; index++) {
+            if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
+              this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
+                pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
+                id: [data[index].pi_poNo, data[index]?.buyerName],
+                _id: data[index]?._id
+              })
+              this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
+                pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
+                id: [data[index].pi_poNo, data[index]?.benneName],
+                _id: data[index]?._id
+              })
+            }
+          }
+          console.log(this.PI_PO_NUMBER_LIST, type, 'PI_PO_NUMBER_LIST')
+        })
+        resolve(temppipo);
+      },
         (err) => reject(err)
       );
     });
@@ -142,15 +143,43 @@ export class PipoDataService {
     });
   }
 
+  findbyBeneName = (benneName) => {
+    return new Promise((resolve, reject) => {
+      this.documentService.getPipo().subscribe((res: any) => {
+        console.log(res, 'resssss.................')
+        let filterBenenName = res?.data.filter((items: any) => items?.benneName?.toLowerCase()?.includes(benneName.toLowerCase()));
+        if (filterBenenName?.length != 0) {
+          resolve(filterBenenName);
+        } else {
+          resolve([]);
+        }
+      });
+    })
+  }
+  
+  findbyPipoNo(pi_poNo: any) {
+    return new Promise((resolve, reject) => {
+      this.documentService.getPipo().subscribe((res: any) => {
+        console.log(res, 'resssss.................')
+        let filterBenenName = res?.data.filter((items: any) => items?.pi_poNo?.toLowerCase()?.includes(pi_poNo.toLowerCase()));
+        if (filterBenenName?.length != 0) {
+          resolve(filterBenenName);
+        } else {
+          resolve([]);
+        }
+      });
+    })
+  }
+
   getPipoListNo = (type, pipolist: any) => {
     this.PI_PO_NUMBER_LIST = {
       PI_PO_BUYER_NAME: [],
       PI_PO_BENNE_NAME: [],
       PIPO_TRANSACTION: []
     };
-   return this.documentService.getPipoNoList().subscribe((res: any) => {
+    return this.documentService.getPipoNoList().subscribe((res: any) => {
       console.log(res, 'resssss.................')
-      var data:any=res?.data;
+      var data: any = res?.data;
       this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'] = [];
       this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'] = [];
       this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'] = [];
@@ -193,7 +222,7 @@ export class PipoDataService {
       return this.PI_PO_NUMBER_LIST;
     })
   }
-  
+
   getPipoListByCustomer = (type, customer) => {
     this.PI_PO_NUMBER_LIST = {
       PI_PO_BUYER_NAME: [],

@@ -66,6 +66,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           } else {
             this.userService.getUserDetail().then((user: any) => {
               this.userData = user?.result
+              console.log(user,"dfsdfsdfsdfds")
               let token = this.authGuard.loadFromLocalStorage();
               if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
                 var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));

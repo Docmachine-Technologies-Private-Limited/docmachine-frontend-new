@@ -204,21 +204,18 @@ table .table-tr-1 {
     gap: 10px;
 }
 
-::ng-deep app-custom-model #AutofillLCTable .AutofillLCTable {
-    height: auto !important;
-    margin: auto !important;
-    max-width: 41vw !important;
-    position: absolute;
-    right: -20px;
-    top: 61px;
+::ng-deep app-new-lc-insurance app-custom-model #AutofillLCTable .AutofillLCTable {
+   padding: 0 !important;
 }
 
-::ng-deep app-custom-model #AutofillLCTable.dropdown-controller {
-    position: absolute !important;
+::ng-deep app-new-lc-insurance app-custom-model #AutofillLCTable.dropdown-controller {
+    width: 33vw !important;
+    margin: 0 !important;
+    top: 49px !important;
     right: 0 !important;
     left: unset !important;
-    width: 560px !important;
-    background-color: transparent !important;
+    padding: 0 !important;
+    background: transparent !important;
 }
 
 .fixed-width {

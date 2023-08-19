@@ -1722,10 +1722,10 @@ export class NewDirectDispatchComponent implements OnInit {
             this.item13[index]['isEnabled'] = true;
             this.OK_BUTTON_CONDITION = true;
             this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
-            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.commision) }, 0);
             if (this.filterSum > this.balanceAvai) {
               this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
-              var sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+              var sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.commision) }, 0);
               let temp: any = details;
               var last_amount: any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
               temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
@@ -1766,7 +1766,7 @@ export class NewDirectDispatchComponent implements OnInit {
       this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
     }
     this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
-    var IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
+    let IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance)+parseFloat(b?.irDataItem?.commision) }, 0);
     this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = parseFloat(IRADVICE_SUM).toFixed(3);
 
     console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST,
@@ -1970,7 +1970,7 @@ export class NewDirectDispatchComponent implements OnInit {
         filterIrdata.push(newVal);
       }
     }
-    this.item13 = filterIrdata;
+    this.item13 = filterIrdata.filter((item:any)=>parseInt(item?.BalanceAvail)!=0);
     this.item13?.forEach(element => {
       element['isEnabled'] = false;
     });
@@ -2249,7 +2249,7 @@ export class NewDirectDispatchComponent implements OnInit {
             }
           } else {
             let sbdetails: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0];
-            let TempfilterSum = this.Advance_Amount_Sum['SB_' + sbdetails?.sbno].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            let TempfilterSum = this.Advance_Amount_Sum['SB_' + sbdetails?.sbno].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
             const ID_APPROVAL: any = this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.id.join(',') + '_' + TempfilterSum : sbAmountSum
             approval_data = {
               id: 'EDD' + '_' + ID_APPROVAL,
