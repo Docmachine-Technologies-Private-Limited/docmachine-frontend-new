@@ -728,17 +728,7 @@ export class NewDirectDispatchComponent implements OnInit {
           }
           console.log('getMaster Data', this.item1);
           this.item1.forEach((element, i) => {
-            if (element?.firxdetails != undefined && element?.firxdetails != '') {
-              let totalFirxAmount: any = 0;
-              for (let index = 0; index < element?.firxdetails.length; index++) {
-                const elementfirxdetails = element?.firxdetails[index];
-                console.log(elementfirxdetails?.firxAmount.split(','), this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')), 'hfhgfghfhfhfhf')
-                totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')))
-              }
-              element['balanceAvai'] = element['balanceAvai'] != '-1' ? element['balanceAvai'] : element?.fobValue
-            } else {
-              element['balanceAvai'] = parseFloat(element?.fobValue);
-            }
+            element['balanceAvai'] = element['balanceAvai'] != '-1' ? element['balanceAvai'] : element?.fobValue
           });
         },
           (err) => console.log(err)
@@ -2043,20 +2033,6 @@ export class NewDirectDispatchComponent implements OnInit {
   }
   async PREVIEWS_URL() {
     this.PreviewSlideToggle(this.itemArray[0]?.sbno)
-    // for (let i = 0; i < this.itemArray.length; i++) {
-    //   var element = this.itemArray[i]?._id;
-    //   tep[this.itemArray[i]?.sbno] = []
-    //   tep[this.itemArray[i]?.sbno][0]=this.formerge;
-    //   for (let index = 0; index < this.temp[element].length; index++) {
-    //     tep[this.itemArray[i]?.sbno].push(this.temp[element][index]?.pdf)
-    //   }
-    // }
-    // for (let i = 0; i < this.itemArray.length; i++) {
-    //   this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno] = []
-    //   await this.mergerpdf.mergePdf(tep[this.itemArray[i]?.sbno]).then((merge: any) => {
-    //     this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno].push(merge)
-    //   })
-    // }
   }
   temp_doc: any = [];
   tp: any = {
@@ -2066,6 +2042,7 @@ export class NewDirectDispatchComponent implements OnInit {
     firxAmount: [],
     firxCommision: [],
     firxRecAmo: [],
+    FirxUsed_Balance:[],
     id: [],
   };
   BOOLEAN: boolean = false;
@@ -2088,15 +2065,6 @@ export class NewDirectDispatchComponent implements OnInit {
             pdf: this.temp[id][index]?.pdf,
             name: this.temp[id][index]['name']
           })
-          // this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-          //   console.log('downloadEachFile', res);
-          //   res.arrayBuffer().then((data: any) => {
-          //     var base64String = this._arrayBufferToBase64(data);
-          //     const x = 'data:application/pdf;base64,' + base64String;
-
-          //     console.log('downloadEachFile', data);
-          //   });
-          // });
         }
         if ((index + 1) == this.temp[id].length) {
           var fitertemp: any = temp.filter(n => n)
@@ -2114,18 +2082,6 @@ export class NewDirectDispatchComponent implements OnInit {
             pdf: this.temp[id][index]?.pdf,
             name: this.temp[id][index]['name']
           })
-          // this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-          //   console.log('downloadEachFile', res);
-          //   res.arrayBuffer().then((data: any) => {
-          //     var base64String = this._arrayBufferToBase64(data);
-          //     const x = 'data:application/pdf;base64,' + base64String;
-          //     this.PDF_LIST.push({
-          //       pdf: x,
-          //       name: this.temp[id][index]['name']
-          //     })
-          //     console.log('downloadEachFile', data);
-          //   });
-          // });
         }
         if ((index + 1) == this.temp[id].length) {
           var fitertemp: any = temp.filter(n => n)
@@ -2172,6 +2128,7 @@ export class NewDirectDispatchComponent implements OnInit {
       this.tp['firxCurrency'].push(element?.irDataItem?.currency)
       this.tp['firxAmount'].push(element?.irDataItem?.amount)
       this.tp['firxCommision'].push(element?.irDataItem?.commision)
+      this.tp['FirxUsed_Balance'].push(element?.irDataItem?.Used_Balance)
       this.tp['firxRecAmo'].push(0);
       this.tp['id'].push(element?.irDataItem?._id)
     }
@@ -2215,20 +2172,7 @@ export class NewDirectDispatchComponent implements OnInit {
   async SendApproval(Status: string, UniqueId: any, event: any) {
     var UpdatedUrl: any = []
     for (let index = 0; index < this.temp_pdf_lits.length; index++) {
-      UpdatedUrl.push(this.temp_pdf_lits[index])
-      // if (this.temp_doc[index]?.pdf != '' && this.temp_doc[index]?.pdf != undefined) {
-      //   if (this.temp_doc[index]?.pdf.indexOf('data:application/pdf;base64,') != -1) {
-      //     await this.userService?.UploadS3Buket({
-      //       fileName: this.temp_doc[index]?.name + '.pdf', buffer: this.temp_doc[index]?.pdf,
-      //       type: 'application/pdf'
-      //     }).subscribe((response: any) => {
-      //       console.log(response, 'response')
-      //       UpdatedUrl.push(response?.url)
-      //     })
-      //   } else {
-      //     UpdatedUrl.push(this.temp_doc[index]?.pdf)
-      //   }
-      // }
+      UpdatedUrl.push(this.temp_pdf_lits[index]);
       if ((index + 1) == this.temp_pdf_lits.length) {
         if (UniqueId != null) {
           var approval_data: any = {};
@@ -2237,7 +2181,7 @@ export class NewDirectDispatchComponent implements OnInit {
           delete this.USER_DATA?.LoginToken
           if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
             approval_data = {
-              id: 'IRDR' + '_' + UniqueId,
+              id: 'IRDR' + '_' + this.randomId(5),
               tableName: 'Inward-Remitance-Dispoal-Realization',
               deleteflag: '-1',
               userdetails: this.USER_DATA,
@@ -2248,11 +2192,8 @@ export class NewDirectDispatchComponent implements OnInit {
               FileType: this.USER_DATA?.sideMenu
             }
           } else {
-            let sbdetails: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0];
-            let TempfilterSum = this.Advance_Amount_Sum['SB_' + sbdetails?.sbno].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
-            const ID_APPROVAL: any = this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.id.join(',') + '_' + TempfilterSum : sbAmountSum
             approval_data = {
-              id: 'EDD' + '_' + ID_APPROVAL,
+              id: 'EDD' + '_' + this.randomId(5),
               tableName: 'Export-Direct-Dispatch',
               deleteflag: '-1',
               userdetails: this.USER_DATA,
@@ -2263,7 +2204,6 @@ export class NewDirectDispatchComponent implements OnInit {
               FileType: this.USER_DATA?.sideMenu
             }
           }
-
           var pipo: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0]?.pipo;
           var pipo_id: any = [];
           var pipo_name: any = [];
@@ -2341,8 +2281,8 @@ export class NewDirectDispatchComponent implements OnInit {
                               id: UniqueId,
                               query: query
                             }).subscribe((r2: any) => {
-                              let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.firxAmount)) + parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
-                              console.log(this.FIRX_AMOUNT(this.tp?.firxAmount), this.FIRX_AMOUNT(this.tp?.firxCommision), sumfixAmount, 'chgctydcbvcbvc')
+                              let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.FirxUsed_Balance)) + parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
+                              console.log(this.FIRX_AMOUNT(this.tp?.FirxUsed_Balance), this.FIRX_AMOUNT(this.tp?.firxCommision), sumfixAmount, 'chgctydcbvcbvc')
                               this.documentService.Update_Amount_by_Table({
                                 tableName: 'masterrecord',
                                 id: UniqueId,
@@ -2413,7 +2353,7 @@ export class NewDirectDispatchComponent implements OnInit {
                           this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
                             console.log('king123');
                             console.log(data);
-                            let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.firxAmount)) + parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
+                            let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.FirxUsed_Balance)) + parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
                             var updateapproval_data: any = {
                               RejectData: {
                                 tableName: 'masterrecord',
@@ -2451,7 +2391,9 @@ export class NewDirectDispatchComponent implements OnInit {
       }
     }
   }
-
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length + 2);
+  };
   FIRX_AMOUNT(amountarray: any): any {
     return parseFloat(amountarray?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
   }
