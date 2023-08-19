@@ -5,6 +5,7 @@ import $ from 'jquery'
 declare var kendo: any;
 
 import {
+  FormControl,
   FormGroup, NgForm, Validators
 } from '@angular/forms';
 
@@ -34,7 +35,10 @@ export class NewLcInsuranceComponent implements OnInit {
   benneDetail: any = [];
   TEAM_DETAILS: any = [];
   URL_PDF: any = '';
-
+  LCTransaction_Data: any = [];
+  VIEW_PDF: any = '';
+  selectedIndexValue:any=new FormControl(0);
+  
   constructor(
     private userService: UserService,
     public documentService: DocumentService,
@@ -898,6 +902,10 @@ export class NewLcInsuranceComponent implements OnInit {
     await this.userService.getUserDetail().then((res: any) => {
       this.USER_DATA = res['result'];
     });
+    this.documentService.getLCTransaction().subscribe((res: any) => {
+      this.LCTransaction_Data = res?.data;
+      console.log(res, "getLCTransaction")
+    })
   }
 
   showhideSummaryPage(val: any) { }
@@ -1064,11 +1072,13 @@ export class NewLcInsuranceComponent implements OnInit {
               }, (error) => {
                 console.log('error');
               });
-              
-              this.documentService.addLCTransaction({bundel:[this.LIST_OF_QUESTION2, this.BENE_INFO, this.TEAM_DETAILS, this.PIPO_INFO,
-                this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, this.SELECTED_BANK_NAME],file:'import',doc:this.NEW_PREVIEWS_URL_LIST[0]}).subscribe((res1: any) => {
-                  this.router.navigate(['/home/dashboardTask'])
-                })
+
+              this.documentService.addLCTransaction({
+                bundel: [this.LIST_OF_QUESTION2, this.BENE_INFO, this.TEAM_DETAILS, this.PIPO_INFO,
+                this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, this.SELECTED_BANK_NAME], file: 'import', doc: this.NEW_PREVIEWS_URL_LIST[0]
+              }).subscribe((res1: any) => {
+                this.router.navigate(['/home/dashboardTask'])
+              })
               this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
                 console.log(res, 'dsdsdsdsdsdsds');
                 this.GetDownloadStatus = res[0];
@@ -1099,4 +1109,11 @@ export class NewLcInsuranceComponent implements OnInit {
     return Math.random().toString(36).substring(2, length + 2);
   };
 
+  view_pdf(url: any) {
+    this.VIEW_PDF = '';
+    setTimeout(() => {
+      this.VIEW_PDF = url;
+      this.selectedIndexValue.setValue(0);
+    }, 200);
+  }
 }

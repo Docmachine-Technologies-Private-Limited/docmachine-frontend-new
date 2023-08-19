@@ -22,7 +22,7 @@
         <div class="content_white_background" style="height: 88.8vh;">
             <main id="content" class="table-padding" role="main">
                 <div class="new_document_list1">
-                    <mat-tab-group>
+                    <mat-tab-group [selectedIndex]="this.selectedIndexValue?.value" (selectedIndexChange)="this.selectedIndexValue.setValue($event)">
                         <mat-tab label="FLC Application">
                             <div class="new_document_list_add_data" style="height: 80vh;">
                                 <form>
@@ -36,7 +36,8 @@
                                                         [data]="this.LIST_OF_QUESTION2"
                                                         [Moredata]="[this.LIST_OF_QUESTION2,this.BENE_INFO,this.TEAM_DETAILS,this.PIPO_INFO,
                                                         this.LIST_OF_QUESTION,this.LIST_OF_QUESTION_VALUE,this.SELECTED_BANK_NAME]"
-                                                        (TableEvent)="TableEvent($event);AutofillLCTablePanel?.displayShow"  (url)="this.URL_PDF=$event" #LC_PANEL></lc-insurance-format>
+                                                        (TableEvent)="TableEvent($event);AutofillLCTablePanel?.displayShow"
+                                                        (url)="this.URL_PDF=$event" #LC_PANEL></lc-insurance-format>
                                                 </div>
                                             </div>
                                         </div>
@@ -56,8 +57,8 @@
                                                         <label for="exampleInputEmail1" class="form-label">Select
                                                             bank*</label>
                                                         <app-ng-dropdown-custom placeHolderText="Select Bank"
-                                                            [items]="this.BANK_LIST_DROPDOWN" bindLabel="value" bindValue="id"
-                                                            [multiple]="false"
+                                                            [items]="this.BANK_LIST_DROPDOWN" bindLabel="value"
+                                                            bindValue="id" [multiple]="false"
                                                             (modelChanges)="onSelectBank($event)" #multiplepipo>
                                                         </app-ng-dropdown-custom>
                                                         <label for="exampleInputEmail1" class="form-label">
@@ -79,7 +80,39 @@
                             </div>
                         </mat-tab>
                         <mat-tab label="FLC Application Summary">
-
+                            <!-- <ng-input
+                                [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
+                                ></ng-input> -->
+                            <table class="table" style="height: 75vh;
+                                                            box-shadow: 0px 0px 2px 2px #e5e5e5;
+                                                             padding: 50px;
+                                                                border-radius: 10px;">
+                                <thead>
+                                    <tr class="table-tr pr-3">
+                                        <th scope="col" class="col-td-th-1">Date</th>
+                                        <th scope="col" class="col-td-th-1">Party Name</th>
+                                        <th scope="col" class="col-td-th-3">Pipo No.</th>
+                                        <th scope="col" class="col-td-th-3">Currency</th>
+                                        <th scope="col" class="col-td-th-3">Amount</th>
+                                        <th scope="col" class="col-td-th-3">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-tr mt-2 pr-3"
+                                        *ngFor="let item of this.LCTransaction_Data;let i=index">
+                                        <td scope="col" class="col-td-th-1">{{item?.date}}</td>
+                                        <td scope="col" class="col-td-th-1">{{item?.bundel[1][0]?.benneName}}</td>
+                                        <td scope="col" class="col-td-th-3">{{item?.bundel[3][0]?.pi_poNo}}</td>
+                                        <td scope="col" class="col-td-th-3">{{item?.bundel[3][0]?.currency}}</td>
+                                        <td scope="col" class="col-td-th-3">{{item?.bundel[3][0]?.amount}}</td>
+                                        <td scope="col" class="col-td-th-3"> <a title="View" class="PopupOpen"
+                                                popup-close="VIEW_PDF" (click)="view_pdf(item?.doc)">
+                                                <i class="fa fa-eye PopupOpen" popup-close="VIEW_PDF"
+                                                    aria-hidden="true"></i>
+                                            </a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </mat-tab>
                     </mat-tab-group>
                 </div>
@@ -120,21 +153,31 @@
         right: 20px;
         border: none;">
             <div style="display:flex;" class="mt-3">
-                <button type="button" class="btn btn-primary" (click)="DoneButton();AutofillLCTablePanel?.displayHidden">Done</button>
+                <button type="button" class="btn btn-primary"
+                    (click)="DoneButton();AutofillLCTablePanel?.displayHidden">Done</button>
             </div>
         </div>
     </div>
 </app-custom-model>
 
 <app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
-name="Document View" #PREVIEWS_PANEL>
-<div class="col-12 mt-2 mb-2">
-    <app-pdf-viewer *ngIf="this.PREVIEWS_URL_STRING!=''" [downloadShow]="false"
-        [src]="this.PREVIEWS_URL_STRING" name="Documents" width="100%" height="100%"></app-pdf-viewer>
-</div>
-<div class="modal-footer">
-    <div style="display:flex;" class="mt-3">
-        <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,this.randomId(10));">Send for Approval</button>
+    name="Document View" #PREVIEWS_PANEL>
+    <div class="col-12 mt-2 mb-2">
+        <app-pdf-viewer *ngIf="this.PREVIEWS_URL_STRING!=''" [downloadShow]="false" [src]="this.PREVIEWS_URL_STRING"
+            name="Documents" width="100%" height="100%"></app-pdf-viewer>
     </div>
-</div>
+    <div class="modal-footer">
+        <div style="display:flex;" class="mt-3">
+            <button type="button" class="btn btn-primary"
+                (click)="SendApproval(this.GetDownloadStatus?.status,this.randomId(10));">Send for Approval</button>
+        </div>
+    </div>
+</app-custom-model>
+
+<app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="VIEW_PDF"
+    name="Document View">
+    <div class="col-12 mt-2 mb-2">
+        <app-pdf-viewer *ngIf="this.VIEW_PDF!=''" [downloadShow]="false" [src]="this.VIEW_PDF"
+            name="Documents" width="100%" height="100%"></app-pdf-viewer>
+    </div>
 </app-custom-model>

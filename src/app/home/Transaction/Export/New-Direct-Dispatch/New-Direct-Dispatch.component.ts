@@ -2176,7 +2176,6 @@ export class NewDirectDispatchComponent implements OnInit {
       if ((index + 1) == this.temp_pdf_lits.length) {
         if (UniqueId != null) {
           var approval_data: any = {};
-          let sbAmountSum: any = this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
           delete this.USER_DATA?.members_list
           delete this.USER_DATA?.LoginToken
           if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {

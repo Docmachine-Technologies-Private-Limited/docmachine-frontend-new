@@ -2072,6 +2072,15 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/LCTransaction/post`, { LCTransaction: data }, httpOptions);
   }
+  
+  getLCTransaction() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/LCTransaction/get`, httpOptions);
+  }
 
   UpdateTransaction(data) {
     this.loadFromLocalStorage();
