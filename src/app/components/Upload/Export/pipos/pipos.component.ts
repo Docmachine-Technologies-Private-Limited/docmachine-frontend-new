@@ -171,6 +171,14 @@ export class PIPOSComponent implements OnInit {
             required: true,
           }
         },
+        HSCODE: {
+          type: "HSCODE",
+          value: "",
+          label: "Select HS Code",
+          rules: {
+            required: true,
+          }
+        },
         PCReferanceDetails: {
           type: "OptionMultiCheckBox",
           value: "",
