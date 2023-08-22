@@ -13,6 +13,7 @@ import $ from 'jquery'
 import { DomSanitizer } from '@angular/platform-browser';
 import { takeWhile, timer } from 'rxjs';
 import { DocumentService } from '../../service/document.service';
+
 @Component({
   selector: 'app-edit-company',
   templateUrl: './edit-company.component.html',
@@ -37,6 +38,8 @@ export class EditCompanyComponent implements OnInit {
   roundSealDone = false;
   forSealDone = false;
   public config: DropzoneConfigInterface;
+  public config1: DropzoneConfigInterface;
+
   letterHead1: any;
   roundSeal1: any;
   forSeal1: any;
@@ -115,18 +118,13 @@ export class EditCompanyComponent implements OnInit {
     Bank_Details: []
   }
   constructor(@Inject(PLATFORM_ID) public platformId,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
     private userService: UserService,
-    private router: Router,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
     public docservice: DocumentService,
     public wininfo: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = userService.api_base;
-    console.log(this.api_base)
-    console.log(this.authToken)
     this.headers = {
       Authorization: this.authToken,
     }
@@ -140,7 +138,18 @@ export class EditCompanyComponent implements OnInit {
         addRemoveLinks: true,
         headers: this.headers,
         timeout: 120000,
-        // autoProcessQueue: false,
+        dictDefaultMessage: 'Drag a document here',
+        acceptedFiles: 'image/*,application/pdf',
+        previewTemplate: '<div  class=\"dz-preview dz-file-preview\" style=\"text-align: right; margin-right:3px;\">\n <div class=\"dz-image\" style=\"text-align: right; margin-right:3px;\"> <img data-dz-thumbnail /></div>\n <div class=\"dz-details\">\n    <div class=\"dz-size\"><span data-dz-size></span></div>\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n  <div class=\"dz-success-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Check</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\n      </g>\n    </svg>\n  </div>\n  <div class=\"dz-error-mark\">\n    <i style=\"color: red; text-align: center;font-size: 30px;\" class=\"fa fa-exclamation-circle\"></i>\n  </div>\n</div>'
+      };
+      this.config1 = {
+        url: `${this.api_base}/member/uploadPdf2Image`,
+        method: `POST`,
+        maxFiles: 5,
+        maxFilesize: 5,
+        addRemoveLinks: true,
+        headers: this.headers,
+        timeout: 120000,
         dictDefaultMessage: 'Drag a document here',
         acceptedFiles: 'image/*,application/pdf',
         previewTemplate: '<div  class=\"dz-preview dz-file-preview\" style=\"text-align: right; margin-right:3px;\">\n <div class=\"dz-image\" style=\"text-align: right; margin-right:3px;\"> <img data-dz-thumbnail /></div>\n <div class=\"dz-details\">\n    <div class=\"dz-size\"><span data-dz-size></span></div>\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n  <div class=\"dz-success-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Check</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\n      </g>\n    </svg>\n  </div>\n  <div class=\"dz-error-mark\">\n    <i style=\"color: red; text-align: center;font-size: 30px;\" class=\"fa fa-exclamation-circle\"></i>\n  </div>\n</div>'
@@ -168,53 +177,33 @@ export class EditCompanyComponent implements OnInit {
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default']
-    this.userService.getTeam()
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data['data'][0])
-          this.item = data['data'][0]
-          this.UPDATED_DETAILS = this.item;
-          delete this.UPDATED_DETAILS['updatedAt'];
-          delete this.UPDATED_DETAILS['userId'];
-          delete this.UPDATED_DETAILS['__v'];
-          delete this.UPDATED_DETAILS['member'];
+    this.userService.getTeam().subscribe(data => {
+      console.log(data['data'][0])
+      this.item = data['data'][0]
+      this.UPDATED_DETAILS = this.item;
+      delete this.UPDATED_DETAILS['updatedAt'];
+      delete this.UPDATED_DETAILS['userId'];
+      delete this.UPDATED_DETAILS['__v'];
+      delete this.UPDATED_DETAILS['member'];
 
-          if (this.UPDATED_DETAILS['Starhousecertificate_Details'] == undefined) {
-            this.UPDATED_DETAILS['Starhousecertificate_Details'] = {
-              CertificateNo: '',
-              Issuesdate: '',
-              ExpiryDate: '',
-              file: ''
-            };
-          }
-          this.iframeVisible = true;
-          this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.UPDATED_DETAILS['Starhousecertificate_Details']?.file
-          );
-          this.isItem = true;
-          console.log(this.item)
-          // this.letterHead1 = data['data'][0].file[0]["Letter Head"]
-          // this.roundSeal1 = data['data'][0].file[1]["Round Seal"]
-          // this.forSeal1 = data['data'][0].file[2]["For Seal"]
-          this.file1 = data['data'][0].file;
-        },
-        error => {
-          console.log("error")
-        });
-
-    // this.loginForm = this.formBuilder.group({
-    //   teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9 _]+$")]],
-    //   iec: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9 _]{10}$"), Validators.maxLength(10)]],
-    //   adress: ['', Validators.required],
-    //   phone: ['', [Validators.required, Validators.pattern("^[0-9 _]{10}$"), Validators.maxLength(10)]],
-    //   caEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
-    //   chaEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
-    //   gst: ['', [Validators.required, Validators.pattern("^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$"), Validators.maxLength(15)]],
-    //   location: new FormArray([this.initLocation()]),
-    //   commodity: new FormArray([this.initComo()]),
-    //   bankDetails: new FormArray([this.initCourse()], Validators.required)
-    // });
+      if (this.UPDATED_DETAILS['Starhousecertificate_Details'] == undefined) {
+        this.UPDATED_DETAILS['Starhousecertificate_Details'] = {
+          CertificateNo: '',
+          Issuesdate: '',
+          ExpiryDate: '',
+          file: ''
+        };
+      }
+      this.iframeVisible = true;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.UPDATED_DETAILS['Starhousecertificate_Details']?.file
+      );
+      this.isItem = true;
+      console.log(this.item)
+      this.file1 = data['data'][0].file;
+    }, error => {
+      console.log("error")
+    });
   }
   email_validation(key, value): any {
     var validRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -267,31 +256,33 @@ export class EditCompanyComponent implements OnInit {
     console.log('onUploadError:', args, args[1].message);
   }
   public onUploadSuccess(args: any): void {
-    //this.uploading = false;]
     console.log(args[1].data)
     this.file.push(args[1].data)
     console.log(this.file)
-    this.letterHead = false;
-    this.roundSeal = false;
-    this.forSeal = false;
-
     this.uploading = false;
     this.iframeVisible = true;
-    this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      args[1].data
-    );
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].data);
+    }, 200);
     console.log(this.publicUrl, 'publicUrl')
-    if (Object.keys(args[1].data)[0] == 'Letter Head') {
-      this.letterHeadDone = true;
-    }
-    else if (Object.keys(args[1].data)[0] == 'Round Seal') {
-      this.roundSealDone = true;
-    }
-    else {
-      this.forSealDone = true;
-    }
-
   }
+
+  iframeVisible1: boolean = false;
+  FOR_SEAL_URL: any = '';
+  public onSoForSealUploadSuccess(args: any): void {
+    console.log(args[1].data)
+    this.uploading = false;
+    this.FOR_SEAL_URL = args[1]?.data?.pdf2imgae
+  }
+
+  LETTER_HEAD_URL: any = '';
+  public onSoLetterHeadUploadSuccess(args: any): void {
+    console.log(args[1].data)
+    this.uploading = false;
+    this.LETTER_HEAD_URL = args[1]?.data?.pdf2imgae
+  }
+
   submit(e) {
     this.uploading = true;
     console.log(e[0].size, 'ajbkab')
@@ -345,7 +336,15 @@ export class EditCompanyComponent implements OnInit {
         if (caEmail == true && chaEmail == true) {
           var chaEmail: any = this.IEC_validation('iec', this.UPDATED_DETAILS['iec']);
           this.UPDATED_DETAILS['file'] = this.file;
-          this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;
+          if (this.FOR_SEAL_URL != undefined && this.FOR_SEAL_URL != '') {
+            this.UPDATED_DETAILS['forSeal'] = this.FOR_SEAL_URL;
+          }
+          if (this.LETTER_HEAD_URL != undefined && this.LETTER_HEAD_URL != '') {
+            this.UPDATED_DETAILS['letterHead'] = this.LETTER_HEAD_URL;
+          }
+          if (this.publicUrl?.changingThisBreaksApplicationSecurity != undefined && this.publicUrl?.changingThisBreaksApplicationSecurity != '') {
+            this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;
+          }
           console.log(this.UPDATED_DETAILS, 'this.UPDATED_DETAILS');
           this.userService.updateTeamById(this.UPDATED_DETAILS, id).subscribe(
             data => {
@@ -388,6 +387,15 @@ export class EditCompanyComponent implements OnInit {
   letterheadView(url: any) {
     this.letterheadUrl = url;
   }
+
+  ForSealheadUrl: any = ''
+  ForSealheadView(url: any) {
+    setTimeout(() => {
+      this.ForSealheadUrl = ''
+      this.ForSealheadUrl = url;
+    }, 200);
+  }
+
   public loadFromLocalStorage() {
     const token = sessionStorage.getItem('token');
     this.authToken = token;
@@ -472,8 +480,10 @@ export class EditCompanyComponent implements OnInit {
   uploadletterhead(id) {
     var input = this.fileinput.target;
     var reader = new FileReader();
-    reader.onload = (event: any) => {
+    reader.onload = async (event: any) => {
       var dataUri = event.target.result;
+      const imagePath = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + dataUri);
+      console.log(imagePath, "asdfdsfsdfdf")
       this.userService.updateTeamById({ letterHead: dataUri }, id).subscribe(
         data => {
           console.log("king123")
@@ -490,6 +500,13 @@ export class EditCompanyComponent implements OnInit {
       console.log("File could not be read: " + event.target.error.code);
     };
     reader.readAsDataURL(input.files[0]);
+  }
+  Starhousecertificate_Url: any = '';
+  Starhousecertificate_DetailsView(item: any) {
+    this.Starhousecertificate_Url = ''
+    setTimeout(() => {
+      this.Starhousecertificate_Url = item?.file
+    }, 200);
   }
   bankClick(e, i) {
     this.bankName[i] = e;

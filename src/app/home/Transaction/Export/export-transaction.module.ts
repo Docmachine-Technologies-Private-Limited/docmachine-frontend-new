@@ -11,7 +11,7 @@ import { ExportHomeComponent } from './export-home/export-home.component';
 import { SharedHomeModule } from '../../shared-home.module';
 import { TransactionDashboardComponent } from './transaction-dashboard/transaction-dashboard.component';
 import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
-
+import { NewExportHomeTransactionComponent } from './export-home/new-export-home-transaction/new-export-home-transaction.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +22,13 @@ import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-
     UploadDocComponent,
     ExportHomeComponent,
     TransactionDashboardComponent,
-    PackingCreditRequestComponent
+    PackingCreditRequestComponent,
+    NewExportHomeTransactionComponent
   ],
   imports: [
     CommonModule,
     SharedHomeModule,
-    ExportTransactionRoutingModule
+    ExportTransactionRoutingModule,
   ]
 })
 export class ExportTransactionModule { }

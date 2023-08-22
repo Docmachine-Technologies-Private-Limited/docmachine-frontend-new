@@ -1,0 +1,28 @@
+<div class="custom-mat-horizontal-stepper-wrapper">
+  <div class="multiple-header-mat">
+    <div class="left-button-scroll">
+      <button aria-hidden="true" type="button" tabindex="-1" (click)="BackScroll(MatStepperHeaderPanel)">
+        <i class="fa fa-chevron-left"></i>
+      </button>
+    </div>
+    <div class="multiple-header-mat-panel" #MatStepperHeaderPanel>
+      <custom-mat-stepper-header *ngFor="let item of this.HEADER_DATA" [CUSTOM_MATSTEP_LABEL]="item?.MATSTEP_LABEL"
+        (event)="onTabChanges($event)" [COUNTER]="item?.counter" [ActiveClass]="item?.ActiveClass"
+        [DisabledClass]="item?.DisabledClass"></custom-mat-stepper-header>
+    </div>
+    <div class="right-button-scroll">
+      <button aria-hidden="true" type="button" tabindex="-1" (click)="NextScroll(MatStepperHeaderPanel)">
+        <i class="fa fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+  <ng-content select="custom-mat-step"></ng-content>
+  <div class="button-panel">
+    <p class="alert-danger"
+      *ngIf="this.HEADER_DATA[this.BUTTON_COUNTER]?.errorMessage!='' && this.ERROR_MESSAGE_SHOW==true"
+      [innerHTML]="this.HEADER_DATA[this.BUTTON_COUNTER]?.errorMessage"></p>
+    <button class="btn btn-primary" (click)="setBack()" [disabled]="this.BACK_BUTTON_DISABLED">Back</button>
+    <button class="btn btn-primary" (click)="setNext()" [disabled]="this.NEXT_BUTTON_DISABLED">Next</button>
+    <button class="btn btn-primary" *ngIf="this.NEXT_BUTTON_DISABLED==true">Done</button>
+  </div>
+</div>

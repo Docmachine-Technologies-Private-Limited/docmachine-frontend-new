@@ -82,6 +82,9 @@ import { FederalBankExportletterheadComponent } from "./AllBankFormat/FederalBan
 import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBank/import-letter-head/import-letter-head.component";
 import { DirectExportPaymentComponent } from "./AllBankFormat/HDFC-Bank/direct-import-payment/direct-import-payment.component";
 import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/FederalBank/direct-import-payment/direct-import-payment.component";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import {MatInputModule} from '@angular/material/input';
+import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
 
 @NgModule({
   declarations: [
@@ -158,8 +161,12 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     MatPaginatorModule,
     jqxSchedulerModule,
     MatBadgeModule,
-    MatButtonModule, 
     MatIconModule,
+    MatButtonModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    CustomMatStepperModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
@@ -214,9 +221,6 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     CustomSlicePipePipe,
     UploadComponentsComponent,
     InnerDynamicErrorComponent,
-    MatBadgeModule,
-    MatButtonModule, 
-    MatIconModule,
     TemplateMainPageComponent,
     CustomCheckboxComponent,
     CustomRadioComponent,
@@ -237,6 +241,13 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
     FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
+    MatBadgeModule,
+    MatIconModule,
+    MatButtonModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    CustomMatStepperModule
   ],
 })
 export class SharedHomeModule { }

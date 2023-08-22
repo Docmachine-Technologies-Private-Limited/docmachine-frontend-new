@@ -95,9 +95,9 @@
 </div>
 
 <app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="PDF_VIEW"
-    name="Airway / BLCopy Documents">
+    name="Inward-Remittance-Disposal">
     <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Airway / BLCopy Documents" [src]="viewData"
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Inward-Remittance-Disposal" [src]="viewData"
             width="100%" height="500px"></app-pdf-viewer>
     </div>
 </app-custom-model>
@@ -105,7 +105,7 @@
 <app-custom-model *ngIf="this.SELECTED_VALUE!=''"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
     EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2" id="EditSummaryPage"
-    [name]="'Airway / BLCopy Documents Update || Airway / BLCopy Documents No. : '+this.SELECTED_VALUE?.airwayBlCopyNumber"
+    [name]="'Inward-Remittance-Disposal Update || Inward-Remittance-Disposal No. : '+this.SELECTED_VALUE?.airwayBlCopyNumber"
     #EditSummaryPagePanel>
     <div class="ml-0 p-3 col-12">
         <div class="container-fluid m-auto p-0">

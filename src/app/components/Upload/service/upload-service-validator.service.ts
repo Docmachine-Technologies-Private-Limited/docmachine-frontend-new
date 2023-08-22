@@ -45,6 +45,9 @@ export class UploadServiceValidatorService implements OnInit {
   BENEFICIARY_NOT_EXITS: boolean = false;
   SELECTED_PIPO: any = [];
   SELECTED_PIPO_ID: any = [];
+  ToChargesAccountdata: any = [];
+  ToCreditAccountdata: any = [];
+  BANK_LIST_DROPDOWN: any = [];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -162,7 +165,31 @@ export class UploadServiceValidatorService implements OnInit {
           console.log(this.location);
           console.log(this.commodity);
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+          }
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+              this.BANK_LIST_DROPDOWN.push({
+                value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+              })
+            }
           }
         }, (error) => { console.log('error'); });
       } else {
@@ -218,9 +245,13 @@ export class UploadServiceValidatorService implements OnInit {
         fieldProps['RemoveListIndex'] = [{ START_INDEX: -1, LAST_INDEX: -1 }];
         if (fieldProps?.AutoFill == true && fieldProps?.AutoFill != undefined) {
           formGroupFields[field] = await new FormArray(tempFormGroup, hasDuplicateFormArray(fieldProps?.EqualList));
+          fieldProps['ExtraValue'] = '';
+          fieldProps['fieldName_More'] = field+'_Extra';
           fields.push({ ...fieldProps, fieldName: field });
         } else {
           formGroupFields[field] = await new FormArray(tempFormGroup);
+          fieldProps['ExtraValue'] = '';
+          fieldProps['fieldName_More'] = field+'_Extra';
           fields.push({ ...fieldProps, fieldName: field });
         }
       } else if (fieldProps?.type == "OptionMultiCheckBox" && fieldProps?.option != undefined) {
@@ -235,12 +266,13 @@ export class UploadServiceValidatorService implements OnInit {
               this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
-          await tempFormGroup.push(new FormGroup(OptiontempFormGroup,null));
+          await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
         });
         fieldProps['NewOption'] = temp;
+        fieldProps['ExtraValue'] = '';
+        fieldProps['fieldName_More'] = field+'_Extra';
         formGroupFields[field] = await new FormArray(tempFormGroup)
         fields.push({ ...fieldProps, fieldName: field });
-        console.log('OptionMultiCheckBox', fields)
       } else if (fieldProps?.type == "formGroup" && fieldProps?.formArray != undefined) {
         var temp: any = [];
         var tempFormGroup: any = [];
@@ -253,15 +285,19 @@ export class UploadServiceValidatorService implements OnInit {
               this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
-          await tempFormGroup.push(new FormGroup(OptiontempFormGroup,null));
+          await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
         });
         fieldProps['NewformArray'] = temp;
+        fieldProps['ExtraValue'] = '';
+        fieldProps['fieldName_More'] = field+'_Extra';
         formGroupFields[field] = await new FormArray(tempFormGroup);
         fields.push({ ...fieldProps, fieldName: field });
         console.log('formGroup', fields)
       } else {
         formGroupFields[field] = new FormControl({ value: fieldProps.value, disabled: fieldProps?.disabled != undefined ? true : false },
           this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
+        fieldProps['ExtraValue'] = '';
+        fieldProps['fieldName_More'] = field+'_Extra';
         fields.push({ ...fieldProps, fieldName: field });
       }
     }
@@ -274,7 +310,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.FIELDS_DATA[id]?.[key]?.setValue(value);
   }
 
-  setValueFromArray(id:any,form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any) {
+  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any) {
     const myForm: any = form?.controls[fieldName] as FormGroup;
     let currentVal = value;
     myForm.value[OptionfieldIndex][FormOptionfieldName] = currentVal;

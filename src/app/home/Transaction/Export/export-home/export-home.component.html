@@ -1,4 +1,4 @@
-<div class="content-wrap ml-0 scroll-bar-main" *ngIf="this.VISIBILITY==true">
+<div class="col-12 p-0">
   <div class="container-fluid p-0">
     <div class="import_export_sec">
       <div class="row">
@@ -40,8 +40,6 @@
                         class="fa fa-times" aria-hidden="true"></i></b></span> </div>
                 <br />
                 <button style="margin-top: 10px;" class="button1" (click)="proceedClick()">Proceed</button>
-                <button style="width: 210px; margin-left: 10px;" class="button1 PopupOpen" popup-close="FORWARD_CONTRACT">Add forward Contract
-                </button>
               </div>
               <table class="table table-striped mb-0 change_theheading"
                 style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
@@ -75,7 +73,6 @@
           <div class="border_bottt"></div>
           <div *ngIf='c'>
             <div *ngIf='c == "P0102" || c == "P0104" || c == "P0105" || c == "P0107"' class="table_list_newss">
-              <!-- P0102 -->
               <div *ngFor="let code of selectedPurpose; let j = index">
                 <div
                   *ngIf='code === c && sbPurpose[j] != code && importPurpose[j] != code && noImportPurpose[j] != code && mailArray[j] != code'>
@@ -1008,7 +1005,6 @@
               </div>
             </div>
             <div *ngIf='c != "P0102" && c != "P0104" && c != "P0105" && c != "P0107"'>
-              <!-- other -->
               <div *ngFor="let code of selectedPurpose; let j = index">
                 <div *ngIf='code === c && generatePurpose[j] != code || Select_A_bank[code]'>
                   <input style="width: 50%; margin-top: 10px;margin-bottom: 10px;"
@@ -1032,7 +1028,7 @@
                       <label style="flex-direction:row;" class="label1"
                         for="male">{{value.bank}}-{{value.accType}}</label>
                     </div>
-                    <br> <span> To {{bankValue}}*</span>
+                    <br><span>Charges To {{bankValue}}*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
                         value="value.bank" (click)="chargesTo(value)">
@@ -1090,7 +1086,7 @@
                                               border-bottom: 4px solid #49A2D7;">Generated Document</p>
                         </div>
                         <div *ngIf='newDone'>
-                          <div class="docStyle" *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
+                          <div class="docStyle" *ngFor="let pipo of this.ARRAY_BUFFER_PDF2;let i=index">
                             <input type="checkBox" checked (change)="addPdfToSelectedPdf(pipo , $event)">
                             <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
                               [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="100%"
@@ -1215,8 +1211,8 @@
   </div>
 </div>
 
-<button style="display: none;visibility: hidden;" type="button" id="POPUP_OPEN_CLOSE" class="PopupOpen"
-  [attr.popup-close]="'InwardRemittanceDisposal'"></button>
+ <!-- <button style="display: none;visibility: hidden;" type="button" id="POPUP_OPEN_CLOSE" class="PopupOpen"
+  [attr.popup-close]="'InwardRemittanceDisposal'"></button> -->
 
 <app-custom-model [FooterButton]="true" EventButton="false"
   [customstyle]="{'margin':'90px auto auto !important','max-width': '55vw !important','margin-right': '0px !important'}"
@@ -1295,7 +1291,6 @@
     </div>
   </app-custom-model>
 </div>
-<!-- Shipping Bill number -->
 <div class="custom-div" #ShippingBillnumber>
   <app-custom-model [FooterButton]="false" modalbodystyle="max-height:90vh" (ModelChange)="removeSession()"
     [customstyle]="{'max-width':'98vw !important'}" class="p-2" height="98vh" id="ShippingBill" name="Shipping Bill"
@@ -1366,7 +1361,7 @@
                             <td> {{data.location}} </td>
                             <td> {{data.commodity}} </td>
                             <td> {{data.amount}} </td>
-                            <td> {{data.paymentTerm[0].type}} </td>
+                            <td> {{data?.paymentTerm[0]?.type?.value}} </td>
                           </tr>
                         </tbody>
                       </table>
@@ -1388,7 +1383,6 @@
   </div>
 </div>
 
-<!-- PI/PO numbers -->
 <app-custom-model [customstyle]="{'max-width':'690vw !important'}" class="p-2" height="75vh" id="FORWARD_CONTRACT"
   [minimizedisabled]="false" modalbodyheight="70vh" name="Select FORWARD CONTRACT View" #FORWARD_CONTRACTPANEL>
   <div class="col-12 mt-2 mb-2">

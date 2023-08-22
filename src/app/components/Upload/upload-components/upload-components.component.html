@@ -192,8 +192,7 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div class="col-12 p-0">
                         <div class="col-12 division-panel"
-                            *ngFor="let Optionfield of field?.NewformArray;let OptionfieldIndex=index"
-                           >
+                            *ngFor="let Optionfield of field?.NewformArray;let OptionfieldIndex=index">
                             <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="field?.AddNewRequried==true">
                                 <label>{{field?.GroupLabel[OptionfieldIndex]}}</label>
                                 <button type="button" class="btn btn-primary"
@@ -205,19 +204,21 @@
                                         class="fa fa-minus"></i></button>
                             </div>
                             <div class="col-12 p-0"
-                                *ngFor="let FormOptionfield of Optionfield | keyvalue;let FormOptionfieldIndex=index"  [formGroupName]="OptionfieldIndex">
+                                *ngFor="let FormOptionfield of Optionfield | keyvalue;let FormOptionfieldIndex=index"
+                                [formGroupName]="OptionfieldIndex">
                                 <ng-container [ngSwitch]="FormOptionfield?.value?.type">
                                     <div class="form-group mb-3" *ngSwitchCase="'text'">
-                                            <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
+                                        <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
                                             (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
                                             [(ngModel)]="FormOptionfield.value.value"></ng-input>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'number'">
                                         <div class="form-group mb-3"
                                             *ngIf="FormOptionfield?.value?.visible==true || FormOptionfield?.value?.visible==undefined">
-                                            <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
-                                            (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
-                                            [(ngModel)]="FormOptionfield.value.value"></ng-input>
+                                            <ng-input [item]="FormOptionfield?.value"
+                                                [name]="FormOptionfield?.value?.name"
+                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
+                                                [(ngModel)]="FormOptionfield.value.value"></ng-input>
                                         </div>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'currency'">
@@ -228,8 +229,7 @@
                                             [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
                                             [name]="FormOptionfield?.value?.name"
                                             [(ngModel)]="FormOptionfield.value.value"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
-                                            >
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)">
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'PaymentTermType'">
@@ -245,7 +245,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'date'">
-                                            <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
+                                        <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
                                             (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
                                             [(ngModel)]="FormOptionfield.value.value"></ng-input>
                                     </div>
@@ -324,11 +324,17 @@
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'Bank'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <ng-select *ngIf="this.validator?.bankDetail?.length!=0" [items]="this.validator?.bankDetail"
+                    <ng-select *ngIf="this.validator?.BANK_LIST_DROPDOWN?.length!=0" [items]="this.validator?.BANK_LIST_DROPDOWN"
                         bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
+                        [name]="field.fieldName" [(ngModel)]="field.ExtraValue">
                     </ng-select>
+                    <div class="col-12 p-0" *ngIf="field.ExtraValue!=''">
+                        <label for="exampleInputEmail1" class="form-label">
+                            Select Account no. & Account Type*</label>
+                        <custom-radio-button [items]="this.validator?.ToChargesAccountdata[field?.ExtraValue?.id]"
+                        [name]="field.fieldName" (event)="field.value=$event"></custom-radio-button>
+                    </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'BankList'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>

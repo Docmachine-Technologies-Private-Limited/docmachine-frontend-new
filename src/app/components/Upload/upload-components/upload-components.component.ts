@@ -15,11 +15,12 @@ import { AuthGuard } from '../../../service/authguard.service';
   templateUrl: './upload-components.component.html',
   styleUrls: ['./upload-components.component.scss']
 })
-export class UploadComponentsComponent implements OnInit,AfterViewInit {
+export class UploadComponentsComponent implements OnInit, AfterViewInit {
   SUBMIT_ERROR: boolean = false;
   @Input('id') id: any = '';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();
+  @Output('RawValueEvent') RawValue: any = new EventEmitter();
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
   @Input('KEY_ENTER_ENABLED') KEY_ENTER_ENABLED: any = false;
@@ -31,7 +32,7 @@ export class UploadComponentsComponent implements OnInit,AfterViewInit {
     BuyerNotFound: '',
     BeneficiaryNotFound: ''
   }
-  
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -52,12 +53,22 @@ export class UploadComponentsComponent implements OnInit,AfterViewInit {
   onSubmit(event: any, e: any, type: any) {
     console.log(e, 'value')
     event.preventDefault();
-    if (e.status == 'VALID') {
+    if (e?.status == 'VALID') {
       this.SUBMIT_ERROR = false;
       this.SubmitEvent.emit(e);
+      this.RawValue.emit(this.getRawValue);
     } else {
+      this.RawValue.emit(false);
       this.SUBMIT_ERROR = true;
     }
+  }
+
+  get getRawValue() {
+    return this.validator.dynamicFormGroup[this.id]?.getRawValue()
+  }
+  
+  get geForm() {
+    return this.validator.dynamicFormGroup[this.id];
   }
 
   setFormValue(value: any, index: any, name1: any, name2: any) {
@@ -118,7 +129,7 @@ export class UploadComponentsComponent implements OnInit,AfterViewInit {
     }, 'AddNewBankName');
   }
 
-  addNewBank(e: any,panel:any) {
+  addNewBank(e: any, panel: any) {
     this.documentService.addNewBankInfo({ value: e?.value?.BankName, BankUniqueId: this.initialName(this.removeAllSpecialChar(e?.value?.BankName)) }).subscribe(async (res: any) => {
       this.validator.BANK_NAME_LIST_GLOABL = await this.documentService.getBankNameList();
       this.toastr.success(res?.message);
@@ -138,7 +149,7 @@ export class UploadComponentsComponent implements OnInit,AfterViewInit {
   removeAllSpecialChar(string: any) {
     return string?.replace(/[^a-zA-Z ]/g, "");
   }
-  
+
   ngAfterViewInit() {
     let token = this.authGuard.loadFromLocalStorage();
     if (token != null) {
@@ -160,7 +171,7 @@ export class UploadComponentsComponent implements OnInit,AfterViewInit {
         }
       });
       this.LOGIN_TOEKN = 'asdasasddasds'
-      console.log('sdasjdasdkjagsdkjasdgaskdjagsdasdaskjdgasdkasdgaskdgasds',this.BuyerNotFound,this.BeneficiaryNotFound)
+      console.log('sdasjdasdkjagsdkjasdgaskdjagsdasdaskjdgasdkasdgaskdgasds', this.BuyerNotFound, this.BeneficiaryNotFound)
     } else {
       this.LOGIN_TOEKN = ''
     }

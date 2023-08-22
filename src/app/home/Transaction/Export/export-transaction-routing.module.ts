@@ -8,13 +8,14 @@ import { UploadDocComponent } from './export-home/upload-doc/upload-doc.componen
 import { ExportHomeComponent } from './export-home/export-home.component';
 import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
 import { TransactionDashboardComponent } from './transaction-dashboard/transaction-dashboard.component';
+import { NewExportHomeTransactionComponent } from './export-home/new-export-home-transaction/new-export-home-transaction.component';
 
 const routes: Routes = [
   { path: "bill-lodgement", component: BillLodgementComponent, canActivate: [MemberGuard] },
   { path: "Packing-Credit-Request-New", component: PackingCreditRequestComponent, canActivate: [MemberGuard] },
   { path: "direct-dispatch", component: NewDirectDispatchComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Sub-bill-Lodgement", component: SubBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
-  { path: "export-home", component: ExportHomeComponent, canActivate: [MemberGuard] },
+  { path: "export-home", component: NewExportHomeTransactionComponent, canActivate: [MemberGuard] },
   { path: "export-home/:id", component: ExportHomeComponent, canActivate: [MemberGuard] },
   { path: "Pdf-Upload", component: UploadDocComponent },
   { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },

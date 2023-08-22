@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren } from "@angular/core";
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { DocumentService } from "../../../../service/document.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as data from '../../../../inward.json';
@@ -24,8 +24,11 @@ declare var kendo: any;
   templateUrl: './export-home.component.html',
   styleUrls: ['./export-home.component.scss']
 })
-export class ExportHomeComponent implements OnInit, OnDestroy {
+export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChildren('ngSelect') ngSelect: ElementRef;
+  @Input('InwardDisposalData') InwardDisposalData: any = [];
+  @Input('ForwardNo') ForwardNo: any = [];
+  @Input('data') data: any = [];
 
   closeResult: string;
   public item1;
@@ -191,6 +194,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   Export_Direct_Dispatch: any = []
   VISIBILITY: boolean = false;
   ForwardContractDATA: any = [];
+  COMPANY_INFO: any = {};
 
   constructor(
     public documentService: DocumentService,
@@ -252,6 +256,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   Inward_Remittance_MT103_DATA: any = [];
   MT103_URL: any = '';
   MT103_ID: any = ''
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes, "ngOnChanges")
+    this.InwardDisposalData = changes?.data?.currentValue[0] != undefined ? changes?.data?.currentValue[0] : this.InwardDisposalData
+    this.ForwardNo = changes?.data?.currentValue[1] != undefined ? changes?.data?.currentValue[1] : this.ForwardNo;
+    this.ToForwardContract_Selected = this.ForwardNo;
+    this.Inward_Remittance_MT103_DATA = this.InwardDisposalData;
+    this.Inward_Remittance_MT103 = this.InwardDisposalData;
+    this.bank = [this.InwardDisposalData[0]?.BankName];
+    this.MT103_URL = this.InwardDisposalData[0]?.file;
+    console.log(this.bank, 'sallBankallBankallBankallBankallBank')
+  }
   async ngOnInit() {
     this.wininfo.set_controller_of_width(250, '.content_top_common')
     await this.userService.getUserDetail().then((res: any) => {
@@ -262,6 +278,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.redirectindex = this.route.snapshot.paramMap.get('index')
     this.redirectpage = this.route.snapshot.paramMap.get('page')
     this.MT103_ID = this.route.snapshot.paramMap.get('MT103_ID');
+    this.ToForwardContract_Selected = this.ForwardNo
     console.log("pipoId", this.redirectid);
     for (let index = 0; index < data['default'].length; index++) {
       var temp: any = [];
@@ -310,13 +327,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.jsondata[0].purpose)
     this.dataJson = this.jsondata
     this.purposeFun(this.default_value)
-    this.documentService.getInward_remittance().subscribe((res: any) => {
-      res?.data?.forEach(element => {
-        element['Checked'] = false;
-      });
-      this.Inward_Remittance_MT103_DATA = res?.data;
-      console.log(res, 'getInward_remittance')
-    })
+    this.Inward_Remittance_MT103_DATA = this.InwardDisposalData;
 
     this.documentService.getThird().subscribe(
       (res: any) => {
@@ -375,26 +386,19 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         fitertemp.forEach(element => {
           this.buyerName.push({ value: element })
         });
-      },
-      (err) => console.log(err)
-    );
+      }, (err) => console.log(err));
 
+    this.documentService.getThird().subscribe((res: any) => {
+      console.log("HEre Response Third", res);
+      this.item7 = res.data;
+      for (let value of this.item7) {
+        if (value['file'] == 'export') {
 
-
-    this.documentService.getThird().subscribe(
-      (res: any) => {
-        console.log("HEre Response Third", res);
-        this.item7 = res.data;
-        for (let value of this.item7) {
-          if (value['file'] == 'export') {
-
-            this.item4.push(value);
-            console.log('awwww', this.item4);
-          }
+          this.item4.push(value);
+          console.log('awwww', this.item4);
         }
-      },
-      (err) => console.log(err)
-    );
+      }
+    }, (err) => console.log(err));
 
     // used details
     this.userService.getUserDetail().then((res: any) => {
@@ -407,32 +411,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     let date = ['27-JAN-21', '29-JAN-2021', '31-JAN-2021']
     const myArray = date[0].split(" ");
 
-    this.userService.getTeam()
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data['data'][0])
-          this.item5 = data['data'][0]
-          console.log("checking for location commodity", this.item5)
-          this.commoditydata = this.item5.commodity;
-          console.log("checking for commodity", this.commoditydata)
-          this.locationdata = this.item5.location;
-          console.log("checking for location", this.locationdata)
-          this.arr = this.item5.gst.split('');
-          this.bankArray = this.item5.bankDetails
-          for (let value of this.bankArray) {
-            this.allBank.push(value.bank)
-          }
-          console.log(this.allBank)
-          this.bank = this.allBank.filter(function (item, index, inputArray) {
-            return inputArray.indexOf(item) == index;
-          });
-          console.log(this.bank, 'sallBankallBankallBankallBankallBank')
-        },
-        error => {
-          console.log("error")
-        });
-
+    this.userService.getTeam().subscribe((data: any) => {
+      this.COMPANY_INFO = data?.data[0]
+      console.log("king123")
+      console.log(data['data'][0])
+      this.item5 = data['data'][0]
+      console.log("checking for location commodity", this.item5)
+      this.commoditydata = this.item5.commodity;
+      console.log("checking for commodity", this.commoditydata)
+      this.locationdata = this.item5.location;
+      console.log("checking for location", this.locationdata)
+      this.arr = this.item5.gst.split('');
+      this.bankArray = this.item5.bankDetails
+      for (let value of this.bankArray) {
+        this.allBank.push(value.bank)
+      }
+    },
+      error => {
+        console.log("error")
+      });
     if (this.documentService.draft) {
       console.log('inside')
       this.proceed = false
@@ -647,11 +644,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     this.INPUT_SERACH = $('.search_box_new');
     console.log(this.mainDoc, 'dfsdfdfdfsd')
-    this.documentService.ForwardContractget().subscribe((res: any) => {
-      this.ForwardContractDATA = res?.data;
-      console.log(res, 'daasdasdasdasdasdadsd')
-    });
-    $('#POPUP_OPEN_CLOSE').click();
   }
 
   InputClick() {
@@ -942,7 +934,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           element?.enableCombing(); // trying to restore combing
         }
       });
-      getAllFields[0].setText('')
+      getAllFields[0].setText(this.COMPANY_INFO?.BranchName)
       getAllFields[3].setText(this.item5.teamName)
       getAllFields[4].setText(this.charge[0])
       getAllFields[5].setText(this.charge[1])
@@ -961,12 +953,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[18].setText('Export')
       getAllFields[19].setText('')
       getAllFields[20].setText(a['currency'])
-      var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      getAllFields[21].setText(updatedata?.Inward_amount_for_disposal)
-      getAllFields[22].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
+      const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+      getAllFields[21].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
+      getAllFields[22].setText(updatedata?.Inward_amount_for_disposal)
       getAllFields[23].setText(this.buyerAds)
       getAllFields[24].setText(a['buyerName'])
       getAllFields[25].setText('ADVANCE AGAINST EXPORT')
+      getAllFields[25].setFontSize(8);
       getAllFields[26].setText(this.generatePurpose[0])
 
       getAllFields[77].setText(this.credit[0])
@@ -999,30 +992,33 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       getAllFields[117].setText(this.charge[12])
       getAllFields[118].setText(this.charge[13])
 
-      let bookingdatesplit = this.ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-', '')?.split('');
-      let duedatesplit = this.ToForwardContract_Selected[0]?.ToDate?.replaceAll('-', '')?.split('');
-      getAllFields[119].setText(this.ToForwardContract_Selected[0]?.ForwardRefNo)
-      getAllFields[120].setText(bookingdatesplit[6])
-      getAllFields[121].setText(bookingdatesplit[7])
-      getAllFields[122].setText(bookingdatesplit[4])
-      getAllFields[123].setText(bookingdatesplit[5])
-      getAllFields[124].setText(bookingdatesplit[0])
-      getAllFields[125].setText(bookingdatesplit[1])
-      getAllFields[126].setText(bookingdatesplit[2])
-      getAllFields[127].setText(bookingdatesplit[3])
+      if (this.ToForwardContract_Selected != undefined && this.ToForwardContract_Selected?.length != 0) {
+        let bookingdatesplit = this.ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-', '')?.split('');
+        let duedatesplit = this.ToForwardContract_Selected[0]?.ToDate?.replaceAll('-', '')?.split('');
+        getAllFields[119].setText(this.ToForwardContract_Selected[0]?.ForwardRefNo)
+        getAllFields[120].setText(bookingdatesplit[6])
+        getAllFields[121].setText(bookingdatesplit[7])
+        getAllFields[122].setText(bookingdatesplit[4])
+        getAllFields[123].setText(bookingdatesplit[5])
+        getAllFields[124].setText(bookingdatesplit[0])
+        getAllFields[125].setText(bookingdatesplit[1])
+        getAllFields[126].setText(bookingdatesplit[2])
+        getAllFields[127].setText(bookingdatesplit[3])
 
-      getAllFields[128].setText(duedatesplit[6])
-      getAllFields[129].setText(duedatesplit[7])
-      getAllFields[130].setText(duedatesplit[4])
-      getAllFields[131].setText(duedatesplit[5])
-      getAllFields[132].setText(duedatesplit[0])
-      getAllFields[133].setText(duedatesplit[1])
-      getAllFields[134].setText(duedatesplit[2])
-      getAllFields[135].setText(duedatesplit[3])
+        getAllFields[128].setText(duedatesplit[6])
+        getAllFields[129].setText(duedatesplit[7])
+        getAllFields[130].setText(duedatesplit[4])
+        getAllFields[131].setText(duedatesplit[5])
+        getAllFields[132].setText(duedatesplit[0])
+        getAllFields[133].setText(duedatesplit[1])
+        getAllFields[134].setText(duedatesplit[2])
+        getAllFields[135].setText(duedatesplit[3])
 
-      getAllFields[136].setText(this.ToForwardContract_Selected[0]?.BookingAmount)
-      getAllFields[137].setText(this.ToForwardContract_Selected[0]?.UtilizedAmount)
-      getAllFields[138].setText(this.ToForwardContract_Selected[0]?.NetRate);
+        getAllFields[136].setText(this.ToForwardContract_Selected[0]?.BookingAmount)
+        getAllFields[137].setText(this.ToForwardContract_Selected[0]?.UtilizedAmount)
+        getAllFields[138].setText(this.ToForwardContract_Selected[0]?.NetRate);
+      }
+
       getAllFields[139].setText(this.jstoday)
 
       var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
@@ -2636,20 +2632,21 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bankRef = e.target.value
   }
   ARRAY_BUFFER_PDF: any = [];
+  ARRAY_BUFFER_PDF2: any = [];
   showPreview(id: any) {
-    // this.PREVIWES_URL='./../../assets/DXB.pdf'
-    console.log("2214 line", this.STORE_URL)
     this.bgColor = true
     this.newDone = true
     this.ARRAY_BUFFER_PDF = [];
+    this.ARRAY_BUFFER_PDF2 = [];
     if (this.formerge != null && this.formerge != '') {
-      this.ARRAY_BUFFER_PDF[0] = this.formerge;
-      this.ARRAY_BUFFER_PDF[1] = this.MT103_URL;
+      this.ARRAY_BUFFER_PDF2[0] = this.formerge;
+      this.ARRAY_BUFFER_PDF2[1] = this.MT103_URL;
     } else {
-      this.ARRAY_BUFFER_PDF[0] = this.MT103_URL;
+      this.ARRAY_BUFFER_PDF2[0] = this.MT103_URL;
     }
     for (let index = 0; index < this.STORE_URL.length; index++) {
       this.ARRAY_BUFFER_PDF.push(this.STORE_URL[index]);
+      this.ARRAY_BUFFER_PDF2.push(this.STORE_URL[index]);
     }
     this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
@@ -2917,7 +2914,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           this.newBankArray.push(value)
         }
       });
-      this.toastr.error("You don't have bank format,please select valid bank name!");
     }
     console.log(a)
   }
@@ -2939,8 +2935,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.selectedPdfs = [];
     this.selectedPdfs[0] = this.value;
     this.selectedPdfs[1] = this.MT103_URL;
-    for (let index = 0; index < this.ARRAY_BUFFER_PDF.length; index++) {
-      this.selectedPdfs.push(this.ARRAY_BUFFER_PDF[index])
+    for (let index = 0; index < this.ARRAY_BUFFER_PDF2.length; index++) {
+      this.selectedPdfs.push(this.ARRAY_BUFFER_PDF2[index])
     }
     console.log('line no. 2493', this.selectedPdfs);
 
@@ -3486,7 +3482,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
                 this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
                   console.log('king123');
                   console.log(data);
-                  this.router.navigate(['/home/dashboardTask'])
+                  this.documentService.UpdateInward_Remittance(updatedata?._id, { Inward_amount_for_disposal: updatedata?.Inward_amount_for_disposal }).subscribe((res) => {
+                    this.router.navigate(['/home/dashboardTask'])
+                  })
                 }, (error) => {
                   console.log('error');
                 });
