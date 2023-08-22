@@ -32,6 +32,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     BuyerNotFound: '',
     BeneficiaryNotFound: ''
   }
+  HS_CODE_DATA:any=[];
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -44,6 +45,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     public userService: UserService) { }
 
   async ngOnInit() {
+    this.HS_CODE_DATA = this.documentService.getHSCODE();
+    this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA;
   }
 
   get onClickButton() {
@@ -176,5 +179,40 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.LOGIN_TOEKN = ''
     }
   }
-
+  ToHSCode_Selected:any=[];
+  ToHSCode(event: any, value: any, index: any) {
+    if (event?.target?.checked == true) {
+      this.ToHSCode_Selected[index] = value;
+    } else {
+      this.ToHSCode_Selected[index] = '';
+    }
+  }
+  ALL_DATA_HSCODE: any = '';
+  DoneButton() {
+    let temp2: any = [];
+    this.ToHSCode_Selected.forEach(element => {
+      temp2.push(element?.hscode);
+    });
+    this.ALL_DATA_HSCODE=temp2.join(',');
+    this.setValue(this.ALL_DATA_HSCODE,this.HSCODE_FEILD_FORM?.field);
+  }
+  filtertimeout: any = ''
+  FILTER_HS_CODE_DATA:any=[];
+  filterHSCode(value: any) {
+    clearTimeout(this.filtertimeout);
+    this.filtertimeout = setTimeout(() => {
+      this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA.filter((item: any) => item?.hscode?.indexOf(value) != -1 || item?.description?.toLowerCase()?.indexOf(value?.toLowerCase()) != -1);
+      if (this.FILTER_HS_CODE_DATA.length == 0) {
+        this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA;
+      }
+    }, 200);
+  }
+  HSCODE_FEILD_FORM:any={
+   id:'',
+   field:''
+  }
+  ValueAdd(id:any,field:any){
+    this.HSCODE_FEILD_FORM['id']=id;
+    this.HSCODE_FEILD_FORM['field']=field;
+  }
 }

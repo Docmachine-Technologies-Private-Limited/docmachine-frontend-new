@@ -1024,14 +1024,14 @@
                   <div *ngIf='bankToggle'> <span> Credit to {{bankValue}}*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                        value="value.bank" (click)="creditTo(value)">
+                        value="value.bank" name="BankToCredit" (click)="creditTo(value)">
                       <label style="flex-direction:row;" class="label1"
                         for="male">{{value.bank}}-{{value.accType}}</label>
                     </div>
                     <br><span>Charges To {{bankValue}}*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                        value="value.bank" (click)="chargesTo(value)">
+                        value="value.bank" name="BankToCharge" (click)="chargesTo(value)">
                       <label style="flex-direction:row;" class="label1"
                         for="male">{{value.bank}}-{{value.accType}}</label>
                     </div>
@@ -1352,7 +1352,7 @@
                         <tbody *ngIf="dataSource.length!=0">
                           <tr class="table-row" *ngFor='let data of dataSource let i = index'>
                             <td>
-                              <input type="checkbox" (change)="changeCheckboxPIPO(data['pi_poNo']); " />
+                              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data); " />
                             </td>
                             <td> {{data.pi_poNo}} </td>
                             <td> {{data.date}} </td>

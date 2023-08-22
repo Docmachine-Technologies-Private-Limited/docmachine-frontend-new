@@ -1,7 +1,6 @@
 import { Component, Injectable, OnInit, forwardRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import $ from 'jquery';
-import { Observable } from 'rxjs';
 import { DocumentService } from '../../service/document.service';
 import { CustomConfirmDialogModelService } from './custom-confirm-dialog-model.service';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -23,6 +22,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
   providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR],
 })
 
+
 export class CustomConfirmDialogModelComponent implements OnInit {
   titleheader: any = 'Modal title';
   message: '';
@@ -38,6 +38,10 @@ export class CustomConfirmDialogModelComponent implements OnInit {
   };
   DATA_RECIVED: any = [];
   DownloadStatus: boolean = false;
+  COMMENTS_LIST: any = {
+    Transaction: [{ value: 'MAKER' }, { value: 'CHECKER' }, { value: 'APPROVER' }],
+    Summary: [{ value: 'Wrong Entry' }, { value: 'Missing Entry' }, { value: 'Duplicate Entry' }]
+  }
 
   constructor(public CustomConfirmDialogModel: CustomConfirmDialogModelService,
     public documentService: DocumentService,
@@ -70,14 +74,15 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     window.scroll(0, 0)
   }
 
-  DropDownConfirmDialogModel(titleheader: any, message: any, callback: Function) {
+  DropDownConfirmDialogModel(titleheader: any, message: any, type: string = 'Summary', callback: Function) {
     this.HIDE_ALL_MODELS('DropDownInputConfirmDialog');
     $('.input-remove').val('');
     this.CustomConfirmDialogModel.titleheader = titleheader;
     this.CustomConfirmDialogModel.message = message;
     $('.DropDownInputConfirmDialog').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS = callback;
-    window.scroll(0, 0)
+    window.scroll(0, 0);
+    this.CustomConfirmDialogModel.TYPE_OF_COMMENTS = type;
   }
   InputConfirmDialogModel(titleheader: any, message: any, callback: Function) {
     this.HIDE_ALL_MODELS('InputConfirmDialog');

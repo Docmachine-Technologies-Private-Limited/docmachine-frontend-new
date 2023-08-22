@@ -703,16 +703,30 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
 
     console.log(this.sbArray)
   }
-  selectPIPO: any = []
-  changeCheckboxPIPO(value, id) {
-    let j = this.selectPIPO.indexOf(value)
-    if (j == -1) {
-      this.selectPIPO.push(value)
+  selectPIPO: any = [];
+  selectPIPO_data: any = [];
+  changeCheckboxPIPO(event: any, value, data: any) {
+    this.selectPIPO_data.push(data)
+    let sumpipoamount: any = this.selectPIPO_data?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.amount) }, 0);
+    console.log(this.selectPIPO, sumpipoamount, this.selectPIPO_data,
+    sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal),'selectPIPO')
+    
+    if ((sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal))) {
+      let j = this.selectPIPO.indexOf(value);
+      if (j == -1) {
+        this.selectPIPO.push(value);
+      }
+      else {
+        this.selectPIPO.splice(j, 1);
+        this.selectPIPO_data.splice(j, 1)
+      }
+    } else {
+      this.selectPIPO_data.pop();
+      event.target.checked = false;
+      this.toastr.error("You don't have much enough money...");
     }
-    else {
-      this.selectPIPO.splice(j, 1)
-    }
-    console.log(this.selectPIPO, 'selectPIPO')
+    console.log(this.selectPIPO, sumpipoamount, this.selectPIPO_data, 'selectPIPO')
+
   }
 
   changeCheckbox2(value) {

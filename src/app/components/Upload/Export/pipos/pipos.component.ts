@@ -72,8 +72,21 @@ export class PIPOSComponent implements OnInit {
         MaterialTypes: {
           type: "MultiCheckBox",
           value: "",
-          label: "Raw Material or Capital Goods",
-          checkboxlabel: [{ text: "Raw Material", value: 'Raw Material' }, { text: 'Capital Goods', value: 'Capital Goods' }],
+          label: "Type of goods category",
+          checkboxlabel: [
+            { text: "Non Capital Goods", value: 'Non Capital Goods' },
+            { text: 'Capital Goods', value: 'Capital Goods' },
+            { text: 'Services', value: 'Services' },
+            { text: 'Samples', value: 'Samples' },
+            { text: 'Repairs and returns', value: 'Repairs and returns' }
+          ],
+          NotificationShow: {
+            "Non Capital Goods": "",
+            "Services": "No SB traceability and applicability (SB+9months criteria not applicable).",
+            "Capital Goods": "",
+            "Samples": "Invoice should be sent to CHA for marking FOC in the SB,Cha Email id should be mandatorily registered if not to Admin.",
+            "Repairs and returns": "GR waiver form should be made available."
+          },
           rules: {
             required: true,
           }
@@ -163,6 +176,7 @@ export class PIPOSComponent implements OnInit {
           value: "",
           label: "PC reference number",
           checkboxlabel: [{ text: "Yes", value: 'Yes' }, { text: 'No', value: 'No' }],
+          Yes: "Yes",
           rules: {
             required: true,
           },
@@ -202,11 +216,60 @@ export class PIPOSComponent implements OnInit {
             }],
           ]
         },
+        ModeofTransport: {
+          type: "OptionMultiCheckBox",
+          value: "",
+          label: "Mode of Transport",
+          checkboxlabel: [{ text: "Sea", value: 'Sea' }, { text: 'Air', value: 'Air' }],
+          rules: {
+            required: true,
+          },
+          Yes: "Sea",
+          No: "Air",
+          option: [
+            [{
+              type: "checkbox",
+              value: "",
+              label: "EDI",
+              name: 'EDI',
+              rules: {
+                required: false,
+              }
+            }, {
+              type: "checkbox",
+              value: "",
+              label: "non - EDI",
+              name: 'nonEDI',
+              rules: {
+                required: false,
+              },
+            }],
+          ],
+          option1: [
+            [{
+              type: "checkbox",
+              value: "",
+              name: 'AirportCustoms',
+              label: "Airport customs",
+              rules: {
+                required: false,
+              }
+            }, {
+              type: "checkbox",
+              value: "",
+              label: "Courier",
+              name: 'Courier',
+              rules: {
+                required: false,
+              }
+            }],
+          ]
+        },
         paymentTerm: {
           type: "formGroup",
           label: "Payment Terms",
           GroupLabel: ['Payment Terms 1'],
-          AddNewRequried:true,
+          AddNewRequried: true,
           rules: {
             required: false,
           },

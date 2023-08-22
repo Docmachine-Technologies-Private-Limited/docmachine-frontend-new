@@ -137,7 +137,6 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
   }
   
   onClick(event:any) {
-  console.log(event)
     if (!this.elementRef.nativeElement.contains(event.target))
       this.displayHidden;
   }

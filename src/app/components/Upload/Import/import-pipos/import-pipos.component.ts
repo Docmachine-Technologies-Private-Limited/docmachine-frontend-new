@@ -92,8 +92,21 @@ export class ImportPIPOSComponent implements OnInit {
         MaterialTypes: {
           type: "MultiCheckBox",
           value: "",
-          label: "Raw Material or Capital Goods",
-          checkboxlabel: [{ text: "Raw Material", value: 'Raw Material' }, { text: 'Capital Goods', value: 'Capital Goods' }],
+          label: "Type of goods category",
+          checkboxlabel: [
+            { text: "Non Capital Goods", value: 'Non Capital Goods' },
+            { text: 'Capital Goods', value: 'Capital Goods' },
+            { text: 'Services', value: 'Services' },
+            { text: 'Samples', value: 'Samples' },
+            { text: 'Repairs and returns', value: 'Repairs and returns' }
+          ],
+          NotificationShow: {
+            "Non Capital Goods": "",
+            "Services": "No SB traceability and applicability.",
+            "Capital Goods": "If goods are first imported and to be sent out, FOC should be marked in BOE and while doing export BOE number should be captured.",
+            "Samples": "Invoice should be sent to CHA for marking FOC in the BOE.",
+            "Repairs and returns": "If goods are sent from India out and then coming in, SB number to captured in BOE along with FOC."
+          },
           rules: {
             required: true,
           }
@@ -153,6 +166,63 @@ export class ImportPIPOSComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        HSCODE: {
+          type: "HSCODE",
+          value: "",
+          label: "Select HS Code",
+          rules: {
+            required: true,
+          }
+        },
+        ModeofTransport: {
+          type: "OptionMultiCheckBox",
+          value: "",
+          label: "Mode of Transport",
+          checkboxlabel: [{ text: "Sea", value: 'Sea' }, { text: 'Air', value: 'Air' }],
+          rules: {
+            required: true,
+          },
+          Yes: "Sea",
+          No: "Air",
+          option: [
+            [{
+              type: "checkbox",
+              value: "",
+              label: "EDI",
+              name: 'EDI',
+              rules: {
+                required: false,
+              }
+            }, {
+              type: "checkbox",
+              value: "",
+              label: "non - EDI",
+              name: 'nonEDI',
+              rules: {
+                required: false,
+              },
+            }],
+          ],
+          option1: [
+            [{
+              type: "checkbox",
+              value: "",
+              name: 'AirportCustoms',
+              label: "Airport customs",
+              rules: {
+                required: false,
+              }
+            }, {
+              type: "checkbox",
+              value: "",
+              label: "Courier",
+              name: 'Courier',
+              rules: {
+                required: false,
+              }
+            }],
+          ]
         },
         paymentTerm: {
           type: "formGroup",

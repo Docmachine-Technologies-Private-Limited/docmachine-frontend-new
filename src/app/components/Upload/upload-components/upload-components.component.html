@@ -145,13 +145,14 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [(ngModel)]="field.value">
                     </custom-checkbox>
+                    <label style="color: green;" *ngIf="field?.value!=undefined && field?.value!='' && field?.NotificationShow[field.value]!=undefined">{{field?.NotificationShow[field.value]}}</label>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'" [formArrayName]="field.fieldName">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName"
                         (event)="field.value=$event">
                     </custom-checkbox>
-                    <div class="col-12 p-0" *ngIf="field.value=='Yes'">
+                    <div class="col-12 p-0" *ngIf="field?.value==field?.Yes">
                         <div class="col-12 p-0" *ngFor="let Optionfield of field?.NewOption;let OptionfieldIndex=index"
                             [formGroupName]="OptionfieldIndex">
                             <div class="col-12 p-0"
@@ -180,9 +181,61 @@
                                                 class="form-control" [style]="FormOptionfield?.value?.style" />
                                         </div>
                                     </div>
+                                    <div class="form-group mb-3" *ngSwitchCase="'checkbox'">
+                                        <div class="col-12 p-0 ml-3">
+                                            <mat-checkbox [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]"
+                                            [name]="FormOptionfield?.value?.fieldName"
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            class="form-control" [style]="FormOptionfield?.value?.style">{{FormOptionfield?.value?.label}}</mat-checkbox>
+                                        </div>
+                                    </div>
                                 </ng-container>
                                 <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
                                     [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex]"
+                                    [fieldName]="FormOptionfield?.value?.fieldName"></inner-dynamic-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 p-0" *ngIf="field?.value==field?.No && field?.No!=undefined">
+                        <div class="col-12 p-0" *ngFor="let Optionfield of field?.NewOption1;let OptionfieldIndex=index"
+                            [formGroupName]="OptionfieldIndex+1">
+                            <div class="col-12 p-0"
+                                *ngFor="let FormOptionfield of Optionfield | keyvalue;let FormOptionfieldIndex=index">
+                                <ng-container [ngSwitch]="FormOptionfield?.value?.type">
+                                    <div class="form-group mb-3" *ngSwitchCase="'text'">
+                                        <label
+                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
+                                        <input
+                                            [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex+1][FormOptionfield?.value?.fieldName]"
+                                            [type]="FormOptionfield?.value?.type"
+                                            [name]="FormOptionfield?.value?.fieldName"
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            class="form-control" [style]="FormOptionfield?.value?.style" />
+                                    </div>
+                                    <div class="form-group mb-3" *ngSwitchCase="'number'">
+                                        <div class="form-group mb-3"
+                                            *ngIf="FormOptionfield?.value?.visible==true || FormOptionfield?.value?.visible==undefined">
+                                            <label
+                                                *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
+                                            <input
+                                                [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex+1][FormOptionfield?.value?.fieldName]"
+                                                [type]="FormOptionfield?.value?.type"
+                                                [name]="FormOptionfield?.value?.fieldName"
+                                                [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                                class="form-control" [style]="FormOptionfield?.value?.style" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3" *ngSwitchCase="'checkbox'">
+                                        <div class="col-12 p-0 ml-3">
+                                            <mat-checkbox [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex+1][FormOptionfield?.value?.fieldName]"
+                                            [name]="FormOptionfield?.value?.fieldName"
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            class="form-control" [style]="FormOptionfield?.value?.style">{{FormOptionfield?.value?.label}}</mat-checkbox>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
+                                    [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex+1]"
                                     [fieldName]="FormOptionfield?.value?.fieldName"></inner-dynamic-error>
                             </div>
                         </div>
@@ -320,6 +373,18 @@
                             [name]="field.fieldName" [(ngModel)]="field.value" required>
                         </ng-select>
                         <button type="button" class="btn btn-primary PopupOpen" popup-close="IncoTerm">view</button>
+                    </div>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'HSCODE'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <div class="row m-0">
+                        <input [value]="this.ALL_DATA_HSCODE" ngModel
+                        (keypress)="this.validator.max_length_validator(this.id,field.fieldName);" type="text"
+                        [name]="field.fieldName"
+                        disabled
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" class="form-control"
+                        [style]="field?.style" />
+                        <button type="button" class="btn btn-primary PopupOpen" popup-close="HS_CODE_POPUP" (click)="ValueAdd(this.id,field.fieldName)">Select HS Code</button>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'Bank'">
@@ -600,5 +665,36 @@
     [customstyle]="{'max-width':'60vw !important','margin-top':'100px !important'}" height="40vh" [name]="'Inco Term'">
     <div class="p-2">
         <img src="../../../../assets/images/incoterm.png" alt="Inco Term" class="img-popup">
+    </div>
+</app-custom-model>
+
+<app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="HS_CODE_POPUP"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
+    <div class="col-12 mt-2 mb-2">
+        <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
+            (event)="filterHSCode($event)"></ng-input>
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-1">Section</th>
+                    <th scope="col" class="col-td-th-1">HS Code</th>
+                    <th scope="col" class="col-td-th-3" [style.width]="'430px'">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.FILTER_HS_CODE_DATA;let i=index">
+                    <td scope="col" class="col-td-th-1"><input type="checkbox" (change)="ToHSCode($event,item,i)"></td>
+                    <td scope="col" class="col-td-th-1">{{item?.section}}</td>
+                    <td scope="col" class="col-td-th-1">{{item?.hscode}}</td>
+                    <td scope="col" class="col-td-th-3" [style.width]="'430px'">{{item?.description}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+        <div style="display:flex;" class="mt-3">
+            <button type="button" class="btn btn-primary" (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
+        </div>
     </div>
 </app-custom-model>

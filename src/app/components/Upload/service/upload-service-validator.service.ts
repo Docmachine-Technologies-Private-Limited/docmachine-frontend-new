@@ -257,6 +257,8 @@ export class UploadServiceValidatorService implements OnInit {
       } else if (fieldProps?.type == "OptionMultiCheckBox" && fieldProps?.option != undefined) {
         var temp: any = [];
         var tempFormGroup: any = [];
+        var temp1: any = [];
+        var tempFormGroup1: any = [];
         fieldProps?.option?.forEach(async (element) => {
           let optiontemp: any = {};
           let OptiontempFormGroup: any = {};
@@ -268,7 +270,19 @@ export class UploadServiceValidatorService implements OnInit {
           await temp.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
         });
+        fieldProps?.option1?.forEach(async (element) => {
+          let optiontemp: any = {};
+          let OptiontempFormGroup: any = {};
+          element?.forEach(optionelement => {
+            optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
+            OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
+              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+          });
+          await temp1.push(optiontemp);
+          await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
+        });
         fieldProps['NewOption'] = temp;
+        fieldProps['NewOption1'] = temp1;
         fieldProps['ExtraValue'] = '';
         fieldProps['fieldName_More'] = field+'_Extra';
         formGroupFields[field] = await new FormArray(tempFormGroup)
