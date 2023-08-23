@@ -346,7 +346,7 @@ export class NewDirectDispatchComponent implements OnInit {
   UrlList: any = '';
   public ExportBillLodgement_Form: FormGroup;
   CUSTOMER_DETAILS: any = [];
-  BUYER_DETAILS: any=[];
+  BUYER_DETAILS: any = [];
 
   constructor(
     private userService: UserService,
@@ -417,14 +417,14 @@ export class NewDirectDispatchComponent implements OnInit {
     };
     this.getBill_Lodgments();
   }
-  
+
   HS_CODE_DATA: any = [];
   FILTER_HS_CODE_DATA: any = [];
   ToChargesAccountdata: any = [];
   ToCreditAccountdata: any = [];
   COMPANY_INFO: any = [];
-  BANK_LIST_DROPDOWN:any=[];
-  
+  BANK_LIST_DROPDOWN: any = [];
+
   getDropdownData() {
     this.userService.getTeam().subscribe(data => {
       this.CUSTOMER_DETAILS = data['data'][0]
@@ -463,7 +463,7 @@ export class NewDirectDispatchComponent implements OnInit {
     });
     this.userService.getBuyer(1).subscribe((res: any) => {
       this.BUYER_DETAILS = res.data;
-      console.log(this.BUYER_DETAILS,'BUYER_DETAILS')
+      console.log(this.BUYER_DETAILS, 'BUYER_DETAILS')
     }, (err) => console.log("Error", err));
     this.HS_CODE_DATA = this.documentService.getHSCODE();
     this.FILTER_HS_CODE_DATA = this.HS_CODE_DATA;
@@ -1620,11 +1620,11 @@ export class NewDirectDispatchComponent implements OnInit {
     this.credit = n.split('');
     console.log(this.credit);
   }
-   
-  CHARGE_TO_DATA:any=[];
+
+  CHARGE_TO_DATA: any = [];
   chargesTo(a) {
     var n = a.accNumber;
-    this.CHARGE_TO_DATA[0]=a;
+    this.CHARGE_TO_DATA[0] = a;
     this.charge = n.split('');
     if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
       this.generateDoc1(this.ExportBillLodgement_Form);
@@ -1697,12 +1697,8 @@ export class NewDirectDispatchComponent implements OnInit {
     if (this.item13[index]['isEnabled'] == false || !this.item13[index]?.sbno?.includes(this.SELECTED_SHIPPING_BILL?.data?.sbNo)) {
       if (parseFloat(this.balanceAvai) > parseFloat(this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'])) {
         if (e.target.checked) {
-          console.log('Checked');
-          let advance = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some(
-            (item: any) => item.valueInternal === irDataItem.billNo
-          );
+          let advance = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some((item: any) => item.valueInternal === irDataItem.billNo);
           if (!advance) {
-            console.log('Adding');
             irDataItem.Used_Balance = irDataItem?.BalanceAvail;
             let details: any = {
               valueInternal: irDataItem.billNo,
@@ -1712,16 +1708,20 @@ export class NewDirectDispatchComponent implements OnInit {
             this.item13[index]['isEnabled'] = true;
             this.OK_BUTTON_CONDITION = true;
             this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
-            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.commision) }, 0);
+            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            // let CommissionSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) {
+            //   return parseFloat(a) + parseFloat(b?.irDataItem?.commision)
+            // }, 0);
             if (this.filterSum > this.balanceAvai) {
               this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
-              var sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.commision) }, 0);
+              var sum: any = sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
               let temp: any = details;
               var last_amount: any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
               temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
+
               this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(temp)
               this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
-              this.filterSum = this.TO_FIXED(sum + last_amount, 2);
+              this.filterSum = this.TO_FIXED(parseInt(sum) + parseInt(last_amount), 2);
               irDataItem.Used_Balance = last_amount;
               this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
               console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
@@ -1735,7 +1735,6 @@ export class NewDirectDispatchComponent implements OnInit {
             this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
           }
         } else {
-          console.log('removing, uncheked');
           this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item: any) => item.valueInternal !== irDataItem.billNo);
           this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item) => item.valueInternal !== irDataItem.billNo);
           this.SELECTED_FIRX_INDEX['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][i] = false;
@@ -1746,7 +1745,6 @@ export class NewDirectDispatchComponent implements OnInit {
         this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo])));
         this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]);
         this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
-
       } else {
         e.target.checked = false;
         this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
@@ -1756,7 +1754,7 @@ export class NewDirectDispatchComponent implements OnInit {
       this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
     }
     this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
-    let IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance)+parseFloat(b?.irDataItem?.commision) }, 0);
+    let IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) + parseFloat(b?.irDataItem?.commision) }, 0);
     this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = parseFloat(IRADVICE_SUM).toFixed(3);
 
     console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST,
@@ -1858,7 +1856,7 @@ export class NewDirectDispatchComponent implements OnInit {
     this.isGenerate = false;
     window.location.reload();
   }
-  TO_FIXED(amount: any, fixed_position: any) {
+  TO_FIXED(amount: any, fixed_position: any): any {
     return !isNaN(amount) ? parseFloat(amount).toFixed(fixed_position) : 0;
   }
 
@@ -1960,7 +1958,7 @@ export class NewDirectDispatchComponent implements OnInit {
         filterIrdata.push(newVal);
       }
     }
-    this.item13 = filterIrdata.filter((item:any)=>parseInt(item?.BalanceAvail)!=0);
+    this.item13 = filterIrdata.filter((item: any) => parseInt(item?.BalanceAvail) != 0);
     this.item13?.forEach(element => {
       element['isEnabled'] = false;
     });
@@ -2042,7 +2040,7 @@ export class NewDirectDispatchComponent implements OnInit {
     firxAmount: [],
     firxCommision: [],
     firxRecAmo: [],
-    FirxUsed_Balance:[],
+    FirxUsed_Balance: [],
     id: [],
   };
   BOOLEAN: boolean = false;
@@ -2127,8 +2125,10 @@ export class NewDirectDispatchComponent implements OnInit {
       this.tp['firxDate'].push(element?.irDataItem?.recievedDate)
       this.tp['firxCurrency'].push(element?.irDataItem?.currency)
       this.tp['firxAmount'].push(element?.irDataItem?.amount)
-      if (element?.irDataItem?.CommissionUsed==false) {
+      if (element?.irDataItem?.CommissionUsed == false) {
         this.tp['firxCommision'].push(element?.irDataItem?.commision)
+      } else {
+        this.tp['firxCommision'].push(0);
       }
       this.tp['FirxUsed_Balance'].push(element?.irDataItem?.Used_Balance)
       this.tp['firxRecAmo'].push(0);
@@ -2151,12 +2151,12 @@ export class NewDirectDispatchComponent implements OnInit {
         fileName: this.guid() + '.pdf', buffer: this.UrlList?.BankUrl,
         type: 'application/pdf'
       }).subscribe(async (pdfresponse: any) => {
-        temp[0]=pdfresponse?.url
+        temp[0] = pdfresponse?.url
         await this.userService?.UploadS3Buket({
           fileName: this.guid() + '.pdf', buffer: this.UrlList?.LetterHeadUrl,
           type: 'application/pdf'
         }).subscribe(async (pdfresponse1: any) => {
-          temp[1]=pdfresponse1?.url;
+          temp[1] = pdfresponse1?.url;
           reslove(temp);
         });
       });
@@ -2256,7 +2256,7 @@ export class NewDirectDispatchComponent implements OnInit {
                             query: {
                               BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
                               sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb],
-                              CommissionUsed:true
+                              CommissionUsed: true
                             }
                           }).subscribe((r1: any) => {
                             let sbAmount: any = this.itemArray.filter((item: any) => item?._id.includes(UniqueId));
@@ -2420,12 +2420,12 @@ export class NewDirectDispatchComponent implements OnInit {
       this.HIDE_SHOW[key] = true;
     }
   }
-  SELECT_BUYER_DETAILS:any=[];
+  SELECT_BUYER_DETAILS: any = [];
   filterBuyerName($event) {
     if ($event != 'Select Buyer Name') {
       this.nameSearch4 = $event;
       var temp_filter: any = this.item13.filter((item: any) => item?.buyerName.includes($event));
-      this.SELECT_BUYER_DETAILS=this.BUYER_DETAILS.filter((item:any)=>item?.buyerName.includes($event))[0];
+      this.SELECT_BUYER_DETAILS = this.BUYER_DETAILS.filter((item: any) => item?.buyerName.includes($event))[0];
       this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAvail), 0)).toFixed(3);
     } else {
       this.nameSearch4 = ''
@@ -2477,7 +2477,7 @@ export class NewDirectDispatchComponent implements OnInit {
   ObjectLength(data) {
     return Object.keys(data)?.length;
   }
-  
+
   filtertimeout: any = ''
   filterHSCode(value: any) {
     clearTimeout(this.filtertimeout);
@@ -2488,7 +2488,7 @@ export class NewDirectDispatchComponent implements OnInit {
       }
     }, 200);
   }
-  
+
   ToForwardContract_Selected: any = []
   ToHSCode_Selected: any = [];
   ToForwardContract(event: any, value: any, index: any) {

@@ -29,13 +29,13 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
   FILETR_AMOUNT: any = [];
   SELECT_BUYER_DETAILS: any = '';
   LETTER_HEAD_URL: any = '';
-  
+
   constructor() { }
 
   ngOnInit(): void {
     this.fillForm(this.data)
   }
-  
+
   urlletterhead(url: any) {
     this.LETTER_HEAD_URL = url;
   }
@@ -50,7 +50,6 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
       const pdfDoc = await PDFDocument.load(formPdfBytes)
       const form: any = pdfDoc.getForm()
-      console.log(form?.getFields(), 'form')
       const getAllFields = form?.getFields();
       getAllFields.forEach(element => {
         const elementvalue: any = element?.acroField?.dict?.values();
@@ -58,8 +57,7 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
           element?.setFontSize(11);
           element?.enableReadOnly();
           const [widget]: any = element?.acroField?.getWidgets();
-          widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
-          element?.enableCombing(); // trying to restore combing
+          widget?.getOrCreateBorderStyle()?.setWidth(0);
         }
       });
 
@@ -99,7 +97,7 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
           getAllFields[26]?.uncheck()
           getAllFields[27]?.check()
         }
-      }else{
+      } else {
         getAllFields[26]?.uncheck()
         getAllFields[27]?.uncheck()
       }
@@ -179,7 +177,7 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[100]?.setText('');
       getAllFields[101]?.setText(this.FIRX_DATE_NO?.DATE.join(','));
       getAllFields[102]?.setText(this.FIRX_DATE_NO?.NUMBER?.join(','));
-      getAllFields[103]?.setText(this.TOTAL_SUM_FIREX?.toString());
+      getAllFields[103]?.setText(this.TOTAL_SUM_FIREX.toString());
       getAllFields[104]?.setText(this.SB_NO?.toString());
       getAllFields[105]?.setText('');
       getAllFields[106]?.setText('');
@@ -190,11 +188,11 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[111]?.setText('');
       getAllFields[112]?.setText('');
       getAllFields[113]?.setText('');
-  
+
       const pdfBytes = await pdfDoc.save()
       var base64String = this._arrayBufferToBase64(pdfBytes)
       const x = 'data:application/pdf;base64,' + base64String;
-      
+
       const mergedPdf = await PDFDocument.create();
       const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
       copiedPages.forEach((page) => {
@@ -227,25 +225,27 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.data = changes?.data?.currentValue!=undefined? changes?.data?.currentValue:this.data;
+    this.data = changes?.data?.currentValue != undefined ? changes?.data?.currentValue : this.data;
     console.log(changes, 'asdasdasdasdasdasds')
-    this.BankId = changes?.data?.currentValue[2][0]?.BankUniqueId!=undefined?changes?.data?.currentValue[2][0]?.BankUniqueId:this.BankId;
-    if (this.data!=undefined) {
+    this.BankId = changes?.data?.currentValue[2][0]?.BankUniqueId != undefined ? changes?.data?.currentValue[2][0]?.BankUniqueId : this.BankId;
+    if (this.data != undefined) {
       this.SB_NO = changes?.data?.currentValue[5];
-      if (this.data[0].length!=0) {
+      if (this.data[0].length != 0) {
         this.FILETR_AMOUNT = this.data[0].filter((item: any) => item?.sbno?.includes(this.SB_NO))
         this.TOTAL_PIPO_AMOUNT = this.FILETR_AMOUNT[0]?.invoices[0]?.amount
-        this.FIRX_DATE_NO['NUMBER']=[];
-        this.FIRX_DATE_NO['DATE']=[];
+        this.FIRX_DATE_NO['NUMBER'] = [];
+        this.FIRX_DATE_NO['DATE'] = [];
         this.TOTAL_SUM_FIREX = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
-        this.TOTAL_SUM_FIREX_COMMISION = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
+        this.TOTAL_SUM_FIREX_COMMISION = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + b?.irDataItem?.CommissionUsed==false?parseFloat(b?.irDataItem?.commision):0 }, 0);
+        this.TOTAL_SUM_FIREX = this.TOTAL_SUM_FIREX - this.TOTAL_SUM_FIREX_COMMISION;
+        console.log(this.TOTAL_SUM_FIREX_COMMISION, (this.TOTAL_SUM_FIREX - this.TOTAL_SUM_FIREX_COMMISION), "TOTAL_SUM_FIREX_COMMISION")
         this.CURRENCY = this.FILETR_AMOUNT[0]?.currency;
         this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
           this.FIRX_DATE_NO?.NUMBER?.push(element?.irDataItem?.billNo)
           this.FIRX_DATE_NO?.DATE?.push(element?.irDataItem?.date)
         });
       }
-    
+
       this.SELECT_BUYER_DETAILS = changes?.data?.currentValue[6]
       setTimeout(() => {
         this.fillForm(this.data);
