@@ -649,8 +649,7 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log('***********userId', this.id);
     });
 
-    this.documentService.getIrAdvice(1).subscribe(
-      (res: any) => {
+    this.documentService.getIrAdvice(1).subscribe((res: any) => {
         console.log(res), (this.item9 = res.data);
         console.log('line no. 324 data', this.item9);
         this.mergeIr();
@@ -722,7 +721,7 @@ export class NewDirectDispatchComponent implements OnInit {
           console.log(res);
           for (let index = 0; index < res?.data.length; index++) {
             const element = res?.data[index];
-            if (element?.file == 'export') {
+            if (element?.file == 'export' && element['balanceAvai']!='0') {
               this.item1.push(element);
             }
           }
@@ -1709,12 +1708,9 @@ export class NewDirectDispatchComponent implements OnInit {
             this.OK_BUTTON_CONDITION = true;
             this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
             this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
-            // let CommissionSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) {
-            //   return parseFloat(a) + parseFloat(b?.irDataItem?.commision)
-            // }, 0);
             if (this.filterSum > this.balanceAvai) {
               this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
-              var sum: any = sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+              var sum: any = sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + (parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.commision)) }, 0);
               let temp: any = details;
               var last_amount: any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
               temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
@@ -1724,7 +1720,6 @@ export class NewDirectDispatchComponent implements OnInit {
               this.filterSum = this.TO_FIXED(parseInt(sum) + parseInt(last_amount), 2);
               irDataItem.Used_Balance = last_amount;
               this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
-              console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
             } else {
               this.PROCEED_BTN_DISABLED = true;
               this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details);
@@ -1911,59 +1906,57 @@ export class NewDirectDispatchComponent implements OnInit {
 
   TOTAL_FIRX_AMOUNT: any = 0;
   public mergeIr2() {
-    let filterIrdata: any = [];
-    if (this.item1 && this.item1.length) {
-      for (let irData of this.item9) {
-        // item9 have forex details
-        console.log('Line no. 3700', irData);
-        // if(irData.sbNo.length){
-        for (let sbNum of this.item1) {
-          console.log('line 3701', sbNum);
-          for (let i = 0; i <= irData.sbNo.length; i++) {
-            console.log('a');
-            if (sbNum.sbno == irData.sbNo[i]) {
-              const newVal = { ...irData }
-              console.log('Line no. 3706', newVal);
-              let sbBalance = sbNum.fobValue;
-              let irAmount = parseFloat(irData.amount);
-              let availableBalance = irAmount - sbBalance;
-              if (availableBalance <= 0) {
-                newVal['BalanceAvail'] = 0;
-              } else {
-                newVal['BalanceAvail'] = availableBalance.toFixed(2);
-              }
+    // let filterIrdata: any = [];
+    // if (this.item1 && this.item1.length) {
+    //   for (let irData of this.item9) {
+    //     console.log('Line no. 3700', irData);
+    //     for (let sbNum of this.item1) {
+    //       console.log('line 3701', sbNum);
+    //       for (let i = 0; i <= irData.sbNo.length; i++) {
+    //         console.log('a');
+    //         if (sbNum.sbno == irData.sbNo[i]) {
+    //           const newVal = { ...irData }
+    //           console.log('Line no. 3706', newVal);
+    //           let sbBalance = sbNum.fobValue;
+    //           let irAmount = parseFloat(irData.amount);
+    //           let availableBalance = irAmount - sbBalance;
+    //           if (availableBalance <= 0) {
+    //             newVal['BalanceAvail'] = 0;
+    //           } else {
+    //             newVal['BalanceAvail'] = availableBalance.toFixed(2);
+    //           }
 
-              if (newVal.BalanceAvail > 0) {
-                console.log("BalanceAvailable", newVal.BalanceAvail)
-                filterIrdata.push(newVal);
-              }
-              console.log('Line no. 3723', filterIrdata);
-            }
-          }
-        }
-      }
-      for (let irData of this.item9) {
-        if (irData.sbNo.length == 0) {
-          const newVal = { ...irData };
-          let availableBal = irData.amount;
-          newVal['BalanceAvail'] = availableBal;
-          filterIrdata.push(newVal);
-          console.log('235', filterIrdata);
-        }
-      }
-    } else {
-      for (let ir of this.item9) {
-        const newVal = { ...ir };
-        let availableBal = ir.amount;
-        newVal['BalanceAvail'] = availableBal;
-        filterIrdata.push(newVal);
-      }
-    }
-    this.item13 = filterIrdata.filter((item: any) => parseInt(item?.BalanceAvail) != 0);
+    //           if (newVal.BalanceAvail > 0) {
+    //             console.log("BalanceAvailable", newVal.BalanceAvail)
+    //             filterIrdata.push(newVal);
+    //           }
+    //           console.log('Line no. 3723', filterIrdata);
+    //         }
+    //       }
+    //     }
+    //   }
+    //   for (let irData of this.item9) {
+    //     if (irData.sbNo.length == 0) {
+    //       const newVal = { ...irData };
+    //       let availableBal = irData.amount;
+    //       newVal['BalanceAvail'] = availableBal;
+    //       filterIrdata.push(newVal);
+    //       console.log('235', filterIrdata);
+    //     }
+    //   }
+    // } else {
+    //   for (let ir of this.item9) {
+    //     const newVal = { ...ir };
+    //     let availableBal = ir.amount;
+    //     newVal['BalanceAvail'] = availableBal;
+    //     filterIrdata.push(newVal);
+    //   }
+    // }
+    this.item13 = this.item9.filter((item: any) => parseInt(item?.BalanceAvail) != 0);
     this.item13?.forEach(element => {
       element['isEnabled'] = false;
     });
-    console.log("filterForex", filterIrdata, this.item13)
+    console.log("filterForex", this.item13)
   }
 
   ShowPopup(callback: any) {
@@ -2246,6 +2239,7 @@ export class NewDirectDispatchComponent implements OnInit {
                               id: element._id,
                               query: {
                                 sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb],
+                                BalanceAvail: parseInt(element?.BalanceAvail) - parseInt(this.tp?.FirxUsed_Balance[index]),
                                 CommissionUsed: true
                               }
                             }).subscribe((list: any) => {
@@ -2287,8 +2281,7 @@ export class NewDirectDispatchComponent implements OnInit {
                               id: UniqueId,
                               query: query
                             }).subscribe((r2: any) => {
-                              let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.FirxUsed_Balance)) + parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
-                              console.log(this.FIRX_AMOUNT(this.tp?.FirxUsed_Balance), this.FIRX_AMOUNT(this.tp?.firxCommision), sumfixAmount, 'chgctydcbvcbvc')
+                              let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.FirxUsed_Balance))
                               this.documentService.Update_Amount_by_Table({
                                 tableName: 'masterrecord',
                                 id: UniqueId,
