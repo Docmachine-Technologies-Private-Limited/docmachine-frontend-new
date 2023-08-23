@@ -8,6 +8,7 @@
                         <thead>
                             <tr class="table-tr">
                                 <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-3">Buyer Name</th>
                                 <th scope="col" class="col-td-th-3">Bank Name</th>
                                 <th scope="col" class="col-td-th-3">Ref. Number</th>
                                 <th scope="col" class="col-td-th-3">Currency</th>
@@ -22,6 +23,7 @@
                                 <td class="col-td-th-1"><input type="checkbox" [checked]="item?.Checked"
                                         (change)="Remittancedata(item,i,stepper)" />
                                 </td>
+                                <td class="col-td-th-3">{{item?.BuyerName?.value}}</td>
                                 <td class="col-td-th-3">{{item?.BankName}}</td>
                                 <td class="col-td-th-3">{{item?.Inward_reference_number}}</td>
                                 <td class="col-td-th-3">{{item?.currency}}</td>

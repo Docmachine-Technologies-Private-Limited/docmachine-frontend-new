@@ -1320,16 +1320,16 @@
                       <div class="row">
                         <div class="col-md-6">
                           <select [(ngModel)]="PIPONumbersBuyerName" class="form-control"
-                            (change)="PIPOFilter(PIPONumbersBuyerName)">
+                            (change)="PIPOFilter(PIPONumbersBuyerName)" disabled>
                             <option value="BuyerName">BuyerName</option>
-                            <option [value]="item" *ngFor="let item of buyerName ; let i = index;"
-                              style="color: black;">{{item}}</option>
+                            <option [value]="item?.value" *ngFor="let item of buyerName ; let i = index;"
+                              style="color: black;">{{item?.value}}</option>
                           </select>
                         </div>
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                           <button class="filter1 btn btn-primary" (click)="PIPONumbersBuyerName = 'BuyerName';
                                                 PIPOFilter(PIPONumbersBuyerName)">Reset</button>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <section style="width: 100%;overflow: auto;

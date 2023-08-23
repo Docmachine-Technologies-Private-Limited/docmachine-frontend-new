@@ -266,6 +266,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.Inward_Remittance_MT103 = this.InwardDisposalData;
     this.bank = [this.InwardDisposalData[0]?.BankName];
     this.MT103_URL = this.InwardDisposalData[0]?.file;
+    this.PIPONumbersBuyerName=this.InwardDisposalData[0]?.BuyerName?.value
+    this.PIPOFilter(this.PIPONumbersBuyerName)
     console.log(this.bank, 'sallBankallBankallBankallBankallBank')
   }
   async ngOnInit() {

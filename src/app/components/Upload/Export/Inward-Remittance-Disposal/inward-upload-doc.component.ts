@@ -51,6 +51,14 @@ export class InwardUploadDocumentsComponent implements OnInit {
       this.pipourl1 = args[1].publicUrl;
       console.log(args,'ahdakjhsdjkhdasds')
       this.validator.buildForm({
+        BuyerName: {
+          type: "buyer",
+          value: "",
+          label: "Select Buyer Name",
+          rules: {
+            required: true,
+          }
+        },
         BankName: {
           type: "Bank",
           value: "",
