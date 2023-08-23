@@ -656,6 +656,7 @@ export class NewDirectDispatchComponent implements OnInit {
         this.mergeIr2();
         this.item9.forEach((element, i) => {
           this.irBuyerName.push({ value: element.partyName, id: element._id });
+          element['BalanceAvail']=element['BalanceAvail']!=undefined?element['BalanceAvail']:element['amount']
         });
         this.irBuyerName = this.irBuyerName.filter(
           (value, index) => this.irBuyerName.indexOf(value) === index
