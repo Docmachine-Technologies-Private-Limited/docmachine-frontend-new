@@ -2127,7 +2127,9 @@ export class NewDirectDispatchComponent implements OnInit {
       this.tp['firxDate'].push(element?.irDataItem?.recievedDate)
       this.tp['firxCurrency'].push(element?.irDataItem?.currency)
       this.tp['firxAmount'].push(element?.irDataItem?.amount)
-      this.tp['firxCommision'].push(element?.irDataItem?.commision)
+      if (element?.irDataItem?.CommissionUsed==false) {
+        this.tp['firxCommision'].push(element?.irDataItem?.commision)
+      }
       this.tp['FirxUsed_Balance'].push(element?.irDataItem?.Used_Balance)
       this.tp['firxRecAmo'].push(0);
       this.tp['id'].push(element?.irDataItem?._id)
@@ -2253,7 +2255,8 @@ export class NewDirectDispatchComponent implements OnInit {
                             id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
                             query: {
                               BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
-                              sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
+                              sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb],
+                              CommissionUsed:true
                             }
                           }).subscribe((r1: any) => {
                             let sbAmount: any = this.itemArray.filter((item: any) => item?._id.includes(UniqueId));
