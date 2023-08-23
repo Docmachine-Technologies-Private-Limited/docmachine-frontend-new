@@ -1,7 +1,7 @@
 <div id="federal-bank-letter-head-2" style="padding: 20px;">
     <div class="d-flex lc-insurance-panel" *ngIf="this.data?.length!=0">
         <h6>APPLICATION AND GUARANTEE FOR ISSUE OF IRREVOCABLE DOCUMENTARY LETTER OF CREDIT</h6>
-        <p class="mt-2">The Branch Head, <input class="contenteditable" />BANK LTD,</p>
+        <p class="mt-2">The Branch Head, <input class="contenteditable"[ngModel]="this.Moredata[2][0]?.BranchName +' '+this.Moredata[6]?.bank" />BANK LTD,</p>
         <p>Branch</p>
         <p>Dear Sir,</p>
         <p>I/We request you to establish with your correspondents in <input class="contenteditable" /> (Country) Documentary
@@ -11,11 +11,7 @@
                 <tr>
                     <td class="col-td-1">40A:*** </td>
                     <td class="col-td-2">TYPE OF L/C</td>
-                    <td class="col-td-3">IRREVOCABLE <button style="right: 10px;
-                        top: 10px;
-                        border: 1px solid #4b20d9;
-                        border-radius: 30px;" class="position-btn-right"
-                        (click)="genratedPdf()">Genrate</button></td>
+                    <td class="col-td-3">IRREVOCABLE</td>
                 </tr>
                 <tr>
                     <td class="col-td-1">31D :***</td>
@@ -65,98 +61,98 @@
                     <td class="col-td-1">41a : (A/D):*** </td>
                     <td class="col-td-2">CREDIT AVAILABLE WITH CREDIT AVAILABLE BY </td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.Moredata[5][0]"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('41a')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('41a')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">42c:*** </td>
                     <td class="col-td-2">DRAFTS AT</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.Moredata[5][1]"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('42c')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('42c')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">42a:*** </td>
                     <td class="col-td-2">DRAWEE</td>
                     <td class="col-td-3 contenteditable1"> <textarea
                             [ngModel]="this.Moredata[6]?.bank+' & '+this.Moredata[6]?.bicAddress"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('42a')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('42a')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">43P:*** </td>
                     <td class="col-td-2">PARTIAL SHIPMENTS</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.Moredata[5][2]"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('43P')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('43P')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">43T:*** </td>
                     <td class="col-td-2">TRANSHIPMENTS</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.Moredata[5][3]"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('43T')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('43T')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">44A:*** </td>
                     <td class="col-td-2">TYPE OF L/C</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[9].value"
                             [name]="this.data[9].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('44A')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('44A')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">44B:*** </td>
                     <td class="col-td-2">SHIPMENT TO</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[10].value"
                             [name]="this.data[10].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('44B')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('44C')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">44C:*** </td>
                     <td class="col-td-2">LATEST DATE OF SHIPMENT</td>
                     <td class="col-td-3 contenteditable1"> <textarea [ngModel]="this.Moredata[3][0]?.lastDayShipment"
                             [name]="this.data[11].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('44C')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('44C')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">45A:*** </td>
                     <td class="col-td-2">QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS) </td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[12].value"
                             [name]="this.data[12].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('45A')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('45A')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">***</td>
                     <td class="col-td-2">IMPORT LICENCE/OGL DETAILS</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[13].value"
                             [name]="this.data[13].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('IMPORT LICENCE')"><i class="fa fa-pencil-square-o PopupOpen"
                             (click)="popupevent('IMPORT LICENCE')" popup-close="AutofillLCTable"
-                            aria-hidden="true"></i></button>
+                            aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">***</td>
                     <td class="col-td-2">IMPORT EXPORT CODE NO.</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[14].value"
                             [name]="this.data[14].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('IMPORT EXPORT')"><i class="fa fa-pencil-square-o PopupOpen"
                             (click)="popupevent('IMPORT EXPORT')" popup-close="AutofillLCTable"
-                            aria-hidden="true"></i></button>
+                            aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">46A:*** </td>
@@ -207,9 +203,9 @@
                         SHIPMENT.
                         (ANY OTHER DOCUMENTS AS MAY BE REQUIRED )
                     </td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('46A')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('46A')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">47 A:T</td>
@@ -231,9 +227,9 @@
                         MARKED ORIGINAL AND SIGNED.
                         OTHERS, PLEASE SPECIFY
                     </td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('47AT')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('47AT')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">71 B:*** </td>
@@ -242,26 +238,26 @@
                     </td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[17].value"
                             [name]="this.data[17].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('71B')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('71B')"
                             popup-close="AutofillLCTable" aria-hidden="true"></i></button>
-                </tr>
+                </tr> -->
                 <tr>
                     <td class="col-td-1">48:*** </td>
                     <td class="col-td-2">PERIOD OF PRESENTATION OF DOCUMENTS</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[18].value"
                             [name]="this.data[18].fieldName"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable" (click)="popupevent('48')"><i
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable" (click)="popupevent('48')"><i
                             class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('48')" popup-close="AutofillLCTable"
-                            aria-hidden="true"></i></button>
+                            aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">49:*** </td>
                     <td class="col-td-2">CONFIRMATION INSTRUCTIONS</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.Moredata[5][4]"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable" (click)="popupevent('49')"><i
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable" (click)="popupevent('49')"><i
                             class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('49')" popup-close="AutofillLCTable"
-                            aria-hidden="true"></i></button>
+                            aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">57a</td>
@@ -269,17 +265,17 @@
                     <td class="col-td-3 contenteditable1"> <textarea style="height: 55px;" [ngModel]="this.Moredata[1][0]?.beneBankName +' '+
                     this.Moredata[1][0]?.beneBankAdress+'\n Account No. : '+this.Moredata[1][0]?.beneAccNo+'\n Swift Code : '+
                     this.Moredata[1][0]?.beneBankSwiftCode"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable"
                         (click)="popupevent('57a')"><i class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('57a')"
-                            popup-close="AutofillLCTable" aria-hidden="true"></i></button>
+                            popup-close="AutofillLCTable" aria-hidden="true"></i></button> -->
                 </tr>
                 <tr>
                     <td class="col-td-1">72:</td>
                     <td class="col-td-2">SENDER TO RECEIVER INFORMATION</td>
                     <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.Moredata[5][5]"></textarea></td>
-                    <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable" (click)="popupevent('72')"><i
+                    <!-- <button class="PopupOpen position-btn-right" popup-close="AutofillLCTable" (click)="popupevent('72')"><i
                             class="fa fa-pencil-square-o PopupOpen" (click)="popupevent('72')" popup-close="AutofillLCTable"
-                            aria-hidden="true"></i></button>
+                            aria-hidden="true"></i></button> -->
                 </tr>
             </thead>
         </table>

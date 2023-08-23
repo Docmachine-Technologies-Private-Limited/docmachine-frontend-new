@@ -36,7 +36,6 @@
                                                         [data]="this.LIST_OF_QUESTION2"
                                                         [Moredata]="[this.LIST_OF_QUESTION2,this.BENE_INFO,this.TEAM_DETAILS,this.PIPO_INFO,
                                                         this.LIST_OF_QUESTION,this.LIST_OF_QUESTION_VALUE,this.SELECTED_BANK_NAME]"
-                                                        (TableEvent)="TableEvent($event);AutofillLCTablePanel?.displayShow"
                                                         (url)="this.URL_PDF=$event" #LC_PANEL></lc-insurance-format>
                                                 </div>
                                             </div>
@@ -70,7 +69,8 @@
                                                 </div>
                                                 <div class="bottom_submit_section">
                                                     <button type="button" class="btn btn-primary">CANCEL</button>
-                                                    <button type="button" class="btn btn-primary">Autofill</button>
+                                                    <button type="button" class="btn btn-primary PopupOpen" (click)="TableEvent('')"
+                                                    popup-close="AutofillLCTable">Autofill</button>
                                                     <button type="button" class="btn btn-secondary"
                                                         (click)="PREVIEWS_URL(PREVIEWS_PANEL,LC_PANEL);LC_PANEL?.pdfgenrated">PREVIEWS</button>
                                                 </div>

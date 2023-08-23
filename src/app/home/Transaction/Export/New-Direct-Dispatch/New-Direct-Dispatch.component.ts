@@ -2245,7 +2245,8 @@ export class NewDirectDispatchComponent implements OnInit {
                               tableName: 'iradvices',
                               id: element._id,
                               query: {
-                                sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
+                                sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb],
+                                CommissionUsed: true
                               }
                             }).subscribe((list: any) => {
 
@@ -2267,7 +2268,8 @@ export class NewDirectDispatchComponent implements OnInit {
                               firxCurrency: this.tp?.firxCurrency.join(','),
                               firxAmount: this.tp?.firxAmount.join(','),
                               firxCommision: this.tp?.firxCommision.join(','),
-                              firxRecAmo: '0'
+                              firxRecAmo: '0',
+                              FirxUsed_Balance:this.tp?.FirxUsed_Balance.join(',')
                             }
                             if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
                               query = {
@@ -2277,6 +2279,7 @@ export class NewDirectDispatchComponent implements OnInit {
                                 firxAmount: this.tp?.firxAmount.join(','),
                                 firxCommision: this.tp?.firxCommision.join(','),
                                 firxRecAmo: '0',
+                                FirxUsed_Balance:this.tp?.FirxUsed_Balance.join(',')
                               }
                             }
                             this.documentService.Update_Amount_by_TableSB({
