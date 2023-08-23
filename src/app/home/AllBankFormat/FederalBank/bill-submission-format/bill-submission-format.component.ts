@@ -236,9 +236,14 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
         this.FIRX_DATE_NO['NUMBER'] = [];
         this.FIRX_DATE_NO['DATE'] = [];
         this.TOTAL_SUM_FIREX = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
-        this.TOTAL_SUM_FIREX_COMMISION = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + b?.irDataItem?.CommissionUsed==false?parseFloat(b?.irDataItem?.commision):0 }, 0);
+        this.TOTAL_SUM_FIREX_COMMISION = 0;
+        this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
+          if (element?.irDataItem?.CommissionUsed == false) {
+            this.TOTAL_SUM_FIREX_COMMISION = parseInt(this.TOTAL_SUM_FIREX_COMMISION) + parseInt(element?.irDataItem?.commision)
+          }
+        });
         this.TOTAL_SUM_FIREX = this.TOTAL_SUM_FIREX - this.TOTAL_SUM_FIREX_COMMISION;
-        console.log(this.TOTAL_SUM_FIREX_COMMISION, (this.TOTAL_SUM_FIREX - this.TOTAL_SUM_FIREX_COMMISION), "TOTAL_SUM_FIREX_COMMISION")
+        console.log(this.TOTAL_SUM_FIREX_COMMISION, (this.TOTAL_SUM_FIREX - this.TOTAL_SUM_FIREX_COMMISION), this.data[1]['SB_' + this.SB_NO], "TOTAL_SUM_FIREX_COMMISION")
         this.CURRENCY = this.FILETR_AMOUNT[0]?.currency;
         this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
           this.FIRX_DATE_NO?.NUMBER?.push(element?.irDataItem?.billNo)

@@ -1754,8 +1754,9 @@ export class NewDirectDispatchComponent implements OnInit {
       this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
     }
     this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
-    let IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) + parseFloat(b?.irDataItem?.commision) }, 0);
-    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = parseFloat(IRADVICE_SUM).toFixed(3);
+    let IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance)}, 0);
+    let COMMISION_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = ((parseFloat(IRADVICE_SUM)-parseInt(COMMISION_SUM))).toFixed(3);
 
     console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST,
       this.FILTER_DATA.FILTER_COMMERCIAL, this.SELECTED_FIRX_INDEX, this.item13, 'Deva Hello0*************************');
