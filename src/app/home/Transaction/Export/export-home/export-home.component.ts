@@ -970,7 +970,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       getAllFields[19].setText('')
       getAllFields[20].setText(a['currency'])
       const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      getAllFields[21].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
+      getAllFields[21].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal).toUpperCase())
       getAllFields[22].setText(updatedata?.Inward_amount_for_disposal)
       getAllFields[23].setText(this.buyerAds)
       getAllFields[24].setText(a['buyerName'])
