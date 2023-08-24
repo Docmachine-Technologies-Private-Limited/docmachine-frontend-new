@@ -266,7 +266,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.Inward_Remittance_MT103 = this.InwardDisposalData;
     this.bank = [this.InwardDisposalData[0]?.BankName];
     this.MT103_URL = this.InwardDisposalData[0]?.file;
-    this.PIPONumbersBuyerName=this.InwardDisposalData[0]?.BuyerName?.value
+    this.PIPONumbersBuyerName = this.InwardDisposalData[0]?.BuyerName?.value
     this.PIPOFilter(this.PIPONumbersBuyerName)
     console.log(this.bank, 'sallBankallBankallBankallBankallBank')
   }
@@ -711,8 +711,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.selectPIPO_data.push(data)
     let sumpipoamount: any = this.selectPIPO_data?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.amount) }, 0);
     console.log(this.selectPIPO, sumpipoamount, this.selectPIPO_data,
-    sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal),'selectPIPO')
-    
+      sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal), 'selectPIPO')
+
     if ((sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal))) {
       let j = this.selectPIPO.indexOf(value);
       if (j == -1) {
@@ -3499,7 +3499,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                   console.log('king123');
                   console.log(data);
                   this.documentService.UpdateInward_Remittance(updatedata?._id, { Inward_amount_for_disposal: updatedata?.Inward_amount_for_disposal }).subscribe((res) => {
-                    this.router.navigate(['/home/dashboardTask'])
+                    this.documentService.ForwardContract_update({
+                      id: this.ToForwardContract_Selected[0]?._id, data:
+                        { AvailableAmount: (parseInt(this.ToForwardContract_Selected[0]?.BookingAmount) - parseInt(this.ToForwardContract_Selected[0]?.UtilizedAmount)) }
+                    }).subscribe((res) => {
+                      this.router.navigate(['/home/dashboardTask'])
+                    })
                   })
                 }, (error) => {
                   console.log('error');

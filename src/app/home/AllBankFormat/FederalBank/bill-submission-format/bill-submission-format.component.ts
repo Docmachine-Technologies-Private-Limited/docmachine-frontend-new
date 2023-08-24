@@ -106,7 +106,7 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[30]?.setText(this.CURRENCY);
       getAllFields[31]?.setText(!isNaN(this.TOTAL_SUM_FIREX) ? this.TOTAL_SUM_FIREX.toString() : '0');
       getAllFields[32]?.setText(this.CURRENCY);
-      getAllFields[33]?.setText(filldata[0][0]?.invoices[0]?.amount != undefined ? this.ConvertNumberToWords(filldata[0][0]?.invoices[0]?.amount) : '0');
+      getAllFields[33]?.setText(filldata[0][0]?.invoices[0]?.amount != undefined ? this.ConvertNumberToWords(filldata[0][0]?.invoices[0]?.amount).toUpperCase() : '0');
       getAllFields[34]?.setText(filldata[0][0]?.invoices[0]?.amount);
       getAllFields[35]?.uncheck();
       getAllFields[36]?.uncheck();

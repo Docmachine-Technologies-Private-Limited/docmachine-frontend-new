@@ -102,10 +102,10 @@ export class ImportPIPOSComponent implements OnInit {
           ],
           NotificationShow: {
             "Non Capital Goods": "",
-            "Services": "No SB traceability and applicability.",
+            "Services": "No BOE traceability and applicability.",
             "Capital Goods": "If goods are first imported and to be sent out, FOC should be marked in BOE and while doing export BOE number should be captured.",
             "Samples": "Invoice should be sent to CHA for marking FOC in the BOE.",
-            "Repairs and returns": "If goods are sent from India out and then coming in, SB number to captured in BOE along with FOC."
+            "Repairs and returns": "If goods are sent from India out and then coming in, BOE number to captured in BOE along with FOC."
           },
           rules: {
             required: true,

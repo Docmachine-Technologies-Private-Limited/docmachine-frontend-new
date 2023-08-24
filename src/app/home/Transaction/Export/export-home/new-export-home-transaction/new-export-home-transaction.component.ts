@@ -165,11 +165,26 @@ export class NewExportHomeTransactionComponent implements OnInit {
             required: true,
           }
         },
-        BookedUnderFacility: {
+        AvailableAmount: {
           type: "text",
-          value: this.ToForwardContract_Selected[0]?.BookedUnderFacility,
-          label: "Amount to be utilised",
+          value: this.ToForwardContract_Selected[0]?.AvailableAmount,
           disabled: true,
+          label: "Available Amount",
+          rules: {
+            required: true,
+          }
+        },
+        UtilizedAmount: {
+          type: "text",
+          value: this.ToForwardContract_Selected[0]?.UtilizedAmount,
+          label: "Amount to be utilised",
+          AmountLessThan: {
+            key: 'UtilizedAmount',
+            equalkey: 'AvailableAmount',
+            index: 3,
+            equalindex: 2,
+            errormsg: 'Available Amount should be less than allow is required.',
+          },
           rules: {
             required: true,
           }
@@ -177,6 +192,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
         NetRate: {
           type: "text",
           value: this.ToForwardContract_Selected[0]?.NetRate,
+          disabled: true,
           label: "Exchange rate as per FWC",
           rules: {
             required: true,
@@ -204,7 +220,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
   ForwardRefNext: boolean = false;
   ForwardRefFormValue(value: any) {
     if (value != false) {
-      this.FORWARD_REF_VALUE_FORM = [this.mergeObject(value,this.ToForwardContract_Selected)]
+      this.FORWARD_REF_VALUE_FORM = [this.mergeObject(value,this.ToForwardContract_Selected[0])]
       this.ForwardRefNext = true;
     } else {
       this.FORWARD_REF_VALUE_FORM = [];

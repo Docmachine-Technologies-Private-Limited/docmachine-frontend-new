@@ -236,7 +236,8 @@ export class UploadServiceValidatorService implements OnInit {
             temp.push({ ...element[field2], fieldName: field2, index: count });
             tempFormGroup.push(new FormGroup({
               [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, 
+                element[field2]?.rules, formid,fieldProps)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
             }));
             count++;
           }
@@ -258,14 +259,13 @@ export class UploadServiceValidatorService implements OnInit {
         var temp: any = [];
         var tempFormGroup: any = [];
         var temp1: any = [];
-        var tempFormGroup1: any = [];
         fieldProps?.option?.forEach(async (element) => {
           let optiontemp: any = {};
           let OptiontempFormGroup: any = {};
           element?.forEach(optionelement => {
             optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
             OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
-              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid,fieldProps)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
@@ -276,7 +276,8 @@ export class UploadServiceValidatorService implements OnInit {
           element?.forEach(optionelement => {
             optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
             OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
-              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+              this.setRequired(optionelement?.minLength, 
+              optionelement?.maxLength, optionelement?.rules, formid,fieldProps)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp1.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
@@ -296,7 +297,8 @@ export class UploadServiceValidatorService implements OnInit {
           element?.forEach(optionelement => {
             optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
             OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
-              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+              this.setRequired(optionelement?.minLength,
+              optionelement?.maxLength, optionelement?.rules, formid,fieldProps)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
@@ -309,7 +311,7 @@ export class UploadServiceValidatorService implements OnInit {
         console.log('formGroup', fields)
       } else {
         formGroupFields[field] = new FormControl({ value: fieldProps.value, disabled: fieldProps?.disabled != undefined ? true : false },
-          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
+          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid,fieldProps)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
         fieldProps['ExtraValue'] = '';
         fieldProps['fieldName_More'] = field+'_Extra';
         fields.push({ ...fieldProps, fieldName: field });
@@ -352,9 +354,10 @@ export class UploadServiceValidatorService implements OnInit {
     };
   }
 
-  setRequired(minLength: any, maxLength: any, rule: any, formid: any) {
+  setRequired(minLength: any, maxLength: any, rule: any, formid: any,field:any) {
     return {
-      text: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
+      text: rule?.required == true ? 
+      [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
       date: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
@@ -439,7 +442,7 @@ export class UploadServiceValidatorService implements OnInit {
         this.FIELDS_DATA[formid][index]['NewformGroup'].push({ ...element[field2], fieldName: field2, index: count });
         tempFormGroup.push(new FormGroup({
           [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid,field2)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
         }));
         count++;
       }
@@ -458,7 +461,7 @@ export class UploadServiceValidatorService implements OnInit {
       const fieldProps: any = dumpformdata[key];
       optiontemp[fieldProps?.name] = ({ ...fieldProps, fieldName: fieldProps?.name });
       OptiontempFormGroup[fieldProps?.name] = new FormControl({ value: "", disabled: fieldProps?.disabled != undefined ? true : false },
-        this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, id)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type])
+        this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, id,fieldProps)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type])
     }
     this.dynamicFormGroup[id]?.controls[fieldName]?.controls?.push(new FormGroup(OptiontempFormGroup));
     this.dynamicFormGroup[id]?.controls[fieldName]?.value?.push(this.emptyvalue(this.dynamicFormGroup[id]?.controls[fieldName]?.value[this.dynamicFormGroup[id]?.controls[fieldName]?.value?.length - 1]));
@@ -552,6 +555,20 @@ export function hasDuplicateFormArray(data: any): ValidatorFn {
       return null;
     }
   };
+}
+
+export function hasAmountLessThanFormArray(control: FormControl): ValidationErrors | null {
+  console.log(control,"hasAmountLessThanFormArray")
+  const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
+  const ALPHA_NUMERIC_VALIDATION_ERROR = { alphaNumericError: 'only alpha numeric values are allowed' }
+  return ALPHA_NUMERIC_REGEX.test(control.value) ? null : ALPHA_NUMERIC_VALIDATION_ERROR;
+}
+
+export function hasAmountGreaterThanFormArray(control: FormControl): ValidationErrors | null {
+  console.log(control,"hasAmountGreaterThanFormArray")
+  const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
+  const ALPHA_NUMERIC_VALIDATION_ERROR = { alphaNumericError: 'only alpha numeric values are allowed' }
+  return ALPHA_NUMERIC_REGEX.test(control.value) ? null : ALPHA_NUMERIC_VALIDATION_ERROR;
 }
 
 export function RemoveValidator(): ValidatorFn {
