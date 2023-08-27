@@ -78,6 +78,22 @@ export class InsurancedocumentsComponent implements OnInit {
             required: true,
           }
         },
+        StartDate: {
+          type: "date",
+          value: "",
+          label: "Start Date*",
+          rules: {
+            required: true,
+          }
+        },
+        Expirydate: {
+          type: "date",
+          value: "",
+          label: "Expiry date*",
+          rules: {
+            required: true,
+          }
+        },
         insuranceAmount: {
           type: "text",
           value: "",

@@ -41,12 +41,15 @@ export class ExportOpinionReportsComponent implements OnInit {
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
-      "Pipo No.",
       "DATE",
       "O R No.",
       "O R Amount",
+      "Foreign Party Name",
+      "Report Date",
+      "Report Ratings",
       "CURRENCY",
       "Buyer Name",
+      "Ageing Days",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -54,6 +57,9 @@ export class ExportOpinionReportsComponent implements OnInit {
     Objectkeys: [],
     ExpansionKeys: [],
     TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
@@ -78,7 +84,6 @@ export class ExportOpinionReportsComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
@@ -127,12 +132,15 @@ export class ExportOpinionReportsComponent implements OnInit {
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['pipo']),
           date: element['date'],
           opinionReportNumber: element['opinionReportNumber'],
           opinionReportAmount: element['opinionReportAmount'],
+          ForeignPartyName: element['ForeignPartyName']?.value,
+          ReportDate: element['ReportDate'],
+          ReportRatings: element['ReportRatings'],
           currency: element['currency'],
           buyerName: element['buyerName'],
+          AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
@@ -147,7 +155,18 @@ export class ExportOpinionReportsComponent implements OnInit {
       }
     });
   }
-
+  public SubtractDates(startDate: Date, endDate: Date): any {
+    let dateDiff = (endDate.getTime() - startDate.getTime()) / 1000;
+    var h: any = Math.floor(dateDiff / 3600);
+    return (h > 24 ? this.SplitTime(h)?.Days + 'days' :startDate.toDateString());
+  }
+  SplitTime(numberOfHours) {
+    var Days = Math.floor(numberOfHours / 24);
+    var Remainder = numberOfHours % 24;
+    var Hours = Math.floor(Remainder);
+    var Minutes = Math.floor(60 * (Remainder - Hours));
+    return ({ "Days": Days, "Hours": Hours, "Minutes": Minutes })
+  }
   async removeEmpty(data: any) {
     await data.forEach(element => {
       for (const key in element) {
@@ -321,11 +340,13 @@ class OpinionReportFormat {
     var temp: any = [];
     this.data?.forEach(element => {
       temp.push({
-        PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
         opinionReportNumber: element['opinionReportNumber'],
         opinionReportAmount: element['opinionReportAmount'],
         currency: element['currency'],
+        ForeignPartyName: element['ForeignPartyName']?.value,
+        ReportDate: element['ReportDate'],
+        ReportRatings: element['ReportRatings'],
         buyerName: this.getBuyerName(element['buyerName']),
       })
     });

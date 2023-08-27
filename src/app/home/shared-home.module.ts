@@ -85,6 +85,7 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatInputModule} from '@angular/material/input';
 import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
+import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
 
 @NgModule({
   declarations: [
@@ -143,6 +144,7 @@ import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-
     FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
+    CustomModelHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -247,7 +249,8 @@ import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-
     MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
-    CustomMatStepperModule
+    CustomMatStepperModule,
+    CustomModelHeaderComponent
   ],
 })
 export class SharedHomeModule { }

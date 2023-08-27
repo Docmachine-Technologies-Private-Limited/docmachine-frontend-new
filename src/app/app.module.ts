@@ -35,7 +35,6 @@ import { CheckboxComponentsComponent } from "./home/checkbox-components/checkbox
 import { CustomConfirmDialogModelService } from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.service'
 import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
 import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
-import { AuthorizationComponent } from './Authorization/authorization/authorization.component';
 import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { SuperGuard } from "./service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "./service/RolePermission/Member/member.guard";
@@ -47,6 +46,9 @@ import { BehaviorSubjectListService } from "./home/CommanSubjectApi/BehaviorSubj
 import { RoleVerifyEmailComponent } from './RoleVerifyEmail/role-verify-email/role-verify-email.component';
 import { IdleService } from "./service/idle.service";
 import { CustomMatTabComponent } from './custom/custom-mat-tab/custom-mat-tab.component';
+import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-intrgration/authorization-tally-intrgration.component";
+import { AuthorizationComponent } from "./authorization/authorization.component";
+import { TallyAuthorizationService } from "./authorization-tally-intrgration/tally-authorization.service";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -73,6 +75,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ResetOTPComponent,
     RoleVerifyEmailComponent,
     CustomMatTabComponent,
+    AuthorizationTallyIntrgrationComponent
   ],
   providers: [
     WindowInformationService,
@@ -85,6 +88,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AdminMemberGuard,
     DateFormatService,
     BehaviorSubjectListService,
+    TallyAuthorizationService,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     IdleService
   ],

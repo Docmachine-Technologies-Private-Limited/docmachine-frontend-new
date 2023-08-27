@@ -71,6 +71,30 @@ export class MasterServiceAgreementsComponent implements OnInit {
             required: true,
           }
         },
+        StartDate: {
+          type: "date",
+          value: "",
+          label: "Start Date*",
+          rules: {
+            required: true,
+          }
+        },
+        Expirydate: {
+          type: "date",
+          value: "",
+          label: "Expiry date*",
+          rules: {
+            required: true,
+          }
+        },
+        buyerName: {
+          type: "buyer",
+          value: "",
+          label: "Overseas Party Name*",
+          rules: {
+            required: true,
+          }
+        },
         currency: {
           type: "currency",
           value: "",
@@ -86,8 +110,8 @@ export class MasterServiceAgreementsComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
-      }, 'ExeportMasterService');
+        },
+      }, 'ExportMasterService');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -99,7 +123,6 @@ export class MasterServiceAgreementsComponent implements OnInit {
     e.value.file = 'export';
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
     e.value.currency = e.value?.currency?.type;
     this.documentService.getInvoice_No({
       masterServiceNumber: e.value.masterServiceNumber

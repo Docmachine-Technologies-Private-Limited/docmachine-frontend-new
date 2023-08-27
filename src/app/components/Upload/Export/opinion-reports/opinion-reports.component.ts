@@ -85,6 +85,30 @@ export class OpinionReportsComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        ForeignPartyName: {
+          type: "buyer",
+          value: "",
+          label: "Foreign Party Name",
+          rules: {
+            required: true,
+          }
+        },
+        ReportDate: {
+          type: "date",
+          value: "",
+          label: "Report Date",
+          rules: {
+            required: true,
+          }
+        },
+        ReportRatings: {
+          type: "text",
+          value: "",
+          label: "Report Ratings",
+          rules: {
+            required: true,
+          }
         }
       }, 'ExportOpomopnReport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')

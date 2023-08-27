@@ -43,6 +43,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "L C No.",
+      "Expiry Date",
+      "Last Date of Shipment",
       "L C Amount",
       "CURRENCY",
       "Buyer Name",
@@ -59,6 +61,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
       "col-td-th-1"
     ],
     eventId: ''
@@ -69,6 +73,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     letterOfCreditAmount: '',
     currency: '',
     buyerName: '',
+    Expirydate: '',
+    LastDateofShipment: '',
   }
   constructor(
     private documentService: DocumentService,
@@ -127,6 +133,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
           PipoNo: this.getPipoNumber(element['pipo']),
           date: element['date'],
           letterOfCreditNumber: element['letterOfCreditNumber'],
+          Expirydate: element['Expirydate'],
+          LastDateofShipment: element['LastDateofShipment'],
           letterOfCreditAmount: element['letterOfCreditAmount'],
           currency: element['currency'],
           buyerName: element['buyerName'],
@@ -215,7 +223,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     //this.sharedData.changeretunurl('home/letterofcredit-lc')
     // this.router.navigate(['home/upload', { file: 'export', document: 'lcCopy' }]);
     this.router.navigate(['/home/upload/Export/LetterofCredit']);
-    
+
   }
 
   toSave(data, index) {
@@ -256,6 +264,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       letterOfCreditAmount: this.SELECTED_VALUE['letterOfCreditAmount'],
       currency: this.SELECTED_VALUE['currency'],
       buyerName: this.SELECTED_VALUE['buyerName'],
+      Expirydate: this.SELECTED_VALUE['Expirydate'],
+      LastDateofShipment: this.SELECTED_VALUE['LastDateofShipment'],
     }
     this.toastr.warning('LetterLC Row Is In Edit Mode');
   }
@@ -322,6 +332,8 @@ class LetterOfCreditFormat {
         PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
         letterOfCreditNumber: element['letterOfCreditNumber'],
+        Expirydate: element['Expirydate'],
+        LastDateofShipment: element['LastDateofShipment'],
         letterOfCreditAmount: element['letterOfCreditAmount'],
         currency: element['currency'],
         buyerName: this.getBuyerName(element['buyerName']),

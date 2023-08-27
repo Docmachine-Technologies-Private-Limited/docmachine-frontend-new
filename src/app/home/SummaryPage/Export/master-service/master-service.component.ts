@@ -7,12 +7,12 @@ import { UserService } from './../../../../service/user.service';
 import * as xlsx from 'xlsx';
 import * as data1 from '../../../../currency.json';
 import { Router } from '@angular/router';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
+import moment from "moment";
 
 @Component({
   selector: 'export-master-service-summary',
@@ -34,6 +34,8 @@ export class MasterServiceComponent implements OnInit {
   filtervisible: boolean = false;
   TEMP_PI_PO_NUMBER: any = [];
   FILTER_VALUE_LIST: any = [];
+  PIPO_DROP_DOWN_DATA: any = [];
+  PIPO_SELECTED_DROP_DOWN_DATA: any = {};
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
@@ -46,6 +48,9 @@ export class MasterServiceComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "M S A No.",
+      "Start Date",
+      "Expiry Date",
+      "Overseas Party Name",
       "M S A Amount",
       "CURRENCY",
       "Buyer Name",
@@ -62,6 +67,9 @@ export class MasterServiceComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
       "col-td-th-1"
     ],
     eventId: ''
@@ -72,6 +80,14 @@ export class MasterServiceComponent implements OnInit {
     masterServiceAmount: '',
     currency: '',
     buyerName: '',
+    StartDate: "",
+    Expirydate: "",
+    UtilizationAddition: [{
+      pi_poNo: "",
+      amount: "",
+      UtilizationAmount: 0,
+      buyerName: ""
+    }]
   }
   constructor(
     private documentService: DocumentService,
@@ -80,9 +96,8 @@ export class MasterServiceComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
+    private pipodataservice: PipoDataService,
     public wininfo: WindowInformationService,
-    private pipoDataService: PipoDataService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog
   ) {
@@ -103,7 +118,7 @@ export class MasterServiceComponent implements OnInit {
           if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
             this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
           }
-          value?.buyerName.forEach(element => {
+          value?.buyerName != "NF" ? value?.buyerName : [].forEach(element => {
             if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
               this.ALL_FILTER_DATA['Buyer_Name'].push(element);
             }
@@ -117,9 +132,28 @@ export class MasterServiceComponent implements OnInit {
         }
         this.MasterServiceTable(this.item)
         console.log(res, 'getMasterServiceFile');
-      },
-      (err) => console.log(err)
-    );
+      }, (err) => console.log(err));
+    this.pipodataservice.getPipoList("export").then((res: any) => {
+      this.PIPO_DROP_DOWN_DATA = [];
+      this.PIPO_SELECTED_DROP_DOWN_DATA = [];
+      res?.pipoModelList?.forEach(element => {
+        this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
+          pi_poNo: element?.pi_poNo,
+          amount: element?.amount,
+          buyerName: element?.buyerName,
+          UtilizationAmount: 0
+        }
+        this.PIPO_DROP_DOWN_DATA.push({
+          pi_poNo: element?.pi_poNo,
+          amount: element?.amount,
+          UtilizationAmount: 0,
+          buyerName: element?.buyerName,
+          id: element?._id
+        });
+      });
+      console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
+
+    })
   }
 
   MasterServiceTable(data: any) {
@@ -128,12 +162,15 @@ export class MasterServiceComponent implements OnInit {
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['pipo']),
+          PipoNo: this.getPipoNumber(element['UtilizationAddition']),
           date: element['date'],
           masterServiceNumber: element['masterServiceNumber'],
+          StartDate: moment(element['StartDate']).format("YYYY-MM-DD"),
+          Expirydate: moment(element['Expirydate']).format("YYYY-MM-DD"),
+          PartyName: element['buyerName']?.value,
           masterServiceAmount: element['masterServiceAmount'],
           currency: element['currency'],
-          buyerName: element['buyerName'],
+          buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
@@ -164,6 +201,13 @@ export class MasterServiceComponent implements OnInit {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+  getPipoBuyerName(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.buyerName);
     });
     return temp.join(',')
   }
@@ -248,9 +292,17 @@ export class MasterServiceComponent implements OnInit {
     this.EDIT_FORM_DATA = {
       date: this.SELECTED_VALUE['date'],
       masterServiceNumber: this.SELECTED_VALUE['masterServiceNumber'],
+      StartDate: this.SELECTED_VALUE['StartDate'],
+      Expirydate: this.SELECTED_VALUE['Expirydate'],
       masterServiceAmount: this.SELECTED_VALUE['masterServiceAmount'],
       currency: this.SELECTED_VALUE['currency'],
       buyerName: this.SELECTED_VALUE['buyerName'],
+      UtilizationAddition: this.SELECTED_VALUE['UtilizationAddition'].length != 0 && this.SELECTED_VALUE['UtilizationAddition'] != "NF" ? this.SELECTED_VALUE['UtilizationAddition'] : [{
+        pi_poNo: "",
+        amount: "",
+        UtilizationAmount: 0,
+        buyerName: ""
+      }]
     }
     this.toastr.warning('Master Service Row Is In Edit Mode');
   }
@@ -302,6 +354,37 @@ export class MasterServiceComponent implements OnInit {
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'MasterService.xlsx');
   }
+
+  clickPipo($event, index) {
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['pi_poNo'] = $event["pi_poNo"];
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['amount'] = $event["amount"];
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['UtilizationAmount'] = $event["UtilizationAmount"];
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['buyerName'] = $event["buyerName"];
+  }
+  AddMore() {
+    this.EDIT_FORM_DATA?.UtilizationAddition.push({
+      pi_poNo: "",
+      amount: "",
+      UtilizationAmount: 0,
+      buyerName: ""
+    });
+  }
+  RemoveMore(index) {
+    this.EDIT_FORM_DATA?.UtilizationAddition.splice(index, 1);
+  }
+  timeout: any = null;
+  AmountValidation(UtilizationAmount: any, index: any, PipoAmount: any, InsuranceAmount: any) {
+    clearTimeout(this.timeout);
+    let SUM_OF_PIPO: any = this.EDIT_FORM_DATA.UtilizationAddition?.reduce(function (acc, obj) { return parseInt(acc) + parseInt(obj.amount); }, 0);
+    if (UtilizationAmount > SUM_OF_PIPO || UtilizationAmount > InsuranceAmount || SUM_OF_PIPO > InsuranceAmount) {
+      this.timeout = setTimeout(() => {
+        this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
+      }, 200);
+      this.toastr.error("insurance value insufficient");
+      return;
+    }
+  }
+
 }
 
 class MasterServiceFormat {
@@ -317,9 +400,12 @@ class MasterServiceFormat {
         PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
         masterServiceNumber: element['masterServiceNumber'],
+        StartDate: moment(element['StartDate']).format("YYYY-MM-DD"),
+        Expirydate: moment(element['Expirydate']).format("YYYY-MM-DD"),
+        PartyName: element['buyerName']?.value,
         masterServiceAmount: element['masterServiceAmount'],
         currency: element['currency'],
-        buyerName: this.getBuyerName(element['buyerName']),
+        buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
       })
     });
     return temp;
@@ -332,10 +418,10 @@ class MasterServiceFormat {
     return temp.join(',')
   }
 
-  getBuyerName(buyerName: any) {
+  getPipoBuyerName(pipo: any) {
     let temp: any = [];
-    buyerName.forEach(element => {
-      temp.push(element);
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.buyerName);
     });
     return temp.join(',')
   }
