@@ -63,6 +63,22 @@ export class MasterServiceAgreementsComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
+        masterServiceNumber: {
+          type: "text",
+          value: "",
+          label: "Master Service Number*",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: "",
+          label: "Currency*",
+          rules: {
+            required: true,
+          }
+        },
         masterServiceAmount: {
           type: "text",
           value: "",
@@ -94,23 +110,7 @@ export class MasterServiceAgreementsComponent implements OnInit {
           rules: {
             required: true,
           }
-        },
-        currency: {
-          type: "currency",
-          value: "",
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        masterServiceNumber: {
-          type: "text",
-          value: "",
-          label: "Master Service Number*",
-          rules: {
-            required: true,
-          }
-        },
+        },     
       }, 'ExportMasterService');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
