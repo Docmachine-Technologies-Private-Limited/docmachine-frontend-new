@@ -6,10 +6,10 @@
                     [attr.hover-popup-open-close]="'open'"></i></button>
         </div>
         <div class="panel-hover">
-            <mat-tab-group [selectedIndex]="selectedIndexPIPO">
+            <mat-tab-group [selectedIndex]="selectedIndexPIPO" (selectedTabChange)="onTabChanged($event);">
                 <mat-tab [label]="pipoArrayListdata.pi_poNo" [id]="pipoArrayListdata?._id"
                     *ngFor="let pipoArrayListdata of this.pipoArrayList;let i=index">
-                    <div class="panel-child-hover">
+                    <div class="panel-child-hover" *ngIf="selectedIndexPIPO==i">
                         <label for="" class="label-header">{{pipoArrayListdata.pi_poNo}} | {{pipoArrayListdata.date}} |
                             {{pipoArrayListdata.buyerName}}</label>
                         <ul class="listDocument">
@@ -172,35 +172,35 @@
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.sb!=undefined,'not-found':pipoArrayListdata?.sb==undefined}"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.sbRef?.length!=0,'not-found':pipoArrayListdata?.sbRef?.length==0}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Shipping Bill Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.sb)" [disabled]="pipoArrayListdata?.sb==undefined?true:false">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.sbRef[0]?.doc)" [disabled]="pipoArrayListdata?.sbRef?.length==0?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.airwayBlcopy!=undefined,'not-found':pipoArrayListdata?.airwayBlcopy==undefined}"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.airwayBlCopyRef?.length!=0,'not-found':pipoArrayListdata?.airwayBlCopyRef?.length==0}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Airway / BL Copy Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.airwayBlcopy)" [disabled]="pipoArrayListdata?.airwayBlcopy==undefined?true:false">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.airwayBlCopyRef[0]?.blCopyDoc)" [disabled]="pipoArrayListdata?.airwayBlCopyRef?.length==0?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.commercial!=undefined,'not-found':pipoArrayListdata?.commercial==undefined}"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.commercialRef?.length!=0,'not-found':pipoArrayListdata?.commercialRef?.length==0}"></div>
                                                     <div class="view-pdf-text">
-                                                        <p class="text-log">Commercial Invoice Uploaded</p>
+                                                        <p class="text-log">commercialRef Invoice Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.commercial)" [disabled]="pipoArrayListdata?.commercial==undefined?true:false">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.commercialRef[0]?.commercialDoc)" [disabled]="pipoArrayListdata?.commercialRef?.length==0?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel left-log-panel-last-child" [ngClass]="{'found':pipoArrayListdata?.packingList!=undefined,'not-found':pipoArrayListdata?.packingList==undefined}"></div>
+                                                    <div class="left-log-panel left-log-panel-last-child" [ngClass]="{'found':pipoArrayListdata?.packingListRef?.length!=0,'not-found':pipoArrayListdata?.packingListRef?.length==0}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Packing List Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.packingList)" [disabled]="pipoArrayListdata?.packingList==undefined?true:false">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.packingListRef[0]?.packingDoc)" [disabled]="pipoArrayListdata?.packingListRef?.length==0?true:false">View</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,21 +219,21 @@
                                         <app-pdf-viewer [downloadShow]="false" name="Proforma Invoice"
                                             [src]="pipoArrayListdata?.doc" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.sb!=''">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.sbRef?.length!=0">
                                         <app-pdf-viewer [downloadShow]="false" name="Shipping Bill"
-                                            [src]="pipoArrayListdata?.sb" width="100%" Newheight="590px"></app-pdf-viewer>
+                                            [src]="pipoArrayListdata?.sbRef[0]?.doc" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.airwayBlcopy!=''">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.airwayBlCopyRef?.length!=0">
                                         <app-pdf-viewer [downloadShow]="false" name="Airway / BL Copy"
-                                            [src]="pipoArrayListdata?.airwayBlcopy" width="100%" Newheight="590px"></app-pdf-viewer>
+                                            [src]="pipoArrayListdata?.airwayBlCopyRef[0]?.blCopyDoc" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.commercial!=''">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.commercialRef?.length!=0">
                                         <app-pdf-viewer [downloadShow]="false" name="Commercial Invoice"
-                                            [src]="pipoArrayListdata?.commercial" width="100%" Newheight="590px"></app-pdf-viewer>
+                                            [src]="pipoArrayListdata?.commercialRef[0]?.commercialDoc" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.packingList!=''">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.packingListRef?.length!=0">
                                         <app-pdf-viewer [downloadShow]="false" name="Packing List"
-                                            [src]="pipoArrayListdata?.packingList" width="100%" Newheight="590px"></app-pdf-viewer>
+                                            [src]="pipoArrayListdata?.packingListRef[0]?.packingDoc" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
                                 </div>
                             </Custom-Slider>

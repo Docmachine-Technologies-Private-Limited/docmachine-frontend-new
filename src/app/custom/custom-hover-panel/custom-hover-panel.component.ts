@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DocumentService } from '../../service/document.service';
 import { PipoDisplayListView, PipoDisplayListViewItem } from '../../../model/pipo.model';
 import { PipoDataService } from '../../service/homeservices/pipo.service';
@@ -11,7 +11,7 @@ import $ from 'jquery';
   templateUrl: './custom-hover-panel.component.html',
   styleUrls: ['./custom-hover-panel.component.scss']
 })
-export class CustomHoverPanelComponent implements OnInit {
+export class CustomHoverPanelComponent implements OnInit, OnChanges {
   @Input('pipoid') pipoID: any = '';
   SbData: any = [];
   inWardData: any = [];
@@ -27,34 +27,19 @@ export class CustomHoverPanelComponent implements OnInit {
   public pipoArrayList: any = [];
   public pipoDisplayListData: PipoDisplayListView;
   public pipoData?: any = [];
-  public selectedIndexPIPO:any=0;
-  
-  constructor(private documentService: DocumentService,
-    private pipoDataService: PipoDataService,
-    private sanitizer: DomSanitizer,
-    private router: Router) { }
+  public selectedIndexPIPO: any = 0;
+
+  constructor(private documentService: DocumentService, private router: Router) { }
 
   ngOnInit(): void {
-    console.log(this.pipoID, 'dfsjdgfdsdsgfdshfdsgfdsfds')
-    this.getPIPOData(this.pipoID)
 
-    this.documentService.getPipo().subscribe(
-      (res: any) => {
-        this.item = res.data;
-        for (let index = 0; index < this.item.length; index++) {
-          const element = this.item[index];
-          if (element?._id==this.pipoID) {
-            this.selectedIndexPIPO=index;
-          }
-        }
-        console.log(this.selectedIndexPIPO,'sdfdfdsfdsfdf')
-        this.getPipoExport(res.data).then((pipores: any) => {
-          this.pipoArrayList = pipores;
-          console.log(this.pipoArrayList, res.data, 'dgfdgdfgdfgdfgdfgfdgdfgdfgfg')
-        });
-      },
-      (err) => console.log(err, '**********')
-    );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes, "ngOnChanges")
+    if (changes?.pipoID?.currentValue!=undefined && changes?.pipoID?.currentValue!=null && changes?.pipoID?.currentValue!="") {
+      this.loadPipoHoverData(changes?.pipoID?.currentValue)
+    }
   }
 
   getSBDetails(id) {
@@ -69,12 +54,29 @@ export class CustomHoverPanelComponent implements OnInit {
           };
           result.push(res[value.fobCurrency])
         }
-        res[value.fobCurrency].fobValue += value.fobValue
-          ;
+        res[value.fobCurrency].fobValue += value.fobValue;
         return res;
       }, {});
       this.SbAmountAndCurrency = result
     })
+  }
+
+  loadPipoHoverData(pipoID:any) {
+    this.getPIPOData(pipoID)
+
+    this.documentService.getPipo().subscribe((res: any) => {
+      this.item = res.data;
+      for (let index = 0; index < this.item.length; index++) {
+        const element = this.item[index];
+        if (element?._id == pipoID) {
+          this.selectedIndexPIPO = index;
+        }
+      }
+      this.getPipoExport(res.data).then((pipores: any) => {
+        this.pipoArrayList = pipores;
+        console.log(this.pipoArrayList, res.data, 'dgfdgdfgdfgdfgdfgfdgdfgdfgfg')
+      });
+    }, (err) => console.log(err, '**********'));
   }
 
   getInwardData(id) {
@@ -84,7 +86,9 @@ export class CustomHoverPanelComponent implements OnInit {
     //   this.inwardBalanceAmount = this.pipoData.amount - this.inwardRemitanceAmount
     // })
   }
-
+  onTabChanged(event:any){
+    this.selectedIndexPIPO=event?.index;
+  }
   getPIPOData(id) {
     this.documentService.getPipoByid(id).subscribe((pipoRes: any) => {
       console.log("-->", pipoRes)
@@ -133,18 +137,18 @@ export class CustomHoverPanelComponent implements OnInit {
   getIRMSum(irmdata: any) {
     return { SumAmount: irmdata.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0), Currency: irmdata[0]?.currency };
   }
-  
+
   viewDetails(data: any) {
     console.log("pipoData", this.pipoData)
     this.router.navigate(['home/pipo-export', data]);
   }
-  
+
   get displayHidden() {
-    return $('#CUSTOM_HOVER_PANEL').css('display','none');
+    return $('#CUSTOM_HOVER_PANEL').css('display', 'none');
   }
-  
+
   get displayShow() {
     return $('.custom-Hover-Panel-btn').click()
   }
-  
+
 }
