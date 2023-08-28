@@ -94,6 +94,7 @@ import { ExportSummaryModule } from "./SummaryPage/Export/export-summary.module"
 import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module";
 import { ImportTransactionModule } from "./Transaction/Import/import-transaction.module";
 import { ExportTransactionModule } from "./Transaction/Export/export-transaction.module";
+import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connector/tally-api-connector.component";
 
 @NgModule({
   declarations: [
@@ -137,6 +138,7 @@ import { ExportTransactionModule } from "./Transaction/Export/export-transaction
     MasterUploadComponent,
     EdpmsReconComponent,
     IdpmsReconComponent,
+    TallyApiConnectorComponent
   ],
   imports: [
     SharedHomeModule,
@@ -201,6 +203,7 @@ import { ExportTransactionModule } from "./Transaction/Export/export-transaction
           { path: "data-table", component: DatatableComponent, pathMatch: "full", canActivate: [MemberGuard] },
          
           { path: "createBene", component: CreateBeneComponent, pathMatch: "full", canActivate: [MemberGuard] },
+          { path: "TallyApiConnector", component: TallyApiConnectorComponent, pathMatch: "full", canActivate: [AdminMemberGuard] },
           { path: "inwardRemittance", component: InwardRemittanceComponent, pathMatch: "full", canActivate: [MemberGuard] },
 
           {

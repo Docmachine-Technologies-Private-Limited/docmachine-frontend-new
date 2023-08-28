@@ -1,0 +1,78 @@
+<div class="col-12 tally-connector-panel">
+    <div class="left-panel">
+        <label class="top-label">Link your account</label>
+        <p class="top-label-p mt-2">Bharathexim want to access financial data from your account.</p>
+        <div class="icon-text-card">
+            <label class="drak-text"><span class="fa fa-eye-slash"></span> 100% Private</label>
+            <p style="margin-left: 25px;">Your credentials remain strictly private and are never shared with Bharathexim
+                or anyone else.</p>
+        </div>
+        <div class="icon-text-card">
+            <label class="drak-text"><span class="fas fa-shield-alt"></span> Protected</label>
+            <p style="margin-left: 25px;">All data is encrypted both at rest using AES-256-bit encryption and in-transit
+                using TLS 1.3.</p>
+        </div>
+        <div class="icon-text-card">
+            <label class="drak-text"><span class="fas fa-lock"></span> Transparent</label>
+            <p style="margin-left: 25px;">Before authorizing access to Bharathexim, you can review the list of
+                permission. Additionally, you can
+                revoke these permission at any time.</p>
+        </div>
+    </div>
+    <div class="right-panel">
+        <label class="top-label">Download and Install the Tally Connector</label>
+        <p class="top-label-p" style="font-size: 15px;">Follow the instructions below to download and install Tally
+            Connector on your Windows system. Once installed,
+            you can securely share financial data with Bharathexim.</p>
+        <div class="icon-text-card-row">
+            <label class="drak-text"><span class="circle-text-number">1</span></label>
+            <p> Click the <span class="drak-text">Download Tally Connector</span> button.</p>
+        </div>
+        <div class="icon-text-card-row">
+            <label class="drak-text"><span class="circle-text-number">2</span></label>
+            <p> When the downloaded message appears at the bottom of your browser window, click the <span
+                    class="drak-text">bharathexim.exe</span>
+                file to
+                install the Connector.</p>
+        </div>
+        <div class="icon-text-card-row">
+            <label class="drak-text"><span class="circle-text-number">3</span></label>
+            <p>After Installing the <span class="drak-text">Tally Connector,</span> open it and <span
+                    class="drak-text">paste the Invite ID.</span></p>
+        </div>
+        <div class="icon-text-card-row">
+            <label class="drak-text"><span class="circle-text-number">4</span></label>
+            <p>Invite Id : <input type="text" readOnly [ngModel]="this.COMPANY_INFO?.AuthorizationTallyToken"
+                    #InviteID />
+                <span class="drak-text" style="border: 1px solid #171717;
+                padding: 3px;
+                margin-left: 10px;
+                border-radius: 5px;
+                cursor: pointer;" *ngIf="this.COMPANY_INFO?.AuthorizationTallyToken!=undefined && this.COMPANY_INFO?.AuthorizationTallyToken!=''"
+                    (click)="copyInputMessage(InviteID,InviteID?.value)">Copy Invite ID</span>
+                <span class="drak-text" style="border: 1px solid #171717;
+                padding: 3px;
+                margin-left: 10px;
+                border-radius: 5px;
+                cursor: pointer;" *ngIf="this.COMPANY_INFO?.AuthorizationTallyToken==undefined || this.COMPANY_INFO?.AuthorizationTallyToken==''" (click)="genrateInviteId()">Genrate Invite ID</span>
+            </p>
+        </div>
+        <div class="icon-text-card-row">
+            <label class="drak-text"><span class="circle-text-number">5</span></label>
+            <p><span class="drak-text">Select your company</span> name you wish to link from the list of companies on
+                the Tally Connector to begin
+                securely sharing data.</p>
+        </div>
+        <div class="note-card">
+            <p><span class="fa fa-info-circle" style="color: #e6801b;"></span> To ensure smooth data sharing, it is
+                necessary to have both the Tally Connector and your Tally Prime app
+                open and running in the background on your Windows system.</p>
+        </div>
+        <div class="button-panel">
+            <p><span class="drak-text" style="color: red;" *ngIf="this.COMPANY_INFO?.AuthorizationTallyToken==undefined || this.COMPANY_INFO?.AuthorizationTallyToken==''">You don't have any invite id..<br> please genrate new invite id..</span></p>
+            <button class="button-download" *ngIf="this.COMPANY_INFO?.AuthorizationTallyToken!=undefined && this.COMPANY_INFO?.AuthorizationTallyToken!=''"
+            (click)="downloadExe()"><span class="fa fa-download"
+                    style="color: white;margin-right: 10px;"></span> Download Tally Connector</button>
+        </div>
+    </div>
+</div>
