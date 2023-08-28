@@ -65,7 +65,7 @@ export class InsurancedocumentsComponent implements OnInit {
         insuranceNumber: {
           type: "text",
           value: "",
-          label: "Insurance Number*",
+          label: "Insurance Policy Number*",
           rules: {
             required: true,
           }
@@ -97,7 +97,7 @@ export class InsurancedocumentsComponent implements OnInit {
         insuranceAmount: {
           type: "text",
           value: "",
-          label: "Insurance Amount",
+          label: "Insurance Policy Amount",
           rules: {
             required: true,
           }

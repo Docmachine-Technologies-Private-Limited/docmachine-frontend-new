@@ -17,6 +17,13 @@
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
                             (change)="clickPipo($event)">
                         </ng-select>
+                        <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && 
+                        this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0 && 
+                        this.PIPO_VISIBLE==true"
+                        [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                        bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
+                        (change)="clickPipo($event)">
+                    </ng-select>
                         <ng-select class="custom-ng-select"
                             *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
                             [items]="this.documentService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"

@@ -35,7 +35,8 @@ export class UploadHeaderComponent implements OnInit {
   @Input('id') id: any = '';
   @Input('title') title: any = '';
   @Input('PIPO_DISABLED') PIPO_DISABLED: boolean = true;
-
+  @Input('PIPO_VISIBLE') PIPO_VISIBLE: boolean = false;
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
