@@ -376,7 +376,14 @@ export class MasterServiceComponent implements OnInit {
   AmountValidation(UtilizationAmount: any, index: any, PipoAmount: any, InsuranceAmount: any) {
     clearTimeout(this.timeout);
     let SUM_OF_PIPO: any = this.EDIT_FORM_DATA.UtilizationAddition?.reduce(function (acc, obj) { return parseInt(acc) + parseInt(obj.amount); }, 0);
-    if (UtilizationAmount > SUM_OF_PIPO || UtilizationAmount > InsuranceAmount || SUM_OF_PIPO > InsuranceAmount) {
+    if (UtilizationAmount > SUM_OF_PIPO || UtilizationAmount > InsuranceAmount) {
+      this.timeout = setTimeout(() => {
+        this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
+      }, 200);
+      this.toastr.error("You don't have much engouh amount");
+      return;
+    }
+    if (SUM_OF_PIPO > InsuranceAmount) {
       this.timeout = setTimeout(() => {
         this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
       }, 200);
