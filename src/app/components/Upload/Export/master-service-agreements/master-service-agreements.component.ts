@@ -66,7 +66,7 @@ export class MasterServiceAgreementsComponent implements OnInit {
         masterServiceAmount: {
           type: "text",
           value: "",
-          label: "Master Service Number*",
+          label: "Master Service Amount*",
           rules: {
             required: true,
           }
@@ -106,7 +106,7 @@ export class MasterServiceAgreementsComponent implements OnInit {
         masterServiceNumber: {
           type: "text",
           value: "",
-          label: "Master Service Amount",
+          label: "Master Service Number*",
           rules: {
             required: true,
           }
