@@ -84,7 +84,7 @@ export class PIPOSComponent implements OnInit {
             "Non Capital Goods": "",
             "Services": "No SB traceability and applicability (SB+9months criteria not applicable).",
             "Capital Goods": "",
-            "Samples": "Invoice should be sent to CHA for marking FOC in the SB,Cha Email id should be mandatorily registered if not to Admin.",
+            "Samples": "Invoice should be sent to CHA for marking FOC in the SB,CHA Email id should be mandatorily registered if not to Admin.",
             "Repairs and returns": "GR waiver form should be made available."
           },
           rules: {

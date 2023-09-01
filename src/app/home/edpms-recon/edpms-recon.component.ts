@@ -96,7 +96,11 @@ export class EdpmsReconComponent implements OnInit {
     this.getUserID();
     await this.userService.getTeam().subscribe((res: any) => {
       this.masterTeam = res?.data[0]?.bankDetails;
-      this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
+      this.masterTeam.forEach((acc: any) => {
+        if (!this.bankAccounts?.includes(acc?.bank)) {
+          this.bankAccounts.push(acc?.bank)
+        }
+      });
     })
     await this.documentService.getclearedEDPMS(this.LIMIT).subscribe((cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
@@ -173,7 +177,7 @@ export class EdpmsReconComponent implements OnInit {
         edpmsStatus: item['STATUS'],
         adRefNo: item['adBillNo'],
         sbAmount: item['sbAmount'],
-        sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai!="-1"?this.getSBAmount(item['Shipping Bill No'])?.balanceAvai:this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
+        sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai != "-1" ? this.getSBAmount(item['Shipping Bill No'])?.balanceAvai : this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
         sbCurrency: item['sbCurrency'],
         statusMeaning: this.getStatusMeaning(item['STATUS']),
         systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
@@ -224,7 +228,7 @@ export class EdpmsReconComponent implements OnInit {
     if (pipo == undefined) {
       return false;
     }
-    if (this.blMaster?.some((bl: any) => bl?.pipo?.includes(pipo?.pi_poNo)==true)) {
+    if (this.blMaster?.some((bl: any) => bl?.pipo?.includes(pipo?.pi_poNo) == true)) {
       return true
     } else {
       return false
@@ -285,17 +289,17 @@ export class EdpmsReconComponent implements OnInit {
     await this.compareEDPMS(false);
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
-  
-  async onSubmit(){
+
+  async onSubmit() {
     await this.getData();
     await this.compareEDPMS(true)
   }
 
-  async compareEDPMS(bool:boolean) {
+  async compareEDPMS(bool: boolean) {
     await this.gatherSBdata(bool);
   }
 
-  async gatherSBdata(bool:boolean) {
+  async gatherSBdata(bool: boolean) {
     await this.documentService.getMaster(1).subscribe(async (res: any) => {
       this.masterSB = res?.data;
       await this.masterExcelData.forEach((data, i) => {
@@ -307,7 +311,7 @@ export class EdpmsReconComponent implements OnInit {
           this.masterExcelData[i]['sbCurrency'] = sbexit[0]?.fobCurrency;
           this.masterExcelData[i]['adBillNo'] = sbexit[0]?.adBillNo;
           this.masterExcelData[i]['pipo'] = sbexit[0]?.pipo[0];
-          this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai!="-1"? sbexit[0]?.balanceAvai:sbexit[0]?.sbAmount;
+          this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai != "-1" ? sbexit[0]?.balanceAvai : sbexit[0]?.sbAmount;
           this.masterExcelData[i]['sbdata'] = sbexit[0];
         } else {
           this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
@@ -315,8 +319,8 @@ export class EdpmsReconComponent implements OnInit {
       });
       await this.preparePayload();
       this.edpmsData = await this.preparePayload();
-      if (bool==true) {
-        await this.saveData();        
+      if (bool == true) {
+        await this.saveData();
       }
       console.log('this.masterExcelData', this.masterExcelData);
     }, (err: any) => {
@@ -336,7 +340,7 @@ export class EdpmsReconComponent implements OnInit {
       console.log("index:", index);
       if (index !== -1) {
         this.edpmsData[i]['sbdata'] = this.masterSB[index];
-        this.edpmsData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai!="-1"?this.masterSB[index]?.balanceAvai:this.masterSB[index]?.sbAmount;
+        this.edpmsData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai != "-1" ? this.masterSB[index]?.balanceAvai : this.masterSB[index]?.sbAmount;
       } else {
         this.edpmsData[i]['sbdata'] = [];
       }

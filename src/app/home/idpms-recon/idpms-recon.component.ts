@@ -96,7 +96,11 @@ export class IdpmsReconComponent implements OnInit {
     this.getUserID();
     await this.userService.getTeam().subscribe((res: any) => {
       this.masterTeam = res?.data[0]?.bankDetails;
-      this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
+      this.masterTeam.forEach((acc: any) => {
+        if (!this.bankAccounts?.includes(acc?.bank)) {
+          this.bankAccounts.push(acc?.bank)
+        }
+      });
     })
     await this.documentService.getclearedIDPMS(this.LIMIT).subscribe((cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addboedata(cleareddata?.data);
@@ -174,7 +178,7 @@ export class IdpmsReconComponent implements OnInit {
         IECode: item['IE Code'],
         IEName: item['IE Name'],
         IEAddress: item['IE Address'],
-        portCode: (item['Port Code']).toString(),
+        portCode: item['Port Code']!=undefined?(item['Port Code']).toString():'',
         idpmsStatus: item['BOE STATUS'],
         boeAmount: (0).toString(),
         boeBalanceAmount: this.getboebalanceAmount(item['BOE Number'])?.balanceAmount != undefined ? this.getboebalanceAmount(item['BOE Number'])?.balanceAmount?.toString() : '-1',
@@ -490,7 +494,7 @@ export class IdpmsReconComponent implements OnInit {
     if (data?.commercialDoc) {
       this.pipoArrayListdata2.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL +  'home/upload-documents/Import/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
@@ -524,7 +528,7 @@ export class IdpmsReconComponent implements OnInit {
     if (data?.commercialDoc) {
       this.pipoArrayListdata3.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL +  'home/upload-documents/Import/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Import/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
