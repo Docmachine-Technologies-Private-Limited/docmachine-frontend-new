@@ -605,7 +605,7 @@
         <span class="fa fa-cog"></span>
         <h6 class="p-0">Settings</h6>
       </li>
-      <li class="nav-item profile-panel" style="display:grid;">
+      <li class="nav-item profile-panel" style="display:grid;" *ngIf="documentService.AppConfig.environment=='LOCAL' || documentService.AppConfig.environment=='DEV'">
         <span class="fa fa-download"></span>
         <h6 class="p-0" (click)="navigationByUrl($event,'/TallyApiConnector')">Download Tally Connector</h6>
       </li>
