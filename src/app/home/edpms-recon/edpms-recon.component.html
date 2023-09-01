@@ -78,7 +78,7 @@
                                                             {{row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbdata?.balanceAvai}}
+                                                            {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.systemStatus}}
@@ -177,7 +177,7 @@
                                                             {{row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbdata?.balanceAvai}}
+                                                            {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.systemStatus}}
@@ -269,7 +269,7 @@
                                                             {{row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbdata?.balanceAvai}}
+                                                            {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.cleared}}

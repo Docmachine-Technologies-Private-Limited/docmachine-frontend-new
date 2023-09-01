@@ -173,7 +173,7 @@ export class EdpmsReconComponent implements OnInit {
         edpmsStatus: item['STATUS'],
         adRefNo: item['adBillNo'],
         sbAmount: item['sbAmount'],
-        sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai,
+        sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai!="-1"?this.getSBAmount(item['Shipping Bill No'])?.balanceAvai:this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
         sbCurrency: item['sbCurrency'],
         statusMeaning: this.getStatusMeaning(item['STATUS']),
         systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
@@ -307,7 +307,7 @@ export class EdpmsReconComponent implements OnInit {
           this.masterExcelData[i]['sbCurrency'] = sbexit[0]?.fobCurrency;
           this.masterExcelData[i]['adBillNo'] = sbexit[0]?.adBillNo;
           this.masterExcelData[i]['pipo'] = sbexit[0]?.pipo[0];
-          this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai;
+          this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai!="-1"? sbexit[0]?.balanceAvai:sbexit[0]?.sbAmount;
           this.masterExcelData[i]['sbdata'] = sbexit[0];
         } else {
           this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
@@ -336,7 +336,7 @@ export class EdpmsReconComponent implements OnInit {
       console.log("index:", index);
       if (index !== -1) {
         this.edpmsData[i]['sbdata'] = this.masterSB[index];
-        this.edpmsData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai;
+        this.edpmsData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai!="-1"?this.masterSB[index]?.balanceAvai:this.masterSB[index]?.sbAmount;
       } else {
         this.edpmsData[i]['sbdata'] = [];
       }
