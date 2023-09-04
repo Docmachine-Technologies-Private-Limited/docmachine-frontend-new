@@ -33,6 +33,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-pipo-documents',
@@ -153,7 +154,7 @@ export class PipoDocumentsComponent implements OnInit {
       "DATE",
       "INVOICE No.",
       "INVOICE DATE",
-      "SELLER NAMES",
+      "Beneficiary NAMES",
       "CURRENCY",
       "Amount",
       "BRANCH",
@@ -193,7 +194,7 @@ export class PipoDocumentsComponent implements OnInit {
       "col-td-th-0",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
@@ -1087,7 +1088,7 @@ export class PipoDocumentsComponent implements OnInit {
         }])?.forEach(boeelement => {
           boedata.push({
             BOENO: boeelement['boeNumber'],
-            BOEDATE: boeelement['boeDate'],
+            BOEDATE: moment(boeelement['boeDate']).format("YYYY-MM-DD"),
             REGION: boeelement['origin'],
             FOBVALUE: boeelement['invoiceAmount'],
             PORTCODE: boeelement['iecCode'],
@@ -1111,7 +1112,7 @@ export class PipoDocumentsComponent implements OnInit {
           STATUSOFBOESUBMISSIONINBANK: "NF",
         }])?.forEach(adviceelement => {
           advice.push({
-            TTDATE: adviceelement['date'],
+            TTDATE:  moment(adviceelement['date']).format("YYYY-MM-DD"),
             TTUSD: adviceelement['amount'],
             PaymentDate: adviceelement['amount'],
             Amount: adviceelement['amount'],
@@ -1126,9 +1127,9 @@ export class PipoDocumentsComponent implements OnInit {
           })
         });
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          DATE: element['date'],
+          DATE: moment(element['date']).format("YYYY-MM-DD"),
           INVOICENUMBER: element['pi_poNo'],
-          INVOICEDATE: element['purchasedate'],
+          INVOICEDATE: moment(element['purchasedate']).format("YYYY-MM-DD"),
           SELLERNAMES: element['benneName'],
           INVOICECURRENCY: element['currency'],
           INVOICEVALUEUSD: element['amount'],

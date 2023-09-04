@@ -143,6 +143,14 @@ export class ImportPIPOSComponent implements OnInit {
             required: true,
           }
         },
+        commodity: {
+          type: "commodity",
+          value: "",
+          label: "Choose commodity",
+          rules: {
+            required: true,
+          }
+        },
         incoterm: {
           type: "IncoTerm",
           value: "",

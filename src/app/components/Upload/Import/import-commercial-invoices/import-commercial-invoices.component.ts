@@ -161,7 +161,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           }
         },
         ThirdParty: {
-          type: "number",
+          type: "text",
           value: "",
           label: "Third Party*",
           rules: {

@@ -108,10 +108,12 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   dump(data: any) {
+    console.log(this.AUTOFILL_INPUT_NAME_LIST,"AUTOFILL_INPUT_NAME_LIST")
     this.AUTOFILL_INPUT_NAME_LIST = data;
   }
 
   autofillCommerical(Commericaldata: any, AUTOFILL_INPUT_NAME_LIST: any) {
+    console.log(Commericaldata,this.AUTOFILL_INPUT_NAME_LIST,"AUTOFILL_INPUT_NAME_LIST")
     AUTOFILL_INPUT_NAME_LIST.forEach(element => {
       this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.controls[element?.index]?.controls[element?.input]?.setValue(Commericaldata?.data[element?.key])
     });
