@@ -53,8 +53,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
+      "col-td-th-2"
     ],
     eventId: ''
   }

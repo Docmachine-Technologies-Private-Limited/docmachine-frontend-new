@@ -66,7 +66,7 @@ export class MasterServiceComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",

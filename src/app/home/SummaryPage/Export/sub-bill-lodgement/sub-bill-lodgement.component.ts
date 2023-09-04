@@ -1,11 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatChipsModule } from '@angular/material/chips';
 import * as xlsx from 'xlsx';
 import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-import $ from 'jquery';
 import { DocumentService } from '../../../../service/document.service';
 import { UserService } from '../../../../service/user.service';
 import { ShippingbillDataService } from '../../../../service/homeservices/shippingbill.service';
@@ -47,34 +44,93 @@ export class SubBillLodgementComponent implements OnInit {
     Lodgement_No:[],
     Party_Name:[]
   };
-
+  USER_DATA: any = [];
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Packing_List_No: [],
+    Currency: [],
+    DATE: []
+  };
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Party Name",
+      "SB no.",
+      "Lodgement no.",
+      "Currency",
+      "Amount",
+      "Realized Amount",
+      "Balance Amount",
+      "Action"],
+    items: [],
+    Expansion_header: [],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-2"
+    ],
+    eventId: ''
+  }
   constructor(public documentService: DocumentService,
     private userService: UserService, public shippingBillService: ShippingbillDataService,
     public dialog: MatDialog,
     public pipoDataService: PipoDataService,
      public wininfo: WindowInformationService) {
-    // this.getDropDownItems()
   }
   ngOnInit() {
     this.wininfo.set_controller_of_width(250,'.content_top_common');
     console.log("-->", this.page, this.limit)
-    // this.pipoDataService.getPipoList('export').then((data) => {
-    //   console.log(data, 'data..................')
-    //   this.pipoDataService.pipolistModel$.subscribe((data) => {
-    //     data.forEach(element => {
-    //       if (element?.file=='export') {
-    //         element?.blcopyRefs?.forEach(blcopyRefsElement => {
-    //           this.dataSource.push({blcopyRefs:blcopyRefsElement,pipo:element})
-    //         });
-    //       }
-    //     });
-    //     console.log(data,this.dataSource,'data2222..................');
-    //   });
-    // });
     this.documentService.getBlcopyrefPromies().then(async (res: any) => {
       this.dataSource = res
+      this.SUB_BILL_LODGEMENT_ListTable(res)
       console.log(this.TEMP,res,this.ALL_DATA_FORMAT,'ALL_DATA_FORMAT')
     })
+  }
+  SUB_BILL_LODGEMENT_ListTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PartyName: element?.pipo[0]?.buyerName,
+          SBno: element?.SbRef[0]?.sbno,
+          Lodgementno: element?.blcopyrefNumber,
+          currency: element?.SbRef[0]?.currency,
+          Amount: element?.amount,
+          RealizedAmount: element?.LodgementData?.data?.amount,
+          BalanceAmount:this.calculateAmount(element?.amount,element?.LodgementData?.data?.amount),
+          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
+      }
+    });
+  }
+  
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
   }
   onclick() {
     this.filtervisible = !this.filtervisible
@@ -83,8 +139,6 @@ export class SubBillLodgementComponent implements OnInit {
   getPipoData() {
     console.log("-->", this.page, this.limit)
     this.documentService.getBlcopyrefPromies().then(async (res: any) => {
-      // this.dataSource = res
-      // console.log("res", this.dataSource)
       console.log(this.TEMP,res,this.ALL_DATA_FORMAT,'ALL_DATA_FORMAT')
     })
   }

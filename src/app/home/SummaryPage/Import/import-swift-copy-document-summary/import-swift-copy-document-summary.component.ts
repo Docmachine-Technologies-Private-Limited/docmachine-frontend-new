@@ -46,7 +46,7 @@ export class ImportSwiftCopyDocumentSummaryComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "Swift-Copy No.",
-      "Buyer Name",
+      "Beneficiary Name",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -56,8 +56,8 @@ export class ImportSwiftCopyDocumentSummaryComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-2",
     ],
     eventId: ''
   }

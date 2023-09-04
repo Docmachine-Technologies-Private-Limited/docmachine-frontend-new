@@ -46,7 +46,7 @@ export class ImportRealisationCertificateSummaryComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "EBRC No.",
-      "Buyer Name",
+      "Beneficiary Name",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -57,7 +57,7 @@ export class ImportRealisationCertificateSummaryComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
     ],
     eventId: ''
   }

@@ -60,8 +60,7 @@ export class ImportMasterServiceComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
+      "col-td-th-2",
     ],
     eventId: ''
   }

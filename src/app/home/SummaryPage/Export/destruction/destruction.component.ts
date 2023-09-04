@@ -53,7 +53,7 @@ export class DestructionComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1"
     ],

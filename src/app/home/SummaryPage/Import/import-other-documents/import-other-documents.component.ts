@@ -43,7 +43,7 @@ export class ImportOtherDocumentsComponent implements OnInit {
       "DATE",
       "Packing List No.",
       "Currency",
-      "Packing List Amount",
+      "Amount",
       "Beneficiary Name",
       "Action"],
     items: [],
@@ -54,11 +54,10 @@ export class ImportOtherDocumentsComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
+      "col-td-th-2",
     ],
     eventId: ''
   }

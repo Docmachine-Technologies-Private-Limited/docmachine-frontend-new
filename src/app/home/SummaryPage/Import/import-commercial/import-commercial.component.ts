@@ -42,8 +42,8 @@ export class ImportCommercialComponent implements OnInit {
       "DATE",
       "Commercial Invoice No.",
       "Advance No.",
-      "Advance Currency",
-      "Advance Amount",
+      "Currency",
+      "Amount",
       "Beneficiary Name",
       "Action"],
     items: [],
@@ -54,12 +54,11 @@ export class ImportCommercialComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
+      "col-td-th-2",
     ],
     eventId: ''
   }

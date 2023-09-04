@@ -103,7 +103,7 @@ export class InwardUploadDocumentsComponent implements OnInit {
         Bill_lodgment_Number: {
           type: "text",
           value: args[1]?.data[0]['RemittanceInformation']!=undefined?args[1]?.data[0]['RemittanceInformation'] : 0,
-          label: "Bill lodgment number",
+          label: "Remittance Information",
           rules: {
             required: true,
           }

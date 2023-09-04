@@ -151,14 +151,14 @@ export class PipoDocumentsComponent implements OnInit {
   FILTER_VALUE_LIST_NEW: any = {
     header: [
       "DATE",
-      "INVOICE NUMBER",
+      "INVOICE No.",
       "INVOICE DATE",
       "SELLER NAMES",
-      "INVOICE CURRENCY",
-      "INVOICE VALUE - USD",
+      "CURRENCY",
+      "Amount",
       "BRANCH",
       "COMMODITY",
-      "BALANCE IF ANY",
+      "Available BALANCE",
       "Action"],
     items: [],
     Expansion_header: [
@@ -191,7 +191,7 @@ export class PipoDocumentsComponent implements OnInit {
     ExpansionKeys2: [],
     TableHeaderClass: [
       "col-td-th-0",
-      "col-td-th-2",
+      "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",

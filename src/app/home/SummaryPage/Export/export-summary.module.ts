@@ -21,6 +21,7 @@ import { ExportBilllodgementreferencenumberadvicecopySummaryComponent } from './
 import { ExportRealisationCertificateSummaryComponent } from './export-realisation-certificate-summary/export-realisation-certificate-summary.component';
 import { ViewDocumentComponent } from './view-document/view-document.component';
 import { InwardRemittanceDisposalComponent } from './inward-remittance-disposal/inward-remittance-disposal.component';
+import { SubBillLodgementComponent } from './sub-bill-lodgement/sub-bill-lodgement.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { InwardRemittanceDisposalComponent } from './inward-remittance-disposal/
     ExportRealisationCertificateSummaryComponent,
     ViewDocumentComponent,
     InwardRemittanceDisposalComponent,
+    SubBillLodgementComponent
   ],
   imports: [
     CommonModule,

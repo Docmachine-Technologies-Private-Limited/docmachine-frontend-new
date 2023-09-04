@@ -46,8 +46,8 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
       "Pipo No.",
       "DATE",
       "blcopy Ref No.",
-      "blcopy Amount",
-      "Buyer Name",
+      "Amount",
+      "Beneficiary Name",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -57,9 +57,9 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
     ],
     eventId: ''
   }

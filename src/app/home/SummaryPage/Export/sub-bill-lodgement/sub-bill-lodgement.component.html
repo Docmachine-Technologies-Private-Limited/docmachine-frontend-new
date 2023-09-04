@@ -1,0 +1,84 @@
+<div class="content-wrap pb-2 scroll-bar-main">
+    <main id="content" class="content table-padding" role="main">
+        <div class="filter_section_top p-2">
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">New Bill Lodgement detail Queue
+                            ({{this.FILTER_VALUE_LIST_NEW?.items?.length}})</h3>
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top p-0">
+                        <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
+                                class="ex_icon"></span>Export</button>
+                        <div class="filter_posit">
+                            <button (click)="filter_Popup.style.display='block'" type="button"
+                                class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
+                                appFilterToggle>
+                                <form class="select_filter_options">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Commodity</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                [(ngModel)]="commodity" name="com">
+                                                <option value=""> commodities</option>
+                                                <option *ngFor="let buyer of commodityArray">{{buyer.como}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Location</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                [(ngModel)]="location" name="location">
+                                                <option value="">locations</option>
+                                                <option *ngFor="let bene of locationArray">{{ bene.loc }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Buyer</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                [(ngModel)]="buyer" name="banee">
+                                                <option value="">Buyers</option>
+                                                <option *ngFor="let bene of benneDetailArray
+                                                ">{{ bene.buyerName }}
+                                                </option>
+
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Start
+                                                Date</label>
+                                            <input class="form-select form-control" type="date" placeholder="Start Date"
+                                                [(ngModel)]="startDate" name="startdate" required />
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">End
+                                                Date</label>
+                                            <input class="form-select form-control" type="date" placeholder="End Date"
+                                                [(ngModel)]="endDate" name="enddate" required />
+                                        </div>
+                                    </div>
+                                    <div class="footer_buttons">
+                                        <button type="button" class="btn btn-light"
+                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                    </div>
+                                </form>
+                                <i></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="analytics">
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
+                [items]="this.FILTER_VALUE_LIST_NEW?.items"
+                [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys">
+            </custom-expansion-panel>
+        </div>
+    </main>
+</div>
