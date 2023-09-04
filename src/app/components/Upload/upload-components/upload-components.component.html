@@ -82,7 +82,7 @@
                 <div class="form-group mb-3" *ngSwitchCase="'Underlying'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select
-                        [items]="[{value:'Pending'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
+                        [items]="[{value:'Booking'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
                         bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">

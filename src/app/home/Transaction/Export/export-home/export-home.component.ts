@@ -710,7 +710,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   changeCheckboxPIPO(event: any, value, data: any) {
     this.selectPIPO_data.push(data)
     let sumpipoamount: any = this.selectPIPO_data?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.amount) }, 0);
-    if ((sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal))) {
+    if ((sumpipoamount >= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal))) {
       let j = this.selectPIPO.indexOf(value);
       if (j == -1) {
         this.selectPIPO.push(value);
