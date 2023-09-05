@@ -552,12 +552,8 @@
           </ul>
           <div class="footer col-12">
             <ul class="list-unstyled components">
-              <li class="nav-item mt-2">
-                <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/help')">Need Help?
-                </h6>
-              </li>
               <li class="nav-item">
-                <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/')">Contact Us</h6>
+                <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/Contact-Us')">Contact Us</h6>
               </li>
               <li class="nav-item">
                 <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/t&c')">Terms &
@@ -622,12 +618,14 @@
       </li>
       <li class="nav-item profile-panel" style="display:grid;"
         *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['export']==true">
-        <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/manage-customer/export')">
+        <span class="fa fa-plus" aria-hidden="true"></span>
+        <h6 class="p-0" (click)="navigationByUrl($event,'/manage-customer/export')">
           Add buyer</h6>
       </li>
       <li class="nav-item profile-panel" style="display:grid;"
         *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['import']==true">
-        <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/manage-customer/import')">
+        <span class="fa fa-plus" aria-hidden="true"></span>
+        <h6 class="p-0" (click)="navigationByUrl($event,'/manage-customer/import')">
           Add Beneficiary</h6>
       </li>
       <li class="nav-item profile-panel" style="display:grid;">

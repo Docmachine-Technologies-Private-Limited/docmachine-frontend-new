@@ -1,6 +1,6 @@
 import { SidenavComponent } from "./sidenav/sidenav.component";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, OnInit } from "@angular/core";
-import { Router, RouterModule } from "@angular/router";
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { RouterModule } from "@angular/router";
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ModalContentComponent1 } from './pipo-doc-export/pipo-doc-export.component';
@@ -95,6 +95,9 @@ import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module"
 import { ImportTransactionModule } from "./Transaction/Import/import-transaction.module";
 import { ExportTransactionModule } from "./Transaction/Export/export-transaction.module";
 import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connector/tally-api-connector.component";
+import { ContactuspanelComponent } from "./contactuspanel/contactuspanel.component";
+import { ContactusTechnicalComponent } from "./contactuspanel/contactus-technical/contactus-technical.component";
+import { ContactusProductOptionComponent } from "./contactuspanel/contactus-product-option/contactus-product-option.component";
 
 @NgModule({
   declarations: [
@@ -136,7 +139,10 @@ import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connecto
     ForwardContractSummaryComponent,
     RoleBasedSingUpComponent,
     MasterUploadComponent,
-    TallyApiConnectorComponent
+    TallyApiConnectorComponent,
+    ContactuspanelComponent,
+    ContactusTechnicalComponent,
+    ContactusProductOptionComponent
   ],
   imports: [
     SharedHomeModule,
@@ -203,7 +209,6 @@ import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connecto
           { path: "createBene", component: CreateBeneComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "TallyApiConnector", component: TallyApiConnectorComponent, pathMatch: "full", canActivate: [AdminMemberGuard] },
           { path: "inwardRemittance", component: InwardRemittanceComponent, pathMatch: "full", canActivate: [MemberGuard] },
-
           {
             path: "edit-remittance",
             component: EditRemittanceComponent,
@@ -211,10 +216,16 @@ import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connecto
             canActivate: [MemberGuard]
           },
           {
-            path: "add-remittance",
-            component: AddRemittanceComponent,
+            path: "edit-remittance",
+            component: EditRemittanceComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
+          },
+          {
+            path: "Contact-Us",
+            component: ContactuspanelComponent,
+            pathMatch: "full",
+            canActivate: [AdminMemberGuard]
           },
           {
             path: "remittance-summary",

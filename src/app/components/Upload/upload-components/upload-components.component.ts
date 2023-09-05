@@ -17,6 +17,8 @@ import { AuthGuard } from '../../../service/authguard.service';
 })
 export class UploadComponentsComponent implements OnInit, AfterViewInit {
   SUBMIT_ERROR: boolean = false;
+  @Input('label') label: any = '';
+  @Input('labelStyle') labelStyle: any = '';
   @Input('id') id: any = '';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();

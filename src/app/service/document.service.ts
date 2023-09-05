@@ -2296,7 +2296,16 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/ForwardContract/update`, data, httpOptions);
   }
-
+  
+  sendContactMessage(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ContactUs/post`, data, httpOptions);
+  }
+  
   SendMailNormalTextdcouments(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

@@ -3,6 +3,7 @@
     <form class="col-12" [formGroup]="this.validator.dynamicFormGroup[this.id]" onsubmit="return false;"
         [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}"
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
+        <label *ngIf="label!=undefined && label!=''" [style]="labelStyle">{{label}}</label>
         <div class="col-12" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
                 <div class="form-group mb-3" *ngSwitchCase="'text'">
@@ -21,6 +22,16 @@
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.style" />
+                    </div>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'textarea'">
+                    <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <textarea [(ngModel)]="field.value"
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            [type]="field.type" [name]="field.fieldName"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            class="form-control" [style]="field?.style" ></textarea>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'email'">
