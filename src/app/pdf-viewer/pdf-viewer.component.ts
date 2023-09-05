@@ -116,6 +116,10 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
           console.log(this.URL_IFRAME, 'changingThisBreaksApplicationSecurity without');
           this.Sppinloader = false
         });
+      }else if(this.src?.includes(this.documentService.AppConfig?.FRONT_END_URL)){
+        this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+        this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+        this.Sppinloader = false
       }
     } else {
       console.log('pdf not found...');

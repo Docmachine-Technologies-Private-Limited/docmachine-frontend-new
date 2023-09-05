@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { async, forkJoin, timer } from "rxjs";
+import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DocumentService } from '../../service/document.service';

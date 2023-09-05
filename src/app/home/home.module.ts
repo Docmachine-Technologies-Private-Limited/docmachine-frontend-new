@@ -136,8 +136,6 @@ import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connecto
     ForwardContractSummaryComponent,
     RoleBasedSingUpComponent,
     MasterUploadComponent,
-    EdpmsReconComponent,
-    IdpmsReconComponent,
     TallyApiConnectorComponent
   ],
   imports: [

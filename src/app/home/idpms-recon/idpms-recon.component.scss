@@ -223,6 +223,9 @@ p {
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    overflow: auto;
+    background: white;
+    border-radius: 10px;
 }
 
 .heading {
@@ -333,4 +336,22 @@ p {
 
 ::ng-deep .mat-tab-body-wrapper {
     height: 100% !important;
+}
+
+.table-wrapper {
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 100%;
+    color: white;
+}
+
+.table-wrapper tr th,
+.table-wrapper tr td{
+    background-color: transparent;
+}
+
+.table-wrapper tr th:hover th,
+.table-wrapper tr th:hover td{
+    background-color: transparent;
 }

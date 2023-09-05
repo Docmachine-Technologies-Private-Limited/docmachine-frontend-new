@@ -20,6 +20,7 @@ import { ImportBilllodgementreferencenumberadvicecopyComponent } from './import-
 import { ImportRealisationCertificateComponent } from './import-realisation-certificate/import-realisation-certificate.component';
 import { ImportSwiftCopyDocumentComponent } from './import-swift-copy-document/import-swift-copy-document.component';
 import { SharedHomeModule } from '../../../home/shared-home.module';
+import { IdpmsReconComponent } from '../../../home/idpms-recon/idpms-recon.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { SharedHomeModule } from '../../../home/shared-home.module';
     ImportPIPOSComponent,
     ImportBilllodgementreferencenumberadvicecopyComponent,
     ImportRealisationCertificateComponent,
-    ImportSwiftCopyDocumentComponent
+    ImportSwiftCopyDocumentComponent,
+    IdpmsReconComponent,
   ],
   imports: [
     CommonModule,
