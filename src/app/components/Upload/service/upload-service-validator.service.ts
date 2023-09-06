@@ -370,6 +370,7 @@ export class UploadServiceValidatorService implements OnInit {
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
       buyer: [rule?.required == true ? Validators.required : ''],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
+      ImagesList: rule?.required == true ? [Validators.required] : [],
       consignee: rule?.required == true ? [Validators.required] : [],
       commodity: rule?.required == true ? [Validators.required] : [],
       origin: rule?.required == true ? [Validators.required] : [],

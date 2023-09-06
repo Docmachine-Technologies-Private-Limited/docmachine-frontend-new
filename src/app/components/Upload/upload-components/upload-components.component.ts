@@ -34,7 +34,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     BuyerNotFound: '',
     BeneficiaryNotFound: ''
   }
-  HS_CODE_DATA:any=[];
+  HS_CODE_DATA: any = [];
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -71,7 +71,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   get getRawValue() {
     return this.validator.dynamicFormGroup[this.id]?.getRawValue()
   }
-  
+
   get geForm() {
     return this.validator.dynamicFormGroup[this.id];
   }
@@ -110,12 +110,12 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   dump(data: any) {
-    console.log(this.AUTOFILL_INPUT_NAME_LIST,"AUTOFILL_INPUT_NAME_LIST")
+    console.log(this.AUTOFILL_INPUT_NAME_LIST, "AUTOFILL_INPUT_NAME_LIST")
     this.AUTOFILL_INPUT_NAME_LIST = data;
   }
 
   autofillCommerical(Commericaldata: any, AUTOFILL_INPUT_NAME_LIST: any) {
-    console.log(Commericaldata,this.AUTOFILL_INPUT_NAME_LIST,"AUTOFILL_INPUT_NAME_LIST")
+    console.log(Commericaldata, this.AUTOFILL_INPUT_NAME_LIST, "AUTOFILL_INPUT_NAME_LIST")
     AUTOFILL_INPUT_NAME_LIST.forEach(element => {
       this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.controls[element?.index]?.controls[element?.input]?.setValue(Commericaldata?.data[element?.key])
     });
@@ -183,7 +183,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.LOGIN_TOEKN = ''
     }
   }
-  ToHSCode_Selected:any=[];
+  ToHSCode_Selected: any = [];
   ToHSCode(event: any, value: any, index: any) {
     if (event?.target?.checked == true) {
       this.ToHSCode_Selected[index] = value;
@@ -197,11 +197,11 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.ToHSCode_Selected.forEach(element => {
       temp2.push(element?.hscode);
     });
-    this.ALL_DATA_HSCODE=temp2.join(',');
-    this.setValue(this.ALL_DATA_HSCODE,this.HSCODE_FEILD_FORM?.field);
+    this.ALL_DATA_HSCODE = temp2.join(',');
+    this.setValue(this.ALL_DATA_HSCODE, this.HSCODE_FEILD_FORM?.field);
   }
   filtertimeout: any = ''
-  FILTER_HS_CODE_DATA:any=[];
+  FILTER_HS_CODE_DATA: any = [];
   filterHSCode(value: any) {
     clearTimeout(this.filtertimeout);
     this.filtertimeout = setTimeout(() => {
@@ -211,12 +211,35 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       }
     }, 200);
   }
-  HSCODE_FEILD_FORM:any={
-   id:'',
-   field:''
+  
+  HSCODE_FEILD_FORM: any = {
+    id: '',
+    field: ''
   }
-  ValueAdd(id:any,field:any){
-    this.HSCODE_FEILD_FORM['id']=id;
-    this.HSCODE_FEILD_FORM['field']=field;
+  
+  ValueAdd(id: any, field: any) {
+    this.HSCODE_FEILD_FORM['id'] = id;
+    this.HSCODE_FEILD_FORM['field'] = field;
+  }
+  
+  IMAGE_UPLOAD_LIST:any=[];
+  onUploadChanges(event: any,autofill:any) {
+    if (event.target.files.length > 0) {
+      event.target.files.forEach(element => {
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          this.IMAGE_UPLOAD_LIST.push({
+            name:element?.name,
+            buffer:fileReader.result
+          })
+        }
+        fileReader.readAsDataURL(element);
+      });
+      this.validator.dynamicFormGroup[this.id]?.controls[autofill?.key]?.setValue(this.IMAGE_UPLOAD_LIST);
+    }
+  }
+  removeImage(index:any,autofill:any){
+    this.IMAGE_UPLOAD_LIST.splice(index,1);
+    this.validator.dynamicFormGroup[this.id]?.controls[autofill?.key]?.setValue(this.IMAGE_UPLOAD_LIST);
   }
 }

@@ -3,6 +3,7 @@ import { UploadServiceValidatorService } from '../../../components/Upload/servic
 import { ToastrService } from 'ngx-toastr';
 import { DocumentService } from '../../../service/document.service';
 import { Router } from '@angular/router';
+import { UserService } from '../../../service/user.service';
 
 @Component({
   selector: 'contactus-technical',
@@ -15,26 +16,53 @@ export class ContactusTechnicalComponent implements OnInit {
     public validator: UploadServiceValidatorService,
     private toastr: ToastrService,
     public router: Router,
+    private userService: UserService,
     public docservice: DocumentService) {
   }
 
-  ngOnInit(): void {
+ async ngOnInit() {
+    const data: any = await this.userService.getUserDetail();
     this.validator.buildForm({
       Name: {
         type: "text",
-        value: "",
+        value: data?.result?.fullName,
         label: "Your Name",
         rules: {
           required: true,
         },
+        visible:false
       },
       EmailId: {
         type: "text",
-        value: "",
+        value: data?.result?.emailId,
         label: "Your Email Id",
         rules: {
           required: true,
         },
+        visible:false
+      },
+      Subject: {
+        type: "text",
+        value: "",
+        label: "Subject Type",
+        maxLength: 100,
+        rules: {
+          required: true,
+        },
+      },
+      ScreenShot:{
+        type: "ImagesList",
+        value: "",
+        label: "Images List",
+        rules: {
+          required: false,
+        },
+        autofill:{
+         key:"ScreenShot",
+        },
+        style: {
+          height: "220px !important"
+        }
       },
       Message: {
         type: "textarea",
@@ -47,7 +75,7 @@ export class ContactusTechnicalComponent implements OnInit {
         style: {
           height: "220px !important"
         }
-      }
+      },
     }, 'ContactUsTechnical');
   }
   onChangesContactUsTechnical(value: any) {
