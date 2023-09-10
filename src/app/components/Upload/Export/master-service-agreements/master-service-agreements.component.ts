@@ -103,7 +103,7 @@ export class MasterServiceAgreementsComponent implements OnInit {
             required: true,
           }
         },
-        buyerName: {
+        PartyName: {
           type: "buyer",
           value: "",
           label: "Overseas Party Name*",

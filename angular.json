@@ -207,8 +207,8 @@
               "builder": "@nguniversal/builders:ssr-dev-server",
               "configurations": {
                 "development": {
-                  "browserTarget": "angular-starter:build:development",
-                  "serverTarget": "angular-starter:server:development"
+                  "browserTarget": "DevBuildSSR/DevBuild:build:development",
+                  "serverTarget": "DevBuildSSR/DevBuild:server:development"
                 },
                 "production": {
                   "browserTarget": "angular-starter:build:production",

@@ -1,5 +1,5 @@
 <upload-components-header title="Upload/Import/Master service agreement" id="Shippingbill"
-    (UploadHeaderEvent)="clickPipo($event)">
+    (UploadHeaderEvent)="clickPipo($event)" [PIPO_DISABLED]="false">
     <div class="upload-panel" *ngIf="publicUrl!=''">
         <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
             Newheight="700px"></app-pdf-viewer>

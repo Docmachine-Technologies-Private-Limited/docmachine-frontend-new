@@ -84,6 +84,30 @@ export class ImportOpinionReportComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        ForeignPartyName: {
+          type: "benne",
+          value: "",
+          label: "Foreign benne Name",
+          rules: {
+            required: true,
+          }
+        },
+        ReportDate: {
+          type: "date",
+          value: "",
+          label: "Report Date",
+          rules: {
+            required: true,
+          }
+        },
+        ReportRatings: {
+          type: "text",
+          value: "",
+          label: "Report Ratings",
+          rules: {
+            required: true,
+          }
         }
       },'ImportOpinionreport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
@@ -96,7 +120,6 @@ export class ImportOpinionReportComponent implements OnInit {
     e.value.file = 'import';
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
     e.value.currency = e.value?.currency?.type;
     console.log(e.value);
     this.documentService.getInvoice_No({

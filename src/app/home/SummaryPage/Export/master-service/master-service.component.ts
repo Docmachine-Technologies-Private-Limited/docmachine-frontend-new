@@ -167,7 +167,7 @@ export class MasterServiceComponent implements OnInit {
           masterServiceNumber: element['masterServiceNumber'],
           StartDate: moment(element['StartDate']).format("YYYY-MM-DD"),
           Expirydate: moment(element['Expirydate']).format("YYYY-MM-DD"),
-          PartyName: element['buyerName']?.value,
+          PartyName: element['PartyName']?.value,
           masterServiceAmount: element['masterServiceAmount'],
           currency: element['currency'],
           buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
