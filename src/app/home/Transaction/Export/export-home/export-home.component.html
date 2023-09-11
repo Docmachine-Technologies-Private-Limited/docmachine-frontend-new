@@ -39,7 +39,9 @@
                       (click)="removeClick(i)" style="color: red;    cursor: pointer;padding: 0 0 0 8px;"><i
                         class="fa fa-times" aria-hidden="true"></i></b></span> </div>
                 <br />
-                <button style="margin-top: 10px;" class="button1" (click)="proceedClick()">Proceed</button>
+                <!-- <custom-mat-step-last-button>
+                  <button style="margin-top: 10px;" class="button1" (click)="proceedClick()">Proceed</button>
+                 </custom-mat-step-last-button> -->
               </div>
               <table class="table table-striped mb-0 change_theheading"
                 style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
@@ -1021,19 +1023,19 @@
                     <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
                   </div>
                   <br>
-                  <div *ngIf='bankToggle'> <span> Credit to {{bankValue}}*</span>
+                  <div *ngIf='bankToggle'> <span>Credit A/C No.*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
                         value="value.bank" name="BankToCredit" (click)="creditTo(value)">
                       <label style="flex-direction:row;" class="label1"
-                        for="male">{{value.bank}}-{{value.accType}}</label>
+                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value.accNumber}}</label>
                     </div>
-                    <br><span>Charges To {{bankValue}}*</span>
+                    <br><span>Charges A/C No.*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
                         value="value.bank" name="BankToCharge" (click)="chargesTo(value)">
                       <label style="flex-direction:row;" class="label1"
-                        for="male">{{value.bank}}-{{value.accType}}</label>
+                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value.accNumber}}</label>
                     </div>
                     <br>
                   </div>

@@ -276,7 +276,7 @@
             <li
               *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true && this.userData['Transaction']==true">
               <a href="#ImportTransactionDashBoard" data-toggle="collapse" aria-expanded="false"
-                class="dropdown-toggle">Transaction Summary</a>
+                class="dropdown-toggle">Transaction Dashboard</a>
               <ul class="collapse list-unstyled" id="ImportTransactionDashBoard">
                 <li class="nav-item">
                 <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST?.Import">
@@ -426,7 +426,7 @@
             <li
               *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true  && this.userData['Transaction']==true">
               <a href="#TransactionDashBoard" data-toggle="collapse" aria-expanded="false"
-                class="dropdown-toggle">Transaction Summary</a>
+                class="dropdown-toggle">Transaction Dashboard</a>
               <ul class="collapse list-unstyled" id="TransactionDashBoard">
                 <li class="nav-item">
                 <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST?.Export">

@@ -270,12 +270,14 @@
                                     <div class="space_bottom"></div>
                                   </div>
                                   <div
-                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" 
+                                    && this.Lodgement["DirectDispatch"]["Hide"]== "no" && this.Lodgement["UnderLC"]["Show"]==="yes"'
                                     class="col-md-8 col-sm-8 col-7">
                                     <label for="email" class="form-label">With Scrutiny?</label>
                                   </div>
                                   <div
-                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"
+                                    && this.Lodgement["DirectDispatch"]["Hide"]== "no" && this.Lodgement["UnderLC"]["Show"]==="yes"'
                                     class="col-md-4 col-sm-4 col-5">
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('WithScrutiny','Hide','btn no-button active1',
@@ -368,7 +370,7 @@
                                   <div class="space_bottom"></div>
                                   <div *ngIf='Bank_Name.selectedItems!=""' style="width:100%;">
                                     <div class="col-md-12 col-sm-12 col-12">
-                                      Charges to {{Bank_Name.selectedItems}}*
+                                      Charges A/C No.*
                                       <div *ngFor='let value of newBankArray'
                                         style="display: flex; align-items: center;">
                                         <input style="flex-direction:row;" [value]="value" name="Charges_to_Bank"
@@ -376,15 +378,15 @@
                                           type="radio" id="options1" class="circular_input1"
                                           (click)="chargesTo(value);">
                                         <label style="flex-direction:row;" class="label1"
-                                          for="male">{{value.bank}}-{{value.accType}}</label>
+                                          for="male">{{value.bank}} - {{value.accType?.split("-")[0]}} - {{value.accNumber}}</label>
                                       </div>
                                       <br>
                                     </div>
                                   </div>
                                   
-                                  <button type="button" class="btn btn-success PopupOpen"
+                                  <!-- <button type="button" class="btn btn-success PopupOpen"
                                   popup-close="HS_CODE_POPUP">
-                                  Select HS Code</button>
+                                  Select HS Code</button> -->
                                   <!-- <div class="col-md-4 col-sm-4 col-5 column" style="display: grid;
                                   grid-template-columns: repeat(2,1fr);
                                   max-width: 93%;

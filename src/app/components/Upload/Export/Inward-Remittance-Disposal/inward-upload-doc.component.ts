@@ -110,8 +110,8 @@ export class InwardUploadDocumentsComponent implements OnInit {
         },
         Inward_amount_for_disposal: {
           type: "number",
-          value: "",
-          label: "Inward amount for disposal",
+          value: this.replaceText(args[1]?.data[0]['Amount'],'32A')==''?0 : this.replaceText(args[1]?.data[0]['Amount'],'32A'),
+          label: "Disposal Amount",
           rules: {
             required: true,
           }

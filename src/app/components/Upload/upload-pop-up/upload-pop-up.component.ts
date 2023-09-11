@@ -12,6 +12,7 @@ export class UploadPopUpComponent implements OnInit {
   @Input('style') style: any = '';
   @Input('name') name: any = 'Upload Documents';
   @Input('url') url: any = '';
+  @Input('UploadFilesNames') UploadFilesNames: any = 'Upload Files';
   @Output('event') event: any = new EventEmitter();
   public config: DropzoneConfigInterface;
 

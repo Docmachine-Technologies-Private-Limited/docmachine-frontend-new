@@ -94,14 +94,14 @@ export class ImportPIPOSComponent implements OnInit {
           value: "",
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Non Capital Goods", value: 'Non Capital Goods' },
+            { text: "Raw Material", value: 'Raw Material' },
             { text: 'Capital Goods', value: 'Capital Goods' },
             { text: 'Services', value: 'Services' },
             { text: 'Samples', value: 'Samples' },
             { text: 'Repairs and returns', value: 'Repairs and returns' }
           ],
           NotificationShow: {
-            "Non Capital Goods": "",
+            "Raw Material": "",
             "Services": "No BOE traceability and applicability.",
             "Capital Goods": "If goods are first imported and to be sent out, FOC should be marked in BOE and while doing export BOE number should be captured.",
             "Samples": "Invoice should be sent to CHA for marking FOC in the BOE.",
@@ -163,14 +163,6 @@ export class ImportPIPOSComponent implements OnInit {
           type: "location",
           value: "",
           label: "Branch",
-          rules: {
-            required: true,
-          }
-        },
-        lastDayShipment: {
-          type: "date",
-          value: "",
-          label: "Last date of shipment",
           rules: {
             required: true,
           }
@@ -243,19 +235,19 @@ export class ImportPIPOSComponent implements OnInit {
           formArray: [
             [
               {
-                type: "date",
+                type: "PaymentTermType",
                 value: "",
-                label: "Last date of shipment",
-                name: 'date',
+                label: "Type",
+                name: 'type',
                 rules: {
                   required: true,
                 },
               },
               {
-                type: "PaymentTermType",
+                type: "date",
                 value: "",
-                label: "Type",
-                name: 'type',
+                label: "Last date of shipment",
+                name: 'date',
                 rules: {
                   required: true,
                 },

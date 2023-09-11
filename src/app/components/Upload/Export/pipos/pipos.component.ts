@@ -53,6 +53,18 @@ export class PIPOSComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].publicUrl;
       this.validator.buildForm({
+        document: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Select the type of document",
+          checkboxlabel: [
+            { text: "Proforma Inovice", value: 'PI' },
+            { text: 'Purchase Order', value: 'PO' }
+          ],
+          rules: {
+            required: true,
+          }
+        },
         buyerName: {
           type: "buyer",
           value: "",
@@ -61,56 +73,10 @@ export class PIPOSComponent implements OnInit {
             required: true,
           }
         },
-        commodity: {
-          type: "commodity",
+        HSCODE: {
+          type: "HSCODE",
           value: "",
-          label: "Choose commodity",
-          rules: {
-            required: true,
-          }
-        },
-        MaterialTypes: {
-          type: "MultiCheckBox",
-          value: "",
-          label: "Type of goods category",
-          checkboxlabel: [
-            { text: "Non Capital Goods", value: 'Non Capital Goods' },
-            { text: 'Capital Goods', value: 'Capital Goods' },
-            { text: 'Services', value: 'Services' },
-            { text: 'Samples', value: 'Samples' },
-            { text: 'Repairs and returns', value: 'Repairs and returns' }
-          ],
-          NotificationShow: {
-            "Non Capital Goods": "",
-            "Services": "No SB traceability and applicability (SB+9months criteria not applicable).",
-            "Capital Goods": "",
-            "Samples": "Invoice should be sent to CHA for marking FOC in the SB,CHA Email id should be mandatorily registered if not to Admin.",
-            "Repairs and returns": "GR waiver form should be made available."
-          },
-          rules: {
-            required: true,
-          }
-        },
-        ConsigneeName: {
-          type: "consignee",
-          value: "",
-          label: "Consignee Name",
-          rules: {
-            required: true,
-          }
-        },
-        RemitterName: {
-          type: "RemitterName",
-          value: "",
-          label: "Remitter Name",
-          rules: {
-            required: false,
-          }
-        },
-        document: {
-          type: "typedocument",
-          value: "",
-          label: "Select the type of document",
+          label: "Select HS Code",
           rules: {
             required: true,
           }
@@ -147,6 +113,63 @@ export class PIPOSComponent implements OnInit {
             required: true,
           }
         },
+        MaterialTypes: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Type of goods category",
+          checkboxlabel: [
+            { text: "Raw Material", value: 'Raw Material' },
+            { text: 'Capital Goods', value: 'Capital Goods' },
+            { text: 'Services', value: 'Services' },
+            { text: 'Samples', value: 'Samples' },
+            { text: 'Repairs and returns', value: 'Repairs and returns' }
+          ],
+          NotificationShow: {
+            "Raw Material": "",
+            "Services": "No SB traceability and applicability (SB+9months criteria not applicable).",
+            "Capital Goods": "",
+            "Samples": "Invoice should be sent to CHA for marking FOC in the SB,CHA Email id should be mandatorily registered if not to Admin.",
+            "Repairs and returns": "GR waiver form should be made available."
+          },
+          HideShowInput: {
+            Services: ["incoterm", "ModeofTransport"],
+          },
+          LabelNameChange: {
+            Services: {
+              paymentTerm: {
+                type: "formGroup",
+                name: "lastDayShipment",
+                labelChange: "Last date of delivery"
+              }
+            },
+            default: {
+              paymentTerm: {
+                type: "formGroup",
+                name: "lastDayShipment",
+                labelChange: "Last date of shipment"
+              }
+            }
+          },
+          rules: {
+            required: true,
+          }
+        },
+        ConsigneeName: {
+          type: "consignee",
+          value: "",
+          label: "Consignee Name",
+          rules: {
+            required: true,
+          }
+        },
+        RemitterName: {
+          type: "RemitterName",
+          value: "",
+          label: "Remitter Name",
+          rules: {
+            required: false,
+          }
+        },
         incoterm: {
           type: "IncoTerm",
           value: "",
@@ -159,22 +182,6 @@ export class PIPOSComponent implements OnInit {
           type: "location",
           value: "",
           label: "Branch",
-          rules: {
-            required: true,
-          }
-        },
-        lastDayShipment: {
-          type: "date",
-          value: "",
-          label: "Last date of shipment",
-          rules: {
-            required: true,
-          }
-        },
-        HSCODE: {
-          type: "HSCODE",
-          value: "",
-          label: "Select HS Code",
           rules: {
             required: true,
           }
@@ -284,19 +291,19 @@ export class PIPOSComponent implements OnInit {
           formArray: [
             [
               {
-                type: "date",
+                type: "PaymentTermType",
                 value: "",
-                label: "Last date of shipment",
-                name: 'date',
+                label: "Type",
+                name: 'type',
                 rules: {
                   required: true,
                 },
               },
               {
-                type: "PaymentTermType",
+                type: "date",
                 value: "",
-                label: "Type",
-                name: 'type',
+                label: "Last date of shipment",
+                name: 'lastDayShipment',
                 rules: {
                   required: true,
                 },

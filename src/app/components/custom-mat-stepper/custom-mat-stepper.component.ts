@@ -9,9 +9,13 @@ import $ from 'jquery';
 })
 export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   @Input('data') data: any = [];
+  @Input('LAST_BUTTON_NAME') LAST_BUTTON_NAME: any ="";
   @ContentChildren(CustomMatStepComponent) MatStepComponent: QueryList<CustomMatStepComponent>;
   @ViewChild('MatStepperHeaderPanel') MatStepperHeaderPanel: ElementRef;
   @Output('event') event: any = new EventEmitter();
+  @Output('lastbuttonEvent') lastbuttonEvent: any = new EventEmitter();
+  @Input('LAST_BUTTON_VISIBLE') LAST_BUTTON_VISIBLE: boolean =false;
+
   BUTTON_COUNTER: number = 0;
   BACK_BUTTON_DISABLED: boolean = false;
   NEXT_BUTTON_DISABLED: boolean = false;
@@ -41,6 +45,10 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+  
+  lastbuttonclick(){
+    this.lastbuttonEvent.emit(true);
   }
 
   setBack() {

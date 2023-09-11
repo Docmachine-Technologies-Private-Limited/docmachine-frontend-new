@@ -186,12 +186,13 @@
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'MultiCheckBox'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [(ngModel)]="field.value">
+                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [(ngModel)]="field.value"
+                    (event)="HideShowInput($event,field?.HideShowInput,fieldIndex);onLabelNameChange($event,field?.LabelNameChange,fieldIndex)">
                     </custom-checkbox>
-                    <label style="color: green;"
-                        *ngIf="field?.value!=undefined && field?.value!='' && field?.NotificationShow[field.value]!=undefined">{{field?.NotificationShow[field.value]}}</label>
+                    <!-- <label style="color: green;"
+                        *ngIf="field?.value!=undefined && field?.value!='' && field?.NotificationShow[field.value]!=undefined">{{field?.NotificationShow[field.value]}}</label> -->
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'" [formArrayName]="field.fieldName">
+                <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'" [ngClass]="{'hidden': field?.disabled==true}" [formArrayName]="field.fieldName">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName"
                         (event)="field.value=$event">
@@ -359,7 +360,7 @@
                                         <label
                                             *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
                                         <ng-select
-                                            [items]="[{value:'Advance Payment'},{value:'Letter of Credit'},{value:'Collection Bill'},{value:'Direct Dispatch'}]"
+                                            [items]="[{value:'Advance Payment'},{value:'Letter of Credit'},{value:'CAD(Cash Against Devliery)'},{value:'Direct Dispatch'}]"
                                             bindLabel="value" [multiple]="false"
                                             [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
                                             [name]="FormOptionfield?.value?.name"
@@ -431,7 +432,7 @@
                         [name]="field.fieldName" [(ngModel)]="field.value" required>
                     </ng-select>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'IncoTerm'">
+                <div class="form-group mb-3" *ngSwitchCase="'IncoTerm'" [ngClass]="{'hidden': field?.disabled==true}">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div class="row m-0">
                         <ng-select style="width: 86% !important;"

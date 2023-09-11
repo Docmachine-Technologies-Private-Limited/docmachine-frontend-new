@@ -22,7 +22,8 @@
       *ngIf="this.HEADER_DATA[this.BUTTON_COUNTER]?.errorMessage!='' && this.ERROR_MESSAGE_SHOW==true"
       [innerHTML]="this.HEADER_DATA[this.BUTTON_COUNTER]?.errorMessage"></p>
     <button class="btn btn-primary" (click)="setBack()" [disabled]="this.BACK_BUTTON_DISABLED">Back</button>
-    <button class="btn btn-primary" (click)="setNext()" [disabled]="this.NEXT_BUTTON_DISABLED">Next</button>
-    <button class="btn btn-primary" *ngIf="this.NEXT_BUTTON_DISABLED==true">Done</button>
+    <button class="btn btn-primary" (click)="setNext()" *ngIf="this.MatStepComponent?.length!=(this.BUTTON_COUNTER+1)" [disabled]="this.NEXT_BUTTON_DISABLED">Next</button>
+    <button class="btn btn-primary" (click)="lastbuttonclick()" 
+    *ngIf="this.MatStepComponent?.length==(this.BUTTON_COUNTER+1) && LAST_BUTTON_VISIBLE==true">{{LAST_BUTTON_NAME}}</button>
   </div>
 </div>

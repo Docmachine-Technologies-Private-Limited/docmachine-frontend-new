@@ -1,5 +1,5 @@
 <div class="col-12 mt-2">
-    <custom-mat-stepper>
+    <custom-mat-stepper LAST_BUTTON_NAME="Proceed" [LAST_BUTTON_VISIBLE]="lastbutton?.proceedtrue" (lastbuttonEvent)="lastbutton?.proceedClick">
         <custom-mat-step MATSTEP_LABEL="Select Inward Remittance Disposal No." errorMessage="Please select Disposal No."
             [NextTrue]="this.Inward_Remittance_MT103?.length!=0 && this.Inward_Remittance_MT103?.length!=undefined?true:false">
             <form>
@@ -79,7 +79,8 @@
             </div>
         </custom-mat-step>
         <custom-mat-step MATSTEP_LABEL="Edit Forward Ref No." errorMessage="Please fill all field value..."
-            [NextTrue]="true" (FormSubmit)="ForwardRefPanel?.onClickButton" [Form]="ForwardRefPanel?.geForm" [FormTrue]="true">
+            [NextTrue]="true" (FormSubmit)="ForwardRefPanel?.onClickButton" [Form]="ForwardRefPanel?.geForm"
+            [FormTrue]="true">
             <div class="col-12 pt-3">
                 <form>
                     <upload-components id="ForwardRef" (RawValueEvent)="ForwardRefFormValue($event)"
@@ -88,10 +89,12 @@
                 </form>
             </div>
         </custom-mat-step>
-        <custom-mat-step MATSTEP_LABEL="Select Purpose Code" errorMessage="Please select Purpose code value..." [NextTrue]="this.InwardDisposalNext">
-            <div class="col-12 pt-3" >
+        <custom-mat-step MATSTEP_LABEL="Select Purpose Code" errorMessage="Please select Purpose code value..."
+            [NextTrue]="this.InwardDisposalNext">
+            <div class="col-12 pt-3">
                 <form>
-                    <app-export-home [data]="[this.INWARD_DISPOSAL_VALUE_FORM,this.FORWARD_REF_VALUE_FORM]" [InwardDisposalData]="this.INWARD_DISPOSAL_VALUE_FORM"
+                    <app-export-home #lastbutton [data]="[this.INWARD_DISPOSAL_VALUE_FORM,this.FORWARD_REF_VALUE_FORM]"
+                        [InwardDisposalData]="this.INWARD_DISPOSAL_VALUE_FORM"
                         [ForwardNo]="this.FORWARD_REF_VALUE_FORM"></app-export-home>
                 </form>
             </div>

@@ -295,8 +295,8 @@ export class UploadServiceValidatorService implements OnInit {
           let optiontemp: any = {};
           let OptiontempFormGroup: any = {};
           element?.forEach(optionelement => {
-            optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
-            OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
+            optiontemp[optionelement?.name?.toString()] = ({ ...optionelement, fieldName: optionelement?.name });
+            OptiontempFormGroup[optionelement?.name?.toString()] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
               this.setRequired(optionelement?.minLength,
               optionelement?.maxLength, optionelement?.rules, formid,fieldProps)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });

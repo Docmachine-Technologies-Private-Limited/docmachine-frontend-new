@@ -639,7 +639,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         i++
       }
-      this.selectedPurpose = newArray
+      this.selectedPurpose = newArray;
     }
     else {
       this.Question5 = '';
@@ -710,19 +710,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   changeCheckboxPIPO(event: any, value, data: any) {
     this.selectPIPO_data.push(data)
     let sumpipoamount: any = this.selectPIPO_data?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.amount) }, 0);
-    if ((sumpipoamount >= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal))) {
-      let j = this.selectPIPO.indexOf(value);
-      if (j == -1) {
-        this.selectPIPO.push(value);
-      }
-      else {
-        this.selectPIPO.splice(j, 1);
-        this.selectPIPO_data.splice(j, 1)
-      }
-    } else {
-      this.selectPIPO_data.pop();
-      event.target.checked = false;
-      this.toastr.error("You don't have much enough money...");
+    let j = this.selectPIPO.indexOf(value);
+    if (j == -1) {
+      this.selectPIPO.push(value);
+    }
+    else {
+      this.selectPIPO.splice(j, 1);
+      this.selectPIPO_data.splice(j, 1)
     }
     console.log(this.selectPIPO, sumpipoamount, this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal, this.selectPIPO_data, 'selectPIPO')
   }
@@ -2745,8 +2739,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         (err) => console.log("ERROR")
       );
     });
-
-
+  }
+  get proceedtrue() {
+    return this.selectedPurpose?.length != 0 ? true : false;
   }
   OLD_INPUT_VALUE: string = '';
   purposeClick(e, f, inputid: any) {
@@ -2757,8 +2752,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         else if (!this.selectedPurpose.includes(e)) {
           this.OLD_INPUT_VALUE = e;
-          // $(inputid).val(e);
-          // this.searchData(e)
           this.selectedPurpose.push(e)
           this.toastr.info(`Purpose code added`);
           this.selection = this.selectedPurpose[0];
@@ -2767,15 +2760,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       else {
         this.toastr.warning(`You can't add this purpose code`);
       }
-
     }
     else {
       this.toastr.error(`Click on purpose code`);
     }
-
-    // this.select = true;
-    // this.purposeCode = e
-    // this.detail = f
   }
 
   removeClick(i) {
@@ -2799,11 +2787,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.mailArray[j] != code
     code !== this.c
     this.importPurpose[j] != code
-    //  this.doneImportPurpose[j] == code
-
   }
 
-  proceedClick() {
+  get proceedClick() {
     console.log("gggg")
     this.proceed = false
     this.c = this.selectedPurpose[0];
@@ -2824,6 +2810,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       i++
     }
     this.z = this.selectedPurpose.length
+    return;
   }
 
   tabClick(a, i) {
