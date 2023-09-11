@@ -109,7 +109,26 @@ export class ImportPIPOSComponent implements OnInit {
           },
           rules: {
             required: true,
-          }
+          },
+          HideShowInput: {
+            Services: ["incoterm", "ModeofTransport"],
+          },
+          LabelNameChange: {
+            Services: {
+              paymentTerm: {
+                type: "formGroup",
+                name: "lastDayShipment",
+                labelChange: "Last date of delivery"
+              }
+            },
+            default: {
+              paymentTerm: {
+                type: "formGroup",
+                name: "lastDayShipment",
+                labelChange: "Last date of shipment"
+              }
+            }
+          },
         },
         pi_poNo: {
           type: "text",

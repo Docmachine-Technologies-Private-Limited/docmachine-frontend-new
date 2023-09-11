@@ -94,15 +94,6 @@ export class NewExportHomeTransactionComponent implements OnInit {
           required: true,
         }
       },
-      Bill_lodgment_Number: {
-        type: "text",
-        value: this.Inward_Remittance_MT103[0]?.Bill_lodgment_Number,
-        label: "BL. Number",
-        disabled: true,
-        rules: {
-          required: true,
-        }
-      },
       Remitter_Name: {
         type: "text",
         value: this.Inward_Remittance_MT103[0]?.Remitter_Name,

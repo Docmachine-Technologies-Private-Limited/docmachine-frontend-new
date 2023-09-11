@@ -933,11 +933,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       getAllFields?.forEach(element => {
         const elementvalue: any = element?.acroField?.dict?.values();
         if (elementvalue[0]?.encodedName == '/Tx') {
-          element?.setFontSize(11);
+          element?.setFontSize(8);
           element?.enableReadOnly();
           const [widget]: any = element?.acroField?.getWidgets();
           widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
-          element?.enableCombing(); // trying to restore combing
         }
       });
       getAllFields[0].setText(this.COMPANY_INFO?.BranchName)
@@ -962,8 +961,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
       getAllFields[21].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal).toUpperCase())
       getAllFields[22].setText(updatedata?.Inward_amount_for_disposal)
-      getAllFields[23].setText(this.buyerAds)
-      getAllFields[24].setText(a['buyerName'])
+      getAllFields[23].setText(a['buyerName'])
+      getAllFields[24].setText(this.buyerAds)
       getAllFields[25].setText('ADVANCE AGAINST EXPORT')
       getAllFields[25].setFontSize(8);
       getAllFields[26].setText(this.generatePurpose[0])

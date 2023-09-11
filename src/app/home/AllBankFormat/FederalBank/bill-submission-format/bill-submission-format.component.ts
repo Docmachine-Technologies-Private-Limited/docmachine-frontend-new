@@ -76,8 +76,8 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
       getAllFields[9]?.setText('');
       getAllFields[10]?.setText('');
       getAllFields[11]?.setText('');
-      getAllFields[12]?.setText(this.SELECT_BUYER_DETAILS?.buyerName);
-      getAllFields[13]?.setText(this.SELECT_BUYER_DETAILS?.buyerAdrs);
+      getAllFields[13]?.setText(this.SELECT_BUYER_DETAILS?.buyerName);
+      getAllFields[12]?.setText(this.SELECT_BUYER_DETAILS?.buyerAdrs);
       getAllFields[14]?.setText('');
       getAllFields[15]?.setText('');
       getAllFields[16]?.setText('');

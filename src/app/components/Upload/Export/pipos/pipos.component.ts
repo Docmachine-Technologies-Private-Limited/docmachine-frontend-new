@@ -118,16 +118,14 @@ export class PIPOSComponent implements OnInit {
           value: "",
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Raw Material", value: 'Raw Material' },
-            { text: 'Capital Goods', value: 'Capital Goods' },
+            { text: "Finished Goods", value: 'Finished Goods' },
             { text: 'Services', value: 'Services' },
             { text: 'Samples', value: 'Samples' },
             { text: 'Repairs and returns', value: 'Repairs and returns' }
           ],
           NotificationShow: {
-            "Raw Material": "",
+            "Finished Goods": "",
             "Services": "No SB traceability and applicability (SB+9months criteria not applicable).",
-            "Capital Goods": "",
             "Samples": "Invoice should be sent to CHA for marking FOC in the SB,CHA Email id should be mandatorily registered if not to Admin.",
             "Repairs and returns": "GR waiver form should be made available."
           },

@@ -108,14 +108,6 @@ export class InwardUploadDocumentsComponent implements OnInit {
             required: true,
           }
         },
-        Inward_amount_for_disposal: {
-          type: "number",
-          value: this.replaceText(args[1]?.data[0]['Amount'],'32A')==''?0 : this.replaceText(args[1]?.data[0]['Amount'],'32A'),
-          label: "Disposal Amount",
-          rules: {
-            required: true,
-          }
-        },
       }, 'inwardremittancedisposal');
     }, 200);
 
