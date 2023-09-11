@@ -39,7 +39,7 @@ import moment from 'moment';
   selector: 'app-pipo-documents',
   templateUrl: './pipo-documents.component.html',
   styleUrls: [
-    
+
     './pipo-documents.component.scss',
   ],
 })
@@ -287,7 +287,7 @@ export class PipoDocumentsComponent implements OnInit {
         console.log('Data fetched successfully', res);
         this.item = res.data;
         console.log(this.item);
-        this.item1=[];
+        this.item1 = [];
         this.pipoDataService.setPipoData(res.data, 'import');
         this.pipoDataService.pipo$.subscribe((data) => {
           for (let value of data) {
@@ -318,7 +318,7 @@ export class PipoDocumentsComponent implements OnInit {
         console.log(this.item);
         this.pipoDataService.setPipoData(res.data, 'import');
         this.pipoDataService.pipo$.subscribe((data) => {
-          this.item1=[];
+          this.item1 = [];
           for (let value of data) {
             this.item1.push(value);
             this.mergeBoe();
@@ -1112,7 +1112,7 @@ export class PipoDocumentsComponent implements OnInit {
           STATUSOFBOESUBMISSIONINBANK: "NF",
         }])?.forEach(adviceelement => {
           advice.push({
-            TTDATE:  moment(adviceelement['date']).format("YYYY-MM-DD"),
+            TTDATE: moment(adviceelement['date']).format("YYYY-MM-DD"),
             TTUSD: adviceelement['amount'],
             PaymentDate: adviceelement['amount'],
             Amount: adviceelement['amount'],
@@ -1127,9 +1127,9 @@ export class PipoDocumentsComponent implements OnInit {
           })
         });
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          DATE: moment(element['date']).format("YYYY-MM-DD"),
+          DATE: moment(element['purchasedate']).format("YYYY-MM-DD"),
           INVOICENUMBER: element['pi_poNo'],
-          INVOICEDATE: moment(element['purchasedate']).format("YYYY-MM-DD"),
+          INVOICEDATE: moment(element['date']).format("YYYY-MM-DD"),
           SELLERNAMES: element['benneName'],
           INVOICECURRENCY: element['currency'],
           INVOICEVALUEUSD: element['amount'],
