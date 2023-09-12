@@ -8,7 +8,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { DocumentService } from '../../../../service/document.service';
 import { UserService } from '../../../../service/user.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from '../../../shared-Data-Servies/shared-data.service';
 import * as xlsx from 'xlsx';
 import * as data1 from '../../../../currency.json';
@@ -310,60 +310,6 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     ]);
   }
 
-  // merging() {
-  //   let filterForexData: any = [];
-  //   if (this.item5 && this.item5.length) {
-  //     for (let irData of this.item1) {
-  //       console.log('irdata', irData);
-  //       var temp: any = [];
-  //       for (let shippingdata of this.item5) {
-  //         console.log('shipping', shippingdata);
-  //         temp['deleteflag'] = shippingdata['deleteflag']
-  //         for (let i = 0; i <= irData.sbNo.length; i++) {
-  //           console.log('index of shipping Bill', irData.sbNo[i]);
-  //           if (irData.sbNo[i] == shippingdata.sbno) {
-  //             const newVal: any = { ...irData };
-  //             console.log('Line no. 211', newVal);
-  //             let sbBalance = shippingdata.fobValue;
-  //             let irAmount = irData.amount
-  //             let availableBalance = irAmount - sbBalance;
-
-  //             if (availableBalance <= 0) {
-  //               newVal['BalanceAvail'] = 0;
-  //             } else {
-  //               newVal['BalanceAvail'] = availableBalance;
-  //             }
-
-  //             console.log('Forex data Value', newVal);
-  //             filterForexData.push(newVal);
-  //           }
-  //         }
-  //       }
-  //     }
-  //     for (let irData of this.item1) {
-  //       console.log("229", irData.sbNo.length)
-  //       if (irData.sbNo.length == 0) {
-  //         const newVal = { ...irData };
-  //         let availableBal = irData.amount
-  //         newVal['BalanceAvail'] = availableBal;
-  //         filterForexData.push(newVal);
-  //         console.log('235', filterForexData);
-  //       }
-  //     }
-
-  //   } else {
-  //     for (let ir of this.item1) {
-  //       const newVal = { ...ir };
-  //       let availableBal = ir.amount
-  //       newVal['BalanceAvail'] = availableBal;
-  //       filterForexData.push(newVal);
-  //       console.log('245', filterForexData);
-  //     }
-  //   }
-  //   this.item6 = filterForexData
-  //   console.log("Full data", this.item6)
-  // }
-
   openIradvice(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
       (result) => {
@@ -406,18 +352,24 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      sbno: this.SELECTED_VALUE['sbno'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-      BankName: this.SELECTED_VALUE['BankName'],
-      currency: this.SELECTED_VALUE['currency'],
-      amount: this.SELECTED_VALUE['amount'],
-      billNo: this.SELECTED_VALUE['billNo'],
-      BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   sbno: this.SELECTED_VALUE['sbno'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    //   BankName: this.SELECTED_VALUE['BankName'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   amount: this.SELECTED_VALUE['amount'],
+    //   billNo: this.SELECTED_VALUE['billNo'],
+    //   BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/InwardRemittanceAdvice`],navigationExtras);
     this.toastr.warning('Forex Advice Row Is In Edit Mode');
   }
 

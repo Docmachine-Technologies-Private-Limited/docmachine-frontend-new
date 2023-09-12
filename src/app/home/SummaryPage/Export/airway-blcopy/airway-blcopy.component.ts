@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnChanges, SimpleChanges, Input } from '@angular/core';
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -268,15 +268,21 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      airwayBlCopydate: this.SELECTED_VALUE['airwayBlCopydate'],
-      sbNo: this.SELECTED_VALUE['sbNo'],
-      airwayBlCopyNumber: this.SELECTED_VALUE['airwayBlCopyNumber'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   airwayBlCopydate: this.SELECTED_VALUE['airwayBlCopydate'],
+    //   sbNo: this.SELECTED_VALUE['sbNo'],
+    //   airwayBlCopyNumber: this.SELECTED_VALUE['airwayBlCopyNumber'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/AirwayBlCopy`],navigationExtras);
     this.toastr.warning('Airway / BlCopy Is In Edit Mode');
   }
 

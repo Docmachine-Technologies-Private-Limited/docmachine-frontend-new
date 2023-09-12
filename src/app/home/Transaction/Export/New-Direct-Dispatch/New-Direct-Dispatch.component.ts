@@ -1995,6 +1995,14 @@ export class NewDirectDispatchComponent implements OnInit {
     'ThirdPartyRemittance': {
       Show: '',
       Hide: ''
+    },
+    Sight:{
+      Show: '',
+      Hide: ''
+    },
+    Usance:{
+      Show: '',
+      Hide: ''
     }
   }
   ClassRetrun(mainkey, key, class1, class2, condition) {

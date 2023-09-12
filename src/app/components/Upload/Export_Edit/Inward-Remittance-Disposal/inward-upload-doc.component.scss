@@ -1,0 +1,95 @@
+.content-wrap {
+    margin: auto;
+}
+
+.import_export_sec {
+    margin: auto;
+    margin-left: 0;
+}
+
+.filter_section_top {
+    display: grid;
+    width: 100%;
+    background-color: #22343f !important;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: 5px 0px 10px 5px #597a8a;
+    padding: 2px;
+}
+
+.middle_datatable .support {
+    height: calc(100vh - 159px);
+}
+
+.table-padding {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.content-wrap.scroll-bar-main {
+    overflow: hidden;
+    padding: 0;
+}
+
+.filter_right_new.padding_new_top {
+    display: flex;
+    gap: 10px;
+}
+
+.heading_common_tag {
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 400;
+    color: floralwhite;
+    margin-left: 20px;
+}
+
+.upload-panel {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    padding: 10px;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.form-container-fluid {
+    width: 100%;
+    padding: 10px;
+    overflow: auto;
+    height: 86vh;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.division-panel {
+    box-shadow: 0px 0px 2px 2px #d5d0d0;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.custom {
+    width: 300px;
+}
+
+.custom ::ng-deep .ng-select .ng-select-container{
+    color: #333;
+    background-color: #fff;
+    border-radius: 0;
+    border: 1px solid #ccc;
+    min-height: 36px;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.header{
+    background: cadetblue;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: end;
+}

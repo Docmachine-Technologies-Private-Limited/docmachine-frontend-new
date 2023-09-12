@@ -7,7 +7,7 @@ import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../../../confirm-
 import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import moment from 'moment';
 
 @Component({
@@ -97,7 +97,7 @@ export class PipoExportComponent implements OnInit {
       this.dataSource = res.docs;
       this.PIPOTable(this.dataSource)
       console.log("res", sort_of_deleteflag_1, sort_of_deleteflag_2, this.dataSource);
-      if (this.paginator.length!=undefined) {
+      if (this.paginator.length != undefined) {
         this.paginator.length = res.totalDocs
       }
     })
@@ -225,7 +225,7 @@ export class PipoExportComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
-         dummydata: index,
+        dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
         FileType: this.USER_DATA?.result?.sideMenu
@@ -237,7 +237,12 @@ export class PipoExportComponent implements OnInit {
   }
 
   toEdit(data: any) {
-    this.router.navigate([`/home/edit-pipo/export/` + this.dataSource[data?.index]?._id])
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.dataSource[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/PIPO`],navigationExtras);
   }
 
   toView(data: any) {

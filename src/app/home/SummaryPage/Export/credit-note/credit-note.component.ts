@@ -16,7 +16,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Data, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, Data, NavigationExtras, NavigationStart, Router } from '@angular/router';
 import * as xlsx from 'xlsx';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
@@ -269,15 +269,21 @@ export class CreditNoteSummaryComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      creditNoteNumber: this.SELECTED_VALUE['creditNoteNumber'],
-      creditNoteAmount: this.SELECTED_VALUE['creditNoteAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   creditNoteNumber: this.SELECTED_VALUE['creditNoteNumber'],
+    //   creditNoteAmount: this.SELECTED_VALUE['creditNoteAmount'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/CreditNoteDocument`],navigationExtras);
     this.toastr.warning('Credit Note Row Is In Edit Mode');
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -110,8 +110,8 @@ export class InwardRemittanceDisposalComponent implements OnInit {
           currency: element['currency'],
           amount: element['amount'],
           Remitter_Name: element['Remitter_Name'],
-          Inward_amount_for_disposal: element['Inward_amount_for_disposal'],
-          BalanceAmount: parseFloat(element['amount'])-parseFloat(element['Inward_amount_for_disposal']),
+          Inward_amount_for_disposal: element['Inward_amount_for_disposal']!=undefined?element['Inward_amount_for_disposal']:0,
+          BalanceAmount: parseFloat(element['amount'])-parseFloat(element['Inward_amount_for_disposal']!=undefined?element['Inward_amount_for_disposal']:0),
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
           RoleType: this.USER_DATA?.result?.RoleCheckbox
@@ -193,42 +193,20 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   }
 
   toSave(data, index) {
-    // this.optionsVisibility[index] = false;
-    // console.log(data);
-    // this.documentService.updateAirwayBlcopy(data, data._id).subscribe(
-    //   (data) => {
-    //     console.log('king123');
-    //     this.toastr.success('Airway / BlCopy updated successfully.');
-    //   },
-    //   (error) => {
-    //     console.log('error');
-    //   }
-    // );
   }
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
-    // this.documentService.updateAirwayBlcopy(data, id).subscribe((data) => {
-    //   console.log(data);
-    //   this.toastr.success('Airway / BlCopy Is Updated Successfully.');
-    //   this.ngOnInit();
-    //   EditSummaryPagePanel?.displayHidden
-    // }, (error) => {
-    //   console.log('error');
-    // });
   }
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   airwayBlCopydate: this.SELECTED_VALUE['airwayBlCopydate'],
-    //   airwayBlCopyNumber: this.SELECTED_VALUE['airwayBlCopyNumber'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
-    // this.toastr.warning('Airway / BlCopy Is In Edit Mode');
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.Inward_Remittance[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/Inward-Remittance-Disposal`],navigationExtras);
   }
 
   handleDelete(data: any) {

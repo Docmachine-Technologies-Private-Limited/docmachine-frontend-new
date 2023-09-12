@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
 import * as data1 from '../../../../currency.json';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as _ from 'lodash';
 import { WindowInformationService } from '../../../../service/window-information.service';
@@ -243,22 +243,26 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
   }
 
   triParty() {
-    // this.sharedData.changeretunurl('home/try-party')
-    // this.router.navigate(['home/upload', { file: 'export', document: 'tryPartyAgreement' }]);
     this.router.navigate(['/home/upload/Export/TripartyAgreements']);
   }
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      triPartyAgreementNumber: this.SELECTED_VALUE['triPartyAgreementNumber'],
-      triPartyAgreementAmount: this.SELECTED_VALUE['triPartyAgreementAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   triPartyAgreementNumber: this.SELECTED_VALUE['triPartyAgreementNumber'],
+    //   triPartyAgreementAmount: this.SELECTED_VALUE['triPartyAgreementAmount'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/TripartyAgreements`],navigationExtras);
     this.toastr.warning('Tri-Party Agreement Row Is In Edit Mode');
   }
 

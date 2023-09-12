@@ -22,6 +22,12 @@ import { ExportRealisationCertificateSummaryComponent } from './export-realisati
 import { ViewDocumentComponent } from './view-document/view-document.component';
 import { InwardRemittanceDisposalComponent } from './inward-remittance-disposal/inward-remittance-disposal.component';
 import { SubBillLodgementComponent } from './sub-bill-lodgement/sub-bill-lodgement.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -44,10 +50,16 @@ import { SubBillLodgementComponent } from './sub-bill-lodgement/sub-bill-lodgeme
     ExportRealisationCertificateSummaryComponent,
     ViewDocumentComponent,
     InwardRemittanceDisposalComponent,
-    SubBillLodgementComponent
+    SubBillLodgementComponent,
   ],
   imports: [
     CommonModule,
+    MatProgressBarModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
     ExportRoutingModule,
     SharedHomeModule
   ]

@@ -181,6 +181,7 @@ import { ContactusProductOptionComponent } from "./contactuspanel/contactus-prod
 
           { path: "Summary/Export", loadChildren: () => import('./SummaryPage/Export/export-summary.module').then(mod => mod.ExportSummaryModule), canActivate: [MemberGuard] },
           { path: "Summary/Import", loadChildren: () => import('./SummaryPage/Import/import-summary.module').then(mod => mod.ImportSummaryModule), canActivate: [MemberGuard] },
+          { path: "Summary/Export/Edit", loadChildren: () => import('../components/Upload/Export_Edit/export-edit.module').then(mod => mod.EditExportUploadModule), canActivate: [MemberGuard] },
 
           { path: "Status", loadChildren: () => import('./StatusPanel/status-panel.module').then(mod => mod.StatusPanelModule), canActivate: [MemberGuard] },
           

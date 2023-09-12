@@ -482,14 +482,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      `${this.api_base}/master/update`,
-      {
-        _id: _id,
-        master: user,
-      },
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/master/update`,{_id: _id,master: user},httpOptions);
   }
 
   updateMasterBySb(user, sbno, _id) {
@@ -823,10 +816,16 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-
-    return this.http.patch(
-      `${this.api_base}/pipo/updatePipo/${id}`, data, httpOptions);
-
+    return this.http.patch(`${this.api_base}/pipo/updatePipo/${id}`, data, httpOptions);
+  }
+  
+  updatePipo(id, data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/pipo/update`,{id:id,pipo:data}, httpOptions);
   }
 
 

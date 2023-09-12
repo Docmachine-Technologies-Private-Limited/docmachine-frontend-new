@@ -1214,18 +1214,19 @@ export class PipoDocumentsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.item3[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      sbno: this.SELECTED_VALUE['sbno'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-      BankName: this.SELECTED_VALUE['BankName'],
-      currency: this.SELECTED_VALUE['currency'],
-      amount: this.SELECTED_VALUE['amount'],
-      billNo: this.SELECTED_VALUE['billNo'],
-      BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.item3[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   sbno: this.SELECTED_VALUE['sbno'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    //   BankName: this.SELECTED_VALUE['BankName'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   amount: this.SELECTED_VALUE['amount'],
+    //   billNo: this.SELECTED_VALUE['billNo'],
+    //   BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
+    // }
+    this.router.navigate([`/home/edit-pipo/import/` + this.item3[data?.index]?._id])
     this.toastr.warning('PI/PO Row Is In Edit Mode');
   }
 

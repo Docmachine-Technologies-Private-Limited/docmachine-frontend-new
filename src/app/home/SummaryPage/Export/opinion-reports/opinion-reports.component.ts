@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as data1 from '../../../../currency.json';
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -277,6 +277,12 @@ export class ExportOpinionReportsComponent implements OnInit {
       currency: this.SELECTED_VALUE['currency'],
       buyerName: this.SELECTED_VALUE['buyerName'],
     }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/OpinionReports`],navigationExtras);
     this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
 

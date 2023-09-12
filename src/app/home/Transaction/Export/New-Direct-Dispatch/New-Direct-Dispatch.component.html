@@ -244,6 +244,44 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-8 col-sm-8 col-7">
+                                    <label for="email" class="form-label">Sight?</label>
+                                  </div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-4 col-sm-4 col-5">
+                                    <div class="check_box_button">
+                                      <button type="button" [class]="ClassRetrun('Sight','Hide','btn no-button active1',
+                                                                          'btn btn-primary remove-no-button','no')"
+                                        (click)="Changebutton('Sight','Hide','Show','no')">No</button>
+                                      <button type="button"
+                                        [class]="ClassRetrun('Sight','Show',
+                                                                          'btn yes-button active','btn yes-button','yes')"
+                                        (click)="Changebutton('Sight','Show','Hide','yes')">Yes</button>
+                                    </div>
+                                  </div>
+                                  <div class="space_bottom"></div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-8 col-sm-8 col-7">
+                                    <label for="email" class="form-label">Usance?</label>
+                                  </div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-4 col-sm-4 col-5">
+                                    <div class="check_box_button">
+                                      <button type="button" [class]="ClassRetrun('Usance','Hide','btn no-button active1',
+                                                                          'btn btn-primary remove-no-button','no')"
+                                        (click)="Changebutton('Usance','Hide','Show','no')">No</button>
+                                      <button type="button"
+                                        [class]="ClassRetrun('Usance','Show',
+                                                                          'btn yes-button active','btn yes-button','yes')"
+                                        (click)="Changebutton('Usance','Show','Hide','yes')">Yes</button>
+                                    </div>
+                                  </div>
+                                  <div class="space_bottom"></div>
                                   <div *ngIf='this.Lodgement["UnderLC"]["Show"]==="yes"' style="width:100%;">
                                     <div class="col-md-12">
                                       <div class="row">
