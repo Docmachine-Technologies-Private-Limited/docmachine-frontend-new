@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-triparty-agreements',
+  selector: 'edit-export-triparty-agreements',
   templateUrl: './triparty-agreements.component.html',
   styleUrls: ['./triparty-agreements.component.scss', '../../commoncss/common.component.scss']
 })

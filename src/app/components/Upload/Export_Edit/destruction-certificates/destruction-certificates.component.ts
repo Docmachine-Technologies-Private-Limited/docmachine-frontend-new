@@ -10,7 +10,7 @@ import {FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-destruction-certificates',
+  selector: 'edit-export-destruction-certificates',
   templateUrl: './destruction-certificates.component.html',
   styleUrls: ['./destruction-certificates.component.scss', '../../commoncss/common.component.scss']
 })

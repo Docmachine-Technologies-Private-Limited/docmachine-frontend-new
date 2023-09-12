@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-master-service-agreements',
+  selector: 'edit-export-master-service-agreements',
   templateUrl: './master-service-agreements.component.html',
   styleUrls: ['./master-service-agreements.component.scss', '../../commoncss/common.component.scss']
 })

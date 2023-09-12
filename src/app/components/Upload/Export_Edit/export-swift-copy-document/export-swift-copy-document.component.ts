@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 @Component({
-  selector: 'app-export-swift-copy-document',
+  selector: 'edit-app-export-swift-copy-document',
   templateUrl: './export-swift-copy-document.component.html',
   styleUrls: ['./export-swift-copy-document.component.scss','../../commoncss/common.component.scss']
 })

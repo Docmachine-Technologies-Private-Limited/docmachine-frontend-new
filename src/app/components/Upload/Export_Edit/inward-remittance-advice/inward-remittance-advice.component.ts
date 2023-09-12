@@ -9,9 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
-
 @Component({
-  selector: 'export-inward-remittance-advice',
+  selector: 'edit-export-inward-remittance-advice',
   templateUrl: './inward-remittance-advice.component.html',
   styleUrls: ['./inward-remittance-advice.component.scss','../../commoncss/common.component.scss']
 })

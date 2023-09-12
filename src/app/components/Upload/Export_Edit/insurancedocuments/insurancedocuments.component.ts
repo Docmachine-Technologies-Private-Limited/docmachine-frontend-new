@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-insurancedocuments',
+  selector: 'edit-export-insurancedocuments',
   templateUrl: './insurancedocuments.component.html',
   styleUrls: ['./insurancedocuments.component.scss','../../commoncss/common.component.scss']
 })

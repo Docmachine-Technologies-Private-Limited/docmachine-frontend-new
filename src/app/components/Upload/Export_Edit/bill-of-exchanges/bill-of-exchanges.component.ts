@@ -10,7 +10,7 @@ import {FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-bill-of-exchanges',
+  selector: 'edit-export-bill-of-exchanges',
   templateUrl: './bill-of-exchanges.component.html',
   styleUrls: ['./bill-of-exchanges.component.scss', '../../commoncss/common.component.scss']
 })

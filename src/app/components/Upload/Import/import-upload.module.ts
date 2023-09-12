@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImportUploadRoutingModule } from './import-upload-routing.module';
-import { BOEComponent } from "../Import/import-BOE/boe.component";
+import { BOEComponent } from "./import-BOE/boe.component";
 import { ImportInsurancedocumentsComponent } from './import-insurancedocuments/import-insurancedocuments.component';
 import { ImportLetterofCreditComponent } from './import-letterof-credit/import-letterof-credit.component';
 import { ImportTripartyAgreementsComponent } from './import-triparty-agreements/import-triparty-agreements.component';

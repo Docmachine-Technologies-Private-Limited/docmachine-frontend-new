@@ -12,7 +12,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 
 @Component({
-  selector: 'inward-Remittance-documents-upload',
+  selector: 'edit-inward-Remittance-documents-upload',
   templateUrl: './inward-upload-doc.component.html',
   styleUrls: ['./inward-upload-doc.component.scss']
 })

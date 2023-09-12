@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-export-billlodgementreferencenumberadvicecopy',
+  selector: 'edit-app-export-billlodgementreferencenumberadvicecopy',
   templateUrl: './export-billlodgementreferencenumberadvicecopy.component.html',
   styleUrls: ['./export-billlodgementreferencenumberadvicecopy.component.scss', '../../commoncss/common.component.scss']
 })

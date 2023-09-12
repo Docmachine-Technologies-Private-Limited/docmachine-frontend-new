@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-packing-list-invoices',
+  selector: 'edit-export-packing-list-invoices',
   templateUrl: './packing-list-invoices.component.html',
   styleUrls: ['./packing-list-invoices.component.scss', '../../commoncss/common.component.scss']
 })

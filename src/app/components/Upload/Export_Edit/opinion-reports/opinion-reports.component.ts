@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-opinion-reports',
+  selector: 'edit-export-opinion-reports',
   templateUrl: './opinion-reports.component.html',
   styleUrls: ['./opinion-reports.component.scss', '../../commoncss/common.component.scss']
 })

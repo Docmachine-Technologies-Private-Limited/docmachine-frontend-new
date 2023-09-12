@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-export-realisation-certificate',
+  selector: 'edit-app-export-realisation-certificate',
   templateUrl: './export-realisation-certificate.component.html',
   styleUrls: ['./export-realisation-certificate.component.scss','../../commoncss/common.component.scss']
 })

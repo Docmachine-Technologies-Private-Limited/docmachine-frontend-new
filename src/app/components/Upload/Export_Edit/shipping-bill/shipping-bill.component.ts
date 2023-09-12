@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-shipping-bill',
+  selector: 'edit-app-shipping-bill',
   templateUrl: './shipping-bill.component.html',
   styleUrls: ['./shipping-bill.component.scss', '../../commoncss/common.component.scss']
 })

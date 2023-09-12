@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-letterof-credit',
+  selector: 'edit-export-letterof-credit',
   templateUrl: './letterof-credit.component.html',
   styleUrls: ['./letterof-credit.component.scss', '../../commoncss/common.component.scss']
 })

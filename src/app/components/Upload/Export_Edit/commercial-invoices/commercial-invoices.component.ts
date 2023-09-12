@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-commercial-invoices',
+  selector: 'edit-export-commercial-invoices',
   templateUrl: './commercial-invoices.component.html',
   styleUrls: ['./commercial-invoices.component.scss', '../../commoncss/common.component.scss']
 })

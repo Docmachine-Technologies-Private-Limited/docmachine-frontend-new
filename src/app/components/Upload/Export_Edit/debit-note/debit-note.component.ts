@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'export-debit-note',
+  selector: 'edit-export-debit-note',
   templateUrl: './debit-note.component.html',
   styleUrls: ['./debit-note.component.scss', '../../commoncss/common.component.scss']
 })
