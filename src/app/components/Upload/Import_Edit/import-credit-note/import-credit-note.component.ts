@@ -10,7 +10,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'edit-import-credit-note',
   templateUrl: './import-credit-note.component.html',
-  styleUrls: ['./import-credit-note.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-credit-note.component.scss', '../../commoncss/common.component.scss']
 })
 export class EditImportCreditNoteComponent implements OnInit {
   publicUrl: any = '';
@@ -32,6 +32,7 @@ export class EditImportCreditNoteComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
+  data: any = '';
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -44,19 +45,22 @@ export class EditImportCreditNoteComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditDestructionCertificatesComponent")
+    });
   }
 
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].publicUrl;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         creditNoteAmount: {
           type: "text",
-          value: "",
+          value: args?.creditNoteAmount,
           label: "Credit Note Number*",
           rules: {
             required: true,
@@ -64,7 +68,7 @@ export class EditImportCreditNoteComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: args?.currency,
           label: "Currency",
           rules: {
             required: true,
@@ -72,7 +76,7 @@ export class EditImportCreditNoteComponent implements OnInit {
         },
         creditNoteNumber: {
           type: "text",
-          value: "",
+          value: args?.creditNoteNumber,
           label: "Credit Note Amount",
           rules: {
             required: true,
@@ -84,50 +88,23 @@ export class EditImportCreditNoteComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.file = 'import';
-    this.documentService.getInvoice_No({
-      creditNoteNumber: e.value.creditNoteNumber
-    }, 'creditNote').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addCredit(e.value).subscribe((res: any) => {
-          this.toastr.success(`Credit Note Document Added Successfully`);
-          let updatedData = {
-            "creditNoteRef": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData)
-            .subscribe(
-              (data) => {
-                console.log(' credit Note document', this.pipourl1);
-                console.log(data);
-                this.router.navigate(['home/Summary/Import/Credit']);
-              },
-              (error) => {
-                console.log('error');
-              }
-            );
-        },
-          (err) => console.log('Error adding pipo'));
-        } else {
-          this.toastr.error(`Please check this Credit no. : ${e.value.creditNoteNumber} already exit...`);
-        }
-    });
+    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+    this.documentService.updateCredit(e.value, this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`Credit Note Document Updated Successfully`);
+      this.router.navigate(['home/Summary/Import/Credit']);
+    }, (err) => console.log('Error adding pipo'));
   }
-  
+
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;

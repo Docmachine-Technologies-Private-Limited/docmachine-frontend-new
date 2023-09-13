@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { ElementRef, Injectable, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { UserService } from '../../../service/user.service';
@@ -48,7 +48,8 @@ export class UploadServiceValidatorService implements OnInit {
   ToChargesAccountdata: any = [];
   ToCreditAccountdata: any = [];
   BANK_LIST_DROPDOWN: any = [];
-
+  CommericalNo: ElementRef | any;
+  
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public authGuard: AuthGuard,

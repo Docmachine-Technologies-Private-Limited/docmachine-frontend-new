@@ -6,14 +6,14 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
   selector: 'edit-import-packing-list-invoices',
   templateUrl: './import-packing-list-invoices.component.html',
-  styleUrls: ['./import-packing-list-invoices.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-packing-list-invoices.component.scss', '../../commoncss/common.component.scss']
 })
 export class EditImportPackingListInvoicesComponent implements OnInit {
   publicUrl: any = '';
@@ -42,6 +42,7 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
+  data: any = '';
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -50,53 +51,33 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public route: ActivatedRoute,
     public userService: UserService) { }
 
   async ngOnInit() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    this.userService.getBuyer(1).subscribe((res: any) => {
-      res.data?.forEach(element => {
-        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-        }
-        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-      });
-      console.log('Benne Detail111', this.ConsigneeNameList, this.BUYER_DETAILS);
-    }, (err) => console.log('Error', err));
-    this.documentService.getMaster(1).subscribe((res: any) => {
-      console.log('Master Data File', res);
-      res.data.forEach((element, i) => {
-        element?.pipo.forEach((ele, j) => {
-          this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
-        });
-      });
-    }, (err) => console.log(err));
-    await this.pipoDataService.getPipoList('export').then(async (data) => {
-      console.log(data, 'data..................')
-      this.pipoDataService.pipolistModel$.subscribe((data) => {
-        this.PIPO_DATA = data;
-        console.log(data, 'data2222..................')
-      });
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
     });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args.packingDoc);
       this.validator.buildForm({
         boe: {
-          type: "BOE",
-          value: "",
+          type: "text",
+          value: args?.packingListNumber,
           label: "Select Bill Of Entry",
+          disabled:true,
           rules: {
             required: true,
           }
         },
         packingListNumber: {
           type: "text",
-          value: "",
+          value: args?.packingListNumber,
           label: "Packing List Number*",
           rules: {
             required: true,
@@ -104,7 +85,7 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: args?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -112,7 +93,7 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
         },
         packingListAmount: {
           type: "text",
-          value: "",
+          value: args?.packingListAmount,
           label: "Packing List Amount",
           rules: {
             required: true,
@@ -127,71 +108,11 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-    let selectedBOE = e?.value?.boe;
-    e.value.pipo = this.pipoArr;
-    console.log('pipoarrya', this.pipoArr);
-    e.value.packingDoc = this.pipourl1;
-    console.log('pipodoc', this.pipourl1);
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.currency = e.value?.currency?.type;
-    e.value.boe = selectedBOE?.sbno;
-    e.value.boeRef = [selectedBOE?._id];
-    this.documentService.getInvoice_No({
-      packingListNumber: e.value.packingListNumber
-    }, 'packinglists').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addPackingList(e.value).subscribe(
-          (res: any) => {
-            this.toastr.success(`Packing List Added Successfully`);
-            console.log('Packing List Added Successfully');
-            let updatedDataSB = {
-              "packingdetails": [
-                res.data._id,
-              ],
-            }
-            this.documentService.updateMasterBySb(
-              updatedDataSB,
-              selectedBOE?.boeNumber,
-              selectedBOE?._id
-            ).subscribe((data) => {
-              console.log('updateMasterBySbupdateMasterBySb', data);
-            }, (error) => {
-              console.log('error');
-            }
-            );
-            let updatedData = {
-              "packingListRef": [
-                res.data._id,
-              ],
-            }
-            this.userService.updateManyPipo(this.pipoArr, "packingList", this.pipourl1, updatedData).subscribe((data) => {
-              console.log(data);
-              this.documentService
-                .updateMasterBySb(
-                  e.value,
-                  selectedBOE?.boeNumber,
-                  selectedBOE?._id
-                ).subscribe(
-                  (data) => {
-                    console.log('king123');
-                    console.log('DATA', data);
-                    this.router.navigate(['home/Summary/Import/Packing-List']);
-                  },
-                  (error) => {
-                    console.log('error');
-                  }
-                );
-            }, (error) => {
-              console.log('error');
-            }
-            );
-          },
-          (err) => console.log('Error adding pipo')
-        );
-      } else {
-        this.toastr.error(`Please check this packing-list no. : ${e.value.packingListNumber} already exit...`);
-      }
+    e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
+    this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`Packing List Added Successfully`);
+      this.router.navigate(['home/Summary/Import/Packing-List']);
+      console.log('Packing List Added Successfully');
     });
   }
 

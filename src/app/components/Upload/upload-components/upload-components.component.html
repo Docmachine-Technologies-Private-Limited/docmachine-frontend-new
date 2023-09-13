@@ -133,16 +133,16 @@
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <ng-select *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
+                    <ng-select [id]="field?.id" *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
+                        [name]="field.fieldName" [(ngModel)]="field.value" #CommericalNo>
                     </ng-select>
-                    <ng-select *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==true"
+                    <ng-select [id]="field?.id" *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==true"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                         (change)="autofillCommerical($event,field?.autofill)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
+                        [name]="field.fieldName" [(ngModel)]="field.value" #CommericalNo>
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
@@ -572,10 +572,10 @@
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
                                         <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
-                                        <ng-select *ngIf="this.validator?.COMMERICAL_NO?.length!=0"
+                                        <ng-select [id]="formGroupItem?.id" *ngIf="this.validator?.COMMERICAL_NO?.length!=0"
                                             [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
-                                            [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value">
+                                            [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value" #CommericalNo>
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">

@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service';
 import * as xlsx from 'xlsx';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
-import {Router } from '@angular/router';
+import {NavigationExtras, Router } from '@angular/router';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -254,15 +254,21 @@ export class ImportsCreditNoteComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      creditNoteNumber: this.SELECTED_VALUE['creditNoteNumber'],
-      creditNoteAmount: this.SELECTED_VALUE['creditNoteAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   creditNoteNumber: this.SELECTED_VALUE['creditNoteNumber'],
+    //   creditNoteAmount: this.SELECTED_VALUE['creditNoteAmount'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/CreditNoteDocument`],navigationExtras);
     this.toastr.warning('Credit Note Row Is In Edit Mode');
   }
 

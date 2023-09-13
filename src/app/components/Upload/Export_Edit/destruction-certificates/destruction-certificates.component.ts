@@ -81,7 +81,7 @@ export class EditDestructionCertificatesComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
-    e.value.currency = e.value?.currency?.type;
+    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
     this.documentService.updateDestruction(e.value,this.data?._id).subscribe((res: any) => {
       this.toastr.success(`destruction Document Updated Successfully`);
       console.log('destruction Document Updated Successfully');

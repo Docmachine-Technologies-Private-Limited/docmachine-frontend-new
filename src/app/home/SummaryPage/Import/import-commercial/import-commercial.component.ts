@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -246,16 +246,22 @@ export class ImportCommercialComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      commercialDate: this.SELECTED_VALUE['commercialDate'],
-      commercialNumber: this.SELECTED_VALUE['commercialNumber'],
-      AdvanceNo: this.SELECTED_VALUE['AdvanceNo'],
-      AdvanceCurrency: this.SELECTED_VALUE['AdvanceCurrency'],
-      AdvanceAmount: this.SELECTED_VALUE['AdvanceAmount'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   commercialDate: this.SELECTED_VALUE['commercialDate'],
+    //   commercialNumber: this.SELECTED_VALUE['commercialNumber'],
+    //   AdvanceNo: this.SELECTED_VALUE['AdvanceNo'],
+    //   AdvanceCurrency: this.SELECTED_VALUE['AdvanceCurrency'],
+    //   AdvanceAmount: this.SELECTED_VALUE['AdvanceAmount'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/CommercialInvoices`],navigationExtras);
     this.toastr.warning('Commercial Invoie Row Is In Edit Mode');
   }
 

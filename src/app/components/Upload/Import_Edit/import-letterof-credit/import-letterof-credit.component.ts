@@ -6,7 +6,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
@@ -42,7 +42,8 @@ export class EditImportLetterofCreditComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -50,21 +51,25 @@ export class EditImportLetterofCreditComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public route: ActivatedRoute,
     public userService: UserService) { }
 
   async ngOnInit() {
-    
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditLetterofCreditComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         letterOfCreditNumber: {
           type: "text",
-          value: "",
+          value: args?.letterOfCreditNumber,
           label: "Letter Of Credit Number*",
           rules: {
             required: true,
@@ -72,7 +77,7 @@ export class EditImportLetterofCreditComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: args?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -80,13 +85,29 @@ export class EditImportLetterofCreditComponent implements OnInit {
         },
         letterOfCreditAmount: {
           type: "text",
-          value: "",
+          value: args?.letterOfCreditAmount,
           label: "Letter Of Credit Amount",
           rules: {
             required: true,
           }
+        },
+        Expirydate: {
+          type: "date",
+          value: args?.Expirydate,
+          label: "Expiry Date",
+          rules: {
+            required: true,
+          }
+        },
+        LastDateofShipment: {
+          type: "date",
+          value: args?.LastDateofShipment,
+          label: "Last Date of Shipment",
+          rules: {
+            required: true,
+          }
         }
-      },'Importletterofcredit');
+      }, 'Importletterofcredit');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
@@ -95,40 +116,12 @@ export class EditImportLetterofCreditComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.currency = e.value?.currency?.type;
+    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
     console.log(e.value);
-    this.documentService.getInvoice_No({
-      letterOfCreditNumber: e.value.letterOfCreditNumber
-    }, 'letterlcs').subscribe((resp: any) => {
-      console.log('Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addLetterLC(e.value).subscribe(
-          (res: any) => {
-            this.toastr.success(`Letter Of Credit Document Added Successfully`);
-            let updatedData = {
-              "lcRef": [
-                res.data._id,
-              ],
-            }
-            this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe(
-              (data) => {
-                console.log('king123');
-                console.log(data);
-                this.router.navigate(['home/Summary/Import/Letter-Of-Credit-Lc']);
-              }, (error) => {
-                console.log('error');
-              }
-            );
-          },
-          (err) => console.log('Error adding pipo')
-        );
-      } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.letterOfCreditNumber} already exit...`);
-      }
-    });
+    this.documentService.updateLetterLC(e.value, this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`Letter Of Credit Document Updated Successfully`);
+      this.router.navigate(['home/Summary/Import/Letter-Of-Credit-Lc']);
+    }, (err) => console.log('Error adding pipo'));
   }
 
   clickPipo(event: any) {

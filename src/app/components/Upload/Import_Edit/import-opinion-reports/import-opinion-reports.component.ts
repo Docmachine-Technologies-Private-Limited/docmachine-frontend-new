@@ -6,7 +6,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
@@ -42,7 +42,8 @@ export class EditImportOpinionReportComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -50,20 +51,25 @@ export class EditImportOpinionReportComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public route: ActivatedRoute,
     public userService: UserService) { }
 
   async ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditOpinionReportsComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         opinionReportNumber: {
           type: "text",
-          value: "",
+          value: args?.opinionReportNumber,
           label: "Opinion Report Number*",
           rules: {
             required: true,
@@ -71,7 +77,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: args?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -79,7 +85,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         opinionReportAmount: {
           type: "text",
-          value: "",
+          value: args?.opinionReportAmount,
           label: "Opinion Report Amount",
           rules: {
             required: true,
@@ -87,7 +93,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         ForeignPartyName: {
           type: "benne",
-          value: "",
+          value: args?.ForeignPartyName,
           label: "Foreign benne Name",
           rules: {
             required: true,
@@ -95,7 +101,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         ReportDate: {
           type: "date",
-          value: "",
+          value: args?.ReportDate,
           label: "Report Date",
           rules: {
             required: true,
@@ -103,13 +109,13 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         ReportRatings: {
           type: "text",
-          value: "",
+          value: args?.ReportRatings,
           label: "Report Ratings",
           rules: {
             required: true,
           }
         }
-      },'ImportOpinionreport');
+      }, 'ImportOpinionreport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
@@ -118,39 +124,12 @@ export class EditImportOpinionReportComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.currency = e.value?.currency?.type;
+    e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
     console.log(e.value);
-    this.documentService.getInvoice_No({
-      opinionReportNumber: e.value.opinionReportNumber
-    }, 'opinionreports').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addOpinionReport(e.value).subscribe(
-          (res: any) => {
-            this.toastr.success(`Opinion Report Document Added Successfully`);
-            let updatedData = {
-              "opinionReportRef": [
-                res.data._id,
-              ],
-            }
-            this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe(
-              (data) => {
-                console.log(data);
-                this.router.navigate(['home/Summary/Import/Opinion-Report']);
-              },
-              (error) => {
-                console.log('error');
-              }
-            );
-          },
-          (err) => console.log('Error adding pipo')
-        );
-      } else {
-        this.toastr.error(`Please check this opinion-report no. : ${e.value.opinionReportNumber} already exit...`);
-      }
-    });
+    this.documentService.updateOpinionReport(e.value,this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`Opinion Report Document Updated Successfully`);
+      this.router.navigate(['home/Summary/Import/Opinion-Report']);
+    }, (err) => console.log('Error adding pipo'));
   }
 
   clickPipo(event: any) {

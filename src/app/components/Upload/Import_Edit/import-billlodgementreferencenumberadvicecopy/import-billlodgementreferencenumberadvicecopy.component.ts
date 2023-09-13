@@ -5,7 +5,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -31,7 +31,8 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -39,20 +40,24 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public route: ActivatedRoute,
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditInwardUploadDocumentsComponent")
+    });
   }
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].publicUrl;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         blcopyrefNumber: {
           type: "text",
-          value: "",
+          value: args?.blcopyrefNumber,
           label: "BlCopyRef Number*",
           rules: {
             required: true,
@@ -60,7 +65,7 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
         },
         amount: {
           type: "text",
-          value: "",
+          value: args?.amount,
           label: "BlCopyRef Amount*",
           rules: {
             required: true,
@@ -74,39 +79,14 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.file = 'import';
-    this.documentService.getInvoice_No({
-      blcopyrefNumber: e.value.blcopyrefNumber
-    }, 'blcopyref').subscribe((resp: any) => {
-      console.log('blcopyref Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addBlcopyref(e.value).subscribe((res: any) => {
-          this.toastr.success(`Blcopyref Document Added Successfully`);
-          let updatedData = {
-            "blcopyRefs": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData)
-            .subscribe(
-              (data) => {
-                console.log('Blcopyref Document document', this.pipourl1);
-                console.log(data);
-                this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
-              },
-              (error) => {
-                console.log('error');
-              }
-            );
-        },
-          (err) => console.log('Error adding Blcopyref Document'));
-        } else {
-          this.toastr.error(`Please check this Blcopyref no. : ${e.value.blcopyrefNumber} already exit...`);
-        }
-    });
+    console.log(e.value, 'onSubmitblCopy');
+    this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
+      console.log(res, 'addBlcopyref');
+      this.toastr.success(`Blcopyref Document Updated Successfully`);
+      this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
+    },
+      (err) => console.log('Error adding pipo')
+    );
   }
   
   clickPipo(event: any) {

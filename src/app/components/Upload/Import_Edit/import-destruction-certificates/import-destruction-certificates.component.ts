@@ -6,7 +6,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
@@ -42,7 +42,8 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -50,21 +51,25 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public route: ActivatedRoute,
     public userService: UserService) { }
 
   async ngOnInit() {
-    
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditDestructionCertificatesComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         destructionNumber: {
           type: "text",
-          value: "",
+          value: args?.destructionNumber,
           label: "Destruction Certificate Number*",
           rules: {
             required: true,
@@ -79,34 +84,12 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-      e.value.pipo = this.pipoArr;
-      e.value.doc = this.pipourl1;
-      e.value.buyerName = this.BUYER_LIST;
-      this.documentService.getInvoice_No({
-        destructionNumber: e.value.destructionNumber
-      }, 'destructions').subscribe((resp: any) => {
-        console.log('creditNoteNumber Invoice_No', resp)
-        if (resp.data.length == 0) {
-          this.documentService.addDestruction(e.value).subscribe((res: any) => {
-            this.toastr.success(`destruction Document Added Successfully`);
-            console.log('destruction Document Added Successfully');
-            let updatedData = {
-              "destructionRef": [
-                res.data._id,
-              ],
-            }
-            this.userService.updateManyPipo(this.pipoArr, 'destruction', this.pipourl1, updatedData).subscribe((data) => {
-              console.log(data);
-              this.router.navigate(['home/Summary/Import/Destruction']);
-            }, (error) => {
-              console.log('error');
-            });
-          }, (err) => console.log('Error adding pipo')
-          );
-        } else {
-          this.toastr.error(`Please check this destruction no. : ${e.value.destructionNumber} already exit...`);
-        }
-      });
+    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
+    this.documentService.updateDestruction(e.value,this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`destruction Document Updated Successfully`);
+      console.log('destruction Document Updated Successfully');
+      this.router.navigate(['home/Summary/Import/Destruction']);
+    }, (err) => console.log('Error adding pipo'));
   }
 
   clickPipo(event: any) {

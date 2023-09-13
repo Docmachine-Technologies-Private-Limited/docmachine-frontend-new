@@ -6,7 +6,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
@@ -44,46 +44,99 @@ export class EditImportTripartyAgreementsComponent implements OnInit {
   SUBMIT_ERROR: boolean = false;
   INDEX: number = 0;
   MAX_DATA_SIZE: number = 2;
-
+  data: any = [];
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
+    public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    this.userService.getBuyer(1).subscribe((res: any) => {
-      res.data?.forEach(element => {
-        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-        }
-        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-      });
-      console.log('Benne Detail111', this.ConsigneeNameList, this.BUYER_DETAILS);
-    }, (err) => console.log('Error', err));
-    this.documentService.getMaster(1).subscribe((res: any) => {
-      console.log('Master Data File', res);
-      res.data.forEach((element, i) => {
-        element?.pipo.forEach((ele, j) => {
-          this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
-        });
-      });
-    }, (err) => console.log(err));
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditTripartyAgreementsComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args.doc);
+      let PartyDetails_Data = [
+        {
+          Party1Name: {
+            type: "benne",
+            value: args?.PartyDetails[0]?.Party1Name?.value,
+            label: "Party1 Name",
+            InputBindValue: 'Party1Address',
+            rules: {
+              required: true,
+            }
+          },
+          Party1Address: {
+            type: "text",
+            value: args?.PartyDetails[0]?.Party1Name?.Address,
+            label: "Party1 Address",
+            InputBindValue: '',
+            disabled: true,
+            rules: {
+              required: true,
+            }
+          }
+        },
+        {
+          Party2Name: {
+            type: "benne",
+            value: args?.PartyDetails[1]?.Party2Name?.value,
+            label: "Party2 Name",
+            InputBindValue: 'Party2Address',
+            rules: {
+              required: true,
+            }
+          },
+          Party2Address: {
+            type: "text",
+            value: args?.PartyDetails[1]?.Party2Name?.Address,
+            label: "Party2 Address",
+            InputBindValue: '',
+            disabled: true,
+            rules: {
+              required: true,
+            }
+          }
+        },
+        {
+          Party3Name: {
+            type: "benne",
+            value: args?.PartyDetails[2]?.Party3Name?.value,
+            label: "Party3 Name",
+            InputBindValue: 'Party3Address',
+            rules: {
+              required: true,
+            }
+          },
+          Party3Address: {
+            type: "text",
+            value: args?.PartyDetails[2]?.Party3Name?.Address,
+            InputBindValue: '',
+            label: "Party3 Address",
+            disabled: true,
+            rules: {
+              required: true,
+            }
+          }
+        }
+      ]
       this.validator.buildForm({
         triPartyAgreementDate: {
           type: "date",
-          value: "",
+          value: args?.triPartyAgreementDate,
           label: "Date",
           rules: {
             required: true,
@@ -91,7 +144,7 @@ export class EditImportTripartyAgreementsComponent implements OnInit {
         },
         triPartyAgreementNumber: {
           type: "text",
-          value: "",
+          value: args?.triPartyAgreementNumber,
           label: "Tri Party Number*",
           rules: {
             required: true,
@@ -99,7 +152,7 @@ export class EditImportTripartyAgreementsComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: args?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -107,7 +160,7 @@ export class EditImportTripartyAgreementsComponent implements OnInit {
         },
         triPartyAgreementAmount: {
           type: "text",
-          value: "",
+          value: args?.triPartyAgreementAmount,
           label: "Tri Party Amount",
           rules: {
             required: true,
@@ -121,71 +174,7 @@ export class EditImportTripartyAgreementsComponent implements OnInit {
           rules: {
             required: true,
           },
-          formGroup: [
-            {
-              Party1Name: {
-                type: "benne",
-                value: "",
-                label: "Party1 Name",
-                InputBindValue: 'Party1Address',
-                rules: {
-                  required: true,
-                }
-              },
-              Party1Address: {
-                type: "text",
-                value: "",
-                label: "Party1 Address",
-                InputBindValue: '',
-                disabled: true,
-                rules: {
-                  required: true,
-                }
-              }
-            },
-            {
-              Party2Name: {
-                type: "benne",
-                value: "",
-                label: "Party2 Name",
-                InputBindValue: 'Party2Address',
-                rules: {
-                  required: true,
-                }
-              },
-              Party2Address: {
-                type: "text",
-                value: "",
-                label: "Party2 Address",
-                InputBindValue: '',
-                disabled: true,
-                rules: {
-                  required: true,
-                }
-              }
-            },
-            {
-              Party3Name: {
-                type: "benne",
-                value: "",
-                label: "Party3 Name",
-                InputBindValue: 'Party3Address',
-                rules: {
-                  required: true,
-                }
-              },
-              Party3Address: {
-                type: "text",
-                value: "",
-                InputBindValue: '',
-                label: "Party3 Address",
-                disabled: true,
-                rules: {
-                  required: true,
-                }
-              }
-            }
-          ]
+          formGroup: PartyDetails_Data
         }
       },'ImportTrypartyagreements');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
@@ -195,35 +184,20 @@ export class EditImportTripartyAgreementsComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.currency = e.value?.currency?.type;
-    this.documentService.getInvoice_No({
-      triPartyAgreementNumber: e.value.triPartyAgreementNumber
-    }, 'thirdparties').subscribe((resp: any) => {
-      console.log('thirdparties Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addThird(e.value).subscribe((res: any) => {
-          this.toastr.success(`Third Party Document Added Successfully`);
-          let updatedData = {
-            "tryPartyAgreementRef": [
-              res.data._id,
-            ],
-          }
-          this.userService
-            .updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
-              console.log(data);
-              this.router.navigate(['home/Summary/Import/TripartyAgreements']);
-            }, (error) => {
-              console.log('error');
-            }
-            );
-        }, (err) => console.log('Error adding pipo'));
-      } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.triPartyAgreementNumber} already exit...`);
-      }
-    });
+    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
+    if (e?.value?.PartyDetails[0]?.Party1Name?.Address == '' || e?.value?.PartyDetails[0]?.Party1Name?.Address == undefined) {
+      e.value.PartyDetails[0].Party1Name = this.data?.PartyDetails[0]?.Party1Name;
+    }
+    if (e?.value?.PartyDetails[1]?.Party2Name?.Address == '' || e?.value?.PartyDetails[1]?.Party2Name?.Address == undefined) {
+      e.value.PartyDetails[1].Party2Name = this.data?.PartyDetails[1]?.Party2Name;
+    }
+    if (e?.value?.PartyDetails[2]?.Party3Name?.Address == '' || e?.value?.PartyDetails[2]?.Party3Name?.Address == undefined) {
+      e.value.PartyDetails[2].Party3Name = this.data?.PartyDetails[2]?.Party3Name;
+    }
+      this.documentService.updateThird(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Third Party Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Import/TripartyAgreements']);
+      }, (err) => console.log('Error adding pipo'));
   }
 
   clickPipo(event: any) {

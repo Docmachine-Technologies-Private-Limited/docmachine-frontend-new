@@ -5,7 +5,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -31,29 +31,34 @@ export class EditImportRealisationCertificateComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
+    public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditInwardUploadDocumentsComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].publicUrl;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         EbrcNumber: {
           type: "text",
-          value: "",
+          value: args?.EbrcNumber,
           label: "EBRC Number*",
           rules: {
             required: true,
@@ -67,39 +72,11 @@ export class EditImportRealisationCertificateComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
     e.value.file = 'import';
-    this.documentService.getInvoice_No({
-      EbrcNumber: e.value.EbrcNumber
-    }, 'ebrcs').subscribe((resp: any) => {
-      console.log('EbrcNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addEbrc(e.value).subscribe((res: any) => {
-          this.toastr.success(`ebrcs Added Successfully`);
-          let updatedData = {
-            "ebrcsRef": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData)
-            .subscribe(
-              (data) => {
-                console.log('ebrcs document', this.pipourl1);
-                console.log(data);
-                this.router.navigate(['home/Summary/Import/Realisation-Cretificate']);
-              },
-              (error) => {
-                console.log('error');
-              }
-            );
-        },
-          (err) => console.log('Error adding ebrcs'));
-        } else {
-          this.toastr.error(`Please check this ebrcs no. : ${e.value.EbrcNumber} already exit...`);
-        }
-    });
+    this.documentService.updateEbrc(e.value,this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`ebrcs Added Successfully`);
+      this.router.navigate(['home/Summary/Import/Realisation-Cretificate']);
+    },(err) => console.log('Error adding ebrcs'));
   }
   
   clickPipo(event: any) {

@@ -36,7 +36,8 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -48,25 +49,21 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
-    if (temp_pipo?.length != 0) {
-      this.btndisabled = false;
-    }
-    await this.documentService.getPipoListNo('import', temp_pipo);
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditInwardUploadDocumentsComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].publicUrl;
-      let res: any = new IRAdvice(args[1].data);
-      console.log(res, 'sdfjhksdjhdkfjsdhfsdkfhsd')
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         BankName: {
           type: "Bank",
-          value: "",
+          value: args?.BankName,
           label: "Bank Name*",
           rules: {
             required: true,
@@ -74,7 +71,7 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
         },
         date: {
           type: "date",
-          value: res?.date,
+          value: args?.date,
           label: "TT Date",
           rules: {
             required: true,
@@ -82,47 +79,64 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
         },
         billNo: {
           type: "text",
-          value: res?.billNo,
-          label: "Bill No",
+          value: args?.billNo,
+          label: "FOREX ADVICE No.",
           rules: {
             required: true,
           }
         },
         currency: {
           type: "currency",
-          value: res?.currency,
+          value: args?.currency,
           label: "Currency*",
           rules: {
             required: true,
           }
         },
         partyName: {
-          type: "benne",
-          value: res?.partyName,
+          type: "text",
+          value: args?.partyName,
           label: "PARTY NAME",
+          disabled:true,
           rules: {
             required: true,
           }
         },
         amount: {
           type: "number",
-          value: res?.amount,
+          value: args?.amount,
           label: "TT AMOUNT",
+          rules: {
+            required: true,
+          }
+        },
+        recievedDate: {
+          type: "date",
+          value: args?.recievedDate,
+          label: "Recieved Date",
           rules: {
             required: true,
           }
         },
         commision: {
           type: "number",
-          value: res?.commision,
+          value: args?.commision,
           label: "Commission",
+          rules: {
+            required: true,
+          }
+        },
+        conversionDate: {
+          type: "date",
+          value: args?.conversionDate,
+          label: "Conversion Date",
           rules: {
             required: true,
           }
         },
         exchangeRate: {
           type: "number",
-          value: res?.exchangeRate,
+          value: args?.exchangeRate,
           label: "Exchange Rate",
           rules: {
             required: true,
@@ -130,7 +144,7 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
         },
         location: {
           type: "location",
-          value: res?.location,
+          value: args?.location,
           label: "Location",
           rules: {
             required: true,
@@ -138,7 +152,7 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
         },
         commodity: {
           type: "commodity",
-          value: res?.commodity,
+          value: args?.commodity,
           label: "Commodity",
           rules: {
             required: true,
@@ -146,18 +160,10 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
         },
         origin: {
           type: "origin",
-          value: res?.origin,
+          value: args?.origin,
           label: "Origin",
           rules: {
-            required: true,
-          }
-        },
-        PaymentType: {
-          type: "PaymentType",
-          value: "",
-          label: "Payment Type*",
-          rules: {
-            required: true,
+            required: false,
           }
         },
       }, 'OutwardRemittanceAdvice');
@@ -168,15 +174,10 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    var temp: any = [];
-    for (let index = 0; index < this.documentService?.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION.length; index++) {
-      const element = this.documentService?.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[index];
-      temp.push(element?._id)
+    if (e?.value?.BuyerName?.Address == undefined) {
+      e.value.BuyerName = this.data?.BuyerName;
     }
     e.value.file = 'import';
-    e.value.pipo = temp.length != 0 ? temp : this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.beneficiaryName = this.BUYER_LIST;
     e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
@@ -184,48 +185,13 @@ export class EditImportOutwardRemittanceAdviceComponent implements OnInit {
     e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
     e.value.origin = e.value.origin?.value != undefined ? e.value.origin.value : e.value.origin;
 
-    console.log('doc', temp, this.pipourl1);
+    console.log('doc', this.pipourl1);
     console.log('onSubmitIrAdvice', e.value);
-    this.documentService.getInvoice_No({
-      billNo: e.value.billNo
-    }, 'iradvices').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
-          console.log('addIrAdvice', data);
-          let updatedData = {
-            "MasterServiceRef": [
-              data?.data._id,
-            ],
-            "AdviceRef": [
-              data?.data._id,
-            ]
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
-            this.toastr.success('Firex Document added successfully.');
-            this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
-            var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-            if (Transaction_id != '') {
-              this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.value } }).subscribe((res: any) => {
-                this.toastr.success('Firex Document added successfully.');
-                this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
-              });
-            } else {
-              this.toastr.success('Firex Document added successfully.');
-              this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
-            }
-          }, (error) => {
-            console.log('error');
-          });
-        },
-          (error) => {
-            console.log('error');
-          }
-        );
-      } else {
-        this.toastr.error(`Please check this Firex Document no. : ${e.value.billNo} already exit...`);
-      }
-    });
+    this.documentService.updateIrAdvice(e.value,this.data?._id).subscribe((data: any) => {
+      console.log('addIrAdvice', data);
+      this.toastr.success('Firex Document added successfully.');
+      this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
+    },(error) => console.log(error));
   }
 
   clickPipo(event: any) {

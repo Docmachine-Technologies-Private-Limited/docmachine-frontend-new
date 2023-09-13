@@ -5,7 +5,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -31,18 +31,24 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
+    public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditAirwayBlCopyComponent")
+    });
   }
 
   response(args: any) {
@@ -53,19 +59,20 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
       this.validator.buildForm({
         airwayBlCopyNumber: {
           type: "text",
-          value: "",
+          value: args?.airwayBlCopyNumber,
           label: "Airway / BlCopy Number*",
           rules: {
             required: true,
           }
         },
         CommercialNumber: {
-          type: "CommericalNo",
+          type: "text",
           value: "",
           label: "Select Commercial Number",
           rules: {
             required: true,
-          }
+          },
+          disabled:true,
         },
       }, 'ImportAirwayBlCopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
@@ -76,43 +83,11 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-    console.log('this is console of blcopy', e.value);
-    e.value.pipo = this.pipoArr;
-    e.value.blCopyDoc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.CommercialNumber = this.CommercialNumber
-    e.value.sbNo = '';
-    e.value.sbRef = [];
     console.log(e.value, 'onSubmitblCopy');
-    this.documentService.getInvoice_No({
-      airwayBlCopyNumber: e.value.airwayBlCopyNumber
-    }, 'airwayblcopies').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addAirwayBlcopyFile(e.value).subscribe((res: any) => {
-          this.toastr.success(`addAirwayBlcopy Document Added Successfully`);
-          let updatedData = {
-            "blcopydetails": [
-              res.data._id,
-            ], "airwayBlCopyRef": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData).subscribe((data) => {
-            console.log(data);
-            this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);
-          },
-            (error) => {
-              console.log('error');
-            }
-          );
-        },
-          (err) => console.log('Error adding pipo')
-        );
-      } else {
-        this.toastr.error(`Please check this airwayblcopies no. : ${e.value.airwayBlCopyNumber} already exit...`);
-      }
-    });
+    this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
+      this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);
+    },(err) => console.log('Error adding pipo'));
   }
 
   clickPipo(event: any) {

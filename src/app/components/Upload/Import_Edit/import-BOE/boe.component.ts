@@ -5,9 +5,10 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { BoeBill } from '../../../../../model/boe.model';
+import $ from "jquery";
 
 @Component({
   selector: 'edit-app-boe-bill',
@@ -37,30 +38,37 @@ export class EditBOEComponent implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
+    public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditBOEComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.UPLOAD_FORM = new BoeBill(args[1]?.data);
-      this.pipourl1 = args[1].publicUrl;
+      this.changedCommercial(args?.pipo[0]?._id)
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         CI_DETAILS: {
           type: "CommericalNo",
-          value: "",
+          value: args?.CI_DETAILS,
           label: "Commerical No.",
+          id:"CommericalNo",
           autofill: [{ input: 'CIINVOICE', key: 'InvoiceValue', name: 'invoices', index: 3, equalinput: 'invoiceNumber', equalindex: 3 },
           { input: 'CIfreightValue', key: 'FreightValue', name: 'FOBFREIGHT', index: 2, equalinput: 'freightValue', equalindex: 1 },
           { input: 'CIinsuranceAmount', key: 'InsuranceValue', name: 'INSURANCE', index: 2, equalinput: 'insuranceAmount', equalindex: 1 },
@@ -81,7 +89,7 @@ export class EditBOEComponent implements OnInit {
           formGroup: [{
             boeDate: {
               type: "date",
-              value: this.UPLOAD_FORM['boeDate']?.replaceAll('/','-').toString(),
+              value: args?.boeDate,
               label: "Boe Date",
               rules: {
                 required: true,
@@ -89,7 +97,7 @@ export class EditBOEComponent implements OnInit {
             },
             boeNumber: {
               type: "text",
-              value: this.UPLOAD_FORM['boeNumber'],
+              value:  args?.boeNumber,
               label: "Boe No.",
               rules: {
                 required: true,
@@ -97,7 +105,7 @@ export class EditBOEComponent implements OnInit {
             },
             AWBNo: {
               type: "text",
-              value: this.UPLOAD_FORM['AWBNo'],
+              value:  args?.AWBNo,
               label: "AWB No.*",
               rules: {
                 required: true,
@@ -105,7 +113,7 @@ export class EditBOEComponent implements OnInit {
             },
             origin: {
               type: "text",
-              value: "",
+              value:  args?.origin,
               label: "ORIGIN*",
               rules: {
                 required: true,
@@ -113,7 +121,7 @@ export class EditBOEComponent implements OnInit {
             },
             dischargePort: {
               type: "text",
-              value: this.UPLOAD_FORM['dischargePort'],
+              value:  args?.dischargePort,
               label: "DISCHARGE PORT*",
               rules: {
                 required: true,
@@ -121,7 +129,7 @@ export class EditBOEComponent implements OnInit {
             },
             iecName: {
               type: "text",
-              value: this.UPLOAD_FORM['iecName'],
+              value: args?.iecName,
               label: "IEC NAME",
               maxLength:200,
               rules: {
@@ -130,7 +138,7 @@ export class EditBOEComponent implements OnInit {
             },
             iecCode: {
               type: "text",
-              value: this.UPLOAD_FORM['iecCode'],
+              value:  args?.iecCode,
               label: "IEC CODE",
               rules: {
                 required: true,
@@ -138,7 +146,7 @@ export class EditBOEComponent implements OnInit {
             },
             adCode: {
               type: "text",
-              value: this.UPLOAD_FORM['adCode'],
+              value:  args?.adCode,
               label: "AD CODE",
               rules: {
                 required: true,
@@ -146,7 +154,7 @@ export class EditBOEComponent implements OnInit {
             },
             adBillNo: {
               type: "text",
-              value: '',
+              value:  args?.adBillNo,
               label: "AD BILL CODE*",
               rules: {
                 required: true,
@@ -174,7 +182,7 @@ export class EditBOEComponent implements OnInit {
           formGroup: [{
             invoiceNumber: {
               type: "text",
-              value: this.UPLOAD_FORM['invoiceNumber'],
+              value:  args?.invoiceNumber,
               label: "Invoices No.",
               rules: {
                 required: true,
@@ -182,7 +190,7 @@ export class EditBOEComponent implements OnInit {
             },
             currency: {
               type: "currency",
-              value: this.UPLOAD_FORM['currency'],
+              value:  args?.currency,
               label: "Invoices Currency",
               rules: {
                 required: true,
@@ -190,7 +198,7 @@ export class EditBOEComponent implements OnInit {
             },
             invoiceAmount: {
               type: "text",
-              value: this.UPLOAD_FORM['invoiceAmount'],
+              value:  args?.invoiceAmount!="NF"?args?.invoiceAmount:0,
               label: "Invoices Amount",
               rules: {
                 required: true,
@@ -198,7 +206,7 @@ export class EditBOEComponent implements OnInit {
             },
             CIINVOICE: {
               type: "text",
-              value: "",
+              value: args?.CI_DETAILS?.data?.InvoiceValue,
               label: "CI INVOICE Amount",
               disabled: true,
               rules: {
@@ -207,7 +215,7 @@ export class EditBOEComponent implements OnInit {
             },
             settledAmount: {
               type: "text",
-              value: this.UPLOAD_FORM['settledAmount'],
+              value: args?.settledAmount,
               label: "SETTELED AMOUNT*",
               rules: {
                 required: true,
@@ -215,7 +223,7 @@ export class EditBOEComponent implements OnInit {
             },
             status: {
               type: "text",
-              value: this.UPLOAD_FORM['status'],
+              value: args?.status,
               label: "STATUS*",
               rules: {
                 required: true,
@@ -242,7 +250,7 @@ export class EditBOEComponent implements OnInit {
           formGroup: [{
             freightCurrency: {
               type: "currency",
-              value: this.UPLOAD_FORM['freightCurrency'],
+              value: args?.freightCurrency,
               label: "FREIGHT CURRENCY",
               rules: {
                 required: true,
@@ -250,7 +258,7 @@ export class EditBOEComponent implements OnInit {
             },
             freightValue: {
               type: "text",
-              value: this.UPLOAD_FORM['freightAmount'],
+              value: args?.freightAmount,
               label: "FREIGHT VALUE",
               rules: {
                 required: true,
@@ -258,7 +266,7 @@ export class EditBOEComponent implements OnInit {
             },
             CIfreightValue: {
               type: "text",
-              value: "",
+              value:  args?.CI_DETAILS?.data?.FreightValue,
               label: "CI FREIGHT VALUE",
               disabled: true,
               rules: {
@@ -286,7 +294,7 @@ export class EditBOEComponent implements OnInit {
           formGroup: [{
             insuranceCurrency: {
               type: "currency",
-              value: this.UPLOAD_FORM['insuranceCurrency'],
+              value: args?.insuranceCurrency,
               label: "Insurance Currency",
               rules: {
                 required: true,
@@ -294,7 +302,7 @@ export class EditBOEComponent implements OnInit {
             },
             insuranceAmount: {
               type: "text",
-              value: this.UPLOAD_FORM['insuranceAmount'],
+              value: args?.insuranceAmount!="NF"?args?.insuranceAmount:'0',
               label: "INSURANCE AMOUNT*",
               rules: {
                 required: true,
@@ -302,7 +310,7 @@ export class EditBOEComponent implements OnInit {
             },
             CIinsuranceAmount: {
               type: "text",
-              value: "",
+              value:  args?.CI_DETAILS?.data?.InsuranceValue,
               label: "CI INSURANCE AMOUNT*",
               disabled: true,
               rules: {
@@ -322,7 +330,7 @@ export class EditBOEComponent implements OnInit {
           formGroup: [{
             discountCurrency: {
               type: "currency",
-              value: this.UPLOAD_FORM['discountCurrency'],
+              value: args?.discountCurrency,
               label: "DISCOUNT Currency",
               rules: {
                 required: true,
@@ -330,7 +338,7 @@ export class EditBOEComponent implements OnInit {
             },
             discountAmount: {
               type: "text",
-              value: this.UPLOAD_FORM['discountAmount'],
+              value: args?.discountAmount!="NF"?args?.discountAmount:'0',
               label: "DISCOUNT AMOUNT*",
               rules: {
                 required: true,
@@ -357,7 +365,7 @@ export class EditBOEComponent implements OnInit {
           formGroup: [{
             miscellaneousCurrency: {
               type: "currency",
-              value: this.UPLOAD_FORM['miscellaneousCurrency'],
+              value: args?.miscellaneousCurrency,
               label: "MISCELLANEOUS Currency",
               rules: {
                 required: true,
@@ -365,7 +373,7 @@ export class EditBOEComponent implements OnInit {
             },
             miscellaneousAmount: {
               type: "text",
-              value: "",
+              value:  args?.miscellaneousAmount!="NF"?args?.miscellaneousAmount:'0',
               label: "MISCELLANEOUS AMOUNT*",
               rules: {
                 required: true,
@@ -373,7 +381,7 @@ export class EditBOEComponent implements OnInit {
             },
             CImiscellaneousAmount: {
               type: "text",
-              value: "",
+              value:  args?.CI_DETAILS?.data?.MiscCharges,
               label: "CI MISCELLANEOUS AMOUNT*",
               disabled: true,
               rules: {
@@ -393,7 +401,7 @@ export class EditBOEComponent implements OnInit {
           formGroup: [{
             commissionCurrency: {
               type: "currency",
-              value: this.UPLOAD_FORM['commissionCurrency'],
+              value: args?.commissionCurrency,
               label: "COMMISSION Currency",
               rules: {
                 required: true,
@@ -401,7 +409,7 @@ export class EditBOEComponent implements OnInit {
             },
             commissionAmount: {
               type: "text",
-              value: this.UPLOAD_FORM['commissionAmount'],
+              value: args?.commissionAmount!="NF"?args?.commissionAmount:'0',
               label: "COMMISSION AMOUNT*",
               rules: {
                 required: true,
@@ -409,7 +417,8 @@ export class EditBOEComponent implements OnInit {
             },
           }]
         },
-      }, 'BILL_OF_ENTRY');
+      }, 'BILL_OF_ENTRY').then((res)=>{
+      });
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -418,46 +427,18 @@ export class EditBOEComponent implements OnInit {
   onSubmit(e: any) {
     let newform: any = this.formJSON_To_Array(e.value);
     console.log(e, newform, 'formJSON_To_Array')
-    newform.pipo = this.pipoArr;
     newform.file = 'import';
-    newform.doc = this.pipourl1;
-    newform.benneName = this.BUYER_LIST;
     newform.currency = newform.currency?.type != undefined ? newform.currency.type : newform.currency;
     newform.commissionCurrency = newform.commissionCurrency?.type != undefined ? newform.commissionCurrency.type : newform.commissionCurrency;
     newform.discountCurrency = newform.discountCurrency?.type != undefined ? newform.discountCurrency.type : newform.discountCurrency;
     newform.freightCurrency = newform.freightCurrency?.type != undefined ? newform.freightCurrency.type : newform.freightCurrency;
     newform.insuranceCurrency = newform.insuranceCurrency?.type != undefined ? newform.insuranceCurrency.type : newform.insuranceCurrency;
     newform.miscellaneousCurrency = newform.miscellaneousCurrency?.type != undefined ? newform.miscellaneousCurrency.type : newform.miscellaneousCurrency;
-    newform.commercialNumber = newform.CI_DETAILS?.data?.commercialNumber
     console.log('Benne Name', newform);
-    this.documentService.getInvoice_No({
-      boeNumber: newform?.boeNumber
-    }, 'boerecords').subscribe((resp: any) => {
-      console.log('boerecord', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addBoe(newform).subscribe((data: any) => {
-          console.log('addBoe', data);
-          let updatedData1 = {
-            "boeRef": [
-              data?._id,
-            ]
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'import', '', updatedData1).subscribe((data_res) => {
-            console.log('updateManyPipo', data_res);
-            this.toastr.success('Boe added successfully.');
-            this.router.navigate(['home/Summary/Import/boe']);
-          }, (error) => {
-            console.log('error');
-          }
-          );
-        }, (error) => {
-          console.log('error');
-        }
-        );
-      } else {
-        this.toastr.error(`Please check this boe no. : ${newform?.boeNumber} already exit...`);
-      }
-    })
+    this.documentService.updateBoe(newform,this.data?._id).subscribe((data: any) => {
+      this.toastr.success('Boe added successfully.');
+      this.router.navigate(['home/Summary/Import/boe']);
+    });
   }
 
   clickPipo(event: any) {

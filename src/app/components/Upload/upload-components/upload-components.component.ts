@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Injectable, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injectable, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../service/upload-service-validator.service';
 import $ from 'jquery';
 import { AuthGuard } from '../../../service/authguard.service';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'upload-components',
@@ -29,6 +30,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('ADD_NEW_BUTTON_VISIBLE') ADD_NEW_BUTTON_VISIBLE: boolean = false;
   @ViewChild('BuyerNotFoundPanel') BuyerNotFound: ElementRef | any;
   @ViewChild('BeneficiaryNotFoundPanel') BeneficiaryNotFound: ElementRef | any
+  @ViewChildren('CommericalNo') CommericalNo: QueryList<NgSelectComponent>;
+
   LOGIN_TOEKN: any = '';
   POPUP_VISIBLILTY: any = {
     BuyerNotFound: '',
@@ -159,6 +162,9 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     let token = this.authGuard.loadFromLocalStorage();
+    // this.CommericalNo.changes.subscribe(()=>{
+    //    console.log($("#"+this.CommericalNo.first?.element?.id+' input')?.click(),"CommericalNo")
+    // })
     if (token != null) {
       this.validator.loaddata().then((res: any) => {
         if (this.validator?.BUYER_DETAILS?.length == 0 && this?.validator?.userData?.sideMenu == 'export') {

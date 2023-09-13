@@ -33,7 +33,8 @@ export class EditImportDebitNotesComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -45,19 +46,21 @@ export class EditImportDebitNotesComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditDestructionCertificatesComponent")
+    });
   }
-
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].publicUrl;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         debitNoteNumber: {
           type: "text",
-          value: "",
+          value: args?.debitNoteNumber,
           label: "Debit Note Number*",
           rules: {
             required: true,
@@ -65,7 +68,7 @@ export class EditImportDebitNotesComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: args?.currency,
           label: "Currency",
           rules: {
             required: true,
@@ -73,7 +76,7 @@ export class EditImportDebitNotesComponent implements OnInit {
         },
         totalDebitAmount: {
           type: "text",
-          value: "",
+          value: args?.totalDebitAmount,
           label: "Debit Note Amount",
           rules: {
             required: true,
@@ -82,40 +85,17 @@ export class EditImportDebitNotesComponent implements OnInit {
       }, 'DebitNoteImport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
-
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.currency = e.value?.currency?.type;
     e.value.file = 'import';
-    e.value.DebitNote = this.pipourl1;
+    e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
+    e.value.commercialNumber = e.value?.commercialNumber?.value!=undefined?e.value?.commercialNumber?.value:e.value?.commercialNumber;
     console.log(e.value);
-    this.documentService.getInvoice_No({
-      debitNoteNumber: e.value.debitNoteNumber
-    }, 'debitnotes').subscribe((resp: any) => {
-      console.log('debitNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addDebit(e.value).subscribe((res: any) => {
-          this.toastr.success(`debit Note Document Added Successfully`);
-          let updatedData = {
-            "debitNoteRef": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
-            console.log('debit Note document', this.pipourl1);
-            console.log(data);
-            this.router.navigate(['home/Summary/Import/Debit']);
-          });
-        },
-          (err) => console.log('Error adding pipo'));
-      } else {
-        this.toastr.error(`Please check this debit note no. : ${e.value.debitNoteNumber} already exit...`);
-      }
+    this.documentService.updateDebit(e.value,this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`debit Note Document Updated Successfully`);
+      this.router.navigate(['home/Summary/Import/Debit']);
     });
   }
 

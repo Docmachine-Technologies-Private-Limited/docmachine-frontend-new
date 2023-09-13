@@ -5,7 +5,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -264,15 +264,12 @@ export class ImportOpinionReportsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      opinionReportNumber: this.SELECTED_VALUE['opinionReportNumber'],
-      opinionReportAmount: this.SELECTED_VALUE['opinionReportAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/OpinionReports`],navigationExtras);
     this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
 

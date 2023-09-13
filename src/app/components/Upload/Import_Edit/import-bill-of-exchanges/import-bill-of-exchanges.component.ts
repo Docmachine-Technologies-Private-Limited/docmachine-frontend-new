@@ -6,7 +6,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
@@ -42,6 +42,7 @@ export class EditImportBillOfExchangesComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR:boolean=false;
+  data: any = '';
   
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -50,28 +51,31 @@ export class EditImportBillOfExchangesComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public route: ActivatedRoute,
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditBillOfExchangesComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         billExchangeNumber: {
           type: "text",
-          value: "",
+          value: args?.billExchangeNumber,
           label: "Bill Of Exchange Number*",
           rules: {
             required: true,
           }
         }
       },'ImportBillOfExchange');
-      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
@@ -79,37 +83,11 @@ export class EditImportBillOfExchangesComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    console.log(e.value);
-    this.documentService.getInvoice_No({
-      billExchangeNumber: e.value.billExchangeNumber
-    }, 'billofexchanges').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addBillExchange(e.value).subscribe(
-          (res: any) => {
-            this.toastr.success(`Bill Of Exchange Document Added Successfully`);
-            let updatedData = {
-              "billOfExchangeRef": [
-                res.data._id,
-              ],
-            }
-            this.userService.updateManyPipo(this.pipoArr, 'billOfExchange', this.pipourl1, updatedData).subscribe((data) => {
-                  console.log(data);
-                  this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
-                },(error) => {
-                  console.log('error');
-                }
-              );
-          },
-          (err) => console.log('Error adding pipo')
-        );
-      } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.billExchangeNumber} already exit...`);
-      }
-    });
+    this.documentService.updateBillExchange(e.value,this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Bill Of Exchange Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
+      },(err) => console.log('Error adding pipo')
+    );
   }
 
   clickPipo(event: any) {

@@ -5,7 +5,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
@@ -80,13 +80,11 @@ export class ImportDebitNoteComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-
-  ) {
+    public dialog: MatDialog) {
   }
+  
   async ngOnInit() {
     this.FILTER_VALUE_LIST = [];
     this.wininfo.set_controller_of_width(270, '.content-wrap')
@@ -257,15 +255,21 @@ export class ImportDebitNoteComponent implements OnInit {
   EDIT_DATE: any = [];
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
-      totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
+    //   totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/DebitNoteDocument`],navigationExtras);
     this.toastr.warning('Debit Note Row Is In Edit Mode');
   }
 

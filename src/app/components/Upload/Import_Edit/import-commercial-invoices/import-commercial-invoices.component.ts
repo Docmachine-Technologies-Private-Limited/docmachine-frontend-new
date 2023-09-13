@@ -6,7 +6,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
@@ -42,29 +42,34 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  data: any = '';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
+    public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params["item"]);
+      this.response(JSON.parse(params["item"]));
+      console.log(this.data, "EditCommercialInvoicesComponent")
+    });
   }
 
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
       this.validator.buildForm({
         AdvanceInfo: {
           type: "AdvanceInfo",
-          value: "",
+          value: args?.AdvanceInfo,
           label: "Select Advance no.",
           rules: {
             required: false,
@@ -73,7 +78,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         AdvanceNo: {
           type: "text",
-          value:"",
+          value:args?.AdvanceNo,
           label: "Advance No.",
           rules: {
             required: false,
@@ -81,7 +86,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         AdvanceCurrency: {
           type: "currency",
-          value: "",
+          value: args?.AdvanceCurrency,
           label: "Advance Currency*",
           rules: {
             required: false,
@@ -89,7 +94,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         AdvanceAmount: {
           type: "number",
-          value: "",
+          value: args?.AdvanceAmount,
           label: "Advance Amount",
           rules: {
             required: false,
@@ -98,7 +103,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         commercialNumber: {
           type: "text",
           typeOf:'ALPHA_NUMERIC',
-          value: "",
+          value: args?.commercialNumber,
           label: "Commercial Invoice Number*",
           rules: {
             required: true,
@@ -106,7 +111,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: args?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -114,7 +119,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         amount: {
           type: "number",
-          value: "",
+          value: args?.amount,
           label: "Amount*",
           rules: {
             required: true,
@@ -122,7 +127,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         InvoiceDate: {
           type: "date",
-          value: "",
+          value: args?.InvoiceDate,
           label: "Invoice Date*",
           rules: {
             required: true,
@@ -130,7 +135,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         InvoiceValue: {
           type: "number",
-          value: "",
+          value: args?.InvoiceValue,
           label: "Commodity Amount*",
           rules: {
             required: true,
@@ -138,7 +143,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         FreightValue: {
           type: "number",
-          value: "",
+          value: args?.FreightValue,
           label: "Freight Amount*",
           rules: {
             required: true,
@@ -146,7 +151,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         InsuranceValue: {
           type: "number",
-          value: "",
+          value: args?.InsuranceValue,
           label: "Insurance Amount*",
           rules: {
             required: true,
@@ -154,7 +159,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         MiscCharges: {
           type: "number",
-          value: "",
+          value: args?.MiscCharges,
           label: "Misc Charges*",
           rules: {
             required: true,
@@ -162,7 +167,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         ThirdParty: {
           type: "text",
-          value: "",
+          value: args?.ThirdParty,
           label: "Third Party*",
           rules: {
             required: true,
@@ -177,48 +182,12 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
-    e.value.pipo = this.pipoArr;
-    console.log('pipoarrya', this.pipoArr);
-    e.value.commercialDoc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.AdvanceCurrency = e.value.AdvanceCurrency?.type != undefined ? e.value.AdvanceCurrency.type : e.value.AdvanceCurrency;
-    e.value.sbNo = '';
-    e.value.sbRef = [];
-    e.value.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
-    e.value.BoeRef = [this.validator.ORM_SELECTION_DATA?.id];
-    e.value.ORM_Ref = [this.validator.ORM_SELECTION_DATA?._id];
-    this.documentService.getInvoice_No({
-      commercialNumber: e.value.commercialNumber
-    }, 'commercials').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        delete e.value.AdvanceInfo
-        this.documentService.addCommercial(e.value).subscribe((res: any) => {
-          this.toastr.success(`Commercial Invoice Added Successfully`);
-          let updatedData = {
-            "commercialRef": [
-              res.data._id,
-            ],
-            "commercialdetails": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData).subscribe((data) => {
-            console.log('commercial', data);
-            this.router.navigate(['home/Summary/Import/Commercial']);
-          }, (error) => {
-            console.log('error');
-          }
-          );
-        },
-          (err) => console.log('Error adding pipo')
-        );
-
-      } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.commercialNumber} already exit...`);
-      }
-    });
+    this.documentService.updateCommercial(e.value,this.data?._id).subscribe((res: any) => {
+      this.toastr.success(`Commercial Invoice Updated Successfully`);
+      this.router.navigate(['home/Summary/Import/Commercial']);     
+    },(err) => console.log('Error adding pipo'));
   }
 
   clickPipo(event: any) {
