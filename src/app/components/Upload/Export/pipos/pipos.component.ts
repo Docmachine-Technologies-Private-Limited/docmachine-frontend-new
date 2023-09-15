@@ -92,10 +92,10 @@ export class PIPOSComponent implements OnInit {
         date: {
           type: "date",
           value: "",
-          label: "Invoice Date",
+          label: "Pipo Date",
           rules: {
             required: true,
-          }
+          },
         },
         currency: {
           type: "currency",
@@ -103,12 +103,18 @@ export class PIPOSComponent implements OnInit {
           label: "Currency",
           rules: {
             required: true,
-          }
+          },
+          autofill:{
+            type:"formGroup",
+            SetInputName:"currency",
+            CONTROLS_NAME:"paymentTerm",
+            GetInputName:"currency"
+           }
         },
         amount: {
           type: "text",
           value: "",
-          label: "Invoice amount",
+          label: "Pipo Amount",
           rules: {
             required: true,
           }
@@ -322,7 +328,8 @@ export class PIPOSComponent implements OnInit {
                 name: 'currency',
                 rules: {
                   required: true,
-                }
+                },
+                disabled:true
               },
             ]
           ]
@@ -336,39 +343,46 @@ export class PIPOSComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
-    e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
-    e.value.buyerName = e.value.buyerName?.value != undefined ? e.value.buyerName.value : e.value.buyerName;
-    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
-    e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
-    e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
-    if (e.value?.document == 'PI') {
-      e.value.doc = this.pipourl1
-    }
-    else if (e.value?.document == 'PO') {
-      e.value.doc = this.pipourl1
-    }
-    this.documentService.getInvoice_No({
-      pi_poNo: e.value.pi_poNo
-    }, 'pi_po').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addPipo(e.value).subscribe(
-          (res) => {
-            this.toastr.success('PI/PO added successfully.');
-            if (this.validator.SELECTED_PIPO?.length == 0) {
-              this.router.navigateByUrl("home/Summary/Export/Pipo");
-            }
-          },
-          (err) => console.log("Error adding pipo")
-        );
-      } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.pi_poNo} already exit...`);
+    console.log(this.paymentTermSum(e.value.paymentTerm),e.value.amount,"this.paymentTermSum(e.value.paymentTerm)")
+    if (this.paymentTermSum(e.value.paymentTerm) <= parseInt(e.value.amount)) {
+      e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+      e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
+      e.value.buyerName = e.value.buyerName?.value != undefined ? e.value.buyerName.value : e.value.buyerName;
+      e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+      e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
+      e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
+      if (e.value?.document == 'PI') {
+        e.value.doc = this.pipourl1
       }
-    });
+      else if (e.value?.document == 'PO') {
+        e.value.doc = this.pipourl1
+      }
+      this.documentService.getInvoice_No({
+        pi_poNo: e.value.pi_poNo
+      }, 'pi_po').subscribe((resp: any) => {
+        console.log('creditNoteNumber Invoice_No', resp)
+        if (resp.data.length == 0) {
+          this.documentService.addPipo(e.value).subscribe(
+            (res) => {
+              this.toastr.success('PI/PO added successfully.');
+              if (this.validator.SELECTED_PIPO?.length == 0) {
+                this.router.navigateByUrl("home/Summary/Export/Pipo");
+              }
+            },
+            (err) => console.log("Error adding pipo")
+          );
+        } else {
+          this.toastr.error(`Please check this sb no. : ${e.value.pi_poNo} already exit...`);
+        }
+      });
+    } else {
+      this.toastr.error(`Sorry your pipo amount and paymentTerm amount not equal...`);
+    }
   }
-
+  paymentTermSum(value: any) {
+    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+  }
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;

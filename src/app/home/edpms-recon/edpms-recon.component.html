@@ -6,23 +6,15 @@
         <div class="upload-panel">
             <mat-tab-group (selectedTabChange)="onTabChanged($event);">
                 <mat-tab label="Upload">
-                    <div class="right-panel p-2">
+                    <div class="right-panel p-4">
                         <custom-status-progress-bar (event)="dumpfun($event)"
                             [data]="this.pipoArrayListdata"></custom-status-progress-bar>
-                        <select class="form-control" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
-                            <option value="" disabled hidden>Select Bank</option>
-                            <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}
-                            </option>
-                        </select>
-                        <form id="file-upload-form" class="uploader" method="POST" (click)="uploadfile?.click();">
-                            <input id="file-upload" type="file" name="fileUpload"
-                                [attr.disabled]="disableUpload ? '' : null" (error)="onUploadError($event)"
-                                (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-                                (sending)="submit($event)" [dropzone]="config3" id="dropzone"
-                                (click)="fileInputClick($event)" #uploadfile />
-                            <button class="btn btn-primary m-0">Upload .xls</button>
-                        </form>
-                        <button class="btn btn-primary m-0" [disabled]="edpmsData.length!=0?false:true" (click)="onSubmit()">Submit</button>
+                        <div class="right-button-area">
+                            <button class="btn btn-primary m-0 PopupOpen" style="width: 100px;"
+                                popup-close="EDPMS_UPLOAD">Upload .xls</button>
+                            <button class="btn btn-primary m-0" style="width: 100px;"
+                                [disabled]="edpmsData.length!=0?false:true" (click)="onSubmit()">Submit</button>
+                        </div>
                     </div>
                     <div class="table-panel">
                         <div class="col-12 p-0" #debitnotes>
@@ -104,23 +96,27 @@
                 </mat-tab>
                 <mat-tab label="Previous Data">
                     <div *ngIf="this.FILTER_EDPMS_DATA.length!=0" class="right-panel p-2">
-                        <div class="button-list" style="display: flex;gap: 5px;">
-                            <custom-status-progress-bar (event)="dumpfun($event)"
+                        <custom-status-progress-bar (event)="dumpfun($event)"
                             [data]="this.pipoArrayListdata2"></custom-status-progress-bar>
-                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" class="btn btn-primary">Netoff/Setoff</button>
+                        <div class="right-button-area-1">
+                            <button type="submit" [disabled]="this.SUBMIT_BUTTON"
+                                class="btn btn-primary">Netoff/Setoff</button>
                             <button type="submit" [disabled]="this.SUBMIT_BUTTON" class="btn btn-primary">ETX</button>
-                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" class="btn btn-primary">Writeoff</button>
-                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" routerLink="/home/direct-dispatch" class="btn btn-primary">Submit D2B</button>
-                        </div>
-                        <app-ng-dropdown-custom style="margin-left:30px" placeHolderText="Search sb no." width="170px" [items]="this.SB_NO_LIST"
-                            (modelChanges)="EDMPS_Search($event?.value)" (keyEvent)="EDMPS_Search($event)"
-                            bindLabel="value" [multiple]="false" #buyerNameSelection>
-                        </app-ng-dropdown-custom>
-                        <div class="pagination" *ngIf="this.FILTER_EDPMS_DATA.length!=0">
-                            <mat-paginator [length]="this.FILTER_EDPMS_DATA.length" [pageSize]="10"
-                                [pageSizeOptions]="this.pageSizeOptionsList" (page)="this.PAGINATION_EVENT($event)"
-                                aria-label="Select page">
-                            </mat-paginator>
+                            <button type="submit" [disabled]="this.SUBMIT_BUTTON"
+                                class="btn btn-primary">Writeoff</button>
+                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" routerLink="/home/direct-dispatch"
+                                class="btn btn-primary">Submit D2B</button>
+                            <app-ng-dropdown-custom style="margin-left:30px" placeHolderText="Search sb no."
+                                width="170px" [items]="this.SB_NO_LIST" (modelChanges)="EDMPS_Search($event?.value)"
+                                (keyEvent)="EDMPS_Search($event)" bindLabel="value" [multiple]="false"
+                                #buyerNameSelection>
+                            </app-ng-dropdown-custom>
+                            <div class="pagination" style="height: 10px;" *ngIf="this.FILTER_EDPMS_DATA.length!=0">
+                                <mat-paginator [length]="this.FILTER_EDPMS_DATA.length" [pageSize]="10"
+                                    [pageSizeOptions]="this.pageSizeOptionsList" (page)="this.PAGINATION_EVENT($event)"
+                                    aria-label="Select page">
+                                </mat-paginator>
+                            </div>
                         </div>
                     </div>
                     <div class="table-panel" *ngIf="this.FILTER_EDPMS_DATA.length!=0">
@@ -202,19 +198,20 @@
                 </mat-tab>
                 <mat-tab label="Entry Cleared">
                     <div *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0" class="right-panel p-2">
-                        <div class="button-list" style="display: flex;gap: 5px;">
-                            <custom-status-progress-bar (event)="dumpfun($event)"
+                        <custom-status-progress-bar (event)="dumpfun($event)"
                             [data]="this.pipoArrayListdata3"></custom-status-progress-bar>
-                        </div>
-                        <app-ng-dropdown-custom placeHolderText="Search sb no." width="170px" [items]="this.SB_NO_LIST2"
-                            (modelChanges)="EDMPS_Search2($event?.value)" (keyEvent)="EDMPS_Search2($event)"
-                            bindLabel="value" [multiple]="false" #buyerNameSelection>
-                        </app-ng-dropdown-custom>
-                        <div class="pagination" *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0">
-                            <mat-paginator [length]="this.FILTER_EDPMS_CLEARED_DATA.length" [pageSize]="10"
-                                [pageSizeOptions]="this.pageSizeOptionsList2" (page)="this.PAGINATION_EVENT2($event)"
-                                aria-label="Select page">
-                            </mat-paginator>
+                        <div class="right-button-area-1">
+                            <app-ng-dropdown-custom placeHolderText="Search sb no." width="170px"
+                                [items]="this.SB_NO_LIST2" (modelChanges)="EDMPS_Search2($event?.value)"
+                                (keyEvent)="EDMPS_Search2($event)" bindLabel="value" [multiple]="false"
+                                #buyerNameSelection>
+                            </app-ng-dropdown-custom>
+                            <div class="pagination" *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0">
+                                <mat-paginator [length]="this.FILTER_EDPMS_CLEARED_DATA.length" [pageSize]="10"
+                                    [pageSizeOptions]="this.pageSizeOptionsList2"
+                                    (page)="this.PAGINATION_EVENT2($event)" aria-label="Select page">
+                                </mat-paginator>
+                            </div>
                         </div>
                     </div>
                     <div class="table-panel" *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0">
@@ -289,8 +286,8 @@
     </main>
 </div>
 
-<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
-    id="pdf_view" [name]="'EDPMS Documents View'">
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="pdf_view"
+    [name]="'EDPMS Documents View'">
     <div class="col-12 p-2">
         <app-pdf-viewer *ngIf="this.SELECT_DOCUMENTS_VIEWS!=''" [downloadShow]="false"
             [name]="this.SELECT_DOCUMENTS_VIEWS?.text" [src]="this.SELECT_DOCUMENTS_VIEWS?.doc" width="100%"
@@ -301,10 +298,16 @@
 <app-custom-model [customstyle]="{'margin':'auto !important'}" modalbodyheight="85vh" class="p-2" height="95vh"
     id="pdf_upload" [name]="'Upload EDPMS Documents'">
     <div class="col-12 p-2" *ngIf="this.SELECT_DOCUMENTS_UPLOAD!=''">
-       <export-app-pipos *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='Pipo doc'"></export-app-pipos>
-       <app-shipping-bill *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='Sb doc'"></app-shipping-bill>
-       <export-airway-bl-copy *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='blCopy doc'"></export-airway-bl-copy>
-       <export-commercial-invoices *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='commercial doc'"></export-commercial-invoices>
-       <export-packing-list-invoices *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='packing doc'"></export-packing-list-invoices>
+        <export-app-pipos *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='Pipo doc'"></export-app-pipos>
+        <app-shipping-bill *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='Sb doc'"></app-shipping-bill>
+        <export-airway-bl-copy *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='blCopy doc'"></export-airway-bl-copy>
+        <export-commercial-invoices
+            *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='commercial doc'"></export-commercial-invoices>
+        <export-packing-list-invoices
+            *ngIf="this.SELECT_DOCUMENTS_UPLOAD?.text=='packing doc'"></export-packing-list-invoices>
     </div>
 </app-custom-model>
+
+<upload-popup id="EDPMS_UPLOAD" url="documents/uploadFile3" UploadFilesNames="Upload EDPMS XSLS"
+    acceptedFiles="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+    (event)="onUploadSuccess($event)"></upload-popup>

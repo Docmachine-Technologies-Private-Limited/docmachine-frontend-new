@@ -110,6 +110,7 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0" [items]="this.validator.CURRENCY_LIST"
                         bindLabel="type" [multiple]="false"
+                        (change)="AutoFillCurrency($event,field?.autofill)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
@@ -546,6 +547,7 @@
                                         <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.CURRENCY_LIST?.length!=0"
                                             [items]="this.validator?.CURRENCY_LIST" bindLabel="type" [multiple]="false"
+                                            (change)="AutoFillCurrency($event,formGroupItem?.autofill)"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
                                             [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value">
                                         </ng-select>
@@ -667,7 +669,7 @@
                                             </ng-select>
                                             <button type="button" class="btn btn-primary PopupOpen"
                                                 popup-close="Add_New_Bank_Name"
-                                                *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true">Add
+                                                *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true" (click)="onAddNewBank()">Add
                                                 New</button>
                                         </div>
                                     </div>
@@ -723,7 +725,7 @@
         </div>
     </div>
 </app-custom-model>
-
+<!-- 
 <app-custom-model *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true" [minimizedisabled]="false" EventButton="false"
     [RemoveBgTop]="false" class="p-2 mt-2" id="Add_New_Bank_Name" [customstyle]="{'max-width':'40vw !important'}"
     height="30vh" [name]="'Add New Bank Name'" #Add_New_Bank_NamePanel>
@@ -731,7 +733,7 @@
         <upload-components id="AddNewBankName"
             (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)"></upload-components>
     </div>
-</app-custom-model>
+</app-custom-model> -->
 
 <app-custom-model [minimizedisabled]="false" EventButton="false" [RemoveBgTop]="false" class="p-2 mt-2" id="IncoTerm"
     [customstyle]="{'max-width':'60vw !important','margin-top':'100px !important'}" height="40vh" [name]="'Inco Term'">

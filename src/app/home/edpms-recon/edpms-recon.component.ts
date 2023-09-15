@@ -51,7 +51,8 @@ export class EdpmsReconComponent implements OnInit {
   LIMIT: number = 10;
   pageSizeOptionsList: any = [];
   pageSizeOptionsList2: any = [];
-
+  USER_DETAILS:any=[];
+  
   constructor(
     private userService: UserService,
     public documentService: DocumentService,
@@ -67,11 +68,12 @@ export class EdpmsReconComponent implements OnInit {
     this.config3 = {
       url: `${this.api_base}/documents/uploadFile3`,
       method: `POST`,
-      maxFiles: 1,
+      maxFiles: 5,
       maxFilesize: 5,
       addRemoveLinks: true,
       headers: this.headers,
       timeout: 820000,
+      clickable: false,
       dictDefaultMessage: "Drag a document here",
       acceptedFiles:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
@@ -95,6 +97,8 @@ export class EdpmsReconComponent implements OnInit {
     this.documentService.Inner_loading = true;
     this.getUserID();
     await this.userService.getTeam().subscribe((res: any) => {
+    this.USER_DETAILS=res?.data[0];
+     console.log(res,"userService.getTeam")
       this.masterTeam = res?.data[0]?.bankDetails;
       this.masterTeam.forEach((acc: any) => {
         if (!this.bankAccounts?.includes(acc?.bank)) {
@@ -165,28 +169,35 @@ export class EdpmsReconComponent implements OnInit {
   preparePayload() {
     let payload: any = [];
     console.log('create edpms res: ', this.masterExcelData);
-    this.masterExcelData.forEach((item: any) => {
+    for (let index = 0; index < this.masterExcelData?.length; index++) {
+      const item:any = this.masterExcelData[index];
       console.log(item?.sbdata, 'jguhgjhghjgdfjsfsdfdsfdsfd')
-      const tempObject = {
-        userId: this.applicant,
-        bank: this.bankSelection,
-        sbNo: item['Shipping Bill No'],
-        sbDate: new Date((item['Shipping Bill Date'] - 25569) * 24 * 60 * 60 * 1000),
-        adCode: item['AD Code'],
-        portCode: item['Port Code'],
-        edpmsStatus: item['STATUS'],
-        adRefNo: item['adBillNo'],
-        sbAmount: item['sbAmount'],
-        sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai != "-1" ? this.getSBAmount(item['Shipping Bill No'])?.balanceAvai : this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
-        sbCurrency: item['sbCurrency'],
-        statusMeaning: this.getStatusMeaning(item['STATUS']),
-        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
-        docAvailable: item['systemStatus'] === 'Available' ? true : false,
-        action: this.getAction(item['systemStatus']),
-        sbdata: item['sbdata']
-      };
-      payload.push(tempObject);
-    });
+      if (item['IE Code']==this.USER_DETAILS?.iec) {
+        const tempObject = {
+          userId: this.applicant,
+          bank: '',
+          sbNo: item['Shipping Bill No'],
+          sbDate: new Date((item['Shipping Bill Date'] - 25569) * 24 * 60 * 60 * 1000),
+          adCode: item['AD Code'],
+          portCode: item['Port Code'],
+          edpmsStatus: item['STATUS'],
+          adRefNo: item['adBillNo'],
+          sbAmount: item['sbAmount'],
+          sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai != "-1" ? this.getSBAmount(item['Shipping Bill No'])?.balanceAvai : this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
+          sbCurrency: item['sbCurrency'],
+          statusMeaning: this.getStatusMeaning(item['STATUS']),
+          systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
+          docAvailable: item['systemStatus'] === 'Available' ? true : false,
+          action: this.getAction(item['systemStatus']),
+          sbdata: item['sbdata']
+        };
+        payload.push(tempObject);
+      }else{
+        payload=[];
+        this.toastr.error("Your excel sheet iec code and your regitration iec code is different please check...");
+        break;
+      }
+    }
     return payload
   }
 

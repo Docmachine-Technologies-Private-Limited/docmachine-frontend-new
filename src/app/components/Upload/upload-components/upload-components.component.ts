@@ -23,6 +23,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('id') id: any = '';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();
+  @Output('AddNewBank') AddNewBank: any = new EventEmitter();
   @Output('RawValueEvent') RawValue: any = new EventEmitter();
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
@@ -125,18 +126,20 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   CreateFormBank() {
-    this.validator.buildForm({
-      BankName: {
-        type: "text",
-        value: "",
-        label: "Bank Name",
-        placeholderText: 'Bank Name',
-        rules: {
-          required: true,
+    setTimeout(() => {
+      this.validator.buildForm({
+        BankName: {
+          type: "text",
+          value: "",
+          label: "Bank Name",
+          placeholderText: 'Bank Name',
+          rules: {
+            required: true,
+          },
+          maxLength: 200
         },
-        maxLength: 200
-      },
-    }, 'AddNewBankName');
+      }, 'AddNewBankName');
+    }, 200);
   }
 
   addNewBank(e: any, panel: any) {
@@ -145,6 +148,10 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.toastr.success(res?.message);
       panel?.displayHidden;
     })
+  }
+
+  onAddNewBank() {
+    this.AddNewBank.emit(true);
   }
 
   initialName(words) {
@@ -162,9 +169,6 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     let token = this.authGuard.loadFromLocalStorage();
-    // this.CommericalNo.changes.subscribe(()=>{
-    //    console.log($("#"+this.CommericalNo.first?.element?.id+' input')?.click(),"CommericalNo")
-    // })
     if (token != null) {
       this.validator.loaddata().then((res: any) => {
         if (this.validator?.BUYER_DETAILS?.length == 0 && this?.validator?.userData?.sideMenu == 'export') {
@@ -189,6 +193,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.LOGIN_TOEKN = ''
     }
   }
+
   ToHSCode_Selected: any = [];
   ToHSCode(event: any, value: any, index: any) {
     if (event?.target?.checked == true) {
@@ -197,6 +202,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.ToHSCode_Selected[index] = '';
     }
   }
+
   ALL_DATA_HSCODE: any = '';
   DoneButton() {
     let temp2: any = [];
@@ -206,6 +212,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.ALL_DATA_HSCODE = temp2.join(',');
     this.setValue(this.ALL_DATA_HSCODE, this.HSCODE_FEILD_FORM?.field);
   }
+
   filtertimeout: any = ''
   FILTER_HS_CODE_DATA: any = [];
   filterHSCode(value: any) {
@@ -314,4 +321,15 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  AutoFillCurrency(value: any, autofillitem: any) {
+    if (autofillitem != undefined && autofillitem != null && autofillitem != '') {
+      if (autofillitem?.type == "formGroup") {
+        this.validator.dynamicFormGroup[this.id]?.controls[autofillitem?.CONTROLS_NAME]?.controls?.forEach(element => {
+          element?.controls[autofillitem?.SetInputName]?.setValue(value?.type);
+        });
+      } else {
+        this.validator.dynamicFormGroup[this.id]?.controls[autofillitem?.CONTROLS_NAME]?.controls?.setValue(value?.type);
+      }
+    }
+  }
 }

@@ -97,7 +97,8 @@ export class EditPIPOSComponent implements OnInit {
             name: 'currency',
             rules: {
               required: true,
-            }
+            },
+            disabled:true
           })
       });
       ModeofTransportData1 = [{
@@ -211,7 +212,7 @@ export class EditPIPOSComponent implements OnInit {
         date: {
           type: "date",
           value: args?.date,
-          label: "Invoice Date",
+          label: "Pipo Date",
           rules: {
             required: true,
           }
@@ -222,12 +223,18 @@ export class EditPIPOSComponent implements OnInit {
           label: "Currency",
           rules: {
             required: true,
-          }
+          },
+          autofill:{
+            type:"formGroup",
+            SetInputName:"currency",
+            CONTROLS_NAME:"paymentTerm",
+            GetInputName:"currency"
+           }
         },
         amount: {
           type: "text",
           value: args?.amount,
-          label: "Invoice amount",
+          label: "Pipo Amount",
           rules: {
             required: true,
           }

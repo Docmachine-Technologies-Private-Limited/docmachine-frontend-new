@@ -141,7 +141,7 @@ export class ImportPIPOSComponent implements OnInit {
         date: {
           type: "date",
           value: "",
-          label: "Invoice Date",
+          label: "Pipo Date",
           rules: {
             required: true,
           }
@@ -157,10 +157,16 @@ export class ImportPIPOSComponent implements OnInit {
         amount: {
           type: "text",
           value: "",
-          label: "Invoice amount",
+          label: "Pipo Amount",
           rules: {
             required: true,
-          }
+          },
+          autofill:{
+            type:"formGroup",
+            SetInputName:"currency",
+            CONTROLS_NAME:"paymentTerm",
+            GetInputName:"currency"
+           }
         },
         commodity: {
           type: "commodity",
@@ -287,7 +293,8 @@ export class ImportPIPOSComponent implements OnInit {
                 name: 'currency',
                 rules: {
                   required: true,
-                }
+                },
+                disabled:true
               },
             ]
           ]

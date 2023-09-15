@@ -98,6 +98,8 @@ import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connecto
 import { ContactuspanelComponent } from "./contactuspanel/contactuspanel.component";
 import { ContactusTechnicalComponent } from "./contactuspanel/contactus-technical/contactus-technical.component";
 import { ContactusProductOptionComponent } from "./contactuspanel/contactus-product-option/contactus-product-option.component";
+import { AddBuyerNameAdminMemberComponent } from "./manage-customer/add-buyer-name-admin-member/add-buyer-name-admin-member.component";
+import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-beneficiary-name-admin-member/add-beneficiary-name-admin-member.component";
 
 @NgModule({
   declarations: [
@@ -142,7 +144,9 @@ import { ContactusProductOptionComponent } from "./contactuspanel/contactus-prod
     TallyApiConnectorComponent,
     ContactuspanelComponent,
     ContactusTechnicalComponent,
-    ContactusProductOptionComponent
+    ContactusProductOptionComponent,
+    AddBuyerNameAdminMemberComponent,
+    AddBeneficiaryNameAdminMemberComponent
   ],
   imports: [
     SharedHomeModule,
@@ -211,6 +215,8 @@ import { ContactusProductOptionComponent } from "./contactuspanel/contactus-prod
           { path: "createBene", component: CreateBeneComponent, pathMatch: "full", canActivate: [MemberGuard] },
           { path: "TallyApiConnector", component: TallyApiConnectorComponent, pathMatch: "full", canActivate: [AdminMemberGuard] },
           { path: "inwardRemittance", component: InwardRemittanceComponent, pathMatch: "full", canActivate: [MemberGuard] },
+          { path: "AddBuyerNameAdminMember", component: AddBuyerNameAdminMemberComponent, pathMatch: "full", canActivate: [MemberGuard] },
+          { path: "AddBeneficiaryNameAdminMember", component: AddBeneficiaryNameAdminMemberComponent, pathMatch: "full", canActivate: [MemberGuard] },
           {
             path: "edit-remittance",
             component: EditRemittanceComponent,

@@ -619,13 +619,13 @@
       <li class="nav-item profile-panel" style="display:grid;"
         *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['export']==true">
         <span class="fa fa-plus" aria-hidden="true"></span>
-        <h6 class="p-0" (click)="navigationByUrl($event,'/manage-customer/export')">
+        <h6 class="p-0" (click)="navigationByUrl($event,'/AddBuyerNameAdminMember')">
           Add buyer</h6>
       </li>
       <li class="nav-item profile-panel" style="display:grid;"
         *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['import']==true">
         <span class="fa fa-plus" aria-hidden="true"></span>
-        <h6 class="p-0" (click)="navigationByUrl($event,'/manage-customer/import')">
+        <h6 class="p-0" (click)="navigationByUrl($event,'/AddBeneficiaryNameAdminMember')">
           Add Beneficiary</h6>
       </li>
       <li class="nav-item profile-panel" style="display:grid;">
