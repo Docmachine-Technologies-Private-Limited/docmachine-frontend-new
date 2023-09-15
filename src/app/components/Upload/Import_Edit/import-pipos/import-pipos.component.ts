@@ -178,7 +178,7 @@ export class EditImportPIPOSComponent implements OnInit {
         date: {
           type: "date",
           value: args?.date,
-          label: "Pipo Date",
+          label: "PI/PO Date",
           rules: {
             required: true,
           }
@@ -200,7 +200,7 @@ export class EditImportPIPOSComponent implements OnInit {
         amount: {
           type: "text",
           value: args?.amount,
-          label: "Pipo Amount",
+          label: "PI/PO Amount",
           rules: {
             required: true,
           }

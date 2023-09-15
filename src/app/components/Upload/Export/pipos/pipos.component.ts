@@ -92,7 +92,7 @@ export class PIPOSComponent implements OnInit {
         date: {
           type: "date",
           value: "",
-          label: "Pipo Date",
+          label: "PI/PO Date",
           rules: {
             required: true,
           },
@@ -114,7 +114,7 @@ export class PIPOSComponent implements OnInit {
         amount: {
           type: "text",
           value: "",
-          label: "Pipo Amount",
+          label: "PI/PO Amount",
           rules: {
             required: true,
           }
