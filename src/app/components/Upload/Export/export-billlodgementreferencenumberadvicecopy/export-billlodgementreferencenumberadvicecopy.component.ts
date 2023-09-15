@@ -113,6 +113,14 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
                 TransactionSbRef
               ],
             }
+            let updatedData1 = {
+              "blcopyRef": [
+                res.data._id,
+              ],
+            }
+            this.documentService.updateBlCopyRef(e?.value?.sbNo,updatedData1).subscribe((res: any) => {
+              console.log('updateBlCopyRef', res);
+            });
             this.documentService.updateBlcopyrefSB(updatedData, res.data._id).subscribe((res: any) => {
               console.log('updateBlcopyrefSB', res);
             });

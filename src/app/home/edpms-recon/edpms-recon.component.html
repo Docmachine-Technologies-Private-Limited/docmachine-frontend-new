@@ -200,7 +200,7 @@
                     <div *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0" class="right-panel p-2">
                         <custom-status-progress-bar (event)="dumpfun($event)"
                             [data]="this.pipoArrayListdata3"></custom-status-progress-bar>
-                        <div class="right-button-area-1">
+                        <div class="right-button-area-2">
                             <app-ng-dropdown-custom placeHolderText="Search sb no." width="170px"
                                 [items]="this.SB_NO_LIST2" (modelChanges)="EDMPS_Search2($event?.value)"
                                 (keyEvent)="EDMPS_Search2($event)" bindLabel="value" [multiple]="false"
