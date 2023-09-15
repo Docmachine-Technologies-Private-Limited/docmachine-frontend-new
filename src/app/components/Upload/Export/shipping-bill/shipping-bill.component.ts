@@ -37,8 +37,8 @@ export class ShippingBillComponent implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
-  @Input('PipoId') Pipoid:any='';
-  
+  @Input('PipoId') Pipoid: any = '';
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -88,7 +88,8 @@ export class ShippingBillComponent implements OnInit {
             name: 'currency',
             rules: {
               required: true,
-            }
+            },
+            disabled: true
           },
           {
             type: "text",
@@ -165,6 +166,12 @@ export class ShippingBillComponent implements OnInit {
           label: "FOB CURRENCY",
           rules: {
             required: true,
+          },
+          autofill: {
+            type: "formGroup",
+            SetInputName: "currency",
+            CONTROLS_NAME: "invoices",
+            GetInputName: "currency"
           }
         },
         fobValue: {
@@ -275,7 +282,8 @@ export class ShippingBillComponent implements OnInit {
                 name: 'currency',
                 rules: {
                   required: true,
-                }
+                },
+                disabled: true
               },
               {
                 type: "text",
@@ -299,49 +307,58 @@ export class ShippingBillComponent implements OnInit {
     console.log(e, 'value')
     let invoices: any = [];
     e.value.file = 'export';
-    for (let i = 0; i < e?.invoices?.length; i++) {
-      invoices = Object.assign(e?.invoices[i], invoices)
-    }
-    console.log(invoices);
-    e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
-    e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
-    e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
-    e.value.buyerName = this.BUYER_LIST
-    e.value.pipo = this.pipoArr;
-    e.value.doc = this.pipourl1?.doc;
-    this.documentService.getInvoice_No({
-      sbno: e.value.sbno
-    }, 'masterrecord').subscribe((resp: any) => {
-      console.log('getInvoice_No', resp)
-      if (resp?.data.length == 0) {
-        this.documentService.addMasterBySb(e.value).subscribe((res: any) => {
-          console.log('Shippingbill updated Successfully');
-          let updatedData: any = ''
-          updatedData = {
-            "sbRef": [
-              res?.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
-            console.log(data);
-            this.toastr.success('shipping Bill added successfully.');
-            if (this.validator.SELECTED_PIPO?.length == 0) {
-              this.router.navigate(['home/Summary/Export/Shipping-bill']);
+    console.log(this.paymentTermSum(e.value.invoices), e.value.fobValue, "this.paymentTermSum(e.value.invoices)")
+    if (this.paymentTermSum(e.value.invoices) <= parseInt(e.value.fobValue)) {
+      for (let i = 0; i < e?.invoices?.length; i++) {
+        invoices = Object.assign(e?.invoices[i], invoices)
+      }
+      console.log(invoices);
+      e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
+      e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
+      e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
+      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+      e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
+      e.value.buyerName = this.BUYER_LIST
+      e.value.pipo = this.pipoArr;
+      e.value.doc = this.pipourl1?.doc;
+      this.documentService.getInvoice_No({
+        sbno: e.value.sbno
+      }, 'masterrecord').subscribe((resp: any) => {
+        console.log('getInvoice_No', resp)
+        if (resp?.data.length == 0) {
+          this.documentService.addMasterBySb(e.value).subscribe((res: any) => {
+            console.log('Shippingbill updated Successfully');
+            let updatedData: any = ''
+            updatedData = {
+              "sbRef": [
+                res?.data._id,
+              ],
             }
+            this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
+              console.log(data);
+              this.toastr.success('shipping Bill added successfully.');
+              if (this.validator.SELECTED_PIPO?.length == 0) {
+                this.router.navigate(['home/Summary/Export/Shipping-bill']);
+              }
+            }, (error) => {
+              console.log('error');
+            }
+            );
           }, (error) => {
             console.log('error');
           }
           );
-        }, (error) => {
-          console.log('error');
+        } else {
+          this.toastr.error(`Please check this sb no. : ${e.value.sbno} already exit...`);
         }
-        );
-      } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.sbno} already exit...`);
-      }
-    })
+      })
+    } else {
+      this.toastr.error(`Sorry your Sb amount and Invoices amount not equal...`);
+    }
+  }
+
+  paymentTermSum(value: any) {
+    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
   }
 
   clickPipo(event: any) {

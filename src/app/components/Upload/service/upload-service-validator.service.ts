@@ -99,7 +99,7 @@ export class UploadServiceValidatorService implements OnInit {
             console.log('Master Data File', res);
             res.data.forEach((element, i) => {
               element?.pipo.forEach((ele, j) => {
-                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id,amount:element?.fobValue });
               });
               this.origin[i] = { value: element.origin, id: element?._id };
             });
@@ -134,7 +134,7 @@ export class UploadServiceValidatorService implements OnInit {
             res.data.forEach((element, i) => {
               element?.pipo?.forEach((ele, j) => {
                 if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
-                  this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
+                  this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id,amount:element?.fobValue});
                 }
               });
               this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };

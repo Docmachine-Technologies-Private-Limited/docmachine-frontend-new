@@ -90,7 +90,8 @@ export class EditShippingBillComponent implements OnInit {
             name: 'currency',
             rules: {
               required: true,
-            }
+            },
+            disabled: true
           },
           {
             type: "text",
@@ -168,6 +169,12 @@ export class EditShippingBillComponent implements OnInit {
           label: "FOB CURRENCY",
           rules: {
             required: true,
+          },
+          autofill: {
+            type: "formGroup",
+            SetInputName: "currency",
+            CONTROLS_NAME: "invoices",
+            GetInputName: "currency"
           }
         },
         fobValue: {
@@ -262,23 +269,31 @@ export class EditShippingBillComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     let invoices: any = [];
-    for (let i = 0; i < e?.invoices?.length; i++) {
-      invoices = Object.assign(e?.invoices[i], invoices)
-    }
-    console.log(invoices);
-    e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
-    e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
-    e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
-    this.documentService.updateMaster(e.value, this.data?._id).subscribe((res: any) => {
-      this.toastr.success('shipping Bill added successfully.');
-      if (this.validator.SELECTED_PIPO?.length == 0) {
-        this.router.navigate(['home/Summary/Export/Shipping-bill']);
+    console.log(this.paymentTermSum(e.value.invoices), e.value.fobValue, "this.paymentTermSum(e.value.invoices)")
+    if (this.paymentTermSum(e.value.invoices) <= parseInt(e.value.fobValue)) {
+      for (let i = 0; i < e?.invoices?.length; i++) {
+        invoices = Object.assign(e?.invoices[i], invoices)
       }
-    }, (error) => {
-      console.log('error');
-    });
+      console.log(invoices);
+      e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
+      e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
+      e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
+      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+      e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
+      this.documentService.updateMaster(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success('shipping Bill added successfully.');
+        if (this.validator.SELECTED_PIPO?.length == 0) {
+          this.router.navigate(['home/Summary/Export/Shipping-bill']);
+        }
+      }, (error) => {
+        console.log('error');
+      });
+    } else {
+      this.toastr.error(`Sorry your Sb amount and Invoices amount not equal...`);
+    }
+  }
+  paymentTermSum(value: any) {
+    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
   }
 
   clickPipo(event: any) {

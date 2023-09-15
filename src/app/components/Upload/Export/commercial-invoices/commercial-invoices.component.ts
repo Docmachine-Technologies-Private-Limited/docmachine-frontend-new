@@ -104,62 +104,66 @@ export class CommercialInvoicesComponent implements OnInit {
     console.log(e, 'value')
     e.value.file = 'export';
     let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
-    e.value.pipo = this.pipoArr;
-    console.log('pipoarrya', this.pipoArr);
-    e.value.commercialDoc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.currency = e.value?.currency?.type;
-    e.value.sbNo = selectedShippingBill?.sbno;
-    e.value.sbRef = [selectedShippingBill?._id];
-    this.documentService.getInvoice_No({
-      commercialNumber: e.value.commercialNumber
-    }, 'commercials').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addCommercial(e.value).subscribe((res: any) => {
-          this.toastr.success(`Commercial Invoice Added Successfully`);
-          let updatedDataSB = {
-            "commercialdetails": [
-              res.data._id,
-            ],
-          }
-          this.documentService.updateMasterBySb(
-            updatedDataSB,
-            selectedShippingBill?.sbno,
-            selectedShippingBill?._id
-          ).subscribe((data) => {
-            console.log('updateMasterBySbupdateMasterBySb', data);
-          }, (error) => {
-            console.log('error');
-          }
-          );
-          let updatedData = {
-            "commercialRef": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData).subscribe((data) => {
-            console.log('commercial', data);
-            this.documentService.updateMasterBySb(e.value, selectedShippingBill?.sbno, selectedShippingBill?._id).subscribe((data) => {
-              console.log('DATA', data);
-              this.router.navigate(['home/Summary/Export/commercial']);
-            },
-              (error) => {
-                console.log('error');
-              }
+    if (selectedShippingBill?.amount >= parseInt(e?.value?.amount)) {
+      e.value.pipo = this.pipoArr;
+      console.log('pipoarrya', this.pipoArr);
+      e.value.commercialDoc = this.pipourl1;
+      e.value.buyerName = this.BUYER_LIST;
+      e.value.currency = e.value?.currency?.type;
+      e.value.sbNo = selectedShippingBill?.sbno;
+      e.value.sbRef = [selectedShippingBill?._id];
+      this.documentService.getInvoice_No({
+        commercialNumber: e.value.commercialNumber
+      }, 'commercials').subscribe((resp: any) => {
+        console.log('creditNoteNumber Invoice_No', resp)
+        if (resp.data.length == 0) {
+          this.documentService.addCommercial(e.value).subscribe((res: any) => {
+            this.toastr.success(`Commercial Invoice Added Successfully`);
+            let updatedDataSB = {
+              "commercialdetails": [
+                res.data._id,
+              ],
+            }
+            this.documentService.updateMasterBySb(
+              updatedDataSB,
+              selectedShippingBill?.sbno,
+              selectedShippingBill?._id
+            ).subscribe((data) => {
+              console.log('updateMasterBySbupdateMasterBySb', data);
+            }, (error) => {
+              console.log('error');
+            }
             );
-          }, (error) => {
-            console.log('error');
-          }
+            let updatedData = {
+              "commercialRef": [
+                res.data._id,
+              ],
+            }
+            this.userService.updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData).subscribe((data) => {
+              console.log('commercial', data);
+              this.documentService.updateMasterBySb(e.value, selectedShippingBill?.sbno, selectedShippingBill?._id).subscribe((data) => {
+                console.log('DATA', data);
+                this.router.navigate(['home/Summary/Export/commercial']);
+              },
+                (error) => {
+                  console.log('error');
+                }
+              );
+            }, (error) => {
+              console.log('error');
+            }
+            );
+          },
+            (err) => console.log('Error adding pipo')
           );
-        },
-          (err) => console.log('Error adding pipo')
-        );
 
-      } else {
-        this.toastr.error(`Please check this commercial no. : ${e.value.commercialNumber} already exit...`);
-      }
-    });
+        } else {
+          this.toastr.error(`Please check this commercial no. : ${e.value.commercialNumber} already exit...`);
+        }
+      });
+    } else {
+      this.toastr.error(`Sorry your Sb amount and Invoices amount not equal...`);
+    }
   }
 
   clickPipo(event: any) {
