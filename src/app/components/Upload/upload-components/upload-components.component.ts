@@ -20,7 +20,9 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   SUBMIT_ERROR: boolean = false;
   @Input('label') label: any = '';
   @Input('labelStyle') labelStyle: any = '';
+  @Input('FormStyle') FormStyle: any = '';
   @Input('id') id: any = '';
+  @Input('SubmitName') SubmitName: any = 'Submit';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();
   @Output('AddNewBank') AddNewBank: any = new EventEmitter();
@@ -32,7 +34,19 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @ViewChild('BuyerNotFoundPanel') BuyerNotFound: ElementRef | any;
   @ViewChild('BeneficiaryNotFoundPanel') BeneficiaryNotFound: ElementRef | any
   @ViewChildren('CommericalNo') CommericalNo: QueryList<NgSelectComponent>;
-
+  Account_Type: any = [{
+    type: 'OD-over draft'
+  }, {
+    type: 'CC-cash credit'
+  }, {
+    type: 'CA-Current account'
+  }, {
+    type: 'EEFC - Exchange earner Foreign currency'
+  }, {
+    type: 'PCFC- packing credit Foreign currency'
+  }, {
+    type: 'EBRD- Bill discounting accoun'
+  }];
   LOGIN_TOEKN: any = '';
   POPUP_VISIBLILTY: any = {
     BuyerNotFound: '',

@@ -8,6 +8,7 @@ import { AppConfig } from '../../../environments/environment';
 })
 export class TemplateMainPageComponent implements OnInit {
   @Input('text') TEXT:any='';
+  @Input('visible') visible:boolean=true;
   API_URL: any = AppConfig?.environment;
   
   constructor() { }

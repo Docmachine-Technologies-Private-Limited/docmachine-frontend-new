@@ -1,7 +1,7 @@
 <div class="form-container-fluid" *ngIf="this.validator.dynamicFormGroup!=undefined"
     [hidden]="this.validator.dynamicFormGroup[this.id]!=undefined?false:true">
     <form class="col-12" [formGroup]="this.validator.dynamicFormGroup[this.id]" onsubmit="return false;"
-        [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}"
+        [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}" [style]="this.FormStyle"
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
         <label *ngIf="label!=undefined && label!=''" [style]="labelStyle">{{label}}</label>
         <div class="col-12" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
@@ -109,8 +109,7 @@
                 <div class="form-group mb-3" *ngSwitchCase="'currency'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0" [items]="this.validator.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false"
-                        (change)="AutoFillCurrency($event,field?.autofill)"
+                        bindLabel="type" [multiple]="false" (change)="AutoFillCurrency($event,field?.autofill)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
@@ -134,12 +133,14 @@
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <ng-select [id]="field?.id" *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
+                    <ng-select [id]="field?.id"
+                        *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value" #CommericalNo>
                     </ng-select>
-                    <ng-select [id]="field?.id" *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==true"
+                    <ng-select [id]="field?.id"
+                        *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==true"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                         (change)="autofillCommerical($event,field?.autofill)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -175,7 +176,8 @@
                     <ng-custom-dropdown *ngIf="this.validator?.INWARD_REMITTANCE_NAME_LIST?.length!=0"
                         [items]="this.validator?.INWARD_REMITTANCE_NAME_LIST" bindLabel="Remitter_Name"
                         [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [selectedItems]="field.value" [(ngModel)]="field.value"></ng-custom-dropdown>
+                        [name]="field.fieldName" [selectedItems]="field.value"
+                        [(ngModel)]="field.value"></ng-custom-dropdown>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'consignee'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
@@ -187,13 +189,15 @@
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'MultiCheckBox'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [value]="field.value" [(ngModel)]="field.value"
-                    (event)="HideShowInput($event,field?.HideShowInput,fieldIndex);onLabelNameChange($event,field?.LabelNameChange,fieldIndex)">
+                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [value]="field.value"
+                        [(ngModel)]="field.value"
+                        (event)="HideShowInput($event,field?.HideShowInput,fieldIndex);onLabelNameChange($event,field?.LabelNameChange,fieldIndex)">
                     </custom-checkbox>
                     <!-- <label style="color: green;"
                         *ngIf="field?.value!=undefined && field?.value!='' && field?.NotificationShow[field.value]!=undefined">{{field?.NotificationShow[field.value]}}</label> -->
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'" [ngClass]="{'hidden': field?.disabled==true}" [formArrayName]="field.fieldName">
+                <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'"
+                    [ngClass]="{'hidden': field?.disabled==true}" [formArrayName]="field.fieldName">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <custom-checkbox [items]="field?.checkboxlabel" [value]="field.value" [name]="field.fieldName"
                         (event)="field.value=$event">
@@ -346,6 +350,16 @@
                                                 [(ngModel)]="FormOptionfield.value.value"></ng-input>
                                         </div>
                                     </div>
+                                    <div class="form-group mb-3" *ngSwitchCase="'AccountType'">
+                                        <label
+                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
+                                        <ng-select *ngIf="this.Account_Type?.length!=0" [items]="this.Account_Type"
+                                            bindLabel="type" [multiple]="false"
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            [name]="FormOptionfield?.value?.fieldName"
+                                            [(ngModel)]="FormOptionfield.value.value">
+                                        </ng-select>
+                                    </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'currency'">
                                         <label
                                             *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
@@ -373,6 +387,17 @@
                                         <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
                                             (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
                                             [(ngModel)]="FormOptionfield.value.value"></ng-input>
+                                    </div>
+                                    <div class="form-group mb-3" *ngSwitchCase="'BankList'">
+                                        <label
+                                            *ngIf="FormOptionfield.value.label!=undefined && FormOptionfield.value.label!=''">{{FormOptionfield.value.label}}</label>
+                                        <ng-select *ngIf="this.validator.BANK_NAME_LIST_GLOABL?.length!=0"
+                                            [items]="this.validator.BANK_NAME_LIST_GLOABL" bindLabel="value"
+                                            [multiple]="false"
+                                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                                            [name]="FormOptionfield.value.fieldName"
+                                            [(ngModel)]="FormOptionfield.value.value">
+                                        </ng-select>
                                     </div>
                                 </ng-container>
                                 <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
@@ -413,6 +438,13 @@
                     <ng-select *ngIf="this.validator?.origin?.length!=0" [items]="this.validator?.origin"
                         bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
+                    </ng-select>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'AccountType'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.Account_Type?.length!=0" [items]="this.Account_Type" bindLabel="type"
+                        [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
@@ -574,10 +606,12 @@
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
                                         <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
-                                        <ng-select [id]="formGroupItem?.id" *ngIf="this.validator?.COMMERICAL_NO?.length!=0"
+                                        <ng-select [id]="formGroupItem?.id"
+                                            *ngIf="this.validator?.COMMERICAL_NO?.length!=0"
                                             [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
-                                            [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value" #CommericalNo>
+                                            [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value"
+                                            #CommericalNo>
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
@@ -688,8 +722,11 @@
         </div>
         <ng-content></ng-content>
         <button type="button" class="btn btn-primary submit-button" [id]="this.id"
-            [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block':'display:none'"
-            (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">Submit</button>
+            [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block;height: 50px;
+            margin: auto;
+            margin-bottom: 0;
+            margin-right: 0;':'display:none'"
+            (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
     </form>
 </div>
 
