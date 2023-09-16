@@ -98,7 +98,7 @@ export class EditPIPOSComponent implements OnInit {
             rules: {
               required: true,
             },
-            disabled:true
+            disabled: true
           })
       });
       ModeofTransportData1 = [{
@@ -224,12 +224,12 @@ export class EditPIPOSComponent implements OnInit {
           rules: {
             required: true,
           },
-          autofill:{
-            type:"formGroup",
-            SetInputName:"currency",
-            CONTROLS_NAME:"paymentTerm",
-            GetInputName:"currency"
-           }
+          autofill: {
+            type: "formGroup",
+            SetInputName: "currency",
+            CONTROLS_NAME: "paymentTerm",
+            GetInputName: "currency"
+          }
         },
         amount: {
           type: "text",
@@ -349,22 +349,31 @@ export class EditPIPOSComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'export';
-    e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
-    e.value.buyerName = e.value.buyerName?.value != undefined ? e.value.buyerName.value : e.value.buyerName;
-    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
-    e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
-    e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
-    this.documentService.updatePipo(this.data?._id, e.value).subscribe((res) => {
-      this.toastr.success('PI/PO added successfully.');
-      if (this.validator.SELECTED_PIPO?.length == 0) {
-        this.router.navigateByUrl("home/Summary/Export/Pipo");
-      }
-    }, (err) => console.log("Error adding pipo"));
+    console.log(this.paymentTermSum(e.value.paymentTerm), e.value.amount, "this.paymentTermSum(e.value.paymentTerm)")
+    if (this.paymentTermSum(e.value.paymentTerm) == parseInt(e.value.amount)) {
+      e.value.file = 'export';
+      e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+      e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
+      e.value.buyerName = e.value.buyerName?.value != undefined ? e.value.buyerName.value : e.value.buyerName;
+      e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+      e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
+      e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
+      this.documentService.updatePipo(this.data?._id, e.value).subscribe((res) => {
+        this.toastr.success('PI/PO added successfully.');
+        if (this.validator.SELECTED_PIPO?.length == 0) {
+          this.router.navigateByUrl("home/Summary/Export/Pipo");
+        }
+      }, (err) => console.log("Error adding pipo"));
+    } else {
+      this.toastr.error(`Total amount in payment Term should be equal to PIPO amount`);
+    }
   }
-  
+
+  paymentTermSum(value: any) {
+    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+  }
+
   mergeObject(obj1: any, obj2: any) {
     for (const key in obj2) {
       if (obj1[key] == undefined) {

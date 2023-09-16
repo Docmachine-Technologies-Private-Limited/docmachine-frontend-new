@@ -308,7 +308,7 @@ export class ShippingBillComponent implements OnInit {
     let invoices: any = [];
     e.value.file = 'export';
     console.log(this.paymentTermSum(e.value.invoices), e.value.fobValue, "this.paymentTermSum(e.value.invoices)")
-    if (this.paymentTermSum(e.value.invoices) <= parseInt(e.value.fobValue)) {
+    if (this.paymentTermSum(e.value.invoices) == parseInt(e.value.fobValue)) {
       for (let i = 0; i < e?.invoices?.length; i++) {
         invoices = Object.assign(e?.invoices[i], invoices)
       }
@@ -353,7 +353,7 @@ export class ShippingBillComponent implements OnInit {
         }
       })
     } else {
-      this.toastr.error(`Sorry your Sb amount and Invoices amount not equal...`);
+      this.toastr.error(`SB Amount and total invoice amount should be equal`);
     }
   }
 

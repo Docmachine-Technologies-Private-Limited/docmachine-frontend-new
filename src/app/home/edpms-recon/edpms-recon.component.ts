@@ -51,8 +51,8 @@ export class EdpmsReconComponent implements OnInit {
   LIMIT: number = 10;
   pageSizeOptionsList: any = [];
   pageSizeOptionsList2: any = [];
-  USER_DETAILS:any=[];
-  
+  USER_DETAILS: any = [];
+
   constructor(
     private userService: UserService,
     public documentService: DocumentService,
@@ -97,8 +97,8 @@ export class EdpmsReconComponent implements OnInit {
     this.documentService.Inner_loading = true;
     this.getUserID();
     await this.userService.getTeam().subscribe((res: any) => {
-    this.USER_DETAILS=res?.data[0];
-     console.log(res,"userService.getTeam")
+      this.USER_DETAILS = res?.data[0];
+      console.log(res, "userService.getTeam")
       this.masterTeam = res?.data[0]?.bankDetails;
       this.masterTeam.forEach((acc: any) => {
         if (!this.bankAccounts?.includes(acc?.bank)) {
@@ -170,9 +170,9 @@ export class EdpmsReconComponent implements OnInit {
     let payload: any = [];
     console.log('create edpms res: ', this.masterExcelData);
     for (let index = 0; index < this.masterExcelData?.length; index++) {
-      const item:any = this.masterExcelData[index];
-      console.log(item?.sbdata, 'jguhgjhghjgdfjsfsdfdsfdsfd')
-      if (item['IE Code']==this.USER_DETAILS?.iec) {
+      const item: any = this.masterExcelData[index];
+      console.log(item?.sbdata, this.checkAllDocuments(item?.sbdata, item['STATUS']), 'jguhgjhghjgdfjsfsdfdsfdsfd')
+      if (item['IE Code'] == this.USER_DETAILS?.iec) {
         const tempObject = {
           userId: this.applicant,
           bank: '',
@@ -187,18 +187,30 @@ export class EdpmsReconComponent implements OnInit {
           sbCurrency: item['sbCurrency'],
           statusMeaning: this.getStatusMeaning(item['STATUS']),
           systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
-          docAvailable: item['systemStatus'] === 'Available' ? true : false,
+          docAvailable: this.checkAllDocuments(item?.sbdata, item['systemStatus']),
           action: this.getAction(item['systemStatus']),
           sbdata: item['sbdata']
         };
         payload.push(tempObject);
-      }else{
-        payload=[];
+      } else {
+        payload = [];
         this.toastr.error("Your excel sheet iec code and your regitration iec code is different please check...");
         break;
       }
     }
     return payload
+  }
+
+  checkAllDocuments(item: any, status: any) {
+    let docbool: boolean = false;
+    if (status == "Available") {
+      if (item?.commercialdetails?.length != 0 && item?.packingdetails?.length != 0 && item?.blcopydetails?.length != 0) {
+        docbool = true;
+      } else {
+        docbool = false;
+      }
+    }
+    return docbool;
   }
 
   getSystemStatus(status, pipo, sbAmount, sbNo, sbdata: any) {
@@ -456,33 +468,33 @@ export class EdpmsReconComponent implements OnInit {
     this.pipoArrayListdata = [];
     console.log(data, 'sdfsdfdf')
     if (data?.pipo) {
-      this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'PIPO', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'PIPO', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'SB', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'SB', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'BL', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'BL', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'Commercial Invoice', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Commercial Invoice', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'Packing List', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Packing List', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -497,33 +509,33 @@ export class EdpmsReconComponent implements OnInit {
       this.SUBMIT_BUTTON = true;
     }
     if (data?.pipo) {
-      this.pipoArrayListdata2.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'PIPO', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'PIPO', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'SB', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'SB', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'BL', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'BL', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'Commercial Invoice', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'Commercial Invoice', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'Packing List', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'Packing List', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -531,33 +543,33 @@ export class EdpmsReconComponent implements OnInit {
     this.pipoArrayListdata3 = [];
     console.log(data, 'sdfsdfdf')
     if (data?.pipo) {
-      this.pipoArrayListdata3.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'PIPO', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'PIPO', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'SB', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'SB', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'BL', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'BL', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'Commercial Invoice', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'Commercial Invoice', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'Packing List', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'Packing List', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 

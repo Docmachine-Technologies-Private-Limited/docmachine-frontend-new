@@ -104,7 +104,7 @@ export class CommercialInvoicesComponent implements OnInit {
     console.log(e, 'value')
     e.value.file = 'export';
     let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
-    if (selectedShippingBill?.amount >= parseInt(e?.value?.amount)) {
+    if (selectedShippingBill?.amount == parseInt(e?.value?.amount)) {
       e.value.pipo = this.pipoArr;
       console.log('pipoarrya', this.pipoArr);
       e.value.commercialDoc = this.pipourl1;

@@ -344,7 +344,7 @@ export class PIPOSComponent implements OnInit {
     console.log(e, 'value')
     e.value.file = 'export';
     console.log(this.paymentTermSum(e.value.paymentTerm),e.value.amount,"this.paymentTermSum(e.value.paymentTerm)")
-    if (this.paymentTermSum(e.value.paymentTerm) <= parseInt(e.value.amount)) {
+    if (this.paymentTermSum(e.value.paymentTerm) == parseInt(e.value.amount)) {
       e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
       e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
       e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
@@ -377,7 +377,7 @@ export class PIPOSComponent implements OnInit {
         }
       });
     } else {
-      this.toastr.error(`Sorry your pipo amount and paymentTerm amount not equal...`);
+      this.toastr.error(`Total amount in payment Term should be equal to PIPO amount`);
     }
   }
   paymentTermSum(value: any) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentService } from '../../../../service/document.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ActivatedRoute,NavigationExtras,Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as xlsx from 'xlsx';
 import * as data1 from '../../../../currency.json';
@@ -123,7 +123,13 @@ export class ViewDocumentComponent implements OnInit {
       "col-td-th-2",
       "col-td-th-1"
     ],
-    eventId: 2
+    eventId: 2,
+    Expansion_header2: [
+      "Invoice No.",
+      "Amount"
+    ],
+    Expansion_Items2: [],
+    ExpansionKeys2: [],
   }
   SHIPPING_BILL_EDIT_FORM_DATA: any = {
     sbdate: '',
@@ -257,13 +263,13 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   getTransactions(selectedRowValues) {
-    this.documentService .getTask({ pi_poNo: selectedRowValues, file: 'advance' }).subscribe(
-        (res: any) => {
-          this.allTransactions = res.task;
-          console.log('ALL TRANSACTIONS', this.allTransactions);
-        },
-        (err) => console.log(err)
-      );
+    this.documentService.getTask({ pi_poNo: selectedRowValues, file: 'advance' }).subscribe(
+      (res: any) => {
+        this.allTransactions = res.task;
+        console.log('ALL TRANSACTIONS', this.allTransactions);
+      },
+      (err) => console.log(err)
+    );
   }
 
   getInvoices(selectedRowValues, i) {
@@ -283,7 +289,7 @@ export class ViewDocumentComponent implements OnInit {
     );
   }
 
-  getInvoicesNew(data: any,panel:any) {
+  getInvoicesNew(data: any, panel: any) {
     if (data != null) {
       this.lastIndex = data?.index;
       this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[data?.index]['doc']);
@@ -440,10 +446,10 @@ export class ViewDocumentComponent implements OnInit {
     // this.optionsVisibility[index] = true;
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/Shippingbill`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/Shippingbill`], navigationExtras);
     this.toastr.warning('Shipping Bill Row Is In Edit Mode');
   }
 
@@ -603,6 +609,13 @@ export class ViewDocumentComponent implements OnInit {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
+        let invoicedeatils: any = [];
+        element?.invoices?.forEach(element2 => {
+          invoicedeatils.push({
+            InvoiceNo: element2?.invoiceno,
+            Amount: element2?.amount
+          })
+        });
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
           sbdate: moment(element['sbdate']).format('DD-MM-YYYY'),
@@ -612,6 +625,7 @@ export class ViewDocumentComponent implements OnInit {
           fobValue: element['fobValue'],
           balanceAvai: element['balanceAvai'] != '-1' ? element['balanceAvai'] : element['fobValue'],
           isExpand: false,
+          isExpand2: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
           RoleType: this.USER_DATA?.result?.RoleCheckbox,
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
@@ -627,16 +641,20 @@ export class ViewDocumentComponent implements OnInit {
             firxAmount: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxAmount'),
             firxCommision: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCommision'),
             FIRX_TOTAL_AMOUNT: element['FIRX_TOTAL_AMOUNT']
-          }]
+          }],
+          Expansion_Items2: invoicedeatils
         })
       });
       if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'isExpand2')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items');
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2');
         this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
+        this.FILTER_VALUE_LIST_NEW['ExpansionKeys2'] = await this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'][0]) : []
       }
     });
   }

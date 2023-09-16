@@ -270,7 +270,7 @@ export class EditShippingBillComponent implements OnInit {
     console.log(e, 'value')
     let invoices: any = [];
     console.log(this.paymentTermSum(e.value.invoices), e.value.fobValue, "this.paymentTermSum(e.value.invoices)")
-    if (this.paymentTermSum(e.value.invoices) <= parseInt(e.value.fobValue)) {
+    if (this.paymentTermSum(e.value.invoices) == parseInt(e.value.fobValue)) {
       for (let i = 0; i < e?.invoices?.length; i++) {
         invoices = Object.assign(e?.invoices[i], invoices)
       }
@@ -289,7 +289,7 @@ export class EditShippingBillComponent implements OnInit {
         console.log('error');
       });
     } else {
-      this.toastr.error(`Sorry your Sb amount and Invoices amount not equal...`);
+      this.toastr.error(`SB Amount and total invoice amount should be equal`);
     }
   }
   paymentTermSum(value: any) {

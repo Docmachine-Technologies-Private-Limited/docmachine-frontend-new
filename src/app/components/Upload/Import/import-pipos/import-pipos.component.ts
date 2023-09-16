@@ -161,12 +161,12 @@ export class ImportPIPOSComponent implements OnInit {
           rules: {
             required: true,
           },
-          autofill:{
-            type:"formGroup",
-            SetInputName:"currency",
-            CONTROLS_NAME:"paymentTerm",
-            GetInputName:"currency"
-           }
+          autofill: {
+            type: "formGroup",
+            SetInputName: "currency",
+            CONTROLS_NAME: "paymentTerm",
+            GetInputName: "currency"
+          }
         },
         commodity: {
           type: "commodity",
@@ -253,7 +253,7 @@ export class ImportPIPOSComponent implements OnInit {
           type: "formGroup",
           label: "Payment Terms",
           GroupLabel: ['Payment Terms 1'],
-          AddNewRequried:true,
+          AddNewRequried: true,
           rules: {
             required: false,
           },
@@ -294,7 +294,7 @@ export class ImportPIPOSComponent implements OnInit {
                 rules: {
                   required: true,
                 },
-                disabled:true
+                disabled: true
               },
             ]
           ]
@@ -309,34 +309,43 @@ export class ImportPIPOSComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
-    e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
-    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
-    if (e.value?.document == 'PI') {
-      e.value.doc = this.pipourl1
-    }
-    else if (e.value?.document == 'PO') {
-      e.value.doc = this.pipourl1
-    }
-    this.documentService.getInvoice_No({
-      pi_poNo: e.value.pi_poNo
-    }, 'pi_po').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        this.documentService.addPipo(e.value).subscribe(
-          (res) => {
-            this.toastr.success('PI/PO added successfully.');
-            this.router.navigateByUrl("home/Summary/Import/Pipo");
-          },
-          (err) => console.log("Error adding pipo")
-        );
-      } else {
-        this.toastr.error(`Please check this pipo no. : ${e.value.pi_poNo} already exit...`);
+    console.log(this.paymentTermSum(e.value.paymentTerm), e.value.amount, "this.paymentTermSum(e.value.paymentTerm)")
+    if (this.paymentTermSum(e.value.paymentTerm) == parseInt(e.value.amount)) {
+      e.value.file = 'import';
+      e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+      e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
+      e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
+      e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+      if (e.value?.document == 'PI') {
+        e.value.doc = this.pipourl1
       }
-    });
+      else if (e.value?.document == 'PO') {
+        e.value.doc = this.pipourl1
+      }
+      this.documentService.getInvoice_No({
+        pi_poNo: e.value.pi_poNo
+      }, 'pi_po').subscribe((resp: any) => {
+        console.log('creditNoteNumber Invoice_No', resp)
+        if (resp.data.length == 0) {
+          this.documentService.addPipo(e.value).subscribe(
+            (res) => {
+              this.toastr.success('PI/PO added successfully.');
+              this.router.navigateByUrl("home/Summary/Import/Pipo");
+            },
+            (err) => console.log("Error adding pipo")
+          );
+        } else {
+          this.toastr.error(`Please check this pipo no. : ${e.value.pi_poNo} already exit...`);
+        }
+      });
+    } else {
+      this.toastr.error(`Total amount in payment Term should be equal to PIPO amount`);
+    }
+  }
+
+  paymentTermSum(value: any) {
+    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
   }
 
   clickPipo(event: any) {

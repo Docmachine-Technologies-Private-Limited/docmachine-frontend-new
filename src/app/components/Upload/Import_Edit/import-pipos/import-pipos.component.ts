@@ -292,20 +292,28 @@ export class EditImportPIPOSComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
-    e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
-    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
-    this.documentService.updatePipo(this.data?._id, e.value).subscribe((res) => {
-      this.toastr.success('PI/PO added successfully.');
-      if (this.validator.SELECTED_PIPO?.length == 0) {
-        this.router.navigateByUrl("home/Summary/Import/Pipo");
-      }
-    }, (err) => console.log("Error adding pipo"));
+    console.log(this.paymentTermSum(e.value.paymentTerm), e.value.amount, "this.paymentTermSum(e.value.paymentTerm)")
+    if (this.paymentTermSum(e.value.paymentTerm) == parseInt(e.value.amount)) {
+      e.value.file = 'import';
+      e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+      e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
+      e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
+      e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+      this.documentService.updatePipo(this.data?._id, e.value).subscribe((res) => {
+        this.toastr.success('PI/PO added successfully.');
+        if (this.validator.SELECTED_PIPO?.length == 0) {
+          this.router.navigateByUrl("home/Summary/Import/Pipo");
+        }
+      }, (err) => console.log("Error adding pipo"));
+    } else {
+      this.toastr.error(`Total amount in payment Term should be equal to PIPO amount`);
+    }
   }
 
+  paymentTermSum(value: any) {
+    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+  }
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
