@@ -358,7 +358,7 @@ export class ShippingBillComponent implements OnInit {
                 }
                 this.userService.updateManyPipo(this.pipoArr, 'commercial', element?.doc, updatedData).subscribe((data) => {
                   console.log('commercial', data);
-                  this.documentService.updateMasterBySb(this.CommercialFilter(element?.invoiceno?.id), e.value.sbno,  element?.invoiceno?.id).subscribe((data) => {
+                  this.documentService.updateMasterBySb({commercialDoc:this.CommercialFilter(element?.invoiceno?.id)[0]?.commercialDoc}, e.value.sbno,  element?.invoiceno?.id).subscribe((data) => {
                     console.log('DATA', data);
                   },(error) => {console.log('error')});
                 }, (error) => {
