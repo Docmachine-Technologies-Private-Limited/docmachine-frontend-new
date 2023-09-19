@@ -35,6 +35,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @ViewChild('BuyerNotFoundPanel') BuyerNotFound: ElementRef | any;
   @ViewChild('BeneficiaryNotFoundPanel') BeneficiaryNotFound: ElementRef | any
   @ViewChildren('CommericalNo') CommericalNo: QueryList<NgSelectComponent>;
+  @Input('morecontent') morecontent:boolean = false;
+
   Account_Type: any = [{
     type: 'OD-over draft'
   }, {

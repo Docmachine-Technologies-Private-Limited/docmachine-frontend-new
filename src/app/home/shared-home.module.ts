@@ -86,6 +86,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatInputModule} from '@angular/material/input';
 import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
 import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
+import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
 
 @NgModule({
   declarations: [
@@ -144,7 +145,8 @@ import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-
     FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
-    CustomModelHeaderComponent
+    CustomModelHeaderComponent,
+    MoreContentComponent
   ],
   imports: [
     CommonModule,
@@ -250,7 +252,8 @@ import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-
     MatFormFieldModule,
     MatInputModule,
     CustomMatStepperModule,
-    CustomModelHeaderComponent
+    CustomModelHeaderComponent,
+    MoreContentComponent
   ],
 })
 export class SharedHomeModule { }

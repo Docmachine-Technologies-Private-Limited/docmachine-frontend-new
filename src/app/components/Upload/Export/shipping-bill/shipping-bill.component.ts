@@ -255,7 +255,7 @@ export class ShippingBillComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: this.UPLOAD_FORM['invoices'] != undefined ? [
+          formArray:[
             [
               {
                 type: "CommericalNo",
@@ -269,7 +269,7 @@ export class ShippingBillComponent implements OnInit {
               },
               {
                 type: "currency",
-                value: this.UPLOAD_FORM['invoices'][0]['currency'],
+                value: this.UPLOAD_FORM['invoices']!=null && this.UPLOAD_FORM['invoices']!=undefined?this.UPLOAD_FORM['invoices'][0]['currency']:'',
                 label: "Invoices Currency",
                 name: 'currency',
                 rules: {
@@ -279,7 +279,7 @@ export class ShippingBillComponent implements OnInit {
               },
               {
                 type: "text",
-                value: this.UPLOAD_FORM['invoices'][0]['amount'],
+                value: this.UPLOAD_FORM['invoices']!=null && this.UPLOAD_FORM['invoices']!=undefined?this.UPLOAD_FORM['invoices'][0]['amount']:'',
                 label: "Invoices Amount",
                 name: 'amount',
                 rules: {
@@ -296,7 +296,7 @@ export class ShippingBillComponent implements OnInit {
                 },
               },
             ]
-          ] : defaultinvoice
+          ]
         }
       }, 'ShippingBill');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
@@ -333,10 +333,11 @@ export class ShippingBillComponent implements OnInit {
             }
             e.value?.invoices?.forEach(element => {
               this.documentService.updateCommercial({
-                sbNo:e.value.sbno,
-                sbRef:[res.data._id]
-              },element?.invoiceno?.id).subscribe((res)=>{});
-              
+                sbNo: e.value.sbno,
+                sbRef: [res.data._id],
+                type: element?.type?.value
+              }, element?.invoiceno?.id).subscribe((res) => { });
+
               this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
                 console.log(data);
                 let updatedDataSB = {
@@ -350,7 +351,7 @@ export class ShippingBillComponent implements OnInit {
                   element?.invoiceno?.id
                 ).subscribe((data) => {
                   console.log('updateMasterBySbupdateMasterBySb', data);
-                }, (error) => {console.log('error')});
+                }, (error) => { console.log('error') });
                 let updatedData = {
                   "commercialRef": [
                     element?.invoiceno?.id,
@@ -358,24 +359,24 @@ export class ShippingBillComponent implements OnInit {
                 }
                 this.userService.updateManyPipo(this.pipoArr, 'commercial', element?.doc, updatedData).subscribe((data) => {
                   console.log('commercial', data);
-                  this.documentService.updateMasterBySb({commercialDoc:this.CommercialFilter(element?.invoiceno?.id)[0]?.commercialDoc}, e.value.sbno,  element?.invoiceno?.id).subscribe((data) => {
+                  this.documentService.updateMasterBySb({ commercialDoc: this.CommercialFilter(element?.invoiceno?.id)[0]?.commercialDoc }, e.value.sbno, element?.invoiceno?.id).subscribe((data) => {
                     console.log('DATA', data);
-                  },(error) => {console.log('error')});
+                  }, (error) => { console.log('error') });
                 }, (error) => {
                   console.log('error');
                 }
                 );
-              },(err) => console.log('Error adding pipo'));
+              }, (err) => console.log('Error adding pipo'));
             });
-           
-          
-              this.toastr.success('shipping Bill added successfully.');
-              if (this.validator.SELECTED_PIPO?.length == 0) {
-                this.router.navigate(['home/Summary/Export/Shipping-bill']);
-              }
-            }, (error) => {
-              console.log('error');
-            });
+
+
+            this.toastr.success('shipping Bill added successfully.');
+            if (this.validator.SELECTED_PIPO?.length == 0) {
+              this.router.navigate(['home/Summary/Export/Shipping-bill']);
+            }
+          }, (error) => {
+            console.log('error');
+          });
         } else {
           this.toastr.error(`Please check this sb no. : ${e.value.sbno} already exit...`);
         }
@@ -404,9 +405,9 @@ export class ShippingBillComponent implements OnInit {
   }
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
-     this.COMMERCIAL_LIST=res?.data;
+      this.COMMERCIAL_LIST = res?.data;
       res?.data.forEach(element => {
-        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc:element?.commercialDoc});
+        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
       });
       console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
     },
@@ -415,7 +416,7 @@ export class ShippingBillComponent implements OnInit {
       }
     );
   }
-  CommercialFilter(id:any){
-    return this.COMMERCIAL_LIST.filter((item:any)=>item?._id?.includes(id)==true)
+  CommercialFilter(id: any) {
+    return this.COMMERCIAL_LIST.filter((item: any) => item?._id?.includes(id) == true)
   }
 }

@@ -4,6 +4,8 @@
         [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}" [style]="this.FormStyle"
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
         <label *ngIf="label!=undefined && label!=''" [style]="labelStyle">{{label}}</label>
+        <ng-content *ngIf="morecontent==true" select="more-content"></ng-content>
+        <div [innerHTML]="CustomInnerHTML"></div>
         <div class="col-12" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
                 <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
