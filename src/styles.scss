@@ -688,6 +688,12 @@ input {
   background-color: transparent !important;
 }
 
+.table thead th,
+.table tbody td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 
 h1,
 h2,

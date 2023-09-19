@@ -163,7 +163,7 @@ export class ShippingBillComponent implements OnInit {
         fobCurrency: {
           type: "currency",
           value: this.UPLOAD_FORM['fobCurrency'],
-          label: "FOB CURRENCY",
+          label: "SB CURRENCY",
           rules: {
             required: true,
           },
@@ -177,7 +177,7 @@ export class ShippingBillComponent implements OnInit {
         fobValue: {
           type: "text",
           value: this.UPLOAD_FORM['fobValue'],
-          label: "FOB VALUE",
+          label: "SB VALUE",
           rules: {
             required: true,
           }
@@ -258,19 +258,11 @@ export class ShippingBillComponent implements OnInit {
           formArray: this.UPLOAD_FORM['invoices'] != undefined ? [
             [
               {
-                type: "text",
-                value: this.UPLOAD_FORM['invoices'][0]['sno'],
-                label: "Invoices Sno.",
-                name: 'sno',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "text",
-                value: this.UPLOAD_FORM['invoices'][0]['invoiceno'],
+                type: "CommericalNo",
+                value: "",
                 label: "Invoices No.",
                 name: 'invoiceno',
+                id: "CommericalNo",
                 rules: {
                   required: true,
                 }
@@ -293,7 +285,16 @@ export class ShippingBillComponent implements OnInit {
                 rules: {
                   required: true,
                 }
-              }
+              },
+              {
+                type: "PaymentTermType",
+                value: "",
+                label: "Type",
+                name: 'type',
+                rules: {
+                  required: true,
+                },
+              },
             ]
           ] : defaultinvoice
         }
@@ -308,11 +309,7 @@ export class ShippingBillComponent implements OnInit {
     let invoices: any = [];
     e.value.file = 'export';
     console.log(this.paymentTermSum(e.value.invoices), e.value.fobValue, "this.paymentTermSum(e.value.invoices)")
-    if (this.paymentTermSum(e.value.invoices) == parseInt(e.value.fobValue)) {
-      for (let i = 0; i < e?.invoices?.length; i++) {
-        invoices = Object.assign(e?.invoices[i], invoices)
-      }
-      console.log(invoices);
+    if (parseInt(this.paymentTermSum(e.value.invoices)) == parseInt(e.value.fobValue)) {
       e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
       e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
       e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
@@ -334,20 +331,51 @@ export class ShippingBillComponent implements OnInit {
                 res?.data._id,
               ],
             }
-            this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
-              console.log(data);
+            e.value?.invoices?.forEach(element => {
+              this.documentService.updateCommercial({
+                sbNo:e.value.sbno,
+                sbRef:[res.data._id]
+              },element?.invoiceno?.id).subscribe((res)=>{});
+              
+              this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
+                console.log(data);
+                let updatedDataSB = {
+                  "commercialdetails": [
+                    element?.invoiceno?.id,
+                  ],
+                }
+                this.documentService.updateMasterBySb(
+                  updatedDataSB,
+                  e.value.sbno,
+                  element?.invoiceno?.id
+                ).subscribe((data) => {
+                  console.log('updateMasterBySbupdateMasterBySb', data);
+                }, (error) => {console.log('error')});
+                let updatedData = {
+                  "commercialRef": [
+                    element?.invoiceno?.id,
+                  ],
+                }
+                this.userService.updateManyPipo(this.pipoArr, 'commercial', element?.doc, updatedData).subscribe((data) => {
+                  console.log('commercial', data);
+                  this.documentService.updateMasterBySb(this.CommercialFilter(element?.invoiceno?.id), e.value.sbno,  element?.invoiceno?.id).subscribe((data) => {
+                    console.log('DATA', data);
+                  },(error) => {console.log('error')});
+                }, (error) => {
+                  console.log('error');
+                }
+                );
+              },(err) => console.log('Error adding pipo'));
+            });
+           
+          
               this.toastr.success('shipping Bill added successfully.');
               if (this.validator.SELECTED_PIPO?.length == 0) {
                 this.router.navigate(['home/Summary/Export/Shipping-bill']);
               }
             }, (error) => {
               console.log('error');
-            }
-            );
-          }, (error) => {
-            console.log('error');
-          }
-          );
+            });
         } else {
           this.toastr.error(`Please check this sb no. : ${e.value.sbno} already exit...`);
         }
@@ -368,9 +396,26 @@ export class ShippingBillComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
+      this.changedCommercial(this.pipoArr)
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+  changedCommercial(pipo: any) {
+    this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
+     this.COMMERCIAL_LIST=res?.data;
+      res?.data.forEach(element => {
+        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc:element?.commercialDoc});
+      });
+      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
+    },
+      (err) => {
+        console.log(err)
+      }
+    );
+  }
+  CommercialFilter(id:any){
+    return this.COMMERCIAL_LIST.filter((item:any)=>item?._id?.includes(id)==true)
   }
 }

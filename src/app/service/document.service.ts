@@ -658,6 +658,13 @@ export class DocumentService {
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
   }
+  
+  getPipoById(id:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    return this.http.post(`${this.api_base}/pipo/getPipoById`,{id:id},httpOptions);
+  }
 
   getInward_remittance() {
     this.loadFromLocalStorage();

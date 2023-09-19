@@ -41,6 +41,7 @@ export class CommercialComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "SB No.",
+      "Payments Terms",
       "Commercial Invoice No.",
       "Buyer Name",
       "Action"],
@@ -53,6 +54,7 @@ export class CommercialComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1"
@@ -125,6 +127,7 @@ export class CommercialComponent implements OnInit {
           PipoNo: this.getPipoNumber(element['pipo']),
           commercialDate: element['commercialDate'],
           sbNo: element['sbNo'],
+          type: element['type'],
           commercialNumber: element['commercialNumber'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
@@ -251,10 +254,10 @@ export class CommercialComponent implements OnInit {
     // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/CommercialInvoices`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/CommercialInvoices`], navigationExtras);
     this.toastr.warning('Commercial Invoie Row Is In Edit Mode');
   }
 
@@ -320,8 +323,9 @@ class CommercialFormat {
         PipoNo: this.getPipoNumber(element['pipo']),
         commercialDate: element['commercialDate'],
         sbNo: element['sbNo'],
+        type: element['type'],
         commercialNumber: element['commercialNumber'],
-        buyerName: this.getBuyerName(element['buyerName']),
+        buyerName: element['buyerName'][0],
       })
     });
     return temp;
@@ -336,7 +340,7 @@ class CommercialFormat {
 
   getBuyerName(buyerName: any) {
     let temp: any = [];
-    buyerName.forEach(element => {
+    buyerName != 'NF' ? buyerName : []?.forEach(element => {
       temp.push(element);
     });
     return temp.join(',')

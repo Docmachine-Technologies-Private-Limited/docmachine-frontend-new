@@ -610,9 +610,9 @@ export class ViewDocumentComponent implements OnInit {
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         let invoicedeatils: any = [];
-        element?.invoices?.forEach(element2 => {
+        element?.invoices?.forEach((element2: any) => {
           invoicedeatils.push({
-            InvoiceNo: element2?.invoiceno,
+            InvoiceNo: element2?.invoiceno?.value,
             Amount: element2?.amount
           })
         });

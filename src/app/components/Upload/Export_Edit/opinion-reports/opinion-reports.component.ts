@@ -74,22 +74,6 @@ export class EditOpinionReportsComponent implements OnInit {
             required: true,
           }
         },
-        currency: {
-          type: "currency",
-          value: args?.currency,
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        opinionReportAmount: {
-          type: "text",
-          value: args?.opinionReportAmount,
-          label: "Opinion Report Amount",
-          rules: {
-            required: true,
-          }
-        },
         ForeignPartyName: {
           type: "buyer",
           value: args?.ForeignPartyName,

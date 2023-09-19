@@ -1,7 +1,8 @@
 <ng-container>
     <div class="input-container">
       <label class="input-container-label" [innerHTML]="item?.label"></label>
-      <input class="form-control" name="input" [type]="item?.type" [(ngModel)]="item.value"  [placeholder]="item?.placeHolderText"
+      <input class="form-control" [disabled]="disabled" name="input" [type]="item?.type" [(ngModel)]="item.value" 
+      [placeholder]="item?.placeHolderText!=undefined?item?.placeHolderText:''"
       (ngModelChange)="onModelChange($event,item?.value)" />
     </div>
   </ng-container>

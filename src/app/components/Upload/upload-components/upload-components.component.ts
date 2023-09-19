@@ -22,6 +22,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('labelStyle') labelStyle: any = '';
   @Input('FormStyle') FormStyle: any = '';
   @Input('id') id: any = '';
+  @Input('TypeOfValue') TypeOfValue: any = 'Normal';
   @Input('SubmitName') SubmitName: any = 'Submit';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();
@@ -74,11 +75,15 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(event: any, e: any, type: any) {
-    console.log(e, 'value')
+    console.log(e, 'from value')
     event.preventDefault();
     if (e?.status == 'VALID') {
+      if (this.TypeOfValue == "Normal") {
+        this.SubmitEvent.emit(e);
+      } else {
+        this.SubmitEvent.emit(this.getRawValue);
+      }
       this.SUBMIT_ERROR = false;
-      this.SubmitEvent.emit(e);
       this.RawValue.emit(this.getRawValue);
     } else {
       this.RawValue.emit(false);

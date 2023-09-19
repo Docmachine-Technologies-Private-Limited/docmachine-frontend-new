@@ -113,7 +113,27 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Pipo')">PI/PO Summary</h6>
                 </li>
                 <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Commercial')">
+                    Commercial Invoices
+                  </h6>
+                </li>
+                <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/boe')">BOE</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Airway-bl-Copy')">
+                    Airway/BL Copy
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Packing-List')">
+                    Packing List Invoice
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Bill-Of-Exchange')">
+                    Bill Of Exchange
+                  </h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Credit')">Credit Notes
@@ -125,8 +145,7 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Insurance-Document')">
-                    Insurance
-                    Documents</h6>
+                    Insurance Policy</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Letter-Of-Credit-Lc')">
@@ -156,32 +175,15 @@
                     Remittance
                     Advice</h6>
                 </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Airway-bl-Copy')">
-                    Airway/BL Copy
-                  </h6>
-                </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Bill-Of-Exchange')">
-                    Bill Of Exchange
-                  </h6>
-                </li>
+               
+               
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Destruction')">
                     Destruction
                     Certificate
                   </h6>
                 </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Commercial')">
-                    Commercial Invoices
-                  </h6>
-                </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Packing-List')">
-                    Packing List Invoice
-                  </h6>
-                </li>
+               
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-upload')">Master
                     Upload</h6>
@@ -292,18 +294,29 @@
                 class="dropdown-toggle">Documents</a>
               <ul class="collapse list-unstyled" id="ExportDocuments">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Pipo')">PI/PO Summary <i
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Pipo')">PI / PO / Order Copy<i
                       style="font-size: 12px; margin-left:10px;" class="fas fa-plus-circle">
                     </i></h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0"
-                    (click)="navigationByUrl($event,'Summary/Export/Inward-Remittance-Disposal')">Inward
-                    Remittance Tracker</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/commercial')">Commercial
+                    Invoices</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Shipping-bill')">Shipping
                     Bill</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/airway-bl-copy')">Airway/BL
+                    Copy</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/packing-list')">Packing List
+                    Invoices</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/bill-of-exchange')">Bill Of
+                    Exchange</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/credit-note')">Credit Notes
@@ -312,7 +325,7 @@
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/debit-note')">Debit Notes
                   </h6>
-                </li>
+                </li>             
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/insurance-document')">
                     Insurance Policy
@@ -337,39 +350,27 @@
                     Reports</h6>
                 </li>
                 <li class="nav-item">
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Export/Inward-Remittance-Disposal')">Inward
+                    Remittance Tracker</h6>
+                </li>
+                <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/inward-remittance-advice')">
                     Inward
                     Remittance
                     Advice</h6>
-                </li>
-
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/airway-bl-copy')">Airway/BL
-                    Copy</h6>
-                </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/bill-of-exchange')">Bill Of
-                    Exchange</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/destruction')">Destruction
                     Certificate</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/commercial')">Commercial
-                    Invoices</h6>
-                </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/packing-list')">Packing List
-                    Invoices</h6>
-                </li>
-                <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Sub-bill-Lodgement')">
                     Bill-Lodgement</h6>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo-export')">PI/PO Master</h6>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-upload')">Master Upload</h6>
                 </li>
