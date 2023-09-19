@@ -386,7 +386,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'date'">
-                                        <ng-input [item]="FormOptionfield" [name]="Optionfield[FormOptionfield]?.name"
+                                        <ng-input [item]="Optionfield[FormOptionfield]" [name]="Optionfield[FormOptionfield]?.name"
                                             [disabled]="Optionfield[FormOptionfield]?.disabled"
                                             (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
                                             [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
