@@ -21,6 +21,7 @@ import { ViewDocumentComponent } from './view-document/view-document.component';
 import { InwardRemittanceDisposalComponent } from './inward-remittance-disposal/inward-remittance-disposal.component';
 import { PipoExportComponent } from './pipo-export/pipo-export.component';
 import { SubBillLodgementComponent } from './sub-bill-lodgement/sub-bill-lodgement.component';
+import { ExportCertificateofOriginComponent } from './certificateof-origin/certificateof-origin.component';
 
 const routes: Routes = [
   { path: "Pipo", component: PipoExportComponent, pathMatch: "full", canActivate: [MemberGuard] },
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: "Swift-Copy-Documents", component: ExportSwiftCopyDocumentSummaryComponent, canActivate: [MemberGuard] },
   { path: 'Inward-Remittance-Disposal', component: InwardRemittanceDisposalComponent, canActivate: [MemberGuard] },
   { path: "Sub-bill-Lodgement", component: SubBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "export-certificate-of-origin", component: ExportCertificateofOriginComponent, pathMatch: "full", canActivate: [MemberGuard] },
 ];
 
 @NgModule({

@@ -1328,12 +1328,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-
-    return this.http.post(
-      `${this.api_base}/destruction/post`,
-      { destruction: pipo },
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/destruction/post`,{ destruction: pipo }, httpOptions);
   }
 
   getDestruction() {
@@ -1342,9 +1337,36 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-
     return this.http.get(`${this.api_base}/destruction/get`, httpOptions);
   }
+  
+  addCertificateofOrigin(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CertificateofOrigin/post`,{ data: pipo }, httpOptions);
+  }
+  
+  updateCertificateofOrigin(pipo,id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CertificateofOrigin/update`,{ data: pipo,id }, httpOptions);
+  }
+
+  getCertificateofOrigin() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/CertificateofOrigin/get`, httpOptions);
+  }
+  
   getDestructionfile(type: string) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

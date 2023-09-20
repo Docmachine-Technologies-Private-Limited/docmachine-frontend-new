@@ -22,6 +22,7 @@ import { EditExportRealisationCertificateComponent } from './export-realisation-
 import { EditExportSwiftCopyDocumentComponent } from './export-swift-copy-document/export-swift-copy-document.component';
 import { SharedHomeModule } from '../../../home/shared-home.module';
 import { EditInwardUploadDocumentsComponent } from './Inward-Remittance-Disposal/inward-upload-doc.component';
+import { EditExportCertificateOfOriginComponent } from './export-certificate-of-origin/export-certificate-of-origin.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { EditInwardUploadDocumentsComponent } from './Inward-Remittance-Disposal
     EditExportBilllodgementreferencenumberadvicecopyComponent,
     EditExportRealisationCertificateComponent,
     EditInwardUploadDocumentsComponent,
+    EditExportCertificateOfOriginComponent
   ],
   imports: [
     CommonModule,

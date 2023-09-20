@@ -20,6 +20,7 @@ import { EditExportBilllodgementreferencenumberadvicecopyComponent } from './exp
 import { EditExportRealisationCertificateComponent } from './export-realisation-certificate/export-realisation-certificate.component';
 import { EditExportSwiftCopyDocumentComponent } from './export-swift-copy-document/export-swift-copy-document.component';
 import { EditInwardUploadDocumentsComponent } from './Inward-Remittance-Disposal/inward-upload-doc.component';
+import { EditExportCertificateOfOriginComponent } from './export-certificate-of-origin/export-certificate-of-origin.component';
 
 const routes: Routes = [
   // Export Upload
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: "Realisation-Cretificate", component: EditExportRealisationCertificateComponent, canActivate: [MemberGuard] },
   { path: "Swift-Copy-Documents", component: EditExportSwiftCopyDocumentComponent, canActivate: [MemberGuard] },
   { path: "Inward-Remittance-Disposal", component: EditInwardUploadDocumentsComponent, canActivate: [MemberGuard] },
+  { path: "Certificate-of-Origin", component: EditExportCertificateOfOriginComponent, canActivate: [MemberGuard] },
 ];
 
 @NgModule({
