@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormatBillOfExchangesComponent } from './bill-of-exchanges.component';
+import { FormatBillOfExchangesComponent } from './bill-of-exchanges-create.component';
 
 describe('FormatBillOfExchangesComponent', () => {
   let component: FormatBillOfExchangesComponent;

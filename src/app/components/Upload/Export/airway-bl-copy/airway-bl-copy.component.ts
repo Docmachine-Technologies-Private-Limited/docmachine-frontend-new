@@ -59,6 +59,14 @@ export class AirwayBlCopyComponent implements OnInit {
             required: true,
           }
         },
+        date: {
+          type: "date",
+          value: "",
+          label: "Date",
+          rules: {
+            required: true,
+          }
+        },
         airwayBlCopyNumber: {
           type: "text",
           value: "",

@@ -43,6 +43,7 @@ export class CommercialComponent implements OnInit {
       "SB No.",
       "Payments Terms",
       "Commercial Invoice No.",
+      "Commercial Amount",
       "Buyer Name",
       "Action"],
     items: [],
@@ -54,6 +55,7 @@ export class CommercialComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-2",
       "col-td-th-2",
       "col-td-th-1",
@@ -129,6 +131,7 @@ export class CommercialComponent implements OnInit {
           sbNo: element['sbNo'],
           type: element['type'],
           commercialNumber: element['commercialNumber'],
+          amount: element['amount'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
@@ -325,6 +328,7 @@ class CommercialFormat {
         sbNo: element['sbNo'],
         type: element['type'],
         commercialNumber: element['commercialNumber'],
+        amount: element['amount'],
         buyerName: element['buyerName'][0],
       })
     });

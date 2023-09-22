@@ -124,7 +124,7 @@ export class CommercialInvoicesComponent implements OnInit {
         console.log('pipoarrya', this.pipoArr);
         e.commercialDoc = this.pipourl1;
         e.buyerName = this.BUYER_LIST;
-        e.currency = e?.currency?.type;
+        e.currency = e?.currency?.type!=undefined?e?.currency?.type:e?.currency;
         e.type = e?.type?.value;
         this.documentService.getInvoice_No({
           commercialNumber: e.commercialNumber

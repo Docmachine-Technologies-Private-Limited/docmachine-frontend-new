@@ -22,12 +22,15 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('labelStyle') labelStyle: any = '';
   @Input('FormStyle') FormStyle: any = '';
   @Input('id') id: any = '';
+  @Input('SubmitButtonStyle') SubmitButtonStyle: any = '';
   @Input('TypeOfValue') TypeOfValue: any = 'Normal';
   @Input('SubmitName') SubmitName: any = 'Submit';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();
   @Output('AddNewBank') AddNewBank: any = new EventEmitter();
   @Output('RawValueEvent') RawValue: any = new EventEmitter();
+  @Output('SHIPPING_BILL_EVENT') SHIPPING_BILL_EVENT: any = new EventEmitter();
+  @Output('BL_COPY_EVENT') BL_COPY_EVENT: any = new EventEmitter();
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
   @Input('KEY_ENTER_ENABLED') KEY_ENTER_ENABLED: any = false;
@@ -35,7 +38,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @ViewChild('BuyerNotFoundPanel') BuyerNotFound: ElementRef | any;
   @ViewChild('BeneficiaryNotFoundPanel') BeneficiaryNotFound: ElementRef | any
   @ViewChildren('CommericalNo') CommericalNo: QueryList<NgSelectComponent>;
-  @Input('morecontent') morecontent:boolean = false;
+  @Input('morecontent') morecontent: boolean = false;
+  @Input('BUTTON_PANEL_SHOW') BUTTON_PANEL_SHOW: boolean = false;
 
   Account_Type: any = [{
     type: 'OD-over draft'
@@ -352,5 +356,45 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
         this.validator.dynamicFormGroup[this.id]?.controls[autofillitem?.CONTROLS_NAME]?.controls?.setValue(value?.type);
       }
     }
+  }
+
+  onSHIPPING_BILL_EVENT(value: any) {
+    this.SHIPPING_BILL_EVENT.emit(value);
+  }
+
+  onBL_COPY_EVENT(value: any) {
+    this.BL_COPY_EVENT.emit(value);
+  }
+
+  CommericalListCheckBoxList: any = [];
+  onCommericalListCheckBox(event, fieldName, index, item: any) {
+    if (event?.checked == true) {
+      this.CommericalListCheckBoxList.push(item);
+    } else {
+      this.CommericalListCheckBoxList.splice(index, 1);
+    }
+    this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(this.CommericalListCheckBoxList);
+    console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
+  }
+
+  onBankCheckBox(event, fieldName,item: any,ItemChecked) {
+    this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
+      element['checked'] = false;
+    });
+    if (event?.checked == true) {
+      ItemChecked['checked'] = true;
+    } else {
+      ItemChecked['checked'] = false;
+    }
+    this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(item);
+    console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
+  }
+
+  BANK_CHECKBOX(value: any) {
+    console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, "BANK_CHECKBOX")
+    this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.id];
+    this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
+      element['checked'] = false;
+    });
   }
 }

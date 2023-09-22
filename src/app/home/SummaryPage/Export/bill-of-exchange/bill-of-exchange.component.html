@@ -81,7 +81,7 @@
                             [routerLink]="['/home/upload-documents/Export/BillOfExchanges']">
                             <span class="add_icon"></span> ADD NEW
                         </button>
-                        <button class="upload-button btn btn-success PopupOpen" popup-close="CREATE_BILL_OF_EXCHANGE">
+                        <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Export/Format-Bill-Of-Exchanges']">
                             <span class="add_icon"></span>Create
                         </button>
                     </div>
@@ -109,9 +109,9 @@
 
 <app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="CREATE_BILL_OF_EXCHANGE"
     name="Bill Of Exchange Documents Create">
-    <div class="p-2">
+    <!-- <div class="p-2">
         <format-bill-of-exchanges></format-bill-of-exchanges>
-    </div>
+    </div> -->
 </app-custom-model>
 
 <app-custom-model *ngIf="this.SELECTED_VALUE!=''"

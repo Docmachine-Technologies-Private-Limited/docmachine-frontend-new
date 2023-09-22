@@ -58,24 +58,6 @@ export class PackingListInvoicesComponent implements OnInit {
             required: true,
           }
         },
-        currency: {
-          type: "currency",
-          value: this.PIPO_DATA?.currency,
-          label: "Currency*",
-          disabled:true,
-          rules: {
-            required: true,
-          }
-        },
-        packingListAmount: {
-          type: "text",
-          value: this.PIPO_DATA?.amount,
-          label: "Packing List Amount",
-          disabled:true,
-          rules: {
-            required: true,
-          }
-        }
       }, 'ExportPackingList');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

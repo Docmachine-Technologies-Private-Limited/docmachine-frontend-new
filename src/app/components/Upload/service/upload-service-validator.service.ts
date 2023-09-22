@@ -12,6 +12,7 @@ export class UploadServiceValidatorService implements OnInit {
   dynamicFormGroup: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
+  BL_COPY_LIST: any = [];
   COMMERICAL_NO: any = [];
   ORM_BY_PARTY_NAME: any = [];
   ORM_SELECTION_DATA: any = [];
@@ -31,6 +32,7 @@ export class UploadServiceValidatorService implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
+  SHIPPING_BILL_MASTER_DATA: any = [];
   SUBMIT_ERROR: boolean = false;
   origin: any = [];
   commodity: any = [];
@@ -49,6 +51,9 @@ export class UploadServiceValidatorService implements OnInit {
   ToCreditAccountdata: any = [];
   BANK_LIST_DROPDOWN: any = [];
   CommericalNo: ElementRef | any;
+  BUYER_DETAILS_MASTER: any = [];
+  COMPANY_INFO: any = [];
+  CHECK_BOX_BANK_LIST:any=[];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -112,6 +117,7 @@ export class UploadServiceValidatorService implements OnInit {
             this.documentService.getPipoListNo('export', this.SELECTED_PIPO?.length != 0 ? this.SELECTED_PIPO : []);
           }
           await this.userService.getBuyer(1).subscribe((res: any) => {
+            this.BUYER_DETAILS_MASTER = res?.data;
             this.BUYER_DETAILS = [];
             this.ConsigneeNameList = [];
             res.data?.forEach(element => {
@@ -125,10 +131,11 @@ export class UploadServiceValidatorService implements OnInit {
             } else {
               this.BUYER_NOT_EXITS = false;
             }
-            console.log('getBuyer Details', this.ConsigneeNameList, this.BUYER_DETAILS);
+            console.log('getBuyer Details', res, this.ConsigneeNameList, this.BUYER_DETAILS);
           }, (err) => console.log('Error', err));
           this.documentService.getMaster(1).subscribe((res: any) => {
             console.log('Master Data File', res);
+            this.SHIPPING_BILL_MASTER_DATA = res?.data;
             this.origin = [];
             this.SHIPPING_BUNDEL = [];
             res.data.forEach((element, i) => {
@@ -151,7 +158,8 @@ export class UploadServiceValidatorService implements OnInit {
           reslove(true)
         }
 
-        await this.userService.getTeam().subscribe(async (data) => {
+        await this.userService.getTeam().subscribe(async (data: any) => {
+          this.COMPANY_INFO = data?.data;
           console.log(data['data'][0]);
           this.location = [];
           this.commodity = [];
@@ -163,8 +171,6 @@ export class UploadServiceValidatorService implements OnInit {
           });
           this.commodity = this.removeDuplicates(this.commodity, 'value');
           this.location = this.removeDuplicates(this.location, 'value')
-          console.log(this.location);
-          console.log(this.commodity);
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
             this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
             this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
@@ -399,6 +405,8 @@ export class UploadServiceValidatorService implements OnInit {
       RemitterName: rule?.required == true ? [Validators.required] : [],
       formGroup: rule?.required == true ? [Validators.required] : [],
       benne: rule?.required == true ? [Validators.required] : [],
+      CommericalListCheckBox: rule?.required == true ? [Validators.required] : [],
+      BLCopy: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :
@@ -477,7 +485,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.dynamicFormGroup[id]?.controls[fieldName]?.controls?.push(new FormGroup(OptiontempFormGroup));
     this.dynamicFormGroup[id]?.controls[fieldName]?.value?.push(this.emptyvalue(this.dynamicFormGroup[id]?.controls[fieldName]?.value[this.dynamicFormGroup[id]?.controls[fieldName]?.value?.length - 1]));
     this.FIELDS_DATA[id][index]['NewformArray']?.push(optiontemp);
-    this.FIELDS_DATA[id][index]['OrderKey']?.push(this.FIELDS_DATA[id][index]['OrderKey'][this.FIELDS_DATA[id][index]['OrderKey']?.length-1]);
+    this.FIELDS_DATA[id][index]['OrderKey']?.push(this.FIELDS_DATA[id][index]['OrderKey'][this.FIELDS_DATA[id][index]['OrderKey']?.length - 1]);
     await this.FIELDS_DATA[id][index]?.GroupLabel?.push(this.FIELDS_DATA[id][index]?.GroupLabel[0]?.replace('1', this.FIELDS_DATA[id][index]?.GroupLabel?.length + 1));
     console.log('New formGroup', this.FIELDS_DATA, this.dynamicFormGroup[id])
   }

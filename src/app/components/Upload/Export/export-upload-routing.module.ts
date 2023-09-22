@@ -21,6 +21,7 @@ import { ExportRealisationCertificateComponent } from './export-realisation-cert
 import { ExportSwiftCopyDocumentComponent } from './export-swift-copy-document/export-swift-copy-document.component';
 import { InwardUploadDocumentsComponent } from './Inward-Remittance-Disposal/inward-upload-doc.component';
 import { ExportCertificateOfOriginComponent } from './export-certificate-of-origin/export-certificate-of-origin.component';
+import { FormatBillOfExchangesComponent } from './bill-of-exchanges-create/bill-of-exchanges-create.component';
 
 const routes: Routes = [
   // Export Upload
@@ -45,6 +46,7 @@ const routes: Routes = [
   { path: "Swift-Copy-Documents", component: ExportSwiftCopyDocumentComponent, canActivate: [MemberGuard] },
   { path: "Upload-Inward-Remittance-Disposal", component: InwardUploadDocumentsComponent, canActivate: [MemberGuard] },
   { path: "Certificate-of-Origin", component: ExportCertificateOfOriginComponent, canActivate: [MemberGuard] },
+  { path: "Format-Bill-Of-Exchanges", component: FormatBillOfExchangesComponent, canActivate: [MemberGuard] },
 ];
 
 @NgModule({

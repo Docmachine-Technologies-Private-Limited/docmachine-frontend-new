@@ -87,7 +87,6 @@ import {MatInputModule} from '@angular/material/input';
 import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
 import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
 import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
-import { FormatBillOfExchangesComponent } from "./AllBankFormat/other/bill-of-exchanges/bill-of-exchanges.component";
 
 @NgModule({
   declarations: [
@@ -147,8 +146,7 @@ import { FormatBillOfExchangesComponent } from "./AllBankFormat/other/bill-of-ex
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
     CustomModelHeaderComponent,
-    MoreContentComponent,
-    FormatBillOfExchangesComponent
+    MoreContentComponent
   ],
   imports: [
     CommonModule,
@@ -255,8 +253,7 @@ import { FormatBillOfExchangesComponent } from "./AllBankFormat/other/bill-of-ex
     MatInputModule,
     CustomMatStepperModule,
     CustomModelHeaderComponent,
-    MoreContentComponent,
-    FormatBillOfExchangesComponent
+    MoreContentComponent
   ],
 })
 export class SharedHomeModule { }

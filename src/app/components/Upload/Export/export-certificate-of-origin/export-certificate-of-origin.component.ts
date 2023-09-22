@@ -13,7 +13,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'app-export-certificate-of-origin',
   templateUrl: './export-certificate-of-origin.component.html',
-  styleUrls: ['./export-certificate-of-origin.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./export-certificate-of-origin.component.scss', '../../commoncss/common.component.scss']
 })
 export class ExportCertificateOfOriginComponent implements OnInit {
   publicUrl: any = '';
@@ -90,7 +90,7 @@ export class ExportCertificateOfOriginComponent implements OnInit {
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
-    e.value.CIRef=[this.CommercialFilter(e.value.CommercialNumber?.id)[0]?._id];
+    e.value.CIRef = [this.CommercialFilter(e.value.CommercialNumber?.id)[0]?._id];
     this.documentService.getInvoice_No({
       CertificateOriginNumber: e.value.CertificateOriginNumber
     }, 'CertificateofOrigin').subscribe((resp: any) => {
@@ -131,12 +131,15 @@ export class ExportCertificateOfOriginComponent implements OnInit {
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
+
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
       this.COMMERCIAL_LIST = res?.data;
       res?.data.forEach(element => {
-        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
+        let checkexit = this.validator.COMMERICAL_NO.filter((item: any) => item?.value?.includes(element?.commercialNumber))
+        if (checkexit?.length == 0) {
+          this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
+        }
       });
       console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
     },

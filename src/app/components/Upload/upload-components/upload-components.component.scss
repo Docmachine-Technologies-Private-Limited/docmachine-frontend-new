@@ -223,7 +223,7 @@
     border-radius: 5px;
 }
 
-.image-card-list .image-card p{
+.image-card-list .image-card p {
     position: absolute;
     bottom: 0;
     margin: 0;
@@ -236,4 +236,30 @@
     text-align: center;
     font-size: 12px;
 }
-.hidden {display:none;}
+
+.hidden {
+    display: none;
+}
+
+.button-hide {
+    display: none;
+}
+
+.more-button-panel {
+    justify-content: flex-end;
+    display: inline-flex;
+    justify-items: flex-end;
+    align-items: flex-start;
+    margin: auto;
+    margin-right: 0;
+    width: 100%;
+    gap: 20px;
+}
+
+.button-show {
+    display: block;
+    height: 50px;
+    margin: auto;
+    margin-bottom: 0;
+    margin-right: 0;
+}

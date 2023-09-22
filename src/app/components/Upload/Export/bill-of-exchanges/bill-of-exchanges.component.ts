@@ -75,7 +75,32 @@ export class BillOfExchangesComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        sbNo: {
+          type: "ShippingBill",
+          value: "",
+          label: "Select Shipping Bill",
+          rules: {
+            required: true,
+          }
+        },
+        CommericalNoList: {
+          type: "CommericalListCheckBox",
+          value: "",
+          label: "Commerical Number*",
+          rules: {
+            required: true,
+          },
+          ShowCheckBox: true,
+        },
+        BLCopy: {
+          type: "BLCopy",
+          value: "",
+          label: "BLCopy Number*",
+          rules: {
+            required: true,
+          }
+        },
       }, 'ExportBillOfExchange');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -125,9 +150,43 @@ export class BillOfExchangesComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
+      this.BUYER_DETAILS = this.validator.BUYER_DETAILS_MASTER.filter((item: any) => item?.buyerName?.includes(event?.id[1]))[0]
+      this.pipoDataService.getShippingNo(event?._id, 'export');
+      this.validator.SHIPPING_BILL_LIST = [];
+      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
+        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
+          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
+        }
+      }
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+  
+  onChangeShippingBill(data: any) {
+    console.log(data, "onChangeShippingBill")
+    let fileterdata = this.validator.SHIPPING_BILL_MASTER_DATA.filter((item: any) => item?._id?.includes(data?.SB_ID))[0];
+    fileterdata?.commercialdetails?.forEach(element => {
+      let checkexit = this.validator.COMMERICAL_NO.filter((item: any) => item?.value?.includes(element?.commercialNumber))
+      if (checkexit?.length == 0) {
+        this.validator.COMMERICAL_NO.push({
+          value: element?.commercialNumber,
+          id: element?._id, sbno: element?.sbNo,
+          sbid: element?.sbRef[0],
+          doc: element?.commercialDoc,
+          currency: element?.currency,
+          amount: element?.amount
+        });
+      }
+    });
+    fileterdata?.blcopydetails?.forEach(element => {
+      let checkexit = this.validator.BL_COPY_LIST.filter((item: any) => item?.value?.includes(element?.airwayBlCopyNumber))
+      if (checkexit?.length == 0) {
+        this.validator.BL_COPY_LIST.push({ value: element?.airwayBlCopyNumber, id: element?._id, no: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
+      }
+    });
+
+    console.log('changedCommercial', fileterdata, this.validator.COMMERICAL_NO, this.validator.BL_COPY_LIST)
   }
 }

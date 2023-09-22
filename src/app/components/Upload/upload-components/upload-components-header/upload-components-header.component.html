@@ -30,7 +30,7 @@
                             bindLabel="pi_po_buyerName" placeholder="Select PI/PO" (change)="clickPipo($event)">
                         </ng-select>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
-                            *ngIf="this.PIPO_DISABLED==true && this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0"
+                            *ngIf="this.PIPO_DISABLED==true && this.UPLOAD_BUTTON==true && this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0"
                             [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
                                 [attr.popup-close]="this.id"></i>
                             Upload</button>

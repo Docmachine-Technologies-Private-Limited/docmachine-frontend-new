@@ -33,18 +33,18 @@ export class CreateTeam1Component implements OnInit {
               required: true,
             }
           },
-          iec: {
-            type: "text",
-            value: "",
-            label: "*Importer exporter code (IEC)",
-            rules: {
-              required: true,
-            }
-          },
           adress: {
             type: "text",
             value: "",
             label: "Company Address",
+            rules: {
+              required: true,
+            }
+          },
+          iec: {
+            type: "text",
+            value: "",
+            label: "*Importer Exporter code (IEC)",
             rules: {
               required: true,
             }
@@ -57,10 +57,18 @@ export class CreateTeam1Component implements OnInit {
               required: true,
             }
           },
+          gst: {
+            type: "text",
+            value: "",
+            label: "*GSTIN",
+            rules: {
+              required: true,
+            }
+          },
           AdCode: {
             type: "text",
             value: "",
-            label: "Ad Code",
+            label: "AD Code",
             rules: {
               required: true,
             }
@@ -77,14 +85,6 @@ export class CreateTeam1Component implements OnInit {
             type: "text",
             value: "",
             label: "CHA email id",
-            rules: {
-              required: true,
-            }
-          },
-          gst: {
-            type: "text",
-            value: "",
-            label: "*GSTIN",
             rules: {
               required: true,
             }
@@ -155,7 +155,16 @@ export class CreateTeam1Component implements OnInit {
                 {
                   type: "text",
                   value: "",
-                  label: "Bank Bic Address",
+                  label: "Bank Swift Code",
+                  name: 'SwiftCode',
+                  rules: {
+                    required: true,
+                  },
+                },
+                {
+                  type: "text",
+                  value: "",
+                  label: "Bank Address",
                   name: 'bicAddress',
                   rules: {
                     required: true,
