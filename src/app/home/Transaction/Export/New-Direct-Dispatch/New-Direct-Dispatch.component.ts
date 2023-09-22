@@ -650,19 +650,19 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     this.documentService.getIrAdvice(1).subscribe((res: any) => {
-        console.log(res), (this.item9 = res.data);
-        console.log('line no. 324 data', this.item9);
-        this.mergeIr();
-        this.mergeIr2();
-        this.item9.forEach((element, i) => {
-          this.irBuyerName.push({ value: element.partyName, id: element._id });
-          element['BalanceAvail']=element['BalanceAvail']!=undefined?element['BalanceAvail']:element['amount']
-        });
-        this.irBuyerName = this.irBuyerName.filter(
-          (value, index) => this.irBuyerName.indexOf(value) === index
-        );
-        console.log('line no. 329 data', this.irBuyerName);
-      },
+      console.log(res), (this.item9 = res.data);
+      console.log('line no. 324 data', this.item9);
+      this.mergeIr();
+      this.mergeIr2();
+      this.item9.forEach((element, i) => {
+        this.irBuyerName.push({ value: element.partyName, id: element._id });
+        element['BalanceAvail'] = element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount']
+      });
+      this.irBuyerName = this.irBuyerName.filter(
+        (value, index) => this.irBuyerName.indexOf(value) === index
+      );
+      console.log('line no. 329 data', this.irBuyerName);
+    },
       (err) => console.log(err)
     );
 
@@ -722,7 +722,7 @@ export class NewDirectDispatchComponent implements OnInit {
           console.log(res);
           for (let index = 0; index < res?.data.length; index++) {
             const element = res?.data[index];
-            if (element?.file == 'export' && element['balanceAvai']!='0') {
+            if (element?.file == 'export' && element['balanceAvai'] != '0') {
               this.item1.push(element);
             }
           }
@@ -1697,9 +1697,10 @@ export class NewDirectDispatchComponent implements OnInit {
     if (this.item13[index]['isEnabled'] == false || !this.item13[index]?.sbno?.includes(this.SELECTED_SHIPPING_BILL?.data?.sbNo)) {
       if (parseFloat(this.balanceAvai) > parseFloat(this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'])) {
         if (e.target.checked) {
+          irDataItem['Enabled']=false;
           let advance = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some((item: any) => item.valueInternal === irDataItem.billNo);
           if (!advance) {
-            irDataItem.Used_Balance = irDataItem?.BalanceAvail;
+            irDataItem.Used_Balance = irDataItem?.InputValue;
             let details: any = {
               valueInternal: irDataItem.billNo,
               irDataItem: irDataItem,
@@ -1708,13 +1709,13 @@ export class NewDirectDispatchComponent implements OnInit {
             this.item13[index]['isEnabled'] = true;
             this.OK_BUTTON_CONDITION = true;
             this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
-            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.InputValue) }, 0);
             if (this.filterSum > this.balanceAvai) {
               this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
-              var sum: any = sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + (parseFloat(b?.irDataItem?.BalanceAvail)+parseFloat(b?.irDataItem?.commision)) }, 0);
+              var sum: any = sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + (parseFloat(b?.irDataItem?.InputValue) + parseFloat(b?.irDataItem?.commision)) }, 0);
               let temp: any = details;
               var last_amount: any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
-              temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
+              temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.InputValue) - parseFloat(last_amount), 2);
 
               this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(temp)
               this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
@@ -1731,6 +1732,7 @@ export class NewDirectDispatchComponent implements OnInit {
             this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
           }
         } else {
+          irDataItem['Enabled']=true;
           this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item: any) => item.valueInternal !== irDataItem.billNo);
           this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item) => item.valueInternal !== irDataItem.billNo);
           this.SELECTED_FIRX_INDEX['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][i] = false;
@@ -1750,9 +1752,9 @@ export class NewDirectDispatchComponent implements OnInit {
       this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
     }
     this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
-    let IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance)}, 0);
+    let IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
     let COMMISION_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.commision) }, 0);
-    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = ((parseFloat(IRADVICE_SUM)-parseInt(COMMISION_SUM))).toFixed(3);
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = ((parseFloat(IRADVICE_SUM) - parseInt(COMMISION_SUM))).toFixed(3);
 
     console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST,
       this.FILTER_DATA.FILTER_COMMERCIAL, this.SELECTED_FIRX_INDEX, this.item13, 'Deva Hello0*************************');
@@ -1907,55 +1909,11 @@ export class NewDirectDispatchComponent implements OnInit {
 
   TOTAL_FIRX_AMOUNT: any = 0;
   public mergeIr2() {
-    // let filterIrdata: any = [];
-    // if (this.item1 && this.item1.length) {
-    //   for (let irData of this.item9) {
-    //     console.log('Line no. 3700', irData);
-    //     for (let sbNum of this.item1) {
-    //       console.log('line 3701', sbNum);
-    //       for (let i = 0; i <= irData.sbNo.length; i++) {
-    //         console.log('a');
-    //         if (sbNum.sbno == irData.sbNo[i]) {
-    //           const newVal = { ...irData }
-    //           console.log('Line no. 3706', newVal);
-    //           let sbBalance = sbNum.fobValue;
-    //           let irAmount = parseFloat(irData.amount);
-    //           let availableBalance = irAmount - sbBalance;
-    //           if (availableBalance <= 0) {
-    //             newVal['BalanceAvail'] = 0;
-    //           } else {
-    //             newVal['BalanceAvail'] = availableBalance.toFixed(2);
-    //           }
-
-    //           if (newVal.BalanceAvail > 0) {
-    //             console.log("BalanceAvailable", newVal.BalanceAvail)
-    //             filterIrdata.push(newVal);
-    //           }
-    //           console.log('Line no. 3723', filterIrdata);
-    //         }
-    //       }
-    //     }
-    //   }
-    //   for (let irData of this.item9) {
-    //     if (irData.sbNo.length == 0) {
-    //       const newVal = { ...irData };
-    //       let availableBal = irData.amount;
-    //       newVal['BalanceAvail'] = availableBal;
-    //       filterIrdata.push(newVal);
-    //       console.log('235', filterIrdata);
-    //     }
-    //   }
-    // } else {
-    //   for (let ir of this.item9) {
-    //     const newVal = { ...ir };
-    //     let availableBal = ir.amount;
-    //     newVal['BalanceAvail'] = availableBal;
-    //     filterIrdata.push(newVal);
-    //   }
-    // }
     this.item13 = this.item9.filter((item: any) => parseInt(item?.BalanceAvail) != 0);
     this.item13?.forEach(element => {
       element['isEnabled'] = false;
+      element['InputValue'] = element?.BalanceAvail;
+      element['Enabled'] = true;
     });
     console.log("filterForex", this.item13)
   }
@@ -1996,11 +1954,11 @@ export class NewDirectDispatchComponent implements OnInit {
       Show: '',
       Hide: ''
     },
-    Sight:{
+    Sight: {
       Show: '',
       Hide: ''
     },
-    Usance:{
+    Usance: {
       Show: '',
       Hide: ''
     }
@@ -2248,7 +2206,7 @@ export class NewDirectDispatchComponent implements OnInit {
                               id: element._id,
                               query: {
                                 sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb],
-                                BalanceAvail: parseInt(element?.BalanceAvail) - parseInt(this.tp?.FirxUsed_Balance[index]),
+                                BalanceAvail: parseInt(element?.InputValue) - parseInt(this.tp?.FirxUsed_Balance[index]),
                                 CommissionUsed: true
                               }
                             }).subscribe((list: any) => {
@@ -2259,7 +2217,7 @@ export class NewDirectDispatchComponent implements OnInit {
                             tableName: 'iradvices',
                             id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
                             query: {
-                              BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
+                              BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.InputValue,
                               sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb],
                               CommissionUsed: true
                             }
@@ -2272,7 +2230,7 @@ export class NewDirectDispatchComponent implements OnInit {
                               firxAmount: this.tp?.firxAmount.join(','),
                               firxCommision: this.tp?.firxCommision.join(','),
                               firxRecAmo: '0',
-                              FirxUsed_Balance:this.tp?.FirxUsed_Balance.join(',')
+                              FirxUsed_Balance: this.tp?.FirxUsed_Balance.join(',')
                             }
                             if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
                               query = {
@@ -2282,7 +2240,7 @@ export class NewDirectDispatchComponent implements OnInit {
                                 firxAmount: this.tp?.firxAmount.join(','),
                                 firxCommision: this.tp?.firxCommision.join(','),
                                 firxRecAmo: '0',
-                                FirxUsed_Balance:this.tp?.FirxUsed_Balance.join(',')
+                                FirxUsed_Balance: this.tp?.FirxUsed_Balance.join(',')
                               }
                             }
                             this.documentService.Update_Amount_by_TableSB({
@@ -2432,7 +2390,7 @@ export class NewDirectDispatchComponent implements OnInit {
       this.nameSearch4 = $event;
       var temp_filter: any = this.item13.filter((item: any) => item?.buyerName.includes($event));
       this.SELECT_BUYER_DETAILS = this.BUYER_DETAILS.filter((item: any) => item?.buyerName.includes($event))[0];
-      this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAvail), 0)).toFixed(3);
+      this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.InputValue), 0)).toFixed(3);
     } else {
       this.nameSearch4 = ''
     }
@@ -2523,6 +2481,20 @@ export class NewDirectDispatchComponent implements OnInit {
       HS_CODE: temp2?.join(','),
       FORWARD_CONTRACT: this.ToForwardContract_Selected
     };
+  }
+  CLEAR_TIMEOUT:any=null;
+  FIRXAMOUNT(data: any, value: any) {
+    console.log(data, value,parseFloat(data?.InputValue)<=parseFloat(data?.BalanceAvail), "FIRXAMOUNT")
+    clearTimeout(this.CLEAR_TIMEOUT);
+    this.CLEAR_TIMEOUT= setTimeout(() => {
+      if (data?.InputValue != '0') {
+        if (parseFloat(data?.InputValue)<=parseFloat(data?.BalanceAvail)) {
+        } else {
+          data.InputValue = data?.BalanceAvail;
+          this.toastr.error("You've exceeded the maximum transaction amount set by your FIRX amount..")
+        }
+      }
+    }, 200);
   }
 }
 

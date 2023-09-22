@@ -231,7 +231,7 @@ export class ForwardContractSummaryComponent implements OnInit {
               }
             },
             {
-              type: 'button', popupid: 'UPLOAD_DOCUMENTS', className: 'fa fa-upload', callback: (item: any) => {
+              type: 'button', popupid: 'UPLOAD_DOCUMENTS', className: 'fa fa-upload', callback: (i,item: any) => {
                 this.upload(item?._id, item);
                 console.log(item, 'asdasdasdasdsad')
               }
@@ -293,6 +293,7 @@ export class ForwardContractSummaryComponent implements OnInit {
   upload(index: any, data: any) {
     this.EDIT_DATA['index'] = index;
     this.EDIT_DATA['data'] = data;
+    console.log(data, this.EDIT_DATA, 'edit')
   }
 
   PDF_VIEW_URL: any = ''
@@ -300,12 +301,12 @@ export class ForwardContractSummaryComponent implements OnInit {
     this.EDIT_DATA['index'] = data?.index;
     this.EDIT_DATA['data'] = data?.item;
     this.PDF_VIEW_URL = ''
-    setTimeout(() => { this.PDF_VIEW_URL = data?.document }, 100)
+    setTimeout(() => { this.PDF_VIEW_URL = this.ForwardContract_DATA[data?.index]?.document }, 100)
     console.log(this.EDIT_DATA, data, 'sdfsdfsdfsdfsd')
   }
 
   UploadDocuments(panel: any) {
-    this.documentService.ForwardContract_update({ id: this.ForwardContract_DATA[this.EDIT_DATA?.index]?._id, data: { document: this.PDF_URL_UPLOAD } }).subscribe((ForwardContract: any) => {
+    this.documentService.ForwardContract_update({ id: this.EDIT_DATA?.data?.data?.id, data: { document: this.PDF_URL_UPLOAD } }).subscribe((ForwardContract: any) => {
       console.log(ForwardContract, 'ForwardContract')
       this.toastr.success('ForwardContract updated documents successfully....')
       this.getForwardContract()

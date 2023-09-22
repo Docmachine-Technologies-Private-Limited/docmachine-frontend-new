@@ -262,7 +262,7 @@ export class FederalBankBillSubmissionFormatComponent implements OnInit, OnChang
         this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
           this.FIRX_DATE_NO?.NUMBER?.push(element?.irDataItem?.billNo)
           this.FIRX_DATE_NO?.DATE?.push(element?.irDataItem?.date)
-          this.FIRX_DATE_NO?.AMOUNT?.push(element?.irDataItem?.amount)
+          this.FIRX_DATE_NO?.AMOUNT?.push(element?.irDataItem?.Used_Balance)
         });
       }
 

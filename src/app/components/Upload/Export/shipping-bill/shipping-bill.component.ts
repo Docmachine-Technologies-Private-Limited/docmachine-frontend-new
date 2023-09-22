@@ -255,7 +255,7 @@ export class ShippingBillComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray:[
+          formArray: [
             [
               {
                 type: "CommericalNo",
@@ -269,7 +269,7 @@ export class ShippingBillComponent implements OnInit {
               },
               {
                 type: "currency",
-                value: this.UPLOAD_FORM['invoices']!=null && this.UPLOAD_FORM['invoices']!=undefined?this.UPLOAD_FORM['invoices'][0]['currency']:'',
+                value: this.UPLOAD_FORM['invoices'] != null && this.UPLOAD_FORM['invoices'] != undefined ? this.UPLOAD_FORM['invoices'][0]['currency'] : '',
                 label: "Invoices Currency",
                 name: 'currency',
                 rules: {
@@ -279,7 +279,7 @@ export class ShippingBillComponent implements OnInit {
               },
               {
                 type: "text",
-                value: this.UPLOAD_FORM['invoices']!=null && this.UPLOAD_FORM['invoices']!=undefined?this.UPLOAD_FORM['invoices'][0]['amount']:'',
+                value: this.UPLOAD_FORM['invoices'] != null && this.UPLOAD_FORM['invoices'] != undefined ? this.UPLOAD_FORM['invoices'][0]['amount'] : '',
                 label: "Invoices Amount",
                 name: 'amount',
                 rules: {
@@ -323,7 +323,7 @@ export class ShippingBillComponent implements OnInit {
       }, 'masterrecord').subscribe((resp: any) => {
         console.log('getInvoice_No', resp)
         if (resp?.data.length == 0) {
-          this.documentService.addMasterBySb(e.value).subscribe((res: any) => {
+          this.documentService.addMasterBySb(e.value).subscribe(async (res: any) => {
             console.log('Shippingbill updated Successfully');
             let updatedData: any = ''
             updatedData = {
@@ -331,6 +331,18 @@ export class ShippingBillComponent implements OnInit {
                 res?.data._id,
               ],
             }
+            let commercialdetails: any = [];
+            await e.value?.invoices?.forEach(element => commercialdetails.push(element?.invoiceno?.id));
+            let updatedDataSB = {
+              "commercialdetails": commercialdetails,
+            }
+            this.documentService.updateMasterBySb(
+              updatedDataSB,
+              e.value.sbno,
+              res?.data._id
+            ).subscribe((data) => {
+              console.log('updateMasterBySbupdateMasterBySb', data);
+            }, (error) => { console.log('error') });
             e.value?.invoices?.forEach(element => {
               this.documentService.updateCommercial({
                 sbNo: e.value.sbno,
@@ -340,18 +352,7 @@ export class ShippingBillComponent implements OnInit {
 
               this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
                 console.log(data);
-                let updatedDataSB = {
-                  "commercialdetails": [
-                    element?.invoiceno?.id,
-                  ],
-                }
-                this.documentService.updateMasterBySb(
-                  updatedDataSB,
-                  e.value.sbno,
-                  element?.invoiceno?.id
-                ).subscribe((data) => {
-                  console.log('updateMasterBySbupdateMasterBySb', data);
-                }, (error) => { console.log('error') });
+
                 let updatedData = {
                   "commercialRef": [
                     element?.invoiceno?.id,

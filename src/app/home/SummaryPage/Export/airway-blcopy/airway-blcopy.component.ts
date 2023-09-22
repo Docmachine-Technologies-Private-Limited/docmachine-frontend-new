@@ -40,9 +40,9 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
   FILTER_VALUE_LIST_NEW: any = {
     header: [
       "Pipo No.",
+      "BL/Airway No.",
       "DATE",
       "SB No.",
-      "BL/Airway No.",
       "Buyer Name",
       "Action"],
     items: [],
@@ -155,9 +155,9 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          airwayBlCopydate: element['airwayBlCopydate'],
-          sbNo: element['sbNo'],
           airwayBlCopyNumber: element['airwayBlCopyNumber'],
+          airwayBlCopydate: element['date'],
+          sbNo: element['sbNo'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,

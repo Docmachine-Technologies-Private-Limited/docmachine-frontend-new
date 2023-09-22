@@ -60,7 +60,15 @@ export class EditAirwayBlCopyComponent implements OnInit {
           type: "text",
           value: args?.sbNo,
           label: "Select Shipping Bill",
-          disabled:true,
+          disabled: true,
+          rules: {
+            required: true,
+          }
+        },
+        date: {
+          type: "date",
+          value: args?.date,
+          label: "Date",
           rules: {
             required: true,
           }
