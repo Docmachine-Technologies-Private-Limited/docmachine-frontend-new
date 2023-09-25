@@ -1,4 +1,4 @@
-<div class="form-container-fluid" *ngIf="this.validator.dynamicFormGroup!=undefined"
+<div class="form-container-fluid" [style]="MainStyle" *ngIf="this.validator.dynamicFormGroup!=undefined"
     [hidden]="this.validator.dynamicFormGroup[this.id]!=undefined?false:true">
     <form class="col-12" [formGroup]="this.validator.dynamicFormGroup[this.id]" onsubmit="return false;"
         [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}" [style]="this.FormStyle"
@@ -85,6 +85,24 @@
                         <mat-checkbox [(ngModel)]="field.value" [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{field.label}}</mat-checkbox>
                     </div>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'yesnocheckbox'">
+                    <div class="col-12 p-0 d-flex" style="align-items: center;">
+                        <label style="margin: auto;margin-left: 0;" *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <div class="d-flex">
+                            <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button" (click)="field.YesNo='true'" [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">Yes</button>
+                            <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button" (click)="field.YesNo='false'" [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">No</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'PopupOpen'">
+                    <label
+                        *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <app-ng-dropdown-custom [class]="field?.class" [popup-close]="field?.id"
+                        [bindLabel]="field?.bindLabel" 
+                        [name]="field?.fieldName" [items]="field?.item"
+                        [multiple]="false">
+                    </app-ng-dropdown-custom>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'password'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>

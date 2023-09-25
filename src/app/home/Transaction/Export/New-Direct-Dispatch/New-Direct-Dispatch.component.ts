@@ -1697,7 +1697,6 @@ export class NewDirectDispatchComponent implements OnInit {
     if (this.item13[index]['isEnabled'] == false || !this.item13[index]?.sbno?.includes(this.SELECTED_SHIPPING_BILL?.data?.sbNo)) {
       if (parseFloat(this.balanceAvai) > parseFloat(this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'])) {
         if (e.target.checked) {
-          irDataItem['Enabled']=false;
           let advance = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some((item: any) => item.valueInternal === irDataItem.billNo);
           if (!advance) {
             irDataItem.Used_Balance = irDataItem?.InputValue;
@@ -1732,7 +1731,6 @@ export class NewDirectDispatchComponent implements OnInit {
             this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
           }
         } else {
-          irDataItem['Enabled']=true;
           this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item: any) => item.valueInternal !== irDataItem.billNo);
           this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item) => item.valueInternal !== irDataItem.billNo);
           this.SELECTED_FIRX_INDEX['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][i] = false;
@@ -2488,11 +2486,15 @@ export class NewDirectDispatchComponent implements OnInit {
     clearTimeout(this.CLEAR_TIMEOUT);
     this.CLEAR_TIMEOUT= setTimeout(() => {
       if (data?.InputValue != '0') {
+         data['Enabled']=false
         if (parseFloat(data?.InputValue)<=parseFloat(data?.BalanceAvail)) {
         } else {
+          data['Enabled']=true
           data.InputValue = data?.BalanceAvail;
           this.toastr.error("You've exceeded the maximum transaction amount set by your FIRX amount..")
         }
+      }else{
+        data['Enabled']=true
       }
     }, 200);
   }

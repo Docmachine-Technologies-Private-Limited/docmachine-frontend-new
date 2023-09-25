@@ -49,6 +49,7 @@ import { CustomMatTabComponent } from './custom/custom-mat-tab/custom-mat-tab.co
 import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-intrgration/authorization-tally-intrgration.component";
 import { AuthorizationComponent } from "./authorization/authorization.component";
 import { TallyAuthorizationService } from "./authorization-tally-intrgration/tally-authorization.service";
+import { LEIRecordsService } from "./service/LEIRecord/leirecords.service";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -89,6 +90,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DateFormatService,
     BehaviorSubjectListService,
     TallyAuthorizationService,
+    LEIRecordsService,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     IdleService
   ],

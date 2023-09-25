@@ -407,6 +407,7 @@ export class UploadServiceValidatorService implements OnInit {
       benne: rule?.required == true ? [Validators.required] : [],
       CommericalListCheckBox: rule?.required == true ? [Validators.required] : [],
       BLCopy: rule?.required == true ? [Validators.required] : [],
+      yesnocheckbox: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :

@@ -1,0 +1,186 @@
+<upload-components-header title="Transaction/Export/Direct-Dispatch" id="Shippingbill"
+    (UploadHeaderEvent)="clickPipo($event)" [UPLOAD_BUTTON]="false" [PIPO_DISABLED]="false">
+    <div class="upload-panel">
+        <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+            *ngIf="this.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Bank Pdf"
+            [src]="this.PREVIWES_URL"></app-pdf-viewer>
+        <upload-components MainStyle="position: absolute;
+        right: 0;
+        margin-top: 9px;
+        width:40%;" [BUTTON_PANEL_SHOW]="true" SubmitName="Fill" (SHIPPING_BILL_EVENT)="onChangeShippingBill($event)"
+            (BL_COPY_EVENT)="onChangeBLCopy($event)" TypeOfValue="Raw" id="EXPORT_BILL_OF_EXCHANGE"
+            (SubmitEvent)="onSubmit($event)">
+            <button type="button" class="btn btn-primary submit-button" (click)="onFillForm(null)">Submit</button>
+        </upload-components>
+    </div>
+</upload-components-header>
+
+
+<app-custom-model [FooterButton]="false" [modalbodystyle]="{height:'90vh !important'}"
+    [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="90vh" id="SHIPING_BILL_POPUP"
+    [name]="'Selection of Shipping Bill'" #ShippingBill>
+    <div class="p-2 SHIPING_BILL_POPUP">
+        <app-ng-dropdown-custom placeHolderText="Select Buyer Name" [items]="this.exportbilllodgementdata?.BUYER_LIST"
+            (modelChanges)="this.exportbilllodgementdata?.getShippingBill($event?.buyerName)" bindLabel="buyerName"
+            [multiple]="false">
+        </app-ng-dropdown-custom>
+        <mat-accordion>
+            <mat-expansion-panel *ngFor='let data of this.exportbilllodgementdata?.SHIPPING_BILL_DATA;let i = index'>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        SB DETAILS
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr class="table-tr">
+                                    <td class="col-td-th-1"><input type="checkbox" />
+                                    </td>
+                                    <td class="col-td-th-3">
+                                        SB DATE : {{data.sbdate}}
+                                    </td>
+                                    <td class="col-td-th-3">
+                                        SB NUMBER : {{data.sbno}}
+                                    </td>
+                                    <td class="col-td-th-3">
+                                        BUYER NAME : {{data.buyerName}}
+                                    </td>
+                                    <td class="col-td-th-3">
+                                        CURRENCY : {{data.fobCurrency}}
+                                    </td>
+                                    <td class="col-td-th-3">
+                                        SB AMOUNT : {{data.fobValue}}
+                                    </td>
+                                    <td class="col-td-th-3">
+                                        AVAILABLE AMOUNT : {{data.balanceAvai}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <table class="table mb-0">
+                    <thead>
+                        <tr class="table-tr">
+                            <th scope="col" class="col-td-th-1">#</th>
+                            <th scope="col" class="col-td-th-3">CI Date</th>
+                            <th scope="col" class="col-td-th-3">CI No.</th>
+                            <th scope="col" class="col-td-th-3">Port Code</th>
+                            <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
+                            <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
+                            <th scope="col" class="col-td-th-3">CI Value(USD)</th>
+                            <th scope="col" class="col-td-th-2">Select DNN</th>
+                            <th scope="col" class="col-td-th-2">Damages / Deductions(Debit Note)</th>
+                            <th scope="col" class="col-td-th-2">SB Amout to be realized</th>
+                            <th scope="col" class="col-td-th-2">FIRX Option</th>
+                            <th scope="col" class="col-td-th-2">Value to be Realised in FIRX(USD)</th>
+                            <th scope="col" class="col-td-th-2">View IRM Details...</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-tr" *ngFor='let commercialdata of data?.commercialdetails;let j = index'>
+                            <td class="col-td-th-1">
+                                <input type="checkbox" />
+                            </td>
+                            <td class="col-td-th-3">
+                                {{commercialdata.commercialDate}}
+                            </td>
+                            <td class="col-td-th-3">
+                                {{commercialdata.commercialNumber}}
+                            </td>
+                            <td class="col-td-th-3">
+                                {{data?.portCode}}
+                            </td>
+                            <td class="col-td-th-3">
+                                {{commercialdata.sbNo}}
+                            </td>
+                            <td class="col-td-th-3">
+                                {{data?.sbdate}}
+                            </td>
+                            <td class="col-td-th-3">
+                                {{commercialdata.amount}}
+                            </td>
+                            <td class="col-td-th-2">
+                                <button type="submit" class="PopupOpen btn btn-primary" popup-close="DEBIT_NOTE">Select
+                                    DNN No.</button>
+                            </td>
+                            <td class="col-td-th-2">
+                                {{commercialdata?.debitAmount}}
+                            </td>
+                            <td class="col-td-th-2">
+                                {{commercialdata?.SB_Amout_Realized}}
+                            </td>
+                            <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary"
+                                popup-close="FIRX">Select IRM
+                                    No.</button></td>
+                            <td class="col-td-th-2">
+                                {{commercialdata?.IRADVICE_SUM}}
+                            </td>
+                            <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary"
+                                    popup-close="FIRX_DEATILS">More...</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</app-custom-model>
+
+<app-custom-model [FooterButton]="true" EventButton="false"
+[customstyle]="{'margin':'auto !important','max-width': '65vw !important','margin-top': '50px !important'}"
+class="p-2" height="400px" id="FIRX" [name]="'FIRX Number Against of'">
+<div class="container-fluid mt-2 mb-2">
+  <div class="middle_bts">
+    <div class="login py-5" style="padding: 0px !important; width:100%;">
+      <div class="container_innser">
+        <section class="box-shadow" style="overflow: auto;
+      height: calc(100vh - 210px);
+      background-color: #ffffffd1;
+      border-radius: 10px;
+      box-shadow: inset 0px 0px 7px 0px #30303082;">
+          <!-- <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
+            <h5 style="margin: auto;margin-left: 30px;">SB No. : {{this.SELECTED_SHIPPING_BILL?.data?.sbNo}}</h5>
+            <h5 style="margin: auto;margin-right: 30px;">SB Amount :
+              {{this.SELECTED_SHIPPING_BILL?.data?.SB_Amout_Realized}}</h5>
+            <h5 style="margin: auto;margin-right: 30px;">Total FIXR Amount : {{this.TOTAL_FIRX_AMOUNT}}</h5>
+          </div> -->
+          <table class="table mb-0">
+            <thead>
+              <tr class="table-tr">
+                <th scope="col" class="col-td-th-1">#</th>
+                <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
+                <th scope="col" class="col-td-th-2">Recieved Amount</th>
+                <th scope="col" class="col-td-th-2">Commision Amount</th>
+                <th scope="col" class="col-td-th-2">Available Balance</th>
+                <th scope="col" class="col-td-th-2">Utilization Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-tr"
+                *ngFor='let data of this.exportbilllodgementdata?.FIREX_DETAILS;let i = index'>
+                <td class="col-td-th-1"><input [disabled]="data?.Enabled" type="checkbox"/>
+                </td>
+                <td class="col-td-th-2">
+                  {{data.billNo}}
+                </td>
+                <td class="col-td-th-2">
+                  {{data.amount}}
+                </td>
+                <td class="col-td-th-2">
+                  {{data.commision}}
+                </td>
+                <td class="col-td-th-2">
+                  {{data.BalanceAvail}}
+                </td>
+                <td class="col-td-th-2">
+                  <input type="text">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+</app-custom-model>

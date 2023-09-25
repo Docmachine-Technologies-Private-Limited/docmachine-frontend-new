@@ -87,6 +87,7 @@ import {MatInputModule} from '@angular/material/input';
 import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
 import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
 import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
+import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data";
 
 @NgModule({
   declarations: [
@@ -173,7 +174,7 @@ import { MoreContentComponent } from "../components/Upload/upload-components/mor
     CustomMatStepperModule
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
+  providers: [ConfirmDialogService, NgbModal,ExportBillLodgementData, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     FilternewPipe,
