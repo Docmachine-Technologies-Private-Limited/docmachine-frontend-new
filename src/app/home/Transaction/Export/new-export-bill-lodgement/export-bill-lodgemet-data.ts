@@ -62,7 +62,7 @@ export class ExportBillLodgementData {
                 });
 
                 this.SHIPPING_BILL_DATA = data;
-                this.getbyFIRXPartyName(buyerName);
+                this.getbyFIRXPartyName(buyerName?.buyerName);
                 console.log(buyerName, this.TRANSACTION_SHIPPING_BILL, "getShippingBill")
             });
         }
