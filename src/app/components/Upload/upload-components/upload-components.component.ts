@@ -30,6 +30,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();
   @Output('AddNewBank') AddNewBank: any = new EventEmitter();
   @Output('RawValueEvent') RawValue: any = new EventEmitter();
+  @Output('BankEvent') BankEvent: any = new EventEmitter();
+  @Output('YesNoCheckBoxEvent') YesNoCheckBoxEvent: any = new EventEmitter();
   @Output('SHIPPING_BILL_EVENT') SHIPPING_BILL_EVENT: any = new EventEmitter();
   @Output('BL_COPY_EVENT') BL_COPY_EVENT: any = new EventEmitter();
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
@@ -310,6 +312,28 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  HideShowInputCheckBox(bool: any, item: any) {
+    if (item != undefined) {
+      if (bool == true) {
+        item.forEach(element => {
+          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element));
+          if (index != -1) {
+            this.validator.FIELDS_DATA[this.id][index]['disabled'] = true;
+            this.validator.dynamicFormGroup[this.id]?.controls[element]?.disable();
+          }
+        });
+      } else {
+        item.forEach(element => {
+          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element));
+          if (index != -1) {
+            this.validator.FIELDS_DATA[this.id][index]['disabled'] = false;
+            this.validator.dynamicFormGroup[this.id]?.controls[element]?.enable();
+          }
+        });
+      }
+    }
+  }
+
   onLabelNameChange(event: any, item: any) {
     console.log(item, item[event], event, "onLabelNameChange if")
     if (item[event] != undefined) {
@@ -378,7 +402,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
   }
 
-  onBankCheckBox(event, fieldName,item: any,ItemChecked) {
+  onBankCheckBox(event, fieldName, item: any, ItemChecked) {
     this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
       element['checked'] = false;
     });
@@ -387,6 +411,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     } else {
       ItemChecked['checked'] = false;
     }
+    this.BankEvent.emit(item);
     this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(item);
     console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
   }
@@ -397,5 +422,10 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
       element['checked'] = false;
     });
+  }
+
+  YesNoFunction(value: any,name:any) {
+    this.setValue(value,name)
+    this.YesNoCheckBoxEvent.emit(value);
   }
 }

@@ -5,7 +5,7 @@
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
         <label *ngIf="label!=undefined && label!=''" [style]="labelStyle">{{label}}</label>
         <ng-content *ngIf="morecontent==true" select="more-content"></ng-content>
-        <div class="col-12" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
+        <div class="col-12" [ngClass]="{'hidden':field?.disabled==true}" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
                 <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                     <div class="form-group mb-3" *ngSwitchCase="'text'">
@@ -70,7 +70,6 @@
                 <div class="form-group mb-3" *ngSwitchCase="'email'">
                     <div class="col-12 p-0">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                        <!-- <i class="fa fa-envelope envelope-icon" aria-hidden="true"></i> -->
                         <div class="email-input-icon">
                             <input [(ngModel)]="field.value"
                                 (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
@@ -86,21 +85,24 @@
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{field.label}}</mat-checkbox>
                     </div>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'yesnocheckbox'">
+                <div class="form-group mb-3" *ngSwitchCase="'yesnocheckbox'" >
                     <div class="col-12 p-0 d-flex" style="align-items: center;">
-                        <label style="margin: auto;margin-left: 0;" *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <label style="margin: auto;margin-left: 0;"
+                            *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                         <div class="d-flex">
-                            <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button" (click)="field.YesNo='true'" [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">Yes</button>
-                            <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button" (click)="field.YesNo='false'" [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">No</button>
+                            <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button"
+                                (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName},field.fieldName);HideShowInputCheckBox(true,field?.HideShowInput)"
+                                [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">{{field?.text1!=undefined?field?.text1:'Yes'}}</button>
+                            <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button"
+                                (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName},field.fieldName);HideShowInputCheckBox(false,field?.HideShowInput)"
+                                [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">{{field?.text2!=undefined?field?.text2:'No'}}</button>
                         </div>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'PopupOpen'">
-                    <label
-                        *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <app-ng-dropdown-custom [class]="field?.class" [popup-close]="field?.id"
-                        [bindLabel]="field?.bindLabel" 
-                        [name]="field?.fieldName" [items]="field?.item"
+                        [bindLabel]="field?.bindLabel" [name]="field?.fieldName" [items]="field?.item"
                         [multiple]="false">
                     </app-ng-dropdown-custom>
                 </div>
@@ -178,6 +180,7 @@
                         (change)="BANK_CHECKBOX($event)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
                     </ng-select>
+                    <label class="mt-2 mb-2" *ngIf="field.Banklabel!=undefined && field.Banklabel!='' && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
                     <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST;let in=index" class="mt-2">
                         <mat-checkbox [checked]="item?.checked"
                             (change)="onBankCheckBox($event,field.fieldName,item?.value,item)" [name]="field.fieldName"

@@ -22,6 +22,7 @@ import { InwardRemittanceDisposalComponent } from './inward-remittance-disposal/
 import { PipoExportComponent } from './pipo-export/pipo-export.component';
 import { SubBillLodgementComponent } from './sub-bill-lodgement/sub-bill-lodgement.component';
 import { ExportCertificateofOriginComponent } from './certificateof-origin/certificateof-origin.component';
+import { SBIRMMatchOffComponent } from './sbirmmatch-off/sbirmmatch-off.component';
 
 const routes: Routes = [
   { path: "Pipo", component: PipoExportComponent, pathMatch: "full", canActivate: [MemberGuard] },
@@ -45,6 +46,7 @@ const routes: Routes = [
   { path: 'Inward-Remittance-Disposal', component: InwardRemittanceDisposalComponent, canActivate: [MemberGuard] },
   { path: "Sub-bill-Lodgement", component: SubBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "export-certificate-of-origin", component: ExportCertificateofOriginComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "SB-IRM-Match-Off", component: SBIRMMatchOffComponent, pathMatch: "full", canActivate: [MemberGuard] },
 ];
 
 @NgModule({

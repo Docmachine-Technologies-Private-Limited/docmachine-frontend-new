@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
 import { ExportBillLodgementData } from './export-bill-lodgemet-data';
+import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
+import { StorageEncryptionDecryptionService } from '../../../../Storage/storage-encryption-decryption.service';
+import { MergePdfListService } from '../../../merge-pdf-list.service';
 
 @Component({
   selector: 'new-export-bill-lodgement',
@@ -23,6 +26,8 @@ export class NewExportBillLodgementComponent implements OnInit {
   VISIBLITY_PDF: boolean = false;
   @Input('RequiredLetterHead') RequiredLetterHead: boolean = false;
   @Output('event') event = new EventEmitter();
+  OTHER_DOCUMENTS: any = [];
+
   TOTAL_SUM_FIREX: any = 0;
   TOTAL_SUM_FIREX_COMMISION: any = 0
   CURRENCY: string = ''
@@ -71,8 +76,10 @@ export class NewExportBillLodgementComponent implements OnInit {
     PIPO_AMOUNT: 0,
     REMAINING_AMOUNT: 0
   }
-
+  USER_DATA: any = [];
   FORM_VALUE: any = null;
+  ExportBillLodgement_Form: any = [];
+  GetDownloadStatus: any = [];
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -81,11 +88,19 @@ export class NewExportBillLodgementComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
-    public exportbilllodgementdata:ExportBillLodgementData,
+    public exportbilllodgementdata: ExportBillLodgementData,
+    public sessionstorage: StorageEncryptionDecryptionService,
+    public pdfmerge: MergePdfListService,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public userService: UserService) { }
 
   ngOnInit(): void {
-    console.log(this.exportbilllodgementdata,"exportbilllodgementdata")
+    this.documentService.MT102_SUBJECT = this.sessionstorage.get('MT102') != '' ? JSON.parse(this.sessionstorage.get('MT102')) : '';
+    console.log(this.exportbilllodgementdata, "exportbilllodgementdata")
+    this.userService.getUserDetail().then((status: any) => {
+      this.USER_DATA = status['result'];
+      console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
+    });
     this.response(null);
   }
 
@@ -93,7 +108,15 @@ export class NewExportBillLodgementComponent implements OnInit {
     this.LETTER_HEAD_URL = url;
   }
 
+  setSelectedBankDetails(bank: any) {
+    this.BankId = bank?.BankUniqueId;
+    this.SELECT_BUYER_DETAILS = bank;
+    this.fillForm(null)
+    console.log(bank, "setSelectedBankDetails")
+  }
+
   async fillForm(filldata: any) {
+    console.log(filldata, "fillForm")
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     if (this.BankId != '') {
@@ -107,146 +130,169 @@ export class NewExportBillLodgementComponent implements OnInit {
       getAllFields.forEach(element => {
         const elementvalue: any = element?.acroField?.dict?.values();
         if (elementvalue[0]?.encodedName == '/Tx') {
-          // element?.setFontSize(11);
           element.setFontSize(8)
           element?.enableReadOnly();
           const [widget]: any = element?.acroField?.getWidgets();
           widget?.getOrCreateBorderStyle()?.setWidth(0);
         }
       });
+      console.log(this.validator.COMPANY_INFO, "COMPANY_INFO")
 
       getAllFields[0]?.setText('');
       getAllFields[1]?.setText('');
       getAllFields[2]?.setText('');
       getAllFields[3]?.setText('');
       getAllFields[4]?.setText('');
-      getAllFields[5]?.setText(filldata[3]?.teamName);
-      getAllFields[6]?.setText(filldata[3]?.adress);
+      getAllFields[5]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
+      getAllFields[6]?.setText(this.validator.COMPANY_INFO[0]?.adress);
       getAllFields[7]?.setText('');
       getAllFields[8]?.setText('');
       getAllFields[8]?.setText('');
       getAllFields[9]?.setText('');
       getAllFields[10]?.setText('');
       getAllFields[11]?.setText('');
-      getAllFields[12]?.setText(this.SELECT_BUYER_DETAILS?.buyerName);
-      getAllFields[13]?.setText(this.SELECT_BUYER_DETAILS?.buyerAdrs);
+      getAllFields[12]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName);
+      getAllFields[13]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs);
       getAllFields[14]?.setText('');
       getAllFields[15]?.setText('');
       getAllFields[16]?.setText('');
       getAllFields[17]?.setText('');
       getAllFields[18]?.setText('');
-      getAllFields[19]?.uncheck()
-      getAllFields[20]?.uncheck()
-      getAllFields[21]?.setText(filldata[2][0]?.bank + '\n' + filldata[2][0]?.bicAddress);
+      getAllFields[19]?.uncheck();
+      getAllFields[20]?.uncheck();
+      getAllFields[21]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
       getAllFields[22]?.uncheck()
       getAllFields[23]?.uncheck()
-      getAllFields[24]?.setText(filldata[0][0] != undefined ? filldata[0][0]['commercialdetails'][0]?.commercialNumber : '');
-      getAllFields[25]?.setText(this.SELECT_BUYER_DETAILS?.buyerbank + '' + this.SELECT_BUYER_DETAILS?.buyerbankaddress);
+      console.log(this.exportbilllodgementdata?.TRANSACTION_SELECTED_COMMERICAIL_DATA,
+        this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
 
-      if (filldata[0][0]?.balanceAvai != undefined) {
-        if (filldata[0][0]?.balanceAvai > (this.TOTAL_SUM_FIREX + this.TOTAL_SUM_FIREX_COMMISION)) {
-          getAllFields[26]?.check()
-          getAllFields[27]?.uncheck()
-        } else {
-          getAllFields[26]?.uncheck()
-          getAllFields[27]?.check()
-        }
-      } else {
-        getAllFields[26]?.uncheck()
-        getAllFields[27]?.uncheck()
-      }
-      getAllFields[28]?.setText(this.FIRX_DATE_NO?.NUMBER.join(','));
-      getAllFields[29]?.setText(this.FIRX_DATE_NO?.DATE.join(','));
-      getAllFields[30]?.setText(this.CURRENCY);
-      getAllFields[31]?.setText(!isNaN(this.TOTAL_SUM_FIREX) ? this.TOTAL_SUM_FIREX.toString() : '0');
-      getAllFields[32]?.setText(this.CURRENCY);
-      getAllFields[33]?.setText(filldata[0][0]?.invoices[0]?.amount != undefined ? this.ConvertNumberToWords(filldata[0][0]?.invoices[0]?.amount).toUpperCase() : '0');
-      getAllFields[34]?.setText(filldata[0][0]?.invoices[0]?.amount);
+      let CommercialNumberList: any = [];
+      let FIRX_DATE_NO: any = {
+        NUMBER: [],
+        DATE: [],
+        CURRENCY: [],
+        AMOUNT: [],
+        RECIVCED_AMOUNT: []
+      };
+      this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.firxdetails?.forEach(element => {
+        element?.FirxUsed_Balance?.split(',').forEach(FirxUsed_Balance => {
+          FIRX_DATE_NO?.AMOUNT?.push(FirxUsed_Balance)
+        });
+      });
+      let TOTAL_SUM_FIREX: any = FIRX_DATE_NO?.AMOUNT?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
+      this.exportbilllodgementdata?.TRANSACTION_SELECTED_COMMERICAIL_DATA?.forEach(element => {
+        CommercialNumberList.push(element?.commercialNumber)
+        element?.IRM_REF?.forEach(IRM_REF_Element => {
+          FIRX_DATE_NO?.NUMBER?.push(IRM_REF_Element?.billNo)
+          FIRX_DATE_NO?.DATE?.push(IRM_REF_Element?.date)
+          FIRX_DATE_NO?.CURRENCY?.push(IRM_REF_Element?.currency)
+          FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.amount)
+        });
+      });
+      getAllFields[24]?.setText(CommercialNumberList?.join(","));
+      getAllFields[25]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '' + this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
+      getAllFields[26]?.uncheck()
+      getAllFields[27]?.uncheck()
+      getAllFields[28]?.setText(FIRX_DATE_NO?.NUMBER.join(','));
+      getAllFields[29]?.setText(FIRX_DATE_NO?.DATE.join(','));
+      getAllFields[30]?.setText(FIRX_DATE_NO?.CURRENCY.join(','));
+
       getAllFields[35]?.uncheck();
       getAllFields[36]?.uncheck();
       getAllFields[37]?.setText('');
       getAllFields[38]?.setText('');
       getAllFields[39]?.setText('');
-      getAllFields[40]?.setText(this.HSCODE_LIST?.join(","));
-      getAllFields[41]?.setText('');
-      getAllFields[42]?.setText(filldata[0][0]?.countryOfFinaldestination);
-      getAllFields[43]?.setText(filldata[0][0] != undefined ? filldata[0][0]['blcopydetails'][0]?.airwayBlCopyNumber : '');
-      getAllFields[44]?.setText(this.SB_NO?.toString());
-      getAllFields[45]?.setText(filldata[0][0]?.portCode);
-      getAllFields[46]?.setText(filldata[0][0]?.sbdate);
-      getAllFields[47]?.setText('');
-      getAllFields[48]?.setText('');
-      getAllFields[49]?.setText('');
-      getAllFields[50]?.setText('');
-      getAllFields[51]?.setText('');
-      getAllFields[52]?.setText('');
-      getAllFields[53]?.setText('');
-      getAllFields[54]?.setText('');
-      getAllFields[55]?.setText('');
-      getAllFields[56]?.setText('');
-      getAllFields[57]?.setText('');
-      getAllFields[58]?.setText('');
-      getAllFields[59]?.setText('');
-      getAllFields[60]?.setText('');
-      getAllFields[61]?.setText('');
-      getAllFields[62]?.setText('');
-      getAllFields[63]?.setText('');
-      getAllFields[64]?.setText('');
-      // OD/CC/CA
-      getAllFields[65]?.setText(filldata[2][0]?.accNumber?.split('')[0]);
-      getAllFields[66]?.setText(filldata[2][0]?.accNumber?.split('')[1]);
-      getAllFields[67]?.setText(filldata[2][0]?.accNumber?.split('')[2]);
-      getAllFields[68]?.setText(filldata[2][0]?.accNumber?.split('')[3]);
-      getAllFields[69]?.setText(filldata[2][0]?.accNumber?.split('')[4]);
-      getAllFields[70]?.setText(filldata[2][0]?.accNumber?.split('')[5]);
-      getAllFields[71]?.setText(filldata[2][0]?.accNumber?.split('')[6]);
-      getAllFields[72]?.setText(filldata[2][0]?.accNumber?.split('')[7]);
-      getAllFields[73]?.setText(filldata[2][0]?.accNumber?.split('')[8]);
-      getAllFields[74]?.setText(filldata[2][0]?.accNumber?.split('')[9]);
-      getAllFields[75]?.setText(filldata[2][0]?.accNumber?.split('')[10]);
-      getAllFields[76]?.setText(filldata[2][0]?.accNumber?.split('')[11]);
-      getAllFields[77]?.setText(filldata[2][0]?.accNumber?.split('')[12]);
-      getAllFields[78]?.setText('');
-      getAllFields[79]?.uncheck();
-      getAllFields[80]?.uncheck();
-      getAllFields[81]?.uncheck();
-      getAllFields[82]?.uncheck();
-      getAllFields[83]?.uncheck();
-      getAllFields[84]?.setText('');
-      getAllFields[85]?.uncheck();
-      getAllFields[86]?.uncheck();
-      getAllFields[87]?.uncheck();
-      getAllFields[88]?.setText('');
-      getAllFields[89]?.uncheck();
-      getAllFields[90]?.uncheck();
-      getAllFields[91]?.uncheck();
-      getAllFields[92]?.uncheck();
-      getAllFields[93]?.uncheck();
-      getAllFields[94]?.uncheck();
-      getAllFields[95]?.setText('');
-      getAllFields[96]?.setText('');
-      getAllFields[97]?.setText('');
-      getAllFields[98]?.setText('');
-      getAllFields[99]?.setText('');
-      getAllFields[100]?.setText('');
-      getAllFields[101]?.setText(this.FIRX_DATE_NO?.DATE[0]);
-      getAllFields[102]?.setText(this.FIRX_DATE_NO?.NUMBER[0]);
-      getAllFields[103]?.setText(this.FIRX_DATE_NO?.AMOUNT[0]);
-      getAllFields[104]?.setText(filldata[0][0]?.fobValue?.toString());
-      if (this.FIRX_DATE_NO?.DATE[1] != undefined) {
-        getAllFields[105]?.setText(this.FIRX_DATE_NO?.DATE[1]);
-        getAllFields[106]?.setText(this.FIRX_DATE_NO?.NUMBER[1]);
-        getAllFields[107]?.setText(this.FIRX_DATE_NO?.AMOUNT[1]);
-        getAllFields[108]?.setText(filldata[0][0]?.fobValue?.toString());
-      }
 
-      if (this.FIRX_DATE_NO?.DATE[2] != undefined) {
-        getAllFields[109]?.setText(this.FIRX_DATE_NO?.DATE[2]);
-        getAllFields[110]?.setText(this.FIRX_DATE_NO?.NUMBER[2]);
-        getAllFields[111]?.setText(this.FIRX_DATE_NO?.AMOUNT[2]);
-        getAllFields[112]?.setText(filldata[0][0]?.fobValue?.toString());
+      if (filldata != null) {
+        getAllFields[31]?.setText(!isNaN(TOTAL_SUM_FIREX) ? TOTAL_SUM_FIREX.toString() : '0');
+        getAllFields[32]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.fobCurrency);
+        getAllFields[33]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.fobValue != undefined ? this.ConvertNumberToWords(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.fobValue).toUpperCase() : '0');
+        getAllFields[34]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.fobValue?.toString());
+
+        getAllFields[40]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.pipo[0]?.HSCODE);
+        getAllFields[41]?.setText('');
+        getAllFields[42]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.countryOfFinaldestination);
+        getAllFields[43]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL['blcopydetails'] != undefined ? this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL['blcopydetails'][0]?.airwayBlCopyNumber : '');
+        getAllFields[44]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.sbno.toString());
+        getAllFields[45]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.portCode);
+        getAllFields[46]?.setText(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.sbdate);
+        getAllFields[47]?.setText('');
+        getAllFields[48]?.setText('');
+        getAllFields[49]?.setText('');
+        getAllFields[50]?.setText('');
+        getAllFields[51]?.setText('');
+        getAllFields[52]?.setText('');
+        getAllFields[53]?.setText('');
+        getAllFields[54]?.setText('');
+        getAllFields[55]?.setText('');
+        getAllFields[56]?.setText('');
+        getAllFields[57]?.setText('');
+        getAllFields[58]?.setText('');
+        getAllFields[59]?.setText('');
+        getAllFields[60]?.setText('');
+        getAllFields[61]?.setText('');
+        getAllFields[62]?.setText('');
+        getAllFields[63]?.setText('');
+        getAllFields[64]?.setText('');
+
+        // // OD/CC/CA
+        getAllFields[65]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[0]);
+        getAllFields[66]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[1]);
+        getAllFields[67]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[2]);
+        getAllFields[68]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[3]);
+        getAllFields[69]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[4]);
+        getAllFields[70]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[5]);
+        getAllFields[71]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[6]);
+        getAllFields[72]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[7]);
+        getAllFields[73]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[8]);
+        getAllFields[74]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[9]);
+        getAllFields[75]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
+        getAllFields[76]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
+        getAllFields[77]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
+
+        getAllFields[78]?.setText('');
+        getAllFields[79]?.uncheck();
+        getAllFields[80]?.uncheck();
+        getAllFields[81]?.uncheck();
+        getAllFields[82]?.uncheck();
+        getAllFields[83]?.uncheck();
+        getAllFields[84]?.setText('');
+        getAllFields[85]?.uncheck();
+        getAllFields[86]?.uncheck();
+        getAllFields[87]?.uncheck();
+        getAllFields[88]?.setText('');
+        getAllFields[89]?.uncheck();
+        getAllFields[90]?.uncheck();
+        getAllFields[91]?.uncheck();
+        getAllFields[92]?.uncheck();
+        getAllFields[93]?.uncheck();
+        getAllFields[94]?.uncheck();
+        getAllFields[95]?.setText('');
+        getAllFields[96]?.setText('');
+        getAllFields[97]?.setText('');
+        getAllFields[98]?.setText('');
+        getAllFields[99]?.setText('');
+        getAllFields[100]?.setText('');
+        if (FIRX_DATE_NO?.DATE[0] != undefined) {
+          getAllFields[101]?.setText(FIRX_DATE_NO?.DATE[0]);
+          getAllFields[102]?.setText(FIRX_DATE_NO?.NUMBER[0]);
+          getAllFields[103]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
+          getAllFields[104]?.setText(FIRX_DATE_NO?.AMOUNT[0]?.toString());
+        }
+        if (FIRX_DATE_NO?.DATE[1] != undefined) {
+          getAllFields[105]?.setText(FIRX_DATE_NO?.DATE[1]);
+          getAllFields[106]?.setText(FIRX_DATE_NO?.NUMBER[1]);
+          getAllFields[107]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
+          getAllFields[108]?.setText(FIRX_DATE_NO?.AMOUNT[1]?.toString());
+        }
+        if (FIRX_DATE_NO?.DATE[2] != undefined) {
+          getAllFields[109]?.setText(FIRX_DATE_NO?.DATE[2]);
+          getAllFields[110]?.setText(FIRX_DATE_NO?.NUMBER[2]);
+          getAllFields[111]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
+          getAllFields[112]?.setText(FIRX_DATE_NO?.AMOUNT[2]?.toString());
+        }
+        getAllFields[113]?.setText('');
       }
-      getAllFields[113]?.setText('');
 
       const pdfBytes = await pdfDoc.save()
       var base64String = this._arrayBufferToBase64(pdfBytes)
@@ -266,9 +312,6 @@ export class NewExportBillLodgementComponent implements OnInit {
       setTimeout(() => {
         this.PREVIWES_URL = x1;
         this.VISIBLITY_PDF = true;
-        setTimeout(() => {
-          this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-        }, 200);
       }, 200);
     }
   }
@@ -285,44 +328,7 @@ export class NewExportBillLodgementComponent implements OnInit {
 
   HSCODE_LIST: any = [];
   ngOnChanges(changes: SimpleChanges): void {
-    this.data = changes?.data?.currentValue != undefined ? changes?.data?.currentValue : this.data;
-    console.log(changes, 'asdasdasdasdasdasds')
-    this.BankId = changes?.data?.currentValue[2][0]?.BankUniqueId != undefined ? changes?.data?.currentValue[2][0]?.BankUniqueId : this.BankId;
-    if (this.data != undefined) {
-      this.SB_NO = changes?.data?.currentValue[5];
-      if (this.data[0].length != 0) {
-        this.FILETR_AMOUNT = this.data[0].filter((item: any) => item?.sbno?.includes(this.SB_NO))
-        this.TOTAL_PIPO_AMOUNT = this.FILETR_AMOUNT[0]?.invoices[0]?.amount
-        this.FIRX_DATE_NO['NUMBER'] = [];
-        this.FIRX_DATE_NO['DATE'] = [];
-        this.FIRX_DATE_NO['AMOUNT'] = [];
-        this.TOTAL_SUM_FIREX = this.data[1]['SB_' + this.SB_NO]?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
-        this.TOTAL_SUM_FIREX_COMMISION = 0;
-        this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
-          if (element?.irDataItem?.CommissionUsed == false) {
-            this.TOTAL_SUM_FIREX_COMMISION = parseInt(this.TOTAL_SUM_FIREX_COMMISION) + parseInt(element?.irDataItem?.commision)
-          }
-        });
-        this.HSCODE_LIST = [];
-        changes?.data?.currentValue[0]?.forEach(element => {
-          console.log(element?.pipo[0], "HSCODE")
-          this.HSCODE_LIST.push(element?.pipo[0]?.HSCODE)
-        });
-        this.TOTAL_SUM_FIREX = this.TOTAL_SUM_FIREX - this.TOTAL_SUM_FIREX_COMMISION;
-        console.log(this.TOTAL_SUM_FIREX_COMMISION, (this.TOTAL_SUM_FIREX - this.TOTAL_SUM_FIREX_COMMISION), this.data[1]['SB_' + this.SB_NO], "TOTAL_SUM_FIREX_COMMISION")
-        this.CURRENCY = this.FILETR_AMOUNT[0]?.currency;
-        this.data[1]['SB_' + this.SB_NO]?.forEach(element => {
-          this.FIRX_DATE_NO?.NUMBER?.push(element?.irDataItem?.billNo)
-          this.FIRX_DATE_NO?.DATE?.push(element?.irDataItem?.date)
-          this.FIRX_DATE_NO?.AMOUNT?.push(element?.irDataItem?.Used_Balance)
-        });
-      }
 
-      this.SELECT_BUYER_DETAILS = changes?.data?.currentValue[6]
-      setTimeout(() => {
-        this.fillForm(this.data);
-      }, 200);
-    }
   }
 
   ConvertNumberToWords(number: any) {
@@ -416,6 +422,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           type: "BankCheckBox",
           value: "",
           label: "Select Bank",
+          Banklabel: "Charges A/C No.*",
           rules: {
             required: true,
           }
@@ -427,7 +434,8 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
-          YesNo: ''
+          YesNo: '',
+          HideShowInput: ["UnderLC", "DirectDispatch", "Sight", "Usance", "WithScrutiny"]
         },
         SHIPPING_BILL: {
           type: "PopupOpen",
@@ -448,7 +456,8 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
-          YesNo: ''
+          YesNo: '',
+          HideShowInput: ["AgainstAdvanceReceipt", "UnderLC", "Sight", "Usance", "WithScrutiny", "BuyerRemitterDifferent", "InvoiceReduction", "WithDiscount"]
         },
         UnderLC: {
           type: "yesnocheckbox",
@@ -457,7 +466,8 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
-          YesNo: ''
+          YesNo: '',
+          HideShowInput: ["Sight", "Usance"]
         },
         Sight: {
           type: "yesnocheckbox",
@@ -519,129 +529,259 @@ export class NewExportBillLodgementComponent implements OnInit {
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
 
-  onSubmit(e: any) {
-    console.log(e, 'value')
-    this.fillForm(e);
-    this.FORM_VALUE = e;
-  }
-
-  checkValueExit(list: any) {
-    return new Promise((resolve, reject) => {
-      let counterlist: any = {
-        count: 0,
-        no: [],
-        status: false
-      };
-      if (list?.length == 0) {
-        resolve(counterlist);
-        return;
+  TITLE_CHANGED: string = 'Export Bill Lodgement'
+  YesNoCheckBox(value: any) {
+    if (value?.id == "DirectDispatch") {
+      if (value?.bool == true) {
+        this.TITLE_CHANGED = "Export Bill Lodgement / Direct Dispatch"
+      } else {
+        this.TITLE_CHANGED = 'Export Bill Lodgement'
       }
-      for (let index = 0; index < list.length; index++) {
-        const element: any = list[index];
-        this.documentService.getInvoice_No({
-          commercialNumber: element?.commercialNumber
-        }, 'commercials').subscribe((resp: any) => {
-          if (resp.data.length != 0) {
-            counterlist['count'] += 1;
-            counterlist['no'].push(element?.commercialNumber);
-          }
-          if ((index + 1) == list.length) {
-            counterlist['status'] = counterlist['count'] == 0 ? true : false
-            resolve(counterlist);
-          }
-        });
+    } else if (value?.id == "AgainstAdvanceReceipt") {
+      if (value?.bool == true) {
+        this.TITLE_CHANGED = "Export Bill Lodgement / Regularization"
+      } else {
+        this.TITLE_CHANGED = 'Export Bill Lodgement'
       }
-    })
-  }
-  clickPipo(event: any) {
-    if (event != undefined) {
-      this.btndisabled = false;
-      this.pipoArr = [event?._id]
-      console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
-      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.BUYER_DETAILS = this.validator.BUYER_DETAILS_MASTER.filter((item: any) => item?.buyerName?.includes(event?.id[1]))[0]
-      this.response(null);
-      // this.pipoDataService.getShippingNo(event?._id, 'export');
-      // this.validator.SHIPPING_BILL_LIST = [];
-      // for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
-      //   if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-      //     this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
-      //   }
-      // }
-      this.COMMERCIAL_LIST = [];
-      console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
-    } else {
-      this.btndisabled = true;
     }
-    console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(value, "YesNoCheckBox")
   }
-  onChangeShippingBill(data: any) {
-    console.log(data, "onChangeShippingBill")
-    this.validator.COMMERICAL_NO = [];
-    let fileterdata = this.validator.SHIPPING_BILL_MASTER_DATA.filter((item: any) => item?._id?.includes(data?.SB_ID))[0];
-    fileterdata?.commercialdetails?.forEach(element => {
-      let checkexit = this.validator.COMMERICAL_NO.filter((item: any) => item?.value?.includes(element?.commercialNumber))
-      if (checkexit?.length == 0) {
-        this.validator.COMMERICAL_NO.push({
-          value: element?.commercialNumber,
-          id: element?._id, sbno: element?.sbNo,
-          sbid: element?.sbRef[0],
-          doc: element?.commercialDoc,
-          currency: element?.currency,
-          amount: element?.amount
+
+  CreateTransaction(ShippingBill) {
+    if (this.exportbilllodgementdata?.TRANSACTION_SELECTED_COMMERICAIL_DATA?.length != 0) {
+      this.fillForm(this.exportbilllodgementdata?.TRANSACTION_SELECTED_COMMERICAIL_DATA);
+      this.OTHER_DOCUMENTS[0] = {
+        name: 'Shipping Bill',
+        pdf: this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.doc
+      }
+      this.OTHER_DOCUMENTS[1] = {
+        name: 'blCopy',
+        pdf: this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.blCopyDoc
+      }
+      this.OTHER_DOCUMENTS[2] = {
+        name: 'Commercial',
+        pdf: this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.commercialDoc
+      }
+      ShippingBill?.displayHidden;
+    } else {
+      this.toastr.error("Please select atleast one commercial no.")
+    }
+  }
+  PREVIEWS_URL_LIST: any = '';
+  alldocuments: any = [];
+  async FormValue(value: any, PrviewPage: any) {
+    console.log(value, "FormValue");
+    if (value != false) {
+      this.ExportBillLodgement_Form = value;
+      this.PREVIEWS_URL_LIST = ''
+      this.alldocuments = [];
+      await this.getS3Url().then(async (res: any) => {
+        await res?.forEach(element => {
+          this.alldocuments.push(element)
         });
-      }
-    });
-    this.validator.BL_COPY_LIST = [];
-    fileterdata?.blcopydetails?.forEach(element => {
-      let checkexit = this.validator.BL_COPY_LIST.filter((item: any) => item?.value?.includes(element?.airwayBlCopyNumber))
-      if (checkexit?.length == 0) {
-        this.validator.BL_COPY_LIST.push({ value: element?.airwayBlCopyNumber, id: element?._id, no: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
-      }
-    });
+        await this.OTHER_DOCUMENTS?.forEach(element => {
+          this.alldocuments.push(element?.pdf)
+        });
+        var fitertemp: any = this.alldocuments.filter(n => n)
+        await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+          this.PREVIEWS_URL_LIST = merge?.pdfurl;
+          console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+          PrviewPage?.displayShow;
+        });
+      });
 
-    console.log('changedCommercial', fileterdata, this.validator.COMMERICAL_NO, this.validator.BL_COPY_LIST)
+    }
   }
-
-  onFillForm(callback: any) {
-    if (this.FORM_VALUE != undefined && this.FORM_VALUE != null) {
-      this.documentService.getInvoice_No({
-        billExchangeNumber: this.FORM_VALUE?.billExchangeNumber
-      }, 'billOfExchange').subscribe(async (resp: any) => {
-        console.log('billOfExchangeRef Invoice_No', resp)
-        if (resp.data.length == 0) {
-          await this.userService?.UploadS3Buket({
-            fileName: this.guid() + '.pdf', buffer: this.PREVIWES_URL,
-            type: 'application/pdf'
-          }).subscribe(async (pdfresponse1: any) => {
-            this.FORM_VALUE.file = 'export';
-            this.FORM_VALUE.pipo = this.pipoArr;
-            console.log('pipoarrya', this.pipoArr);
-            this.FORM_VALUE.doc = pdfresponse1?.url;
-            this.FORM_VALUE.buyerName = this.BUYER_LIST;
-            this.documentService.addBillExchange(this.FORM_VALUE).subscribe((res: any) => {
-              this.toastr.success(`BillExchange Invoice Added Successfully`);
-              let updatedData = {
-                "billOfExchangeRef": [
-                  res.data._id,
-                ],
+  async SendApproval(Status: string, UniqueId: any, event: any) {
+    var UpdatedUrl: any = [];
+    if (UniqueId != null) {
+      var approval_data: any = {};
+      delete this.USER_DATA?.members_list
+      delete this.USER_DATA?.LoginToken
+      if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
+        approval_data = {
+          id: 'IRDR' + '_' + this.randomId(5),
+          tableName: 'Inward-Remitance-Dispoal-Realization',
+          deleteflag: '-1',
+          userdetails: this.USER_DATA,
+          status: 'pending',
+          documents: this.alldocuments,
+          Types: 'downloadPDF',
+          TypeOfPage: 'Transaction',
+          FileType: this.USER_DATA?.sideMenu
+        }
+      } else {
+        approval_data = {
+          id: 'EDD' + '_' + this.randomId(5),
+          tableName: 'Export-Direct-Dispatch',
+          deleteflag: '-1',
+          userdetails: this.USER_DATA,
+          status: 'pending',
+          documents: this.alldocuments,
+          Types: 'downloadPDF',
+          TypeOfPage: 'Transaction',
+          FileType: this.USER_DATA?.sideMenu
+        }
+      }
+      var pipo: any = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.pipo;
+      var pipo_id: any = [];
+      var pipo_name: any = [];
+      (pipo != 'NF' ? pipo : []).forEach(element => {
+        pipo_id.push(element?._id)
+        pipo_name.push(element?.pi_poNo)
+      });
+      this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
+        console.log(approval_data, res, 'approval_data')
+        if (res?.id != approval_data?.id) {
+          if (Status == '' || Status == null || Status == 'Rejected') {
+            this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+              this.ExportBillLodgement_Form['SbRef']=(UniqueId);
+              this.ExportBillLodgement_Form['documents']=(UpdatedUrl?.reverse());
+              this.ExportBillLodgement_Form['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId })
+              this.ExportBillLodgement_Form['extradata']=(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL)
+              if (this.ExportBillLodgement_Form['AgainstAdvanceReceipt']?.bool == true) {
+                var data: any = {
+                  data: this.ExportBillLodgement_Form.value,
+                  TypeTransaction: 'Export-Direct-Dispatch',
+                  fileType: 'Export',
+                  UserDetails: approval_data?.id,
+                  pipo: pipo_id
+                }
+                this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                  let updatedData = {
+                    "TransactionRef": [
+                      res1._id,
+                    ]
+                  }
+                  if (this.documentService.MT102_SUBJECT?.file == '' || this.documentService.MT102_SUBJECT?.file == undefined) {
+                    this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                      console.log(data);
+                      let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.firxdetails?.FirxUsed_Balance?.split(','))) + parseInt(this.FIRX_AMOUNT(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.firxdetails?.firxCommision?.split(',')))
+                      var updateapproval_data: any = {
+                        RejectData: {
+                          tableName: 'masterrecord',
+                          id: approval_data?.id,
+                          TransactionId: res1._id,
+                          data: {
+                            SbRef: UniqueId,
+                            Total_FIRX_Amount: sumfixAmount
+                          },
+                          pipo_id: pipo_id,
+                          pipo_name: pipo_name
+                        }
+                      }
+                      this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
+                        this.router.navigate(['/home/dashboardTask'])
+                        event?.displayHidden;
+                        this.toastr.success('Successfully added Transaction of SB No. :' + this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.sbno);
+                      });
+                    }, (error) => {
+                      console.log('error');
+                    }
+                    );
+                  }
+                  console.log('addExportBillLodgment', res1);
+                })
+              } else {
+                if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
+                  var changevalue: any = this.documentService.MT102_SUBJECT;
+                  changevalue['pipo'] = pipo_id;
+                  changevalue['SbRef'] = [this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?._id];
+                  changevalue['Url_Redirect'] = { file: 'export', document: 'blCopyref', SbRef: UniqueId, pipo: pipo_name.toString() };
+                  var data: any = {
+                    data: changevalue,
+                    TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+                    fileType: 'Export',
+                    UserDetails: approval_data?.id,
+                    pipo: pipo_id
+                  }
+                  this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                    this.router.navigate(['/home/dashboardTask']);
+                    this.sessionstorage.remove('MT102')
+                    console.log('addExportBillLodgment', res1);
+                  })
+                } else {
+                  if (this.ExportBillLodgement_Form['AgainstAdvanceReceipt']?.bool == false) {
+                    var data: any = {
+                      data: this.ExportBillLodgement_Form,
+                      TypeTransaction: 'Export-Direct-Dispatch',
+                      fileType: 'Export',
+                      UserDetails: approval_data?.id,
+                      pipo: pipo_id
+                    }
+                    this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                      let updatedData = {
+                        "TransactionRef": [
+                          res1._id,
+                        ]
+                      }
+                      this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                        console.log('king123');
+                        console.log(data);
+                        let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.firxdetails?.FirxUsed_Balance?.split(','))) + parseInt(this.FIRX_AMOUNT(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.firxdetails?.firxCommision?.split(',')))
+                        var updateapproval_data: any = {
+                          RejectData: {
+                            tableName: 'masterrecord',
+                            id: approval_data?.id,
+                            TransactionId: res1._id,
+                            data: {
+                              SbRef: UniqueId,
+                              Total_FIRX_Amount: sumfixAmount
+                            },
+                            pipo_id: pipo_id,
+                            pipo_name: pipo_name
+                          }
+                        }
+                        this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
+                          this.router.navigate(['/home/dashboardTask'])
+                        });
+                      }, (error) => {
+                        console.log('error');
+                      }
+                      );
+                      console.log('addExportBillLodgment', res1);
+                    })
+                  }
+                }
               }
-              this.userService.updateManyPipo(this.pipoArr, 'commercial', pdfresponse1?.url, updatedData).subscribe((data) => {
-                console.log('commercial', data);
-                this.router.navigate(['home/Summary/Export/bill-of-exchange']);
-              }, (error) => {
-                console.log('error');
-              });
-            }, (err) => console.log('Error adding pipo'));
-          });
+            });
+          }
         } else {
-          this.toastr.error(`Please check this BillExchange no. : ${this.FORM_VALUE?.billExchangeNumber} already exit...`);
+          this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Send for Approval',
+            `You already send for approval <br>&<br>also check ${res?.status} panel`)
         }
       });
     }
+    console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, pipo, approval_data, 'uiiiiiiiiiiiiii')
   }
 
+  FIRX_AMOUNT(amountarray: any): any {
+    return parseFloat(amountarray?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
+  }
+  getStatusCheckerMaker(id) {
+    return new Promise((resolve, reject) => {
+      this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
+    })
+  }
+
+  async getS3Url() {
+    return new Promise(async (reslove, reject) => {
+      let temp: any = [];
+      await this.userService?.UploadS3Buket({
+        fileName: this.guid() + '.pdf', buffer: this.PREVIWES_URL,
+        type: 'application/pdf'
+      }).subscribe(async (pdfresponse1: any) => {
+        temp[0] = pdfresponse1?.url;
+        await this.userService?.UploadS3Buket({
+          fileName: this.guid() + '.pdf', buffer: this.LETTER_HEAD_URL,
+          type: 'application/pdf'
+        }).subscribe(async (pdfresponse2: any) => {
+          temp[1] = pdfresponse2?.url;
+          reslove(temp);
+        });
+      });
+    })
+  }
   guid() {
     let s4 = () => {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -650,6 +790,7 @@ export class NewExportBillLodgementComponent implements OnInit {
     }
     return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
-  onChangeBLCopy(data: any) {
-  }
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length + 2);
+  };
 }

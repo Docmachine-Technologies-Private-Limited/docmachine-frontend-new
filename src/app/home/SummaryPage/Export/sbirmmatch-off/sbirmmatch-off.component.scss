@@ -137,10 +137,11 @@
 }
 
 .SHIPING_BILL_POPUP ::ng-deep .mat-accordion {
-    margin-top: 10px !important;
+    margin-top: 10px!important;
     margin: auto;
     display: flex;
     flex-direction: column;
+    width: calc(100vw - 230px);
 }
 
 .SHIPING_BILL_POPUP ::ng-deep .mat-expansion-panel-spacing {
@@ -191,15 +192,4 @@
 
 .match-off ::ng-deep .upload-components-header {
     position: relative !important;
-}
-
-.Transaction-btn {
-    margin: auto;
-    margin-right: 20px;
-    background-color: transparent;
-    border: none;
-}
-
-.Transaction-btn:hover {
-    color: #597a8a;
 }

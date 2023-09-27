@@ -29,6 +29,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ExportCertificateofOriginComponent } from './certificateof-origin/certificateof-origin.component';
+import { SBIRMMatchOffComponent } from './sbirmmatch-off/sbirmmatch-off.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ExportCertificateofOriginComponent } from './certificateof-origin/certi
     InwardRemittanceDisposalComponent,
     SubBillLodgementComponent,
     ExportCertificateofOriginComponent,
+    SBIRMMatchOffComponent,
   ],
   imports: [
     CommonModule,

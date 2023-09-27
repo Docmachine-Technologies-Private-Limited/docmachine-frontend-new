@@ -176,13 +176,13 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
         }
       }
       this.item1.forEach((element, i) => {
-        let amount = element.amount
         let commision = parseFloat(element.commision)
         let exchangeRate = parseFloat(element.exchangeRate)
         let pipoamount: any = parseFloat(element?.pipo[0]?.amount)
         this.item1[i].recUSD = (pipoamount - commision).toFixed(2);
         let cv = (parseFloat(this.item1[i].recUSD) * exchangeRate).toFixed(2);
         this.item1[i].convertedAmount = cv != "NaN" ? cv : null;
+        element['BalanceAvail'] = element['BalanceAvail'] == 0 ? (element['BalanceAvail']).toString() : element['BalanceAvail']
       });
       this.FILTER_VALUE_LIST = this.item1;
       this.ForexAdviceTable(this.item1);
@@ -201,24 +201,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       this.commodity = this.commodity.filter((value, index) => this.commodity.indexOf(value) === index);
     }, (error) => {
       console.log('error');
-    }
-    );
-
-    this.documentService.getMaster(1).subscribe((res: any) => {
-      console.log('Master Data File', res);
-      this.item5 = res.data;
-      this.item5.forEach((element, i) => {
-        this.origin[i] = element.countryOfFinaldestination;
-      });
-      this.origin = this.origin.filter((value, index) => this.origin.indexOf(value) === index);
-      console.log('Master Country', this.origin);
-    }, (err) => console.log(err)
-    );
-
-    this.documentService.getPipo().subscribe((res: any) => {
-      console.log('Data fetched successfully', res), (this.item3 = res.data);
-    }, (err) => console.log(err)
-    );
+    });
   }
 
   getPipoNumbers(data) {
@@ -235,14 +218,14 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
           date: element['date'],
-          boeno: element['boeno'],
+          boeno: element['sbno'],
           partyName: element['partyName'],
           buyerName: element['buyerName'],
           BankName: element['BankName']?.value,
           currency: element['currency'],
           amount: element['amount'],
           billNo: element['billNo'],
-          BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+          BalanceAvail: element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element['amount'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           Expansion_Items: [{
             From: element['origin'],
@@ -261,7 +244,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length!=0) {
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
@@ -275,7 +258,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
   async removeEmpty(data: any) {
     await data.forEach(element => {
       for (const key in element) {
-        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined && element[key] != 0) {
           element[key] = 'NF'
         }
       }
@@ -366,10 +349,10 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/InwardRemittanceAdvice`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/InwardRemittanceAdvice`], navigationExtras);
     this.toastr.warning('Forex Advice Row Is In Edit Mode');
   }
 
