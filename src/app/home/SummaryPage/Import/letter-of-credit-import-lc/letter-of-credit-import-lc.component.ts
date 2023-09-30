@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from 'moment';
 
 @Component({
   selector: 'letter-of-credit-import-lc-summary',
@@ -125,7 +126,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date: moment(element['date']).format('DD-MM-YYYY'),
           letterOfCreditNumber: element['letterOfCreditNumber'],
           letterOfCreditAmount: element['letterOfCreditAmount'],
           currency: element['currency'],

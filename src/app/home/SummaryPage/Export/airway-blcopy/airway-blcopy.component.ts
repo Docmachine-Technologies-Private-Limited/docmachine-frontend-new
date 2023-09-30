@@ -12,6 +12,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
+import moment from 'moment';
 
 @Component({
   selector: 'export-airway-blcopy-summary',
@@ -156,7 +157,7 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
           airwayBlCopyNumber: element['airwayBlCopyNumber'],
-          airwayBlCopydate: element['date'],
+          airwayBlCopydate: moment(element['date']).format("DD-MM-YYYY"),
           sbNo: element['sbNo'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',

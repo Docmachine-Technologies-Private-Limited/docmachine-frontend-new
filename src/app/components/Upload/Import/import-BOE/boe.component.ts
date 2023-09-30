@@ -61,10 +61,6 @@ export class BOEComponent implements OnInit {
           type: "CommericalNo",
           value: "",
           label: "Commerical No.",
-          autofill: [{ input: 'CIINVOICE', key: 'InvoiceValue', name: 'invoices', index: 3, equalinput: 'invoiceNumber', equalindex: 3 },
-          { input: 'CIfreightValue', key: 'FreightValue', name: 'FOBFREIGHT', index: 2, equalinput: 'freightValue', equalindex: 1 },
-          { input: 'CIinsuranceAmount', key: 'InsuranceValue', name: 'INSURANCE', index: 2, equalinput: 'insuranceAmount', equalindex: 1 },
-          { input: 'CImiscellaneousAmount', key: 'MiscCharges', name: 'MISCELLANEOUS', index: 2, equalinput: 'miscellaneousAmount', equalindex: 1 }],
           autofillrequired: true,
           rules: {
             required: true,

@@ -12,6 +12,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
+import moment from "moment";
 
 @Component({
   selector: 'app-inward-remittance-disposal',

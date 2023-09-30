@@ -7,12 +7,11 @@ import { UserService } from './../../../../service/user.service'
 import * as data1 from '../../../../currency.json';
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-
+import moment from "moment";
 
 @Component({
   selector: 'export-opinion-reports-summary',
@@ -128,10 +127,10 @@ export class ExportOpinionReportsComponent implements OnInit {
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          date: element['date'],
+          date: moment(element['date']).format("DD-MM-YYYY"),
           opinionReportNumber: element['opinionReportNumber'],
           ForeignPartyName: element['ForeignPartyName']?.value,
-          ReportDate: element['ReportDate'],
+          ReportDate: moment(element['ReportDate']).format("DD-MM-YYYY"),
           ReportRatings: element['ReportRatings'],
           buyerName: element['buyerName'],
           AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),

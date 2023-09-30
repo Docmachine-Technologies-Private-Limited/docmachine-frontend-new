@@ -1,53 +1,37 @@
-import { Directive,
-  OnInit,
-  Renderer2,
+import {
+  Directive,
   ElementRef,
   HostListener,
   Input,
-  HostBinding } from '@angular/core';
+} from '@angular/core';
 
 @Directive({
   selector: '[appFilterToggle]'
 })
 export class FilterToggleDirective {
-  @Input() defaultColor : string;
-  @Input() highlightColor : string = 'pink';
-  @HostBinding('style.backgroundColor') backgroundColor: string;
+  @Input() defaultColor: string;
+  @Input() highlightColor: string = 'pink';
 
- constructor(private elementRef: ElementRef ,private renderer : Renderer2){
+  constructor(private elementRef: ElementRef) {
 
- }
+  }
 
- ngOnInit(){
-   this.backgroundColor = this.defaultColor;
-   //this.renderer.setStyle(this.elementRef.nativeElement,'background-color','pink');
- }
+  ngOnInit() {
+  }
 
-
-
- @HostListener('mouseenter') mouseover(eventData: Event){
-   //this.renderer.setStyle(this.elementRef.nativeElement,'background-color','pink');
-   this.backgroundColor =this.highlightColor;
- }
-
- @HostListener('mouseleave') mouseleave(eventData: Event){
-   //this.renderer.setStyle(this.elementRef.nativeElement,'background-color','transparent');
-   this.backgroundColor = this.defaultColor;
- }
- @HostListener('document:mousedown', ['$event'])
- onGlobalClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-
+  @HostListener('document:click', ['$event'])
+  onClick(event): void {
+    var ClassList: any = []
+    for (let index = 0; index < event?.target?.classList.length; index++) {
+      ClassList.push(event?.target?.classList[index])
     }
- }
- @HostListener('document:click', ['$event'])
- onClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target) && ['fi_icon','filter-popup'].includes(event.target.className)==false) {
+    if (ClassList.length == 0) {
+      ClassList = event?.target?.className?.split(' ')
+    }
+    if (ClassList?.includes('filter-popup') == true) {
+      this.elementRef.nativeElement.style.display = 'block';
+    } else {
       this.elementRef.nativeElement.style.display = 'none';
-    }else{
-      if (['fi_icon','filter-popup'].includes(event.target.className)==true) {
-        this.elementRef.nativeElement.style.display = 'block';
-      }
     }
- }
+  }
 }

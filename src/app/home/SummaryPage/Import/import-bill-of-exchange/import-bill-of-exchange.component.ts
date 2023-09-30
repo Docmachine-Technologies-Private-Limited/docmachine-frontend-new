@@ -13,6 +13,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from 'moment';
 
 @Component({
   selector: 'import-import-bill-of-exchange-summar',
@@ -119,7 +120,7 @@ export class ImportBillOfExchangeComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          billOfExchangeDate: element['billOfExchangeDate'],
+          billOfExchangeDate: moment(element['billOfExchangeDate']).format("DD-MM-YYYY"),
           billExchangeNumber: element['billExchangeNumber'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',

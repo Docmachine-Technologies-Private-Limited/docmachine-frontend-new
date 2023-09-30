@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from "moment";
+
 @Component({
   selector: 'import-opinion-reports-summary',
   templateUrl: './import-opinion-reports.component.html',
@@ -130,7 +132,7 @@ export class ImportOpinionReportsComponent implements OnInit {
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          date: element['date'],
+          date: moment(element['date']).format("DD-MM-YYYY"),
           opinionReportNumber: element['opinionReportNumber'],
           opinionReportAmount: element['opinionReportAmount'],
           ForeignPartyName: element['ForeignPartyName']?.value,

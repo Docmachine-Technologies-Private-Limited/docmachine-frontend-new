@@ -12,6 +12,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from 'moment';
 
 @Component({
   selector: 'imports-credit-note-summary',
@@ -130,7 +131,7 @@ export class ImportsCreditNoteComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date: moment(element['date']).format('DD-MM-YYYY'),
           creditNoteNumber: element['creditNoteNumber'],
           creditNoteAmount: element['creditNoteAmount'],
           currency: element['currency'],

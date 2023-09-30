@@ -160,10 +160,10 @@ export class ImportInsuranceComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['UtilizationAddition']),
-          date: moment(element['date']).format("YYYY-MM-DD"),
+          date: moment(element['date']).format("DD-MM-YYYY"),
           insuranceNumber: element['insuranceNumber'],
-          StartDate: moment(element['StartDate']).format("YYYY-MM-DD"),
-          Expirydate: moment(element['Expirydate']).format("YYYY-MM-DD"),
+          StartDate: moment(element['StartDate']).format("DD-MM-YYYY"),
+          Expirydate: moment(element['Expirydate']).format("DD-MM-YYYY"),
           insuranceAmount: element['insuranceAmount'],
           currency: element['currency'],
           buyerName: this.getPipoBuyerName(element['UtilizationAddition']),

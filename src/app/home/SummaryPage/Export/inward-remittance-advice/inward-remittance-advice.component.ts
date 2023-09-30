@@ -18,6 +18,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
+import moment from "moment";
 
 @Component({
   selector: 'export-inward-remittance-advice-summary',
@@ -217,7 +218,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date:  moment(element['date']).format("DD-MM-YYYY"),
           boeno: element['sbno'],
           partyName: element['partyName'],
           buyerName: element['buyerName'],
@@ -231,10 +232,10 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
             From: element['origin'],
             Branch: element['location'],
             Description: element['commodity'],
-            RecievedDate: element['recievedDate'],
+            RecievedDate:  moment(element['recievedDate']).format("DD-MM-YYYY"),
             CommissionBankCharges: element['commision'],
             RecievedAmountUSD: element['recUSD'],
-            ConversionDate: element['conversionDate'],
+            ConversionDate:  moment(element['conversionDate']).format("DD-MM-YYYY"),
             ConversionRate: element['exchangeRate'],
             ConvertedAmount: element['convertedAmount'],
             PaymentType: element['PaymentType'],

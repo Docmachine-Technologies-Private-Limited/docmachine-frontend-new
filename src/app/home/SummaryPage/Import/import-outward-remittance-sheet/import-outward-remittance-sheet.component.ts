@@ -17,6 +17,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from "moment";
 
 @Component({
   selector: 'import-outward-remittance-sheet-summar',
@@ -253,22 +254,22 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date:  moment(element['date']).format("DD-MM-YYYY"),
           boeno: element['sbno'],
           beneficiaryName: element['beneficiaryName'],
           BankName: element['BankName']?.value,
           currency: element['currency'],
           amount: element['amount'],
           billNo: element['billNo'],
-          BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+          BalanceAvail: element['BalanceAvail'] != '-1' ? element['BalanceAvail'] : element['amount'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           Expansion_Items: [{
             Branch: element['location'],
             Description: element['commodity'],
-            RecievedDate: element['recievedDate'],
+            RecievedDate:  moment(element['recievedDate']).format("DD-MM-YYYY"),
             CommissionBankCharges: element['commision'],
             RecievedAmountUSD: element['recUSD'],
-            ConversionDate: element['conversionDate'],
+            ConversionDate:  moment(element['conversionDate']).format("DD-MM-YYYY"),
             ConversionRate: element['exchangeRate'],
             ConvertedAmount: element['convertedAmount'],
             PaymentType: element['PaymentType'],

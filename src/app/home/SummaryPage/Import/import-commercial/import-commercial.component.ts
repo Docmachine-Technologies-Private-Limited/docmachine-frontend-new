@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from 'moment';
 
 @Component({
   selector: 'import-commercial-summary',
@@ -128,7 +129,7 @@ export class ImportCommercialComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          commercialDate: element['commercialDate'],
+          commercialDate: moment(element['commercialDate']).format('DD-MM-YYYY'),
           commercialNumber: element['commercialNumber'],
           AdvanceNo: element['AdvanceNo'],
           AdvanceCurrency: element['AdvanceCurrency'],

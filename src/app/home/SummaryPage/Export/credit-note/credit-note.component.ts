@@ -4,10 +4,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service';
 import * as data1 from '../../../../currency.json';
-
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -24,7 +21,6 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from 'moment';
-
 
 @Component({
   selector: 'export-credit-note-summary',

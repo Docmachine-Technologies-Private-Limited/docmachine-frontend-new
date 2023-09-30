@@ -61,6 +61,14 @@ export class ImportOpinionReportComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
+        date: {
+          type: "date",
+          value: "",
+          label: "Opinion Report Number*",
+          rules: {
+            required: true,
+          }
+        },
         opinionReportNumber: {
           type: "text",
           value: "",

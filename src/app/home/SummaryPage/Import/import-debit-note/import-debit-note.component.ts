@@ -12,6 +12,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from 'moment';
 
 @Component({
   selector: 'impoprt-import-debit-note-summary',
@@ -44,6 +45,7 @@ export class ImportDebitNoteComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "D N No.",
+      "CI No.",
       "D N Amount",
       "CURRENCY",
       "Beneficiary Name",
@@ -54,6 +56,7 @@ export class ImportDebitNoteComponent implements OnInit {
     Objectkeys: [],
     ExpansionKeys: [],
     TableHeaderClass: [
+      "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
@@ -131,8 +134,9 @@ export class ImportDebitNoteComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date: moment(element['date']).format('DD-MM-YYYY'),
           debitNoteNumber: element['debitNoteNumber'],
+          commercialNumber: element['commercialNumber'],
           DebitAmount: element['totalDebitAmount'],
           currency: element['currency'],
           buyerName: element['buyerName'],

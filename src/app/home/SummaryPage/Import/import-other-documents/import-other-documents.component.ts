@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from "moment";
 
 @Component({
   selector: 'import-other-documents-summary',
@@ -42,8 +43,6 @@ export class ImportOtherDocumentsComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "Packing List No.",
-      "Currency",
-      "Amount",
       "Beneficiary Name",
       "Action"],
     items: [],
@@ -55,8 +54,6 @@ export class ImportOtherDocumentsComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-2",
-      "col-td-th-1",
-      "col-td-th-1",
       "col-td-th-2",
     ],
     eventId: ''
@@ -124,10 +121,8 @@ export class ImportOtherDocumentsComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          packingListDate: element['packingListDate'],
+          packingListDate: moment(element['packingListDate']).format("DD-MM-YYYY"),
           packingListNumber: element['packingListNumber'],
-          currency: element['currency'],
-          packingListAmount: element['packingListAmount'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,

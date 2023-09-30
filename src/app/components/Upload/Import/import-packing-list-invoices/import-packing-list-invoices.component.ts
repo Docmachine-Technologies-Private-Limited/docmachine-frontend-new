@@ -102,22 +102,6 @@ export class ImportPackingListInvoicesComponent implements OnInit {
             required: true,
           }
         },
-        currency: {
-          type: "currency",
-          value: "",
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        packingListAmount: {
-          type: "text",
-          value: "",
-          label: "Packing List Amount",
-          rules: {
-            required: true,
-          }
-        }
       }, 'Importpackinglist');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

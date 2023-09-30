@@ -156,10 +156,9 @@ export class PipoDocumentsComponent implements OnInit {
       "INVOICE DATE",
       "Beneficiary NAMES",
       "CURRENCY",
-      "Amount",
       "BRANCH",
       "COMMODITY",
-      "Available BALANCE",
+      "Amount",
       "Action"],
     items: [],
     Expansion_header: [
@@ -199,8 +198,6 @@ export class PipoDocumentsComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-1"
     ],
     eventId: 1
   }
@@ -1088,7 +1085,7 @@ export class PipoDocumentsComponent implements OnInit {
         }])?.forEach(boeelement => {
           boedata.push({
             BOENO: boeelement['boeNumber'],
-            BOEDATE: moment(boeelement['boeDate']).format("YYYY-MM-DD"),
+            BOEDATE: moment(boeelement['boeDate']).format("DD-MM-YYYY"),
             REGION: boeelement['origin'],
             FOBVALUE: boeelement['invoiceAmount'],
             PORTCODE: boeelement['iecCode'],
@@ -1112,7 +1109,7 @@ export class PipoDocumentsComponent implements OnInit {
           STATUSOFBOESUBMISSIONINBANK: "NF",
         }])?.forEach(adviceelement => {
           advice.push({
-            TTDATE: moment(adviceelement['date']).format("YYYY-MM-DD"),
+            TTDATE: moment(adviceelement['date']).format("DD-MM-YYYY"),
             TTUSD: adviceelement['amount'],
             PaymentDate: adviceelement['amount'],
             Amount: adviceelement['amount'],
@@ -1127,15 +1124,14 @@ export class PipoDocumentsComponent implements OnInit {
           })
         });
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          DATE: moment(element['purchasedate']).format("YYYY-MM-DD"),
+          DATE: moment(element['purchasedate']).format("DD-MM-YYYY"),
           INVOICENUMBER: element['pi_poNo'],
-          INVOICEDATE: moment(element['date']).format("YYYY-MM-DD"),
+          INVOICEDATE: moment(element['date']).format("DD-MM-YYYY"),
           SELLERNAMES: element['benneName'],
           INVOICECURRENCY: element['currency'],
-          INVOICEVALUEUSD: element['amount'],
           BRANCH: element['location'],
           COMMODITY: element['commodity'],
-          BALANCEIFANY: element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['amount'],
+          BALANCEIFANY: element['amount'],
           Expansion_Items: boedata,
           Expansion_Items2: advice,
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',

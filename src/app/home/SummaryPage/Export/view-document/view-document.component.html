@@ -17,17 +17,16 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button (click)="filter_Popup.style.display='block'" type="button"
-                                class="btn btn-secondary"><span class="fi_icon"></span>Filter</button>
-                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
-                                appFilterToggle>
+                            <button type="button" class="filter-popup btn btn-secondary"><span
+                                class="fi_icon filter-popup"></span>Filter</button>
+                            <div class="bg-white filter_main_sec mt-2" appFilterToggle>
                                 <form class="select_filter_options">
                                     <div class="row">
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
                                             <select class="form-select form-control" aria-label="Default select example"
                                                 name="Buyer_Name"
-                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                (change)="filter($event.target.value,'buyerName');">
                                                 <option value="">Buyer name</option>
                                                 <option [value]="Buyer_Name"
                                                     *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
@@ -39,7 +38,7 @@
                                             <label for="exampleFormControlInput1" class="form-label">Company
                                                 name</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'consigneeName');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'consigneeName');"
                                                 name="Company_Name">
                                                 <option value="">Company name</option>
                                                 <option [value]="Company_Name"
@@ -51,7 +50,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Origin</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'exporterLocationCode');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'exporterLocationCode');"
                                                 name="Origin">
                                                 <option value="">Origin</option>
                                                 <option *ngFor="let Origin of this.ALL_FILTER_DATA?.Origin">{{ Origin }}
@@ -61,7 +60,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Destination</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'countryOfFinaldestination');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'countryOfFinaldestination');"
                                                 name="Destination">
                                                 <option value="">Destination</option>
                                                 <option *ngFor="let Destination of this.ALL_FILTER_DATA?.Destination">
@@ -72,7 +71,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Currency</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'freightCurrency');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'freightCurrency');"
                                                 name="Currency">
                                                 <option value="">Currency</option>
                                                 <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
@@ -83,7 +82,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">SB DATE</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'sbdate');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'sbdate');"
                                                 name="SB_DATE">
                                                 <option value="">SB DATE</option>
                                                 <option [value]="SB_DATE"
@@ -94,7 +93,7 @@
                                     </div>
                                     <div class="footer_buttons">
                                         <button type="button" class="btn btn-light"
-                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                            (click)="resetFilter();">RESET</button>
                                     </div>
                                 </form>
                                 <i></i>

@@ -149,7 +149,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           value: res?.origin,
           label: "Origin",
           rules: {
-            required: true,
+            required: false,
           }
         },
         PaymentType: {

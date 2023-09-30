@@ -13,6 +13,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
 import * as _ from 'lodash';
+import moment from 'moment';
 
 @Component({
   selector: 'import-tri-party-summary',
@@ -129,7 +130,7 @@ export class ImportTriPartyComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date: moment(element['date']).format('DD-MM-YYYY'),
           triPartyAgreementNumber: element['triPartyAgreementNumber'],
           triPartyAgreementAmount: element['triPartyAgreementAmount'],
           currency: element['currency'],
