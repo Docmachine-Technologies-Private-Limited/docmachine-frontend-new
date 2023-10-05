@@ -34,7 +34,7 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    BL_Airway_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -69,8 +69,9 @@ export class InwardRemittanceDisposalComponent implements OnInit {
     airwayBlCopyNumber: '',
     buyerName: '',
   }
-  Inward_Remittance:any=[];
-  
+  Inward_Remittance: any = [];
+  FILTER_FORM: any = ''
+
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -93,14 +94,79 @@ export class InwardRemittanceDisposalComponent implements OnInit {
     }
     this.item = [];
     this.documentService.getInward_remittance().subscribe(async (res: any) => {
-     this.Inward_Remittance = res?.data;
-     await this.AirwayBlCopyTable(this.Inward_Remittance)
+      this.item = res?.data;
+      this.Inward_Remittance = res?.data;
+      for (let value of res.data) {
+        // if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+        //   this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
+        // }
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.Remitter_Name)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.Remitter_Name });
+        }
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.Inward_reference_number)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.Inward_reference_number });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Remitter_Name",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['Buyer_Name'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Reference Number",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
+      await this.AirwayBlCopyTable(this.Inward_Remittance)
       console.log(res, 'getInward_remittance')
     })
   }
 
+  onSubmit(value: any) {
+    let form_value: any = {
+      Remitter_Name: value?.value?.buyerName,
+      Inward_reference_number: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'Inward_remittance').subscribe((resp: any) => {
+      console.log(resp, value, "Inward_remittance")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.AirwayBlCopyTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.AirwayBlCopyTable(this.FILTER_VALUE_LIST)
+  }
+
   AirwayBlCopyTable(data: any) {
-  console.log(data,'AirwayBlCopyTable')
+    console.log(data, 'AirwayBlCopyTable')
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
     this.removeEmpty(data).then(async (newdata: any) => {
@@ -111,8 +177,8 @@ export class InwardRemittanceDisposalComponent implements OnInit {
           currency: element['currency'],
           amount: element['amount'],
           Remitter_Name: element['Remitter_Name'],
-          Inward_amount_for_disposal: element['Inward_amount_for_disposal']!=undefined?element['Inward_amount_for_disposal']:0,
-          BalanceAmount: parseFloat(element['amount'])-parseFloat(element['Inward_amount_for_disposal']!=undefined?element['Inward_amount_for_disposal']:0),
+          Inward_amount_for_disposal: element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0,
+          BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
           RoleType: this.USER_DATA?.result?.RoleCheckbox
@@ -123,7 +189,7 @@ export class InwardRemittanceDisposalComponent implements OnInit {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
       }
-      console.log(this.FILTER_VALUE_LIST_NEW,'AirwayBlCopyTable')
+      console.log(this.FILTER_VALUE_LIST_NEW, 'AirwayBlCopyTable')
     });
   }
 
@@ -204,10 +270,10 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   toEdit(data: any) {
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.Inward_Remittance[data?.index])
+        "item": JSON.stringify(this.Inward_Remittance[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/Inward-Remittance-Disposal`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/Inward-Remittance-Disposal`], navigationExtras);
   }
 
   handleDelete(data: any) {
@@ -226,7 +292,7 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   }
 
   newCredit() {
-    this.router.navigate(['/home/upload', {file: 'import', document: 'import-blCopy'}]);
+    this.router.navigate(['/home/upload', { file: 'import', document: 'import-blCopy' }]);
   }
 
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {

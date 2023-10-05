@@ -84,6 +84,7 @@ export class SBIRMMatchOffComponent implements OnInit {
     public userService: UserService) { }
 
   ngOnInit(): void {
+    this.exportbilllodgementdata.clear();
     console.log(this.exportbilllodgementdata, "exportbilllodgementdata")
     this.response(null);
   }

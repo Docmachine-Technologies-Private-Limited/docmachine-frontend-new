@@ -55,12 +55,12 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
-    Party_Name: [],
+    Buyer_Name: [],
     SB_Number: [],
     From: [],
     Branch: [],
     Description: [],
-    FIRX_Number_ID: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -118,7 +118,8 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     billNo: "",
     BalanceAvail: "",
   }
-
+  FILTER_FORM: any = ''
+  
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
@@ -147,35 +148,55 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     this.documentService.getIrAdvice(1).subscribe((res: any) => {
       console.log(res), (this.item = res.data);
       console.log('king', this.item);
-      for (let value of this.item) {
-        if (value['file'] == 'export') {
-          this.item1.push(value);
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          if (this.ALL_FILTER_DATA['Party_Name'].includes(value?.partyName) == false) {
-            this.ALL_FILTER_DATA['Party_Name'].push(value?.partyName);
-          }
-          if (this.ALL_FILTER_DATA['SB_Number'].includes(value?.sbNo) == false) {
-            this.ALL_FILTER_DATA['SB_Number'].push(value?.sbNo);
-          }
-          if (this.ALL_FILTER_DATA['From'].includes(value?.origin) == false) {
-            this.ALL_FILTER_DATA['From'].push(value?.origin);
-          }
-          if (this.ALL_FILTER_DATA['Branch'].includes(value?.location) == false) {
-            this.ALL_FILTER_DATA['Branch'].push(value?.location);
-          }
-          if (this.ALL_FILTER_DATA['Description'].includes(value?.commodity) == false) {
-            this.ALL_FILTER_DATA['Description'].push(value?.commodity);
-          }
-          if (this.ALL_FILTER_DATA['FIRX_Number_ID'].includes(value?.billNo) == false) {
-            this.ALL_FILTER_DATA['FIRX_Number_ID'].push(value?.billNo);
-          }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.date);
+      this.item1 = res?.data;
+        for (let value of res.data) {
+          if (value['file'] == 'export') {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
+            }
+            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+            }
+            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.billNo)?.length == 0) {
+              this.ALL_FILTER_DATA['NO'].push({ value: value?.billNo });
+            }
+            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+              this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+            }
           }
         }
-      }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Buyer",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select FIRX Number",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
       this.item1.forEach((element, i) => {
         let commision = parseFloat(element.commision)
         let exchangeRate = parseFloat(element.exchangeRate)
@@ -204,6 +225,36 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       console.log('error');
     });
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      date: value?.value?.date,
+      billNo: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'iradvices').subscribe((resp: any) => {
+      console.log(resp, value, "iradvices")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.ForexAdviceTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.ForexAdviceTable(this.FILTER_VALUE_LIST)
+  }
+
 
   getPipoNumbers(data) {
     return data.pipo.map((x) => {

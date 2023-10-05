@@ -194,7 +194,7 @@ export class EdpmsReconComponent implements OnInit {
         payload.push(tempObject);
       } else {
         payload = [];
-        this.toastr.error("Your excel sheet iec code and your regitration iec code is different please check...");
+        this.toastr.error("Your excel sheet iec code and your registration iec code is different please check...");
         break;
       }
     }

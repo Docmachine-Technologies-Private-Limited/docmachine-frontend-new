@@ -43,11 +43,9 @@ export class ImportOpinionReportsComponent implements OnInit {
     header: [
       "DATE",
       "O R No.",
-      "O R Amount",
       "Foreign Party Name",
       "Report Date",
       "Report Ratings",
-      "CURRENCY",
       "Beneficiary Name",
       "Ageing Days",
       "Action"],
@@ -59,13 +57,10 @@ export class ImportOpinionReportsComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
       "col-td-th-2",
-      "col-td-th-1",
       "col-td-th-2",
-      "col-td-th-1",
       "col-td-th-2",
-      "col-td-th-1"
+      "col-td-th-2",
     ],
     eventId: ''
   }
@@ -134,11 +129,9 @@ export class ImportOpinionReportsComponent implements OnInit {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           date: moment(element['date']).format("DD-MM-YYYY"),
           opinionReportNumber: element['opinionReportNumber'],
-          opinionReportAmount: element['opinionReportAmount'],
           ForeignPartyName: element['ForeignPartyName']?.value,
           ReportDate: element['ReportDate'],
           ReportRatings: element['ReportRatings'],
-          currency: element['currency'],
           buyerName: element['buyerName'],
           AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',

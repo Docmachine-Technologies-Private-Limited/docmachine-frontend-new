@@ -88,6 +88,8 @@ import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-
 import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
 import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
 import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data";
+import { NgCustomFilterPopupComponent } from "../custom/ng-custom-filter-popup/ng-custom-filter-popup.component";
+import { OldFederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterheadold/exportoldletterhead.component";
 
 @NgModule({
   declarations: [
@@ -147,7 +149,9 @@ import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lo
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
     CustomModelHeaderComponent,
-    MoreContentComponent
+    MoreContentComponent,
+    NgCustomFilterPopupComponent,
+    OldFederalBankExportletterheadComponent
   ],
   imports: [
     CommonModule,
@@ -254,7 +258,9 @@ import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lo
     MatInputModule,
     CustomMatStepperModule,
     CustomModelHeaderComponent,
-    MoreContentComponent
+    MoreContentComponent,
+    NgCustomFilterPopupComponent,
+    OldFederalBankExportletterheadComponent
   ],
 })
 export class SharedHomeModule { }

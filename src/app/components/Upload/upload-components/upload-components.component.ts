@@ -83,6 +83,13 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     return $('.submit-button#' + this.id).click();
   }
 
+  get resetForm() {
+    this.validator.FIELDS_DATA[this.id]?.forEach(element => {
+      element['value'] = '';
+      this.validator.dynamicFormGroup[this.id]?.controls[element?.fieldName]?.setValue("");
+    });
+    return this.validator.dynamicFormGroup[this.id]?.reset();
+  }
   onSubmit(event: any, e: any, type: any) {
     console.log(e, 'from value')
     event.preventDefault();
@@ -129,12 +136,18 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   AUTOFILL_INPUT_NAME_LIST: any = [];
-  ORM_SELECTION(event: any, index: any, data: any, AUTOFILL_INPUT_NAME_LIST: any) {
+  ORM_SELECTION(event: any, index: any, data: any, AUTOFILL_INPUT_NAME_LIST: any, type: any = 'Normal') {
     if (event.target.checked) {
       this.validator.ORM_SELECTION_DATA = data;
-      AUTOFILL_INPUT_NAME_LIST.forEach(element => {
-        this.validator.dynamicFormGroup[this.id]?.controls[element?.input]?.setValue(this.validator.ORM_SELECTION_DATA[element?.key]);
-      });
+      if (type == "Normal") {
+        AUTOFILL_INPUT_NAME_LIST.forEach(element => {
+          this.validator.dynamicFormGroup[this.id]?.controls[element?.input]?.setValue(this.validator.ORM_SELECTION_DATA[element?.key]);
+        });
+      } else if (type == "formGroup") {
+        AUTOFILL_INPUT_NAME_LIST.forEach(element => {
+          this.validator.dynamicFormGroup[this.id]?.controls[element?.parent]?.controls[0]?.controls[element?.input]?.setValue(this.validator.ORM_SELECTION_DATA[element?.key]);
+        });
+      }
     } else {
       this.validator.ORM_SELECTION_DATA = []
       event.target.checked = false;
@@ -424,8 +437,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  YesNoFunction(value: any,name:any) {
-    this.setValue(value,name)
+  YesNoFunction(value: any, name: any) {
+    this.setValue(value, name)
     this.YesNoCheckBoxEvent.emit(value);
   }
 }

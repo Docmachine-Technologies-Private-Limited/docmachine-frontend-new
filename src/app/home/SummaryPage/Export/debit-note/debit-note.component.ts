@@ -41,7 +41,7 @@ export class DebitNoteSummaryComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    D_N_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -81,7 +81,8 @@ export class DebitNoteSummaryComponent implements OnInit {
     currency: '',
     buyerName: '',
   }
-
+  FILTER_FORM: any = ''
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -105,35 +106,93 @@ export class DebitNoteSummaryComponent implements OnInit {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
     this.item1 = [];
-    this.documentService.getDebit().subscribe(
-      (res: any) => {
+    this.documentService.getDebit().subscribe((res: any) => {
+        this.item1 = res?.data;
+        this.FILTER_VALUE_LIST = this.item1;
         for (let value of res.data) {
           if (value['file'] == 'export') {
-            this.item1.push(value);
-            this.FILTER_VALUE_LIST.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
             }
-            value?.buyerName.forEach(element => {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-              }
-            });
-            if (this.ALL_FILTER_DATA['D_N_No'].includes(value?.debitNoteNumber) == false) {
-              this.ALL_FILTER_DATA['D_N_No'].push(value?.debitNoteNumber);
+            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
             }
-            if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.date);
+            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.debitNoteNumber)?.length == 0) {
+              this.ALL_FILTER_DATA['NO'].push({ value: value?.debitNoteNumber });
+            }
+            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+              this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
             }
           }
+        }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Buyer",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Debit No.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
         }
         this.DebitNoteTable(this.item1)
         console.log(res, 'yuyuyuyuyuyuyuuy')
       },
       (err) => console.log(err)
     );
-
   }
+
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      date: value?.value?.date,
+      debitNoteNumber: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'debitnotes').subscribe((resp: any) => {
+      console.log(resp, value, "debitnotes")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item1;
+      this.DebitNoteTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item1;
+    this.DebitNoteTable(this.FILTER_VALUE_LIST)
+  }
+
 
   DebitNoteTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];

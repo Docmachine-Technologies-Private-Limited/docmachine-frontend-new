@@ -53,7 +53,6 @@ export class DocumentService {
       PIPO_TRANSACTION: [],
       PIPO_NO: []
     };
-
     this.getPipoNoList().subscribe((res: any) => {
       console.log(res, 'resssss.................')
       var data: any = res?.data;
@@ -97,9 +96,39 @@ export class DocumentService {
         }
       }
       console.log(this.PI_PO_NUMBER_LIST, type, 'getPipoListNo');
+      return data;
     })
   }
 
+  getPipoListNoFilter = (data) => {
+    this.PI_PO_NUMBER_LIST = {
+      PI_PO_BUYER_NAME: [],
+      PI_PO_BENNE_NAME: [],
+      PIPO_TRANSACTION: [],
+      PIPO_NO: []
+    };
+    var data: any = data;
+    this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'] = [];
+    this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'] = [];
+    this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'] = [];
+    this.PI_PO_NUMBER_LIST['PIPO_NO'] = data;
+    for (let index = 0; index < data?.length; index++) {
+      if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
+        this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
+          pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
+          id: [data[index].pi_poNo, data[index]?.buyerName],
+          _id: data[index]?._id
+        })
+        this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
+          pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
+          id: [data[index].pi_poNo, data[index]?.benneName],
+          _id: data[index]?._id
+        })
+      }
+    }
+    console.log(this.PI_PO_NUMBER_LIST, 'getPipoListNo');
+  }
+  
   // Inward inwardRemittance Advice
   setSessionData(key: any, data: any) {
     sessionStorage.setItem(key, JSON.stringify(data));
@@ -217,6 +246,16 @@ export class DocumentService {
     };
     console.log(query, 'getInvoice_No')
     return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`, { query: query, tableName: table_name }, httpOptions);
+  }
+
+  filterAnyTable(query, table_name: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    console.log(query, 'filterAnyTable')
+    return this.http.post(`${this.api_base}/orAdvice/filterAnyTable`, { query: query, tableName: table_name }, httpOptions);
   }
 
 
@@ -437,7 +476,17 @@ export class DocumentService {
     let url = `${this.api_base}/pipo/getPipoNo`;
     return this.http.get(url, httpOptions);
   }
-
+  
+  getPipoNoFilter(query:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/pipo/getPipoNoFilter`;
+    return this.http.post(url,{query:query} ,httpOptions);
+  }
+  
   getMasterScheduler() {
     this.loadFromLocalStorage();
     console.log(this.authToken);

@@ -34,7 +34,7 @@ export class DestructionComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    Destruction_Certificate_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -64,6 +64,8 @@ export class DestructionComponent implements OnInit {
     destructionNumber: '',
     buyerName: '',
   }
+  FILTER_FORM: any = ''
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -82,32 +84,93 @@ export class DestructionComponent implements OnInit {
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA);
     this.item = [];
-    this.documentService.getDestructionfile("export").subscribe(
-      (res: any) => {
+    this.documentService.getDestructionfile("export").subscribe((res: any) => {
         this.item = res?.data;
-        this.FILTER_VALUE_LIST = this.item;
         for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+          if (value['file'] == 'export') {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
             }
-          });
-          if (this.ALL_FILTER_DATA['Destruction_Certificate_No'].includes(value?.destructionNumber) == false) {
-            this.ALL_FILTER_DATA['Destruction_Certificate_No'].push(value?.destructionNumber);
-          }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.destructionDate) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.destructionDate);
+            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+            }
+            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.destructionNumber)?.length == 0) {
+              this.ALL_FILTER_DATA['NO'].push({ value: value?.destructionNumber });
+            }
+            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.destructionDate)?.length == 0) {
+              this.ALL_FILTER_DATA['DATE'].push({ value: value?.destructionDate });
+            }
           }
         }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Buyer",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select DESTRUCTION CERTIFICATE NO.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
+        this.FILTER_VALUE_LIST = this.item;
         this.DestructionTable(this.item)
         console.log(res, 'getDestructionfile');
       },
       (err) => console.log(err)
     );
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      destructionDate: value?.value?.date,
+      destructionNumber: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'debitnotes').subscribe((resp: any) => {
+      console.log(resp, value, "debitnotes")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.DestructionTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.DestructionTable(this.FILTER_VALUE_LIST)
+  }
+
 
   DestructionTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];

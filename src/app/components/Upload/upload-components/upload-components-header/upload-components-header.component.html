@@ -19,11 +19,10 @@
                         </ng-select>
                         <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && 
                         this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0 && 
-                        this.PIPO_VISIBLE==true"
-                        [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
-                        bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                        (change)="clickPipo($event)">
-                    </ng-select>
+                        this.PIPO_VISIBLE==true" [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                            bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
+                            (change)="clickPipo($event)">
+                        </ng-select>
                         <ng-select class="custom-ng-select"
                             *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
                             [items]="this.documentService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
@@ -43,10 +42,14 @@
                             [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
                                 [attr.popup-close]="this.id"></i>
                             Upload</button>
+                        <button class="upload-button btn btn-success filter-popup"><i
+                                class="fa fa-filter filter-popup" aria-hidden="true"></i>
+                            Filter</button>
+                           <ng-custom-filter-popup (FilterEvent)="onSubmit($event)" [data]="this.EXPORT_FORM"></ng-custom-filter-popup>
                     </div>
                     <div class="filter_right_new padding_new_top p-0"
                         *ngIf="this.validator?.BENEFICIARY_NOT_EXITS==false && this.validator?.userData?.sideMenu=='import'">
-                            <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0 && 
+                        <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0 && 
                             this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0 && 
                             this.PIPO_DISABLED==true"
                             [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
@@ -71,7 +74,11 @@
                             *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
                             [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
                                 [attr.popup-close]="this.id"></i>
-                            Upload</button>   
+                            Upload</button>
+                        <button class="upload-button btn btn-success filter-popup"><i
+                                class="fa fa-filter filter-popup" aria-hidden="true"></i>
+                            Filter</button>
+                        <ng-custom-filter-popup (FilterEvent)="onSubmit($event)" [data]="this.IMPORT_FORM"></ng-custom-filter-popup>
                     </div>
                 </div>
             </div>
@@ -109,3 +116,31 @@
         </div>
     </div>
 </div>
+
+<!-- <app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="SEARCH_PIPO"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #SEARCH_PIPO_POPUP_PANEL>
+    <custom-model-header>
+        <div class="d-flex" style="gap: 10px;">
+            <ng-input
+                [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"></ng-input>
+            <ng-input
+                [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"></ng-input>
+            <button type="button" class="btn btn-primary" (click)="SEARCH_PIPO_POPUP_PANEL?.displayHidden">Done</button>
+        </div>
+    </custom-model-header>
+    <div class="col-12 mt-2 mb-2">
+
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-1">PIPO No.</th>
+                    <th scope="col" class="col-td-th-1">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+               
+            </tbody>
+        </table>
+    </div>
+</app-custom-model> -->

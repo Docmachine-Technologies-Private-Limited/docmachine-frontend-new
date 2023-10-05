@@ -41,7 +41,7 @@ export class InsuranceDocumentComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    Insurance_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -88,6 +88,7 @@ export class InsuranceDocumentComponent implements OnInit {
       buyerName:""
     }]
   }
+  FILTER_FORM: any = ''
 
   constructor(
     private documentService: DocumentService,
@@ -111,28 +112,59 @@ export class InsuranceDocumentComponent implements OnInit {
     for (let index = 0; index < data1['default']?.length; index++) {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
-    this.item1 = [];
-    this.documentService.getInsurance().subscribe(
-      (res: any) => {
+    this.item = [];
+    this.documentService.getInsurance().subscribe((res: any) => {
+        this.item = res?.data;
         for (let value of res.data) {
           if (value['file'] == 'export') {
-            this.item1.push(value);
-            this.FILTER_VALUE_LIST.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
             }
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0]) == false) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
+            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
             }
-            if (this.ALL_FILTER_DATA['Insurance_No'].includes(value?.insuranceNumber) == false) {
-              this.ALL_FILTER_DATA['Insurance_No'].push(value?.insuranceNumber);
+            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.insuranceNumber)?.length == 0) {
+              this.ALL_FILTER_DATA['NO'].push({ value: value?.insuranceNumber });
             }
-            if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.date);
+            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+              this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
             }
           }
         }
-        this.InsuranceNoTable(this.item1)
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Buyer",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select IP NO.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
+        this.FILTER_VALUE_LIST = this.item;
+        this.InsuranceNoTable(this.item)
         console.log(res, 'yuyuyuyuyuyuyuuy')
       }, (err) => console.log(err));
     this.pipodataservice.getPipoList("export").then((res: any) => {
@@ -157,6 +189,36 @@ export class InsuranceDocumentComponent implements OnInit {
 
     })
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      date: value?.value?.date,
+      insuranceNumber: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'insurances').subscribe((resp: any) => {
+      console.log(resp, value, "insurances")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.InsuranceNoTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.InsuranceNoTable(this.FILTER_VALUE_LIST)
+  }
+
 
   InsuranceNoTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];

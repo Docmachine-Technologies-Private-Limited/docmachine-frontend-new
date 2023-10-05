@@ -11,7 +11,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'upload-components-header',
   templateUrl: './upload-components-header.component.html',
-  styleUrls: ['./upload-components-header.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./upload-components-header.component.scss', '../../commoncss/common.component.scss']
 })
 export class UploadHeaderComponent implements OnInit {
   @Output('UploadHeaderEvent') UploadHeaderEvent: any = new EventEmitter();
@@ -37,7 +37,60 @@ export class UploadHeaderComponent implements OnInit {
   @Input('PIPO_DISABLED') PIPO_DISABLED: boolean = true;
   @Input('PIPO_VISIBLE') PIPO_VISIBLE: boolean = false;
   @Input('UPLOAD_BUTTON') UPLOAD_BUTTON: boolean = true;
-  
+  EXPORT_FORM: any =  {
+    buyer: {
+      type: "buyer",
+      value: "",
+      label: "Select Buyer",
+      rules: {
+        required: false,
+      }
+    },
+    fromdate: {
+      type: "date",
+      value: "",
+      label: "Select Date From",
+      rules: {
+        required: false,
+      }
+    },
+    todate: {
+      type: "date",
+      value: "",
+      label: "Select Date To",
+      rules: {
+        required: false,
+      }
+    },
+  }
+
+  IMPORT_FORM: any = {
+    benneName: {
+      type: "benne",
+      value: "",
+      label: "Select Beneficiary",
+      rules: {
+        required: false,
+      }
+    },
+    fromdate: {
+      type: "date",
+      value: "",
+      label: "Select Date From",
+      rules: {
+        required: false,
+      }
+    },
+    todate: {
+      type: "date",
+      value: "",
+      label: "Select Date To",
+      rules: {
+        required: false,
+      }
+    },
+  }
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -62,8 +115,22 @@ export class UploadHeaderComponent implements OnInit {
     }
     console.log(event, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
-  routechanged(text:any){
+
+  routechanged(text: any) {
     this.router.navigate([text]);
+  }
+  
+  onSubmit(value: any) {
+    let query: any = { date: { $gte: value?.value?.fromdate, $lte: value?.value?.todate } };
+    if (value?.value?.buyer != null && value?.value?.buyer != undefined) {
+      query["buyerName"] = value?.value?.buyer?.value
+    } else if (value?.value?.benneName != null && value?.value?.benneName != undefined) {
+      query["benneName"] = value?.value?.benneName?.value
+    }
+    this.validator.documentService?.getPipoNoFilter(query).subscribe((res: any) => {
+      this.validator.documentService?.getPipoListNoFilter(res?.data);
+      console.log(res?.data, "getPipoNoFilter")
+    });
+    console.log(value, "NgCustomFilterPopup")
   }
 }

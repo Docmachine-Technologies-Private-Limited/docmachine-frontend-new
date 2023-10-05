@@ -152,6 +152,12 @@ export class ImportPIPOSComponent implements OnInit {
           label: "Currency",
           rules: {
             required: true,
+          },
+          autofill: {
+            type: "formGroup",
+            SetInputName: "currency",
+            CONTROLS_NAME: "paymentTerm",
+            GetInputName: "currency"
           }
         },
         amount: {
@@ -161,12 +167,6 @@ export class ImportPIPOSComponent implements OnInit {
           rules: {
             required: true,
           },
-          autofill: {
-            type: "formGroup",
-            SetInputName: "currency",
-            CONTROLS_NAME: "paymentTerm",
-            GetInputName: "currency"
-          }
         },
         commodity: {
           type: "commodity",

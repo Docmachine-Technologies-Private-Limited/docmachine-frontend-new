@@ -19,7 +19,7 @@ import moment from 'moment';
   templateUrl: './airway-blcopy.component.html',
   styleUrls: ['./airway-blcopy.component.scss']
 })
-export class AirwayBLCopyComponent implements OnInit, OnChanges {
+export class AirwayBLCopyComponent implements OnInit {
 
   @ViewChild('airwayBlCopy', { static: false }) airwayBlCopy: ElementRef;
   public item: any = [];
@@ -36,7 +36,8 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
     Buyer_Name: [],
     BL_Airway_No: [],
     Currency: [],
-    DATE: []
+    DATE: [],
+    SB_NO: []
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
@@ -67,8 +68,9 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
     airwayBlCopyNumber: '',
     buyerName: '',
   }
-  
-  @Input('PipoId') PipoId:any=''
+  FILTER_FORM: any = ''
+
+  @Input('PipoId') PipoId: any = ''
 
   constructor(
     private documentService: DocumentService,
@@ -81,7 +83,6 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
     public validator: UploadServiceValidatorService) {
-    console.log('dsfsdkshsdkhsdkfjshsdkjfsdhfjksd')
   }
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270, '.content-wrap')
@@ -95,59 +96,112 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
       for (let value of res.data) {
         if (value['file'] == 'export') {
           this.item.push(value);
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
           }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['BL_Airway_No'].includes(value?.airwayBlCopyNumber) == false) {
-            this.ALL_FILTER_DATA['BL_Airway_No'].push(value?.airwayBlCopyNumber);
+          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
           }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.airwayBlCopydate) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.airwayBlCopydate);
+          if (this.ALL_FILTER_DATA['BL_Airway_No'].filter((item: any) => item?.value == value?.airwayBlCopyNumber)?.length == 0) {
+            this.ALL_FILTER_DATA['BL_Airway_No'].push({ value: value?.airwayBlCopyNumber });
+          }
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.airwayBlCopydate)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.airwayBlCopydate });
+          }
+          if (this.ALL_FILTER_DATA['SB_NO'].filter((item: any) => item?.value == value?.sbNo)?.length == 0) {
+            this.ALL_FILTER_DATA['SB_NO'].push({ value: value?.sbNo });
           }
         }
+
+      }
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Buyer",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['Buyer_Name'],
+          bindLabel: "value"
+        },
+        date: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        // PipoList: {
+        //   type: "ArrayList",
+        //   value: "",
+        //   label: "Select Pipo",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   item: this.ALL_FILTER_DATA['PI_PO_No'],
+        //   bindLabel: "value",
+        // },
+        BL_AIRWAY_NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select BL/AIRWAY NO",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['BL_Airway_No'],
+          bindLabel: "value"
+        },
+        SB_NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select SB NO.",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['SB_NO'],
+          bindLabel: "value"
+        },
       }
       this.FILTER_VALUE_LIST = this.item;
       this.AirwayBlCopyTable(this.item)
       console.log(res, 'yuyuyuyuyuyuyuuy')
-    },(err) => console.log(err));
+    }, (err) => console.log(err));
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes, 'getAirwayBlcopy')
-    this.documentService.getAirwayBlcopy(this.validator.SELECTED_PIPO).subscribe(
-      (res: any) => {
-        this.item = [];
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-            this.item.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-            }
-            value?.buyerName.forEach(element => {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-              }
-            });
-            if (this.ALL_FILTER_DATA['BL_Airway_No'].includes(value?.airwayBlCopyNumber) == false) {
-              this.ALL_FILTER_DATA['BL_Airway_No'].push(value?.airwayBlCopyNumber);
-            }
-            if (this.ALL_FILTER_DATA['DATE'].includes(value?.airwayBlCopydate) == false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.airwayBlCopydate);
-            }
-          }
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      airwayBlCopydate: value?.value?.date,
+      airwayBlCopyNumber: value?.value?.BL_AIRWAY_NO,
+      sbNo: value?.value?.SB_NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
         }
-        this.FILTER_VALUE_LIST = this.item;
-        this.AirwayBlCopyTable(this.item)
-        console.log(res, 'yuyuyuyuyuyuyuuy')
-      },
-      (err) => console.log(err)
-    );
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'airwayblcopies').subscribe((resp: any) => {
+      console.log(resp, value,"airwayblcopies")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.AirwayBlCopyTable(this.FILTER_VALUE_LIST)
+    }); 
   }
+  
+  reset(){
+    this.FILTER_VALUE_LIST = this.item;
+    this.AirwayBlCopyTable(this.FILTER_VALUE_LIST)
+  }
+
 
   AirwayBlCopyTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
@@ -280,10 +334,10 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
     // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/AirwayBlCopy`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/AirwayBlCopy`], navigationExtras);
     this.toastr.warning('Airway / BlCopy Is In Edit Mode');
   }
 
@@ -340,6 +394,8 @@ export class AirwayBLCopyComponent implements OnInit, OnChanges {
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'airwayBlCopy.xlsx');
   }
+
+
 }
 
 

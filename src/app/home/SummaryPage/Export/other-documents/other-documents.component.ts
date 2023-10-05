@@ -33,7 +33,7 @@ export class OtherDocumentsComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    Packing_List_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -68,6 +68,7 @@ export class OtherDocumentsComponent implements OnInit {
     packingListAmount: '',
     buyerName: '',
   }
+  FILTER_FORM: any = ''
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -95,26 +96,85 @@ export class OtherDocumentsComponent implements OnInit {
         this.item = res?.data;
         this.FILTER_VALUE_LIST = this.item;
         for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
           }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['Packing_List_No'].includes(value?.packingListNumber) == false) {
-            this.ALL_FILTER_DATA['Packing_List_No'].push(value?.packingListNumber);
+          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
           }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.packingListDate) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.packingListDate);
+          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.packingListNumber)?.length == 0) {
+            this.ALL_FILTER_DATA['NO'].push({ value: value?.packingListNumber });
           }
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.packingListDate)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.packingListDate });
+          }
+        }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select buyerName",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Packing List No.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
         }
         this.PackingListTable(this.item)
         console.log(res, 'getPackingListfile');
       },
       (err) => console.log(err)
     );
+  }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      packingListDate: value?.value?.date,
+      packingListNumber: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'packinglists').subscribe((resp: any) => {
+      console.log(resp, value, "packinglists")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.PackingListTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.PackingListTable(this.FILTER_VALUE_LIST)
   }
 
   PackingListTable(data: any) {

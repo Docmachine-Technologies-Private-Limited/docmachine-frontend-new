@@ -127,7 +127,9 @@
                         <mat-panel-description>
                             <div class="d-flex flex-column" (click)="$event.stopPropagation();">
                                 <mat-panel-title>
-                                    SB DETAILS
+                                    <p> SB DETAILS</p>
+                                    <button style="margin: auto;margin-right: 10px;"
+                                    class="btn btn-primary Transaction-btn" (click)="this.exportbilllodgementdata?.Reload">Refresh</button>
                                 </mat-panel-title>
                                 <table class="table mb-0">
                                     <tbody>
@@ -179,6 +181,7 @@
                             </thead>
                             <tbody>
                                 <tr class="table-tr"
+                                [ngClass]="{'disabled-tr':commercialdata?.AmountUsed==true}"
                                     *ngFor='let commercialdata of data?.commercialdetails;let j = index'>
                                     <td class="col-td-th-1">
                                         <input type="checkbox" [checked]="commercialdata?.CheckBoxEnabled"
@@ -358,14 +361,15 @@
         <div class="middle_bts">
             <div class="login py-5" style="padding: 0px !important; width:100%;">
                 <div class="container_innser">
-                    <section>
+                    <section style="overflow: auto;
+                    height: 60vh;">
                         <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
                             <h5 style="margin: auto;margin-left: 30px;">SB No. :
                                 {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.sbno}}</h5>
                             <h5 style="margin: auto;margin-right: 30px;">SB Amount :
                                 {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.fobValue}}</h5>
                             <h5 style="margin: auto;margin-right: 30px;">CI Amount :
-                                {{this.exportbilllodgementdata?.SELECTED_COMMERICAIL_DATA[this.CI_INDEX]?.amount}}</h5>
+                                {{this.exportbilllodgementdata?.SELECTED_COMMERICAIL_DATA?.amount}}</h5>
                             <h5 style="margin: auto;margin-right: 30px;">Total FIXR Amount : {{
                                 this.exportbilllodgementdata?.TOTAL_FIRX_AMOUNT}}
                             </h5>
@@ -384,8 +388,8 @@
                             <tbody>
                                 <tr class="table-tr"
                                     *ngFor='let data of this.exportbilllodgementdata?.FIREX_DETAILS;let i = index'>
-                                    <td class="col-td-th-1"><input
-                                            (click)="this.exportbilllodgementdata?.FirxSelection($event,this.CI_INDEX,data)"
+                                    <td class="col-td-th-1"><input [checked]="data?.isChecked"
+                                            (click)="this.exportbilllodgementdata?.FirxSelection($event,this.CI_INDEX,data);"
                                             [disabled]="data?.Enabled" type="checkbox" />
                                     </td>
                                     <td class="col-td-th-2">
@@ -401,7 +405,7 @@
                                         {{data.BalanceAvail}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        <input type="text" (keypress)="FIRXAMOUNT(data, $event)"
+                                        <input type="text" (keypress)="this.exportbilllodgementdata?.FIRXAMOUNT(data,this.CI_INDEX,$event)"
                                             [(ngModel)]="data.InputValue">
                                     </td>
                                 </tr>

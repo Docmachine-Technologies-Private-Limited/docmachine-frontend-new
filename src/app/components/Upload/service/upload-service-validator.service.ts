@@ -381,7 +381,7 @@ export class UploadServiceValidatorService implements OnInit {
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(200)],
       number: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
-      buyer: [rule?.required == true ? Validators.required : ''],
+      buyer: rule?.required == true ? [Validators.required] : [],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
       ImagesList: rule?.required == true ? [Validators.required] : [],
       consignee: rule?.required == true ? [Validators.required] : [],
@@ -408,6 +408,7 @@ export class UploadServiceValidatorService implements OnInit {
       CommericalListCheckBox: rule?.required == true ? [Validators.required] : [],
       BLCopy: rule?.required == true ? [Validators.required] : [],
       yesnocheckbox: rule?.required == true ? [Validators.required] : [],
+      ArrayList: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :

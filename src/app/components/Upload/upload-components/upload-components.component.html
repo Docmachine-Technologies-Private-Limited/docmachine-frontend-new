@@ -5,7 +5,8 @@
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
         <label *ngIf="label!=undefined && label!=''" [style]="labelStyle">{{label}}</label>
         <ng-content *ngIf="morecontent==true" select="more-content"></ng-content>
-        <div class="col-12" [ngClass]="{'hidden':field?.disabled==true}" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
+        <div class="col-12" [ngClass]="{'hidden':field?.disabled==true}"
+            *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
                 <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                     <div class="form-group mb-3" *ngSwitchCase="'text'">
@@ -85,7 +86,7 @@
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{field.label}}</mat-checkbox>
                     </div>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'yesnocheckbox'" >
+                <div class="form-group mb-3" *ngSwitchCase="'yesnocheckbox'">
                     <div class="col-12 p-0 d-flex" style="align-items: center;">
                         <label style="margin: auto;margin-left: 0;"
                             *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
@@ -105,6 +106,13 @@
                         [bindLabel]="field?.bindLabel" [name]="field?.fieldName" [items]="field?.item"
                         [multiple]="false">
                     </app-ng-dropdown-custom>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'ArrayList'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-custom-dropdown [items]="field?.item" [bindLabel]="field?.bindLabel" [multiple]="false"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [name]="field?.fieldName" [selectedItems]="field?.value"
+                        [(ngModel)]="field.value"></ng-custom-dropdown>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'password'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
@@ -180,7 +188,8 @@
                         (change)="BANK_CHECKBOX($event)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
                     </ng-select>
-                    <label class="mt-2 mb-2" *ngIf="field.Banklabel!=undefined && field.Banklabel!='' && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
+                    <label class="mt-2 mb-2"
+                        *ngIf="field.Banklabel!=undefined && field.Banklabel!='' && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
                     <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST;let in=index" class="mt-2">
                         <mat-checkbox [checked]="item?.checked"
                             (change)="onBankCheckBox($event,field.fieldName,item?.value,item)" [name]="field.fieldName"
@@ -492,6 +501,16 @@
                                             [name]="Optionfield[FormOptionfield].fieldName"
                                             [(ngModel)]="Optionfield[FormOptionfield].value" #CommericalNo>
                                         </ng-select>
+                                    </div>
+                                    <div class="form-group mb-3" *ngSwitchCase="'AdvanceInfo'">
+                                        <label
+                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}</label>
+                                        <app-ng-dropdown-custom class="PopupOpen" popup-close="UPLOAD_ORM_POPUP"
+                                            bindLabel="value" placeHolderText="Select Advance no."
+                                            (modelChanges)="dump(Optionfield[FormOptionfield]?.autofillinput)"
+                                            [name]="Optionfield[FormOptionfield].fieldName"
+                                            [items]="[{value:'Advance no.'}]" [multiple]="false">
+                                        </app-ng-dropdown-custom>
                                     </div>
                                 </ng-container>
                                 <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
@@ -846,7 +865,8 @@
                         <tbody>
                             <tr class="table-tr" *ngFor="let item of this.validator.ORM_BY_PARTY_NAME;let i=index">
                                 <td scope="col" class="col-td-th-1"><input type="checkbox" id="orm_checkbox"
-                                        (change)="ORM_SELECTION($event,i,item,this.AUTOFILL_INPUT_NAME_LIST)" /></td>
+                                        (change)="ORM_SELECTION($event,i,item,this.AUTOFILL_INPUT_NAME_LIST,'formGroup')" />
+                                </td>
                                 <td scope="col" class="col-td-th-2">{{item?.billNo}}</td>
                                 <td scope="col" class="col-td-th-2">{{item?.amount}}</td>
                                 <td scope="col" class="col-td-th-2">

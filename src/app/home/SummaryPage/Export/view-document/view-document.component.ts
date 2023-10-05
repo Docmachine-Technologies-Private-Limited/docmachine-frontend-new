@@ -84,7 +84,8 @@ export class ViewDocumentComponent implements OnInit {
     Origin: [],
     Destination: [],
     Currency: [],
-    SB_DATE: []
+    DATE: [],
+    NO: []
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
@@ -143,6 +144,8 @@ export class ViewDocumentComponent implements OnInit {
     fobCurrency: '',
     fobValue: ''
   }
+  FILTER_FORM: any = ''
+  
   constructor(
     public documentService: DocumentService,
     public shippingBillService: ShippingbillDataService,
@@ -167,9 +170,11 @@ export class ViewDocumentComponent implements OnInit {
       this.PENDING_DATA = res;
       console.log("this.PENDING_DATA", res)
     })
+    
     for (let index = 0; index < data1['default']?.length; index++) {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
+    
     this.shippingBillService.getShippingBillList_Master().then((data: any) => {
       console.log('getShippingBillList_Master', data)
       this.item1 = data;
@@ -211,27 +216,120 @@ export class ViewDocumentComponent implements OnInit {
       this.ShippingBillTable(data);
       this.FILTER_VALUE_LIST = data;
 
-      for (let index = 0; index < data.length; index++) {
-        if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
-          this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
+      for (let value of data) {
+        // if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+        //   this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
+        // }
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
-          this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.sbno)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.sbno });
         }
-        if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
-          this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.sbdate)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.sbdate });
         }
-        if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
-          this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
-        }
-        if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
-          this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
-        }
+      }
+      
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['Buyer_Name'],
+          bindLabel: "value"
+        },
+        date: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select SB NUMBER",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
       }
     });
     this.showInvoice = false;
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      sbdate: value?.value?.date,
+      sbno: value?.value?.NO
+    };
 
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'masterrecord').subscribe((resp: any) => {
+      console.log(resp, value, "masterrecord")
+      resp?.data?.forEach(element => {
+        let totalFirxAmount: any = 0;
+        let tp: any = {
+          firxNumber: [],
+          firxDate: [],
+          firxCurrency: [],
+          firxAmount: [],
+          firxCommision: [],
+          firxRecAmo: [],
+          id: [],
+        };
+        for (let index = 0; index < element?.firxdetails.length; index++) {
+          const elementfirxdetails = element?.firxdetails[index];
+          totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
+
+          elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
+            tp?.firxNumber?.push(firxelementno)
+          });
+          elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
+            tp?.firxDate?.push(firxDateelement)
+          });
+          elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
+            tp?.firxCurrency?.push(firxCurrencyelement)
+          });
+          elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
+            tp?.firxAmount?.push(firxAmountelement)
+          });
+          elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
+            tp?.firxCommision?.push(firxCommisionelement)
+          });
+        }
+        element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
+        element['FIRX_INFO'] = tp;
+      });
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item1;
+      this.ShippingBillTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item1;
+    this.ShippingBillTable(this.FILTER_VALUE_LIST)
+  }
+  
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item1.filter((item: any) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {

@@ -77,22 +77,6 @@ export class ImportOpinionReportComponent implements OnInit {
             required: true,
           }
         },
-        currency: {
-          type: "currency",
-          value: "",
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        opinionReportAmount: {
-          type: "text",
-          value: "",
-          label: "Opinion Report Amount",
-          rules: {
-            required: true,
-          }
-        },
         ForeignPartyName: {
           type: "benne",
           value: "",
@@ -128,7 +112,6 @@ export class ImportOpinionReportComponent implements OnInit {
     e.value.file = 'import';
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
-    e.value.currency = e.value?.currency?.type;
     console.log(e.value);
     this.documentService.getInvoice_No({
       opinionReportNumber: e.value.opinionReportNumber

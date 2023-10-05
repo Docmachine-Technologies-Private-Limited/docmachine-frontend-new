@@ -277,19 +277,19 @@ export class NewExportBillLodgementComponent implements OnInit {
           getAllFields[101]?.setText(FIRX_DATE_NO?.DATE[0]);
           getAllFields[102]?.setText(FIRX_DATE_NO?.NUMBER[0]);
           getAllFields[103]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
-          getAllFields[104]?.setText(FIRX_DATE_NO?.AMOUNT[0]?.toString());
+          getAllFields[104]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
         }
         if (FIRX_DATE_NO?.DATE[1] != undefined) {
           getAllFields[105]?.setText(FIRX_DATE_NO?.DATE[1]);
           getAllFields[106]?.setText(FIRX_DATE_NO?.NUMBER[1]);
           getAllFields[107]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
-          getAllFields[108]?.setText(FIRX_DATE_NO?.AMOUNT[1]?.toString());
+          getAllFields[108]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
         }
         if (FIRX_DATE_NO?.DATE[2] != undefined) {
           getAllFields[109]?.setText(FIRX_DATE_NO?.DATE[2]);
           getAllFields[110]?.setText(FIRX_DATE_NO?.NUMBER[2]);
           getAllFields[111]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
-          getAllFields[112]?.setText(FIRX_DATE_NO?.AMOUNT[2]?.toString());
+          getAllFields[112]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
         }
         getAllFields[113]?.setText('');
       }

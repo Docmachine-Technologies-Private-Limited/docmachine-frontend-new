@@ -13,7 +13,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'import-commercial-invoices',
   templateUrl: './import-commercial-invoices.component.html',
-  styleUrls: ['./import-commercial-invoices.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-commercial-invoices.component.scss', '../../commoncss/common.component.scss']
 })
 export class ImportCommercialInvoicesComponent implements OnInit {
   publicUrl: any = '';
@@ -53,7 +53,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+
   }
 
   response(args: any) {
@@ -63,41 +63,63 @@ export class ImportCommercialInvoicesComponent implements OnInit {
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
         AdvanceInfo: {
-          type: "AdvanceInfo",
-          value: "",
-          label: "Select Advance no.",
+          type: "formGroup",
+          label: "Advance Info",
+          GroupLabel: ['Advance Info 1'],
+          AddNewRequried: false,
           rules: {
             required: false,
           },
-          autofillinput:[{input:'AdvanceNo',key:'billNo'},{input:'AdvanceCurrency',key:'currency'},{input:'AdvanceAmount',key:'amount'}]
-        },
-        AdvanceNo: {
-          type: "text",
-          value:"",
-          label: "Advance No.",
-          rules: {
-            required: false,
-          }
-        },
-        AdvanceCurrency: {
-          type: "currency",
-          value: "",
-          label: "Advance Currency*",
-          rules: {
-            required: false,
-          }
-        },
-        AdvanceAmount: {
-          type: "number",
-          value: "",
-          label: "Advance Amount",
-          rules: {
-            required: false,
-          }
+          formArray: [
+            [
+              {
+                type: "AdvanceInfo",
+                value: "",
+                label: "Select Advance no.",
+                name: 'AdvanceInfoAny',
+                rules: {
+                  required: true,
+                },
+                AutoFillType: "formGroup",
+                autofillinput: [
+                  { input: 'AdvanceNo', key: 'billNo', parent: "AdvanceInfo" },
+                  { input: 'AdvanceCurrency', key: 'currency', parent: "AdvanceInfo" },
+                  { input: 'AdvanceAmount', key: 'amount', parent: "AdvanceInfo" }
+                ],
+              },
+              {
+                type: "text",
+                value: "",
+                label: "Advance No.",
+                name: 'AdvanceNo',
+                rules: {
+                  required: true,
+                },
+              },
+              {
+                type: "currency",
+                value: "",
+                label: "Advance Currency*",
+                name: 'AdvanceCurrency',
+                rules: {
+                  required: true,
+                },
+              },
+              {
+                type: "number",
+                value: "",
+                label: "Advance Amount",
+                name: 'AdvanceAmount',
+                rules: {
+                  required: true,
+                },
+              }
+            ]
+          ]
         },
         commercialNumber: {
           type: "text",
-          typeOf:'ALPHA_NUMERIC',
+          typeOf: 'ALPHA_NUMERIC',
           value: "",
           label: "Commercial Invoice Number*",
           rules: {
@@ -165,7 +187,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           value: "",
           label: "Third Party*",
           rules: {
-            required: true,
+            required: false,
           }
         }
       }, 'ImportCommerical');

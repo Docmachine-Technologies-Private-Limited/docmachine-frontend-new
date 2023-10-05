@@ -39,7 +39,7 @@ export class MasterServiceComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    M_S_A_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -89,6 +89,8 @@ export class MasterServiceComponent implements OnInit {
       buyerName: ""
     }]
   }
+  FILTER_FORM: any = ''
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -110,25 +112,54 @@ export class MasterServiceComponent implements OnInit {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
     this.item = [];
-    this.documentService.getMasterServiceFile("export").subscribe(
-      (res: any) => {
+    this.documentService.getMasterServiceFile("export").subscribe((res: any) => {
         this.item = res?.data;
         this.FILTER_VALUE_LIST = this.item;
         for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
           }
-          value?.buyerName != "NF" ? value?.buyerName : [].forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['M_S_A_No'].includes(value?.masterServiceNumber) == false) {
-            this.ALL_FILTER_DATA['M_S_A_No'].push(value?.masterServiceNumber);
+          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
           }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.date);
+          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.masterServiceNumber)?.length == 0) {
+            this.ALL_FILTER_DATA['NO'].push({ value: value?.masterServiceNumber });
           }
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+          }
+        }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select buyerName",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select M S A No.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
         }
         this.MasterServiceTable(this.item)
         console.log(res, 'getMasterServiceFile');
@@ -155,6 +186,37 @@ export class MasterServiceComponent implements OnInit {
 
     })
   }
+
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      date: value?.value?.date,
+      masterServiceNumber: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'masterservices').subscribe((resp: any) => {
+      console.log(resp, value, "masterservices")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.MasterServiceTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.MasterServiceTable(this.FILTER_VALUE_LIST)
+  }
+  
 
   MasterServiceTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];

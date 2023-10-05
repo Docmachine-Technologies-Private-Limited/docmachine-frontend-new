@@ -4,7 +4,7 @@
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
-                        <h3 class="heading_common_tag">Commercial Invoices</h3>
+                        <h3 class="heading_common_tag">Commercial Invoices ({{this.FILTER_VALUE_LIST?.length}})</h3>
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-12">
@@ -14,65 +14,11 @@
                         <div class="filter_posit">
                             <button type="button" class="filter-popup btn btn-secondary"><span
                                 class="fi_icon filter-popup"></span>Filter</button>
-                            <div class="bg-white filter_main_sec mt-2" appFilterToggle>
-                                <form class="select_filter_options">
-                                    <div class="row">
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                name="Buyer_Name"
-                                                (change)="filter($event.target.value,'buyerName');">
-                                                <option value="">Buyer name</option>
-                                                <option [value]="Buyer_Name"
-                                                    *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
-                                                    {{Buyer_Name}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'pipo');"
-                                                name="Company_Name">
-                                                <option value="">PI/PO No.</option>
-                                                <option [value]="PI_PO_No"
-                                                    *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No
-                                                    }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Commercial Invoice
-                                                No.</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'commercialNumber');"
-                                                name="Origin">
-                                                <option value="">Commercial Invoice No.</option>
-                                                <option
-                                                    *ngFor="let Origin of this.ALL_FILTER_DATA?.Commercial_Invoice_No">
-                                                    {{ Origin }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">DATE</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'commercialDate');"
-                                                name="date">
-                                                <option value="">DATE</option>
-                                                <option [value]="SB_DATE"
-                                                    *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="footer_buttons">
-                                        <button type="button" class="btn btn-light"
-                                            (click)="resetFilter();">RESET</button>
-                                    </div>
-                                </form>
-                                <i></i>
-                            </div>
+                                <ng-custom-filter-popup 
+                                (ResetEvent)="reset()"
+                                FormStyle="display: grid;
+                                grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
+                                *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
                         </div>
                         <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Export/CommercialInvoices']">
                             <span class="add_icon"></span> ADD NEW

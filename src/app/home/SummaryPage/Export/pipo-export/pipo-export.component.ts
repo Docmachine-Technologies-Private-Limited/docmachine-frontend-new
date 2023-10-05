@@ -20,7 +20,8 @@ export class PipoExportComponent implements OnInit {
   @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
 
   displayedColumns: string[] = ['pi_poNo', 'date', 'buyerName', 'location', 'commodity', 'amount', 'paymentTerm', 'actions'];
-  dataSource: any[];
+  dataSource: any=[];
+  OrgdataSource: any=[];
   benneDetailArray: any;
   locationArray: any;
   commodityArray: any;
@@ -64,7 +65,17 @@ export class PipoExportComponent implements OnInit {
     ],
     eventId: '0'
   }
-
+  ALL_FILTER_DATA: any = {
+    Buyer_Name: [],
+    Company_Name: [],
+    Origin: [],
+    Destination: [],
+    Currency: [],
+    DATE: [],
+    NO: []
+  };
+  FILTER_FORM: any = ''
+  
   constructor(public documentService: DocumentService,
     private userService: UserService,
     public dialog: MatDialog,
@@ -93,13 +104,91 @@ export class PipoExportComponent implements OnInit {
       var sort_of_deleteflag_1: any = res.docs.filter((item) => item.deleteflag == '0');
       var sort_of_deleteflag_2: any = res.docs.filter((item) => item.deleteflag == '-1');
       this.dataSource = res.docs;
+      this.OrgdataSource = res.docs;
       this.PIPOTable(this.dataSource)
+      for (let value of this.dataSource) {
+        // if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+        //   this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
+        // }
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+        }
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['Buyer_Name'],
+          bindLabel: "value"
+        },
+        date: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
       console.log("res", sort_of_deleteflag_1, sort_of_deleteflag_2, this.dataSource);
       if (this.paginator.length != undefined) {
         this.paginator.length = res.totalDocs
       }
     })
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      date: value?.value?.date,
+      pi_poNo: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'pi_po').subscribe((resp: any) => {
+      console.log(resp, value, "pi_po")
+      this.dataSource = resp?.data?.length != 0 ? resp?.data : this.OrgdataSource;
+      this.PIPOTable(this.dataSource)
+    });
+  }
+
+  reset() {
+    this.dataSource = this.OrgdataSource;
+    this.PIPOTable(this.dataSource)
+  }
+
 
   handlePage(pagination: any) {
     console.log("==>", pagination)

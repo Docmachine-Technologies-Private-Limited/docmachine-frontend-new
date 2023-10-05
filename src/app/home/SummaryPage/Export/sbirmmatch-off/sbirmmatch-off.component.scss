@@ -137,7 +137,7 @@
 }
 
 .SHIPING_BILL_POPUP ::ng-deep .mat-accordion {
-    margin-top: 10px!important;
+    margin-top: 10px !important;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -192,4 +192,32 @@
 
 .match-off ::ng-deep .upload-components-header {
     position: relative !important;
+}
+
+.disabled-tr {
+    pointer-events: none;
+    opacity: 0.6;
+    position: relative;
+}
+
+.disabled-tr::after {
+    content: "Already Used";
+    position: absolute;
+    left: 0;
+    font-size: 20px;
+    color: red;
+    opacity: 1;
+    background: cornflowerblue;
+    padding: 20px;
+}
+
+.Transaction-btn {
+    margin: auto;
+    margin-right: 20px;
+    background-color: transparent;
+    border: none;
+}
+
+.Transaction-btn:hover {
+    color: #597a8a;
 }
