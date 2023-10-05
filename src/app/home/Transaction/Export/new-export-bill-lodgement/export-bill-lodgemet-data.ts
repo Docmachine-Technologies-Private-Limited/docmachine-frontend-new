@@ -149,7 +149,7 @@ export class ExportBillLodgementData {
                     });
                     this.SELECTED_COMMERICAIL_DATA['CheckBoxEnabled'] = false;
                     this.SELECTED_COMMERICAIL_DATA['Firxbutton'] = true;
-                    let sum_of_irm: any = this.SELECTED_COMMERICAIL_DATA?.IRM_REF?.reduce((a, b) => parseFloat(a) + parseFloat(b?.MatchOffData?.InputValue), 0);
+                    let sum_of_irm: any = this.SELECTED_COMMERICAIL_DATA?.IRM_REF?.reduce((a, b) => parseFloat(a) + (parseFloat(b?.MatchOffData?.InputValue)+parseFloat(b?.MatchOffData?.commision)), 0);
                     if (parseFloat(this.SELECTED_COMMERICAIL_DATA?.amount) == parseFloat(sum_of_irm)) {
                         this.SELECTED_COMMERICAIL_DATA['AmountUsed'] = true;
                         this.SELECTED_COMMERICAIL_DATA['SB_Amout_Realized'] = sum_of_irm;
