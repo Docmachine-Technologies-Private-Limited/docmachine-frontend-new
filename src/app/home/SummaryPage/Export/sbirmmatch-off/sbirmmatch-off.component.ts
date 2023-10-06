@@ -149,13 +149,13 @@ export class SBIRMMatchOffComponent implements OnInit {
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  
+
   CI_INDEX: any = -1
   SelectIRM(index: any) {
     this.CI_INDEX = index;
   }
-  
-  YesNoCheckBox(value:any){
-   console.log("YesNoCheckBoxEvent",value)
+
+  YesNoCheckBox(value: any) {
+    console.log("YesNoCheckBoxEvent", value)
   }
 }

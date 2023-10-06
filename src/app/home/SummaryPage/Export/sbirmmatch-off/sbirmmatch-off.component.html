@@ -14,6 +14,9 @@
                             <div class="d-flex flex-column">
                                 <mat-panel-title>
                                     SB DETAILS
+                                    <button style="margin: auto;margin-right: 10px;"
+                                        class="btn btn-primary Transaction-btn"
+                                        (click)="this.exportbilllodgementdata?.dselect(data)">D-Select</button>
                                 </mat-panel-title>
                                 <table class="table mb-0">
                                     <tbody>
@@ -92,16 +95,16 @@
                                     <tr class="table-tr"
                                         *ngFor='let IRM_REFdata of commercialdata?.IRM_REF;let j = index'>
                                         <td class="col-td-th-1">
-                                            {{IRM_REFdata.commercialDate}}
+                                            {{IRM_REFdata?.billNo}}
                                         </td>
                                         <td class="col-td-th-1">
-                                            {{IRM_REFdata.commercialNumber}}
+                                            {{IRM_REFdata?.amount}}
                                         </td>
                                         <td class="col-td-th-1">
-                                            {{IRM_REFdata.amount}}
+                                            {{IRM_REFdata?.commision}}
                                         </td>
                                         <td class="col-td-th-3">
-                                            <p> {{IRM_REFdata?.debitAmount}}</p>
+                                            {{IRM_REFdata?.BalanceAvail}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -129,7 +132,8 @@
                                 <mat-panel-title>
                                     <p> SB DETAILS</p>
                                     <button style="margin: auto;margin-right: 10px;"
-                                    class="btn btn-primary Transaction-btn" (click)="this.exportbilllodgementdata?.Reload">Refresh</button>
+                                        class="btn btn-primary Transaction-btn"
+                                        (click)="this.exportbilllodgementdata?.Reload">Refresh</button>
                                 </mat-panel-title>
                                 <table class="table mb-0">
                                     <tbody>
@@ -180,8 +184,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="table-tr"
-                                [ngClass]="{'disabled-tr':commercialdata?.AmountUsed==true}"
+                                <tr class="table-tr" [ngClass]="{'disabled-tr':commercialdata?.AmountUsed==true}"
                                     *ngFor='let commercialdata of data?.commercialdetails;let j = index'>
                                     <td class="col-td-th-1">
                                         <input type="checkbox" [checked]="commercialdata?.CheckBoxEnabled"
@@ -217,8 +220,38 @@
                                         {{commercialdata?.IRADVICE_SUM}}
                                     </td>
                                     <td class="col-td-th-3">
-                                        <button style="width: 50%;" type="submit" class="PopupOpen btn btn-primary"
-                                            popup-close="FIRX_DEATILS">More...</button>
+                                        <button style="width: 50%;" type="submit" class="filter-popup  btn btn-primary">More...</button>
+                                            <!-- <ng-custom-filter-popup>
+                                                <div class="col-12">
+                                                  <table class="table mb-0">
+                                                      <thead>
+                                                          <tr class="table-tr">
+                                                              <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
+                                                              <th scope="col" class="col-td-th-2">Recieved Amount</th>
+                                                              <th scope="col" class="col-td-th-2">Commision Amount</th>
+                                                              <th scope="col" class="col-td-th-2">Available Balance</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr class="table-tr"
+                                                              *ngFor='let IRADVICE_DATAdata of commercialdata?.IRADVICE_DATA;let i = index'>
+                                                              <td class="col-td-th-2">
+                                                                  {{IRADVICE_DATAdata.billNo}}
+                                                              </td>
+                                                              <td class="col-td-th-2">
+                                                                  {{IRADVICE_DATAdata.amount}}
+                                                              </td>
+                                                              <td class="col-td-th-2">
+                                                                  {{IRADVICE_DATAdata.commision}}
+                                                              </td>
+                                                              <td class="col-td-th-2">
+                                                                  {{IRADVICE_DATAdata.BalanceAvail}}
+                                                              </td>
+                                                          </tr>
+                                                      </tbody>
+                                                  </table>
+                                                </div>
+                                              </ng-custom-filter-popup> -->
                                     </td>
                                     <td class="col-td-th-1">
                                         <button type="submit"
@@ -336,8 +369,7 @@
                                     {{commercialdata?.IRADVICE_SUM}}
                                 </td>
                                 <td class="col-td-th-3">
-                                    <button style="width: 50%;" type="submit" class="PopupOpen btn btn-primary"
-                                        popup-close="FIRX_DEATILS">More...</button>
+                                    <button style="width: 50%;" type="submit" class="btn btn-primary">More...</button>
                                 </td>
                                 <td class="col-td-th-1">
                                     <button type="submit" (click)="this.exportbilllodgementdata?.SaveChanges(data,i)"
@@ -405,7 +437,8 @@
                                         {{data.BalanceAvail}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        <input type="text" (keypress)="this.exportbilllodgementdata?.FIRXAMOUNT(data,this.CI_INDEX,$event)"
+                                        <input type="text"
+                                            (keypress)="this.exportbilllodgementdata?.FIRXAMOUNT(data,this.CI_INDEX,$event)"
                                             [(ngModel)]="data.InputValue">
                                     </td>
                                 </tr>

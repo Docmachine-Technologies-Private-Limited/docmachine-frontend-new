@@ -221,3 +221,7 @@
 .Transaction-btn:hover {
     color: #597a8a;
 }
+
+::ng-deep ng-custom-filter-popup .filter_main {
+    width: 540px !important;
+}

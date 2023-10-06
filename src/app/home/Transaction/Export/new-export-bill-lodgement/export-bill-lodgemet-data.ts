@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { DocumentService } from "../../../../service/document.service";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
+import { CustomConfirmDialogModelComponent } from "../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
 
 @Injectable({ providedIn: 'root' })
 export class ExportBillLodgementData {
@@ -19,6 +20,7 @@ export class ExportBillLodgementData {
 
     constructor(public documentService: DocumentService,
         private toastr: ToastrService,
+        public confrimModel: CustomConfirmDialogModelComponent,
         private userService: UserService) {
         this.getBuyerList();
         this.SHIPPING_BILL_DATA = []
@@ -75,7 +77,7 @@ export class ExportBillLodgementData {
                                 element1['IRADVICE_SUM'] = sum_of_irm
                                 element1['debitAmount'] = '0';
                             } else {
-                                element1['CheckBoxEnabled'] = false;
+                                element1['CheckBoxEnabled'] = true;
                                 element1['Firxbutton'] = true;
                                 element1['SB_Amout_Realized'] = '0';
                                 element1['IRADVICE_SUM'] = '0'
@@ -137,8 +139,8 @@ export class ExportBillLodgementData {
                         element['debitAmount'] = '0';
                         element['ReamaingAmount'] = '-1';
                         element?.commercialdetails?.forEach(commercialdetailselement => {
-                            commercialdetailselement['CheckBoxEnabled'] = false;
-                            commercialdetailselement['Firxbutton'] = true;
+                            commercialdetailselement['CheckBoxEnabled'] = true;
+                            commercialdetailselement['Firxbutton'] = false;
                             commercialdetailselement['SB_Amout_Realized'] = '0';
                             commercialdetailselement['IRADVICE_SUM'] = '0'
                             commercialdetailselement['IRADVICE_DATA'] = []
@@ -148,8 +150,8 @@ export class ExportBillLodgementData {
                         });
                     });
                     this.SELECTED_COMMERICAIL_DATA['CheckBoxEnabled'] = false;
-                    this.SELECTED_COMMERICAIL_DATA['Firxbutton'] = true;
-                    let sum_of_irm: any = this.SELECTED_COMMERICAIL_DATA?.IRM_REF?.reduce((a, b) => parseFloat(a) + (parseFloat(b?.MatchOffData?.InputValue)+parseFloat(b?.MatchOffData?.commision)), 0);
+                    this.SELECTED_COMMERICAIL_DATA['Firxbutton'] = false;
+                    let sum_of_irm: any = this.SELECTED_COMMERICAIL_DATA?.IRM_REF?.reduce((a, b) => parseFloat(a) + (parseFloat(b?.MatchOffData?.InputValue) + parseFloat(b?.MatchOffData?.commision)), 0);
                     if (parseFloat(this.SELECTED_COMMERICAIL_DATA?.amount) == parseFloat(sum_of_irm)) {
                         this.SELECTED_COMMERICAIL_DATA['AmountUsed'] = true;
                         this.SELECTED_COMMERICAIL_DATA['SB_Amout_Realized'] = sum_of_irm;
@@ -157,7 +159,7 @@ export class ExportBillLodgementData {
                         this.SELECTED_COMMERICAIL_DATA['debitAmount'] = '0';
                     } else {
                         this.SELECTED_COMMERICAIL_DATA['CheckBoxEnabled'] = false;
-                        this.SELECTED_COMMERICAIL_DATA['Firxbutton'] = true;
+                        this.SELECTED_COMMERICAIL_DATA['Firxbutton'] = false;
                         this.SELECTED_COMMERICAIL_DATA['SB_Amout_Realized'] = '0';
                         this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM'] = '0'
                         this.SELECTED_COMMERICAIL_DATA['IRADVICE_DATA'] = []
@@ -395,7 +397,7 @@ export class ExportBillLodgementData {
                 this.documentService.Update_Amount_by_Table({
                     tableName: 'masterrecord',
                     id: data?._id,
-                    query: { balanceAvai: parseFloat(data?.balanceAvai) - (parseFloat(sumfixAmount) + parseFloat(sumfixCommisionAmount)) }
+                    query: { balanceAvai: parseFloat(data?.balanceAvai) - (parseFloat(sumfixAmount)) }
                 }).subscribe((r3: any) => {
                     this.toastr.success("Update Changes...")
                     this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
@@ -430,5 +432,53 @@ export class ExportBillLodgementData {
         this.TOTAL_CI_AMOUNT = this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);;
         sbdata['TOTAL_CI_AMOUNT'] = commercialdata?.amount;
         console.log(sbdata, this.TRANSACTION_SELECTED_COMMERICAIL_DATA)
+    }
+
+
+    dselect(data: any) {
+        console.log(data, "sdfsdfdfdfsfffsdfsfs")
+        this.confrimModel.YesNoDialogModel("Reset All Data<br/> Do you want d-select all data with this shipping bill no. : "+data?.sbno, "", (value: any) => {
+            if (value?.value === "Yes") {
+                this.documentService.Update_Amount_by_Table({
+                    tableName: 'masterrecord',
+                    id: data?._id,
+                    query: {
+                        firxdetails: [],
+                        balanceAvai: data?.fobValue
+                    }
+                }).subscribe(async (r3: any) => {
+                    for (let index = 0; index < data?.commercialdetails?.length; index++) {
+                        const element = data?.commercialdetails?.[index];
+                        element?.IRM_REF?.forEach(IRM_REF_element => {
+                            this.documentService.Update_Amount_by_Table({
+                                tableName: 'iradvices',
+                                id: IRM_REF_element?._id,
+                                query: {
+                                    sbno: [],
+                                    BalanceAvail: parseFloat(IRM_REF_element?.BalanceAvail)+parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                    CommissionUsed: false,
+                                    MatchOffData: {},
+                                    UsedAmount: parseFloat(IRM_REF_element?.BalanceAvail)+parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                    CI_REF: []
+                                }
+                            }).subscribe(async (list: any) => {
+                                await this.documentService.Update_Amount_by_Table({
+                                    tableName: 'commercials',
+                                    id: element?._id,
+                                    query: { IRM_REF: [], TransctionEnabled: false }
+                                }).subscribe((r2: any) => {
+
+                                });
+                            })
+                        });
+                        if ((index + 1) == data?.commercialdetails?.length) {
+                            this.toastr.success("Update Changes...")
+                            this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
+                        }
+                    }
+                });
+            }
+            console.log(value, "jhsdjkfhgdkfsdfdfsdfd")
+        })
     }
 }

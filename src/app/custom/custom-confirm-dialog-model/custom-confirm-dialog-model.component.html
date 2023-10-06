@@ -127,7 +127,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
     <div class="column">
-      <h5 class="modal-title">{{this.CustomConfirmDialogModel.titleheader}}</h5>
+      <h5 class="modal-title" [innerHTML]="this.CustomConfirmDialogModel.titleheader"></h5>
       <div class="row" style="gap: 10px;">
         <button type="button" class="btn btn-primary"
           (click)="this.CALLBACKS_CALL({Inputdata:'Yes'},YesNoDialogModel.style.display='none')">Yes</button>
