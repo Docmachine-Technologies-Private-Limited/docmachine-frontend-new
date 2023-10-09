@@ -73,6 +73,7 @@ export class ApprovalPanelComponent implements OnInit {
     this.detailsViewdata = this.DATA_CREATE[id];
     console.log(this.detailsViewdata, 'detailsViewdata')
   }
+  
   mergeAllPDFs = async (type: String, doc: any, tableName: any, emaildata: any) => {
     if (type == 'download') {
       var fitertemp: any = doc.filter(n => n)
@@ -94,6 +95,7 @@ export class ApprovalPanelComponent implements OnInit {
       });
     }
   }
+  
   downloadAsSingleFile = async (filename, pdfDoc: any) => {
     this.blobToSaveAs(filename, pdfDoc)
   };

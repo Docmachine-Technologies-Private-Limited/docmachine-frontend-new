@@ -94,7 +94,12 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
-    e.value.SbRef = [e?.value?.sbNo];
+    var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
+    if (TransactionSbRef != '' && TransactionSbRef != undefined && TransactionSbRef != null) {
+      e.value.SbRef = [TransactionSbRef];
+    }else{
+      e.value.SbRef = [e?.value?.sbNo];
+    }
     e.value.file = 'export';
     console.log(e.value, 'onSubmitblCopy');
 
@@ -106,25 +111,6 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
         this.documentService.addBlcopyref(e.value).subscribe((res: any) => {
           console.log(res, 'addBlcopyref');
           this.toastr.success(`Blcopyref Document Added Successfully`);
-          var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
-          if (TransactionSbRef != '') {
-            let updatedData = {
-              "SbRef": [
-                TransactionSbRef
-              ],
-            }
-            let updatedData1 = {
-              "blcopyRef": [
-                res.data._id,
-              ],
-            }
-            this.documentService.updateBlCopyRef(e?.value?.sbNo,updatedData1).subscribe((res: any) => {
-              console.log('updateBlCopyRef', res);
-            });
-            this.documentService.updateBlcopyrefSB(updatedData, res.data._id).subscribe((res: any) => {
-              console.log('updateBlcopyrefSB', res);
-            });
-          }
           let updatedData = {
             "blcopyRefs": [
               res.data._id,

@@ -172,7 +172,8 @@ export class NewExportBillLodgementComponent implements OnInit {
         DATE: [],
         CURRENCY: [],
         AMOUNT: [],
-        RECIVCED_AMOUNT: []
+        RECIVCED_AMOUNT: [],
+        USED_AMOUNT: []
       };
       this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.firxdetails?.forEach(element => {
         element?.FirxUsed_Balance?.split(',').forEach(FirxUsed_Balance => {
@@ -186,7 +187,8 @@ export class NewExportBillLodgementComponent implements OnInit {
           FIRX_DATE_NO?.NUMBER?.push(IRM_REF_Element?.billNo)
           FIRX_DATE_NO?.DATE?.push(IRM_REF_Element?.date)
           FIRX_DATE_NO?.CURRENCY?.push(IRM_REF_Element?.currency)
-          FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.amount)
+          FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.MatchOffData?.amount)
+          FIRX_DATE_NO?.USED_AMOUNT?.push(IRM_REF_Element?.MatchOffData?.InputValue)
         });
       });
       getAllFields[24]?.setText(CommercialNumberList?.join(","));
@@ -256,18 +258,18 @@ export class NewExportBillLodgementComponent implements OnInit {
         getAllFields[81]?.uncheck();
         getAllFields[82]?.uncheck();
         getAllFields[83]?.uncheck();
-        getAllFields[84]?.setText('');
+        getAllFields[84]?.setText("");
         getAllFields[85]?.uncheck();
         getAllFields[86]?.uncheck();
         getAllFields[87]?.uncheck();
-        getAllFields[88]?.setText('');
+        getAllFields[88]?.setText(this.getCurrentDate().toString());
         getAllFields[89]?.uncheck();
         getAllFields[90]?.uncheck();
         getAllFields[91]?.uncheck();
         getAllFields[92]?.uncheck();
         getAllFields[93]?.uncheck();
         getAllFields[94]?.uncheck();
-        getAllFields[95]?.setText('');
+        getAllFields[95]?.setText(this.getCurrentDate().toString());
         getAllFields[96]?.setText('');
         getAllFields[97]?.setText('');
         getAllFields[98]?.setText('');
@@ -277,19 +279,19 @@ export class NewExportBillLodgementComponent implements OnInit {
           getAllFields[101]?.setText(FIRX_DATE_NO?.DATE[0]);
           getAllFields[102]?.setText(FIRX_DATE_NO?.NUMBER[0]);
           getAllFields[103]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
-          getAllFields[104]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
+          getAllFields[104]?.setText(FIRX_DATE_NO?.USED_AMOUNT[0]?.toString());
         }
         if (FIRX_DATE_NO?.DATE[1] != undefined) {
           getAllFields[105]?.setText(FIRX_DATE_NO?.DATE[1]);
           getAllFields[106]?.setText(FIRX_DATE_NO?.NUMBER[1]);
           getAllFields[107]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
-          getAllFields[108]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
+          getAllFields[108]?.setText(FIRX_DATE_NO?.USED_AMOUNT[1]?.toString());
         }
         if (FIRX_DATE_NO?.DATE[2] != undefined) {
           getAllFields[109]?.setText(FIRX_DATE_NO?.DATE[2]);
           getAllFields[110]?.setText(FIRX_DATE_NO?.NUMBER[2]);
           getAllFields[111]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
-          getAllFields[112]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
+          getAllFields[112]?.setText(FIRX_DATE_NO?.USED_AMOUNT[2]?.toString());
         }
         getAllFields[113]?.setText('');
       }
@@ -330,7 +332,16 @@ export class NewExportBillLodgementComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
 
   }
-
+  
+  getCurrentDate() {
+    const date = new Date();
+    let currentDay = String(date.getDate()).padStart(2, '0');
+    let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+    let currentYear = date.getFullYear();
+    let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
+    return currentDate;
+  }
+  
   ConvertNumberToWords(number: any) {
     var words = new Array();
     words[0] = '';
@@ -635,10 +646,10 @@ export class NewExportBillLodgementComponent implements OnInit {
         if (res?.id != approval_data?.id) {
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-              this.ExportBillLodgement_Form['SbRef']=(UniqueId);
-              this.ExportBillLodgement_Form['documents']=(UpdatedUrl?.reverse());
-              this.ExportBillLodgement_Form['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId })
-              this.ExportBillLodgement_Form['extradata']=(this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL)
+              this.ExportBillLodgement_Form['SbRef'] = (UniqueId);
+              this.ExportBillLodgement_Form['documents'] = (UpdatedUrl?.reverse());
+              this.ExportBillLodgement_Form['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId })
+              this.ExportBillLodgement_Form['extradata'] = (this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL)
               if (this.ExportBillLodgement_Form['AgainstAdvanceReceipt']?.bool == true) {
                 var data: any = {
                   data: this.ExportBillLodgement_Form.value,

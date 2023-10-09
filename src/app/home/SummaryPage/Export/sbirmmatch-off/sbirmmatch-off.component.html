@@ -88,6 +88,7 @@
                                         <th scope="col" class="col-td-th-1">FIRX Number/ID</th>
                                         <th scope="col" class="col-td-th-1">Recieved Amount</th>
                                         <th scope="col" class="col-td-th-1">Commision Amount</th>
+                                        <th scope="col" class="col-td-th-1">UsedAmount</th>
                                         <th scope="col" class="col-td-th-3">Available Balance</th>
                                     </tr>
                                 </thead>
@@ -102,6 +103,9 @@
                                         </td>
                                         <td class="col-td-th-1">
                                             {{IRM_REFdata?.commision}}
+                                        </td>
+                                        <td class="col-td-th-1">
+                                            {{IRM_REFdata?.MatchOffData?.InputValue}}
                                         </td>
                                         <td class="col-td-th-3">
                                             {{IRM_REFdata?.BalanceAvail}}

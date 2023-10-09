@@ -139,7 +139,7 @@ export class ExportBillLodgementData {
                         element['debitAmount'] = '0';
                         element['ReamaingAmount'] = '-1';
                         element?.commercialdetails?.forEach(commercialdetailselement => {
-                            commercialdetailselement['CheckBoxEnabled'] = true;
+                            commercialdetailselement['CheckBoxEnabled'] = false;
                             commercialdetailselement['Firxbutton'] = false;
                             commercialdetailselement['SB_Amout_Realized'] = '0';
                             commercialdetailselement['IRADVICE_SUM'] = '0'
@@ -394,10 +394,17 @@ export class ExportBillLodgementData {
             }).subscribe((r2: any) => {
                 let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.FirxUsed_Balance))
                 let sumfixCommisionAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
+                console.log(sumfixAmount, sumfixCommisionAmount, "sumfixCommisionAmount")
+                let sumfixAmount2 = 0;
+                if (parseFloat(sumfixAmount) == parseFloat(data?.balanceAvai)) {
+                    sumfixAmount2 = parseFloat(data?.balanceAvai) - parseFloat(sumfixAmount)
+                } else {
+                    sumfixAmount2 = parseFloat(data?.balanceAvai) - (parseFloat(sumfixAmount) + parseFloat(sumfixCommisionAmount))
+                }
                 this.documentService.Update_Amount_by_Table({
                     tableName: 'masterrecord',
                     id: data?._id,
-                    query: { balanceAvai: parseFloat(data?.balanceAvai) - (parseFloat(sumfixAmount)) }
+                    query: { balanceAvai: sumfixAmount2 }
                 }).subscribe((r3: any) => {
                     this.toastr.success("Update Changes...")
                     this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
@@ -437,7 +444,7 @@ export class ExportBillLodgementData {
 
     dselect(data: any) {
         console.log(data, "sdfsdfdfdfsfffsdfsfs")
-        this.confrimModel.YesNoDialogModel("Reset All Data<br/> Do you want d-select all data with this shipping bill no. : "+data?.sbno, "", (value: any) => {
+        this.confrimModel.YesNoDialogModel("Reset All Data<br/> Do you want d-select all data with this shipping bill no. : " + data?.sbno, "", (value: any) => {
             if (value?.value === "Yes") {
                 this.documentService.Update_Amount_by_Table({
                     tableName: 'masterrecord',
@@ -455,10 +462,10 @@ export class ExportBillLodgementData {
                                 id: IRM_REF_element?._id,
                                 query: {
                                     sbno: [],
-                                    BalanceAvail: parseFloat(IRM_REF_element?.BalanceAvail)+parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                    BalanceAvail: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
                                     CommissionUsed: false,
                                     MatchOffData: {},
-                                    UsedAmount: parseFloat(IRM_REF_element?.BalanceAvail)+parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                    UsedAmount: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
                                     CI_REF: []
                                 }
                             }).subscribe(async (list: any) => {

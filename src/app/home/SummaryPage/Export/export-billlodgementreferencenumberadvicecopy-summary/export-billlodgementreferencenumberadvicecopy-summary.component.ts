@@ -132,7 +132,7 @@ export class ExportBilllodgementreferencenumberadvicecopySummaryComponent implem
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          SbNo: this.getPipoNumber(element['pipo']),
+          SbNo: element['SbRef'] != 'NF' ? element['SbRef'][0]?.sbno : 'NF',
           date: moment(element['date']).format('DD-MM-YYYY'),
           blcopyrefNumber: element['blcopyrefNumber'],
           amount: element['amount'],
@@ -267,10 +267,10 @@ export class ExportBilllodgementreferencenumberadvicecopySummaryComponent implem
     // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/Bill-Lodgement-Referance-AdviceCopy`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/Bill-Lodgement-Referance-AdviceCopy`], navigationExtras);
     this.toastr.warning('Debit Note Row Is In Edit Mode');
   }
 
