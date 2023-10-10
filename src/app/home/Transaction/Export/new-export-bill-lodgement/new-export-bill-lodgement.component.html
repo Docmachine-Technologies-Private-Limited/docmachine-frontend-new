@@ -125,12 +125,13 @@
                                         <th scope="col" class="col-td-th-1">FIRX Number/ID</th>
                                         <th scope="col" class="col-td-th-1">Recieved Amount</th>
                                         <th scope="col" class="col-td-th-1">Commision Amount</th>
+                                        <th scope="col" class="col-td-th-1">Used Amount</th>
                                         <th scope="col" class="col-td-th-3">Available Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="table-tr"
-                                        *ngFor='let IRM_REFdata of commercialdata?.IRM_REF;let j = index'>
+                                        *ngFor='let IRM_REFdata of commercialdata?.MatchOffData;let j = index'>
                                         <td class="col-td-th-1">
                                             {{IRM_REFdata.billNo}}
                                         </td>
@@ -140,8 +141,11 @@
                                         <td class="col-td-th-1">
                                             {{IRM_REFdata.commision}}
                                         </td>
+                                        <td class="col-td-th-1">
+                                            {{IRM_REFdata?.InputValue}}
+                                        </td>
                                         <td class="col-td-th-3">
-                                            {{IRM_REFdata?.MatchOffData?.UsedAmount}}
+                                            {{IRM_REFdata?.BalanceAvail}}
                                         </td>
                                     </tr>
                                 </tbody>

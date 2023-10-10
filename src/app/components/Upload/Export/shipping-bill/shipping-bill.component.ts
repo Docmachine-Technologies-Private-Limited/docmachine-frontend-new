@@ -407,6 +407,7 @@ export class ShippingBillComponent implements OnInit {
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
       this.COMMERCIAL_LIST = res?.data;
+      this.validator.COMMERICAL_NO = [];
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
       });

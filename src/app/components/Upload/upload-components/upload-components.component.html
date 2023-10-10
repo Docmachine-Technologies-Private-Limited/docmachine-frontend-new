@@ -31,9 +31,10 @@
                 <div class="form-group mb-3" *ngSwitchCase="'SB_DETAILS_SHOW'">
                     <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                        <div class="p-2 SHIPING_BILL_POPUP" style="overflow: auto;" *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.length!=0">
+                        <div class="p-2 SHIPING_BILL_POPUP" style="overflow: auto;"
+                            *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.length!=0">
                             <mat-accordion>
-                                <mat-expansion-panel >
+                                <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-description>
                                             <div class="d-flex flex-column">
@@ -1019,8 +1020,9 @@
     </div>
 </app-custom-model>
 
-<app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="HS_CODE_POPUP"
-    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
+<app-custom-model [customstyle]="{'max-width':'90vw !important','position':'relative'}" class="p-2" height="75vh"
+    id="HS_CODE_POPUP" [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View"
+    #HS_CODE_POPUP_PANEL>
     <div class="col-12 mt-2 mb-2">
         <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
             (event)="filterHSCode($event)"></ng-input>
@@ -1043,7 +1045,7 @@
             </tbody>
         </table>
     </div>
-    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+    <div class="modal-footer" style="position: absolute;bottom: -10px;right: 0px;">
         <div style="display:flex;" class="mt-3">
             <button type="button" class="btn btn-primary"
                 (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>

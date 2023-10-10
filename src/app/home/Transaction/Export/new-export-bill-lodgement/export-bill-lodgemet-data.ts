@@ -378,20 +378,28 @@ export class ExportBillLodgementData {
             data?.commercialdetails?.forEach(async (element) => {
                 if (element?.IRADVICE_DATA?.length != 0 && element?.IRADVICE_DATA != undefined) {
                     let FIRX_ID: any = [];
+                    let FIRX_DATA: any = [];
                     await element?.IRADVICE_DATA?.forEach(async (element1) => {
                         await FIRX_ID.push(element1?._id);
+                        element1["BalanceAvail"] = parseInt(element1?.BalanceAvail) == parseInt(element1?.InputValue) ? 0 : parseInt(element1?.BalanceAvail) - parseInt(element1?.InputValue);
+                        element1["UsedAmount"] = element1?.InputValue
+                        await FIRX_DATA.push(element1);
                         this.documentService.Update_Amount_by_Table({
                             tableName: 'iradvices',
                             id: element1._id,
                             query: {
-                                CI_REF: [element?._id]
+                                CI_REF: [element?._id],
                             }
                         }).subscribe((list: any) => { })
                     });
                     await this.documentService.Update_Amount_by_Table({
                         tableName: 'commercials',
                         id: element?._id,
-                        query: { IRM_REF: FIRX_ID, TransctionEnabled: true }
+                        query: {
+                            IRM_REF: FIRX_ID,
+                            TransctionEnabled: true,
+                            MatchOffData: FIRX_DATA,
+                        }
                     }).subscribe((r2: any) => { });
                 }
             });
@@ -491,7 +499,7 @@ export class ExportBillLodgementData {
                                 await this.documentService.Update_Amount_by_Table({
                                     tableName: 'commercials',
                                     id: element?._id,
-                                    query: { IRM_REF: [], TransctionEnabled: false }
+                                    query: { IRM_REF: [], TransctionEnabled: false, MatchOffData: [] }
                                 }).subscribe((r2: any) => {
 
                                 });

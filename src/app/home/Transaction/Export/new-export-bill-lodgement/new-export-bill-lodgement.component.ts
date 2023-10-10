@@ -183,12 +183,12 @@ export class NewExportBillLodgementComponent implements OnInit {
       let TOTAL_SUM_FIREX: any = FIRX_DATE_NO?.AMOUNT?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
       this.exportbilllodgementdata?.TRANSACTION_SELECTED_COMMERICAIL_DATA?.forEach(element => {
         CommercialNumberList.push(element?.commercialNumber)
-        element?.IRM_REF?.forEach(IRM_REF_Element => {
+        element?.MatchOffData?.forEach(IRM_REF_Element => {
           FIRX_DATE_NO?.NUMBER?.push(IRM_REF_Element?.billNo)
           FIRX_DATE_NO?.DATE?.push(IRM_REF_Element?.date)
           FIRX_DATE_NO?.CURRENCY?.push(IRM_REF_Element?.currency)
-          FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.MatchOffData?.amount)
-          FIRX_DATE_NO?.USED_AMOUNT?.push(IRM_REF_Element?.MatchOffData?.InputValue)
+          FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.amount)
+          FIRX_DATE_NO?.USED_AMOUNT?.push(IRM_REF_Element?.InputValue)
         });
       });
       getAllFields[24]?.setText(CommercialNumberList?.join(","));
