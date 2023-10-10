@@ -224,8 +224,9 @@
                                         {{commercialdata?.IRADVICE_SUM}}
                                     </td>
                                     <td class="col-td-th-3">
-                                        <button style="width: 50%;" type="submit" class="filter-popup  btn btn-primary">More...</button>
-                                            <!-- <ng-custom-filter-popup>
+                                        <button style="width: 50%;" type="submit"
+                                            class="filter-popup  btn btn-primary">More...</button>
+                                        <!-- <ng-custom-filter-popup>
                                                 <div class="col-12">
                                                   <table class="table mb-0">
                                                       <thead>
@@ -418,6 +419,7 @@
                                     <th scope="col" class="col-td-th-2">Recieved Amount</th>
                                     <th scope="col" class="col-td-th-2">Commision Amount</th>
                                     <th scope="col" class="col-td-th-2">Available Balance</th>
+                                    <th scope="col" class="col-td-th-2">Bank Charges</th>
                                     <th scope="col" class="col-td-th-2">Utilization Amount</th>
                                 </tr>
                             </thead>
@@ -441,8 +443,17 @@
                                         {{data.BalanceAvail}}
                                     </td>
                                     <td class="col-td-th-2">
+                                        <div class="d-flex">
+                                            <button class="btn-primary yes-btn btn remove-no-button"
+                                               (click)="data.YesNo='true';this.exportbilllodgementdata?.BankChargesAmount(data,'Yes')"
+                                                [ngClass]="{'yes-button':data?.YesNo=='true','remove-no-button-1':data?.YesNo=='false'}">YES</button>
+                                            <button (click)="data.YesNo='false';this.exportbilllodgementdata?.BankChargesAmount(data,'No')" class="btn-primary btn no-btn remove-no-button"
+                                                [ngClass]="{'no-button':data?.YesNo=='false','remove-no-button-2':data?.YesNo=='true'}">NO</button>
+                                        </div>
+                                    </td>
+                                    <td class="col-td-th-2">
                                         <input type="text"
-                                            (keypress)="this.exportbilllodgementdata?.FIRXAMOUNT(data,this.CI_INDEX,$event)"
+                                            (keypress)="this.exportbilllodgementdata?.FIRXAMOUNT(data,$event)"
                                             [(ngModel)]="data.InputValue">
                                     </td>
                                 </tr>

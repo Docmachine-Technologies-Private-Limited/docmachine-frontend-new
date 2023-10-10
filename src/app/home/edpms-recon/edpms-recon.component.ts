@@ -145,12 +145,7 @@ export class EdpmsReconComponent implements OnInit {
         this.pageSizeOptionsList2.push(10 * (index + 1))
       }
       console.log(cleareddata, 'getclearedEDPMS')
-    })
-
-    await this.documentService.getEdpmsQuery({ userId: this.applicant }).subscribe((res: any) => {
-      console.log(res, "getEdpmsQuery")
-    })
-
+    });
     await this.documentService.Hide_InnerLoader();
   }
 
@@ -202,6 +197,7 @@ export class EdpmsReconComponent implements OnInit {
     console.log('create edpms res: ', this.masterExcelData);
     for (let index = 0; index < this.masterExcelData?.length; index++) {
       const item: any = this.masterExcelData[index];
+      let sbexit: any = this.masterSB.filter((item: any) => item?.sbno?.includes(item['Shipping Bill No']));
       if (item['IE Code'] == this.USER_DETAILS?.iec) {
         const tempObject = {
           userId: this.applicant,
@@ -211,7 +207,7 @@ export class EdpmsReconComponent implements OnInit {
           adCode: item['AD Code'],
           portCode: item['Port Code'],
           edpmsStatus: item['STATUS'],
-          adRefNo: this.getBlRefNo(item?.blcopyRef)?.join(","),
+          adRefNo: item?.adRefNo,
           sbAmount: item['sbAmount'],
           sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai != "-1" ? this.getSBAmount(item['Shipping Bill No'])?.balanceAvai : this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
           sbCurrency: item['sbCurrency'],
@@ -364,6 +360,7 @@ export class EdpmsReconComponent implements OnInit {
           this.masterExcelData[i]['systemStatus'] = 'Available';
           this.masterExcelData[i]['sbAmount'] = sbexit[0]?.fobValue;
           this.masterExcelData[i]['sbCurrency'] = sbexit[0]?.fobCurrency;
+          this.masterExcelData[i]['adRefNo'] = this.getBlRefNo(sbexit[0]?.blcopyRef)?.join(",");
           this.masterExcelData[i]['adBillNo'] = this.getBlRefNo(sbexit[0]?.blcopyRef)?.join(",");
           this.masterExcelData[i]['pipo'] = sbexit[0]?.pipo[0];
           this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai != "-1" ? sbexit[0]?.balanceAvai : sbexit[0]?.sbAmount;
@@ -372,7 +369,6 @@ export class EdpmsReconComponent implements OnInit {
           this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
         }
       });
-      await this.preparePayload();
       this.edpmsData = await this.preparePayload();
       await this.edpmsData?.forEach(element => {
         this.AD_CODE_BUCKET_LIST[element["adCode"]] = [];

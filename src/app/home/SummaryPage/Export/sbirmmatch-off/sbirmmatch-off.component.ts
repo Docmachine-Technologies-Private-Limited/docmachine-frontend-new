@@ -158,4 +158,6 @@ export class SBIRMMatchOffComponent implements OnInit {
   YesNoCheckBox(value: any) {
     console.log("YesNoCheckBoxEvent", value)
   }
+  
+ 
 }

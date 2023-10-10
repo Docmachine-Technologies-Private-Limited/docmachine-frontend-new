@@ -112,6 +112,7 @@ export class ExportBillLodgementData {
                 element['UsedAmount'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;;
                 element['ReamaingAmount'] = '0';
                 element['isChecked'] = false;
+                element['YesNo'] = '';
                 if (element?.BalanceAvail?.toString() != '0') {
                     data.push(element);
                 }
@@ -281,7 +282,7 @@ export class ExportBillLodgementData {
         }
     }
     CLEAR_TIMEOUT: any = null;
-    FIRXAMOUNT(data: any, index: any, value: any) {
+    FIRXAMOUNT(data: any, value: any) {
         console.log(data, value, "FIRXAMOUNT")
         clearTimeout(this.CLEAR_TIMEOUT);
         data.isChecked = false;
@@ -294,8 +295,8 @@ export class ExportBillLodgementData {
                     this.toastr.error("You've exceeded the maximum transaction amount set by your FIRX amount..")
                 }
                 let findIndex: any = this.SELECTED_SHIPPING_BILL?.IRADVICE_DATA?.findIndex(item => item?._id == data?._id);
-                this.SELECTED_SHIPPING_BILL?.IRADVICE_DATA?.splice(findIndex, 1);
-                this.SELECTED_COMMERICAIL_DATA['IRADVICE_DATA']?.splice(findIndex, 1);
+                // this.SELECTED_SHIPPING_BILL?.IRADVICE_DATA?.splice(findIndex, 1);
+                // this.SELECTED_COMMERICAIL_DATA['IRADVICE_DATA']?.splice(findIndex, 1);
                 let TOTAL_CI_FIRX_SELECTED_AMOUNT = this.SELECTED_COMMERICAIL_DATA?.IRADVICE_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.InputValue), 0);
                 this.SELECTED_SHIPPING_BILL['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
                 this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
@@ -304,8 +305,26 @@ export class ExportBillLodgementData {
             } else {
                 data['Enabled'] = true
             }
-            console.log(index, data, "FirxSelection")
+            console.log(data, "FirxSelection")
         }, 200);
+    }
+    BankChargesAmount(data: any, value: any) {
+        if (value == "Yes") {
+            data["InputValue"] = parseFloat(data["BalanceAvail"]) - parseFloat(data["commision"])
+            let TOTAL_CI_FIRX_SELECTED_AMOUNT = this.SELECTED_COMMERICAIL_DATA?.IRADVICE_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.InputValue), 0);
+            this.SELECTED_SHIPPING_BILL['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
+            this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
+            console.log(this.SELECTED_SHIPPING_BILL,
+                this.SELECTED_COMMERICAIL_DATA, TOTAL_CI_FIRX_SELECTED_AMOUNT, "FirxSelection")
+        } else {
+            data["InputValue"] = parseFloat(data["BalanceAvail"]);
+            let TOTAL_CI_FIRX_SELECTED_AMOUNT = this.SELECTED_COMMERICAIL_DATA?.IRADVICE_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.InputValue), 0);
+            this.SELECTED_SHIPPING_BILL['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
+            this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
+            console.log(this.SELECTED_SHIPPING_BILL,
+                this.SELECTED_COMMERICAIL_DATA, TOTAL_CI_FIRX_SELECTED_AMOUNT, "FirxSelection")
+        }
+
     }
     tp: any = {
         firxNumber: [],

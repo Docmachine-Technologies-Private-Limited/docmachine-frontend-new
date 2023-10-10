@@ -49,7 +49,7 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
     var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
     var Transaction_pipoid: any = this.route.snapshot.paramMap.get('pipo');
-    console.log(TransactionSbRef,Transaction_pipoid,Transaction_id)
+    console.log(TransactionSbRef, Transaction_pipoid, Transaction_id)
   }
 
 
@@ -97,7 +97,7 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
     if (TransactionSbRef != '' && TransactionSbRef != undefined && TransactionSbRef != null) {
       e.value.SbRef = [TransactionSbRef];
-    }else{
+    } else {
       e.value.SbRef = [e?.value?.sbNo];
     }
     e.value.file = 'export';
@@ -111,18 +111,28 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
         this.documentService.addBlcopyref(e.value).subscribe((res: any) => {
           console.log(res, 'addBlcopyref');
           this.toastr.success(`Blcopyref Document Added Successfully`);
+
           let updatedData = {
-            "blcopyRefs": [
+            "blcopyRef": [
               res.data._id,
             ],
           }
+          this.documentService.updateBlCopyRef(
+            e?.value?.sbNo,
+            updatedData
+          ).subscribe((data) => {
+            console.log('updateBlCopyRef', data);
+          }, (error) => {
+            console.log('error');
+          })
+
           this.userService.updateManyPipo(res?.data?.pipo, 'export', this.pipourl1, updatedData)
             .subscribe((data) => {
               console.log('king123');
               console.log(data);
 
               var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-              if (Transaction_id != '') {
+              if (Transaction_id != '' && Transaction_id != undefined && Transaction_id != null) {
                 this.documentService.UpdateTransaction({ id: Transaction_id, data: { blCopyRef: e.value } }).subscribe((res: any) => {
                   this.router.navigate(['home/Summary/Export/Bill-Lodgement-Referance-AdviceCopy']);
                 });
