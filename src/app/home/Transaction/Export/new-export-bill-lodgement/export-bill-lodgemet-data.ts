@@ -70,7 +70,7 @@ export class ExportBillLodgementData {
                     }
                     if (type == "MatchOff") {
                         element?.commercialdetails?.forEach((element1: any, index) => {
-                            let sum_of_irm: any = element1?.IRM_REF?.reduce((a, b) => parseFloat(a) + parseFloat(b?.MatchOffData?.InputValue), 0);
+                            let sum_of_irm: any = element1?.IRM_REF?.reduce((a, b) => parseFloat(a) + (parseFloat(b?.MatchOffData?.InputValue)+parseFloat(b?.MatchOffData?.commision)), 0);
                             if (parseFloat(element1?.amount) == parseFloat(sum_of_irm)) {
                                 element1['AmountUsed'] = true;
                                 element1['SB_Amout_Realized'] = sum_of_irm;
