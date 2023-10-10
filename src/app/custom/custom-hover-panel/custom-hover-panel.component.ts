@@ -1,9 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DocumentService } from '../../service/document.service';
-import { PipoDisplayListView, PipoDisplayListViewItem } from '../../../model/pipo.model';
-import { PipoDataService } from '../../service/homeservices/pipo.service';
 import { Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import $ from 'jquery';
 
 @Component({
@@ -15,7 +12,7 @@ export class CustomHoverPanelComponent implements OnInit, OnChanges {
   @Input('pipoid') pipoID: any = '';
   SbData: any = [];
   inWardData: any = [];
-  inwardRemitanceAmount: number = 0;
+  inwardRemitanceAmount:any = 0;
   inwardBalanceAmount: number = 0;
   balanceAmount: number = 0
   SbAmountAndCurrency: any = [];
@@ -25,7 +22,6 @@ export class CustomHoverPanelComponent implements OnInit, OnChanges {
   item: any = [];
   PDF_URL: any = '';
   public pipoArrayList: any = [];
-  public pipoDisplayListData: PipoDisplayListView;
   public pipoData?: any = [];
   public selectedIndexPIPO: any = 0;
 
@@ -80,11 +76,11 @@ export class CustomHoverPanelComponent implements OnInit, OnChanges {
   }
 
   getInwardData(id) {
-    // this.documentService.getInwardDetailsByPIPO(id).subscribe((inwardRes: any) => {
-    //   this.inWardData = inwardRes
-    //   this.inwardRemitanceAmount = this.inWardData.reduce((accum, item) => accum + item.amount, 0)
-    //   this.inwardBalanceAmount = this.pipoData.amount - this.inwardRemitanceAmount
-    // })
+    this.documentService.getInwardDetailsByPIPO(id).subscribe((inwardRes: any) => {
+      this.inWardData = inwardRes
+      this.inwardRemitanceAmount = this.inWardData.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0)
+      this.inwardBalanceAmount = parseFloat(this.pipoData.amount) - parseFloat(this.inwardRemitanceAmount)
+    })
   }
   onTabChanged(event:any){
     this.selectedIndexPIPO=event?.index;

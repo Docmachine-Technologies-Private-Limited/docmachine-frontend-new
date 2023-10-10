@@ -394,6 +394,17 @@ export class DocumentService {
     return this.http.post(url, { limit: limit }, httpOptions);
   }
 
+
+  getEdpmsQuery(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/edpms/getEdpmsQuery`;
+    return this.http.post(url,{query:data} ,httpOptions);
+  }
+  
   createIDPMS(payload) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -446,6 +457,7 @@ export class DocumentService {
     let url = `${this.api_base}/master/get`;
     return this.http.get(url, httpOptions);
   }
+  
 
   getMasterBuyer(user) {
     this.loadFromLocalStorage();

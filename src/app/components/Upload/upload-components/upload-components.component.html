@@ -28,6 +28,129 @@
                             class="form-control" [style]="field?.style" />
                     </div>
                 </div>
+                <div class="form-group mb-3" *ngSwitchCase="'SB_DETAILS_SHOW'">
+                    <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <div class="p-2 SHIPING_BILL_POPUP" style="overflow: auto;" *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.length!=0">
+                            <mat-accordion>
+                                <mat-expansion-panel >
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-description>
+                                            <div class="d-flex flex-column">
+                                                <mat-panel-title>
+                                                    SB DETAILS
+                                                </mat-panel-title>
+                                                <table class="table mb-0">
+                                                    <tbody>
+                                                        <tr class="table-tr">
+                                                            <td class="col-td-th-3">
+                                                                SB DATE :
+                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.sbdate}}
+                                                            </td>
+                                                            <td class="col-td-th-3">
+                                                                SB NUMBER :
+                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.sbno}}
+                                                            </td>
+                                                            <td class="col-td-th-3">
+                                                                BUYER NAME :
+                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.buyerName}}
+                                                            </td>
+                                                            <td class="col-td-th-3">
+                                                                CURRENCY :
+                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.fobCurrency}}
+                                                            </td>
+                                                            <td class="col-td-th-3">
+                                                                SB AMOUNT :
+                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.fobValue}}
+                                                            </td>
+                                                            <td class="col-td-th-3">
+                                                                AVAILABLE AMOUNT :
+                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.balanceAvai}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <div class="d-flex flex-column">
+                                        <mat-expansion-panel
+                                            *ngFor='let commercialdata of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.commercialdetails;let i = index'>
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-description>
+                                                    <div class="d-flex flex-column">
+                                                        <mat-panel-title>
+                                                            CI DETAILS
+                                                        </mat-panel-title>
+                                                        <table class="table mb-0">
+                                                            <tbody>
+                                                                <tr class="table-tr">
+                                                                    <td class="col-td-th-3">
+                                                                        CI DATE : {{commercialdata.commercialDate}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        CI NO. : {{commercialdata.commercialNumber}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        CI Value(USD) : {{commercialdata.amount}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        Damages / Deductions(Debit Note) :
+                                                                        {{commercialdata.debitAmount}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        SB Amout to be realized :
+                                                                        {{commercialdata.SB_Amout_Realized}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        Value to be Realised in FIRX(USD) :
+                                                                        {{commercialdata.IRADVICE_SUM}}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </mat-panel-description>
+                                            </mat-expansion-panel-header>
+                                            <table class="table mb-0">
+                                                <thead>
+                                                    <tr class="table-tr">
+                                                        <th scope="col" class="col-td-th-1">FIRX Number/ID</th>
+                                                        <th scope="col" class="col-td-th-1">Recieved Amount</th>
+                                                        <th scope="col" class="col-td-th-1">Commision Amount</th>
+                                                        <th scope="col" class="col-td-th-1">UsedAmount</th>
+                                                        <th scope="col" class="col-td-th-3">Available Balance</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="table-tr"
+                                                        *ngFor='let IRM_REFdata of commercialdata?.IRM_REF;let j = index'>
+                                                        <td class="col-td-th-1">
+                                                            {{IRM_REFdata?.billNo}}
+                                                        </td>
+                                                        <td class="col-td-th-1">
+                                                            {{IRM_REFdata?.amount}}
+                                                        </td>
+                                                        <td class="col-td-th-1">
+                                                            {{IRM_REFdata?.commision}}
+                                                        </td>
+                                                        <td class="col-td-th-1">
+                                                            {{IRM_REFdata?.MatchOffData?.InputValue}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{IRM_REFdata?.BalanceAvail}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </mat-expansion-panel>
+
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group mb-3" *ngSwitchCase="'ImagesList'">
                     <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>

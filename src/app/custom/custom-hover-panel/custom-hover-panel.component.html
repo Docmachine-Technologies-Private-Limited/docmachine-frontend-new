@@ -11,7 +11,7 @@
                     *ngFor="let pipoArrayListdata of this.pipoArrayList;let i=index">
                     <div class="panel-child-hover" *ngIf="selectedIndexPIPO==i">
                         <label for="" class="label-header">{{pipoArrayListdata.pi_poNo}} | {{pipoArrayListdata.date}} |
-                            {{pipoArrayListdata.buyerName}}</label>
+                            {{pipoArrayListdata.buyerName}} | ( {{pipoArrayListdata.currency}} | {{pipoArrayListdata.amount}} )</label>
                         <ul class="listDocument">
                             <button class="btn btn-primary border-radius"
                                 (click)="openUploadWithType('debitNote')">Debit
@@ -68,7 +68,7 @@
                                                         <div class="d-grid">
                                                             <label for="" class="card-label">Shipping Bill Number |
                                                                 Amount</label>
-                                                            <label for="" class="text-card-label">
+                                                            <label for="" class="text-card-label" style="overflow: auto;">
                                                                 <p
                                                                     *ngFor='let sbdata of pipoArrayListdata?.sbRef;let j=index'>
                                                                     <span class="number-span">{{j+1}}.</span>
@@ -78,7 +78,7 @@
                                                         </div>
                                                         <div class="d-grid">
                                                             <label for="" class="card-label">Shipping bill date</label>
-                                                            <label for="" class="text-card-label">
+                                                            <label for="" class="text-card-label" style="overflow: auto;">
                                                                 <p
                                                                     *ngFor='let sbdata of pipoArrayListdata?.sbRef;let j=index'>
                                                                     <span class="number-span">{{j+1}}.</span>
@@ -89,7 +89,7 @@
                                                         <div class="d-grid">
                                                             <label for="" class="card-label">Total Shipping bill
                                                                 Amount</label>
-                                                            <label for="" class="text-card-label">
+                                                            <label for="" class="text-card-label" style="overflow: auto;">
                                                                 <p>{{this.getSBSum(pipoArrayListdata?.sbRef)?.Currency}}
                                                                     |
                                                                     {{this.getSBSum(pipoArrayListdata?.sbRef)?.SumAmount}}
@@ -109,7 +109,7 @@
                                                         <div class="d-grid">
                                                             <label for="" class="card-label">Inward Remittance Number |
                                                                 Amount</label>
-                                                            <label for="" class="text-card-label">
+                                                            <label for="" class="text-card-label" style="overflow: auto;">
                                                                 <p
                                                                     *ngFor='let inward of pipoArrayListdata?.AdviceRef;let j=index'>
                                                                     <span class="number-span">{{j+1}}.</span>
@@ -129,7 +129,7 @@
                                                         </div>
                                                         <div class="d-grid">
                                                             <label for="" class="card-label">Balance amount</label>
-                                                            <label for="" class="text-card-label">
+                                                            <label for="" class="text-card-label" style="overflow: auto;">
                                                                 <p>{{inwardBalanceAmount}}</p>
                                                             </label>
                                                         </div>

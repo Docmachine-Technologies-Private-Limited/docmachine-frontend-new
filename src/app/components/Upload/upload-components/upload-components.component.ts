@@ -10,6 +10,7 @@ import { UploadServiceValidatorService } from '../service/upload-service-validat
 import $ from 'jquery';
 import { AuthGuard } from '../../../service/authguard.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { ExportBillLodgementData } from '../../../home/Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data';
 
 @Component({
   selector: 'upload-components',
@@ -72,6 +73,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public authGuard: AuthGuard,
+    public exportbilllodgementdata: ExportBillLodgementData,
     public userService: UserService) { }
 
   async ngOnInit() {

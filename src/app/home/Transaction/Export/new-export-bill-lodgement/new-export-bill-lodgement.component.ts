@@ -451,7 +451,7 @@ export class NewExportBillLodgementComponent implements OnInit {
         SHIPPING_BILL: {
           type: "PopupOpen",
           value: '',
-          label: "Select PI/PO or shipping bill",
+          label: "Select Shipping bill",
           rules: {
             required: true,
           },
@@ -459,6 +459,15 @@ export class NewExportBillLodgementComponent implements OnInit {
           bindLabel: "value",
           item: [{ value: 'Shipping bill' }],
           id: "SHIPING_BILL_POPUP",
+        },
+        SB_DETAILS_SHOW: {
+          type: "SB_DETAILS_SHOW",
+          label: "Selected Shipping bill",
+          visible:true,
+          value: '',
+          rules: {
+            required: false,
+          },
         },
         DirectDispatch: {
           type: "yesnocheckbox",

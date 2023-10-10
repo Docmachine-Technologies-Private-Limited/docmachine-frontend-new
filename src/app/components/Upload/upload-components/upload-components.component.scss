@@ -264,7 +264,7 @@
     margin-right: 0;
 }
 
-.yes-btn{
+.yes-btn {
     float: left;
     padding: 0 10px;
     margin: 0;
@@ -277,7 +277,7 @@
     border-bottom-left-radius: 5px;
 }
 
-.no-btn{
+.no-btn {
     float: left;
     padding: 0 10px;
     margin: 0;
@@ -340,4 +340,229 @@
     color: #777;
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
+}
+
+
+.import_export_sec {
+    margin: auto;
+    margin-left: 0;
+}
+
+.filter_section_top {
+    display: grid;
+    width: 100%;
+    background-color: #22343f !important;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: 5px 0px 10px 5px #597a8a;
+    padding: 2px;
+}
+
+.middle_datatable .support {
+    height: calc(100vh - 159px);
+}
+
+.table-padding {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.content-wrap.scroll-bar-main {
+    overflow: hidden;
+    padding: 0;
+}
+
+.filter_right_new.padding_new_top {
+    display: flex;
+    gap: 10px;
+}
+
+.heading_common_tag {
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 400;
+    color: floralwhite;
+    margin-left: 20px;
+}
+
+.upload-panel {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    padding: 10px;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.form-container-fluid {
+    width: 100%;
+    padding: 10px;
+    overflow: auto;
+    height: 86vh;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.division-panel {
+    box-shadow: 0px 0px 2px 2px #d5d0d0;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.custom {
+    width: 300px;
+}
+
+.custom ::ng-deep .ng-select .ng-select-container {
+    color: #333;
+    background-color: #fff;
+    border-radius: 0;
+    border: 1px solid #ccc;
+    min-height: 36px;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.label-name-amount {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px 2px #d4d4d4;
+    margin-bottom: 10px;
+}
+
+.label-name-amount p {
+    font-size: 14px;
+    margin: 0;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-expansion-panel-header-description {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: unset !important;
+    align-items: center;
+    overflow: auto;
+    margin-right: 0 !important;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-expansion-panel-header-title {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: unset !important;
+    align-items: center;
+    background: black;
+    width: 100% !important;
+    padding: 5px;
+    margin-right: 0 !important;
+    color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.SHIPING_BILL_POPUP .col-td-th-3 {
+    width: 170px !important;
+}
+
+.SHIPING_BILL_POPUP .table>:not(caption)>*>* {
+    background-color: transparent !important;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-expansion-panel-body {
+    padding: 0 24px 16px;
+    overflow: auto;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-accordion {
+    margin-top: 10px !important;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: calc(100vw - 230px);
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-expansion-panel-spacing {
+    margin: 16px 0;
+    background-color: floralwhite;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-expansion-panel {
+    margin-bottom: 20px;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .d-grid {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
+    gap: 20px;
+}
+
+.SHIPING_BILL_POPUP .flex-column {
+    flex-direction: column !important;
+    width: 100%;
+}
+
+.SHIPING_BILL_POPUP .flex-column-1 {
+    flex-direction: column !important;
+    width: 200px;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-expansion-panel-header {
+    height: auto;
+    padding: 0;
+}
+
+.SHIPING_BILL_POPUP .prevent-click {
+    pointer-events: none;
+}
+
+.SHIPING_BILL_POPUP .authorize-click {
+    pointer-events: auto;
+}
+
+.SHIPING_BILL_POPUP ::ng-deep .mat-expansion-indicator {
+    display: none !important;
+}
+
+.match-off ::ng-deep .upload-components-header {
+    position: relative !important;
+}
+
+.disabled-tr {
+    pointer-events: none;
+    opacity: 0.6;
+    position: relative;
+}
+
+.disabled-tr::after {
+    content: "Already Used";
+    position: absolute;
+    left: 0;
+    font-size: 20px;
+    color: red;
+    opacity: 1;
+    background: cornflowerblue;
+    padding: 20px;
+}
+
+.Transaction-btn {
+    margin: auto;
+    margin-right: 20px;
+    background-color: transparent;
+    border: none;
+}
+
+.Transaction-btn:hover {
+    color: #597a8a;
+}
+
+::ng-deep ng-custom-filter-popup .filter_main {
+    width: 540px !important;
 }

@@ -53,6 +53,15 @@ export class EdpmsReconComponent implements OnInit {
   pageSizeOptionsList2: any = [];
   USER_DETAILS: any = [];
 
+  AD_CODE_BUCKET_LIST: any = [];
+  AD_CODE_BUCKET_LIST_KEY: any = [];
+
+  AD_CODE_PREVIOUS_BUCKET_LIST: any = [];
+  AD_CODE_PREVIOUS_BUCKET_LIST_KEY: any = [];
+
+  AD_CODE_CLEARED_BUCKET_LIST: any = [];
+  AD_CODE_CLEARED_BUCKET_LIST_KEY: any = [];
+
   constructor(
     private userService: UserService,
     public documentService: DocumentService,
@@ -91,6 +100,7 @@ export class EdpmsReconComponent implements OnInit {
   async getUserID() {
     const data: any = await this.userService.getUserDetail();
     this.applicant = data.result?.companyId;
+    return data;
   }
 
   async ngOnInit() {
@@ -106,9 +116,19 @@ export class EdpmsReconComponent implements OnInit {
         }
       });
     })
-    await this.documentService.getclearedEDPMS(this.LIMIT).subscribe((cleareddata: any) => {
+    await this.documentService.getclearedEDPMS(this.LIMIT).subscribe(async (cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
+
+      await this.GET_EDMPS_CLEARED?.forEach(element => {
+        this.AD_CODE_CLEARED_BUCKET_LIST[element["adCode"]] = [];
+      });
+      this.AD_CODE_CLEARED_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_CLEARED_BUCKET_LIST);
+      await this.GET_EDMPS_CLEARED?.forEach(element => {
+        element["isActive"] = false;
+        this.AD_CODE_CLEARED_BUCKET_LIST[element["adCode"]].push(element);
+      });
+
       this.SB_NO_LIST2 = [];
       var temp: any = [];
       this.GET_EDMPS_CLEARED.forEach(element => {
@@ -126,6 +146,11 @@ export class EdpmsReconComponent implements OnInit {
       }
       console.log(cleareddata, 'getclearedEDPMS')
     })
+
+    await this.documentService.getEdpmsQuery({ userId: this.applicant }).subscribe((res: any) => {
+      console.log(res, "getEdpmsQuery")
+    })
+
     await this.documentService.Hide_InnerLoader();
   }
 
@@ -149,8 +174,8 @@ export class EdpmsReconComponent implements OnInit {
     }
   }
 
-  saveData() {
-    this.documentService.createEDPMS(this.preparePayload()).subscribe((res: any) => {
+  saveData(data, type: any) {
+    this.documentService.createEDPMS({ data: data, type: type }).subscribe((res: any) => {
       console.log('create edpms res: ', res);
       this.edpmsData = res?.data;
       this.pageSizeOptionsList = [];
@@ -159,6 +184,12 @@ export class EdpmsReconComponent implements OnInit {
         this.pageSizeOptionsList.push(10 * (index + 1))
       }
       this.SBdata();
+      this.ngOnInit();
+      this.AD_CODE_BUCKET_LIST = [];
+      this.AD_CODE_BUCKET_LIST_KEY = [];
+      this.AD_CODE_BUCKET_LIST = [];
+      this.edpmsData = [];
+
       this.toastr.success('Successfully upload file in your system...')
     }, err => {
       console.log('create EDPMS error: ', err)
@@ -171,7 +202,6 @@ export class EdpmsReconComponent implements OnInit {
     console.log('create edpms res: ', this.masterExcelData);
     for (let index = 0; index < this.masterExcelData?.length; index++) {
       const item: any = this.masterExcelData[index];
-      console.log(item?.sbdata, this.checkAllDocuments(item?.sbdata, item['STATUS']), 'jguhgjhghjgdfjsfsdfdsfdsfd')
       if (item['IE Code'] == this.USER_DETAILS?.iec) {
         const tempObject = {
           userId: this.applicant,
@@ -181,7 +211,7 @@ export class EdpmsReconComponent implements OnInit {
           adCode: item['AD Code'],
           portCode: item['Port Code'],
           edpmsStatus: item['STATUS'],
-          adRefNo: item['adBillNo'],
+          adRefNo: this.getBlRefNo(item?.blcopyRef)?.join(","),
           sbAmount: item['sbAmount'],
           sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai != "-1" ? this.getSBAmount(item['Shipping Bill No'])?.balanceAvai : this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
           sbCurrency: item['sbCurrency'],
@@ -303,26 +333,28 @@ export class EdpmsReconComponent implements OnInit {
     console.log("onUploadInit:", args);
   }
 
+
   async onUploadSuccess(args: any) {
     this.uploading = false;
     this.uploaded = true;
     console.log("onUploadSuccess ARGS", args);
     this.masterExcelData = args[1].data;
     await this.getData();
-    await this.compareEDPMS(false);
+    await this.compareEDPMS(false, null, '');
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
 
-  async onSubmit() {
+  async onSubmit(data: any, type: any) {
+    console.log(data, "sdfsdfsdfsdfdsfsdfdsfd")
     await this.getData();
-    await this.compareEDPMS(true)
+    await this.compareEDPMS(true, data, type)
   }
 
-  async compareEDPMS(bool: boolean) {
-    await this.gatherSBdata(bool);
+  async compareEDPMS(bool: boolean, data: any, type: any) {
+    await this.gatherSBdata(bool, data, type);
   }
 
-  async gatherSBdata(bool: boolean) {
+  async gatherSBdata(bool: boolean, data: any, type: any) {
     await this.documentService.getMaster(1).subscribe(async (res: any) => {
       this.masterSB = res?.data;
       await this.masterExcelData.forEach((data, i) => {
@@ -332,7 +364,7 @@ export class EdpmsReconComponent implements OnInit {
           this.masterExcelData[i]['systemStatus'] = 'Available';
           this.masterExcelData[i]['sbAmount'] = sbexit[0]?.fobValue;
           this.masterExcelData[i]['sbCurrency'] = sbexit[0]?.fobCurrency;
-          this.masterExcelData[i]['adBillNo'] = sbexit[0]?.adBillNo;
+          this.masterExcelData[i]['adBillNo'] = this.getBlRefNo(sbexit[0]?.blcopyRef)?.join(",");
           this.masterExcelData[i]['pipo'] = sbexit[0]?.pipo[0];
           this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai != "-1" ? sbexit[0]?.balanceAvai : sbexit[0]?.sbAmount;
           this.masterExcelData[i]['sbdata'] = sbexit[0];
@@ -342,13 +374,29 @@ export class EdpmsReconComponent implements OnInit {
       });
       await this.preparePayload();
       this.edpmsData = await this.preparePayload();
+      await this.edpmsData?.forEach(element => {
+        this.AD_CODE_BUCKET_LIST[element["adCode"]] = [];
+      });
+      this.AD_CODE_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_BUCKET_LIST);
+      await this.edpmsData?.forEach(element => {
+        element["isActive"] = false;
+        this.AD_CODE_BUCKET_LIST[element["adCode"]].push(element);
+      });
       if (bool == true) {
-        await this.saveData();
+        await this.saveData(data, type);
       }
-      console.log('this.masterExcelData', this.masterExcelData);
+      console.log('this.masterExcelData', this.edpmsData, this.masterExcelData);
     }, (err: any) => {
       console.log(err);
     });
+  }
+
+  getBlRefNo(data: any) {
+    let no: any = [];
+    data?.forEach(element => {
+      no.push(element?.blcopyrefNumber)
+    });
+    return no;
   }
 
   async SBdata() {
@@ -612,9 +660,12 @@ export class EdpmsReconComponent implements OnInit {
     await this.documentService.getMaster(1).subscribe((res: any) => {
       this.masterSB = res?.data;
       console.log('getMaster:', res);
-      this.documentService.getEDPMSbyLimit(this.LIMIT).subscribe((res: any) => {
+      this.documentService.getEDPMSbyLimit(this.LIMIT).subscribe(async (res: any) => {
         this.SB_NO_LIST = [];
         this.GET_EDMPS = this.addSBdata(res?.data);
+        this.GET_EDMPS?.forEach(element => {
+          element["isActive"] = false;
+        });
         var temp: any = [];
         this.GET_EDMPS.forEach(element => {
           if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
@@ -624,7 +675,18 @@ export class EdpmsReconComponent implements OnInit {
         temp.forEach(element => {
           this.SB_NO_LIST.push({ value: element })
         });
+
         this.FILTER_EDPMS_DATA = this.GET_EDMPS;
+
+        await this.GET_EDMPS?.forEach(element => {
+          this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]] = [];
+        });
+        this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_PREVIOUS_BUCKET_LIST);
+        await this.GET_EDMPS?.forEach(element => {
+          element["isActive"] = false;
+          this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]].push(element);
+        });
+
         console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
 
         this.pageSizeOptionsList = [];
@@ -675,6 +737,9 @@ export class EdpmsReconComponent implements OnInit {
   async PAGINATION_EVENT2(event: any) {
     this.documentService.getclearedEDPMS(event?.pageSize).subscribe((cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
+      this.GET_EDMPS_CLEARED?.forEach(element => {
+        element["isActive"] = false;
+      });
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
       this.SB_NO_LIST2 = [];
       var temp: any = [];
@@ -688,5 +753,15 @@ export class EdpmsReconComponent implements OnInit {
       });
       console.log(cleareddata, 'getclearedEDPMS')
     })
+  }
+
+  ActiveRemove(index: any, data) {
+    data?.forEach((element, i) => {
+      if (i == index) {
+        element["isActive"] = true;
+      } else {
+        element["isActive"] = false;
+      }
+    });
   }
 }

@@ -347,16 +347,16 @@ p {
 }
 
 .table-wrapper tr th,
-.table-wrapper tr td{
+.table-wrapper tr td {
     background-color: transparent;
 }
 
 .table-wrapper tr th:hover th,
-.table-wrapper tr th:hover td{
+.table-wrapper tr th:hover td {
     background-color: transparent;
 }
 
-.right-button-area{
+.right-button-area {
     position: absolute;
     display: flex;
     gap: 10px;
@@ -364,12 +364,12 @@ p {
     left: 100%;
 }
 
-.right-button-area-1{
+.right-button-area-1 {
     position: absolute;
     display: flex;
     gap: 10px;
     top: 118px;
-    left: 61%;
+    right: -150px;
 }
 
 .right-button-area-2 {
@@ -378,4 +378,45 @@ p {
     gap: 10px;
     top: 118px;
     left: 91%;
+}
+
+.edpms-table {
+    position: relative;
+}
+
+.edpms-table .submit-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+}
+
+.submit-btn-2 {
+    position: fixed;
+    top: 78px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.submit-btn-2 button{
+    font-size: 12px;
+}
+
+.isActive {
+    background-color: #496687 !important;
+    color: white;
+    border-radius: 5px !important;
+    margin-top: 10px !important;
+}
+
+.isActive td {
+    color: white !important;
+}
+
+.isDocumentsAvailable{
+    background: #89fe89;
+}
+
+.isDocumentsNotAvailable{
+    background: #fa6e6e;
 }
