@@ -13,11 +13,17 @@ export class ExportBillLodgementData {
     TOTAL_FIRX_AMOUNT: any = 0;
     SELECTED_SHIPPING_BILL: any = [];
     SELECTED_COMMERICAIL_DATA: any = [];
+    SELECTED_SHIPPING_BILL_TRANSACTION: any = {};
+    SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS: any = [];
+    SELECTED_COMMERICAIL_DATA_TRANSACTION: any = [];
     SELECTED_BUYER_NAME: any = ''
     TOTAL_CI_AMOUNT: any = 0;
     TRANSACTION_SHIPPING_BILL: any = [];
     TRANSACTION_SELECTED_COMMERICAIL_DATA: any = [];
-
+    ALL_RELATED_DOCUMENTS:any=[];
+    ALL_COMMERCIAL_DATA_LIST:any=[];
+    PREVIWES_URL:any=''
+    
     constructor(public documentService: DocumentService,
         private toastr: ToastrService,
         public confrimModel: CustomConfirmDialogModelComponent,
@@ -32,6 +38,7 @@ export class ExportBillLodgementData {
         this.SELECTED_SHIPPING_BILL = [];
         this.SELECTED_BUYER_NAME = ''
     }
+
     clear() {
         this.SHIPPING_BILL_DATA = []
         this.SHIPPING_BILL_DATA_LINKAGE = [];
@@ -46,6 +53,7 @@ export class ExportBillLodgementData {
         this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
         return;
     }
+
     getShippingBill(buyerName: any, type: any) {
         this.setBuyerName(buyerName)
         if (buyerName != undefined && buyerName != null && buyerName != '') {
@@ -70,7 +78,7 @@ export class ExportBillLodgementData {
                     }
                     if (type == "MatchOff") {
                         element?.commercialdetails?.forEach((element1: any, index) => {
-                            let sum_of_irm: any = element1?.IRM_REF?.reduce((a, b) => parseFloat(a) + (parseFloat(b?.MatchOffData?.InputValue)+parseFloat(b?.MatchOffData?.commision)), 0);
+                            let sum_of_irm: any = element1?.IRM_REF?.reduce((a, b) => parseFloat(a) + (parseFloat(b?.MatchOffData?.InputValue) + parseFloat(b?.MatchOffData?.commision)), 0);
                             if (parseFloat(element1?.amount) == parseFloat(sum_of_irm)) {
                                 element1['AmountUsed'] = true;
                                 element1['SB_Amout_Realized'] = sum_of_irm;
@@ -189,6 +197,57 @@ export class ExportBillLodgementData {
         console.log(data, "setSelectedShippingBill")
     }
 
+    setSelectedShippingBillTransaction($event, index, data: any) {
+        if (data?.blCopyDoc) {
+            if (data.commercialDoc) {
+                if ($event?.target?.checked == true) {
+                    data["COMMERICAIL_DATA"] = [];
+                    data["ALL_RELATED_DOCUMENTS"] = [];
+                    data["FORM_URL_LIST"] = [];
+                    data["PREVIEWS_URL_LIST"] = '';
+                    
+                    this.SHIPPING_BILL_DATA?.forEach(element => {
+                        element?.commercialdetails?.forEach(commercialdetailselement => {
+                            commercialdetailselement['CheckBoxEnabled'] = false;
+                        });
+                    });
+                    this.SELECTED_SHIPPING_BILL_TRANSACTION["SB_INDEX_" + index] = data;
+                    data['CheckBoxEnabled'] = true;
+                } else {
+                    delete this.SELECTED_SHIPPING_BILL_TRANSACTION["SB_INDEX_" + index];
+                    $event.target.checked = false
+                    data['CheckBoxEnabled'] = false
+                }
+            } else {
+                $event.target.checked = false
+                this.toastr.error("You Don't Have Any Commercial Invoice Linkend with this Shipping Bill");
+            }
+        } else {
+            $event.target.checked = false
+            this.toastr.error("You Don't Have Any AirWay / BLCopy Documnet Linkend with this Shipping Bill");
+        }
+        this.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = Object.keys(this.SELECTED_SHIPPING_BILL_TRANSACTION);
+        console.log(data, this.SELECTED_SHIPPING_BILL_TRANSACTION, "setSelectedShippingBill")
+    }
+
+    setSelectCommercialDataTransaction($event, SB_Index, CI_Index, sbdata: any, commercialdata: any) {
+        if ($event?.target?.checked == true) {
+            commercialdata['CheckBoxEnabled'] = true;
+            commercialdata['Firxbutton'] = false;
+            commercialdata['sbdata'] = sbdata;
+            commercialdata['SB_Amout_Realized'] = commercialdata?.amount;
+            this.SELECTED_SHIPPING_BILL_TRANSACTION[SB_Index]["COMMERICAIL_DATA"].push(commercialdata);
+        } else {
+            commercialdata['Firxbutton'] = true;
+            commercialdata['CheckBoxEnabled'] = false;
+            commercialdata['SB_Amout_Realized'] = '0';
+            this.SELECTED_SHIPPING_BILL_TRANSACTION[SB_Index]["COMMERICAIL_DATA"]?.splice(CI_Index, 1);
+        }
+        this.TOTAL_CI_AMOUNT = this.SELECTED_SHIPPING_BILL_TRANSACTION[SB_Index]["COMMERICAIL_DATA"]?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);;
+        sbdata['TOTAL_CI_AMOUNT'] = commercialdata?.amount;
+        console.log(sbdata, this.SELECTED_SHIPPING_BILL_TRANSACTION[SB_Index]["COMMERICAIL_DATA"], "COMMERICAIL_DATA")
+    }
+
     setBuyerName(name: any) {
         this.SELECTED_BUYER_NAME = name;
     }
@@ -223,8 +282,28 @@ export class ExportBillLodgementData {
         }
     }
 
+    setSelectCommercialData($event, sbdata: any, commercialdata: any) {
+        if ($event?.target?.checked == true) {
+            if (!this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.includes(commercialdata?._id)) {
+                commercialdata['CheckBoxEnabled'] = true;
+                commercialdata['Firxbutton'] = false;
+                commercialdata['sbdata'] = sbdata;
+                this.TRANSACTION_SELECTED_COMMERICAIL_DATA.push(commercialdata)
+            }
+            commercialdata['SB_Amout_Realized'] = commercialdata?.amount;
+        } else {
+            commercialdata['Firxbutton'] = true;
+            commercialdata['CheckBoxEnabled'] = false;
+            let findIndex: any = this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.findIndex(item => item?._id == commercialdata?._id);
+            this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.splice(findIndex, 1);
+            commercialdata['SB_Amout_Realized'] = '0';
+        }
+        this.TOTAL_CI_AMOUNT = this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);;
+        sbdata['TOTAL_CI_AMOUNT'] = commercialdata?.amount;
+        console.log(sbdata, this.TRANSACTION_SELECTED_COMMERICAIL_DATA)
+    }
+
     FirxSelection($event: any, index: any, data: any) {
-        console.log($event, index, data, "FirxSelection")
         if ($event?.target?.checked == true) {
             if (this.SELECTED_SHIPPING_BILL?.length != 0) {
                 if (this.SELECTED_COMMERICAIL_DATA?.length != 0) {
@@ -233,18 +312,15 @@ export class ExportBillLodgementData {
                     data.Enabled = true;
                     if (parseFloat(this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM']) < parseFloat(this.SELECTED_COMMERICAIL_DATA?.amount)) {
                         let amount: any = 0;
-                        console.log(parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount), parseFloat(data?.InputValue), "SELECTED_COMMERICAIL_DATA")
                         let FIRX_AMOUNT: any = 0;
                         if (parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount) > parseFloat(data?.InputValue)) {
                             FIRX_AMOUNT = parseFloat(data?.InputValue)
                             amount = parseFloat(data?.InputValue)
                             data['InputValue'] = FIRX_AMOUNT;
-                            console.log(parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount) > parseFloat(data?.InputValue), "if SELECTED_COMMERICAIL_DATA")
                         } else {
                             amount = (parseFloat(data?.InputValue) - parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount))
                             FIRX_AMOUNT = (parseFloat(data?.InputValue) - parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount))
                             data['InputValue'] = parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount)
-                            console.log(parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount) < parseFloat(data?.InputValue), "else SELECTED_COMMERICAIL_DATA")
                         }
                         this.SELECTED_COMMERICAIL_DATA['UsedAmount'] = parseFloat(this.SELECTED_COMMERICAIL_DATA?.UsedAmount) - parseFloat(data?.InputValue)
                         data.isChecked = true;
@@ -259,8 +335,6 @@ export class ExportBillLodgementData {
                     let TOTAL_CI_FIRX_SELECTED_AMOUNT = this.SELECTED_COMMERICAIL_DATA?.IRADVICE_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.InputValue), 0);
                     this.SELECTED_SHIPPING_BILL['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
                     this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
-                    console.log(this.SELECTED_SHIPPING_BILL,
-                        this.SELECTED_COMMERICAIL_DATA, TOTAL_CI_FIRX_SELECTED_AMOUNT, "FirxSelection")
                 } else {
                     $event.target.checked = false
                     this.toastr.error("Please select atleast one commercial no.")
@@ -277,10 +351,9 @@ export class ExportBillLodgementData {
             this.SELECTED_SHIPPING_BILL['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
             this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
             data['InputValue'] = parseFloat(data?.UsedAmount)
-            console.log(this.SELECTED_SHIPPING_BILL,
-                this.SELECTED_COMMERICAIL_DATA, TOTAL_CI_FIRX_SELECTED_AMOUNT, "FirxSelection")
         }
     }
+
     CLEAR_TIMEOUT: any = null;
     FIRXAMOUNT(data: any, value: any) {
         console.log(data, value, "FIRXAMOUNT")
@@ -294,20 +367,16 @@ export class ExportBillLodgementData {
                     data.InputValue = data?.UsedAmount;
                     this.toastr.error("You've exceeded the maximum transaction amount set by your FIRX amount..")
                 }
-                let findIndex: any = this.SELECTED_SHIPPING_BILL?.IRADVICE_DATA?.findIndex(item => item?._id == data?._id);
-                // this.SELECTED_SHIPPING_BILL?.IRADVICE_DATA?.splice(findIndex, 1);
-                // this.SELECTED_COMMERICAIL_DATA['IRADVICE_DATA']?.splice(findIndex, 1);
                 let TOTAL_CI_FIRX_SELECTED_AMOUNT = this.SELECTED_COMMERICAIL_DATA?.IRADVICE_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.InputValue), 0);
                 this.SELECTED_SHIPPING_BILL['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
                 this.SELECTED_COMMERICAIL_DATA['IRADVICE_SUM'] = TOTAL_CI_FIRX_SELECTED_AMOUNT;
-                console.log(this.SELECTED_SHIPPING_BILL,
-                    this.SELECTED_COMMERICAIL_DATA, TOTAL_CI_FIRX_SELECTED_AMOUNT, "FirxSelection")
             } else {
                 data['Enabled'] = true
             }
             console.log(data, "FirxSelection")
         }, 200);
     }
+
     BankChargesAmount(data: any, value: any) {
         if (value == "Yes") {
             data["InputValue"] = parseFloat(data["BalanceAvail"]) - parseFloat(data["commision"])
@@ -447,28 +516,6 @@ export class ExportBillLodgementData {
         return parseFloat(amountarray?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
     }
 
-    setSelectCommercialData($event, sbdata: any, commercialdata: any) {
-        if ($event?.target?.checked == true) {
-            if (!this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.includes(commercialdata?._id)) {
-                commercialdata['CheckBoxEnabled'] = true;
-                commercialdata['Firxbutton'] = false;
-                commercialdata['sbdata'] = sbdata;
-                this.TRANSACTION_SELECTED_COMMERICAIL_DATA.push(commercialdata)
-            }
-            commercialdata['SB_Amout_Realized'] = commercialdata?.amount;
-        } else {
-            commercialdata['Firxbutton'] = true;
-            commercialdata['CheckBoxEnabled'] = false;
-            let findIndex: any = this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.findIndex(item => item?._id == commercialdata?._id);
-            this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.splice(findIndex, 1);
-            commercialdata['SB_Amout_Realized'] = '0';
-        }
-        this.TOTAL_CI_AMOUNT = this.TRANSACTION_SELECTED_COMMERICAIL_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);;
-        sbdata['TOTAL_CI_AMOUNT'] = commercialdata?.amount;
-        console.log(sbdata, this.TRANSACTION_SELECTED_COMMERICAIL_DATA)
-    }
-
-
     dselect(data: any) {
         console.log(data, "sdfsdfdfdfsfffsdfsfs")
         this.confrimModel.YesNoDialogModel("Reset All Data<br/> Do you want d-select all data with this shipping bill no. : " + data?.sbno, "", (value: any) => {
@@ -515,4 +562,5 @@ export class ExportBillLodgementData {
             console.log(value, "jhsdjkfhgdkfsdfdfsdfd")
         })
     }
+
 }

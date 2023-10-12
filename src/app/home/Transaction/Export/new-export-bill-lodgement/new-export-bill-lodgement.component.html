@@ -3,20 +3,71 @@
     <div class="upload-panel">
         <div class="left-panel" style="height: 84vh;
         overflow: auto;">
-            <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                *ngIf="this.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Bank Pdf"
-                [src]="this.PREVIWES_URL"></app-pdf-viewer>
+            <div class="col-12" *ngIf="this.SINGLE_TAB_MULITIPLE_TAB=='1'">
+                <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                *ngIf="this.exportbilllodgementdata?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                name="Bank Pdf"
+                [src]="this.exportbilllodgementdata?.PREVIWES_URL"></app-pdf-viewer>
             <div id="federal-bank-letter-head">
-                <federal-bank-exportletterhead *ngIf="this.PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                <federal-bank-exportletterhead
+                    *ngIf="this.exportbilllodgementdata?.PREVIWES_URLL!='' && this.VISIBLITY_PDF==true"
                     (url)="urlletterhead($event)"
                     [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
             </div>
-            <app-pdf-viewer class="pt-3" *ngFor="let item of this.OTHER_DOCUMENTS;let i=index" [downloadShow]="false"
-                width="100%" Newheight="calc(100vh - 130px)" [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
+            <app-pdf-viewer class="pt-3"
+                *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.ALL_RELATED_DOCUMENTS;let j=index"
+                [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                [name]="ALL_RELATED_DOCUMENTSitem?.name"
+                [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
+            <button type="button"
+                [disabled]="this.PREVIOUD_BTN"
+                class="btn btn-primary Previous-btn PopupOpen"
+                (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION)"
+                popup-close="PrviewPage">Previous</button>
+            <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
+                (click)="
+                FormValueSingle(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION,true)"
+                attr.popup-close="PrviewPage">Proceed</button>
+            </div>
+            <mat-tab-group *ngIf="this.SINGLE_TAB_MULITIPLE_TAB=='2'"
+                (selectedTabChange)="this.ShippingBillTabChanged($event,RawValueEventPanel?.geForm)">
+                <mat-tab
+                    [label]="'SB No. : '+this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.sbno"
+                    [id]="item"
+                    *ngFor="let item of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS;let i=index">
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                        name="Bank Pdf"
+                        [src]="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.PREVIWES_URL"></app-pdf-viewer>
+                    <div id="federal-bank-letter-head">
+                        <federal-bank-exportletterhead
+                            *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.PREVIWES_URLL!='' && this.VISIBLITY_PDF==true"
+                            (url)="urlletterhead($event)"
+                            [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
+                    </div>
+                    <app-pdf-viewer class="pt-3"
+                        *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.ALL_RELATED_DOCUMENTS;let j=index"
+                        [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        [name]="ALL_RELATED_DOCUMENTSitem?.name"
+                        [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
+                    <button type="button"
+                        [disabled]="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.COMMERICAIL_DATA?.length!=0?false:true"
+                        class="btn btn-primary Previous-btn PopupOpen"
+                        (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item])"
+                        popup-close="PrviewPage">Previous</button>
+                    <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
+                        (click)="
+                        FormValue(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item])"
+                        attr.popup-close="PrviewPage">Proceed</button>
+                </mat-tab>
+            </mat-tab-group>
         </div>
-        <upload-components [BUTTON_PANEL_SHOW]="true" SubmitName="Proceed" TypeOfValue="Raw"
+        <upload-components SubmitButtonStyle="position: fixed;
+        top: 63px;
+        font-size: 13px;
+        right: 5px;" [BUTTON_PANEL_SHOW]="false" [HIDE_SUBMIT_BUTTON]="false"
             (YesNoCheckBoxEvent)="YesNoCheckBox($event)" (BankEvent)="setSelectedBankDetails($event)"
-            (RawValueEvent)="FormValue($event,PrviewPagePanel)" id="EXPORT_BILL_OF_EXCHANGE">
+            id="EXPORT_BILL_OF_EXCHANGE" #RawValueEventPanel>
         </upload-components>
     </div>
 </upload-components-header>
@@ -25,13 +76,13 @@
 <app-custom-model [FooterButton]="false" [modalbodystyle]="{height:'90vh !important'}"
     [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="90vh" id="PrviewPage" [name]="'Preview Pdf'"
     #PrviewPagePanel>
-    <div class="pdf-viewer-panel">
-        <app-pdf-viewer class="pt-3" *ngIf="this.PREVIEWS_URL_LIST!=''" [downloadShow]="false" width="100%"
-            Newheight="calc(100vh - 130px)" name="All Pdf Merge" [src]="this.PREVIEWS_URL_LIST"></app-pdf-viewer>
+    <div class="pdf-viewer-panel p-2">
+        <app-pdf-viewer *ngIf="this.SELECTED_PREVIEWS_URL!=''" [downloadShow]="false" width="100%"
+            Newheight="calc(100vh - 130px)" name="All Pdf Merge" [src]="this.SELECTED_PREVIEWS_URL"></app-pdf-viewer>
     </div>
     <custom-model-header>
         <button type="button" class="btn btn-primary" (click)="SendApproval('',
-        this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?._id,PrviewPagePanel);">Send for Approval</button>
+        this.ExportBillLodgement_Form?.SingleMultiple?.bool == false?this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?._id:'multiple',PrviewPagePanel);">Send for Approval</button>
     </custom-model-header>
 </app-custom-model>
 
@@ -54,14 +105,14 @@
                                 <mat-panel-title>
                                     SB DETAILS
                                     <button type="button" class="btn btn-primary Transaction-btn"
-                                        (click)="this.CreateTransaction(ShippingBill)">Fill Pdf</button>
+                                        (click)="this.CreateTransaction(ShippingBill,'SB_INDEX_'+i)">Fill Pdf</button>
                                 </mat-panel-title>
                                 <table class="table mb-0">
                                     <tbody>
                                         <tr class="table-tr">
                                             <td class="col-td-th-1"><input [checked]="data?.CheckBoxEnabled"
                                                     type="checkbox"
-                                                    (click)="this.exportbilllodgementdata?.setSelectedShippingBill($event,data)" />
+                                                    (click)="this.exportbilllodgementdata?.setSelectedShippingBillTransaction($event,i,data)" />
                                             </td>
                                             <td class="col-td-th-3">
                                                 SB DATE : {{data.sbdate}}
@@ -89,7 +140,7 @@
                     </mat-expansion-panel-header>
                     <div class="d-flex flex-column">
                         <mat-expansion-panel [expanded]="commercialdata?.CheckBoxEnabled"
-                            *ngFor='let commercialdata of data?.commercialdetails;let i = index'>
+                            *ngFor='let commercialdata of data?.commercialdetails;let j = index'>
                             <mat-expansion-panel-header>
                                 <mat-panel-description>
                                     <div class="d-flex flex-column" (click)="$event.stopPropagation();">
@@ -102,7 +153,7 @@
                                                     <td class="col-td-th-1">
                                                         <input type="checkbox"
                                                             [checked]="commercialdata?.CheckBoxEnabled"
-                                                            (click)="this.exportbilllodgementdata?.setSelectCommercialData($event,data,commercialdata);" />
+                                                            (click)="this.exportbilllodgementdata?.setSelectCommercialDataTransaction($event,'SB_INDEX_'+i,j,data,commercialdata);" />
                                                     </td>
                                                     <td class="col-td-th-3">
                                                         CI DATE : {{commercialdata.commercialDate}}
@@ -154,6 +205,7 @@
                     </div>
                 </mat-expansion-panel>
             </mat-accordion>
+            <button style="position: absolute;bottom: 0; right: 0;" type="button" class="btn btn-primary" (click)="ShippingBill?.displayHidden">Done</button>
         </div>
     </div>
 </app-custom-model>

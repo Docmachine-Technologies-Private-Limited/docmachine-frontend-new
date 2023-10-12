@@ -203,3 +203,18 @@
 .Transaction-btn:hover {
     color: #597a8a;
 }
+
+.left-panel ::ng-deep .mat-tab-body-content {
+    height: 77vh !important;
+    overflow: auto;
+    position: relative;
+}
+
+.left-panel .Previous-btn {
+    position: fixed;
+    bottom: 0;
+    right: 80px;
+    top: 64px;
+    height: 32px;
+    font-size: 14px;
+}

@@ -125,6 +125,7 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
       console.log('pdf not found...');
     }
   }
+  
   _arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array(buffer);
