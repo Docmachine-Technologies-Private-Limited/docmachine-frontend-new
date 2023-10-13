@@ -37,6 +37,7 @@ export class UploadHeaderComponent implements OnInit {
   @Input('PIPO_DISABLED') PIPO_DISABLED: boolean = true;
   @Input('PIPO_VISIBLE') PIPO_VISIBLE: boolean = false;
   @Input('UPLOAD_BUTTON') UPLOAD_BUTTON: boolean = true;
+  @Input('HIDE_OPTION') HIDE_OPTION: boolean = true;
   EXPORT_FORM: any =  {
     buyer: {
       type: "buyer",

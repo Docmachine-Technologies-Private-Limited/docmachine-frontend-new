@@ -1,5 +1,5 @@
 <upload-components-header [title]="this.TITLE_CHANGED" id="Shippingbill" [UPLOAD_BUTTON]="false"
-    [PIPO_DISABLED]="false">
+    [PIPO_DISABLED]="false" [HIDE_OPTION]="false">
     <div class="upload-panel">
         <div class="left-panel" style="height: 84vh;
         overflow: auto;">
@@ -23,7 +23,7 @@
                 [disabled]="this.PREVIOUD_BTN"
                 class="btn btn-primary Previous-btn PopupOpen"
                 (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION)"
-                popup-close="PrviewPage">Previous</button>
+                popup-close="PrviewPage">Preview</button>
             <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
                 (click)="
                 FormValueSingle(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION,true)"
@@ -54,7 +54,7 @@
                         [disabled]="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.COMMERICAIL_DATA?.length!=0?false:true"
                         class="btn btn-primary Previous-btn PopupOpen"
                         (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item])"
-                        popup-close="PrviewPage">Previous</button>
+                        popup-close="PrviewPage">Preview</button>
                     <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
                         (click)="
                         FormValue(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item])"

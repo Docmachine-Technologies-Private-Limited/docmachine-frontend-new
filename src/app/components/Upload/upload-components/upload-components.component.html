@@ -11,17 +11,24 @@
                 <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
                     <div class="form-group mb-3" *ngSwitchCase="'text'">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                        <input [(ngModel)]="field.value" [disbaled]="field?.disabled"
+                        <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            (keypress)="field?.KeyPress($event)"
                             class="form-control" [style]="field?.style" />
+                    </div>
+                </div>
+                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
+                    <div class="form-group mb-3" *ngSwitchCase="'LabelShow'">
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <label for="" class="form-label-control" [innerHTML]="field?.value"></label>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'number'">
                     <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                        <input [(ngModel)]="field.value" [disbaled]="field?.disabled"
+                        <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -185,7 +192,7 @@
                 <div class="form-group mb-3" *ngSwitchCase="'textarea'">
                     <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                        <textarea [(ngModel)]="field.value" [disbaled]="field?.disabled"
+                        <textarea [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -256,12 +263,15 @@
                 <div class="form-group mb-3" *ngSwitchCase="'date'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <input [(ngModel)]="field.value"
+                        [disbaled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" [type]="field.type"
                         [name]="field.fieldName" class="form-control" [style]="field?.style" />
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'currency'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0" [items]="this.validator.CURRENCY_LIST"
+                    <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0"
+                    [disbaled]="field?.Inputdisabled"
+                    [items]="this.validator.CURRENCY_LIST"
                         bindLabel="type" [multiple]="false" (change)="AutoFillCurrency($event,field?.autofill)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
@@ -271,6 +281,7 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select [items]="[{value:'Buy'},{value:'Sell'}]" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [disbaled]="field?.Inputdisabled"
                         (change)="this.setValue($event?.value,field?.InputBindValue)" [name]="field.fieldName"
                         [(ngModel)]="field.value">
                     </ng-select>
@@ -280,6 +291,7 @@
                     <ng-select
                         [items]="[{value:'Booking'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
                         bindLabel="value" [multiple]="false"
+                        [disbaled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
@@ -289,6 +301,7 @@
                     <ng-select [id]="field?.id"
                         *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
+                        [disbaled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value" #CommericalNo>
                     </ng-select>

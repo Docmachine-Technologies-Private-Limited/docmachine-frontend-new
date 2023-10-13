@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms'
 import { DocumentService } from "../../../../../service/document.service";
 import { UploadServiceValidatorService } from '../../../../../components/Upload/service/upload-service-validator.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'new-export-home-transaction',
@@ -28,6 +29,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder,
     public validator: UploadServiceValidatorService,
+    private toastr: ToastrService,
     public documentService: DocumentService) { }
 
   ngOnInit(): void {
@@ -57,53 +59,54 @@ export class NewExportHomeTransactionComponent implements OnInit {
     });
     this.MT103_URL = data?.file;
     this.Inward_Remittance_MT103 = [data];
+    var cleartimeout: any = null;
     setTimeout(() => {
       this.validator.buildForm({
         BankName: {
-          type: "text",
+          type: "LabelShow",
           value: this.Inward_Remittance_MT103[0]?.BankName,
           label: "Bank Name",
-          disabled: true,
+          Inputdisabled: true,
           visible: true,
           rules: {
             required: true,
           }
         },
         Inward_reference_number: {
-          type: "text",
+          type: "LabelShow",
           value: this.Inward_Remittance_MT103[0]?.Inward_reference_number,
           label: "Ref. Number",
-          disabled: true,
+          Inputdisabled: true,
           visible: true,
           rules: {
             required: true,
           }
         },
         currency: {
-          type: "currency",
+          type: "LabelShow",
           value: this.Inward_Remittance_MT103[0]?.currency,
           label: "Currency",
-          visible: true,
+          Inputdisabled: true,
           disabled: true,
           rules: {
             required: true,
-          }
+          },
         },
         amount: {
-          type: "text",
+          type: "LabelShow",
           value: this.Inward_Remittance_MT103[0]?.amount,
           label: "Amount",
-          disabled: true,
+          Inputdisabled: true,
           visible: true,
           rules: {
             required: true,
           }
         },
         Remitter_Name: {
-          type: "text",
+          type: "LabelShow",
           value: this.Inward_Remittance_MT103[0]?.Remitter_Name,
           label: "Remitter Name",
-          disabled: true,
+          Inputdisabled: true,
           visible: true,
           rules: {
             required: true,
@@ -116,58 +119,67 @@ export class NewExportHomeTransactionComponent implements OnInit {
           visible: true,
           rules: {
             required: true,
+          },
+          KeyPress: (event: any) => {
+            clearTimeout(cleartimeout);
+            if (parseFloat(event?.target?.value) > parseFloat(this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal)) {
+
+            } else {
+              this.toastr.error("Inward Amount for Disposal Should be Equal to Your Added Amount");
+              event?.preventDefault();
+              cleartimeout = setTimeout(() => {
+                event.target.value = this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal;
+              }, 200);
+            }
+            console.log("sdfsdhfsdfdsfsdfd", event)
           }
         }
-      }, 'InwardRemittanceDisposal');
+      }, 'NewInwardRemittanceDisposal');
     }, 200);
     console.log(this.REMITTANCE_DATA, 'REMITTANCE_DATA')
   }
 
   ToForwardContract_Selected: any = []
   ToForwardContract(event: any, value: any, index: any) {
+    var cleartimeout: any = null;
     if (event?.target?.checked == true) {
       this.ToForwardContract_Selected[0] = value;
       this.validator.buildForm({
         ForwardRefNo: {
-          type: "text",
+          type: "LabelShow",
           value: this.ToForwardContract_Selected[0]?.ForwardRefNo,
           label: "Forward Ref No",
-          disabled: true,
           rules: {
             required: true,
           }
         },
         BookingDate: {
-          type: "date",
+          type: "LabelShow",
           value: this.ToForwardContract_Selected[0]?.BookingDate,
           label: "Booking Date",
-          disabled: true,
           rules: {
             required: true,
           }
         },
         BookingAmount: {
-          type: "text",
+          type: "LabelShow",
           value: this.ToForwardContract_Selected[0]?.BookingAmount,
           label: "Forward Contract Amount",
-          disabled: true,
           rules: {
             required: true,
           }
         },
         ToDate: {
-          type: "text",
+          type: "LabelShow",
           value: this.ToForwardContract_Selected[0]?.ToDate,
           label: "Due Date",
-          disabled: true,
           rules: {
             required: true,
           }
         },
         AvailableAmount: {
-          type: "text",
-          value: this.ToForwardContract_Selected[0]?.AvailableAmount,
-          disabled: true,
+          type: "LabelShow",
+          value: this.ToForwardContract_Selected[0]?.AvailableAmount!=""?this.ToForwardContract_Selected[0]?.AvailableAmount:0,
           label: "Available Amount",
           rules: {
             required: true,
@@ -186,12 +198,24 @@ export class NewExportHomeTransactionComponent implements OnInit {
           },
           rules: {
             required: true,
+          },
+          KeyPress: (event: any) => {
+            clearTimeout(cleartimeout);
+            if (parseFloat(event?.target?.value) > parseFloat(this.ToForwardContract_Selected[0]?.AvailableAmount)) {
+
+            } else {
+              this.toastr.error("Utilized Amount Should be Equal to Your Added Amount");
+              event?.preventDefault();
+              cleartimeout = setTimeout(() => {
+                event.target.value = this.ToForwardContract_Selected[0]?.AvailableAmount;
+              }, 200);
+            }
+            console.log("sdfsdhfsdfdsfsdfd", event)
           }
         },
         NetRate: {
-          type: "text",
+          type: "LabelShow",
           value: this.ToForwardContract_Selected[0]?.NetRate,
-          disabled: true,
           label: "Exchange rate as per FWC",
           rules: {
             required: true,

@@ -442,7 +442,7 @@ export class ExportBillLodgementData {
                 this.tp['id'].push(element?._id);
                 var amount: number = 0;
                 if (element?.YesNo == "true") {
-                    amount = parseInt(element?.UsedAmount) == (parseInt(element?.InputValue) + parseFloat(element?.commision)) ? 0 : parseInt(element?.UsedAmount) - (parseInt(element?.InputValue) + parseFloat(element?.commision));
+                    amount = parseInt(element?.UsedAmount) == (parseInt(element?.InputValue)) ? 0 : parseInt(element?.UsedAmount) - (parseInt(element?.InputValue) + parseFloat(element?.commision));
                 } else {
                     amount = parseInt(element?.UsedAmount) == (parseInt(element?.InputValue)) ? 0 : parseInt(element?.UsedAmount) - parseInt(element?.InputValue);
                 }
