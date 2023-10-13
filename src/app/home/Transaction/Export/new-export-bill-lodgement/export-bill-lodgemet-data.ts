@@ -20,10 +20,10 @@ export class ExportBillLodgementData {
     TOTAL_CI_AMOUNT: any = 0;
     TRANSACTION_SHIPPING_BILL: any = [];
     TRANSACTION_SELECTED_COMMERICAIL_DATA: any = [];
-    ALL_RELATED_DOCUMENTS:any=[];
-    ALL_COMMERCIAL_DATA_LIST:any=[];
-    PREVIWES_URL:any=''
-    
+    ALL_RELATED_DOCUMENTS: any = [];
+    ALL_COMMERCIAL_DATA_LIST: any = [];
+    PREVIWES_URL: any = ''
+
     constructor(public documentService: DocumentService,
         private toastr: ToastrService,
         public confrimModel: CustomConfirmDialogModelComponent,
@@ -78,7 +78,15 @@ export class ExportBillLodgementData {
                     }
                     if (type == "MatchOff") {
                         element?.commercialdetails?.forEach((element1: any, index) => {
-                            let sum_of_irm: any = element1?.IRM_REF?.reduce((a, b) => parseFloat(a) + (parseFloat(b?.MatchOffData?.InputValue) + parseFloat(b?.MatchOffData?.commision)), 0);
+                            let sum_of_irm: any = 0
+                            element1?.MatchOffData?.forEach(MatchOffDataElement => {
+                                if (MatchOffDataElement?.YesNo == "true") {
+                                    sum_of_irm += parseFloat(MatchOffDataElement?.InputValue) + parseFloat(MatchOffDataElement?.commision)
+                                } else {
+                                    sum_of_irm += parseFloat(MatchOffDataElement?.InputValue)
+                                }
+                            });
+                            console.log(sum_of_irm, "sum_of_irm")
                             if (parseFloat(element1?.amount) == parseFloat(sum_of_irm)) {
                                 element1['AmountUsed'] = true;
                                 element1['SB_Amout_Realized'] = sum_of_irm;
@@ -205,7 +213,7 @@ export class ExportBillLodgementData {
                     data["ALL_RELATED_DOCUMENTS"] = [];
                     data["FORM_URL_LIST"] = [];
                     data["PREVIEWS_URL_LIST"] = '';
-                    
+
                     this.SHIPPING_BILL_DATA?.forEach(element => {
                         element?.commercialdetails?.forEach(commercialdetailselement => {
                             commercialdetailselement['CheckBoxEnabled'] = false;
@@ -423,19 +431,27 @@ export class ExportBillLodgementData {
                 this.tp['firxCurrency'].push(element?.currency)
                 this.tp['firxAmount'].push(element?.InputValue)
                 if (element?.CommissionUsed == false) {
-                    this.tp['firxCommision'].push(element?.commision)
+                    if (element?.YesNo == "true") {
+                        this.tp['firxCommision'].push(element?.commision)
+                    }
                 } else {
                     this.tp['firxCommision'].push(0);
                 }
                 this.tp['FirxUsed_Balance'].push(element?.InputValue)
                 this.tp['firxRecAmo'].push(0);
                 this.tp['id'].push(element?._id);
+                var amount: number = 0;
+                if (element?.YesNo == "true") {
+                    amount = parseInt(element?.UsedAmount) == (parseInt(element?.InputValue) + parseFloat(element?.commision)) ? 0 : parseInt(element?.UsedAmount) - (parseInt(element?.InputValue) + parseFloat(element?.commision));
+                } else {
+                    amount = parseInt(element?.UsedAmount) == (parseInt(element?.InputValue)) ? 0 : parseInt(element?.UsedAmount) - parseInt(element?.InputValue);
+                }
                 this.documentService.Update_Amount_by_Table({
                     tableName: 'iradvices',
                     id: element._id,
                     query: {
                         sbno: [data?.sbno],
-                        BalanceAvail: parseInt(element?.UsedAmount) == parseInt(element?.InputValue) ? 0 : parseInt(element?.UsedAmount) - parseInt(element?.InputValue),
+                        BalanceAvail: amount,
                         CommissionUsed: true,
                         MatchOffData: element,
                         UsedAmount: element?.InputValue

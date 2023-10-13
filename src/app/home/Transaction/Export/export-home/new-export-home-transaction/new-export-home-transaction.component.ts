@@ -57,61 +57,69 @@ export class NewExportHomeTransactionComponent implements OnInit {
     });
     this.MT103_URL = data?.file;
     this.Inward_Remittance_MT103 = [data];
-    this.validator.buildForm({
-      BankName: {
-        type: "text",
-        value: this.Inward_Remittance_MT103[0]?.BankName,
-        label: "Bank Name",
-        disabled: true,
-        rules: {
-          required: true,
+    setTimeout(() => {
+      this.validator.buildForm({
+        BankName: {
+          type: "text",
+          value: this.Inward_Remittance_MT103[0]?.BankName,
+          label: "Bank Name",
+          disabled: true,
+          visible: true,
+          rules: {
+            required: true,
+          }
+        },
+        Inward_reference_number: {
+          type: "text",
+          value: this.Inward_Remittance_MT103[0]?.Inward_reference_number,
+          label: "Ref. Number",
+          disabled: true,
+          visible: true,
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.Inward_Remittance_MT103[0]?.currency,
+          label: "Currency",
+          visible: true,
+          disabled: true,
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "text",
+          value: this.Inward_Remittance_MT103[0]?.amount,
+          label: "Amount",
+          disabled: true,
+          visible: true,
+          rules: {
+            required: true,
+          }
+        },
+        Remitter_Name: {
+          type: "text",
+          value: this.Inward_Remittance_MT103[0]?.Remitter_Name,
+          label: "Remitter Name",
+          disabled: true,
+          visible: true,
+          rules: {
+            required: true,
+          }
+        },
+        Inward_amount_for_disposal: {
+          type: "text",
+          value: this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal,
+          label: "Disposal Amount",
+          visible: true,
+          rules: {
+            required: true,
+          }
         }
-      },
-      Inward_reference_number: {
-        type: "text",
-        value: this.Inward_Remittance_MT103[0]?.Inward_reference_number,
-        label: "Ref. Number",
-        disabled: true,
-        rules: {
-          required: true,
-        }
-      },
-      currency: {
-        type: "currency",
-        value: this.Inward_Remittance_MT103[0]?.currency,
-        label: "Currency",
-        disabled: true,
-        rules: {
-          required: true,
-        }
-      },
-      amount: {
-        type: "text",
-        value: this.Inward_Remittance_MT103[0]?.amount,
-        label: "Amount",
-        disabled: true,
-        rules: {
-          required: true,
-        }
-      },
-      Remitter_Name: {
-        type: "text",
-        value: this.Inward_Remittance_MT103[0]?.Remitter_Name,
-        label: "Remitter Name",
-        disabled: true,
-        rules: {
-          required: true,
-        }
-      },
-      Inward_amount_for_disposal: {
-        type: "text",
-        value: this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal,
-        label: "Disposal Amount",
-        rules: {
-          required: true,
-        }
-      }
-    }, 'InwardRemittanceDisposal');
+      }, 'InwardRemittanceDisposal');
+    }, 200);
     console.log(this.REMITTANCE_DATA, 'REMITTANCE_DATA')
   }
 
@@ -198,7 +206,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
   InwardDisposalNext: boolean = false;
   InwardDisposalFormValue(value: any) {
     if (value != false) {
-      this.INWARD_DISPOSAL_VALUE_FORM = [this.mergeObject(value,this.REMITTANCE_DATA)];
+      this.INWARD_DISPOSAL_VALUE_FORM = [this.mergeObject(value, this.REMITTANCE_DATA)];
       this.InwardDisposalNext = true;
     } else {
       this.INWARD_DISPOSAL_VALUE_FORM = [];
@@ -211,7 +219,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
   ForwardRefNext: boolean = false;
   ForwardRefFormValue(value: any) {
     if (value != false) {
-      this.FORWARD_REF_VALUE_FORM = [this.mergeObject(value,this.ToForwardContract_Selected[0])]
+      this.FORWARD_REF_VALUE_FORM = [this.mergeObject(value, this.ToForwardContract_Selected[0])]
       this.ForwardRefNext = true;
     } else {
       this.FORWARD_REF_VALUE_FORM = [];
@@ -219,7 +227,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
     }
     console.log(value, "ForwardRefFormValue")
   }
-  
+
   mergeObject(obj1: any, obj2: any) {
     for (const key in obj2) {
       if (obj1[key] == undefined) {
