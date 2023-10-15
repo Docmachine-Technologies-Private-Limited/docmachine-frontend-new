@@ -1089,7 +1089,7 @@
                       </div>
                       <br>
                     </div>
-                    <div *ngIf='newDone' style="display: flex;flex-direction: column;gap: 20px;">
+                    <div style="display: flex;flex-direction: column;gap: 20px;">
                       <div class="docStyle" style="width: 500px;"
                         *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
                         <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
@@ -1102,8 +1102,9 @@
                       <button *ngIf='newDone' class="button1" style="margin-right: 10px;"
                         (click)="hidePreview()">Edit</button> -->
                       <button class="btn btn-primary PopupOpen" popup-close="ExportTransactionView"
-                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL);showPreview(code)">Send for Approval</button>
-                        <button class="btn btn-primary">Download</button>
+                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL);">Send for
+                        Approval</button>
+                      <button class="btn btn-primary">Download</button>
                       <!-- <button *ngIf='!newDone' id="ProceedPreview" class="button1"
                         style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to
                         Preview</button> -->
@@ -1352,50 +1353,47 @@
                   <div class="DDDD">
                     <div class="mt_bottom" style="margin-bottom:20px">
                       <div class="row">
-                        <div class="col-md-6">
-                          <select [(ngModel)]="PIPONumbersBuyerName" class="form-control"
+                        <div class="d-flex col-12" style="align-items: baseline;">
+                          <select [(ngModel)]="PIPONumbersBuyerName" class="form-control col-4"
                             (change)="PIPOFilter(PIPONumbersBuyerName)" disabled>
                             <option value="BuyerName">BuyerName</option>
                             <option [value]="item?.value" *ngFor="let item of buyerName ; let i = index;"
                               style="color: black;">{{item?.value}}</option>
                           </select>
+                          <div class="inerward-remittance-details">
+                            <p>Currency : {{this.Inward_Remittance_MT103_DATA[0]?.currency}} | Remittance Amount : {{this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal}} </p>
+                          </div>
                         </div>
-                        <!-- <div class="col-md-3">
-                          <button class="filter1 btn btn-primary" (click)="PIPONumbersBuyerName = 'BuyerName';
-                                                PIPOFilter(PIPONumbersBuyerName)">Reset</button>
-                        </div> -->
                       </div>
                     </div>
-                    <section style="width: 100%;overflow: auto;
-                                        height: 350px;max-height: 800px;" class="box-shadow">
-                      <table class="table table-striped mb-0">
-                        <thead style="width: 100% ;height: 54px;">
-                          <tr class="text-muted table-heading"
-                            style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                            <th scope="col"></th>
-                            <th scope="col">Invoice No</th>
-                            <th scope="col">Invoice Date</th>
-                            <th scope="col">Consignee Name</th>
-                            <th scope="col">Branch</th>
-                            <th scope="col">Commodity</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Incoterm</th>
-                            <th scope="col">Payment Term</th>
+                    <section class="box-shadow">
+                      <table class="table mb-0 mt-2">
+                        <thead>
+                          <tr class="table-tr pr-3">
+                            <th scope="col" class="col-td-th-1">#</th>
+                            <th scope="col" class="col-td-th-3">Invoice No</th>
+                            <th scope="col" class="col-td-th-3">Invoice Date</th>
+                            <th scope="col" class="col-td-th-3">Buyer Name</th>
+                            <th scope="col" class="col-td-th-3">Branch</th>
+                            <th scope="col" class="col-td-th-3">Currency</th>
+                            <th scope="col" class="col-td-th-3">Amount</th>
+                            <th scope="col" class="col-td-th-3">Balance Amount</th>
+                            <th scope="col" class="col-td-th-3">Utilized Amount</th>
                           </tr>
                         </thead>
                         <tbody *ngIf="dataSource.length!=0">
-                          <tr class="table-row" *ngFor='let data of dataSource let i = index'>
-                            <td>
-                              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data); " />
+                          <tr class="table-tr pr-3" *ngFor='let data of dataSource; let i = index'>
+                            <td scope="col" class="col-td-th-1">
+                              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data,i); " />
                             </td>
-                            <td> {{data.pi_poNo}} </td>
-                            <td> {{data.date}} </td>
-                            <td> {{data.buyerName}} </td>
-                            <td> {{data.fobCurrency}} </td>
-                            <td> {{data.location}} </td>
-                            <td> {{data.commodity}} </td>
-                            <td> {{data.amount}} </td>
-                            <td> {{data?.paymentTerm[0]?.type?.value}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.pi_poNo}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.date}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.buyerName}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.location}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.currency}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.amount}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.AvailableAmount}} </td>
+                            <td scope="col" class="col-td-th-3"> {{data?.UtilizedAmount}} </td>
                           </tr>
                         </tbody>
                       </table>
@@ -1404,8 +1402,8 @@
                   <div class="submit_right_button" style="float:right;">
                     <button class="filter1 btn btn-secondary" aria-label="Close"
                       (click)="PIPONumbers.style.display='none'">Cancel</button>
-                    <button class="filter1 btn btn-primary" style="margin-left:16px"
-                      (click)="PIPONumbers.style.display='none'">Sumbit</button>
+                    <button class="filter1 btn btn-primary" [disabled]="selectPIPO_data?.length!=0?false:true"
+                      style="margin-left:16px" (click)="PIPONumbers.style.display='none'">Sumbit</button>
                   </div>
                 </div>
               </div>

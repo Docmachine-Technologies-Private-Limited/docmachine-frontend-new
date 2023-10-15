@@ -1,5 +1,5 @@
 <div class="col-12 mt-2">
-    <custom-mat-stepper LAST_BUTTON_NAME="Proceed" [LAST_BUTTON_VISIBLE]="lastbutton?.proceedtrue"
+    <custom-mat-stepper LAST_BUTTON_NAME="Next" [LAST_BUTTON_VISIBLE]="lastbutton?.proceedtrue"
         (lastbuttonEvent)="lastbutton?.proceedClick">
         <custom-mat-step MATSTEP_LABEL="Select Inward Remittance" errorMessage="Please select Inward Remittance"
             [NextTrue]="this.Inward_Remittance_MT103?.length!=0 && this.Inward_Remittance_MT103?.length!=undefined?true:false">
@@ -54,6 +54,7 @@
                             <th scope="col" class="col-td-th-1">#</th>
                             <th scope="col" class="col-td-th-2">Forward Ref No</th>
                             <th scope="col" class="col-td-th-3">Booking Date</th>
+                            <th scope="col" class="col-td-th-3">Currency</th>
                             <th scope="col" class="col-td-th-2">Forward Contract Amount</th>
                             <th scope="col" class="col-td-th-3">Due Date</th>
                             <th scope="col" class="col-td-th-3">Amount to be utilised</th>
@@ -61,11 +62,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.ForwardContractDATA;let i=index">
+                        <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.ForwardContractFilterDATA;let i=index">
                             <td scope="col" class="col-td-th-1"><input type="checkbox"
                                     (change)="ToForwardContract($event,item,i)"></td>
                             <td scope="col" class="col-td-th-2">{{item?.ForwardRefNo}}</td>
                             <td scope="col" class="col-td-th-3">{{item?.BookingDate}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
                             <td scope="col" class="col-td-th-2">{{item?.BookingAmount}}</td>
                             <td scope="col" class="col-td-th-3">{{item?.ToDate}}</td>
                             <td scope="col" class="col-td-th-3">{{item?.AvailableAmount}}</td>

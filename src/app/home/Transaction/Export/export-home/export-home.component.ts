@@ -265,11 +265,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.ForwardNo = changes?.data?.currentValue[1] != undefined ? changes?.data?.currentValue[1] : this.ForwardNo;
     this.ToForwardContract_Selected = this.ForwardNo;
     this.Inward_Remittance_MT103_DATA = this.InwardDisposalData;
+    this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] = 0
     this.Inward_Remittance_MT103 = this.InwardDisposalData;
     this.bank = [this.InwardDisposalData[0]?.BankName];
     this.MT103_URL = this.InwardDisposalData[0]?.file;
     this.PIPONumbersBuyerName = this.InwardDisposalData[0]?.BuyerName?.value
-    this.PIPOFilter(this.PIPONumbersBuyerName)
+    this.PIPOFilter(this.InwardDisposalData[0])
     console.log(this.bank, 'sallBankallBankallBankallBankallBank')
   }
   async ngOnInit() {
@@ -330,6 +331,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
 
     this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer, 'export').subscribe((res: any) => {
       console.log(res, 'resssssssssssssss');
+      res?.docs?.forEach(element => {
+        element['AvailableAmount'] = element?.AvailableAmount != undefined && element?.AvailableAmount != '-1' ? element?.AvailableAmount : element?.amount
+        element['UtilizedAmount'] = 0;
+        element['SUM_AMOUNT'] = 0;
+      });
       this.OLD_dataSource = res.docs;
       this.dataSource = res.docs
       console.log("res", this.dataSource)
@@ -719,18 +725,40 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   }
   selectPIPO: any = [];
   selectPIPO_data: any = [];
-  changeCheckboxPIPO(event: any, value, data: any) {
-    this.selectPIPO_data.push(data)
-    let sumpipoamount: any = this.selectPIPO_data?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.amount) }, 0);
-    let j = this.selectPIPO.indexOf(value);
-    if (j == -1) {
-      this.selectPIPO.push(value);
+  PIPO_SUM_AMOUNT: any = 0;
+
+  changeCheckboxPIPO(event: any, value, data: any, index) {
+    if (event.target.checked == true) {
+      if (parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) > parseFloat(this.PIPO_SUM_AMOUNT)) {
+        this.selectPIPO_data.push(data)
+        this.selectPIPO.push(value);
+        data['UtilizedAmount'] = data?.amount;
+        if (parseFloat(data['AvailableAmount']) < parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal)) {
+          this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] = parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) -
+            parseFloat(data['AvailableAmount']);
+        } else {
+          this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] =
+            parseFloat(data['AvailableAmount']) - parseFloat(data?.amount);
+        }
+        data['AvailableAmount'] = this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] == 0 ? 0 : this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'];
+      } else {
+        data['UtilizedAmount'] = 0;
+        data['AvailableAmount'] = parseFloat(data?.amount);
+        this.selectPIPO.splice(index, 1);
+        this.selectPIPO_data.splice(index, 1)
+        event.target.checked = false;
+        this.toastr.error("Invoice amount should be equal or more than  remittance amount")
+      }
+    } else {
+      data['UtilizedAmount'] = 0;
+      data['AvailableAmount'] = parseFloat(data?.amount);
+      data['UtilizedAmount'] = 0;
+      this.selectPIPO.splice(index, 1);
+      this.selectPIPO_data.splice(index, 1)
     }
-    else {
-      this.selectPIPO.splice(j, 1);
-      this.selectPIPO_data.splice(j, 1)
-    }
-    console.log(this.selectPIPO, sumpipoamount, this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal, this.selectPIPO_data, 'selectPIPO')
+    this.PIPO_SUM_AMOUNT = this.selectPIPO_data.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+    console.log(this.selectPIPO, this.Inward_Remittance_MT103_DATA[0],
+      this.PIPO_SUM_AMOUNT, this.selectPIPO_data, 'selectPIPO')
   }
 
   resetActive(data: any, i) {
@@ -890,7 +918,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
     }
-    this.SELECTED_PURPOSE_CODE=false;
+    this.SELECTED_PURPOSE_CODE = false;
+    this.showPreview(code)
     console.log("hello there", this.newTask);
   }
   replaceText(text: any, repl_text: any) {
@@ -934,9 +963,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       getAllFields[17].setText(this.charge[13])
       getAllFields[18].setText('Export')
       getAllFields[19].setText('')
-      getAllFields[20].setText(a['currency'])
       const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      getAllFields[21].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal).toUpperCase())
+      getAllFields[20].setText(updatedata?.currency)
+      getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
       getAllFields[22].setText(updatedata?.Inward_amount_for_disposal)
       getAllFields[23].setText(a['buyerName'])
       getAllFields[24].setText(this.buyerAds)
@@ -1243,7 +1272,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     })
 
     const text21Field = form.createTextField('best.text21')
-    text21Field.setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
+    text21Field.setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal))
     text21Field.addToPage(firstpage, {
       x: 340, y: 580, width: 220,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -2716,13 +2745,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       );
     });
   }
-  
+
   get proceedtrue() {
     return this.SELECTED_PURPOSE_CODE;
   }
 
   OLD_INPUT_VALUE: string = '';
-  SELECTED_PURPOSE_CODE:boolean=false;
+  SELECTED_PURPOSE_CODE: boolean = false;
   purposeClick(e, colspanitem) {
     if (e.startsWith("P0") || e.startsWith("P1")) {
       if (this.Inward_Remittance.includes(e)) {
@@ -2734,18 +2763,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           this.selectedPurpose.push(e)
           this.toastr.info(`Purpose code added`);
           this.selection = this.selectedPurpose[0];
-          this.SELECTED_PURPOSE_CODE=true;
+          this.SELECTED_PURPOSE_CODE = true;
         }
         colspanitem['isActive'] = !colspanitem?.isActive;
       }
       else {
-        this.SELECTED_PURPOSE_CODE=false;
+        this.SELECTED_PURPOSE_CODE = false;
         colspanitem['isActive'] = false
         this.toastr.warning(`You can't add this purpose code`);
       }
     }
     else {
-      this.SELECTED_PURPOSE_CODE=false
+      this.SELECTED_PURPOSE_CODE = false
       this.toastr.error(`Click on purpose code`);
     }
   }
@@ -2793,6 +2822,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
       i++
     }
+    this.showPreview(this.c)
     this.z = this.selectedPurpose.length
     return;
   }
@@ -3152,21 +3182,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     return this.Inward_Remittancefilter;
   }
 
-  PIPOFilter(searchvalue) {
-    if (searchvalue != null && searchvalue != undefined && searchvalue != 'BuyerName') {
-      this.dataSource = this.OLD_dataSource.filter((e) => {
-        var temp = (e['buyerName']);
-        if (temp != null && temp != undefined) {
-          if ((temp.toLowerCase()).indexOf(searchvalue.toLowerCase()) != -1) {
-            return e;
-          }
-        }
-      });
-    }
-    else {
-      this.dataSource = this.OLD_dataSource;
-    }
+  PIPOFilter(data: any) {
+    this.dataSource = this.OLD_dataSource?.filter((e) => e?.currency?.indexOf(data?.currency) != -1 &&
+      e?.buyerName?.indexOf(data?.BuyerName?.value) != -1);
   }
+
   ShippingBillnumberFil(searchvalue) {
     if (searchvalue != '' && searchvalue[0] != null && searchvalue[0] != undefined && searchvalue[0] != 'BuyerName') {
       this.ShippingbillNumberfilter = this.item1.filter((e: any) => e?.buyerName[0]?.indexOf(searchvalue[0]) != -1);
@@ -3291,25 +3311,89 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.Lodgement[this.selection][mainkey][hidekey] = '';
     // console.log(this.Lodgement[this.selection],'Lodgement')
   }
-  Number_to_word(numberInput: any) {
-    let oneToTwenty = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ',
-      'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
-    let tenth = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-    //let num = ('0000000000'+ numberInput).slice(-10).match(/^(\d{1})(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-    let num: any = ('0000000' + numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
-    console.log(num);
-    if (numberInput.toString().length > 7 || !num) {
-      return '';
-    } else {
-      console.log(numberInput);
-      let outputText = num[1] != 0 ? (oneToTwenty[Number(num[1])] || `${tenth[num[1][0]]} ${oneToTwenty[num[1][1]]}`) + ' million ' : '';
-      outputText += num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}`) + 'hundred ' : '';
-      outputText += num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`) + ' thousand ' : '';
-      outputText += num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) + 'hundred ' : '';
-      outputText += num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : '';
-      return outputText;
+
+  ConvertNumberToWords(number: any) {
+    var words = new Array();
+    words[0] = '';
+    words[1] = 'One';
+    words[2] = 'Two';
+    words[3] = 'Three';
+    words[4] = 'Four';
+    words[5] = 'Five';
+    words[6] = 'Six';
+    words[7] = 'Seven';
+    words[8] = 'Eight';
+    words[9] = 'Nine';
+    words[10] = 'Ten';
+    words[11] = 'Eleven';
+    words[12] = 'Twelve';
+    words[13] = 'Thirteen';
+    words[14] = 'Fourteen';
+    words[15] = 'Fifteen';
+    words[16] = 'Sixteen';
+    words[17] = 'Seventeen';
+    words[18] = 'Eighteen';
+    words[19] = 'Nineteen';
+    words[20] = 'Twenty';
+    words[30] = 'Thirty';
+    words[40] = 'Forty';
+    words[50] = 'Fifty';
+    words[60] = 'Sixty';
+    words[70] = 'Seventy';
+    words[80] = 'Eighty';
+    words[90] = 'Ninety';
+    number = number.toString();
+    var atemp = number.split(".");
+    var number = atemp[0].split(",").join("");
+    var n_length = number.length;
+    var words_string = "";
+    if (n_length <= 9) {
+      var n_array: any = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+      var received_n_array = new Array();
+      for (var i = 0; i < n_length; i++) {
+        received_n_array[i] = number.substr(i, 1);
+      }
+      for (var i = 9 - n_length, j = 0; i < 9; i++, j++) {
+        n_array[i] = received_n_array[j];
+      }
+      for (var i = 0, j = 1; i < 9; i++, j++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          if (n_array[i] == 1) {
+            n_array[j] = 10 + parseInt(n_array[j]);
+            n_array[i] = 0;
+          }
+        }
+      }
+      var value: any = "";
+      for (var i = 0; i < 9; i++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          value = n_array[i] * 10;
+        } else {
+          value = n_array[i];
+        }
+        if (value != 0) {
+          words_string += words[value] + " ";
+        }
+        if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Crores ";
+        }
+        if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Lakhs ";
+        }
+        if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Thousand ";
+        }
+        if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
+          words_string += "Hundred and ";
+        } else if (i == 6 && value != 0) {
+          words_string += "Hundred ";
+        }
+      }
+      words_string = words_string.split("  ").join(" ");
     }
+    return words_string;
   }
+
   async SendApproval(Status: string, UniqueId: any, code: any) {
     var temp_doc: any = [];
     var approval_data: any = [];
