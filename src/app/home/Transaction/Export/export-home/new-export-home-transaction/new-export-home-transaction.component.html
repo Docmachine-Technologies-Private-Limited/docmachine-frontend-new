@@ -1,5 +1,6 @@
 <div class="col-12 mt-2">
-    <custom-mat-stepper LAST_BUTTON_NAME="Proceed" [LAST_BUTTON_VISIBLE]="lastbutton?.proceedtrue" (lastbuttonEvent)="lastbutton?.proceedClick">
+    <custom-mat-stepper LAST_BUTTON_NAME="Proceed" [LAST_BUTTON_VISIBLE]="lastbutton?.proceedtrue"
+        (lastbuttonEvent)="lastbutton?.proceedClick">
         <custom-mat-step MATSTEP_LABEL="Select Inward Remittance" errorMessage="Please select Inward Remittance"
             [NextTrue]="this.Inward_Remittance_MT103?.length!=0 && this.Inward_Remittance_MT103?.length!=undefined?true:false">
             <form>
@@ -33,14 +34,14 @@
                 </div>
             </form>
         </custom-mat-step>
-        <custom-mat-step MATSTEP_LABEL="Fill Disposal Instruction"
-            errorMessage="Please fill all field value..." [NextTrue]="this.InwardDisposalNext"
-            (FormSubmit)="InwardRemittanceDisposal?.onClickButton" [Form]="InwardRemittanceDisposal?.geForm"
-            [FormTrue]="true">
+        <custom-mat-step MATSTEP_LABEL="Fill Disposal Instruction" errorMessage="Please fill all field value..."
+            [NextTrue]="this.InwardDisposalNext" (FormSubmit)="InwardRemittanceDisposal?.onClickButton"
+            [Form]="InwardRemittanceDisposal?.geForm" [FormTrue]="true">
             <div class="col-12 pt-3">
                 <form>
-                    <upload-components id="NewInwardRemittanceDisposal" (RawValueEvent)="InwardDisposalFormValue($event)"
-                        [HIDE_SUBMIT_BUTTON]="false" #InwardRemittanceDisposal>
+                    <upload-components id="NewInwardRemittanceDisposal"
+                        (RawValueEvent)="InwardDisposalFormValue($event)" [HIDE_SUBMIT_BUTTON]="false"
+                        #InwardRemittanceDisposal>
                     </upload-components>
                 </form>
             </div>
@@ -79,8 +80,9 @@
             [FormTrue]="true">
             <div class="col-12 pt-3">
                 <form>
-                    <upload-components id="ForwardRef" (RawValueEvent)="ForwardRefFormValue($event)"
-                        [HIDE_SUBMIT_BUTTON]="false" #ForwardRefPanel>
+                    <upload-components FormStyle="display: grid;
+                    grid-template-columns: repeat(2,1fr);" id="ForwardRef"
+                        (RawValueEvent)="ForwardRefFormValue($event)" [HIDE_SUBMIT_BUTTON]="false" #ForwardRefPanel>
                     </upload-components>
                 </form>
             </div>
@@ -94,9 +96,6 @@
                         [ForwardNo]="this.FORWARD_REF_VALUE_FORM"></app-export-home>
                 </form>
             </div>
-            <!-- <custom_mat_step_button>
-                <button class="btn btn-primary"> Generate Document</button>
-            </custom_mat_step_button> -->
         </custom-mat-step>
     </custom-mat-stepper>
 </div>

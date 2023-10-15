@@ -23,12 +23,21 @@
       <main id="content" class="content22 table-padding" role="main">
         <div cla ss="analytics" *ngIf="proceed">
           <div *ngIf="!selectPurpose">
-            <p class="stp3">Select a Purpose code*</p>
+            <p class="stp3">Search by Group Name and Purpose code*</p>
             <div *ngIf="!purposeSelect" class="top_serah_section">
-              <ng-select [items]="Inward_Remittancefilter" class="mb-4" style="margin-bottom: 20px;"
-                placeholder="Search purpose code,group name or description" (keyup)="searchData($event.target.value);"
-                (change)="this.searchData(selection)" [mulitple]="true" [(ngModel)]="selection" name="commodity"
-                #ngSelect> </ng-select>
+              <div style="gap: 10px;
+              display: grid !important;
+              grid-template-columns: repeat(2,1fr);">
+                <ng-select class="col-12" *ngIf="this.GROUP_NAME_LIST?.length!=0" [items]="this.GROUP_NAME_LIST"
+                  class="mb-4" style="margin-bottom: 20px;" placeholder="Search group name" bindLabel="value"
+                  (keyup)="searchDataGroupName($event.target.value);" (change)="this.searchDataGroupName($event?.value)"
+                  [mulitple]="true" #ngSelect> </ng-select>
+
+                <ng-select class="col-12" [items]="Inward_Remittancefilter" class="mb-4" style="margin-bottom: 20px;"
+                  placeholder="Search purpose code" (keyup)="searchData($event.target.value);"
+                  (change)="this.searchData(selection)" [mulitple]="true" [(ngModel)]="selection" name="commodity"
+                  #ngSelect> </ng-select>
+              </div>
               <div *ngIf="pgNumber != 0"> Matching Result
                 <br> Number of Purpose Group = {{ pgNumber }}
                 <br> Number of Purpose Code or Description = {{ pcNumber }}
@@ -1051,20 +1060,18 @@
                     </div>
                     <br><span>Charges A/C No.*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
-                      <input *ngIf="value?.currency=='INR'" style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                        value="value.bank" name="BankToCharge" (click)="chargesTo(value)">
+                      <input *ngIf="value?.currency=='INR'" style="flex-direction:row;" type="radio" id="options1"
+                        class="circular_input" value="value.bank" name="BankToCharge" (click)="chargesTo(value)">
                       <label *ngIf="value?.currency=='INR'" style="flex-direction:row;" class="label1"
                         for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value.accNumber}}</label>
                     </div>
                     <br>
                   </div>
-                  <custom_mat_step_button>
-                    <div class="custom-mat-step-button-panel">
-                      <button class="btn btn-primary" style="float:right" (click)='generateDoc(code,j)' [disabled]="this.charge?.length!=0?false:true"> Generate
-                        Document
-                      </button>
-                    </div>
-                  </custom_mat_step_button>
+                  <div class="btn-control-panel">
+                    <button class="btn btn-primary" style="float:right" (click)='generateDoc(code,j)'
+                      [disabled]="this.charge?.length!=0?false:true"> Preview
+                    </button>
+                  </div>
                 </div>
                 <div *ngIf='code === c && generatePurpose[j] == code'>
                   <div>
@@ -1089,15 +1096,14 @@
                           [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
                       </div>
                     </div>
-                    <div *ngIf="donePurpose[j] != code" style="display: block; width: 78%;  margin-top: 40px;">
+                    <div *ngIf="donePurpose[j] != code" class="btn-control-panel">
                       <!-- <button *ngIf='newDone' class="button1" style="margin-right: 10px;" title="Share As PDF"
                         (click)="doneDox()">Done </button>
                       <button *ngIf='newDone' class="button1" style="margin-right: 10px;"
                         (click)="hidePreview()">Edit</button> -->
-                      <button class="button1 PopupOpen" popup-close="ExportTransactionView"
-                        style="margin-right: 10px; width:200px"
-                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL);showPreview(code)">Send Mail /
-                        Download</button>
+                      <button class="btn btn-primary PopupOpen" popup-close="ExportTransactionView"
+                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL);showPreview(code)">Send for Approval</button>
+                        <button class="btn btn-primary">Download</button>
                       <!-- <button *ngIf='!newDone' id="ProceedPreview" class="button1"
                         style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to
                         Preview</button> -->

@@ -15,7 +15,17 @@
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            (keypress)="field?.KeyPress($event)" class="form-control" [style]="field?.style" />
+                            class="form-control" [style]="field?.style" />
+                    </div>
+                </div>
+                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
+                    <div class="form-group mb-3" *ngSwitchCase="'TextValiadtion'">
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            [type]="field.type" [name]="field.fieldName"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            class="form-control" [style]="field?.style" />
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">

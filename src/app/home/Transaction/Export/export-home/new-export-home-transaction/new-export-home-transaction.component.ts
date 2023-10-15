@@ -95,7 +95,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
         amount: {
           type: "LabelShow",
           value: this.Inward_Remittance_MT103[0]?.amount,
-          label: "Amount",
+          label: "Remittance Amount",
           Inputdisabled: true,
           visible: true,
           rules: {
@@ -113,35 +113,15 @@ export class NewExportHomeTransactionComponent implements OnInit {
           }
         },
         Inward_amount_for_disposal: {
-          type: "text",
+          type: "TextValiadtion",
           value: this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal,
           label: "Disposal Amount",
           visible: true,
+          EqualName: "amount",
           rules: {
             required: true,
           },
-          AmountLessThan: {
-            key: 'Inward_amount_for_disposal',
-            equalkey: 'amount',
-            index: 3,
-            equalindex: 2,
-            errormsg: 'Inward Amount should be less than allow is required.',
-          },
-          KeyPress: (event: any) => {
-            clearTimeout(cleartimeout);
-            if (event?.target?.value != '') {
-              if (parseFloat(event?.target?.value) <= parseFloat(this.Inward_Remittance_MT103[0]?.amount)) {
-
-              } else {
-                this.toastr.error("Inward Amount for Disposal Should be Equal to Your Added Amount");
-                event?.preventDefault();
-                cleartimeout = setTimeout(() => {
-                  event.target.value = this.Inward_Remittance_MT103[0]?.amount;
-                }, 200);
-              }
-            }
-            console.log("sdfsdhfsdfdsfsdfd", event)
-          }
+          errormsg: 'Disposal Amount should be lesser than Inward Remittance Amount.',
         }
       }, 'NewInwardRemittanceDisposal');
     }, 200);
@@ -150,10 +130,25 @@ export class NewExportHomeTransactionComponent implements OnInit {
 
   ToForwardContract_Selected: any = []
   ToForwardContract(event: any, value: any, index: any) {
-    var cleartimeout: any = null;
     if (event?.target?.checked == true) {
       this.ToForwardContract_Selected[0] = value;
       this.validator.buildForm({
+        RemittanceAmount: {
+          type: "LabelShow",
+          value: this.INWARD_DISPOSAL_VALUE_FORM[0]?.amount,
+          label: "Remittance Amount",
+          rules: {
+            required: true,
+          }
+        },
+        DisposalAmount: {
+          type: "LabelShow",
+          value: this.INWARD_DISPOSAL_VALUE_FORM[0]?.Inward_amount_for_disposal,
+          label: "Disposal Amount",
+          rules: {
+            required: true,
+          }
+        },
         ForwardRefNo: {
           type: "LabelShow",
           value: this.ToForwardContract_Selected[0]?.ForwardRefNo,
@@ -195,34 +190,14 @@ export class NewExportHomeTransactionComponent implements OnInit {
           }
         },
         UtilizedAmount: {
-          type: "text",
+          type: "TextValiadtion",
           value: this.ToForwardContract_Selected[0]?.UtilizedAmount,
           label: "Amount to be utilised",
-          AmountLessThan: {
-            key: 'UtilizedAmount',
-            equalkey: 'AvailableAmount',
-            index: 3,
-            equalindex: 2,
-            errormsg: 'Available Amount should be less than allow is required.',
-          },
+          EqualName: "AvailableAmount",
+          errormsg: 'Utilisation amount should be equal or less than the forward contract Amount.',
           rules: {
             required: true,
           },
-          KeyPress: (event: any) => {
-            clearTimeout(cleartimeout);
-            if (event?.target?.value != '') {
-              if (parseFloat(event?.target?.value) <= parseFloat(this.ToForwardContract_Selected[0]?.AvailableAmount)) {
-
-              } else {
-                this.toastr.error("Utilized Amount Should be Equal to Your Added Amount");
-                event?.preventDefault();
-                cleartimeout = setTimeout(() => {
-                  event.target.value = this.ToForwardContract_Selected[0]?.AvailableAmount;
-                }, 200);
-              }
-            }
-            console.log("sdfsdhfsdfdsfsdfd", event)
-          }
         },
         NetRate: {
           type: "LabelShow",

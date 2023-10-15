@@ -1385,3 +1385,11 @@ iframe #toolbar #end #downloads #download #icon {
     background-color: coral;
     color: white;
 }
+
+.btn-control-panel {
+    position: fixed;
+    bottom: 22px;
+    right: 190px;
+    display: flex;
+    gap: 10px;
+}

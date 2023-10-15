@@ -53,7 +53,7 @@ export class UploadServiceValidatorService implements OnInit {
   CommericalNo: ElementRef | any;
   BUYER_DETAILS_MASTER: any = [];
   COMPANY_INFO: any = [];
-  CHECK_BOX_BANK_LIST:any=[];
+  CHECK_BOX_BANK_LIST: any = [];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -381,6 +381,17 @@ export class UploadServiceValidatorService implements OnInit {
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(200)],
       number: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
+
+      TextValiadtion: rule?.required == true ?
+        [Validators.required, minLength != undefined ?
+          Validators.minLength(minLength) :
+          Validators.minLength(0), maxLength != undefined ?
+          Validators.maxLength(maxLength) : Validators.maxLength(50), hasAmountLessThanForm(field?.EqualName, field?.errormsg)] :
+        [minLength != undefined ? Validators.minLength(minLength) :
+          Validators.minLength(0), maxLength != undefined ?
+          Validators.maxLength(maxLength) : Validators.maxLength(50),
+        hasAmountLessThanForm(field?.EqualName, field?.errormsg)],
+
       buyer: rule?.required == true ? [Validators.required] : [],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
       ImagesList: rule?.required == true ? [Validators.required] : [],
@@ -586,6 +597,20 @@ export function hasAmountLessThanFormArray(control: FormControl): ValidationErro
   const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
   const ALPHA_NUMERIC_VALIDATION_ERROR = { alphaNumericError: 'only alpha numeric values are allowed' }
   return ALPHA_NUMERIC_REGEX.test(control.value) ? null : ALPHA_NUMERIC_VALIDATION_ERROR;
+}
+
+export function hasAmountLessThanForm(equals: string, Message: string) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const equalsField: any = control.root.get(equals)
+    if (equalsField) {
+      if (parseFloat(control.value) <= parseFloat(equalsField?.value)) {
+        return null;
+      } else {
+        return { matched: Message };
+      }
+    }
+    return null;
+  }
 }
 
 export function hasAmountGreaterThanFormArray(control: FormControl): ValidationErrors | null {

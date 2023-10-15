@@ -257,6 +257,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   MT103_URL: any = '';
   MT103_ID: any = ''
   NEW_PURPOSE_CODE: any = [];
+  GROUP_NAME_LIST: any = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes, "ngOnChanges")
@@ -291,6 +292,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.NEW_PURPOSE_CODE = data['default'];
     for (let index = 0; index < data['default'].length; index++) {
       var temp: any = [];
+      if (this.GROUP_NAME_LIST?.filter((item: any) => item?.value?.includes(data['default'][index]['groupname']))?.length == 0) {
+        this.GROUP_NAME_LIST.push({ value: data['default'][index]['groupname'] })
+      }
       for (let j = 0; j < data['default'][index]['purpose'].length; j++) {
         if (this.Inward_Remittance.includes(data['default'][index]['purpose'][j].code)) {
           temp.push(data['default'][index]['purpose'][j]);
@@ -300,6 +304,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         this.default_value[data['default'][index]['groupname']] = temp;
       }
     }
+    console.log(this.GROUP_NAME_LIST, "GROUP_NAME_LIST")
     this.documentService.getBlcopyrefPromies().then((res: any) => {
       this.Blcopyref = res;
       this.Blcopyrefoldata = res;
@@ -770,7 +775,24 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       this.NEW_PURPOSE_CODE = data['default']
     }
   }
-  
+
+
+  searchDataGroupName(e) {
+    console.log(e)
+    this.jsondata = []
+    if (e != null && e != '') {
+      let filtervalue = this.dataJson?.filter((item: any) => item?.groupname?.toLowerCase()?.indexOf(e?.toLowerCase()) != -1)
+      this.jsondata = filtervalue
+      console.log(this.jsondata, "jsondata")
+      this.NEW_PURPOSE_CODE = this.jsondata;
+      if (this.jsondata?.length == 0) {
+        this.NEW_PURPOSE_CODE = data['default']
+      }
+    } else {
+      this.NEW_PURPOSE_CODE = data['default']
+    }
+  }
+
   purposeFun(data: any) {
     this.purposeRows = [];
     for (let key in data) {
@@ -868,6 +890,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
     }
+    this.SELECTED_PURPOSE_CODE=false;
     console.log("hello there", this.newTask);
   }
   replaceText(text: any, repl_text: any) {
@@ -2693,11 +2716,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       );
     });
   }
+  
   get proceedtrue() {
-    return this.selectedPurpose?.length != 0 ? true : false;
+    return this.SELECTED_PURPOSE_CODE;
   }
 
   OLD_INPUT_VALUE: string = '';
+  SELECTED_PURPOSE_CODE:boolean=false;
   purposeClick(e, colspanitem) {
     if (e.startsWith("P0") || e.startsWith("P1")) {
       if (this.Inward_Remittance.includes(e)) {
@@ -2709,15 +2734,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           this.selectedPurpose.push(e)
           this.toastr.info(`Purpose code added`);
           this.selection = this.selectedPurpose[0];
+          this.SELECTED_PURPOSE_CODE=true;
         }
         colspanitem['isActive'] = !colspanitem?.isActive;
       }
       else {
+        this.SELECTED_PURPOSE_CODE=false;
         colspanitem['isActive'] = false
         this.toastr.warning(`You can't add this purpose code`);
       }
     }
     else {
+      this.SELECTED_PURPOSE_CODE=false
       this.toastr.error(`Click on purpose code`);
     }
   }

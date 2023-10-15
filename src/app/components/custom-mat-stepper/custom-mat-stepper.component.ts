@@ -72,7 +72,6 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
       this.BackScrollButton;
     } else {
       this.BACK_BUTTON_DISABLED = true;
-      this.NEXT_BUTTON_DISABLED =
         this.HEADER_DATA?.forEach((element: any) => {
           element['ActiveClass'] = false;
         });
