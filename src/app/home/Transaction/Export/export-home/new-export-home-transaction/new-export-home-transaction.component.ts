@@ -120,16 +120,25 @@ export class NewExportHomeTransactionComponent implements OnInit {
           rules: {
             required: true,
           },
+          AmountLessThan: {
+            key: 'Inward_amount_for_disposal',
+            equalkey: 'amount',
+            index: 3,
+            equalindex: 2,
+            errormsg: 'Inward Amount should be less than allow is required.',
+          },
           KeyPress: (event: any) => {
             clearTimeout(cleartimeout);
-            if (parseFloat(event?.target?.value) > parseFloat(this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal)) {
+            if (event?.target?.value != '') {
+              if (parseFloat(event?.target?.value) <= parseFloat(this.Inward_Remittance_MT103[0]?.amount)) {
 
-            } else {
-              this.toastr.error("Inward Amount for Disposal Should be Equal to Your Added Amount");
-              event?.preventDefault();
-              cleartimeout = setTimeout(() => {
-                event.target.value = this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal;
-              }, 200);
+              } else {
+                this.toastr.error("Inward Amount for Disposal Should be Equal to Your Added Amount");
+                event?.preventDefault();
+                cleartimeout = setTimeout(() => {
+                  event.target.value = this.Inward_Remittance_MT103[0]?.amount;
+                }, 200);
+              }
             }
             console.log("sdfsdhfsdfdsfsdfd", event)
           }
@@ -179,7 +188,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
         },
         AvailableAmount: {
           type: "LabelShow",
-          value: this.ToForwardContract_Selected[0]?.AvailableAmount!=""?this.ToForwardContract_Selected[0]?.AvailableAmount:0,
+          value: this.ToForwardContract_Selected[0]?.AvailableAmount != "" ? this.ToForwardContract_Selected[0]?.AvailableAmount : 0,
           label: "Available Amount",
           rules: {
             required: true,
@@ -201,14 +210,16 @@ export class NewExportHomeTransactionComponent implements OnInit {
           },
           KeyPress: (event: any) => {
             clearTimeout(cleartimeout);
-            if (parseFloat(event?.target?.value) > parseFloat(this.ToForwardContract_Selected[0]?.AvailableAmount)) {
+            if (event?.target?.value != '') {
+              if (parseFloat(event?.target?.value) <= parseFloat(this.ToForwardContract_Selected[0]?.AvailableAmount)) {
 
-            } else {
-              this.toastr.error("Utilized Amount Should be Equal to Your Added Amount");
-              event?.preventDefault();
-              cleartimeout = setTimeout(() => {
-                event.target.value = this.ToForwardContract_Selected[0]?.AvailableAmount;
-              }, 200);
+              } else {
+                this.toastr.error("Utilized Amount Should be Equal to Your Added Amount");
+                event?.preventDefault();
+                cleartimeout = setTimeout(() => {
+                  event.target.value = this.ToForwardContract_Selected[0]?.AvailableAmount;
+                }, 200);
+              }
             }
             console.log("sdfsdhfsdfdsfsdfd", event)
           }

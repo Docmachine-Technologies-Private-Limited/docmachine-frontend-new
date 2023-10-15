@@ -256,6 +256,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   Inward_Remittance_MT103_DATA: any = [];
   MT103_URL: any = '';
   MT103_ID: any = ''
+  NEW_PURPOSE_CODE: any = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes, "ngOnChanges")
@@ -282,6 +283,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.MT103_ID = this.route.snapshot.paramMap.get('MT103_ID');
     this.ToForwardContract_Selected = this.ForwardNo
     console.log("pipoId", this.redirectid);
+    for (let index = 0; index < data['default'].length; index++) {
+      for (let j = 0; j < data['default'][index]['purpose'].length; j++) {
+        data['default'][index]['purpose']['isActive'] = false;
+      }
+    }
+    this.NEW_PURPOSE_CODE = data['default'];
     for (let index = 0; index < data['default'].length; index++) {
       var temp: any = [];
       for (let j = 0; j < data['default'][index]['purpose'].length; j++) {
@@ -721,6 +728,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     console.log(this.selectPIPO, sumpipoamount, this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal, this.selectPIPO_data, 'selectPIPO')
   }
 
+  resetActive(data: any, i) {
+    data?.forEach((element, index) => {
+      if (i != index) {
+        element['isActive'] = false
+      }
+    });
+  }
+
   changeCheckbox2(value) {
     let j = this.tryArray.indexOf(value)
     if (j == -1) {
@@ -729,94 +744,33 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     else {
       this.tryArray.splice(j, 1)
     }
-
     console.log(this.tryArray)
   }
 
   searchData(e) {
     console.log(e)
-
     this.jsondata = []
     if (e != null && e != '') {
       for (let data of this.dataJson) {
-        if (data.groupname.toLowerCase().indexOf(e.toLowerCase()) != -1) {
-          this.jsondata.push(data)
-        }
-        else {
-          let purpose: any = []
-          for (let value of data.purpose) {
-            if (value.code.toLowerCase().indexOf(e.toLowerCase()) != -1
-              || value.description.toLowerCase().indexOf(e.toLowerCase()) != -1) {
-              purpose.push({
-                "code": value.code,
-                "description": value.description
-              })
-            }
+        data?.purpose?.forEach(element => {
+          if (element?.code?.toLowerCase()?.indexOf(e?.toLowerCase()) != -1) {
+            this.jsondata.push({
+              groupname: data?.groupname,
+              purpose: [element]
+            });
           }
-          if (purpose.length > 0) {
-            this.jsondata[data.groupname] = purpose;
-          }
-        }
-
+        });
       }
-      console.log(this.jsondata.length)
-      this.pgNumber = Object.keys(this.jsondata).length
-      this.pcNumber = 0;
-      for (let data of this.jsondata) {
-        console.log(data.purpose.length)
-        this.pcNumber = this.pcNumber + data.purpose.length
+      console.log(this.jsondata, "jsondata")
+      this.NEW_PURPOSE_CODE = this.jsondata;
+      if (this.jsondata?.length == 0) {
+        this.NEW_PURPOSE_CODE = data['default']
       }
-      this.default_value = this.jsondata
-      this.purposeFun(this.default_value)
     } else {
-      this.default_value = this.old_data;
-      this.purposeFun(this.default_value)
+      this.NEW_PURPOSE_CODE = data['default']
     }
-
   }
-  searchMulitpleData(multipleselectedvalue) {
-    console.log(multipleselectedvalue, 'multipleselectedvalue')
-    this.jsondata = [];
-    if (multipleselectedvalue.length != 0) {
-      for (let index = 0; index < multipleselectedvalue.length; index++) {
-
-        for (let data of this.dataJson) {
-          if (data.groupname.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1) {
-            this.jsondata.push(data)
-          }
-          else {
-            let purpose: any = []
-            for (let value of data.purpose) {
-              if (value.code.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1
-                || value.description.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1) {
-                purpose.push({
-                  "code": value.code,
-                  "description": value.description
-                })
-              }
-            }
-            if (purpose.length > 0) {
-              this.jsondata[data.groupname] = purpose;
-            }
-          }
-        }
-      }
-      console.log(this.jsondata.length)
-      this.pgNumber = Object.keys(this.jsondata).length
-      this.pcNumber = 0;
-      for (let data of this.jsondata) {
-        console.log(data.purpose.length)
-        this.pcNumber = this.pcNumber + data.purpose.length
-      }
-      this.default_value = this.jsondata
-      this.purposeFun(this.default_value)
-    } else {
-      this.default_value = this.old_data;
-      this.purposeFun(this.default_value)
-    }
-
-  }
-
+  
   purposeFun(data: any) {
     this.purposeRows = [];
     for (let key in data) {
@@ -2742,8 +2696,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   get proceedtrue() {
     return this.selectedPurpose?.length != 0 ? true : false;
   }
+
   OLD_INPUT_VALUE: string = '';
-  purposeClick(e, f, inputid: any) {
+  purposeClick(e, colspanitem) {
     if (e.startsWith("P0") || e.startsWith("P1")) {
       if (this.Inward_Remittance.includes(e)) {
         if (this.selectedPurpose.includes(e)) {
@@ -2755,8 +2710,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           this.toastr.info(`Purpose code added`);
           this.selection = this.selectedPurpose[0];
         }
+        colspanitem['isActive'] = !colspanitem?.isActive;
       }
       else {
+        colspanitem['isActive'] = false
         this.toastr.warning(`You can't add this purpose code`);
       }
     }

@@ -15,8 +15,7 @@
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            (keypress)="field?.KeyPress($event)"
-                            class="form-control" [style]="field?.style" />
+                            (keypress)="field?.KeyPress($event)" class="form-control" [style]="field?.style" />
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
@@ -221,7 +220,7 @@
                     <div class="col-12 p-0 d-flex" style="align-items: center;">
                         <label style="margin: auto;margin-left: 0;"
                             *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                        <div class="d-flex">
+                        <div class="d-flex" *ngIf="field?.CoveringLetter==false || field?.CoveringLetter==undefined">
                             <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button"
                                 (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName},field.fieldName);HideShowInputCheckBox(true,field?.HideShowInput)"
                                 [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">{{field?.text1!=undefined?field?.text1:'Yes'}}</button>
@@ -229,6 +228,16 @@
                                 (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName},field.fieldName);HideShowInputCheckBox(false,field?.HideShowInput)"
                                 [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">{{field?.text2!=undefined?field?.text2:'No'}}</button>
                         </div>
+                        <custom-ng-content-header *ngIf="field?.CoveringLetter==true">
+                            <div class="d-flex">
+                                <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button"
+                                (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName},field.fieldName);HideShowInputCheckBox(true,field?.HideShowInput)"
+                                [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">{{field?.text1!=undefined?field?.text1:'Yes'}}</button>
+                            <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button"
+                                (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName},field.fieldName);HideShowInputCheckBox(false,field?.HideShowInput)"
+                                [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">{{field?.text2!=undefined?field?.text2:'No'}}</button>
+                            </div>
+                        </custom-ng-content-header>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'PopupOpen'">
@@ -262,17 +271,15 @@
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'date'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <input [(ngModel)]="field.value"
-                        [disbaled]="field?.Inputdisabled"
+                    <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" [type]="field.type"
                         [name]="field.fieldName" class="form-control" [style]="field?.style" />
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'currency'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
-                    <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0"
-                    [disbaled]="field?.Inputdisabled"
-                    [items]="this.validator.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" (change)="AutoFillCurrency($event,field?.autofill)"
+                    <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0" [disbaled]="field?.Inputdisabled"
+                        [items]="this.validator.CURRENCY_LIST" bindLabel="type" [multiple]="false"
+                        (change)="AutoFillCurrency($event,field?.autofill)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
@@ -281,17 +288,15 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select [items]="[{value:'Buy'},{value:'Sell'}]" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [disbaled]="field?.Inputdisabled"
-                        (change)="this.setValue($event?.value,field?.InputBindValue)" [name]="field.fieldName"
-                        [(ngModel)]="field.value">
+                        [disbaled]="field?.Inputdisabled" (change)="this.setValue($event?.value,field?.InputBindValue)"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'Underlying'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select
                         [items]="[{value:'Booking'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
-                        bindLabel="value" [multiple]="false"
-                        [disbaled]="field?.Inputdisabled"
+                        bindLabel="value" [multiple]="false" [disbaled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
@@ -328,7 +333,10 @@
                     <label class="mt-2 mb-2"
                         *ngIf="field.Banklabel!=undefined && field.Banklabel!='' && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
                     <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST;let in=index" class="mt-2">
-                        <mat-checkbox [checked]="item?.checked"
+                        <mat-checkbox *ngIf="field.TypeOfCurrency==item?.value?.currency" [checked]="item?.checked"
+                            (change)="onBankCheckBox($event,field.fieldName,item?.value,item)" [name]="field.fieldName"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
+                        <mat-checkbox *ngIf="field.TypeOfCurrency=='' || field.TypeOfCurrency==undefined" [checked]="item?.checked"
                             (change)="onBankCheckBox($event,field.fieldName,item?.value,item)" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
                     </div>

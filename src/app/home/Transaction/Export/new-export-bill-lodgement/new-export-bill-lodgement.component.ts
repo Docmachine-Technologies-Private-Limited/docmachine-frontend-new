@@ -115,6 +115,11 @@ export class NewExportBillLodgementComponent implements OnInit {
     this.BankId = bank?.BankUniqueId;
     this.SELECT_BUYER_DETAILS = bank;
     console.log(bank, "setSelectedBankDetails")
+    if (this.ExportBillLodgement_Form?.value?.SingleMultiple?.bool == true) {
+      this.fillFormSingle(null);
+    } else {
+      this.fillForm(null);
+    }
   }
 
   async fillForm(sbdata: any) {
@@ -313,6 +318,7 @@ export class NewExportBillLodgementComponent implements OnInit {
         head: [['Date', 'FIRX No.', 'Amount received', 'SB Setoff Amount', 'CI No.', 'SB No.']],
         body: dataTable,
       })
+      // this.addWaterMark(doc);
       let tableuri = doc.output("arraybuffer");
       console.log(tableuri, "tableuri")
       const loadmergedPdf = await PDFDocument.load(tableuri);
@@ -348,11 +354,15 @@ export class NewExportBillLodgementComponent implements OnInit {
     }
   }
 
-  addWaterMark(imgData, doc) {
+  addWaterMark(doc: any) {
     var totalPages = doc.internal.getNumberOfPages();
+    var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+    var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+    var img1 = new Image();
+    img1.src = this.validator.COMPANY_INFO[0]?.letterHead;
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
-      doc.addImage(imgData, 'PNG', 40, 40, 75, 75);
+      doc.addImage(img1, 'PNG', 0, 0, pageWidth, pageHeight);
     }
     return doc;
   }
@@ -473,6 +483,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           value: "",
           label: "Select Bank",
           Banklabel: "Charges A/C No.*",
+          TypeOfCurrency: "INR",
           rules: {
             required: true,
           }
@@ -490,7 +501,8 @@ export class NewExportBillLodgementComponent implements OnInit {
         SingleMultiple: {
           type: "yesnocheckbox",
           value: '',
-          label: "Single/Mulitple Shipping Bill",
+          label: "Do you want to Single Covering Letter",
+          CoveringLetter:true,
           rules: {
             required: true,
           },
@@ -614,8 +626,10 @@ export class NewExportBillLodgementComponent implements OnInit {
     } else if (value?.id == "SingleMultiple") {
       if (value?.bool == true) {
         this.SINGLE_TAB_MULITIPLE_TAB = "1";
+        this.fillForm(null)
       } else {
         this.SINGLE_TAB_MULITIPLE_TAB = "2";
+        this.fillFormSingle(null)
       }
     }
     console.log(value, "YesNoCheckBox")
@@ -1076,8 +1090,10 @@ export class NewExportBillLodgementComponent implements OnInit {
         const mergedPdfFileload = await mergedPdfload.save();
         var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
         const x1 = 'data:application/pdf;base64,' + base64String1;
+        this.PREVIWES_URL = ''
         this.exportbilllodgementdata.PREVIWES_URL = '';
         setTimeout(async () => {
+          this.PREVIWES_URL = x1;
           this.exportbilllodgementdata.PREVIWES_URL = x1;
           this.VISIBLITY_PDF = true;
           await resolve(x1)

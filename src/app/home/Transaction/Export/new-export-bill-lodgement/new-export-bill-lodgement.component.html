@@ -1,33 +1,32 @@
-<upload-components-header [title]="this.TITLE_CHANGED" id="Shippingbill" [UPLOAD_BUTTON]="false"
-    [PIPO_DISABLED]="false" [HIDE_OPTION]="false">
+<upload-components-header [title]="this.TITLE_CHANGED" id="Shippingbill" [UPLOAD_BUTTON]="false" [PIPO_DISABLED]="false"
+    [HIDE_OPTION]="false">
     <div class="upload-panel">
         <div class="left-panel" style="height: 84vh;
         overflow: auto;">
+            <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length==0 && PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                name="Bank Pdf" [src]="PREVIWES_URL"></app-pdf-viewer>
             <div class="col-12" *ngIf="this.SINGLE_TAB_MULITIPLE_TAB=='1'">
                 <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                *ngIf="this.exportbilllodgementdata?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                name="Bank Pdf"
-                [src]="this.exportbilllodgementdata?.PREVIWES_URL"></app-pdf-viewer>
-            <div id="federal-bank-letter-head">
-                <federal-bank-exportletterhead
-                    *ngIf="this.exportbilllodgementdata?.PREVIWES_URLL!='' && this.VISIBLITY_PDF==true"
-                    (url)="urlletterhead($event)"
-                    [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
-            </div>
-            <app-pdf-viewer class="pt-3"
-                *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.ALL_RELATED_DOCUMENTS;let j=index"
-                [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                [name]="ALL_RELATED_DOCUMENTSitem?.name"
-                [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
-            <button type="button"
-                [disabled]="this.PREVIOUD_BTN"
-                class="btn btn-primary Previous-btn PopupOpen"
-                (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION)"
-                popup-close="PrviewPage">Preview</button>
-            <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
-                (click)="
+                    *ngIf="this.exportbilllodgementdata?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Bank Pdf"
+                    [src]="this.exportbilllodgementdata?.PREVIWES_URL"></app-pdf-viewer>
+                <div id="federal-bank-letter-head">
+                    <federal-bank-exportletterhead
+                        *ngIf="this.exportbilllodgementdata?.PREVIWES_URLL!='' && this.VISIBLITY_PDF==true"
+                        (url)="urlletterhead($event)"
+                        [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
+                </div>
+                <app-pdf-viewer class="pt-3"
+                    *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.ALL_RELATED_DOCUMENTS;let j=index"
+                    [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                    [name]="ALL_RELATED_DOCUMENTSitem?.name" [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
+                <button type="button" [disabled]="this.PREVIOUD_BTN" class="btn btn-primary Previous-btn PopupOpen"
+                    (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION)"
+                    popup-close="PrviewPage">Preview</button>
+                <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
+                    (click)="
                 FormValueSingle(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION,true)"
-                attr.popup-close="PrviewPage">Proceed</button>
+                    attr.popup-close="PrviewPage">Proceed</button>
             </div>
             <mat-tab-group *ngIf="this.SINGLE_TAB_MULITIPLE_TAB=='2'"
                 (selectedTabChange)="this.ShippingBillTabChanged($event,RawValueEventPanel?.geForm)">
@@ -81,14 +80,24 @@
             Newheight="calc(100vh - 130px)" name="All Pdf Merge" [src]="this.SELECTED_PREVIEWS_URL"></app-pdf-viewer>
     </div>
     <custom-model-header>
-        <button type="button" class="btn btn-primary" (click)="SendApproval('',
-        this.ExportBillLodgement_Form?.SingleMultiple?.bool == false?this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?._id:'multiple',PrviewPagePanel);">Send for Approval</button>
+        <button type="button" class="btn btn-primary"
+            (click)="SendApproval('',
+        this.ExportBillLodgement_Form?.SingleMultiple?.bool == false?this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?._id:'multiple',PrviewPagePanel);">Send
+            for Approval</button>
     </custom-model-header>
 </app-custom-model>
 
 <app-custom-model [FooterButton]="false" [modalbodystyle]="{height:'90vh !important'}"
     [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="90vh" id="SHIPING_BILL_POPUP"
     [name]="'Selection of Shipping Bill'" #ShippingBill>
+    <custom-model-header>
+        <div class="d-flex" style="gap: 10px;">
+            <label for="">Match SB with IRM using match off module</label>
+            <button type="button" class="btn btn-primary" (click)="ShippingBill?.displayHidden">Done</button>
+            <button type="button" class="btn btn-primary">Fill Pdf</button>
+        </div>
+    </custom-model-header>
+
     <div class="p-2 SHIPING_BILL_POPUP">
         <div class="p-2 SHIPING_BILL_POPUP" style="height: 84vh;">
             <app-ng-dropdown-custom placeHolderText="Select Buyer Name"
@@ -205,7 +214,6 @@
                     </div>
                 </mat-expansion-panel>
             </mat-accordion>
-            <button style="position: absolute;bottom: 0; right: 0;" type="button" class="btn btn-primary" (click)="ShippingBill?.displayHidden">Done</button>
         </div>
     </div>
 </app-custom-model>
