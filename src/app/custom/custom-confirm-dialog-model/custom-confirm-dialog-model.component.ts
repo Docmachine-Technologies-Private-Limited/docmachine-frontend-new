@@ -92,7 +92,7 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     $('.InputConfirmDialog').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS = callback;
   }
-  public IframeConfirmDialogModel(titleheader: any, url: any, downloadShow: boolean, callback: Function): any {
+  public IframeConfirmDialogModel(titleheader: any, url: any, downloadShow: boolean,buttonName:string='', callback: Function): any {
     this.HIDE_ALL_MODELS('IframeModel').then((res: any) => {
       if (res == true) {
         this.MODEL_TYPE_VIEW['IframeModel'] = true;
@@ -103,6 +103,7 @@ export class CustomConfirmDialogModelComponent implements OnInit {
         this.CustomConfirmDialogModel.CALLBACKS = callback;
         this.DownloadStatus = downloadShow
         window.scroll(0, 0);
+        this.CustomConfirmDialogModel.ButtonName=buttonName;
       }
     });
   }
@@ -141,5 +142,9 @@ export class CustomConfirmDialogModelComponent implements OnInit {
   }
   CALLBACKS_CALL(value: any, dump: any) {
     this.CustomConfirmDialogModel.CALLBACKS({ value: value.Inputdata })
+  }
+  
+  PopUpCallBack(value){
+    this.CustomConfirmDialogModel.CALLBACKS(value)
   }
 }

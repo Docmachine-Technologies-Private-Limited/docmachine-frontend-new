@@ -265,7 +265,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.ForwardNo = changes?.data?.currentValue[1] != undefined ? changes?.data?.currentValue[1] : this.ForwardNo;
     this.ToForwardContract_Selected = this.ForwardNo;
     this.Inward_Remittance_MT103_DATA = this.InwardDisposalData;
-    this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] = 0
+    this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] = this.InwardDisposalData[0]?.Inward_amount_for_disposal
     this.Inward_Remittance_MT103 = this.InwardDisposalData;
     this.bank = [this.InwardDisposalData[0]?.BankName];
     this.MT103_URL = this.InwardDisposalData[0]?.file;
@@ -728,24 +728,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   PIPO_SUM_AMOUNT: any = 0;
 
   changeCheckboxPIPO(event: any, value, data: any, index) {
+    const FindIndex = this.selectPIPO_data.findIndex(item => item?._id === data?._id);
     if (event.target.checked == true) {
       if (parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) > parseFloat(this.PIPO_SUM_AMOUNT)) {
         this.selectPIPO_data.push(data)
         this.selectPIPO.push(value);
-        data['UtilizedAmount'] = data?.amount;
-        if (parseFloat(data['AvailableAmount']) < parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal)) {
-          this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] = parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) -
-            parseFloat(data['AvailableAmount']);
-        } else {
-          this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] =
-            parseFloat(data['AvailableAmount']) - parseFloat(data?.amount);
+        if (parseFloat(data['UtilizedAmount']) == 0) {
+          data['UtilizedAmount'] = parseFloat(data?.amount);
         }
-        data['AvailableAmount'] = this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] == 0 ? 0 : this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'];
       } else {
-        data['UtilizedAmount'] = 0;
-        data['AvailableAmount'] = parseFloat(data?.amount);
-        this.selectPIPO.splice(index, 1);
-        this.selectPIPO_data.splice(index, 1)
         event.target.checked = false;
         this.toastr.error("Invoice amount should be equal or more than  remittance amount")
       }
@@ -753,12 +744,37 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       data['UtilizedAmount'] = 0;
       data['AvailableAmount'] = parseFloat(data?.amount);
       data['UtilizedAmount'] = 0;
-      this.selectPIPO.splice(index, 1);
-      this.selectPIPO_data.splice(index, 1)
+      this.selectPIPO.splice(FindIndex, 1);
+      this.selectPIPO_data.splice(FindIndex, 1)
     }
-    this.PIPO_SUM_AMOUNT = this.selectPIPO_data.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+    this.PIPO_SUM_AMOUNT = this.selectPIPO_data.reduce((a, b) => parseFloat(a) + parseFloat(b?.UtilizedAmount), 0);
     console.log(this.selectPIPO, this.Inward_Remittance_MT103_DATA[0],
       this.PIPO_SUM_AMOUNT, this.selectPIPO_data, 'selectPIPO')
+  }
+
+  CLEAR_TIMEOUT: any = null
+  InputValidation(event: any, data: any) {
+    clearTimeout(this.CLEAR_TIMEOUT)
+    if (data['UtilizedAmount'] != '' && parseFloat(data['UtilizedAmount']) != 0) {
+      if (parseFloat(data['UtilizedAmount']) < parseFloat(data?.AvailableAmount)) {
+        this.PIPO_SUM_AMOUNT = this.selectPIPO_data.reduce((a, b) => parseFloat(a) + parseFloat(b?.UtilizedAmount), 0);
+      } else {
+        this.CLEAR_TIMEOUT = setTimeout(() => {
+          data['UtilizedAmount'] = parseFloat(data?.AvailableAmount)
+          this.toastr.error("Utilized Amount should be equal or more than Available Amount")
+        }, 200);
+      }
+    }
+  }
+
+  AmountValidation(display: any) {
+    console.log(parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal),
+      parseFloat(this.PIPO_SUM_AMOUNT), parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) >= parseFloat(this.PIPO_SUM_AMOUNT), "hghghjghjfjhdjj")
+    if (parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) >= parseFloat(this.PIPO_SUM_AMOUNT)) {
+      display?.displayHidden;
+    } else {
+      this.toastr.error("Invoice amount should be equal or more than  remittance amount")
+    }
   }
 
   resetActive(data: any, i) {

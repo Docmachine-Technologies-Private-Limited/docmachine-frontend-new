@@ -19,7 +19,7 @@
           <td class="col-td-th-2">{{item['tableName']}} | {{item['TypeOfPage']}}</td>
           <td class="col-td-th-2">{{item['createdAt']}}</td>
           <td class="col-td-th-1">
-            <label>{{item['status']}}</label>
+            <label>{{item['status']=="Verify"?'Verified':item['status']}}</label>
           </td>
           <td class="col-td-th-2">
             <label>{{item['comment']}}</label>
@@ -27,13 +27,13 @@
           <td class="col-td-th-2">
             <div class="column flex-display"
               *ngIf="this.USER_DETAILS?.RoleCheckbox==='Approver' || this.USER_DETAILS?.RoleCheckbox==''">
-              <button type="submit" class="btn btn-success" (click)="Approved({
+              <!-- <button type="submit" class="btn btn-success" (click)="Approved({
               id: item['_id'],
               Tableid: item['id'],
               tableName:item['tableName'],
               status:'Approved',
               deleteflag:'2'
-            },i)">Approve</button>
+            },i)">Approve</button> -->
               <button type="submit" class="btn btn-danger" (click)="Reject({
               id: item['_id'],
               Tableid: item['id'],
@@ -43,17 +43,17 @@
               Types:item['Types']
             },i)">Reject</button>
               <button type="submit" class="btn btn-primary PopupOpen" popup-close="Documents_View"
-                (click)="openView(item,i,CreateBuyerBeneficiaryMember)">View</button>
+                (click)="openView(item,i,CreateBuyerBeneficiaryMember,'Approve')">View</button>
             </div>
             <div class="column flex-display"
               *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker' && item['status']!='Verify'">
-              <button type="submit" class="btn btn-success" (click)="Approved({
+              <!-- <button type="submit" class="btn btn-success" (click)="Approved({
               id: item['_id'],
               Tableid: item['id'],
               tableName:item['tableName'],
               status:'Verify',
               deleteflag:'1'
-            },i)">Verify</button>
+            },i)">Verify</button> -->
               <button type="submit" class="btn btn-danger" (click)="Reject({
               id: item['_id'],
               Tableid: item['id'],
@@ -63,9 +63,9 @@
               Types:item['Types']
             },i)">Reject</button>
               <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary PopupOpen"
-                [attr.popup-close]="'Documents_View'" (click)="openView(item,i,CreateBuyerBeneficiaryMember)">View</button>
+                [attr.popup-close]="'Documents_View'" (click)="openView(item,i,CreateBuyerBeneficiaryMember,'Verify')">View</button>
               <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary PopupOpen"
-                [attr.popup-close]="'Documents_View'" (click)="openView(item,i,CreateBuyerBeneficiaryMember)">View</button>
+                [attr.popup-close]="'Documents_View'" (click)="openView(item,i,CreateBuyerBeneficiaryMember,'Verify')">View</button>
             </div>
           </td>
         </tr>

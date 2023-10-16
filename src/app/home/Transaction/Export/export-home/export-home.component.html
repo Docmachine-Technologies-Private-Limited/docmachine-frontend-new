@@ -94,8 +94,8 @@
           </div>
         </div>
         <div class="analytics" *ngIf="!proceed">
-          <div> <img src="../../../assets/back.png" style="width: 20px; height: 20px;"
-              (click)="hide('.search_box_new')"><span style="margin-left: 10px;">Back</span> </div>
+          <!-- <div> <img src="../../../assets/back.png" style="width: 20px; height: 20px;"
+              (click)="hide('.search_box_new')"><span style="margin-left: 10px;">Back</span> </div> -->
           <div class="flex-container">
             <div *ngFor="let code of selectedPurpose; let i = index" [ngClass]="{'my_class': c === code}"
               (click)="tabClick(code,i)"> {{code}}</div>
@@ -1038,10 +1038,10 @@
               <div *ngFor="let code of selectedPurpose; let j = index">
                 <div *ngIf='code === c && generatePurpose[j] != code || Select_A_bank[code]'>
                   <input style="width: 50%; margin-top: 10px;margin-bottom: 10px;"
-                    placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control" type="text"
-                    searchPIPONumbers id="SearchShippingBill" autocomplete="off" [value]='StringConverter(selectPIPO)'
-                    (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers.style.display='flex')"
-                    #SearchPIPONumbers>
+                    placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control PopupOpen"
+                    type="text" searchPIPONumbers id="SearchShippingBill" autocomplete="off"
+                    [value]='StringConverter(selectPIPO)' popup-close="PIPONumbers"
+                    (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers)" #SearchPIPONumbers>
                   <span *ngIf='filterToggle'>Select PI/PO numbers*</span>
                   <br>
                   <h3 class="select_bg_new">Select a bank <span style="color:red;">*</span></h3>
@@ -1077,7 +1077,7 @@
                   <div>
                     <div id="mainId" class="bc" *ngIf="donePurpose[j] != code && value!='' && value!=undefined">
                       <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
-                        name="Documents" [src]="'data:application/pdf;base64,'+value" width="700px"
+                        name="Disposal Instruction" [src]="'data:application/pdf;base64,'+value" width="700px"
                         height="500px"></app-pdf-viewer>
                     </div>
                     <br>
@@ -1085,7 +1085,7 @@
                       <br>
                       <div style="display: flex; align-items: center;" *ngIf="this.MT103_URL!=''">
                         <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
-                          name="MT103 Documents" [src]="this.MT103_URL" width="700px" height="500px"></app-pdf-viewer>
+                          name="SWIFT Copy" [src]="this.MT103_URL" width="700px" height="500px"></app-pdf-viewer>
                       </div>
                       <br>
                     </div>
@@ -1093,7 +1093,7 @@
                       <div class="docStyle" style="width: 500px;"
                         *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
                         <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
-                          [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
+                          [name]="'PIPO-'+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
                       </div>
                     </div>
                     <div *ngIf="donePurpose[j] != code" class="btn-control-panel">
@@ -1101,9 +1101,33 @@
                         (click)="doneDox()">Done </button>
                       <button *ngIf='newDone' class="button1" style="margin-right: 10px;"
                         (click)="hidePreview()">Edit</button> -->
-                      <button class="btn btn-primary PopupOpen" popup-close="ExportTransactionView"
+                      <!-- <button class="btn btn-primary PopupOpen" popup-close="ExportTransactionView"
                         (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL);">Send for
-                        Approval</button>
+                        Approval</button> -->
+                      <div style="display: flex;">
+                        <div
+                          *ngIf="this.GetDownloadStatus?.status=='Approved' && this.USER_DATA?.RoleCheckbox!='' && this.USER_DATA?.RoleCheckbox!=null">
+                          <button type="submit" class="btn btn-primary" (click)="mergeAllPDFs('download')"
+                            (click)="modal.dismiss('Cross click')">Download PDF</button>
+                          <button type="submit" class="btn btn-primary" (click)="mergeAllPDFs('sendMail')"
+                            (click)="modal.dismiss('Cross click')">Send Mail</button>
+                        </div>
+                        <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                          <div
+                            *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                            <button *ngIf='newDone' class="btn btn-primary" style="margin-right: 10px; width:200px"
+                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                              (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
+                              for Approval</button>
+                          </div>
+                          <div
+                            *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
+                            <button *ngIf='newDone' class="btn btn-primary" style="margin-right: 10px; width:200px"
+                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'">Wait
+                              for Approval</button>
+                          </div>
+                        </div>
+                      </div>
                       <button class="btn btn-primary">Download</button>
                       <!-- <button *ngIf='!newDone' id="ProceedPreview" class="button1"
                         style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to
@@ -1336,7 +1360,72 @@
     </div>
   </app-custom-model>
 </div>
-<div class="bg-black-opacity" #PIPONumbers>
+<app-custom-model [FooterButton]="false" modalbodystyle="max-height:90vh" (ModelChange)="removeSession()"
+  [customstyle]="{'max-width':'98vw !important'}" class="p-2" height="98vh" id="PIPONumbers"
+  name="Search PI/PO numbers*" #PIPONumbers>
+  <custom-model-header>
+    <div class="d-flex" style="gap: 10px;">
+      <button class="filter1 btn btn-secondary" aria-label="Close" (click)="PIPONumbers?.displayHidden">Cancel</button>
+      <button class="filter1 btn btn-primary" [disabled]="selectPIPO_data?.length!=0?false:true"
+        style="margin-left:16px" (click)="AmountValidation(PIPONumbers)">Sumbit</button>
+    </div>
+  </custom-model-header>
+  <div class="col-12 p-2">
+    <div class="mt_bottom" style="margin-bottom:20px">
+      <div class="row">
+        <div class="d-flex col-12" style="align-items: baseline;">
+          <select [(ngModel)]="PIPONumbersBuyerName" class="form-control col-4"
+            (change)="PIPOFilter(PIPONumbersBuyerName)" disabled>
+            <option value="BuyerName">BuyerName</option>
+            <option [value]="item?.value" *ngFor="let item of buyerName ; let i = index;" style="color: black;">
+              {{item?.value}}</option>
+          </select>
+          <div class="inerward-remittance-details">
+            <p>Remittance-Details || Currency : {{this.Inward_Remittance_MT103_DATA[0]?.currency}} | Remittance Amount :
+              {{this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal}} </p>
+            <p>PI/PO Deatils || Currency : {{this.Inward_Remittance_MT103_DATA[0]?.currency}} | PI/PO Amount :
+              {{this.PIPO_SUM_AMOUNT}} </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="box-shadow" style="height: 56vh;
+  overflow: auto;">
+      <table class="table mb-0 mt-2">
+        <thead>
+          <tr class="table-tr pr-3">
+            <th scope="col" class="col-td-th-1">#</th>
+            <th scope="col" class="col-td-th-3">Invoice No</th>
+            <th scope="col" class="col-td-th-3">Invoice Date</th>
+            <th scope="col" class="col-td-th-3">Buyer Name</th>
+            <th scope="col" class="col-td-th-3">Branch</th>
+            <th scope="col" class="col-td-th-3">Currency</th>
+            <th scope="col" class="col-td-th-3">Invoice Amount</th>
+            <th scope="col" class="col-td-th-3">Balance Amount</th>
+            <th scope="col" class="col-td-th-3">Utilized Amount</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="dataSource.length!=0">
+          <tr class="table-tr pr-3" *ngFor='let data of dataSource; let i = index'>
+            <td scope="col" class="col-td-th-1">
+              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data,i);" />
+            </td>
+            <td scope="col" class="col-td-th-3"> {{data?.pi_poNo}} </td>
+            <td scope="col" class="col-td-th-3"> {{data?.date}} </td>
+            <td scope="col" class="col-td-th-3"> {{data?.buyerName}} </td>
+            <td scope="col" class="col-td-th-3"> {{data?.location}} </td>
+            <td scope="col" class="col-td-th-3"> {{data?.currency}} </td>
+            <td scope="col" class="col-td-th-3"> {{data?.amount}} </td>
+            <td scope="col" class="col-td-th-3"> {{data?.AvailableAmount}} </td>
+            <td scope="col" class="col-td-th-3"><input type="text" (keypress)="InputValidation($event,data)"
+                [(ngModel)]="data.UtilizedAmount"></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</app-custom-model>
+<!-- <div class="bg-black-opacity" #PIPONumbers>
   <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -1366,7 +1455,8 @@
                         </div>
                       </div>
                     </div>
-                    <section class="box-shadow">
+                    <section class="box-shadow" style="height: 56vh;
+                    overflow: auto;">
                       <table class="table mb-0 mt-2">
                         <thead>
                           <tr class="table-tr pr-3">
@@ -1384,7 +1474,7 @@
                         <tbody *ngIf="dataSource.length!=0">
                           <tr class="table-tr pr-3" *ngFor='let data of dataSource; let i = index'>
                             <td scope="col" class="col-td-th-1">
-                              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data,i); " />
+                              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data,i);" />
                             </td>
                             <td scope="col" class="col-td-th-3"> {{data?.pi_poNo}} </td>
                             <td scope="col" class="col-td-th-3"> {{data?.date}} </td>
@@ -1393,7 +1483,7 @@
                             <td scope="col" class="col-td-th-3"> {{data?.currency}} </td>
                             <td scope="col" class="col-td-th-3"> {{data?.amount}} </td>
                             <td scope="col" class="col-td-th-3"> {{data?.AvailableAmount}} </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.UtilizedAmount}} </td>
+                            <td scope="col" class="col-td-th-3"><input type="text" (changes)="InputValidation($event,data)" [(ngModel)]="data.UtilizedAmount"></td>
                           </tr>
                         </tbody>
                       </table>
@@ -1403,7 +1493,7 @@
                     <button class="filter1 btn btn-secondary" aria-label="Close"
                       (click)="PIPONumbers.style.display='none'">Cancel</button>
                     <button class="filter1 btn btn-primary" [disabled]="selectPIPO_data?.length!=0?false:true"
-                      style="margin-left:16px" (click)="PIPONumbers.style.display='none'">Sumbit</button>
+                      style="margin-left:16px" (click)="AmountValidation(PIPONumbers)">Sumbit</button>
                   </div>
                 </div>
               </div>
@@ -1413,7 +1503,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <app-custom-model [customstyle]="{'max-width':'690vw !important'}" class="p-2" height="75vh" id="FORWARD_CONTRACT"
   [minimizedisabled]="false" modalbodyheight="70vh" name="Select FORWARD CONTRACT View" #FORWARD_CONTRACTPANEL>

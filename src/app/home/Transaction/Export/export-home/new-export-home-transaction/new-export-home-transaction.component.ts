@@ -87,8 +87,6 @@ export class NewExportHomeTransactionComponent implements OnInit {
           type: "LabelShow",
           value: data?.currency,
           label: "Currency",
-          Inputdisabled: true,
-          disabled: true,
           rules: {
             required: true,
           },
@@ -167,14 +165,6 @@ export class NewExportHomeTransactionComponent implements OnInit {
               required: true,
             }
           },
-          BookingAmount: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.BookingAmount,
-            label: "Forward Contract Amount",
-            rules: {
-              required: true,
-            }
-          },
           ToDate: {
             type: "LabelShow",
             value: this.ToForwardContract_Selected[0]?.ToDate,
@@ -191,6 +181,14 @@ export class NewExportHomeTransactionComponent implements OnInit {
               required: true,
             }
           },
+          BookingAmount: {
+            type: "LabelShow",
+            value: this.ToForwardContract_Selected[0]?.BookingAmount,
+            label: "Forward Contract Amount",
+            rules: {
+              required: true,
+            }
+          },
           AvailableAmount: {
             type: "LabelShow",
             value: this.ToForwardContract_Selected[0]?.AvailableAmount != "" ? this.ToForwardContract_Selected[0]?.AvailableAmount : this.ToForwardContract_Selected[0]?.BookingAmount,
@@ -203,7 +201,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
             type: "TextValiadtion",
             value: this.ToForwardContract_Selected[0]?.UtilizedAmount,
             label: "Amount to be utilised",
-            EqualName: "AvailableAmount",
+            EqualName: "DisposalAmount",
             errormsg: 'Utilisation amount should be equal or less than the forward contract Amount.',
             rules: {
               required: true,

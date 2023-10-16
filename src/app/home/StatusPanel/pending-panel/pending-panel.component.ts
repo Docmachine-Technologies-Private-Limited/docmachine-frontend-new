@@ -58,6 +58,7 @@ export class PendingPanelComponent implements OnInit {
       }
       this.documentService.setDownloadStatus(download).subscribe((res: any) => {
         console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
+        this.toastr.success('Successfully Updated data...')
         this.ngOnInit();
       });
     } else if (this.DATA_CREATE[index]['Types'] == 'BuyerAddition') {
@@ -153,7 +154,7 @@ export class PendingPanelComponent implements OnInit {
       });
     }
   }
-  async openView(item: any, index: any, panel: any) {
+  async openView(item: any, index: any, panel: any, roletype: any) {
     console.log(item, 'sdfgsfhsdgfdfsd')
     var temp: any = [];
     if (item != undefined && item != '') {
@@ -162,7 +163,26 @@ export class PendingPanelComponent implements OnInit {
           try {
             var temp: any = item?.documents.filter(n => n)
             await this.pdfmerge._multiple_merge_pdf(temp).then(async (merge: any) => {
-              this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+              this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, roletype, (value: any) => {
+                console.log(value, "IframeConfirmDialogModel")
+                if (value?.Name == "Verify") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Verify',
+                    deleteflag: '1'
+                  }, index)
+                } else if (value?.Name == "Approve") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Approved',
+                    deleteflag: '2'
+                  }, index)
+                }
+              });
             });
           } catch (error) {
             console.log(error, 'errror')
@@ -190,7 +210,26 @@ export class PendingPanelComponent implements OnInit {
       else {
         try {
           await this.pdfmerge._multiple_merge_pdf([item['dummydata']['doc'] != '' ? item['dummydata']['doc'] : item['dummydata']['doc1']]).then(async (merge: any) => {
-            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, roletype, (value) => {
+              console.log(value, "IframeConfirmDialogModel")
+                if (value?.Name == "Verify") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Verify',
+                    deleteflag: '1'
+                  }, index)
+                } else if (value?.Name == "Approve") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Approved',
+                    deleteflag: '2'
+                  }, index)
+                }
+            });
           });
         } catch (error) {
           console.log(error, 'errror')

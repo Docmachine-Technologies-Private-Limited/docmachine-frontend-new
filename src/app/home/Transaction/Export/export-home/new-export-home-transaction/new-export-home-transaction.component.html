@@ -39,7 +39,8 @@
             [Form]="InwardRemittanceDisposal?.geForm" [FormTrue]="true">
             <div class="col-12 pt-3">
                 <form>
-                    <upload-components id="NewInwardRemittanceDisposal"
+                    <upload-components FormStyle="display: grid;
+                    grid-template-columns: repeat(2,1fr);" id="NewInwardRemittanceDisposal"
                         (RawValueEvent)="InwardDisposalFormValue($event)" [HIDE_SUBMIT_BUTTON]="false"
                         #InwardRemittanceDisposal>
                     </upload-components>
@@ -83,7 +84,7 @@
             <div class="col-12 pt-3">
                 <form>
                     <upload-components FormStyle="display: grid;
-                    grid-template-columns: repeat(2,1fr);" id="ForwardRef"
+                    grid-template-columns: repeat(3,1fr);" id="ForwardRef"
                         (RawValueEvent)="ForwardRefFormValue($event)" [HIDE_SUBMIT_BUTTON]="false" #ForwardRefPanel>
                     </upload-components>
                 </form>

@@ -111,7 +111,12 @@
 <div class="iframecustommodel" tabindex="-1" role="dialog" #iframecustommodel
   [style]="this.MODEL_TYPE_VIEW['IframeModel']==true?'display: block;' : 'display: none;'">
   <app-custom-model height="98vh" *ngIf="this.CustomConfirmDialogModel?.url?.length!=0" id="Documents_View"
-    name="Document View" (ModelChange)="this.HIDE_ALL_MODELS('IframeModel');">
+    name="Document View" (ModelChange)="this.HIDE_ALL_MODELS('IframeModel');" #iframecustommodelPopup>
+    <custom-model-header *ngIf="this.CustomConfirmDialogModel?.ButtonName!=''">
+      <div style="display: flex;">
+        <button type="button" class="btn btn-primary" (click)="PopUpCallBack({Name:this.CustomConfirmDialogModel?.ButtonName});this.HIDE_ALL_MODELS('IframeModel');iframecustommodelPopup?.displayHidden">{{this.CustomConfirmDialogModel?.ButtonName}}</button>
+      </div>
+      </custom-model-header>
     <div class="form-group iframe-group">
       <app-pdf-viewer [downloadShow]="false" *ngFor="let url of this.CustomConfirmDialogModel.url" name="Documents"
         [src]="url" width="100%" height="100%"></app-pdf-viewer>
