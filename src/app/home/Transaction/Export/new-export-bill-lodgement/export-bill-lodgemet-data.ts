@@ -23,6 +23,7 @@ export class ExportBillLodgementData {
     ALL_RELATED_DOCUMENTS: any = [];
     ALL_COMMERCIAL_DATA_LIST: any = [];
     PREVIWES_URL: any = ''
+    IS_AGAINST_ADVANCE_YES_NO: boolean = false;
 
     constructor(public documentService: DocumentService,
         private toastr: ToastrService,
@@ -111,8 +112,13 @@ export class ExportBillLodgementData {
                 });
 
                 this.SHIPPING_BILL_DATA = data;
+                if (this.IS_AGAINST_ADVANCE_YES_NO == true) {
+                    this.TRANSACTION_SHIPPING_BILL = this.SHIPPING_BILL_DATA?.filter((item: any) => item?.firxdetails?.length != 0)
+                } else if (this.IS_AGAINST_ADVANCE_YES_NO == false) {
+                    this.TRANSACTION_SHIPPING_BILL = this.SHIPPING_BILL_DATA?.filter((item: any) => item?.firxdetails?.length == 0)
+                }
                 this.getbyFIRXPartyName(buyerName?.buyerName);
-                console.log(buyerName, this.TRANSACTION_SHIPPING_BILL, "getShippingBill")
+                console.log(buyerName, this.TRANSACTION_SHIPPING_BILL, this.IS_AGAINST_ADVANCE_YES_NO, "getShippingBill")
             });
         }
     }

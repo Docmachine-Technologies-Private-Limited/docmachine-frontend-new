@@ -213,10 +213,11 @@
 .left-panel .Previous-btn {
     position: fixed;
     bottom: 0;
-    right: 80px;
-    top: 64px;
+    right: 81px;
+    top: 61px;
     height: 32px;
     font-size: 14px;
+    z-index: 99999;
 }
 
 .yes-btn {

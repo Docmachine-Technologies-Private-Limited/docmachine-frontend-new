@@ -394,6 +394,7 @@ export class UploadServiceValidatorService implements OnInit {
 
       buyer: rule?.required == true ? [Validators.required] : [],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
+      BankCheckBox: rule?.required == true ? [Validators.required] : [],
       ImagesList: rule?.required == true ? [Validators.required] : [],
       consignee: rule?.required == true ? [Validators.required] : [],
       commodity: rule?.required == true ? [Validators.required] : [],

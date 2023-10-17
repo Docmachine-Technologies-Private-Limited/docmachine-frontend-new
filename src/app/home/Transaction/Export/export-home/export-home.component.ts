@@ -769,8 +769,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
 
   AmountValidation(display: any) {
     console.log(parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal),
-      parseFloat(this.PIPO_SUM_AMOUNT), parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) >= parseFloat(this.PIPO_SUM_AMOUNT), "hghghjghjfjhdjj")
-    if (parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) >= parseFloat(this.PIPO_SUM_AMOUNT)) {
+      parseFloat(this.PIPO_SUM_AMOUNT), parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) == parseFloat(this.PIPO_SUM_AMOUNT), "hghghjghjfjhdjj")
+    if (parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) <= parseFloat(this.PIPO_SUM_AMOUNT)) {
       display?.displayHidden;
     } else {
       this.toastr.error("Invoice amount should be equal or more than  remittance amount")
@@ -2968,15 +2968,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedPdfs.push(this.ARRAY_BUFFER_PDF2[index])
     }
     console.log('line no. 2493', this.selectedPdfs);
-
-    // this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
-    //   (result) => {
-    //     this.closeResult = `Closed with: ${result}`;
-    //   },
-    //   (reason) => {
-    //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    //   }
-    // );
   }
 
   addPdfToSelectedPdf(value, e) {
@@ -3530,7 +3521,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             deleteflag: '-1',
             userdetails: this.USER_DATA,
             status: 'pending',
-            documents: UpdatedUrl,
+            documents: UpdatedUrl?.reverse(),
             Types: 'downloadPDF',
             TypeOfPage: 'Transaction',
             FileType: this.USER_DATA?.sideMenu,
@@ -3541,7 +3532,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             tempPipo.push(findPipo[0]?._id)
           }
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-          updatedata['documents'] = UpdatedUrl;
+          updatedata['documents'] = UpdatedUrl?.reverse();
           updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
 

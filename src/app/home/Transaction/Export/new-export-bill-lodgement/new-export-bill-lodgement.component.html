@@ -3,83 +3,225 @@
     <div class="upload-panel">
         <div class="left-panel" style="height: 84vh;
         overflow: auto;">
-            <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length==0 && PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                name="Bank Pdf" [src]="PREVIWES_URL"></app-pdf-viewer>
-            <div class="col-12" *ngIf="this.SINGLE_TAB_MULITIPLE_TAB=='1'">
-                <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                    *ngIf="this.exportbilllodgementdata?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Bank Pdf"
-                    [src]="this.exportbilllodgementdata?.PREVIWES_URL"></app-pdf-viewer>
-                <div id="federal-bank-letter-head">
-                    <federal-bank-exportletterhead
-                        *ngIf="this.exportbilllodgementdata?.PREVIWES_URLL!='' && this.VISIBLITY_PDF==true"
-                        (url)="urlletterhead($event)"
-                        [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
-                </div>
-                <app-pdf-viewer class="pt-3"
-                    *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.ALL_RELATED_DOCUMENTS;let j=index"
-                    [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                    [name]="ALL_RELATED_DOCUMENTSitem?.name" [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
-                <button type="button" [disabled]="this.PREVIOUD_BTN" class="btn btn-primary Previous-btn PopupOpen"
-                    (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION)"
-                    popup-close="PrviewPage">Preview</button>
-                <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
-                    (click)="
-                FormValueSingle(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION,true)"
-                    attr.popup-close="PrviewPage">Proceed</button>
-            </div>
-            <mat-tab-group *ngIf="this.SINGLE_TAB_MULITIPLE_TAB=='2'"
-                (selectedTabChange)="this.ShippingBillTabChanged($event,RawValueEventPanel?.geForm)">
-                <mat-tab
-                    [label]="'SB No. : '+this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.sbno"
-                    [id]="item"
-                    *ngFor="let item of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS;let i=index">
+            <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="this.ShippingBillTabChanged($event,RawValueEventPanel?.geForm)">
+                <mat-tab *ngIf="this.BankId!=''" label="Covering Schedule">
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                        *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                        name="Bank Pdf"
-                        [src]="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.PREVIWES_URL"></app-pdf-viewer>
+                        *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
+                        [src]="PREVIWES_URL"></app-pdf-viewer>
                     <div id="federal-bank-letter-head">
-                        <federal-bank-exportletterhead
-                            *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.PREVIWES_URLL!='' && this.VISIBLITY_PDF==true"
+                        <federal-bank-exportletterhead *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
                             (url)="urlletterhead($event)"
                             [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
                     </div>
-                    <app-pdf-viewer class="pt-3"
-                        *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.ALL_RELATED_DOCUMENTS;let j=index"
-                        [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                        [name]="ALL_RELATED_DOCUMENTSitem?.name"
-                        [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
-                    <button type="button"
+                    <button type="button" *ngIf="RawValueEventPanel?.geForm?.value?.SingleMultiple?.bool==true" style="
+                    background-color: white;
+                    border: none;
+                    right: 150px !important;
+                    top: 9px !important;
+                    position: absolute;"
                         [disabled]="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.COMMERICAIL_DATA?.length!=0?false:true"
                         class="btn btn-primary Previous-btn PopupOpen"
-                        (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item])"
-                        popup-close="PrviewPage">Preview</button>
-                    <button type="button" style="right: 3px !important;" class="btn btn-primary Previous-btn"
+                        (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION)"
+                        popup-close="PrviewPage"><img style="width: 15px;" class="full-screen-img PopupOpen"
+                            src="../../../../../assets/minimize-svgrepo-com.svg" popup-close="PrviewPage"
+                            alt=""></button>
+                    <!-- <button type="button" id="SingLeCoveringLetter"
+                        *ngIf="RawValueEventPanel?.geForm?.value?.SingleMultiple?.bool==true" style="right: 5px !important;
+                        top: unset;
+                        bottom: 20px;
+                        position: absolute;
+                        background-color: transparent;
+                        border: none;" class="btn btn-primary Previous-btn"
                         (click)="
-                        FormValue(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item])"
-                        attr.popup-close="PrviewPage">Proceed</button>
+                    FormValueSingle(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION,true)"
+                        #ProceedButton><img style="width: 35px;" class="full-screen-img"
+                            src="../../../../../assets/arrow-circle-right-svgrepo-com.svg" alt=""></button> -->
                 </mat-tab>
+                <div *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length!=0">
+                    <mat-tab
+                        [label]="'SB No. : '+this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.sbno"
+                        [id]="item"
+                        *ngFor="let item of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS;let i=index">
+                        <mat-tab-group>
+                            <mat-tab label="Summary">
+                                <div class="p-2 SHIPING_BILL_POPUP" style="overflow: auto;">
+                                    <mat-accordion>
+                                        <mat-expansion-panel expanded="true">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-description>
+                                                    <div class="d-flex flex-column">
+                                                        <mat-panel-title>
+                                                            SB DETAILS
+                                                        </mat-panel-title>
+                                                        <table class="table mb-0">
+                                                            <tbody>
+                                                                <tr class="table-tr">
+                                                                    <td class="col-td-th-3">
+                                                                        SB DATE :
+                                                                        {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.sbdate}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        SB NUMBER :
+                                                                        {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.sbno}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        CURRENCY :
+                                                                        {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.fobCurrency}}
+                                                                    </td>
+                                                                    <td class="col-td-th-3">
+                                                                        SB AMOUNT :
+                                                                        {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.fobValue}}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </mat-panel-description>
+                                            </mat-expansion-panel-header>
+                                            <div class="d-flex flex-column">
+                                                <mat-expansion-panel expanded="true"
+                                                    *ngFor='let commercialdata of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.commercialdetails;let i = index'>
+                                                    <mat-expansion-panel-header>
+                                                        <mat-panel-description>
+                                                            <div class="d-flex flex-column">
+                                                                <mat-panel-title>
+                                                                    CI DETAILS
+                                                                </mat-panel-title>
+                                                                <table class="table mb-0">
+                                                                    <tbody>
+                                                                        <tr class="table-tr">
+                                                                            <td class="col-td-th-3">
+                                                                                CI DATE :
+                                                                                {{commercialdata.commercialDate}}
+                                                                            </td>
+                                                                            <td class="col-td-th-3">
+                                                                                CI NO. :
+                                                                                {{commercialdata.commercialNumber}}
+                                                                            </td>
+                                                                            <td class="col-td-th-3">
+                                                                                CI Value(USD) :
+                                                                                {{commercialdata.amount}}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </mat-panel-description>
+                                                    </mat-expansion-panel-header>
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                            <tr class="table-tr">
+                                                                <th scope="col" class="col-td-th-1">FIRX Number/ID</th>
+                                                                <th scope="col" class="col-td-th-1">Recieved Amount</th>
+                                                                <th scope="col" class="col-td-th-1">Commision Amount
+                                                                </th>
+                                                                <th scope="col" class="col-td-th-1">UsedAmount</th>
+                                                                <th scope="col" class="col-td-th-3">Available Balance
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="table-tr"
+                                                                *ngFor='let IRM_REFdata of commercialdata?.IRM_REF;let j = index'>
+                                                                <td class="col-td-th-1">
+                                                                    {{IRM_REFdata?.billNo}}
+                                                                </td>
+                                                                <td class="col-td-th-1">
+                                                                    {{IRM_REFdata?.amount}}
+                                                                </td>
+                                                                <td class="col-td-th-1">
+                                                                    {{IRM_REFdata?.commision}}
+                                                                </td>
+                                                                <td class="col-td-th-1">
+                                                                    {{IRM_REFdata?.MatchOffData?.InputValue}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{IRM_REFdata?.BalanceAvail}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </mat-expansion-panel>
+
+                                            </div>
+                                        </mat-expansion-panel>
+                                    </mat-accordion>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Documents">
+                                <app-pdf-viewer class="pt-3"
+                                    *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.ALL_RELATED_DOCUMENTS;let j=index"
+                                    [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                                    [name]="ALL_RELATED_DOCUMENTSitem?.name"
+                                    [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
+
+                            </mat-tab>
+                        </mat-tab-group>
+                        <button type="button" style="background-color: transparent;
+                            border: none;
+                            right: 10px !important;
+                            top: 9px !important;
+                            position: absolute;"
+                            [disabled]="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.COMMERICAIL_DATA?.length!=0?false:true"
+                            class="btn btn-primary Previous-btn PopupOpen"
+                            (click)="setPrevious(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item])"
+                            popup-close="PrviewPage"><img style="width: 15px;" class="full-screen-img PopupOpen"
+                                src="../../../../../assets/minimize-svgrepo-com.svg" popup-close="PrviewPage"
+                                alt=""></button>
+                        <button type="button" [id]="'Button_'+item"
+                            *ngIf="RawValueEventPanel?.geForm?.value?.SingleMultiple?.bool==false" style="
+                            right: 80px !important;
+                            top: 9px !important;
+                            position: absolute;" class="btn btn-primary Previous-btn"
+                            (click)="
+                                FormValue(RawValueEventPanel?.onClickButton,RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]);this.selectedIndex=0"
+                            #ProceedButton>Genrate Covering Schedule</button>
+                    </mat-tab>
+                </div>
             </mat-tab-group>
         </div>
-        <upload-components SubmitButtonStyle="position: fixed;
-        top: 63px;
-        font-size: 13px;
-        right: 5px;" [BUTTON_PANEL_SHOW]="false" [HIDE_SUBMIT_BUTTON]="false"
-            (YesNoCheckBoxEvent)="YesNoCheckBox($event)" (BankEvent)="setSelectedBankDetails($event)"
-            id="EXPORT_BILL_OF_EXCHANGE" #RawValueEventPanel>
+        <upload-components [BUTTON_PANEL_SHOW]="false" (YesNoCheckBoxEvent)="YesNoCheckBox($event)"
+            (BankEvent)="setSelectedBankDetails($event)" id="EXPORT_BILL_OF_EXCHANGE"
+            (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm,this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION)"
+            #RawValueEventPanel>
         </upload-components>
     </div>
 </upload-components-header>
-
 
 <app-custom-model [FooterButton]="false" [modalbodystyle]="{height:'90vh !important'}"
     [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="90vh" id="PrviewPage" [name]="'Preview Pdf'"
     #PrviewPagePanel>
     <div class="pdf-viewer-panel p-2">
-        <app-pdf-viewer *ngIf="this.SELECTED_PREVIEWS_URL!=''" [downloadShow]="false" width="100%"
-            Newheight="calc(100vh - 130px)" name="All Pdf Merge" [src]="this.SELECTED_PREVIEWS_URL"></app-pdf-viewer>
+        <mat-tab-group (selectedTabChange)="this.ShippingBillTabChanged($event,RawValueEventPanel?.geForm)">
+            <mat-tab *ngIf="this.BankId!=''" label="Covering Schedule">
+                <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                    *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
+                    [src]="PREVIWES_URL"></app-pdf-viewer>
+                <div id="federal-bank-letter-head">
+                    <federal-bank-exportletterhead
+                        *ngIf="this.exportbilllodgementdata?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                        (url)="urlletterhead($event)"
+                        [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
+                </div>
+            </mat-tab>
+            <mat-tab [label]="'SB No. : '+this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.sbno"
+                [id]="item"
+                *ngFor="let item of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS;let i=index">
+                <app-pdf-viewer class="pt-3"
+                    *ngFor="let ALL_RELATED_DOCUMENTSitem of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.ALL_RELATED_DOCUMENTS;let j=index"
+                    [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                    [name]="ALL_RELATED_DOCUMENTSitem?.name" [src]="ALL_RELATED_DOCUMENTSitem?.pdf"></app-pdf-viewer>
+                <button style="position: absolute;
+                bottom: 30px;
+                right: 40px;" *ngIf="this.ExportBillLodgement_Form?.SingleMultiple?.bool == false" type="button"
+                    class="btn btn-primary"
+                    (click)="SendApproval('',
+                this.ExportBillLodgement_Form?.SingleMultiple?.bool == false?this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?._id:'multiple',PrviewPagePanel);">Send
+                    for Approval</button>
+            </mat-tab>
+        </mat-tab-group>
     </div>
-    <custom-model-header>
+    <custom-model-header *ngIf="this.ExportBillLodgement_Form?.SingleMultiple?.bool == true">
         <button type="button" class="btn btn-primary"
             (click)="SendApproval('',
         this.ExportBillLodgement_Form?.SingleMultiple?.bool == false?this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?._id:'multiple',PrviewPagePanel);">Send
@@ -94,7 +236,7 @@
         <div class="d-flex" style="gap: 10px;">
             <label for="">Match SB with IRM using match off module</label>
             <button type="button" class="btn btn-primary" (click)="ShippingBill?.displayHidden">Done</button>
-            <button type="button" class="btn btn-primary">Fill Pdf</button>
+            <button type="button" class="btn btn-primary" (click)="AllCreateTransaction()">Fill Pdf</button>
         </div>
     </custom-model-header>
 
@@ -113,8 +255,8 @@
                             <div class="d-flex flex-column" (click)="$event.stopPropagation();">
                                 <mat-panel-title>
                                     SB DETAILS
-                                    <button type="button" class="btn btn-primary Transaction-btn"
-                                        (click)="this.CreateTransaction(ShippingBill,'SB_INDEX_'+i)">Fill Pdf</button>
+                                    <!-- <button type="button" class="btn btn-primary Transaction-btn"
+                                        (click)="this.CreateTransaction(ShippingBill,'SB_INDEX_'+i)">Fill Pdf</button> -->
                                 </mat-panel-title>
                                 <table class="table mb-0">
                                     <tbody>
