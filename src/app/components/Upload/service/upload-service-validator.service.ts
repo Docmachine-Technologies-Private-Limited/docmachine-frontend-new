@@ -154,13 +154,17 @@ export class UploadServiceValidatorService implements OnInit {
 
           this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
             this.INWARD_REMITTANCE_NAME_LIST = res?.data;
+            this.NEW_INWARD_REMITTANCE_NAME_LIST=[];
+            this.CHECK_BOX_REMITTER_LIST=[];
             res?.data.forEach(element => {
+              element['checked'] = false;
               this.REMITTER_LIST[element?.Remitter_Name] = [];
               if (this.NEW_INWARD_REMITTANCE_NAME_LIST?.filter((item:any)=>item?.Remitter_Name?.indexOf(element?.Remitter_Name)!=-1)?.length==0) {
                 this.NEW_INWARD_REMITTANCE_NAME_LIST.push({Remitter_Name:element?.Remitter_Name})
               }
             });
             res?.data.forEach(element => {
+              element['checked'] = false;
               this.REMITTER_LIST[element?.Remitter_Name].push(element);
             });
             console.log(res, this.REMITTER_LIST,'getInward_remittanceName')
@@ -172,6 +176,7 @@ export class UploadServiceValidatorService implements OnInit {
 
         await this.userService.getTeam().subscribe(async (data: any) => {
           this.COMPANY_INFO = data?.data;
+          this.CHECK_BOX_BANK_LIST=[]
           console.log(data['data'][0]);
           this.location = [];
           this.commodity = [];
@@ -184,11 +189,13 @@ export class UploadServiceValidatorService implements OnInit {
           this.commodity = this.removeDuplicates(this.commodity, 'value');
           this.location = this.removeDuplicates(this.location, 'value')
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            data['data'][0]['bankDetails']['checked']=false
             this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
             this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
             this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
           }
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            data['data'][0]['bankDetails']['checked']=false
             this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
               value: data['data'][0]['bankDetails'][index],
               text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,

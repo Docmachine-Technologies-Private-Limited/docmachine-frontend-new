@@ -34,7 +34,8 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     IframeModel: false,
     YesNoDialogModel: false,
     DropDownInput: false,
-    Notification_DialogModel: false
+    Notification_DialogModel: false,
+    YesDialogModel:false
   };
   DATA_RECIVED: any = [];
   DownloadStatus: boolean = false;
@@ -113,6 +114,15 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     this.CustomConfirmDialogModel.titleheader = titleheader;
     this.CustomConfirmDialogModel.message = message;
     $('.YesNoDialogModel').css('display', 'flex');
+    this.CustomConfirmDialogModel.CALLBACKS = callback;
+    window.scroll(0, 0)
+  }
+  YesDialogModel(titleheader: any, message: any, callback: Function) {
+    this.HIDE_ALL_MODELS('YesDialogModel');
+    $('.input-remove').val('');
+    this.CustomConfirmDialogModel.titleheader = titleheader;
+    this.CustomConfirmDialogModel.message = message;
+    $('.YesDialogModel').css('display', 'flex');
     this.CustomConfirmDialogModel.CALLBACKS = callback;
     window.scroll(0, 0)
   }

@@ -6,7 +6,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
 import { ExportBillLodgementData } from './export-bill-lodgemet-data';
@@ -97,17 +97,33 @@ export class NewExportBillLodgementComponent implements OnInit {
     public exportbilllodgementdata: ExportBillLodgementData,
     public sessionstorage: StorageEncryptionDecryptionService,
     public pdfmerge: MergePdfListService,
+    private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public userService: UserService) { }
+    public userService: UserService) {
+    exportbilllodgementdata.clear();
+  }
 
   ngOnInit(): void {
-    this.documentService.MT102_SUBJECT = this.sessionstorage.get('MT102') != '' ? JSON.parse(this.sessionstorage.get('MT102')) : '';
-    console.log(this.exportbilllodgementdata, "exportbilllodgementdata")
-    this.userService.getUserDetail().then((status: any) => {
-      this.USER_DATA = status['result'];
-      console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
+    this.actRoute.paramMap.subscribe(async (params) => {
+      this.exportbilllodgementdata.clear();
+      this.PREVIWES_URL=''
+      this.VISIBLITY_PDF=false;
+      if (params.get('file') == "NewBillLodgement") {
+        this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO = false;
+        this.TITLE_CHANGED = "New BillLodgement"
+      } else if (params.get('file') == "ExportBillRegularization") {
+        this.TITLE_CHANGED = "Export Bill Regularization"
+        this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO = true;
+      }
+      this.documentService.MT102_SUBJECT = this.sessionstorage.get('MT102') != '' ? JSON.parse(this.sessionstorage.get('MT102')) : '';
+      console.log(this.exportbilllodgementdata, "exportbilllodgementdata")
+      this.userService.getUserDetail().then((status: any) => {
+        this.USER_DATA = status['result'];
+        console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
+      });
+      this.response(null);
     });
-    this.response(null);
+
   }
 
   urlletterhead(url: any) {
@@ -126,6 +142,7 @@ export class NewExportBillLodgementComponent implements OnInit {
   }
 
   SubmitButton(formvalue: any, data: any) {
+    formvalue.value['AgainstAdvanceReceipt'] = { bool: this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO }
     if (formvalue?.value?.SingleMultiple?.bool == true) {
       this.exportbilllodgementdata.SELECTED_SHIPPING_BILL = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION;
       this.FormValueSingle(null, formvalue, data, true);
@@ -344,11 +361,12 @@ export class NewExportBillLodgementComponent implements OnInit {
           mergedPdf.addPage(page);
         }
       });
-      const copiedPages2 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
-      copiedPages2.forEach((page) => {
-        mergedPdf.addPage(page);
-      });
-
+      if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
+        const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
+        copiedPages3.forEach((page) => {
+          mergedPdf.addPage(page);
+        });
+      }
       const mergedPdfFile = await mergedPdf.save();
       const mergedPdfload = await PDFDocument.load(mergedPdfFile);
       const mergedPdfFileload = await mergedPdfload.save();
@@ -504,16 +522,6 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           }
         },
-        AgainstAdvanceReceipt: {
-          type: "yesnocheckbox",
-          value: '',
-          label: "Against advance receipt?",
-          rules: {
-            required: true,
-          },
-          YesNo: '',
-          HideShowInput: ["UnderLC", "DirectDispatch", "Sight", "Usance", "WithScrutiny"]
-        },
         SHIPPING_BILL: {
           type: "PopupOpen",
           value: '',
@@ -546,16 +554,16 @@ export class NewExportBillLodgementComponent implements OnInit {
           YesNo: '',
           HideShowInput: ["AgainstAdvanceReceipt", "UnderLC", "Sight", "Usance", "WithScrutiny", "BuyerRemitterDifferent", "InvoiceReduction", "WithDiscount"]
         },
-        UnderLC: {
-          type: "yesnocheckbox",
-          value: '',
-          label: "Under LC?",
-          rules: {
-            required: true,
-          },
-          YesNo: '',
-          HideShowInput: ["Sight", "Usance"]
-        },
+        // UnderLC: {
+        //   type: "yesnocheckbox",
+        //   value: '',
+        //   label: "Under LC?",
+        //   rules: {
+        //     required: true,
+        //   },
+        //   YesNo: '',
+        //   HideShowInput: ["Sight", "Usance"]
+        // },
         Sight: {
           type: "yesnocheckbox",
           value: '',
@@ -563,7 +571,8 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
-          YesNo: ''
+          YesNo: '',
+          HideShowInput: ["Usance"]
         },
         Usance: {
           type: "yesnocheckbox",
@@ -572,21 +581,13 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
-          YesNo: ''
+          YesNo: '',
+          HideShowInput: ["Sight"]
         },
         WithScrutiny: {
           type: "yesnocheckbox",
           value: '',
           label: "With Discount?",
-          rules: {
-            required: true,
-          },
-          YesNo: ''
-        },
-        BuyerRemitterDifferent: {
-          type: "yesnocheckbox",
-          value: '',
-          label: "Is Buyer remitter different?",
           rules: {
             required: true,
           },
@@ -601,15 +602,15 @@ export class NewExportBillLodgementComponent implements OnInit {
           },
           YesNo: ''
         },
-        WithDiscount: {
-          type: "yesnocheckbox",
-          value: '',
-          label: "With Discount?",
-          rules: {
-            required: true,
-          },
-          YesNo: ''
-        },
+        // WithDiscount: {
+        //   type: "yesnocheckbox",
+        //   value: '',
+        //   label: "With Discount?",
+        //   rules: {
+        //     required: true,
+        //   },
+        //   YesNo: ''
+        // },
       }, 'EXPORT_BILL_OF_EXCHANGE');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
@@ -845,9 +846,7 @@ export class NewExportBillLodgementComponent implements OnInit {
                 if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
                   this.PREVIEWS_URL_LIST = merge?.pdfurl;
                   this.SELECTED_PREVIEWS_URL = ''
-                  this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION["url"] = ''
                   setTimeout(() => {
-                    this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION["url"] = merge?.pdfurl
                     this.SELECTED_PREVIEWS_URL = merge?.pdfurl
                     this.PREVIOUD_BTN = false;
                   }, 500);
@@ -856,13 +855,6 @@ export class NewExportBillLodgementComponent implements OnInit {
             });
           });
         }
-      } else {
-        this.SELECTED_PREVIEWS_URL = ''
-        this.PREVIWES_URL = ''
-        setTimeout(() => {
-          this.PREVIWES_URL = this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION["url"]
-          this.SELECTED_PREVIEWS_URL = this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION["url"]
-        }, 500);
       }
       console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, this.PREVIEWS_URL_LIST, 'FormValueSinglePreviewSlideToggle')
     }
@@ -1108,7 +1100,6 @@ export class NewExportBillLodgementComponent implements OnInit {
         let SBtableuri = doc.output("arraybuffer");
         console.log(SBtableuri, "SBtableuri")
         const SBloadmergedPdf = await PDFDocument.load(SBtableuri);
-
         const doc1 = new jsPDF()
         let text = "ANNEXURE – REMITTANCE RECEIVED";
         var pageWidth = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
@@ -1136,10 +1127,12 @@ export class NewExportBillLodgementComponent implements OnInit {
           mergedPdf.addPage(page);
         });
 
-        const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
-        copiedPages3.forEach((page) => {
-          mergedPdf.addPage(page);
-        });
+        if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
+          const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
+          copiedPages3.forEach((page) => {
+            mergedPdf.addPage(page);
+          });
+        }
 
         const mergedPdfFile = await mergedPdf.save();
         const mergedPdfload = await PDFDocument.load(mergedPdfFile);

@@ -3,7 +3,8 @@
     <div class="upload-panel">
         <div class="left-panel" style="height: 84vh;
         overflow: auto;">
-            <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="this.ShippingBillTabChanged($event,RawValueEventPanel?.geForm)">
+            <mat-tab-group [selectedIndex]="selectedIndex"
+                (selectedTabChange)="this.ShippingBillTabChanged($event,RawValueEventPanel?.geForm)">
                 <mat-tab *ngIf="this.BankId!=''" label="Covering Schedule">
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                         *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
@@ -13,7 +14,7 @@
                             (url)="urlletterhead($event)"
                             [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
                     </div>
-                    <button type="button" *ngIf="RawValueEventPanel?.geForm?.value?.SingleMultiple?.bool==true" style="
+                    <button type="button" *ngIf="PREVIWES_URL!='' && RawValueEventPanel?.geForm?.value?.SingleMultiple?.bool==true" style="
                     background-color: white;
                     border: none;
                     right: 150px !important;
@@ -108,7 +109,7 @@
                                                             </div>
                                                         </mat-panel-description>
                                                     </mat-expansion-panel-header>
-                                                    <table class="table mb-0">
+                                                    <table class="table mb-0" *ngIf="this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO== true">
                                                         <thead>
                                                             <tr class="table-tr">
                                                                 <th scope="col" class="col-td-th-1">FIRX Number/ID</th>
@@ -235,8 +236,8 @@
     <custom-model-header>
         <div class="d-flex" style="gap: 10px;">
             <label for="">Match SB with IRM using match off module</label>
+            <button type="button" class="btn btn-primary" [disabled]="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length==0?true:false" (click)="AllCreateTransaction()">Fill Pdf</button>
             <button type="button" class="btn btn-primary" (click)="ShippingBill?.displayHidden">Done</button>
-            <button type="button" class="btn btn-primary" (click)="AllCreateTransaction()">Fill Pdf</button>
         </div>
     </custom-model-header>
 
@@ -321,7 +322,8 @@
                                     </div>
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
-                            <table class="table mb-0">
+                            <table class="table mb-0"
+                                *ngIf="this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO== true">
                                 <thead>
                                     <tr class="table-tr">
                                         <th scope="col" class="col-td-th-1">FIRX Number/ID</th>

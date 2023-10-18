@@ -41,6 +41,8 @@ export class ExportBillLodgementData {
     }
 
     clear() {
+        this.SELECTED_SHIPPING_BILL_TRANSACTION=[];
+        this.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS=[]
         this.SHIPPING_BILL_DATA = []
         this.SHIPPING_BILL_DATA_LINKAGE = [];
         this.TRANSACTION_SHIPPING_BILL = [];

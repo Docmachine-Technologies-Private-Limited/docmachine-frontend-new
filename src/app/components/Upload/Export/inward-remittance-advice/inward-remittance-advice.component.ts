@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { JsonPipe } from '@angular/common';
 
 
 @Component({
@@ -44,6 +46,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public route: ActivatedRoute,
     public userService: UserService) { }
 
@@ -65,22 +68,14 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       let res: any = new IRAdvice(args[1].data);
       console.log(res, 'sdfjhksdjhdkfjsdhfsdkfhsd')
       this.validator.buildForm({
-        BankName: {
-          type: "Bank",
-          value: "",
-          label: "Bank Name*",
-          rules: {
-            required: true,
-          }
-        },
         TrackerRef: {
           type: "RemitterCheckBox",
-          value: "",
-          label: "Select Inward Remittance Name",
+          value: res?.partyName,
+          label: "Select Remitter Name",
           rules: {
             required: true,
           },
-          RemitterLabel: "Select Inward Remittance Ref No.",
+          RemitterLabel: "Select Remitter Ref No.",
         },
         date: {
           type: "date",
@@ -102,14 +97,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           type: "currency",
           value: res?.currency,
           label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        partyName: {
-          type: "buyer",
-          value: res?.partyName,
-          label: "PARTY NAME",
           rules: {
             required: true,
           }
@@ -210,42 +197,54 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     }, 'iradvices').subscribe((resp: any) => {
       console.log('creditNoteNumber Invoice_No', resp)
       if (resp.data.length == 0) {
-        this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
-          console.log('addIrAdvice', data);
-          let updatedData = {
-            "MasterServiceRef": [
-              data?.data._id,
-            ],
-            "AdviceRef": [
-              data?.data._id,
-            ]
-          }
-          this.documentService.UpdateInward_Remittance(e.value?.TrackerRef?._id, {
-            "AdviceRef": [
-              data?.data._id,
-            ]
-          }).subscribe((res: any) => { })
-          this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData).subscribe((data) => {
-            this.toastr.success('Firex Document added successfully.');
-            this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
-            var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-            if (Transaction_id != '') {
-              this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.value } }).subscribe((res: any) => {
-                this.toastr.success('Firex Document added successfully.');
-                this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
-              });
-            } else {
-              this.toastr.success('Firex Document added successfully.');
-              this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
+        this.CustomConfirmDialogModel.YesDialogModel(`You are updating remitter info in pipo no.</br>
+        </br>
+        <p>PIPO Remitter info. : </br> ${this.PIPO_DATA?.RemitterName?.Remitter_Name}</p>
+        <p>New Remitter info. : </br> ${e?.value?.TrackerRef?.Remitter_Name}</p>
+        `, 'Comments', (CustomConfirmDialogRes: any) => {
+          this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
+            console.log('addIrAdvice', data);
+            let updatedData = {
+              "MasterServiceRef": [
+                data?.data._id,
+              ],
+              "AdviceRef": [
+                data?.data._id,
+              ],
+
             }
-          }, (error) => {
-            console.log('error');
-          });
-        },
-          (error) => {
-            console.log('error');
-          }
-        );
+            this.documentService.UpdateInward_Remittance(e.value?.TrackerRef?._id, {
+              "AdviceRef": [
+                data?.data._id,
+              ]
+            }).subscribe((res: any) => { })
+            console.log(CustomConfirmDialogRes, "CustomConfirmDialogRes")
+            if (CustomConfirmDialogRes?.value == "Ok") {
+              this.userService.updatePipo({
+                RemitterName: e?.value?.TrackerRef
+              }, this.pipoArr[0]).subscribe((res: any) => {
+                this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData).subscribe((data) => {
+                  var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
+                  if (Transaction_id != '' && Transaction_id != undefined && Transaction_id != null) {
+                    this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.value } }).subscribe((res: any) => {
+                      this.toastr.success('Remittance advice added successfully');
+                      this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
+                    });
+                  } else {
+                    this.toastr.success('Remittance advice added successfully');
+                    this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
+                  }
+                }, (error) => {
+                  console.log('error');
+                });
+              })
+            }
+          },
+            (error) => {
+              console.log('error');
+            }
+          );
+        });
       } else {
         this.toastr.error(`Please check this Firex Document no. : ${e.value.billNo} already exit...`);
       }
@@ -259,6 +258,10 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
+
+      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
+        this.PIPO_DATA = res?.data[0];
+      })
     } else {
       this.btndisabled = true;
     }

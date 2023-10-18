@@ -78,6 +78,23 @@
     justify-content: center;
 }
 
+.YesDialogModel-group{
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 2px 2px #afa5a5;
+  height: 290px;
+  width: 500px;
+  flex-direction: column;
+  border-radius: 10px;
+  margin: auto;
+  padding-top: 10px;
+  color: #000;
+  position: relative;
+}
+
 .Notification_DialogModel .modal-dialog{
   max-width: 100% !important;
 }

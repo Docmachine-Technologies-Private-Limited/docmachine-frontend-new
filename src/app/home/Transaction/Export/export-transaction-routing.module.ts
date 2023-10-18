@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: "bill-lodgement", component: BillLodgementComponent, canActivate: [MemberGuard] },
   { path: "Packing-Credit-Request-New", component: PackingCreditRequestComponent, canActivate: [MemberGuard] },
   { path: "direct-dispatch", component: NewDirectDispatchComponent, pathMatch: "full", canActivate: [MemberGuard] },
-  { path: "new-direct-dispatch", component: NewExportBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "new-direct-dispatch/:file", component: NewExportBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "export-home", component: NewExportHomeTransactionComponent, canActivate: [MemberGuard] },
   { path: "export-home/:id", component: ExportHomeComponent, canActivate: [MemberGuard] },
   { path: "Pdf-Upload", component: UploadDocComponent },
