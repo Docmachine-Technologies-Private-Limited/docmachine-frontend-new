@@ -106,8 +106,8 @@ export class NewExportBillLodgementComponent implements OnInit {
   ngOnInit(): void {
     this.actRoute.paramMap.subscribe(async (params) => {
       this.exportbilllodgementdata.clear();
-      this.PREVIWES_URL=''
-      this.VISIBLITY_PDF=false;
+      this.PREVIWES_URL = ''
+      this.VISIBLITY_PDF = false;
       if (params.get('file') == "NewBillLodgement") {
         this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO = false;
         this.TITLE_CHANGED = "New BillLodgement"
@@ -177,7 +177,7 @@ export class NewExportBillLodgementComponent implements OnInit {
         }
       });
 
-      getAllFields[0]?.setText('');
+      getAllFields[0]?.setText(this.validator.COMPANY_INFO[0]?.BranchName);
       getAllFields[1]?.setText('');
       getAllFields[2]?.setText('');
       getAllFields[3]?.setText('');
@@ -202,7 +202,18 @@ export class NewExportBillLodgementComponent implements OnInit {
       getAllFields[21]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
       getAllFields[22]?.uncheck()
       getAllFields[23]?.uncheck()
-      console.log(sbdata, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
+      console.log(sbdata, this.ExportBillLodgement_Form, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
+
+      if (this.ExportBillLodgement_Form?.Sight?.bool == true) {
+        getAllFields[35]?.check();
+        getAllFields[36]?.uncheck();
+
+      } else if (this.ExportBillLodgement_Form?.Usance?.bool == true) {
+        getAllFields[35]?.uncheck();
+        getAllFields[36]?.check();
+        getAllFields[37]?.setText(this.ExportBillLodgement_Form?.Usancedays);
+        getAllFields[38]?.setText(this.ExportBillLodgement_Form?.Usancefrom);
+      }
 
       let CommercialNumberList: any = [];
       let FIRX_DATE_NO: any = {
@@ -242,10 +253,7 @@ export class NewExportBillLodgementComponent implements OnInit {
         getAllFields[29]?.setText(FIRX_DATE_NO?.DATE?.slice(0, 3)?.join(','));
         getAllFields[30]?.setText(FIRX_DATE_NO?.CURRENCY?.slice(0, 3)?.join(','));
 
-        getAllFields[35]?.uncheck();
-        getAllFields[36]?.uncheck();
-        getAllFields[37]?.setText('');
-        getAllFields[38]?.setText('');
+
         getAllFields[39]?.setText('');
 
         getAllFields[31]?.setText(!isNaN(TOTAL_SUM_FIREX) ? TOTAL_SUM_FIREX.toString() : '0');
@@ -583,6 +591,22 @@ export class NewExportBillLodgementComponent implements OnInit {
           },
           YesNo: '',
           HideShowInput: ["Sight"]
+        },
+        Usancedays: {
+          type: "text",
+          value: '',
+          label: "days",
+          rules: {
+            required: true,
+          },
+        },
+        Usancefrom: {
+          type: "text",
+          value: '',
+          label: "from",
+          rules: {
+            required: true,
+          },
         },
         WithScrutiny: {
           type: "yesnocheckbox",
