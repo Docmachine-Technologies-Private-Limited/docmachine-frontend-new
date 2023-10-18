@@ -645,19 +645,19 @@ export class NewExportBillLodgementComponent implements OnInit {
   YesNoCheckBox(value: any) {
     if (value?.id == "DirectDispatch") {
       if (value?.bool == true) {
-        this.TITLE_CHANGED = "Export Bill Lodgement / Direct Dispatch"
+        // this.TITLE_CHANGED = "Export Bill Lodgement / Direct Dispatch"
       } else {
-        this.TITLE_CHANGED = 'Export Bill Lodgement'
+        // this.TITLE_CHANGED = 'Export Bill Lodgement'
       }
     } else if (value?.id == "AgainstAdvanceReceipt") {
       if (value?.bool == true) {
-        this.TITLE_CHANGED = "Export Bill Lodgement / Regularization"
+        // this.TITLE_CHANGED = "Export Bill Lodgement / Regularization"
         this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO = true;
         if (this.exportbilllodgementdata.SELECTED_BUYER_NAME != '') {
           this.exportbilllodgementdata.getShippingBill(this.exportbilllodgementdata.SELECTED_BUYER_NAME, "dgdfds");
         }
       } else {
-        this.TITLE_CHANGED = 'Export Bill Lodgement'
+        // this.TITLE_CHANGED = 'Export Bill Lodgement'
         this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO = false;
         if (this.exportbilllodgementdata.SELECTED_BUYER_NAME != '') {
           this.exportbilllodgementdata.getShippingBill(this.exportbilllodgementdata.SELECTED_BUYER_NAME, "fdfsdfsd");
@@ -951,7 +951,16 @@ export class NewExportBillLodgementComponent implements OnInit {
         getAllFields[22]?.uncheck()
         getAllFields[23]?.uncheck()
         console.log(sbdata, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
-
+        if (this.ExportBillLodgement_Form?.Sight?.bool == true) {
+          getAllFields[35]?.check();
+          getAllFields[36]?.uncheck();
+  
+        } else if (this.ExportBillLodgement_Form?.Usance?.bool == true) {
+          getAllFields[35]?.uncheck();
+          getAllFields[36]?.check();
+          getAllFields[37]?.setText(this.ExportBillLodgement_Form?.Usancedays);
+          getAllFields[38]?.setText(this.ExportBillLodgement_Form?.Usancefrom);
+        }
         let CommercialNumberList: any = [];
         let FIRX_DATE_NO: any = {
           NUMBER: [],
@@ -1014,10 +1023,6 @@ export class NewExportBillLodgementComponent implements OnInit {
           getAllFields[29]?.setText("As per Annexure Attached");
           getAllFields[30]?.setText("As per Annexure Attached");
 
-          getAllFields[35]?.uncheck();
-          getAllFields[36]?.uncheck();
-          getAllFields[37]?.setText('');
-          getAllFields[38]?.setText('');
           getAllFields[39]?.setText('');
 
           getAllFields[31]?.setText("As per Annexure Attached");
