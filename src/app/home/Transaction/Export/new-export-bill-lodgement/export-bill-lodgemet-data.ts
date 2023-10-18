@@ -126,7 +126,29 @@ export class ExportBillLodgementData {
         this.userService.getBuyer(1).subscribe((res: any) => this.BUYER_LIST = res?.data);
     }
     getbyFIRXPartyName(buyerName: any) {
-        this.documentService.getbyPartyName(buyerName).subscribe((res: any) => {
+        // this.documentService.getbyPartyName(buyerName).subscribe((res: any) => {
+        //     let data: any = [];
+        //     res?.data?.forEach(element => {
+        //         element['BalanceAvail'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount
+        //         element['InputValue'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;
+        //         element['UsedAmount'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;;
+        //         element['ReamaingAmount'] = '0';
+        //         element['isChecked'] = false;
+        //         element['YesNo'] = '';
+        //         if (element?.BalanceAvail?.toString() != '0') {
+        //             data.push(element);
+        //         }
+        //     });
+        //     this.TOTAL_FIRX_AMOUNT = data?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+        //     this.FIREX_DETAILS = data;
+        //     console.log(res, "getbyFIRXPartyName")
+        // });
+    }
+
+    getbyFIRXPartyNamebyPipo(pipoId) {
+        this.documentService.filterAnyTable({
+            pipo: [pipoId]
+        }, 'iradvices').subscribe((res: any) => {
             let data: any = [];
             res?.data?.forEach(element => {
                 element['BalanceAvail'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount
@@ -142,9 +164,26 @@ export class ExportBillLodgementData {
             this.TOTAL_FIRX_AMOUNT = data?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
             this.FIREX_DETAILS = data;
             console.log(res, "getbyFIRXPartyName")
-        });
-    }
+        })
 
+        // this.documentService.getbyPartyName(buyerName).subscribe((res: any) => {
+        //     let data: any = [];
+        //     res?.data?.forEach(element => {
+        //         element['BalanceAvail'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount
+        //         element['InputValue'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;
+        //         element['UsedAmount'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;;
+        //         element['ReamaingAmount'] = '0';
+        //         element['isChecked'] = false;
+        //         element['YesNo'] = '';
+        //         if (element?.BalanceAvail?.toString() != '0') {
+        //             data.push(element);
+        //         }
+        //     });
+        //     this.TOTAL_FIRX_AMOUNT = data?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+        //     this.FIREX_DETAILS = data;
+        //     console.log(res, "getbyFIRXPartyName")
+        // });
+    }
     setSelectedShippingBill($event, data: any) {
         if (data?.blCopyDoc) {
             if (data.commercialDoc) {
@@ -192,6 +231,7 @@ export class ExportBillLodgementData {
                     }
                     this.SELECTED_COMMERICAIL_DATA = [];
                     data['CheckBoxEnabled'] = true;
+                    this.getbyFIRXPartyNamebyPipo(data?.pipo[0]?._id)
                 } else {
                     this.FIREX_DETAILS?.forEach(element => {
                         element['isChecked'] = false;

@@ -23,6 +23,7 @@ export class UploadServiceValidatorService implements OnInit {
   BENEFICIARY_DETAILS: any = [];
   BENEFICIARY_ADDRESS_DETAILS: any = [];
   INWARD_REMITTANCE_NAME_LIST: any = [];
+  NEW_INWARD_REMITTANCE_NAME_LIST: any = [];
   ConsigneeNameList: any = [];
   PIPO_DATA: any = [];
   pipourl1: any = '';
@@ -54,6 +55,8 @@ export class UploadServiceValidatorService implements OnInit {
   BUYER_DETAILS_MASTER: any = [];
   COMPANY_INFO: any = [];
   CHECK_BOX_BANK_LIST: any = [];
+  CHECK_BOX_REMITTER_LIST: any = [];
+  REMITTER_LIST: any = []
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -151,7 +154,16 @@ export class UploadServiceValidatorService implements OnInit {
 
           this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
             this.INWARD_REMITTANCE_NAME_LIST = res?.data;
-            console.log(res, 'getInward_remittanceName')
+            res?.data.forEach(element => {
+              this.REMITTER_LIST[element?.Remitter_Name] = [];
+              if (this.NEW_INWARD_REMITTANCE_NAME_LIST?.filter((item:any)=>item?.Remitter_Name?.indexOf(element?.Remitter_Name)!=-1)?.length==0) {
+                this.NEW_INWARD_REMITTANCE_NAME_LIST.push({Remitter_Name:element?.Remitter_Name})
+              }
+            });
+            res?.data.forEach(element => {
+              this.REMITTER_LIST[element?.Remitter_Name].push(element);
+            });
+            console.log(res, this.REMITTER_LIST,'getInward_remittanceName')
           })
           await reslove(true)
         } else {
@@ -393,6 +405,7 @@ export class UploadServiceValidatorService implements OnInit {
         hasAmountLessThanForm(field?.EqualName, field?.errormsg)],
 
       buyer: rule?.required == true ? [Validators.required] : [],
+      RemitterCheckBox: rule?.required == true ? [Validators.required] : [],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
       BankCheckBox: rule?.required == true ? [Validators.required] : [],
       ImagesList: rule?.required == true ? [Validators.required] : [],

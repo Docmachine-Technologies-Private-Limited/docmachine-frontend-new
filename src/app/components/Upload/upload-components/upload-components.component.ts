@@ -431,10 +431,31 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
   }
 
+  onRemitterCheckBox(event, fieldName, item: any, ItemChecked) {
+    this.validator.CHECK_BOX_REMITTER_LIST.forEach(element => {
+      element['checked'] = false;
+    });
+    if (event?.checked == true) {
+      ItemChecked['checked'] = true;
+    } else {
+      ItemChecked['checked'] = false;
+    }
+    this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(item);
+    console.log(event, item, "onRemitterCheckBox")
+  }
+  
   BANK_CHECKBOX(value: any) {
     console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, "BANK_CHECKBOX")
     this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.id];
     this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
+      element['checked'] = false;
+    });
+  }
+  
+  REMITTER_CHECKBOX(value: any) {
+    console.log(value, this.validator?.REMITTER_LIST[value?.Remitter_Name], this.validator?.REMITTER_LIST, "BANK_CHECKBOX")
+    this.validator.CHECK_BOX_REMITTER_LIST = this.validator?.REMITTER_LIST[value?.Remitter_Name];
+    this.validator.CHECK_BOX_REMITTER_LIST.forEach(element => {
       element['checked'] = false;
     });
   }

@@ -1282,10 +1282,10 @@ export class NewExportBillLodgementComponent implements OnInit {
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
                           this.router.navigate(['/home/dashboardTask']);
-                          this.toastr.success('Successfully added Transaction of SB No. :' + extradata?.join(','));
+                          this.toastr.success(`SB No. ${extradata?.join(',')} sent for for regularisation approval`);
                         } else {
                           this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.filter((item: any) => item == this.BUTTON_INDEX)
-                          this.toastr.success('Successfully added Transaction of SB No. :' + this.SELECTED_SB_DATA?.sbno);
+                          this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for regularisation approval`);
                         }
                         event?.displayHidden;
                       });

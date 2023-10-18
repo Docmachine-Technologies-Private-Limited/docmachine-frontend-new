@@ -14,7 +14,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'export-inward-remittance-advice',
   templateUrl: './inward-remittance-advice.component.html',
-  styleUrls: ['./inward-remittance-advice.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./inward-remittance-advice.component.scss', '../../commoncss/common.component.scss']
 })
 export class InwardRemittanceAdviceComponent implements OnInit {
   publicUrl: any = '';
@@ -72,6 +72,15 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        TrackerRef: {
+          type: "RemitterCheckBox",
+          value: "",
+          label: "Select Inward Remittance Name",
+          rules: {
+            required: true,
+          },
+          RemitterLabel: "Select Inward Remittance Ref No.",
         },
         date: {
           type: "date",
@@ -211,6 +220,11 @@ export class InwardRemittanceAdviceComponent implements OnInit {
               data?.data._id,
             ]
           }
+          this.documentService.UpdateInward_Remittance(e.value?.TrackerRef?._id, {
+            "AdviceRef": [
+              data?.data._id,
+            ]
+          }).subscribe((res: any) => { })
           this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData).subscribe((data) => {
             this.toastr.success('Firex Document added successfully.');
             this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
@@ -243,7 +257,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;

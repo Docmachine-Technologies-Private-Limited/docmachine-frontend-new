@@ -351,6 +351,21 @@
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
                     </div>
                 </div>
+                <div class="form-group mb-3" *ngSwitchCase="'RemitterCheckBox'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.validator.NEW_INWARD_REMITTANCE_NAME_LIST?.length!=0"
+                        [items]="this.validator.NEW_INWARD_REMITTANCE_NAME_LIST" bindLabel="Remitter_Name" [multiple]="false"
+                        (change)="REMITTER_CHECKBOX($event)"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
+                    </ng-select>
+                    <label class="mt-2 mb-2"
+                        *ngIf="field.RemitterLabel!=undefined && field.RemitterLabel!='' && this.validator.CHECK_BOX_REMITTER_LIST?.length!=0">{{field.RemitterLabel}}</label>
+                    <div *ngFor="let item of this.validator.CHECK_BOX_REMITTER_LIST;let in=index" class="mt-2">
+                        <mat-checkbox *ngIf="field.TypeOfCurrency=='' || field.TypeOfCurrency==undefined" [checked]="item?.checked"
+                            (change)="onRemitterCheckBox($event,field.fieldName,item,item)" [name]="field.fieldName"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.Inward_reference_number}} | {{item?.currency}} | {{item?.Inward_amount_for_disposal}}</mat-checkbox>
+                    </div>
+                </div>
                 <div class="form-group mb-3" *ngSwitchCase="'CommericalListCheckBox'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div *ngFor="let item of this.validator.COMMERICAL_NO;let in=index">

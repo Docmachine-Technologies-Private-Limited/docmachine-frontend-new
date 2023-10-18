@@ -4,7 +4,14 @@
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
-                        <h3 class="heading_common_tag">Inward-Remittance-Summary ({{this.Inward_Remittance?.length}})
+                        <h3 class="heading_common_tag" *ngIf="this.GET_FILE_NAME_ROUTE=='PendingCaliming'">Pending
+                            Claiming Summary ({{this.Inward_Remittance?.length}})
+                        </h3>
+                        <h3 class="heading_common_tag" *ngIf="this.GET_FILE_NAME_ROUTE=='DisposalSubmitted'">Submitted
+                            Summary ({{this.Inward_Remittance?.length}})
+                        </h3>
+                        <h3 class="heading_common_tag" *ngIf="this.GET_FILE_NAME_ROUTE=='Processed'">Processed Summary
+                            ({{this.Inward_Remittance?.length}})
                         </h3>
                     </div>
                 </div>

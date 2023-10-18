@@ -43,7 +43,7 @@ const routes: Routes = [
   { path: "Bill-Lodgement-Referance-AdviceCopy", component: ExportBilllodgementreferencenumberadvicecopySummaryComponent, canActivate: [MemberGuard] },
   { path: "Realisation-Cretificate", component: ExportRealisationCertificateSummaryComponent, canActivate: [MemberGuard] },
   { path: "Swift-Copy-Documents", component: ExportSwiftCopyDocumentSummaryComponent, canActivate: [MemberGuard] },
-  { path: 'Inward-Remittance-Disposal', component: InwardRemittanceDisposalComponent, canActivate: [MemberGuard] },
+  { path: 'Inward-Remittance-Disposal/:file', component: InwardRemittanceDisposalComponent, canActivate: [MemberGuard] },
   { path: "Sub-bill-Lodgement", component: SubBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "export-certificate-of-origin", component: ExportCertificateofOriginComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "SB-IRM-Match-Off", component: SBIRMMatchOffComponent, pathMatch: "full", canActivate: [MemberGuard] },

@@ -3551,12 +3551,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                 let updatedData = {
                   "TransactionRef": [
                     res1._id,
+                  ],
+                  "InwardRemittanceTracker": [
+                    updatedata?._id
                   ]
                 }
                 this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
                   console.log('king123');
                   console.log(data);
-                  this.documentService.UpdateInward_Remittance(updatedata?._id, { Inward_amount_for_disposal: updatedata?.Inward_amount_for_disposal }).subscribe((res) => {
+                  this.documentService.UpdateInward_Remittance(updatedata?._id, { Inward_amount_for_disposal: updatedata?.Inward_amount_for_disposal, pipoRef: tempPipo, SubmitDate: new Date().toLocaleTimeString() }).subscribe((res) => {
                     this.documentService.ForwardContract_update({
                       id: this.ToForwardContract_Selected[0]?._id, data:
                         { AvailableAmount: (parseInt(this.ToForwardContract_Selected[0]?.BookingAmount) - parseInt(this.ToForwardContract_Selected[0]?.UtilizedAmount)) }

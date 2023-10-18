@@ -47,7 +47,7 @@ export class SidenavComponent implements OnInit {
     private sharedData: SharedDataService) {
     this.userService.getUserDetail().then((user: any) => {
       this.userData = user['result'];
-      console.log("userData", this.userData)
+      console.log("userData", this.TRANSACTION_DASHBOARD_LIST,this.userData)
     });
   }
 
