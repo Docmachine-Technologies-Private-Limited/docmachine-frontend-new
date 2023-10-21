@@ -48,10 +48,34 @@ export class ImportCommercialComponent implements OnInit {
       "Beneficiary Name",
       "Action"],
     items: [],
-    Expansion_header: [],
+    Expansion_header: [
+      "BOE NO",
+      "BOE DATE",
+      "REGION",
+      "FOB VALUE",
+      "PORT CODE",
+      "BOE Balance Amount",
+      "Freight Charges"
+    ],
+    Expansion_header2: [
+      "TT DATE",
+      "TT USD",
+      "Payment Date",
+      "Amount",
+      "Currency",
+      "CCY Rate",
+      "INR Amount",
+      "ORM REF NUMBER/ID",
+      "TOTAL DEDUCTIONS/DAMGES/USD",
+      "FINAL AMOUNT - USD",
+      "DEBIT NOTE STATUS",
+      "STATUS OF BOE SUBMISSION IN BANK"
+    ],
     Expansion_Items: [],
+    Expansion_Items2: [],
     Objectkeys: [],
     ExpansionKeys: [],
+    ExpansionKeys2: [],
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
@@ -127,6 +151,56 @@ export class ImportCommercialComponent implements OnInit {
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
+        let boedata: any = [];
+        (element?.BoeRef != 'NF' ? element?.BoeRef : [{
+          BOENO: "NF",
+          BOEDATE: "NF",
+          REGION: "NF",
+          FOBVALUE: "NF",
+          PORTCODE: "NF",
+          BOEBalanceAmount: "NF",
+          FreightCharges: "NF"
+        }])?.forEach(boeelement => {
+          boedata.push({
+            BOENO: boeelement['boeNumber'],
+            BOEDATE: moment(boeelement['boeDate']).format("DD-MM-YYYY"),
+            REGION: boeelement['origin'],
+            FOBVALUE: boeelement['invoiceAmount'],
+            PORTCODE: boeelement['iecCode'],
+            BOEBalanceAmount: boeelement['balanceAmount'] != "-1" ? boeelement['balanceAmount'] : boeelement['invoiceAmount'],
+            FreightCharges: boeelement['freightAmount']
+          })
+        });
+        let advice: any = [];
+        (element?.ORM_Ref != 'NF' ? element?.ORM_Ref : [{
+          TTDATE: 'NF',
+          TTUSD: 'NF',
+          PaymentDate: 'NF',
+          Amount: "NF",
+          Currency: "NF",
+          CCYRate: "NF",
+          INRAmount: "NF",
+          ORMREFNUMBERID: "NF",
+          TOTALDEDUCTIONSDAMGESUSD: "NF",
+          FINALAMOUNTUSD: "NF",
+          DEBITNOTESTATUS: "NF",
+          STATUSOFBOESUBMISSIONINBANK: "NF",
+        }])?.forEach(adviceelement => {
+          advice.push({
+            TTDATE: moment(adviceelement['date']).format("DD-MM-YYYY"),
+            TTUSD: adviceelement['amount'],
+            PaymentDate: adviceelement['amount'],
+            Amount: adviceelement['amount'],
+            Currency: adviceelement['currency'],
+            CCYRate: adviceelement['amount'],
+            INRAmount: adviceelement['amount'],
+            ORMREFNUMBERID: adviceelement['billNo'],
+            TOTALDEDUCTIONSDAMGESUSD: adviceelement['amount'],
+            FINALAMOUNTUSD: adviceelement['amount'],
+            DEBITNOTESTATUS: adviceelement['amount'],
+            STATUSOFBOESUBMISSIONINBANK: adviceelement['amount'],
+          })
+        });
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
           commercialDate: moment(element['commercialDate']).format('DD-MM-YYYY'),
@@ -135,17 +209,25 @@ export class ImportCommercialComponent implements OnInit {
           AdvanceCurrency: element['currency'],
           AdvanceAmount: element['amount'],
           buyerName: element['buyerName'],
+          Expansion_Items: boedata,
+          Expansion_Items2: advice,
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
+          isExpand2: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
       if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'isExpand2')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2');
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
+        this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+        this.FILTER_VALUE_LIST_NEW['ExpansionKeys2'] = await this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'][0]) : []
       }
     });
   }
@@ -242,7 +324,7 @@ export class ImportCommercialComponent implements OnInit {
   }
 
   newDest() {
-    this.router.navigate(['home/upload', {file: 'import', document: 'import-commercial'}]);
+    this.router.navigate(['home/upload', { file: 'import', document: 'import-commercial' }]);
   }
 
   SELECTED_VALUE: any = '';
@@ -259,10 +341,10 @@ export class ImportCommercialComponent implements OnInit {
     // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Import/Edit/CommercialInvoices`],navigationExtras);
+    this.router.navigate([`/home/Summary/Import/Edit/CommercialInvoices`], navigationExtras);
     this.toastr.warning('Commercial Invoie Row Is In Edit Mode');
   }
 
