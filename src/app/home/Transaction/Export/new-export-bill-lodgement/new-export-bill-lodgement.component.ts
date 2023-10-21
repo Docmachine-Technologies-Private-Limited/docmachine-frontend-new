@@ -560,7 +560,7 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["AgainstAdvanceReceipt", "UnderLC", "Sight", "Usance", "WithScrutiny", "BuyerRemitterDifferent", "InvoiceReduction", "WithDiscount"]
+          HideShowInput: ["AgainstAdvanceReceipt", "UnderLC", "Sight", "Usancedays", "Usancefrom", "Usance", "WithScrutiny", "BuyerRemitterDifferent", "InvoiceReduction", "WithDiscount"]
         },
         // UnderLC: {
         //   type: "yesnocheckbox",
@@ -954,7 +954,7 @@ export class NewExportBillLodgementComponent implements OnInit {
         if (this.ExportBillLodgement_Form?.Sight?.bool == true) {
           getAllFields[35]?.check();
           getAllFields[36]?.uncheck();
-  
+
         } else if (this.ExportBillLodgement_Form?.Usance?.bool == true) {
           getAllFields[35]?.uncheck();
           getAllFields[36]?.check();

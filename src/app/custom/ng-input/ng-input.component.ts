@@ -15,6 +15,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class NgInputComponent implements OnInit,ControlValueAccessor {
   @Input('item') item: any = {};
   @Input('disabled') disabled: boolean = false;
+  @Input('required') required: boolean = false;
 
   @Output('event') event: any = new EventEmitter();   
   onChange: any = () => { };

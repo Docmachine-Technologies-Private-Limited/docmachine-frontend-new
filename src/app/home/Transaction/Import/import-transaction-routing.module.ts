@@ -7,6 +7,7 @@ import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Dir
 import { BuyerCreditPanelComponent } from './BuyerCreditPanel/Buyer-Credit-Panel.component';
 import { TransactionDashboardComponent } from './transaction-dashboard/transaction-dashboard.component';
 import { NewLcInsuranceComponent } from './new-lc-insurance/new-lc-insurance.component';
+import { BOE_ORMMMatchOffComponent } from './BOEORMmatch-off/BOE_ORMmatch-off.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,12 @@ const routes: Routes = [
   {
     path: "Buyer-Credit-Panel",
     component: BuyerCreditPanelComponent,
+    pathMatch: "full",
+    canActivate: [MemberGuard]
+  },
+  {
+    path: "BOE-ORM-Macth-Off",
+    component: BOE_ORMMMatchOffComponent,
     pathMatch: "full",
     canActivate: [MemberGuard]
   },

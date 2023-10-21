@@ -62,14 +62,61 @@ export class ImportCommercialInvoicesComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
+        commercialNumber: {
+          type: "text",
+          typeOf: 'ALPHA_NUMERIC',
+          value: "",
+          label: "Commercial Invoice Number*",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: "",
+          label: "Currency*",
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "number",
+          value: "",
+          label: "Amount*",
+          rules: {
+            required: true,
+          }
+        },
+        InvoiceDate: {
+          type: "date",
+          value: "",
+          label: "Invoice Date*",
+          rules: {
+            required: true,
+          }
+        },
+        IfAdvancePaid: {
+          type: "yesnocheckbox",
+          value: 'true',
+          label: "If Advance Paid?",
+          rules: {
+            required: false,
+          },
+          YesNo: 'true',
+          text1: 'No',
+          text2: 'Yes',
+          HideShowInput: ["AdvanceInfo"],
+          class:'row-reverse'
+        },
         AdvanceInfo: {
           type: "formGroup",
           label: "Advance Info",
           GroupLabel: ['Advance Info 1'],
           AddNewRequried: false,
           rules: {
-            required: false,
+            required: true,
           },
+          disabled: true,
           formArray: [
             [
               {
@@ -117,69 +164,37 @@ export class ImportCommercialInvoicesComponent implements OnInit {
             ]
           ]
         },
-        commercialNumber: {
-          type: "text",
-          typeOf: 'ALPHA_NUMERIC',
-          value: "",
-          label: "Commercial Invoice Number*",
-          rules: {
-            required: true,
-          }
-        },
-        currency: {
-          type: "currency",
-          value: "",
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        amount: {
-          type: "number",
-          value: "",
-          label: "Amount*",
-          rules: {
-            required: true,
-          }
-        },
-        InvoiceDate: {
-          type: "date",
-          value: "",
-          label: "Invoice Date*",
-          rules: {
-            required: true,
-          }
-        },
+
         InvoiceValue: {
           type: "number",
           value: "",
-          label: "Commodity Amount*",
+          label: "Commodity Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         FreightValue: {
           type: "number",
           value: "",
-          label: "Freight Amount*",
+          label: "Freight Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         InsuranceValue: {
           type: "number",
           value: "",
-          label: "Insurance Amount*",
+          label: "Insurance Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         MiscCharges: {
           type: "number",
           value: "",
-          label: "Misc Charges*",
+          label: "Misc Charges",
           rules: {
-            required: true,
+            required: false,
           }
         },
         ThirdParty: {
@@ -197,50 +212,54 @@ export class ImportCommercialInvoicesComponent implements OnInit {
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
   onSubmit(e: any) {
-    console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.pipo = this.pipoArr;
-    console.log('pipoarrya', this.pipoArr);
-    e.value.commercialDoc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.AdvanceCurrency = e.value.AdvanceCurrency?.type != undefined ? e.value.AdvanceCurrency.type : e.value.AdvanceCurrency;
-    e.value.sbNo = '';
-    e.value.sbRef = [];
-    e.value.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
-    e.value.BoeRef = [this.validator.ORM_SELECTION_DATA?.id];
-    e.value.ORM_Ref = [this.validator.ORM_SELECTION_DATA?._id];
-    this.documentService.getInvoice_No({
-      commercialNumber: e.value.commercialNumber
-    }, 'commercials').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
-      if (resp.data.length == 0) {
-        delete e.value.AdvanceInfo
-        this.documentService.addCommercial(e.value).subscribe((res: any) => {
-          this.toastr.success(`Commercial Invoice Added Successfully`);
-          let updatedData = {
-            "commercialRef": [
-              res.data._id,
-            ],
-            "commercialdetails": [
-              res.data._id,
-            ],
-          }
-          this.userService.updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData).subscribe((data) => {
-            console.log('commercial', data);
-            this.router.navigate(['home/Summary/Import/Commercial']);
-          }, (error) => {
-            console.log('error');
-          }
-          );
-        },
-          (err) => console.log('Error adding pipo')
-        );
+    console.log(e, this.validator.ORM_SELECTION_DATA, 'value')
 
-      } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.commercialNumber} already exit...`);
-      }
-    });
+    if (e != false) {
+      e.file = 'import';
+      e.pipo = this.pipoArr;
+      console.log('pipoarrya', this.pipoArr);
+      e.commercialDoc = this.pipourl1;
+      e.buyerName = this.BUYER_LIST;
+      e.currency = e.currency?.type != undefined ? e.currency.type : e.currency;
+      e.AdvanceCurrency = e.AdvanceInfo[0]?.AdvanceCurrency?.type != undefined ? e.AdvanceInfo[0]?.AdvanceCurrency?.type : e.AdvanceCurrency;
+      e.AdvanceNo = e.AdvanceInfo[0]?.AdvanceNo != undefined ? e.AdvanceInfo[0]?.AdvanceNo : e.AdvanceNo;
+      e.AdvanceAmount = e.AdvanceInfo[0]?.AdvanceAmount != undefined ? e.AdvanceInfo[0]?.AdvanceAmount : e.AdvanceAmount;
+      e.sbNo = '';
+      e.sbRef = [];
+      e.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
+      e.BoeRef = [this.validator.ORM_SELECTION_DATA?.id];
+      e.ORM_Ref = [this.validator.ORM_SELECTION_DATA?._id];
+      this.documentService.getInvoice_No({
+        commercialNumber: e.commercialNumber
+      }, 'commercials').subscribe((resp: any) => {
+        console.log('creditNoteNumber Invoice_No', resp)
+        if (resp.data.length == 0) {
+          delete e.AdvanceInfo
+          this.documentService.addCommercial(e).subscribe((res: any) => {
+            this.toastr.success(`Commercial Invoice Added Successfully`);
+            let updatedData = {
+              "commercialRef": [
+                res.data._id,
+              ],
+              "commercialdetails": [
+                res.data._id,
+              ],
+            }
+            this.userService.updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData).subscribe((data) => {
+              console.log('commercial', data);
+              this.router.navigate(['home/Summary/Import/Commercial']);
+            }, (error) => {
+              console.log('error');
+            }
+            );
+          },
+            (err) => console.log('Error adding pipo')
+          );
+        } else {
+          this.toastr.error(`Please check this sb no. : ${e.commercialNumber} already exit...`);
+        }
+      });
+    }
   }
 
   clickPipo(event: any) {

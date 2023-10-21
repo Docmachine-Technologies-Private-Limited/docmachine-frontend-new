@@ -366,6 +366,7 @@ export class UploadServiceValidatorService implements OnInit {
     myForm['status'] = 'VALID';
     this.dynamicFormGroup[id].get(fieldName).clearValidators(); // 6. Clear All Validators
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
+    console.log(myForm,"myForm")
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string): any {

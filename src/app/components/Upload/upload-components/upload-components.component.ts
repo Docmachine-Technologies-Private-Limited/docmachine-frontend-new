@@ -145,27 +145,37 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
         AUTOFILL_INPUT_NAME_LIST.forEach(element => {
           this.validator.dynamicFormGroup[this.id]?.controls[element?.input]?.setValue(this.validator.ORM_SELECTION_DATA[element?.key]);
         });
+        if (this.CALLBACK != undefined && this.CALLBACK != null && this.CALLBACK != '') {
+          this.CALLBACK({ form: this.validator.dynamicFormGroup[this.id], AUTOFILL_INPUT_NAME_LIST: AUTOFILL_INPUT_NAME_LIST, FIELDS_DATA: this.field })
+        }
       } else if (type == "formGroup") {
         AUTOFILL_INPUT_NAME_LIST.forEach(element => {
           this.validator.dynamicFormGroup[this.id]?.controls[element?.parent]?.controls[0]?.controls[element?.input]?.setValue(this.validator.ORM_SELECTION_DATA[element?.key]);
         });
+      }
+      if (this.CALLBACK != undefined && this.CALLBACK != null && this.CALLBACK != '') {
+        this.CALLBACK({ form: this.validator.dynamicFormGroup[this.id], AUTOFILL_INPUT_NAME_LIST: AUTOFILL_INPUT_NAME_LIST, FIELDS_DATA: this.field })
       }
     } else {
       this.validator.ORM_SELECTION_DATA = []
       event.target.checked = false;
     }
   }
-
-  dump(data: any) {
-    console.log(this.AUTOFILL_INPUT_NAME_LIST, "AUTOFILL_INPUT_NAME_LIST")
+  CALLBACK: any = null;
+  field: any = null;
+  dump(data: any, callback: any = null, field: any = null) {
+    console.log(this.AUTOFILL_INPUT_NAME_LIST, callback, "AUTOFILL_INPUT_NAME_LIST")
     this.AUTOFILL_INPUT_NAME_LIST = data;
+    this.CALLBACK = callback;
+    this.field = field;
   }
 
   autofillCommerical(Commericaldata: any, AUTOFILL_INPUT_NAME_LIST: any) {
-    console.log(Commericaldata, this.AUTOFILL_INPUT_NAME_LIST, "AUTOFILL_INPUT_NAME_LIST")
+    console.log(Commericaldata, this.CALLBACK, this.AUTOFILL_INPUT_NAME_LIST, "AUTOFILL_INPUT_NAME_LIST")
     AUTOFILL_INPUT_NAME_LIST.forEach(element => {
       this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.controls[element?.index]?.controls[element?.input]?.setValue(Commericaldata?.data[element?.key])
     });
+
   }
 
   CreateFormBank() {
@@ -443,7 +453,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(item);
     console.log(event, item, "onRemitterCheckBox")
   }
-  
+
   BANK_CHECKBOX(value: any) {
     console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, "BANK_CHECKBOX")
     this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.id];
@@ -451,7 +461,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       element['checked'] = false;
     });
   }
-  
+
   REMITTER_CHECKBOX(value: any) {
     console.log(value, this.validator?.REMITTER_LIST[value?.Remitter_Name], this.validator?.REMITTER_LIST, "BANK_CHECKBOX")
     this.validator.CHECK_BOX_REMITTER_LIST = this.validator?.REMITTER_LIST[value?.Remitter_Name];

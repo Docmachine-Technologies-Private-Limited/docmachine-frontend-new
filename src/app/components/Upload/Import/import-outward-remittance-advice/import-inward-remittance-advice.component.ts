@@ -64,14 +64,6 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
       let res: any = new IRAdvice(args[1].data);
       console.log(res, 'sdfjhksdjhdkfjsdhfsdkfhsd')
       this.validator.buildForm({
-        BankName: {
-          type: "Bank",
-          value: "",
-          label: "Bank Name*",
-          rules: {
-            required: true,
-          }
-        },
         date: {
           type: "date",
           value: res?.date,
@@ -133,22 +125,6 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           value: res?.location,
           label: "Location",
           rules: {
-            required: true,
-          }
-        },
-        commodity: {
-          type: "commodity",
-          value: res?.commodity,
-          label: "Commodity",
-          rules: {
-            required: true,
-          }
-        },
-        origin: {
-          type: "origin",
-          value: res?.origin,
-          label: "Origin",
-          rules: {
             required: false,
           }
         },
@@ -157,7 +133,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           value: "",
           label: "Payment Type*",
           rules: {
-            required: true,
+            required: false,
           }
         },
       }, 'OutwardRemittanceAdvice');
@@ -180,9 +156,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
     e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
-    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
     e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-    e.value.origin = e.value.origin?.value != undefined ? e.value.origin.value : e.value.origin;
 
     console.log('doc', temp, this.pipourl1);
     console.log('onSubmitIrAdvice', e.value);

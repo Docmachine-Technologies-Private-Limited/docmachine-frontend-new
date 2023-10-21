@@ -1,14 +1,16 @@
 .tally-connector-panel {
-    background-color: white;
-    height: 96%;
+    background-color: #fff;
+    height: 88vh;
     width: 95%;
-    margin: auto;
-    margin-top: 20px;
+    margin: 20px auto auto;
     border-radius: 10px;
-    padding: 20px;
+    padding: 0;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    box-shadow: 0px 0px 8px 8px #c5c5c599;
+    box-shadow: 0 0 8px 8px #c5c5c599;
 }
 
 .tally-connector-panel .top-label {
@@ -71,27 +73,31 @@
     align-items: baseline;
 }
 
-.right-panel{
-    width: 90%;
-    margin: auto;
-    margin-right: 0;
-    margin-top: 0;
+.right-panel {
+    width: 100%;
+    margin: 0 0 auto auto;
+    overflow: auto;
+    height: 86vh;
+    padding: 10px;
 }
 
-.note-card{
+.note-card {
     background: #ffba5e4f;
     padding: 10px;
     border-radius: 10px;
     border: 1px solid #babf26;
 }
 
-.button-panel{
-    position: absolute;
-    bottom: 30px;
-    right: 20px;
+.button-panel {
+    margin: auto;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-top: 20px;
 }
 
-.button-panel .button-download{
+.button-panel .button-download {
     background: black;
     border: none;
     outline: none;

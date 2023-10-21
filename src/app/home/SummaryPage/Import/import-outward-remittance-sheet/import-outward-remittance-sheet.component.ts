@@ -69,7 +69,6 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       "DATE",
       "BOE Number",
       "Party Name",
-      "Bank Name",
       "Currency",
       "TT Amount",
       "Ref No.",
@@ -91,7 +90,6 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     Objectkeys: [],
     ExpansionKeys: [],
     TableHeaderClass: [
-      "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
@@ -257,7 +255,6 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           date:  moment(element['date']).format("DD-MM-YYYY"),
           boeno: element['sbno'],
           beneficiaryName: element['beneficiaryName'],
-          BankName: element['BankName']?.value,
           currency: element['currency'],
           amount: element['amount'],
           billNo: element['billNo'],
