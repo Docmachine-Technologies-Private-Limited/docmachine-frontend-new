@@ -500,7 +500,7 @@ export class BOEORMMactchData {
                 FirxUsed_Balance: this.tp?.FirxUsed_Balance.join(','),
                 MatchOffData: data?.ORM_ADVICE_DATA
             }
-            this.documentService.Update_Amount_by_TableSB({
+            this.documentService.Update_Amount_by_Table({
                 tableName: 'boerecords',
                 id: data?._id,
                 query: Createquery
@@ -535,7 +535,7 @@ export class BOEORMMactchData {
 
     dselect(data: any) {
         console.log(data, "sdfsdfdfdfsfffsdfsfs")
-        this.confrimModel.YesNoDialogModel("Reset All Data<br/> Do you want d-select all data with this shipping bill no. : " + data?.sbno, "", (value: any) => {
+        this.confrimModel.YesNoDialogModel("Reset All Data<br/> Do you want d-select all data with this shipping bill no. : " + data?.boeNumber, "", (value: any) => {
             if (value?.value === "Yes") {
                 this.documentService.Update_Amount_by_Table({
                     tableName: 'boerecords',
@@ -547,7 +547,7 @@ export class BOEORMMactchData {
                 }).subscribe(async (r3: any) => {
                     for (let index = 0; index < data?.CI_REF?.length; index++) {
                         const element = data?.CI_REF?.[index];
-                        element?.IRM_REF?.forEach(IRM_REF_element => {
+                        element?.MatchOffData?.forEach(IRM_REF_element => {
                             this.documentService.Update_Amount_by_Table({
                                 tableName: 'iradvices',
                                 id: IRM_REF_element?._id,
