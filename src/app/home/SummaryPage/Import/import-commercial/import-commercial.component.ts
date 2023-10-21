@@ -133,7 +133,7 @@ export class ImportCommercialComponent implements OnInit {
           commercialNumber: element['commercialNumber'],
           AdvanceNo: element['AdvanceNo'],
           AdvanceCurrency: element['currency'],
-          AdvanceAmount: element['AdvanceAmount'],
+          AdvanceAmount: element['amount'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,

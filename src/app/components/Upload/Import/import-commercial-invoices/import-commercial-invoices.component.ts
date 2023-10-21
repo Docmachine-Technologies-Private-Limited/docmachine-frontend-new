@@ -64,7 +64,6 @@ export class ImportCommercialInvoicesComponent implements OnInit {
       this.validator.buildForm({
         commercialNumber: {
           type: "text",
-          typeOf: 'ALPHA_NUMERIC',
           value: "",
           label: "Commercial Invoice Number*",
           rules: {
@@ -73,7 +72,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: this.PIPO_DATA?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -164,7 +163,6 @@ export class ImportCommercialInvoicesComponent implements OnInit {
             ]
           ]
         },
-
         InvoiceValue: {
           type: "number",
           value: "",
@@ -197,14 +195,6 @@ export class ImportCommercialInvoicesComponent implements OnInit {
             required: false,
           }
         },
-        ThirdParty: {
-          type: "text",
-          value: "",
-          label: "Third Party*",
-          rules: {
-            required: false,
-          }
-        }
       }, 'ImportCommerical');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -275,6 +265,10 @@ export class ImportCommercialInvoicesComponent implements OnInit {
         console.log(res, 'getbyPartyName');
         this.validator.ORM_BY_PARTY_NAME = res?.data;
       });
+      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
+        this.PIPO_DATA = res?.data[0];
+        console.log(res, "getPipoById")
+      })
     } else {
       this.btndisabled = true;
     }

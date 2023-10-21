@@ -39,8 +39,9 @@
                                 </div>
                                 <div class="col-md-7 col-sm-7 col-12 padding-left0">
                                     <div class="content1 lefttext_move">
-                                        <h6 class="name">{{data?.name}} <span
-                                                class="role_based" *ngIf="data?.UnderSubscriptionCheckBox">{{data?.UnderSubscriptionCheckBox}}</span></h6>
+                                        <h6 class="name">{{data?.name}} <span class="role_based"
+                                                *ngIf="data?.UnderSubscriptionCheckBox">{{data?.UnderSubscriptionCheckBox}}</span>
+                                        </h6>
                                         <h6 class="email">{{data?.email}}</h6>
                                         <label class="email">Subscription : <span
                                                 class="subcolor">{{data?.Subscription}}</span></label>
@@ -63,9 +64,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="bottom_button_new" style="margin-top:25px;">
-            <button class="new_bot_butn" [routerLink]="['/home/dashboard']">Finish</button>
-        </div> -->
     </main>
 </div>
 <div class="opcaity">
@@ -75,26 +73,11 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Member</h5>
                     <button type="button" class="btn-close buton_right_new"
-                        (click)="formmodel.style.display='none';cleardata()"><span aria-hidden="true">&times;</span></button>
+                        (click)="formmodel.style.display='none';cleardata()"></button>
                 </div>
                 <div class="modal-body">
                     <div class="add_new_members_lus">
                         <form [formGroup]="memeberForm" (ngSubmit)="onSubmit(formmodel)" class="edit_form_new_sec">
-                            <!-- <div class="button-wrapper">
-                               <img *ngIf="this.img!=''" [src]="this.img" style="width: 200px;border-radius: 10px;">
-                               <div *ngIf="this.img==''">
-                                <span class="label">
-                                    <img class="img1" src="./assets/Icon-feather-upload.svg">
-                                </span>
-                                <p class="heading" style="font-size: 12px;">Upload Profile</p>
-                                <div class="upload-div">
-                                    <input name="upload" (change)="CONSOLE($event.target.files)"
-                                        type="file" class="upload-box" placeholder="Upload File"
-                                        accept=".png, .jpg, .jpeg, .gif"
-                                        class="dropzone dropzone-container" id="dropzone">
-                                </div>
-                               </div>
-                            </div> -->
                             <div class="row">
                                 <div class="col-md-6 col-12">
                                     <label for="recipient-name" class="col-form-label">Name</label>
@@ -148,36 +131,17 @@
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <label for="message-text" class="col-form-label">Role_Type</label>
-                                    <span class="Role_Type">{{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</span>
-                                    <!-- <select class="form-select" aria-label="Default select example" disabled [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['Role_Type']=='' ||
-              this.FORM_BUILDER['Role_Type']==='Select Subscription' }"
-                                        (change)="FORM_BUILDER_INSERT_VALUE('Role_Type',$event.target.value)">
-                                        <option [value]="this.userData?.result['Role_Type']">
-                                            {{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</option>
-                                    </select>
-                                    <div *ngIf="submitted && this.FORM_BUILDER['Role_Type']=='' ||
-                this.FORM_BUILDER['Role_Type']=='Select Subscription'" class="invalid-feedback">
-                                        <div *ngIf="this.FORM_BUILDER['Role_Type']=='' ||
-                this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is required</div>
-                                    </div> -->
+                                    <span
+                                        class="Role_Type">{{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</span>
                                 </div>
                                 <div class="col-md-12 col-12">
-                                    <div class="row flex col-5" *ngIf="this.userData?.result['Role_Type']=='1'">
-                                        <!-- <label for="message-text" class="col-form-label">Role : </label> -->
-                                        <!-- <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
-                    <input class="form-check-input" (change)="onChange(cat.value, $event.target.checked)"name="{{ cat.value }}"
-                     type="checkbox" id="{{cat.value}}">
-                    <label class="form-check-label" for="{{cat.value}}">
-                        {{cat.value}}
-                    </label>
-                </div> -->
-                                    </div>
                                     <div class="column top_paddd_new" *ngIf="this.userData?.result['Role_Type']=='2'">
                                         <h5 for="message-text" class="col_neww">Role : </h5>
                                         <ul class="ul_list">
                                             <li class="form-check"
                                                 *ngFor="let cat of [{value:'Maker'},{value:'Approver'}]">
                                                 <input class="form-check-input"
+                                                style="width: 15px !important;"
                                                     (change)="onChange($event,cat.value, $event.target.checked)"
                                                     name="{{ cat.value }}" type="checkbox" id="{{cat.value}}">
                                                 <label class="form-check-label" for="{{cat.value}}">
@@ -191,7 +155,7 @@
                                         <ul class="ul_list">
                                             <li class="form-check"
                                                 *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
-                                                <input class="form-check-input"
+                                                <input class="form-check-input" style="width: 15px !important;"
                                                     (change)="onChange($event,cat.value, $event.target.checked)"
                                                     name="{{ cat.value }}" type="checkbox" id="{{cat.value}}">
                                                 <label class="form-check-label" for="{{cat.value}}">
@@ -225,46 +189,29 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Member</h5>
                     <button type="button" class="btn-close buton_right_new"
-                        (click)="Editformmodel.style.display='none'"><span aria-hidden="true">&times;</span></button>
+                        (click)="Editformmodel.style.display='none'"></button>
                 </div>
                 <div class="modal-body">
                     <div class="add_new_members_lus">
                         <div class="">
                             <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel)"
-                            class="edit_form_new_sec">
-                            <!-- <div class="">
+                                class="edit_form_new_sec">
                                 <div class="button-wrapper">
-                                    <form class="form" method="POST">
-                                        <p class="heading">Update Member</p>
+                                    <img [src]="this.img" style="width: 200px;border-radius: 10px;">
+                                    <div>
                                         <span class="label">
-                                            <img class="img3" [src]="this.SELECTED_EDIT_DATA['imageUrl']"
-                                                style="height: 70px; width: 70px;">
+                                            <img class="img1" src="./assets/Icon-feather-upload.svg">
                                         </span>
-                                        <div *ngIf="!toggle" class="upload-div">
-                                            <input name="upload" class="upload-box" placeholder="Upload File"
-                                                (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                                                (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
-                                                [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
+                                        <p class="heading" style="font-size: 12px;">Upload Profile</p>
+                                        <div class="upload-div">
+                                            <input name="upload" (change)="CONSOLE($event.target.files)" type="file"
+                                                class="upload-box" placeholder="Upload File"
+                                                accept=".png, .jpg, .jpeg, .gif" class="dropzone dropzone-container"
+                                                id="dropzone">
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div> -->
-                            <div class="button-wrapper">
-                                <img  [src]="this.img" style="width: 200px;border-radius: 10px;">
-                                <div>
-                                 <span class="label">
-                                     <img class="img1" src="./assets/Icon-feather-upload.svg">
-                                 </span>
-                                 <p class="heading" style="font-size: 12px;">Upload Profile</p>
-                                 <div class="upload-div">
-                                     <input name="upload" (change)="CONSOLE($event.target.files)"
-                                         type="file" class="upload-box" placeholder="Upload File"
-                                         accept=".png, .jpg, .jpeg, .gif"
-                                         class="dropzone dropzone-container" id="dropzone">
-                                 </div>
-                                </div>
-                             </div>
-                           
+
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="recipient-name" class="col-form-label">Name</label>
@@ -302,10 +249,10 @@
                                                 {{this.userData?.result?.Subscription}}</option>
                                             <option *ngIf="this.userData?.result?.Subscription=='both'" value="">
                                                 Select Option</option>
-                                            <option *ngIf="this.userData?.result?.Subscription=='both'"
-                                                value="Export">Export</option>
-                                            <option *ngIf="this.userData?.result?.Subscription=='both'"
-                                                value="Import">Import</option>
+                                            <option *ngIf="this.userData?.result?.Subscription=='both'" value="Export">
+                                                Export</option>
+                                            <option *ngIf="this.userData?.result?.Subscription=='both'" value="Import">
+                                                Import</option>
                                             <option *ngIf="this.userData?.result?.Subscription=='both'" value="both">
                                                 both</option>
                                         </select>
@@ -343,6 +290,7 @@
                                                 <li class="form-check"
                                                     *ngFor="let cat of [{value:'Maker'},{value:'Approver'}]">
                                                     <input class="form-check-input"
+                                                    style="width: 15px !important;"
                                                         [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false"
                                                         (change)="onChange($event,cat.value, $event.target.checked)"
                                                         name="{{ cat.value }}" type="checkbox" id="{{cat.value}}"
@@ -360,6 +308,7 @@
                                                 <li class="form-check"
                                                     *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
                                                     <input class="form-check-input"
+                                                    style="width: 15px !important;"
                                                         [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false"
                                                         (change)="onChange($event,cat.value, $event.target.checked)"
                                                         name="{{ cat.value }}" type="checkbox" id="{{cat.value}}"
