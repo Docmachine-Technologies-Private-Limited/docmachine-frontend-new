@@ -67,44 +67,10 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
       this.validator.buildForm({
-        AdvanceInfo: {
-          type: "AdvanceInfo",
-          value: args?.AdvanceInfo,
-          label: "Select Advance no.",
-          rules: {
-            required: false,
-          },
-          autofillinput:[{input:'AdvanceNo',key:'billNo'},{input:'AdvanceCurrency',key:'currency'},{input:'AdvanceAmount',key:'amount'}]
-        },
-        AdvanceNo: {
-          type: "text",
-          value:args?.AdvanceNo,
-          label: "Advance No.",
-          rules: {
-            required: false,
-          }
-        },
-        AdvanceCurrency: {
-          type: "currency",
-          value: args?.AdvanceCurrency,
-          label: "Advance Currency*",
-          rules: {
-            required: false,
-          }
-        },
-        AdvanceAmount: {
-          type: "number",
-          value: args?.AdvanceAmount,
-          label: "Advance Amount",
-          rules: {
-            required: false,
-          }
-        },
         commercialNumber: {
           type: "text",
-          typeOf:'ALPHA_NUMERIC',
           value: args?.commercialNumber,
-          label: "Commercial Invoice Number*",
+          label: "Commercial Invoice Number",
           rules: {
             required: true,
           }
@@ -112,7 +78,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         currency: {
           type: "currency",
           value: args?.currency,
-          label: "Currency*",
+          label: "Currency",
           rules: {
             required: true,
           }
@@ -120,7 +86,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         amount: {
           type: "number",
           value: args?.amount,
-          label: "Amount*",
+          label: "Amount",
           rules: {
             required: true,
           }
@@ -128,15 +94,71 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         InvoiceDate: {
           type: "date",
           value: args?.InvoiceDate,
-          label: "Invoice Date*",
+          label: "Invoice Date",
           rules: {
             required: true,
           }
         },
+        AdvanceInfo: {
+          type: "formGroup",
+          label: "Advance Info",
+          GroupLabel: ['Advance Info 1'],
+          AddNewRequried: false,
+          rules: {
+            required: true,
+          },
+          disabled: true,
+          formArray: [
+            [
+              {
+                type: "AdvanceInfo",
+                value: "",
+                label: "Select Advance no.",
+                name: 'AdvanceInfoAny',
+                rules: {
+                  required: true,
+                },
+                AutoFillType: "formGroup",
+                autofillinput: [
+                  { input: 'AdvanceNo', key: 'billNo', parent: "AdvanceInfo" },
+                  { input: 'AdvanceCurrency', key: 'currency', parent: "AdvanceInfo" },
+                  { input: 'AdvanceAmount', key: 'amount', parent: "AdvanceInfo" }
+                ],
+              },
+              {
+                type: "text",
+                value: "",
+                label: "Advance No.",
+                name: 'AdvanceNo',
+                rules: {
+                  required: true,
+                },
+              },
+              {
+                type: "currency",
+                value: "",
+                label: "Advance Currency",
+                name: 'AdvanceCurrency',
+                rules: {
+                  required: true,
+                },
+              },
+              {
+                type: "number",
+                value: "",
+                label: "Advance Amount",
+                name: 'AdvanceAmount',
+                rules: {
+                  required: true,
+                },
+              }
+            ]
+          ]
+        },
         InvoiceValue: {
           type: "number",
           value: args?.InvoiceValue,
-          label: "Commodity Amount*",
+          label: "Commodity Amount",
           rules: {
             required: true,
           }
@@ -144,7 +166,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         FreightValue: {
           type: "number",
           value: args?.FreightValue,
-          label: "Freight Amount*",
+          label: "Freight Amount",
           rules: {
             required: true,
           }
@@ -152,7 +174,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         InsuranceValue: {
           type: "number",
           value: args?.InsuranceValue,
-          label: "Insurance Amount*",
+          label: "Insurance Amount",
           rules: {
             required: true,
           }
@@ -160,20 +182,12 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         MiscCharges: {
           type: "number",
           value: args?.MiscCharges,
-          label: "Misc Charges*",
+          label: "Misc Charges",
           rules: {
             required: true,
           }
         },
-        ThirdParty: {
-          type: "text",
-          value: args?.ThirdParty,
-          label: "Third Party*",
-          rules: {
-            required: true,
-          }
-        }
-      }, 'ImportCommerical');
+      }, 'EditImportCommerical');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
