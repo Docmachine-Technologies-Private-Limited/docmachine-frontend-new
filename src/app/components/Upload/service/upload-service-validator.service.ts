@@ -176,6 +176,7 @@ export class UploadServiceValidatorService implements OnInit {
 
         await this.userService.getTeam().subscribe(async (data: any) => {
           this.COMPANY_INFO = data?.data;
+          console.log(this.COMPANY_INFO,"COMPANY_INFO")
           this.CHECK_BOX_BANK_LIST=[]
           console.log(data['data'][0]);
           this.location = [];
@@ -358,7 +359,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.FIELDS_DATA[id]?.[key]?.setValue(value);
   }
 
-  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any) {
+  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any,callback:any=undefined) {
     const myForm: any = form?.controls[fieldName] as FormGroup;
     let currentVal = value;
     myForm.value[OptionfieldIndex][FormOptionfieldName] = currentVal;
@@ -367,6 +368,9 @@ export class UploadServiceValidatorService implements OnInit {
     this.dynamicFormGroup[id].get(fieldName).clearValidators(); // 6. Clear All Validators
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
     console.log(myForm,"myForm")
+    if (callback!=undefined && callback!=null) {
+      callback({id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id]});
+    }
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string): any {

@@ -1067,7 +1067,7 @@
                     </div>
                     <br>
                   </div>
-                  <div class="btn-control-panel">
+                  <div class="btn-control-panel" [ngClass]="{'btn-control-panel-2':this.charge?.length==0}">
                     <button class="btn btn-primary" style="float:right" (click)='generateDoc(code,j)'
                       [disabled]="this.charge?.length!=0?false:true"> Preview
                     </button>
@@ -1128,7 +1128,7 @@
                           </div>
                         </div>
                       </div>
-                      <button class="btn btn-primary">Download</button>
+                      <!-- <button class="btn btn-primary">Download</button> -->
                       <!-- <button *ngIf='!newDone' id="ProceedPreview" class="button1"
                         style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to
                         Preview</button> -->

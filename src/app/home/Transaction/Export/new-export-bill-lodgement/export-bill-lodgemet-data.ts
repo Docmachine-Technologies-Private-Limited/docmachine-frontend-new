@@ -41,8 +41,8 @@ export class ExportBillLodgementData {
     }
 
     clear() {
-        this.SELECTED_SHIPPING_BILL_TRANSACTION=[];
-        this.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS=[]
+        this.SELECTED_SHIPPING_BILL_TRANSACTION = [];
+        this.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = []
         this.SHIPPING_BILL_DATA = []
         this.SHIPPING_BILL_DATA_LINKAGE = [];
         this.TRANSACTION_SHIPPING_BILL = [];
@@ -59,6 +59,7 @@ export class ExportBillLodgementData {
 
     getShippingBill(buyerName: any, type: any) {
         this.setBuyerName(buyerName)
+        console.log(buyerName, "buyerName")
         if (buyerName != undefined && buyerName != null && buyerName != '') {
             this.documentService.getMasterBuyer(buyerName?.buyerName).subscribe((res: any) => {
                 let data: any = [];
@@ -120,7 +121,7 @@ export class ExportBillLodgementData {
                     this.TRANSACTION_SHIPPING_BILL = this.SHIPPING_BILL_DATA?.filter((item: any) => item?.firxdetails?.length == 0)
                 }
                 this.getbyFIRXPartyName(buyerName?.buyerName);
-                console.log(buyerName, this.TRANSACTION_SHIPPING_BILL, this.IS_AGAINST_ADVANCE_YES_NO, "getShippingBill")
+                console.log(buyerName, res?.data, this.TRANSACTION_SHIPPING_BILL, this.IS_AGAINST_ADVANCE_YES_NO, "getShippingBill")
             });
         }
     }
@@ -594,31 +595,34 @@ export class ExportBillLodgementData {
                 }).subscribe(async (r3: any) => {
                     for (let index = 0; index < data?.commercialdetails?.length; index++) {
                         const element = data?.commercialdetails?.[index];
-                        element?.IRM_REF?.forEach(IRM_REF_element => {
-                            this.documentService.Update_Amount_by_Table({
-                                tableName: 'iradvices',
-                                id: IRM_REF_element?._id,
-                                query: {
-                                    sbno: [],
-                                    BalanceAvail: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
-                                    CommissionUsed: false,
-                                    MatchOffData: {},
-                                    UsedAmount: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
-                                    CI_REF: []
-                                }
-                            }).subscribe(async (list: any) => {
-                                await this.documentService.Update_Amount_by_Table({
-                                    tableName: 'commercials',
-                                    id: element?._id,
-                                    query: { IRM_REF: [], TransctionEnabled: false, MatchOffData: [] }
-                                }).subscribe((r2: any) => {
-
-                                });
-                            })
-                        });
-                        if ((index + 1) == data?.commercialdetails?.length) {
-                            this.toastr.success("Update Changes...")
-                            this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
+                        if (element?.IRM_REF?.length != 0) {
+                            element?.IRM_REF?.forEach(IRM_REF_element => {
+                                this.documentService.Update_Amount_by_Table({
+                                    tableName: 'iradvices',
+                                    id: IRM_REF_element?._id,
+                                    query: {
+                                        sbno: [],
+                                        BalanceAvail: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                        CommissionUsed: false,
+                                        MatchOffData: {},
+                                        UsedAmount: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                        CI_REF: []
+                                    }
+                                }).subscribe(async (list: any) => {
+                                    await this.documentService.Update_Amount_by_Table({
+                                        tableName: 'commercials',
+                                        id: element?._id,
+                                        query: { IRM_REF: [], TransctionEnabled: false, MatchOffData: [] }
+                                    }).subscribe((r2: any) => {
+                                        if ((index + 1) == data?.commercialdetails?.length) {
+                                            this.toastr.success("Changes Updated...")
+                                            console.log(this.SELECTED_BUYER_NAME, "SELECTED_BUYER_NAME")
+                
+                                            this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
+                                        }
+                                    });
+                                })
+                            });
                         }
                     }
                 });

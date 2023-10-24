@@ -34,6 +34,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Output('BankEvent') BankEvent: any = new EventEmitter();
   @Output('YesNoCheckBoxEvent') YesNoCheckBoxEvent: any = new EventEmitter();
   @Output('SHIPPING_BILL_EVENT') SHIPPING_BILL_EVENT: any = new EventEmitter();
+  @Output('CommericalNoEvent') CommericalNoEvent: any = new EventEmitter();
   @Output('BL_COPY_EVENT') BL_COPY_EVENT: any = new EventEmitter();
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;

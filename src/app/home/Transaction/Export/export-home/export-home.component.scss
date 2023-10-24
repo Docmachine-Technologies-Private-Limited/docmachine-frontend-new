@@ -1389,7 +1389,11 @@ iframe #toolbar #end #downloads #download #icon {
 .btn-control-panel {
     position: fixed;
     bottom: 22px;
-    right: 190px;
+    right: 100px;
     display: flex;
     gap: 10px;
+}
+
+.btn-control-panel-2 {
+    right: 165px;
 }

@@ -7,6 +7,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'export-app-pipos',
@@ -169,11 +170,11 @@ export class PIPOSComponent implements OnInit {
         RemitterName: {
           type: "RemitterCheckBox",
           value: "",
-          label: "Select Inward Remittance Name",
+          label: "Select Inward Remitter Name",
           rules: {
             required: false,
           },
-          RemitterLabel: "Select Inward Remittance Ref No.",
+          RemitterLabel: "Select Inward Remitter Ref No.",
         },
         incoterm: {
           type: "IncoTerm",
@@ -300,6 +301,14 @@ export class PIPOSComponent implements OnInit {
                 value: "",
                 label: "Type",
                 name: 'type',
+                callback: (item: any) => {
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  let currentVal = item?.dynamicFormGroup?.controls['currency']?.value;
+                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.type);
+                  myForm['touched'] = true;
+                  myForm['status'] = 'VALID';
+                  console.log(item, "callback")
+                },
                 rules: {
                   required: true,
                 },

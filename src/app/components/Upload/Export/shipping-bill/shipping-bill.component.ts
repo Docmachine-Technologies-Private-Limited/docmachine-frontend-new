@@ -8,6 +8,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-shipping-bill',
@@ -162,11 +163,12 @@ export class ShippingBillComponent implements OnInit {
         },
         fobCurrency: {
           type: "currency",
-          value: this.UPLOAD_FORM['fobCurrency'],
+          value: this.PIPO_DATA?.currency,
           label: "SB CURRENCY",
           rules: {
             required: true,
           },
+          Inputdisabled: true,
           autofill: {
             type: "formGroup",
             SetInputName: "currency",
@@ -182,14 +184,14 @@ export class ShippingBillComponent implements OnInit {
             required: true,
           }
         },
-        freightCurrency: {
-          type: "currency",
-          value: this.UPLOAD_FORM['freightCurrency'],
-          label: "FREIGHT CURRENCY",
-          rules: {
-            required: true,
-          }
-        },
+        // freightCurrency: {
+        //   type: "currency",
+        //   value: this.UPLOAD_FORM['freightCurrency'],
+        //   label: "FREIGHT CURRENCY",
+        //   rules: {
+        //     required: true,
+        //   }
+        // },
         freightValue: {
           type: "text",
           value: this.UPLOAD_FORM['freightValue'],
@@ -215,14 +217,14 @@ export class ShippingBillComponent implements OnInit {
             required: true,
           }
         },
-        insuranceCurrency: {
-          type: "currency",
-          value: this.UPLOAD_FORM['insuranceCurrency'],
-          label: "Insurance Currency",
-          rules: {
-            required: true,
-          }
-        },
+        // insuranceCurrency: {
+        //   type: "currency",
+        //   value: this.UPLOAD_FORM['insuranceCurrency'],
+        //   label: "Insurance Currency",
+        //   rules: {
+        //     required: true,
+        //   }
+        // },
         insuranceValue: {
           type: "text",
           value: this.UPLOAD_FORM['insuranceValue'],
@@ -265,6 +267,25 @@ export class ShippingBillComponent implements OnInit {
                 id: "CommericalNo",
                 rules: {
                   required: true,
+                },
+                callback: (item: any) => {
+                  this.SELECTED_COMMERCIAL_VALUE = this.CommercialFilter(item?.value?.id)?.length != 0 ? this.CommercialFilter(item?.value?.id)[0] : []
+                  console.log(item?.value, this.SELECTED_COMMERCIAL_VALUE, "CommericalNo")
+
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["type"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.type);
+                  if (this.SELECTED_COMMERCIAL_VALUE?.currency == this.PIPO_DATA?.currency) {
+                    myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.currency);
+                    myForm['touched'] = true;
+                    myForm['status'] = 'VALID';
+                  } else {
+                    myForm?.setErrors({
+                      matched: "Your CI Selected Currency and your pipo currency is different..."
+                    });
+                    myForm['touched'] = true;
+                  }
+                  console.log(item, "callback")
                 }
               },
               {
@@ -399,11 +420,16 @@ export class ShippingBillComponent implements OnInit {
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.changedCommercial(this.pipoArr)
+      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
+        this.PIPO_DATA = res?.data[0];
+        console.log(res, "getPipoById")
+      })
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
+
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
       this.COMMERCIAL_LIST = res?.data;
@@ -418,7 +444,14 @@ export class ShippingBillComponent implements OnInit {
       }
     );
   }
+
   CommercialFilter(id: any) {
     return this.COMMERCIAL_LIST.filter((item: any) => item?._id?.includes(id) == true)
   }
+
+  SELECTED_COMMERCIAL_VALUE: any = ''
+  CommericalNo(value: any) {
+
+  }
+
 }

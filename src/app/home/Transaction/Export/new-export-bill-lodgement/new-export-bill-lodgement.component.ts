@@ -351,13 +351,11 @@ export class NewExportBillLodgementComponent implements OnInit {
       var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
       var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
       doc.text(text, pageWidth / 2, 20, { align: 'center' });
-
       autoTable(doc, {
         margin: { top: 30, left: 10, bottom: 30 },
         head: [['Date', 'FIRX No.', 'Amount received', 'SB Setoff Amount', 'CI No.', 'SB No.']],
         body: dataTable,
       })
-      // this.addWaterMark(doc);
       let tableuri = doc.output("arraybuffer");
       console.log(tableuri, "tableuri")
       const loadmergedPdf = await PDFDocument.load(tableuri);
@@ -394,19 +392,6 @@ export class NewExportBillLodgementComponent implements OnInit {
         }
       }, 200);
     }
-  }
-
-  addWaterMark(doc: any) {
-    var totalPages = doc.internal.getNumberOfPages();
-    var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-    var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
-    var img1 = new Image();
-    img1.src = this.validator.COMPANY_INFO[0]?.letterHead;
-    for (let i = 1; i <= totalPages; i++) {
-      doc.setPage(i);
-      doc.addImage(img1, 'PNG', 0, 0, pageWidth, pageHeight);
-    }
-    return doc;
   }
 
   _arrayBufferToBase64(buffer) {
@@ -562,16 +547,6 @@ export class NewExportBillLodgementComponent implements OnInit {
           YesNo: '',
           HideShowInput: ["AgainstAdvanceReceipt", "UnderLC", "Sight", "Usancedays", "Usancefrom", "Usance", "WithScrutiny", "BuyerRemitterDifferent", "InvoiceReduction", "WithDiscount"]
         },
-        // UnderLC: {
-        //   type: "yesnocheckbox",
-        //   value: '',
-        //   label: "Under LC?",
-        //   rules: {
-        //     required: true,
-        //   },
-        //   YesNo: '',
-        //   HideShowInput: ["Sight", "Usance"]
-        // },
         Sight: {
           type: "yesnocheckbox",
           value: '',
@@ -580,7 +555,7 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Usance"]
+          HideShowInput: ["Usance","Usancedays","Usancefrom"]
         },
         Usance: {
           type: "yesnocheckbox",
@@ -626,15 +601,6 @@ export class NewExportBillLodgementComponent implements OnInit {
           },
           YesNo: ''
         },
-        // WithDiscount: {
-        //   type: "yesnocheckbox",
-        //   value: '',
-        //   label: "With Discount?",
-        //   rules: {
-        //     required: true,
-        //   },
-        //   YesNo: ''
-        // },
       }, 'EXPORT_BILL_OF_EXCHANGE');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);

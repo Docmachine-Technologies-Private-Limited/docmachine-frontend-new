@@ -7,6 +7,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'import-pipos',
@@ -266,6 +267,14 @@ export class ImportPIPOSComponent implements OnInit {
                 name: 'type',
                 rules: {
                   required: true,
+                },
+                callback: (item: any) => {
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  let currentVal = item?.dynamicFormGroup?.controls['currency']?.value;
+                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.type);
+                  myForm['touched'] = true;
+                  myForm['status'] = 'VALID';
+                  console.log(item, "callback")
                 },
               },
               {

@@ -281,6 +281,7 @@ export class EditCompanyComponent implements OnInit {
     console.log(args[1].data)
     this.uploading = false;
     this.LETTER_HEAD_URL = args[1]?.data?.pdf2imgae
+    this.toastr.success("Find new letter head...")
   }
 
   submit(e) {

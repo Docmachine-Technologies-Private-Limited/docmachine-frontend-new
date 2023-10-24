@@ -25,7 +25,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
   CUSTOM_MAT_STEPPER: any = {
     LABEL_LIST_NAME: ["Select Inward Remittance Disposal No.", "Form Forward Ref No."]
   }
-  
+
   ForwardContractFilterDATA: any = [];
 
   constructor(private _formBuilder: FormBuilder,
@@ -58,7 +58,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
         element['Checked'] = true;
       }
     });
-    this.ForwardContractFilterDATA=this.ForwardContractDATA.filter((item:any)=>item?.Currency?.indexOf(data?.currency)!=-1)
+    this.ForwardContractFilterDATA = this.ForwardContractDATA.filter((item: any) => item?.Currency?.indexOf(data?.currency) != -1)
     this.MT103_URL = data?.file;
     this.Inward_Remittance_MT103 = [data];
     setTimeout(() => {
@@ -113,7 +113,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
         },
         Inward_amount_for_disposal: {
           type: "TextValiadtion",
-          value: data?.Inward_amount_for_disposal,
+          value: data?.Inward_amount_for_disposal != '' && data?.Inward_amount_for_disposal != undefined ? data?.Inward_amount_for_disposal : data?.amount,
           label: "Disposal Amount",
           visible: true,
           EqualName: "amount",
@@ -130,7 +130,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
   ToForwardContract_Selected: any = []
   ToForwardContract(event: any, value: any, index: any) {
     if (event?.target?.checked == true) {
-      if (this.Inward_Remittance_MT103[0]?.currency==value?.Currency) {
+      if (this.Inward_Remittance_MT103[0]?.currency == value?.Currency) {
         this.ToForwardContract_Selected[0] = value;
         this.validator.buildForm({
           RemittanceAmount: {
@@ -216,13 +216,13 @@ export class NewExportHomeTransactionComponent implements OnInit {
             }
           }
         }, 'ForwardRef');
-      }else{
-        event.target.checked=false
+      } else {
+        event.target.checked = false
         this.ToForwardContract_Selected[0] = '';
         this.toastr.error("Forward Contract Currency should be same Remittance Currency.")
       }
     } else {
-      event.target.checked=false
+      event.target.checked = false
       this.ToForwardContract_Selected[0] = '';
     }
   }

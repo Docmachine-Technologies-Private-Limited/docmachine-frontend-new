@@ -934,7 +934,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
     }
-    this.SELECTED_PURPOSE_CODE = false;
     this.showPreview(code)
     console.log("hello there", this.newTask);
   }
@@ -2957,6 +2956,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     var n = a.accNumber
     this.charge = n.split("");
     console.log(this.charge)
+    this.SELECTED_PURPOSE_CODE = false;
   }
 
   openToPdf(content2, pipo) {

@@ -140,6 +140,7 @@ export class ImportAirwayBlCopyComponent implements OnInit {
 
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
+      this.validator.COMMERICAL_NO=[];
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0] });
       });

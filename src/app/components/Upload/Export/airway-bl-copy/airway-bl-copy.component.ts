@@ -101,7 +101,7 @@ export class AirwayBlCopyComponent implements OnInit {
       console.log('creditNoteNumber Invoice_No', resp)
       if (resp.data.length == 0) {
         this.documentService.addAirwayBlcopyFile(e.value).subscribe((res: any) => {
-          this.toastr.success(`addAirwayBlcopy Document Added Successfully`);
+          this.toastr.success(`AWB/Bl Copy Succesffuly added`);
           let updatedDataSB = {
             "blcopydetails": [
               res.data._id,

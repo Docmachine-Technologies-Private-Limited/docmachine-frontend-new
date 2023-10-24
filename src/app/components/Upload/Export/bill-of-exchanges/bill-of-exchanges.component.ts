@@ -71,7 +71,7 @@ export class BillOfExchangesComponent implements OnInit {
         billExchangeNumber: {
           type: "text",
           value: "",
-          label: "Bill Of Exchange Number*",
+          label: "Bill Of Exchange Number",
           rules: {
             required: true,
           }
@@ -87,7 +87,7 @@ export class BillOfExchangesComponent implements OnInit {
         CommericalNoList: {
           type: "CommericalListCheckBox",
           value: "",
-          label: "Commerical Number*",
+          label: "Commerical Number",
           rules: {
             required: true,
           },
@@ -96,7 +96,7 @@ export class BillOfExchangesComponent implements OnInit {
         BLCopy: {
           type: "BLCopy",
           value: "",
-          label: "BLCopy Number*",
+          label: "BLCopy Number",
           rules: {
             required: true,
           }
@@ -183,7 +183,7 @@ export class BillOfExchangesComponent implements OnInit {
     fileterdata?.blcopydetails?.forEach(element => {
       let checkexit = this.validator.BL_COPY_LIST.filter((item: any) => item?.value?.includes(element?.airwayBlCopyNumber))
       if (checkexit?.length == 0) {
-        this.validator.BL_COPY_LIST.push({ value: element?.airwayBlCopyNumber, id: element?._id, no: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
+        this.validator.BL_COPY_LIST.push({ value: element?.airwayBlCopyNumber, id: element?._id, no: element?.airwayBlCopyNumber, sbid: element?.sbRef[0], doc: element?.commercialDoc });
       }
     });
 

@@ -120,11 +120,11 @@ export class EdpmsReconComponent implements OnInit {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
 
-      await this.GET_EDMPS_CLEARED?.forEach(element => {
+      await cleareddata?.data?.forEach(element => {
         this.AD_CODE_CLEARED_BUCKET_LIST[element["adCode"]] = [];
       });
       this.AD_CODE_CLEARED_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_CLEARED_BUCKET_LIST);
-      await this.GET_EDMPS_CLEARED?.forEach(element => {
+      await cleareddata?.data?.forEach(element => {
         element["isActive"] = false;
         this.AD_CODE_CLEARED_BUCKET_LIST[element["adCode"]].push(element);
       });
@@ -197,7 +197,6 @@ export class EdpmsReconComponent implements OnInit {
     console.log('create edpms res: ', this.masterExcelData);
     for (let index = 0; index < this.masterExcelData?.length; index++) {
       const item: any = this.masterExcelData[index];
-      let sbexit: any = this.masterSB.filter((item: any) => item?.sbno?.includes(item['Shipping Bill No']));
       if (item['IE Code'] == this.USER_DETAILS?.iec) {
         const tempObject = {
           userId: this.applicant,
@@ -354,17 +353,17 @@ export class EdpmsReconComponent implements OnInit {
     await this.documentService.getMaster(1).subscribe(async (res: any) => {
       this.masterSB = res?.data;
       await this.masterExcelData.forEach((data, i) => {
-        let sbexit: any = this.masterSB.filter((item: any) => item?.sbno?.includes(data['Shipping Bill No']));
-        console.log('sbexit:', res, sbexit, data['Shipping Bill No']);
-        if (sbexit.length != 0) {
+        let index = this.masterSB.findIndex((item) => (item?.sbno)?.toString()?.toLowerCase() == (data['Shipping Bill No'])?.toString()?.toLowerCase());
+        console.log('sbexit:', res, index, data['Shipping Bill No']);
+        if (index != -1) {
           this.masterExcelData[i]['systemStatus'] = 'Available';
-          this.masterExcelData[i]['sbAmount'] = sbexit[0]?.fobValue;
-          this.masterExcelData[i]['sbCurrency'] = sbexit[0]?.fobCurrency;
-          this.masterExcelData[i]['adRefNo'] = this.getBlRefNo(sbexit[0]?.blcopyRef)?.join(",");
-          this.masterExcelData[i]['adBillNo'] = this.getBlRefNo(sbexit[0]?.blcopyRef)?.join(",");
-          this.masterExcelData[i]['pipo'] = sbexit[0]?.pipo[0];
-          this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai != "-1" ? sbexit[0]?.balanceAvai : sbexit[0]?.sbAmount;
-          this.masterExcelData[i]['sbdata'] = sbexit[0];
+          this.masterExcelData[i]['sbAmount'] = this.masterSB[index]?.fobValue;
+          this.masterExcelData[i]['sbCurrency'] = this.masterSB[index]?.fobCurrency;
+          this.masterExcelData[i]['adRefNo'] = this.getBlRefNo(this.masterSB[index]?.blcopyRef)?.join(",");
+          this.masterExcelData[i]['adBillNo'] = this.getBlRefNo(this.masterSB[index]?.blcopyRef)?.join(",");
+          this.masterExcelData[i]['pipo'] = this.masterSB[index]?.pipo[index];
+          this.masterExcelData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai != "-1" ? this.masterSB[index]?.balanceAvai : this.masterSB[index]?.sbAmount;
+          this.masterExcelData[i]['sbdata'] = this.masterSB[index];
         } else {
           this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
         }
@@ -683,7 +682,7 @@ export class EdpmsReconComponent implements OnInit {
           this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]].push(element);
         });
 
-        console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+        console.log(this.GET_EDMPS, this.SB_NO_LIST,this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY,this.AD_CODE_PREVIOUS_BUCKET_LIST, 'getEDPMS')
 
         this.pageSizeOptionsList = [];
         let lenforloop: number = parseInt(res?.TotalLength) / 10;
@@ -713,7 +712,7 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   async PAGINATION_EVENT(event: any) {
-    await this.documentService.getEDPMSbyLimit(event?.pageSize).subscribe((res: any) => {
+    await this.documentService.getEDPMSbyLimit(event?.pageSize).subscribe(async (res: any) => {
       console.log(event, res, 'PAGINATION_EVENT')
       this.SB_NO_LIST = [];
       this.GET_EDMPS = this.addSBdata(res?.data);
@@ -727,7 +726,17 @@ export class EdpmsReconComponent implements OnInit {
         this.SB_NO_LIST.push({ value: element })
       });
       this.FILTER_EDPMS_DATA = this.GET_EDMPS;
-      console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+      await this.GET_EDMPS?.forEach(element => {
+        this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]] = [];
+      });
+      this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_PREVIOUS_BUCKET_LIST);
+      await this.GET_EDMPS?.forEach(element => {
+        element["isActive"] = false;
+        this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]].push(element);
+      });
+
+      console.log(this.GET_EDMPS, this.SB_NO_LIST,this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY,this.AD_CODE_PREVIOUS_BUCKET_LIST, 'getEDPMS')
+
     })
   }
   async PAGINATION_EVENT2(event: any) {

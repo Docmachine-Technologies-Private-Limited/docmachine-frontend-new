@@ -303,12 +303,15 @@
                 <div class="form-group mb-3" *ngSwitchCase="'currency'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0" [disbaled]="field?.Inputdisabled"
-                        [items]="this.validator.CURRENCY_LIST" bindLabel="type" [multiple]="false"
-                        (change)="AutoFillCurrency($event,field?.autofill)"
+                    <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0 && (field?.Inputdisabled==false || field?.Inputdisabled==undefined)"
+                        [disabled]="field?.Inputdisabled" [items]="this.validator.CURRENCY_LIST" bindLabel="type"
+                        [multiple]="false" (change)="AutoFillCurrency($event,field?.autofill)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
+                    <input *ngIf="field?.Inputdisabled==true"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [name]="field.fieldName" [(ngModel)]="field.value" class="form-control" type="text" readonly>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'BuySell'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
@@ -677,7 +680,7 @@
                                             bindLabel="value" [multiple]="false"
                                             [placeholder]="Optionfield[FormOptionfield]?.placeholderText!=undefined?Optionfield[FormOptionfield]?.placeholderText:''"
                                             [name]="Optionfield[FormOptionfield]?.name"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback)"
                                             [(ngModel)]="Optionfield[FormOptionfield].value">
                                         </ng-select>
                                     </div>
@@ -723,7 +726,7 @@
                                             *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && Optionfield[FormOptionfield].autofillrequired==undefined"
                                             [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                                             [placeholder]="Optionfield[FormOptionfield].placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback);CommericalNoEvent?.emit($event)"
                                             [name]="Optionfield[FormOptionfield].fieldName"
                                             [(ngModel)]="Optionfield[FormOptionfield].value" #CommericalNo>
                                         </ng-select>
