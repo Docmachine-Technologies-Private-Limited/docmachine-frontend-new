@@ -84,3 +84,18 @@
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
+
+.label-name-amount{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px 2px #d4d4d4;
+    margin-bottom: 10px;
+}
+
+.label-name-amount p{
+    font-size: 14px;
+    margin: 0;
+}

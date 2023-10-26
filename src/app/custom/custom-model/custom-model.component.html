@@ -5,7 +5,7 @@
     [style.height]="height" [style]="customstyle" style="height: 63vh;margin: auto !important;">
     <div [ngClass]="{'modal-content':removebg==true}">
       <div [ngClass]="{'modal-header':removebg==true}">
-        <h5 class="modal-title" *ngIf="removebg==true">{{name}}</h5>
+        <h5 [style]="this.ModalTitleStyle" class="modal-title" *ngIf="removebg==true">{{name}}</h5>
         <div class="row" style="margin-right: 0 !important;align-items: center;gap: 10px;justify-content: center;">
           <ng-content select="custom-model-header"></ng-content>
           <button type="button" style="padding: 0;

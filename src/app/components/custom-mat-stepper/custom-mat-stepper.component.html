@@ -25,6 +25,6 @@
     <button class="btn btn-primary" (click)="setNext()" *ngIf="this.MatStepComponent?.length!=(this.BUTTON_COUNTER+1)" [disabled]="this.NEXT_BUTTON_DISABLED">Next</button>
     <button class="btn btn-primary" (click)="lastbuttonclick()" 
     *ngIf="this.MatStepComponent?.length==(this.BUTTON_COUNTER+1) && LAST_BUTTON_VISIBLE==true">{{LAST_BUTTON_NAME}}</button>
-    <ng-content select=".content-panel[role=custom_mat_step_button]"></ng-content>
+    <ng-content select="custom-mat-step[role=custom_mat_step_button]"></ng-content>
   </div>
 </div>

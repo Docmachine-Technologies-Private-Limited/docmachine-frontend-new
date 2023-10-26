@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib';
-import $ from 'jquery'
-declare var kendo: any;
+import moment from 'moment';
 
 @Component({
   selector: 'federal-bank-remittance-advance-against',
@@ -53,20 +52,20 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[0]?.setText('');
           getAllFields[1]?.setText('');
           getAllFields[2]?.setText(filldata[3][0]?.currency + ' ' + filldata[3][0]?.remittanceAmount);
-         
+
           var today: any = new Date();
           var dd = String(today.getDate()).padStart(2, '0');
-          var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+          var mm = String(today.getMonth() + 1).padStart(2, '0');
           var yyyy = today.getFullYear();
-          today = yyyy+"-"+mm+"-"+dd;
-          today=today?.split("-")
+          today = yyyy + "-" + mm + "-" + dd;
+          today = today?.split("-")
           getAllFields[3]?.setText(today[2]?.split('')[0]);
           getAllFields[4]?.setText(today[2]?.split('')[1]);
           getAllFields[5]?.setText(today[1]?.split('')[0]);
           getAllFields[6]?.setText(today[1]?.split('')[1]);
           getAllFields[7]?.setText(today[0]?.split('')[2]);
           getAllFields[8]?.setText(today[0]?.split('')[3]);
-          
+
           getAllFields[9]?.setText(filldata[3][0]?.remittanceAmount != undefined ? filldata[3][0]?.currency + ' ' + this.ConvertNumberToWords(filldata[3][0]?.remittanceAmount) : '-');
           getAllFields[10]?.setText('');
           getAllFields[11]?.uncheck()
@@ -123,7 +122,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
             let booking_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.BookingDate?.split('-');
             let due_date: any = filldata[6]?.FORWARD_CONTRACT[0]?.ToDate?.split('-');
             getAllFields[58]?.setText(filldata[6]?.FORWARD_CONTRACT[0]?.ForwardRefNo);
-            
+
             if (booking_date != undefined) {
               getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
               getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
@@ -156,7 +155,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[82]?.setText('');
           getAllFields[83]?.setText('');
           getAllFields[84]?.setText('');
-          getAllFields[85]?.setText('');
+          getAllFields[85]?.setText(moment(new Date()).format('DD-MM-YYYY'));
           getAllFields[86]?.setText('');
           getAllFields[87]?.uncheck();
           getAllFields[88]?.uncheck()
@@ -164,7 +163,7 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
           getAllFields[90]?.uncheck();
           getAllFields[91]?.uncheck();
           getAllFields[92]?.uncheck();
-          getAllFields[93]?.setText('');
+          getAllFields[93]?.setText(moment(new Date()).format('DD-MM-YYYY'));
           getAllFields[94]?.setText('');
           getAllFields[95]?.setText('');
           getAllFields[96]?.setText('');
@@ -222,49 +221,6 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
     }
     return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
-
-  // async modifyPdf() {
-  //   // Fetch an existing PDF document
-  //   const url = './../../assets/pdf/FedralBank/Remittance_Advance_Against_Imports_Edit.pdf'
-  //   const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
-  //   const pdfDoc = await PDFDocument.load(existingPdfBytes)
-  //   const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
-  //   const pages = pdfDoc.getPages()
-  //   const firstPage = pages[0]
-  //   const {
-  //     width,
-  //     height
-  //   } = firstPage.getSize()
-
-  //   firstPage.drawText('Firmado por <?php echo $usuarionombre;?>, en fecha <?php echo $fechafirma;?>!', {
-  //     x: 12,
-  //     y: height / 2 - 300,
-  //     size: 12,
-  //     font: helveticaFont,
-  //     color: rgb(0.95, 0.1, 0.1),
-  //     rotate: degrees(90),
-  //     //original ajustes.
-  //     // x: 5,
-  //     //y: height / 2 + 300,
-  //     //size: 12,
-  //     //font: helveticaFont,
-  //     //color: rgb(0.95, 0.1, 0.1),
-  //     //rotate: degrees(-90),
-  //   })
-
-  //   // Serialize the PDFDocument to bytes (a Uint8Array)
-  //   const pdfBytes = await pdfDoc.save()
-  //   var blob = new Blob([pdfBytes])
-  //   var reader = new FileReader();
-  //   reader.onload = function (event: any) {
-  //     var base64: any = event.target.result
-  //     var res = base64.replace("data:application/octet-stream;base64,", "");
-  //     var sites = ['data:application/pdf;base64, ' + res]
-  //     console.log(sites, 'asfsdfsdfsdf')
-  //   };
-
-  //   reader.readAsDataURL(blob);
-  // }
 
   pipodata() {
     let data: any = {
@@ -353,6 +309,6 @@ export class FederalBankREMITTANCEADVANCEAGAINSTComponent implements OnInit, OnC
       }
       words_string = words_string.split("  ").join(" ");
     }
-    return words_string;
+    return words_string?.toUpperCase();
   }
 }

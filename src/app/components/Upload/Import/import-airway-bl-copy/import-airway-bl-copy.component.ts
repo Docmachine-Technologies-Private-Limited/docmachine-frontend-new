@@ -51,10 +51,18 @@ export class ImportAirwayBlCopyComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
+        CommercialNumber: {
+          type: "CommericalNo",
+          value: "",
+          label: "Select Commercial Invoice",
+          rules: {
+            required: true,
+          }
+        },
         airwayBlCopydate: {
           type: "date",
           value: "",
-          label: "Airway / BlCopy Date*",
+          label: "Airway / BlCopy Date",
           rules: {
             required: true,
           }
@@ -62,15 +70,7 @@ export class ImportAirwayBlCopyComponent implements OnInit {
         airwayBlCopyNumber: {
           type: "text",
           value: "",
-          label: "Airway / BlCopy Number*",
-          rules: {
-            required: true,
-          }
-        },
-        CommercialNumber: {
-          type: "CommericalNo",
-          value: "",
-          label: "Select Commercial Number",
+          label: "Airway / BlCopy Number",
           rules: {
             required: true,
           }

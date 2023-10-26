@@ -12,6 +12,10 @@ import { NewLcInsuranceComponent } from './new-lc-insurance/new-lc-insurance.com
 import { LcInsuranceFormatComponent } from './new-lc-insurance/lc-insurance-format/lc-insurance-format.component';
 import { BOE_ORMMMatchOffComponent } from './BOEORMmatch-off/BOE_ORMmatch-off.component';
 import { BOEORMMactchData } from './BOEORMmatch-off/BOE-ORM-Mactch-data';
+import { NewAdvanceImportPaymentsComponent } from './new-advance-import-payments/new-advance-import-payments.component';
+import { NewCollectionImportPaymentsComponent } from './new-collection-import-payments/new-collection-import-payments.component';
+import { NewLCImportPaymentsComponent } from './new-lcimport-payments/new-lcimport-payments.component';
+import { NewDirectImportPaymentsComponent } from './new-direct-import-payments/new-direct-import-payments.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,11 @@ import { BOEORMMactchData } from './BOEORMmatch-off/BOE-ORM-Mactch-data';
     TransactionDashboardComponent,
     NewLcInsuranceComponent,
     LcInsuranceFormatComponent,
-    BOE_ORMMMatchOffComponent
+    BOE_ORMMMatchOffComponent,
+    NewAdvanceImportPaymentsComponent,
+    NewCollectionImportPaymentsComponent,
+    NewLCImportPaymentsComponent,
+    NewDirectImportPaymentsComponent
   ],
   providers:[BOEORMMactchData],
   imports: [

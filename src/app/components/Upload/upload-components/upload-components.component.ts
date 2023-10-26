@@ -35,7 +35,10 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Output('YesNoCheckBoxEvent') YesNoCheckBoxEvent: any = new EventEmitter();
   @Output('SHIPPING_BILL_EVENT') SHIPPING_BILL_EVENT: any = new EventEmitter();
   @Output('CommericalNoEvent') CommericalNoEvent: any = new EventEmitter();
+  @Output('AddButton') AddButton: any = new EventEmitter();
   @Output('BL_COPY_EVENT') BL_COPY_EVENT: any = new EventEmitter();
+  @Output('BENEFICIARY_EVENT') BENEFICIARY_EVENT: any = new EventEmitter();
+  @Output('PIPO_EVENT') PIPO_EVENT: any = new EventEmitter();
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
   @Input('KEY_ENTER_ENABLED') KEY_ENTER_ENABLED: any = false;
@@ -45,7 +48,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @ViewChildren('CommericalNo') CommericalNo: QueryList<NgSelectComponent>;
   @Input('morecontent') morecontent: boolean = false;
   @Input('BUTTON_PANEL_SHOW') BUTTON_PANEL_SHOW: boolean = false;
-
+  @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean = true;
+  
   Account_Type: any = [{
     type: 'OD-over draft'
   }, {
@@ -441,6 +445,20 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(item);
     console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
   }
+  
+  onChargerBankCheckBox(event, fieldName, item: any, ItemChecked) {
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES.forEach(element => {
+      element['checked'] = false;
+    });
+    if (event?.checked == true) {
+      ItemChecked['checked'] = true;
+    } else {
+      ItemChecked['checked'] = false;
+    }
+    this.BankEvent.emit(item);
+    this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(item);
+    console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
+  }
 
   onRemitterCheckBox(event, fieldName, item: any, ItemChecked) {
     this.validator.CHECK_BOX_REMITTER_LIST.forEach(element => {
@@ -458,7 +476,11 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   BANK_CHECKBOX(value: any) {
     console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, "BANK_CHECKBOX")
     this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.id];
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES = this.validator?.ToCreditAccountdata[value?.id];
     this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
+      element['checked'] = false;
+    });
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES.forEach(element => {
       element['checked'] = false;
     });
   }

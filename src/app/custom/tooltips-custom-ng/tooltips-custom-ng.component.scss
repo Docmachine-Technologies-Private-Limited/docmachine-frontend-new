@@ -1,0 +1,26 @@
+.ng-tooltip:before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    transform: translateY(50%);
+    left: 0;
+    margin: auto;
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    display: none;
+}
+
+.ng-tooltip:hover:before {
+    display: block;
+}
+
+.ng-tooltip.left:before {
+    left: initial;
+    margin: initial;
+    right: 100%;
+    margin-right: 15px;
+}

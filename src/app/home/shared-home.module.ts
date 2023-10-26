@@ -91,6 +91,7 @@ import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lo
 import { NgCustomFilterPopupComponent } from "../custom/ng-custom-filter-popup/ng-custom-filter-popup.component";
 import { OldFederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterheadold/exportoldletterhead.component";
 import { CustomNgContentHeaderComponent } from "../components/Upload/upload-components/upload-components-header/custom-ng-content-header/custom-ng-content-header.component";
+import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips-custom-ng.component";
 
 @NgModule({
   declarations: [
@@ -153,7 +154,8 @@ import { CustomNgContentHeaderComponent } from "../components/Upload/upload-comp
     MoreContentComponent,
     NgCustomFilterPopupComponent,
     OldFederalBankExportletterheadComponent,
-    CustomNgContentHeaderComponent
+    CustomNgContentHeaderComponent,
+    TooltipsCustomNgComponent
   ],
   imports: [
     CommonModule,
@@ -263,7 +265,8 @@ import { CustomNgContentHeaderComponent } from "../components/Upload/upload-comp
     MoreContentComponent,
     NgCustomFilterPopupComponent,
     OldFederalBankExportletterheadComponent,
-    CustomNgContentHeaderComponent
+    CustomNgContentHeaderComponent,
+    TooltipsCustomNgComponent
   ],
 })
 export class SharedHomeModule { }

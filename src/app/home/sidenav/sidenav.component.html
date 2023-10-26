@@ -204,33 +204,49 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true  && this.userData['Transaction']==true">
-            <a href="#SBIRMMatchOff" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">BOE ORM Match Off</a>
-            <ul class="collapse list-unstyled" id="SBIRMMatchOff">
-              <li class="nav-item">
-              <li class="nav-item">
-                <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Transaction/Import/BOE-ORM-Macth-Off')">BOE ORM Match Off
-                </h6>
-              </li>
-            </ul>
-          </li>
+            <li
+              *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true  && this.userData['Transaction']==true">
+              <a href="#SBIRMMatchOff" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">BOE ORM
+                Match Off</a>
+              <ul class="collapse list-unstyled" id="SBIRMMatchOff">
+                <li class="nav-item">
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Transaction/Import/BOE-ORM-Macth-Off')">BOE
+                    ORM Match Off
+                  </h6>
+                </li>
+              </ul>
+            </li>
             <li
               *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true && this.userData['Transaction']==true">
               <a href="#Transactions" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="Transactions">
+                <!-- <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction','ADVANCE')">
+                  ADVANCE OUTWARD REMITTANCE
+                </h6>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction','DIRECTBILL')">
+                  DIRECT BILL
+                </h6>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction',' OutwardRemittanceA2')">
+                  Outward Remittance (A2)
+                </h6> -->
+
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance')">ADVANCE OUTWARD REMITTANCE</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
-                    (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance-a2')">
-                    Outward Remittance (A2)</h6>
+                    (click)="navigationByUrl($event,'/Transaction/Import/Import-Direct-Payment')">DIRECT BILL</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
-                    (click)="navigationByUrl($event,'/Transaction/Import/Import-Direct-Payment')">DIRECT BILL</h6>
+                    (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance-a2')">
+                    Outward Remittance (A2)</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"

@@ -46,7 +46,7 @@ export class OldFederalBankExportletterheadComponent implements OnInit, OnChange
     })
     var strArr3 = doc.splitTextToSize(`Kindly have the same adjusted and close the pending EDPMS entries reflecting in our AD CODE.`, pageWidth-10)
     doc.text(strArr3, 10, 190, { align: 'left' });
-    var strArr4 = doc.splitTextToSize(`Thanking You,\n${this.validator.COMPANY_INFO[0]?.CompanyName}\n${this.validator.COMPANY_INFO[0]?.adress}`, 200)
+    var strArr4 = doc.splitTextToSize(`Thanking You,\n${this.validator.COMPANY_INFO[0]?.teamName}\n${this.validator.COMPANY_INFO[0]?.adress}`, 200)
     doc.text(strArr4, 10, 210, { align: 'left' });
     doc.text("Authorized Signatory", 10, 250, { align: 'left' });
 

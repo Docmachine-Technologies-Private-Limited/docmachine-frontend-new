@@ -39,6 +39,7 @@ export class UploadServiceValidatorService implements OnInit {
   commodity: any = [];
   location: any = [];
   bankDetail: any = [];
+  bankDetail2: any = [];
   Id: any = '';
   BANK_NAME_LIST_GLOABL: any = [];
   FIELDS_DATA: any = [];
@@ -55,8 +56,10 @@ export class UploadServiceValidatorService implements OnInit {
   BUYER_DETAILS_MASTER: any = [];
   COMPANY_INFO: any = [];
   CHECK_BOX_BANK_LIST: any = [];
+  CHECK_BOX_BANK_LIST_CHARGES: any = [];
   CHECK_BOX_REMITTER_LIST: any = [];
   REMITTER_LIST: any = []
+  PIPO_LIST: any = [];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -66,18 +69,16 @@ export class UploadServiceValidatorService implements OnInit {
 
   ngOnInit(): void {
   }
-
+  BENEFICIARY_DETAILS_LIST: any = [];
   async loaddata() {
     return new Promise(async (reslove, reject) => {
       let token = this.authGuard.loadFromLocalStorage();
       this.LOGIN_TOEKN = token;
       if (token != undefined) {
+        this.getCompanyInfo();
         this.CURRENCY_LIST = this.documentService.getCurrencyList();
         let USER_DATA: any = await this.userService.getUserDetail();
-        await this.userService.getUserDetail().then((res: any) => {
-          this.userData = res?.result;
-          console.log(this.userData, 'asdasdasdasdasdasdasdasdasdasdasd')
-        });
+
         if (USER_DATA?.result?.sideMenu == 'import') {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
@@ -86,7 +87,7 @@ export class UploadServiceValidatorService implements OnInit {
           await this.userService.getBene(1).subscribe((res: any) => {
             this.BENEFICIARY_DETAILS = [];
             this.ConsigneeNameList = [];
-
+            this.BENEFICIARY_DETAILS_LIST = res.data;
             res.data?.forEach(element => {
               if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
                 this.ConsigneeNameList.push({ value: element?.ConsigneeName })
@@ -154,75 +155,83 @@ export class UploadServiceValidatorService implements OnInit {
 
           this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
             this.INWARD_REMITTANCE_NAME_LIST = res?.data;
-            this.NEW_INWARD_REMITTANCE_NAME_LIST=[];
-            this.CHECK_BOX_REMITTER_LIST=[];
+            this.NEW_INWARD_REMITTANCE_NAME_LIST = [];
+            this.CHECK_BOX_REMITTER_LIST = [];
             res?.data.forEach(element => {
               element['checked'] = false;
               this.REMITTER_LIST[element?.Remitter_Name] = [];
-              if (this.NEW_INWARD_REMITTANCE_NAME_LIST?.filter((item:any)=>item?.Remitter_Name?.indexOf(element?.Remitter_Name)!=-1)?.length==0) {
-                this.NEW_INWARD_REMITTANCE_NAME_LIST.push({Remitter_Name:element?.Remitter_Name})
+              if (this.NEW_INWARD_REMITTANCE_NAME_LIST?.filter((item: any) => item?.Remitter_Name?.indexOf(element?.Remitter_Name) != -1)?.length == 0) {
+                this.NEW_INWARD_REMITTANCE_NAME_LIST.push({ Remitter_Name: element?.Remitter_Name })
               }
             });
             res?.data.forEach(element => {
               element['checked'] = false;
               this.REMITTER_LIST[element?.Remitter_Name].push(element);
             });
-            console.log(res, this.REMITTER_LIST,'getInward_remittanceName')
+            console.log(res, this.REMITTER_LIST, 'getInward_remittanceName')
           })
           await reslove(true)
         } else {
           reslove(true)
         }
-
-        await this.userService.getTeam().subscribe(async (data: any) => {
-          this.COMPANY_INFO = data?.data;
-          console.log(this.COMPANY_INFO,"COMPANY_INFO")
-          this.CHECK_BOX_BANK_LIST=[]
-          console.log(data['data'][0]);
-          this.location = [];
-          this.commodity = [];
-          data['data'][0]['location']?.forEach(element => {
-            this.location.push({ value: element?.loc })
-          });
-          data['data'][0]['commodity']?.forEach(element => {
-            this.commodity.push({ value: element?.como })
-          });
-          this.commodity = this.removeDuplicates(this.commodity, 'value');
-          this.location = this.removeDuplicates(this.location, 'value')
-          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-            data['data'][0]['bankDetails']['checked']=false
-            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-          }
-          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-            data['data'][0]['bankDetails']['checked']=false
-            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-              value: data['data'][0]['bankDetails'][index],
-              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-              org: data['data'][0]['bankDetails'][index]
-            })
-            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-              value: data['data'][0]['bankDetails'][index],
-              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-              org: data['data'][0]['bankDetails'][index]
-            })
-            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-              value: data['data'][0]['bankDetails'][index],
-              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-              org: data['data'][0]['bankDetails'][index]
-            })
-            if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
-              this.BANK_LIST_DROPDOWN.push({
-                value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
-              })
-            }
-          }
-        }, (error) => { console.log('error'); });
       } else {
         reslove(true);
       }
     })
+  }
+
+  async getCompanyInfo() {
+    await this.userService.getTeam().subscribe(async (data: any) => {
+      this.COMPANY_INFO = data?.data;
+      console.log(this.COMPANY_INFO, "COMPANY_INFO")
+      this.CHECK_BOX_BANK_LIST = []
+      this.CHECK_BOX_BANK_LIST_CHARGES = [];
+      console.log(data['data'][0]);
+      this.location = [];
+      this.commodity = [];
+      data['data'][0]['location']?.forEach(element => {
+        this.location.push({ value: element?.loc })
+      });
+      data['data'][0]['commodity']?.forEach(element => {
+        this.commodity.push({ value: element?.como })
+      });
+      this.commodity = this.removeDuplicates(this.commodity, 'value');
+      this.location = this.removeDuplicates(this.location, 'value')
+      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+        data['data'][0]['bankDetails']['checked'] = false
+        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+      }
+      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+        data['data'][0]['bankDetails']['checked'] = false
+        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+          value: data['data'][0]['bankDetails'][index],
+          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          org: data['data'][0]['bankDetails'][index]
+        })
+        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+          value: data['data'][0]['bankDetails'][index],
+          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          org: data['data'][0]['bankDetails'][index]
+        })
+        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+          value: data['data'][0]['bankDetails'][index],
+          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          org: data['data'][0]['bankDetails'][index]
+        })
+        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+          this.BANK_LIST_DROPDOWN.push({
+            value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+          })
+        }
+      }
+    }, (error) => { console.log('error'); });
+
+    await this.userService.getUserDetail().then((res: any) => {
+      this.userData = res?.result;
+      console.log(this.userData, 'asdasdasdasdasdasdasdasdasdasdasd')
+    });
   }
 
   async buildForm(model: any, id: any) {
@@ -330,7 +339,7 @@ export class UploadServiceValidatorService implements OnInit {
             optiontemp[optionelement?.name?.toString()] = ({ ...optionelement, fieldName: optionelement?.name });
             OptiontempFormGroup[optionelement?.name?.toString()] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
               this.setRequired(optionelement?.minLength,
-                optionelement?.maxLength, optionelement?.rules, formid, fieldProps)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+                optionelement?.maxLength, optionelement?.rules, formid, optionelement)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
@@ -359,7 +368,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.FIELDS_DATA[id]?.[key]?.setValue(value);
   }
 
-  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any,callback:any=undefined) {
+  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined) {
     const myForm: any = form?.controls[fieldName] as FormGroup;
     let currentVal = value;
     myForm.value[OptionfieldIndex][FormOptionfieldName] = currentVal;
@@ -367,9 +376,9 @@ export class UploadServiceValidatorService implements OnInit {
     myForm['status'] = 'VALID';
     this.dynamicFormGroup[id].get(fieldName).clearValidators(); // 6. Clear All Validators
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
-    console.log(myForm,"myForm")
-    if (callback!=undefined && callback!=null) {
-      callback({id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id]});
+    console.log(myForm, "myForm")
+    if (callback != undefined && callback != null) {
+      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id] });
     }
   }
 
@@ -416,6 +425,16 @@ export class UploadServiceValidatorService implements OnInit {
           Validators.maxLength(maxLength) : Validators.maxLength(50),
         hasAmountLessThanForm(field?.EqualName, field?.errormsg)],
 
+      TextGreaterValiadtion: rule?.required == true ?
+        [Validators.required, minLength != undefined ?
+          Validators.minLength(minLength) :
+          Validators.minLength(0), maxLength != undefined ?
+          Validators.maxLength(maxLength) : Validators.maxLength(50), hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)] :
+        [minLength != undefined ? Validators.minLength(minLength) :
+          Validators.minLength(0), maxLength != undefined ?
+          Validators.maxLength(maxLength) : Validators.maxLength(50),
+        hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
+
       buyer: rule?.required == true ? [Validators.required] : [],
       RemitterCheckBox: rule?.required == true ? [Validators.required] : [],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
@@ -446,6 +465,7 @@ export class UploadServiceValidatorService implements OnInit {
       BLCopy: rule?.required == true ? [Validators.required] : [],
       yesnocheckbox: rule?.required == true ? [Validators.required] : [],
       ArrayList: rule?.required == true ? [Validators.required] : [],
+      BOE: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       LabelShow: [],
@@ -630,6 +650,20 @@ export function hasAmountLessThanForm(equals: string, Message: string) {
     const equalsField: any = control.root.get(equals)
     if (equalsField) {
       if (parseFloat(control.value) <= parseFloat(equalsField?.value)) {
+        return null;
+      } else {
+        return { matched: Message };
+      }
+    }
+    return null;
+  }
+}
+
+export function hasAmountGreaterThanForm(equals: string, Message: string) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const equalsField: any = control.root.get(equals)
+    if (equalsField) {
+      if (parseFloat(control.value) >= parseFloat(equalsField?.value)) {
         return null;
       } else {
         return { matched: Message };
