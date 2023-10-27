@@ -29,16 +29,16 @@
                                                                 <th scope="col" class="col-td-th-3">Boe No.</th>
                                                                 <th scope="col" class="col-td-th-3">Boe Date</th>
                                                                 <th scope="col" class="col-td-th-3">AD Code</th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Portal</th>
-                                                                <th scope="col" class="col-td-th-2">Import Agency</th>
+                                                                <th scope="col" class="col-td-th-3">Shipping Portal</th>
+                                                                <th scope="col" class="col-td-th-3">Import Agency</th>
                                                                 <th scope="col" class="col-td-th-3">IE PAN</th>
                                                                 <th scope="col" class="col-td-th-3">IE Code</th>
                                                                 <th scope="col" class="col-td-th-3">IE Name</th>
                                                                 <th scope="col" class="col-td-th-3">IE Address</th>
                                                                 <th scope="col" class="col-td-th-3">Port Code</th>
-                                                                <th scope="col" class="col-td-th-2">IDPMS STATUS</th>
-                                                                <th scope="col" class="col-td-th-2">System Status</th>
-                                                                <th scope="col" class="col-td-th-2">Full Set Available
+                                                                <th scope="col" class="col-td-th-3">IDPMS STATUS</th>
+                                                                <th scope="col" class="col-td-th-3">System Status</th>
+                                                                <th scope="col" class="col-td-th-3">Full Set Available
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -51,10 +51,10 @@
                                                                 <td class="col-td-th-3">
                                                                     {{(i+1)}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.boeno}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
@@ -64,7 +64,7 @@
                                                                     {{row?.ShippingPortal}}
                                                                 </td>
 
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.ImportAgency}}
                                                                 </td>
 
@@ -74,22 +74,22 @@
                                                                 <td class="col-td-th-3">
                                                                     {{row?.IECode}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.IEName}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.IEAddress}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.portCode}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.idpmsStatus}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.systemStatus}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.docAvailable==true?'Yes':'No'}}
                                                                 </td>
                                                             </tr>
@@ -119,16 +119,16 @@
                                                                 <th scope="col" class="col-td-th-3">Boe No.</th>
                                                                 <th scope="col" class="col-td-th-3">Boe Date</th>
                                                                 <th scope="col" class="col-td-th-3">AD Code</th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Portal</th>
-                                                                <th scope="col" class="col-td-th-2">Import Agency</th>
+                                                                <th scope="col" class="col-td-th-3">Shipping Portal</th>
+                                                                <th scope="col" class="col-td-th-3">Import Agency</th>
                                                                 <th scope="col" class="col-td-th-3">IE PAN</th>
                                                                 <th scope="col" class="col-td-th-3">IE Code</th>
                                                                 <th scope="col" class="col-td-th-3">IE Name</th>
                                                                 <th scope="col" class="col-td-th-3">IE Address</th>
                                                                 <th scope="col" class="col-td-th-3">Port Code</th>
-                                                                <th scope="col" class="col-td-th-2">IDPMS STATUS</th>
-                                                                <th scope="col" class="col-td-th-2">System Status</th>
-                                                                <th scope="col" class="col-td-th-2">Full Set Available
+                                                                <th scope="col" class="col-td-th-3">IDPMS STATUS</th>
+                                                                <th scope="col" class="col-td-th-3">System Status</th>
+                                                                <th scope="col" class="col-td-th-3">Full Set Available
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -141,36 +141,45 @@
                                                                 <td class="col-td-th-3">
                                                                     {{(i+1)}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbNo}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeno}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
                                                                     {{row?.adCode}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
+                                                                    {{row?.ShippingPortal}}
+                                                                </td>
+
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.ImportAgency}}
+                                                                </td>
+
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEPAN}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IECode}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEName}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEAddress}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
                                                                     {{row?.portCode}}
                                                                 </td>
-
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.edpmsStatus}}
-                                                                </td>
-
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.adRefNo}}
+                                                                    {{row?.idpmsStatus}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
                                                                     {{row?.systemStatus}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.docAvailable==true?'Yes':'No'}}
                                                                 </td>
                                                             </tr>
@@ -232,16 +241,16 @@
                                                                 <th scope="col" class="col-td-th-3">Boe No.</th>
                                                                 <th scope="col" class="col-td-th-3">Boe Date</th>
                                                                 <th scope="col" class="col-td-th-3">AD Code</th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Portal</th>
-                                                                <th scope="col" class="col-td-th-2">Import Agency</th>
+                                                                <th scope="col" class="col-td-th-3">Shipping Portal</th>
+                                                                <th scope="col" class="col-td-th-3">Import Agency</th>
                                                                 <th scope="col" class="col-td-th-3">IE PAN</th>
                                                                 <th scope="col" class="col-td-th-3">IE Code</th>
                                                                 <th scope="col" class="col-td-th-3">IE Name</th>
                                                                 <th scope="col" class="col-td-th-3">IE Address</th>
                                                                 <th scope="col" class="col-td-th-3">Port Code</th>
-                                                                <th scope="col" class="col-td-th-2">IDPMS STATUS</th>
-                                                                <th scope="col" class="col-td-th-2">System Status</th>
-                                                                <th scope="col" class="col-td-th-2">Full Set Available
+                                                                <th scope="col" class="col-td-th-3">IDPMS STATUS</th>
+                                                                <th scope="col" class="col-td-th-3">System Status</th>
+                                                                <th scope="col" class="col-td-th-3">Full Set Available
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -254,36 +263,43 @@
                                                                 <td class="col-td-th-3">
                                                                     {{(i+1)}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbNo}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeno}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
                                                                     {{row?.adCode}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
+                                                                    {{row?.ShippingPortal}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.ImportAgency}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEPAN}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IECode}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEName}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEAddress}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
                                                                     {{row?.portCode}}
                                                                 </td>
-
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.edpmsStatus}}
-                                                                </td>
-
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.adRefNo}}
+                                                                    {{row?.idpmsStatus}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
                                                                     {{row?.systemStatus}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.docAvailable==true?'Yes':'No'}}
                                                                 </td>
                                                             </tr>
@@ -306,19 +322,20 @@
                                                         <thead>
                                                             <tr class="table-tr">
                                                                 <th scope="col" class="col-td-th-3">#</th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Bill No.
-                                                                </th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Bill Date
-                                                                </th>
+                                                                <th scope="col" class="col-td-th-3">Boe No.</th>
+                                                                <th scope="col" class="col-td-th-3">Boe Date</th>
                                                                 <th scope="col" class="col-td-th-3">AD Code</th>
+                                                                <th scope="col" class="col-td-th-3">Shipping Portal</th>
+                                                                <th scope="col" class="col-td-th-3">Import Agency</th>
+                                                                <th scope="col" class="col-td-th-3">IE PAN</th>
+                                                                <th scope="col" class="col-td-th-3">IE Code</th>
+                                                                <th scope="col" class="col-td-th-3">IE Name</th>
+                                                                <th scope="col" class="col-td-th-3">IE Address</th>
                                                                 <th scope="col" class="col-td-th-3">Port Code</th>
-                                                                <th scope="col" class="col-td-th-2">EDPMS STATUS</th>
-                                                                <th scope="col" class="col-td-th-3">AD Ref No.</th>
-                                                                <th scope="col" class="col-td-th-3">SB Amount</th>
-                                                                <th scope="col" class="col-td-th-2">SB Balance amount
+                                                                <th scope="col" class="col-td-th-3">IDPMS STATUS</th>
+                                                                <th scope="col" class="col-td-th-3">System Status</th>
+                                                                <th scope="col" class="col-td-th-3">Full Set Available
                                                                 </th>
-                                                                <th scope="col" class="col-td-th-2">System Status</th>
-                                                                <th scope="col" class="col-td-th-3">Doc Available</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -330,33 +347,40 @@
                                                                 <td class="col-td-th-3">
                                                                     {{(i+1)}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbNo}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeno}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
                                                                     {{row?.adCode}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
+                                                                    {{row?.ShippingPortal}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.ImportAgency}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEPAN}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IECode}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEName}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEAddress}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
                                                                     {{row?.portCode}}
                                                                 </td>
-
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.edpmsStatus}}
-                                                                </td>
-
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.adRefNo}}
+                                                                    {{row?.idpmsStatus}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
                                                                     {{row?.systemStatus}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
@@ -372,7 +396,6 @@
                                 </div>
                             </mat-tab>
                         </mat-tab-group>
-
                     </div>
                 </mat-tab>
                 <mat-tab label="Entry Cleared">
@@ -405,19 +428,19 @@
                                                         <thead>
                                                             <tr class="table-tr">
                                                                 <th scope="col" class="col-td-th-3">#</th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Bill No.
-                                                                </th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Bill Date
-                                                                </th>
+                                                                <th scope="col" class="col-td-th-3">Boe No.</th>
+                                                                <th scope="col" class="col-td-th-3">Boe Date</th>
                                                                 <th scope="col" class="col-td-th-3">AD Code</th>
+                                                                <th scope="col" class="col-td-th-3">Shipping Portal</th>
+                                                                <th scope="col" class="col-td-th-3">Import Agency</th>
+                                                                <th scope="col" class="col-td-th-3">IE PAN</th>
+                                                                <th scope="col" class="col-td-th-3">IE Code</th>
+                                                                <th scope="col" class="col-td-th-3">IE Name</th>
+                                                                <th scope="col" class="col-td-th-3">IE Address</th>
                                                                 <th scope="col" class="col-td-th-3">Port Code</th>
-                                                                <th scope="col" class="col-td-th-2">EDPMS STATUS</th>
-                                                                <th scope="col" class="col-td-th-3">AD Ref No.</th>
-                                                                <th scope="col" class="col-td-th-3">SB Amount</th>
-                                                                <th scope="col" class="col-td-th-2">SB Balance amount
-                                                                </th>
-                                                                <th scope="col" class="col-td-th-2">System Status</th>
-                                                                <th scope="col" class="col-td-th-2">Full Set Available
+                                                                <th scope="col" class="col-td-th-3">IDPMS STATUS</th>
+                                                                <th scope="col" class="col-td-th-3">System Status</th>
+                                                                <th scope="col" class="col-td-th-3">Full Set Available
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -430,36 +453,43 @@
                                                                 <td class="col-td-th-3">
                                                                     {{(i+1)}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbNo}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeno}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
                                                                     {{row?.adCode}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
+                                                                    {{row?.ShippingPortal}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.ImportAgency}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEPAN}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IECode}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEName}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEAddress}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
                                                                     {{row?.portCode}}
                                                                 </td>
-
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.edpmsStatus}}
-                                                                </td>
-
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.adRefNo}}
+                                                                    {{row?.idpmsStatus}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
                                                                     {{row?.systemStatus}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
+                                                                <td class="col-td-th-3">
                                                                     {{row?.docAvailable==true?'Yes':'No'}}
                                                                 </td>
                                                             </tr>
@@ -482,18 +512,20 @@
                                                         <thead>
                                                             <tr class="table-tr">
                                                                 <th scope="col" class="col-td-th-3">#</th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Bill No.
-                                                                </th>
-                                                                <th scope="col" class="col-td-th-2">Shipping Bill Date
-                                                                </th>
+                                                                <th scope="col" class="col-td-th-3">Boe No.</th>
+                                                                <th scope="col" class="col-td-th-3">Boe Date</th>
                                                                 <th scope="col" class="col-td-th-3">AD Code</th>
+                                                                <th scope="col" class="col-td-th-3">Shipping Portal</th>
+                                                                <th scope="col" class="col-td-th-3">Import Agency</th>
+                                                                <th scope="col" class="col-td-th-3">IE PAN</th>
+                                                                <th scope="col" class="col-td-th-3">IE Code</th>
+                                                                <th scope="col" class="col-td-th-3">IE Name</th>
+                                                                <th scope="col" class="col-td-th-3">IE Address</th>
                                                                 <th scope="col" class="col-td-th-3">Port Code</th>
-                                                                <th scope="col" class="col-td-th-2">EDPMS STATUS</th>
-                                                                <th scope="col" class="col-td-th-3">AD Ref No.</th>
-                                                                <th scope="col" class="col-td-th-3">SB Amount</th>
-                                                                <th scope="col" class="col-td-th-2">SB Balance amount
+                                                                <th scope="col" class="col-td-th-3">IDPMS STATUS</th>
+                                                                <th scope="col" class="col-td-th-3">System Status</th>
+                                                                <th scope="col" class="col-td-th-3">Full Set Available
                                                                 </th>
-                                                                <th scope="col" class="col-td-th-3">Status</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -504,34 +536,44 @@
                                                                 <td class="col-td-th-3">
                                                                     {{(i+1)}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbNo}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeno}}
                                                                 </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
                                                                     {{row?.adCode}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
+                                                                    {{row?.ShippingPortal}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.ImportAgency}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEPAN}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IECode}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEName}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
+                                                                    {{row?.IEAddress}}
+                                                                </td>
+                                                                <td class="col-td-th-3">
                                                                     {{row?.portCode}}
                                                                 </td>
-
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.edpmsStatus}}
-                                                                </td>
-
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.adRefNo}}
+                                                                    {{row?.idpmsStatus}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.sbdata?.fobValue}}
-                                                                </td>
-                                                                <td class="col-td-th-2">
-                                                                    {{row?.sbdata?.balanceAvai!="-1"?row?.sbdata?.balanceAvai:row?.sbdata?.fobValue}}
+                                                                    {{row?.systemStatus}}
                                                                 </td>
                                                                 <td class="col-td-th-3">
-                                                                    {{row?.cleared}}
+                                                                    {{row?.docAvailable==true?'Yes':'No'}}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
