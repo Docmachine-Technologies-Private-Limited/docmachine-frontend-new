@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { BoeBill } from '../../../../../model/boe.model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-boe-bill',
@@ -75,11 +76,12 @@ export class BOEComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: this.UPLOAD_FORM['currency'],
+          value: this.PIPO_DATA['currency'],
           label: "BOE Currency",
           rules: {
             required: true,
           },
+          Inputdisabled: true,
           autofill: {
             type: "formGroup",
             SetInputName: "currency",
@@ -161,11 +163,21 @@ export class BOEComponent implements OnInit {
                 id: "CommericalNo",
                 rules: {
                   required: true,
-                }
+                },
+                callback: (item: any) => {
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  let currentVal = item?.value;
+                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["amount"] = (currentVal?.data?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.data?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.data?.currency);
+                  myForm['touched'] = true;
+                  myForm['status'] = 'VALID';
+                  console.log(item, "callback")
+                },
               },
               {
                 type: "currency",
-                value: '',
+                value: this.PIPO_DATA['currency'],
                 label: "Invoices Currency",
                 name: 'currency',
                 rules: {
@@ -275,23 +287,30 @@ export class BOEComponent implements OnInit {
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.changedCommercial(this.pipoArr)
+      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
+        this.PIPO_DATA = res?.data[0];
+        console.log(res, "getPipoById")
+      })
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
+  COMMERICAL_NO: any = [];
+
   changedCommercial(pipo: any) {
-    this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
-      this.validator.COMMERICAL_NO=[];
+    this.documentService.filterAnyTable({
+      buyerName: this.BUYER_LIST,
+      currency: this.PIPO_DATA?.currency,
+      pipo: this.pipoArr
+    }, 'commercials').subscribe((res: any) => {
+      console.log(res, 'commercials')
+      this.validator.COMMERICAL_NO = [];
+      this.COMMERICAL_NO = res?.data;
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], data: element });
       });
-      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
-    },
-      (err) => {
-        console.log(err)
-      }
-    );
+    });
   }
 
   formJSON_To_Array(data: any) {

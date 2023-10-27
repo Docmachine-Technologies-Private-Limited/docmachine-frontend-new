@@ -48,7 +48,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
     PIPO_AMOUNT: 0,
     REMAINING_AMOUNT: 0
   }
-  
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -255,7 +255,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
             this.toastr.error(`Please check this sb no. : ${e.commercialNumber} already exit...`);
           }
         });
-      }else{
+      } else {
         this.toastr.error(`CI Amount should be equal to PIPO or less`);
       }
     }
@@ -270,10 +270,6 @@ export class ImportCommercialInvoicesComponent implements OnInit {
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'import');
-      this.documentService.getbyPartyName(this.BUYER_LIST[0]).subscribe((res: any) => {
-        console.log(res, 'getbyPartyName');
-        this.validator.ORM_BY_PARTY_NAME = res?.data;
-      });
       this.documentService.getPipoById(event?._id).subscribe((res: any) => {
         this.PIPO_DATA = res?.data[0];
         let CI_SUM = this.PIPO_DATA?.commercialRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
@@ -282,7 +278,14 @@ export class ImportCommercialInvoicesComponent implements OnInit {
         this.CI_INFO_SUM['PIPO_AMOUNT'] = this.PIPO_DATA?.amount;
         this.CI_INFO_SUM['REMAINING_AMOUNT'] = parseFloat(this.PIPO_DATA?.amount) - parseFloat(CI_SUM);
         console.log(res, "getPipoById", this.CI_INFO_SUM)
-        console.log(res, "getPipoById")
+        this.documentService.filterAnyTable({
+          beneficiaryName: this.BUYER_LIST,
+          currency: this.PIPO_DATA?.currency,
+          pipo: this.pipoArr
+        }, 'iradvices').subscribe((res: any) => {
+          this.validator.ORM_BY_PARTY_NAME = res?.data;
+          console.log(res, 'ORM_BY_PARTY_NAME')
+        });
       })
     } else {
       this.btndisabled = true;

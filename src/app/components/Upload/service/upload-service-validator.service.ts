@@ -207,17 +207,17 @@ export class UploadServiceValidatorService implements OnInit {
         data['data'][0]['bankDetails']['checked'] = false
         this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
           value: data['data'][0]['bankDetails'][index],
-          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
           org: data['data'][0]['bankDetails'][index]
         })
         this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
           value: data['data'][0]['bankDetails'][index],
-          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
           org: data['data'][0]['bankDetails'][index]
         })
         this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
           value: data['data'][0]['bankDetails'][index],
-          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
           org: data['data'][0]['bankDetails'][index]
         })
         if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
@@ -368,7 +368,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.FIELDS_DATA[id]?.[key]?.setValue(value);
   }
 
-  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined) {
+  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined,field:any=undefined) {
     const myForm: any = form?.controls[fieldName] as FormGroup;
     let currentVal = value;
     myForm.value[OptionfieldIndex][FormOptionfieldName] = currentVal;
@@ -378,7 +378,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
     console.log(myForm, "myForm")
     if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id] });
+      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id] ,field:field});
     }
   }
 

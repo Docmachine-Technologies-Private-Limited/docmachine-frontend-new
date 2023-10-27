@@ -106,10 +106,6 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       this.exportbilllodgementdata.clear();
       this.PREVIWES_URL = ''
       this.VISIBLITY_PDF = false;
-      this.documentService.ForwardContractget().subscribe((res: any) => {
-        this.ForwardContractDATA = res?.data;
-        console.log(res, 'daasdasdasdasdasdadsd')
-      });
       this.validator.PIPO_LIST = [];
     });
     setTimeout(() => {
@@ -243,13 +239,13 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
-                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["BOEAmount"] = currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount;
+                  item['field']['NewformArray'][item?.OptionfieldIndex]["BOEAmount"]['value'] = currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount;
                   myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
                   myForm.controls[item?.OptionfieldIndex]?.controls["BOEAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
                   myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
                   myForm['touched'] = true;
                   myForm['status'] = 'VALID';
-                  console.log(item, "callback")
+                  console.log(item, this.validator.FIELDS_DATA, "callback")
                 },
               },
               {
@@ -331,7 +327,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     this.BENEFICIARY_DETAILS = this.validator.BENEFICIARY_DETAILS_LIST.filter((item: any) => item?._id == value?.id);
     this.documentService.filterAnyTable({
       benneName: value?.value,
-      "paymentTerm.type": { value: "Direct Imports(Payment Against Bill of entry)" }
+      "paymentTerm": { $elemMatch: { type: { value: "Direct Imports(Payment Against Bill of entry)" } } }
     }, 'pi_po').subscribe((res: any) => {
       res?.data.forEach(element => {
         element['ischecked'] = false;
@@ -351,7 +347,13 @@ export class NewDirectImportPaymentsComponent implements OnInit {
 
   PIPO_LIST_CHECKED(value: any, index: any) {
     this.validator.PIPO_LIST = [value]
-    this.validator.BOE_LIST = value?.boeRef
+    this.validator.BOE_LIST = value?.boeRef?.filter((item: any) => item?.currency == value?.currency);
+    this.documentService.filterAnyTable({
+      Currency: value?.currency,
+    }, 'ForwardContract').subscribe((res: any) => {
+      this.ForwardContractDATA = res?.data;
+      console.log(res, 'ForwardContractDATA')
+    });
     this.response(null);
     this.PIPO_LIST.forEach((element, i) => {
       if (i != index) {
@@ -800,7 +802,11 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                   const element: any = this.ExportBillLodgement_Form?.paymentTerm[index];
                   const sum = parseFloat(element?.PIPO_LIST?.paymentTerm[0].BalanceAmount) - parseFloat(element?.RemittanceAmount);
                   element.PIPO_LIST.paymentTerm[0].BalanceAmount = sum;
-                  this.userService.updatePipo({ balanceAmount: sum, paymentTerm: element.PIPO_LIST.paymentTerm }, element?.PIPO_LIST?._id).subscribe((data) => {
+                  this.documentService.AnyUpdateTable({
+                    _id: element?.PIPO_LIST?._id,
+                    "paymentTerm.type.value": "Direct Imports(Payment Against Bill of entry)"
+                  }, { "paymentTerm.$.BalanceAmount": sum }, 'pi_po').subscribe((res: any) => { })
+                  this.userService.updatePipo({ balanceAmount: sum }, element?.PIPO_LIST?._id).subscribe((data) => {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.ExportBillLodgement_Form?.paymentTerm.length) {

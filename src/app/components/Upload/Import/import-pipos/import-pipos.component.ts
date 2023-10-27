@@ -326,6 +326,7 @@ export class ImportPIPOSComponent implements OnInit {
       e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
       e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
       e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+     
       if (e.value?.document == 'PI') {
         e.value.doc = this.pipourl1
       }
@@ -337,6 +338,9 @@ export class ImportPIPOSComponent implements OnInit {
       }, 'pi_po').subscribe((resp: any) => {
         console.log('creditNoteNumber Invoice_No', resp)
         if (resp.data.length == 0) {
+          e?.value?.paymentTerm?.forEach(element => {
+            element['BalanceAmount']=element?.amount
+         });
           this.documentService.addPipo(e.value).subscribe(
             (res) => {
               this.toastr.success('PI/PO added successfully.');

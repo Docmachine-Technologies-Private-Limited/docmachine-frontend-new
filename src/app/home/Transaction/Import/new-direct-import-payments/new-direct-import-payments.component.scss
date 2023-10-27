@@ -298,7 +298,7 @@
     border-top-right-radius: 5px;
 }
 
-.bg-white .height-control {
+.Invoice .height-control {
     height: 76vh;
     overflow: auto;
 }
@@ -327,7 +327,7 @@
     width: 98%;
 }
 
-.Invoice ::ng-deep custom-mat-step .custom-mat-horizontal-stepper-wrapper {
+.Invoice ::ng-deep custom-mat-stepper .custom-mat-horizontal-stepper-wrapper {
     height: calc(100vh - 110px);
 }
 

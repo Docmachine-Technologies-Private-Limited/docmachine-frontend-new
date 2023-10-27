@@ -21,7 +21,8 @@
                 </div>
                 <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
                     <div class="form-group mb-3" *ngSwitchCase="'button'">
-                       <button type="button" class="btn btn-primary" (click)="this.AddButton?.emit({text:field?.text})">{{field?.text}}</button>
+                        <button type="button" class="btn btn-primary"
+                            (click)="this.AddButton?.emit({text:field?.text})">{{field?.text}}</button>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
@@ -793,13 +794,16 @@
                                             *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
                                             <span style="color: red;"
                                                 *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select *ngIf="this.validator?.PIPO_LIST?.length!=0"
+                                        <ng-select
+                                            *ngIf="this.validator?.PIPO_LIST?.length!=0 && (Optionfield[FormOptionfield]?.Inputdisabled==false || Optionfield[FormOptionfield]?.Inputdisabled==undefined)"
                                             [items]="this.validator?.PIPO_LIST" bindLabel="pi_poNo" [multiple]="false"
                                             (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback);PIPO_EVENT.emit($event)"
                                             [placeholder]="Optionfield[FormOptionfield].placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
                                             [name]="Optionfield[FormOptionfield].fieldName"
                                             [(ngModel)]="Optionfield[FormOptionfield].value">
                                         </ng-select>
+                                        <label [name]="Optionfield[FormOptionfield].fieldName"
+                                        *ngIf="Optionfield[FormOptionfield]?.Inputdisabled==true" class="form-control" for="">{{Optionfield[FormOptionfield].value?.pi_poNo}}</label>
                                     </div>
                                     <div class="form-group mb-3"
                                         *ngIf="Optionfield[FormOptionfield]?.visible==true || Optionfield[FormOptionfield]?.visible==undefined">
@@ -829,13 +833,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'BOE'">
-                                        <label *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}} <span style="color: red;"
+                                        <label
+                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
+                                            <span style="color: red;"
                                                 *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select *ngIf="this.validator.BOE_LIST?.length!=0" [items]="this.validator.BOE_LIST"
-                                            bindLabel="boeNumber" [multiple]="false"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback)"
+                                        <ng-select *ngIf="this.validator.BOE_LIST?.length!=0"
+                                            [items]="this.validator.BOE_LIST" bindLabel="boeNumber" [multiple]="false"
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback,field)"
                                             [placeholder]="Optionfield[FormOptionfield]?.placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield].fieldName" [(ngModel)]="Optionfield[FormOptionfield].value">
+                                            [name]="Optionfield[FormOptionfield].fieldName"
+                                            [(ngModel)]="Optionfield[FormOptionfield].value">
                                         </ng-select>
                                     </div>
                                 </ng-container>

@@ -1548,7 +1548,7 @@ body {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     background-color: #2992fc;
-    background-image: linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    background-image: linear-gradient(center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
     box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
     position: relative;
     overflow: hidden;
@@ -1565,8 +1565,8 @@ body {
 }
 
 ::ng-deep .mat-datepicker-content .mat-calendar {
-    width: 229px!important;
-    height: 300px!important;
+    width: 229px !important;
+    height: 300px !important;
 }
 
 .date_of_shipment {
@@ -1578,168 +1578,176 @@ body {
     top: 27px;
     right: 0px;
 }
-.pdf_invoce_scroll iframe{
-  height: 750px;
+
+.pdf_invoce_scroll iframe {
+    height: 750px;
 }
 
 .accordion .accordion-item {
-  margin: 10px 0;
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0 0 8px #6e7a7a;
+    margin: 10px 0;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 8px #6e7a7a;
 }
 
 .accordion-titel {
-  background-color: #404848;
-  padding: 10px 15px;
-  cursor: pointer;
+    background-color: #404848;
+    padding: 10px 15px;
+    cursor: pointer;
 }
 
 .accordion-contant {
-  padding: 5px;
-  background-color: #ffffff85;
-  display: none;
-  flex-direction: column;
-  text-align: left;
-  width: 100%;
-  line-height: 12px;
-  height: 100%;
+    padding: 5px;
+    background-color: #ffffff85;
+    display: none;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+    line-height: 12px;
+    height: 100%;
 }
 
 .accordion-titel h2 span {
-  float: right;
+    float: right;
 }
 
 .accordion-titel h2 {
-  font-size: 15px;
-  color: #fff;
-  margin: auto;
-  font-weight: 600;
-  white-space: pre-wrap;
+    font-size: 15px;
+    color: #fff;
+    margin: auto;
+    font-weight: 600;
+    white-space: pre-wrap;
 }
 
 .sb-panel {
-  display: flex;
-  font-size: 15px;
-  gap: 5px;
+    display: flex;
+    font-size: 15px;
+    gap: 5px;
 }
 
 .sb-panel h3 {
-  font-size: 15px;
-  line-height: 20px;
-  text-align: center;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
 }
 
-.sb-panel table tr td,.sb-panel table tr th{
-  font-size: 12px;
+.sb-panel table tr td,
+.sb-panel table tr th {
+    font-size: 12px;
 }
-.PREVIEW_PAGE .modal-content{
-  width: 75vw;
-  margin: auto;
+
+.PREVIEW_PAGE .modal-content {
+    width: 75vw;
+    margin: auto;
 }
-.PREVIEW_PAGE .modal-body{
-  height: 80vh;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
+
+.PREVIEW_PAGE .modal-body {
+    height: 80vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
-.add_new_buttons{
-  display: flex !important;
+
+.add_new_buttons {
+    display: flex !important;
 }
+
 .file_add_new {
-  cursor: pointer;
-  width: 100%;
-  background-color: #fff;
-  border: 1px dashed #51AEE5;
-  display: flex;
-  background: #F2F9FD;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 10px;
-  padding: 40px 0;
-  margin-bottom: 30px;
+    cursor: pointer;
+    width: 100%;
+    background-color: #fff;
+    border: 1px dashed #51AEE5;
+    display: flex;
+    background: #F2F9FD;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    padding: 40px 0;
+    margin-bottom: 30px;
 }
 
 .file_add_new h5 {
-  color: rgba(0, 0, 0, 0.8);
-  margin-bottom: 1px;
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 1px;
 }
 
-.file_add_new input{
-  opacity: 0;
-  height: 100%;
-  width: 100%;
+.file_add_new input {
+    opacity: 0;
+    height: 100%;
+    width: 100%;
 }
 
 .file_add_new p {
-  font-family: "EuropaNuova-Regular", sans-serif !important;
-  width: 100%;
-  height: 23px !important;
-  text-align: center;
-  line-height: 30px;
-  color: rgba(0, 0, 0, 0.3);
-  font-size: 15px;
-  font-weight: 400;
-  margin-bottom: 2%;
+    font-family: "EuropaNuova-Regular", sans-serif !important;
+    width: 100%;
+    height: 23px !important;
+    text-align: center;
+    line-height: 30px;
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 2%;
 }
 
 .circular_input {
-  height: 20px;
-  width: 20px;
-  margin-left: 9px;
-  margin-top: 20px;
-  margin-bottom: 10px;
+    height: 20px;
+    width: 20px;
+    margin-left: 9px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .file_add_new i {
-  font-size: 35px;
-  color: rgba(0, 0, 0, 0.2);
-  margin-bottom: 2%;
+    font-size: 35px;
+    color: rgba(0, 0, 0, 0.2);
+    margin-bottom: 2%;
 }
 
 .file_add_new button {
-  font-family: "Poppins", sans-serif !important;
-  font-weight: 400;
-  border: none;
-  height: 52px;
-  width: 160px;
-  background-color: #ebebeb;
-  padding-top: 1%;
-  padding-bottom: 1%;
-  border-radius: 6px;
-  color: rgba(0, 0, 0, 0.6);
-  outline: none;
-  margin-bottom: 2px;
+    font-family: "Poppins", sans-serif !important;
+    font-weight: 400;
+    border: none;
+    height: 52px;
+    width: 160px;
+    background-color: #ebebeb;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-radius: 6px;
+    color: rgba(0, 0, 0, 0.6);
+    outline: none;
+    margin-bottom: 2px;
 }
 
 .file_add_new button:hover {
-  background: #149174;
-  color: #0c5645;
+    background: #149174;
+    color: #0c5645;
 }
 
 .file_add_new button:active {
-  border: 0;
+    border: 0;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-  outline: none;
+    outline: none;
 }
+
 .k-widget {
     font-family: "DejaVu Sans", "Arial", sans-serif;
     font-size: .9em;
 }
 
-.td-th-width{
+.td-th-width {
     display: flex;
     flex-direction: column;
     width: 400px;
 }
-.d-grid{
+
+.d-grid {
     gap: 20px;
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     align-items: baseline;
     justify-content: flex-start;
     width: 100%;
@@ -1747,7 +1755,7 @@ select:focus {
 
 .col-td-th-2 {
     width: 200px;
-    border: 0!important;
+    border: 0 !important;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -1910,7 +1918,7 @@ table .table-tr-1 {
     margin: 0 0px !important;
 }
 
-.tr-box-shadow{
+.tr-box-shadow {
     box-shadow: 0px 0px 2px 2px #bcbbbb;
 }
 
@@ -1928,10 +1936,128 @@ table .table-tr-1 {
     box-shadow: 0 0 3px 2px #00000063;
 }
 
-.table-border{
+.table-border {
     background: #3c3d3d;
     color: white;
 }
-.table-border th{
+
+.table-border th {
     color: white;
+}
+
+
+
+// 
+.table-custom {
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+}
+
+.thead-card {
+    display: grid;
+    grid-template-columns: 200px calc(100% - 200px);
+    align-items: center;
+}
+
+.tbody-card {
+    display: grid;
+    grid-template-columns: 200px auto;
+    align-items: center;
+    background-color: rgb(33, 96, 155);
+    margin-bottom: 20px;
+    border-radius: 5px;
+    color: black;
+}
+
+.tbody-card .p-border {
+    height: 99%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.colspan {
+    display: grid;
+    grid-template-columns: 150px auto;
+}
+
+.colspan p {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: left !important;
+    padding: 10px;
+    width: 100%;
+}
+
+.groupname-text {
+    background-color: rgb(62, 52, 201);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: white;
+}
+
+.colspanitem {
+    background-color: rgb(117, 8, 206);
+    width: 100%;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.text-left {
+    text-align: left !important;
+    padding: 10px;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-overflow: clip;
+    white-space: pre-wrap;
+    font-size: 12px;
+}
+
+.card-layout {
+    background-color: #fff;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    height: 100%;
+    min-height: 50px;
+    max-height: 100%;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 97%;
+    cursor: pointer;
+}
+
+.label-text {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.p-text {
+    font-size: 12px;
+}
+
+.isActive {
+    background-color: coral;
+    color: white;
+}
+
+.btn-control-panel {
+    position: fixed;
+    bottom: 22px;
+    right: 100px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-control-panel-2 {
+    right: 165px;
 }

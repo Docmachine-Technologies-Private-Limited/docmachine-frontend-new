@@ -257,6 +257,16 @@ export class DocumentService {
     console.log(query, 'filterAnyTable')
     return this.http.post(`${this.api_base}/orAdvice/filterAnyTable`, { query: query, tableName: table_name }, httpOptions);
   }
+  
+  AnyUpdateTable(id,query, table_name: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    console.log(query, 'filterAnyTable')
+    return this.http.post(`${this.api_base}/orAdvice/UpdateAnyTable`, {id:id ,query: query, tableName: table_name }, httpOptions);
+  }
 
 
   updateByIr(data, _id) {

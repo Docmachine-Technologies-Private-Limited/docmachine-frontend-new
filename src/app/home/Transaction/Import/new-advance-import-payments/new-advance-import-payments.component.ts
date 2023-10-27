@@ -106,11 +106,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       this.exportbilllodgementdata.clear();
       this.PREVIWES_URL = ''
       this.VISIBLITY_PDF = false;
-      this.documentService.ForwardContractget().subscribe((res: any) => {
-        this.ForwardContractDATA = res?.data;
-        console.log(res, 'daasdasdasdasdasdadsd')
-      });
-      this.validator.PIPO_LIST=[];
+
+      this.validator.PIPO_LIST = [];
       setTimeout(() => {
         this.validator.buildForm({
           BenneName: {
@@ -176,6 +173,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                 rules: {
                   required: true,
                 },
+                Inputdisabled: true,
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
@@ -267,7 +265,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     this.BENEFICIARY_DETAILS = this.validator.BENEFICIARY_DETAILS_LIST.filter((item: any) => item?._id == value?.id);
     this.documentService.filterAnyTable({
       benneName: value?.value,
-      "paymentTerm.type": { value: "Advance Payment" }
+      "paymentTerm": { $elemMatch: { type: { value:  "Advance Payment" } } }
     }, 'pi_po').subscribe((res: any) => {
       res?.data.forEach(element => {
         element['ischecked'] = false;
@@ -280,6 +278,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
           }
         });
       });
+
       this.PIPO_LIST = res?.data
       console.log(value, res, this.BENEFICIARY_DETAILS, "BENEFICIARY_CALLBACK")
     });
@@ -288,6 +287,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
   PIPO_LIST_CHECKED(value: any, index: any) {
     this.validator.PIPO_LIST = [value]
     this.validator.BOE_LIST = value?.boeRef
+    this.documentService.filterAnyTable({
+      Currency: value?.currency,
+    }, 'ForwardContract').subscribe((res: any) => {
+      this.ForwardContractDATA = res?.data;
+      console.log(res, 'ForwardContractDATA')
+    });
     this.response(null);
     this.PIPO_LIST.forEach((element, i) => {
       if (i != index) {
@@ -721,7 +726,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                   const element: any = this.ExportBillLodgement_Form?.paymentTerm[index];
                   const sum = parseFloat(element?.PIPO_LIST?.paymentTerm[0].BalanceAmount) - parseFloat(element?.RemittanceAmount);
                   element.PIPO_LIST.paymentTerm[0].BalanceAmount = sum;
-                  this.userService.updatePipo({ balanceAmount: sum, paymentTerm: element.PIPO_LIST.paymentTerm }, element?.PIPO_LIST?._id).subscribe((data) => {
+                  this.documentService.AnyUpdateTable({
+                    _id: element?.PIPO_LIST?._id,
+                    "paymentTerm.type.value": "Advance Payment"
+                  }, { "paymentTerm.$.BalanceAmount": sum }, 'pi_po').subscribe((res: any) => { })
+
+                  this.userService.updatePipo({ balanceAmount: sum }, element?.PIPO_LIST?._id).subscribe((data) => {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.ExportBillLodgement_Form?.paymentTerm.length) {

@@ -12,12 +12,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     useExisting: forwardRef(() => NgInputComponent)
   }]
 })
-export class NgInputComponent implements OnInit,ControlValueAccessor {
+export class NgInputComponent implements OnInit, ControlValueAccessor {
   @Input('item') item: any = {};
   @Input('disabled') disabled: boolean = false;
   @Input('required') required: boolean = false;
 
-  @Output('event') event: any = new EventEmitter();   
+  @Output('event') event: any = new EventEmitter();
   onChange: any = () => { };
   onTouch: any = () => { };
 
@@ -31,9 +31,13 @@ export class NgInputComponent implements OnInit,ControlValueAccessor {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.item?.value != undefined && this.item?.value != null && this.item?.value != '') {
+      this.event.emit(this.item?.value);
+    }
+  }
 
-  checked:any = '';
+  checked: any = '';
   writeValue(checked: any) {
     this.checked = checked;
   }
@@ -43,9 +47,13 @@ export class NgInputComponent implements OnInit,ControlValueAccessor {
     this.onChange(value);
     this.event.emit(value);
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
-     this.item=changes?.item?.currentValue;
+    this.item = changes?.item?.currentValue;
+    if (this.item?.value != undefined && this.item?.value != null && this.item?.value != '') {
+      this.event.emit(this.item?.value);
+    }
+    console.log(changes,"ng-input-ngOnChanges")
   }
 
 }

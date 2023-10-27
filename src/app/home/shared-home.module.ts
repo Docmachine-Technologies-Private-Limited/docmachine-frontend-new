@@ -92,6 +92,8 @@ import { NgCustomFilterPopupComponent } from "../custom/ng-custom-filter-popup/n
 import { OldFederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterheadold/exportoldletterhead.component";
 import { CustomNgContentHeaderComponent } from "../components/Upload/upload-components/upload-components-header/custom-ng-content-header/custom-ng-content-header.component";
 import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips-custom-ng.component";
+import { SummaryTransactionUIHeaderComponent } from "../custom/SummaryTransactionUI/summary-transaction-uiheader/summary-transaction-uiheader.component";
+import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/summary-transaction-ui.component";
 
 @NgModule({
   declarations: [
@@ -155,7 +157,9 @@ import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips
     NgCustomFilterPopupComponent,
     OldFederalBankExportletterheadComponent,
     CustomNgContentHeaderComponent,
-    TooltipsCustomNgComponent
+    TooltipsCustomNgComponent,
+    SummaryTransactionUIHeaderComponent,
+    SummaryTransactionUIComponent
   ],
   imports: [
     CommonModule,
@@ -266,7 +270,9 @@ import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips
     NgCustomFilterPopupComponent,
     OldFederalBankExportletterheadComponent,
     CustomNgContentHeaderComponent,
-    TooltipsCustomNgComponent
+    TooltipsCustomNgComponent,
+    SummaryTransactionUIHeaderComponent,
+    SummaryTransactionUIComponent
   ],
 })
 export class SharedHomeModule { }
