@@ -237,7 +237,8 @@
 
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
-                    (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance')">ADVANCE OUTWARD REMITTANCE</h6>
+                    (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance')">ADVANCE
+                    OUTWARD REMITTANCE</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
@@ -430,7 +431,7 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Realisation-Cretificate')">
-                    Realisation-Cretificate</h6>
+                    EBRC</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Export/Swift-Copy-Documents')">
@@ -508,7 +509,11 @@
                 </li>
               </ul>
             </li>
-            <li
+            <li class="nav-item" *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true  && this.userData['Transaction']==true">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/Transaction/Export/Transaction-Dashboard')">
+                Transaction Summary</h6>
+            </li>
+            <!-- <li
               *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true  && this.userData['Transaction']==true">
               <a href="#ExportTransactionDashBoard" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transaction Dashboard</a>
@@ -520,7 +525,7 @@
                   </h6>
                 </li>
               </ul>
-            </li>
+            </li> -->
             <li
               *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['export']==true && this.userData['Transaction']==true">
               <a href="#EDPMS" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">EDPMS</a>

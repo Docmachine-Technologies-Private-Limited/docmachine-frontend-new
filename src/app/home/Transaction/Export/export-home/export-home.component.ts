@@ -3429,7 +3429,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           var filterValue: any = {
             Amount: [],
             Number: [],
-            Documents: []
+            Documents: [],
+            Id:[],
+            SB_REF:[]
           }
           var tempPipo: any = [];
           var P102_DATA: any = [];
@@ -3440,12 +3442,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
               filterValue['Amount'].push(filterItem?.amount)
               filterValue['Number'].push(filterItem?.blcopyrefNumber)
               filterValue['Documents'].push(filterItem?.doc)
+              filterValue['Id'].push(filterItem?._id)
+              filterValue['SB_REF'].push(filterItem?.SbRef[0])
               tempPipo.push(filterItem?.pipo[0]?._id)
             })
           });
           approval_data = {
-            id: 'IRDR' + '_' + UniqueId,
-            tableName: 'Inward-Remitance-Dispoal-Realization',
+            id: 'IRDR' + '_' + this.randomId(5),
+            tableName: 'Export-Bill-Realisation',
             deleteflag: '-1',
             userdetails: this.USER_DATA,
             status: 'pending',
@@ -3458,17 +3462,21 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
           updatedata['documents'] = UpdatedUrl;
           updatedata['extradata'] = P102_DATA;
+          updatedata['filterValue'] = filterValue;
           updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               var data: any = {
                 data: updatedata,
-                TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
-                fileType: 'Export',
+                TypeTransaction: 'Export-Bill-Realisation',
+                fileType: this.USER_DATA?.sideMenu,
                 UserDetails: approval_data?.id,
                 pipo: tempPipo,
-                UniqueId: approval_data?.id
+                UniqueId: approval_data?.id,
+                MT103Ref: updatedata?._id,
+                SBRef: filterValue['SB_REF'],
+                LodgementAdviceCopy: filterValue['Id']
               }
               this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                 console.log(res1, 'addExportBillLodgment')
@@ -3516,8 +3524,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         if ((index + 1 == temp_doc.length)) {
           approval_data = {
-            id: 'Inward_Remitance_Dispoal' + '_' + UniqueId,
-            tableName: 'Inward-Remitance-Dispoal',
+            id: 'Inward_Remitance_Dispoal' + '_' + this.randomId(5),
+            tableName: 'Inward-Remittance-Disposal',
             deleteflag: '-1',
             userdetails: this.USER_DATA,
             status: 'pending',
@@ -3540,11 +3548,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               var data: any = {
                 data: updatedata,
-                TypeTransaction: 'Inward-Remitance-Dispoal',
-                fileType: 'Export',
+                TypeTransaction: 'Inward-Remittance-Disposal',
+                fileType: this.USER_DATA?.sideMenu,
                 UserDetails: approval_data?.id,
                 pipo: tempPipo,
-                UniqueId: approval_data?.id
+                UniqueId: approval_data?.id,
+                MT103Ref: updatedata?._id
               }
               this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                 console.log(res1, 'addExportBillLodgment')
@@ -3588,7 +3597,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         var filterValue: any = {
           Amount: [],
           Number: [],
-          Documents: []
+          Documents: [],
+          Id:[],
+          SB_REF:[]
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
@@ -3599,12 +3610,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             filterValue['Amount'].push(filterItem?.amount)
             filterValue['Number'].push(filterItem?.blcopyrefNumber)
             filterValue['Documents'].push(filterItem?.doc)
+            filterValue['Id'].push(filterItem?._id),
+            filterValue['SB_REF'].push(filterItem?.SbRef[0])
             tempPipo.push(filterItem?.pipo[0]?._id)
           })
         });
         approval_data = {
-          id: 'IRDR' + '_' + UniqueId,
-          tableName: 'Inward-Remitance-Dispoal-Realization',
+          id: 'IRDR' + '_' + this.randomId(5),
+          tableName: 'Export-Bill-Realisation',
           deleteflag: '-1',
           userdetails: this.USER_DATA,
           status: 'pending',
@@ -3617,6 +3630,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
         updatedata['documents'] = temp_doc;
         updatedata['extradata'] = P102_DATA;
+        updatedata['filterValue'] = filterValue;
         updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
         updatedata['ALL_DATA_HSCODE_FORWARD'] = this.ALL_DATA_HSCODE_FORWARD
         console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, P102_DATA, 'approval_data')
@@ -3624,11 +3638,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
             var data: any = {
               data: updatedata,
-              TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
-              fileType: 'Export',
+              TypeTransaction: 'Export-Bill-Realisation',
+              fileType: this.USER_DATA?.sideMenu,
               UserDetails: approval_data?.id,
               pipo: tempPipo,
-              UniqueId: approval_data?.id
+              UniqueId: approval_data?.id,
+              SBRef: filterValue['SB_REF'],
+              LodgementAdviceCopy: filterValue['Id']
             }
             console.log(UniqueId, approval_data, data, 'uiiiiiiiiiiiiii')
             this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
@@ -3650,11 +3666,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
-
   }
   checkapproval(name: any) {
     return new Promise((resolve, reject) => {
-      this.documentService.getApprovedData(name + '_' + this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id).subscribe((res: any) => {
+      this.documentService.getApprovedData(name + '_' + this.randomId(5)).subscribe((res: any) => {
         console.log(res, 'dsdsdsdsdsdsds');
         if (res.length == 0) {
           resolve(true)
@@ -3665,6 +3680,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       })
     })
   }
+
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length + 2);
+  };
 
   ToForwardContract_Selected: any = []
   ToForwardContract(event: any, value: any, index: any) {

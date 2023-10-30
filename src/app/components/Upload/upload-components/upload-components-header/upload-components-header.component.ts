@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
@@ -7,6 +7,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import $ from 'jquery'
 
 @Component({
   selector: 'upload-components-header',
@@ -34,11 +35,12 @@ export class UploadHeaderComponent implements OnInit {
   SUBMIT_ERROR: boolean = false;
   @Input('id') id: any = '';
   @Input('title') title: any = '';
+  @Input('PIPO_TARANSACTION') PIPO_TARANSACTION: boolean = false;
   @Input('PIPO_DISABLED') PIPO_DISABLED: boolean = true;
   @Input('PIPO_VISIBLE') PIPO_VISIBLE: boolean = false;
   @Input('UPLOAD_BUTTON') UPLOAD_BUTTON: boolean = true;
   @Input('HIDE_OPTION') HIDE_OPTION: boolean = true;
-  EXPORT_FORM: any =  {
+  EXPORT_FORM: any = {
     buyer: {
       type: "buyer",
       value: "",
@@ -101,8 +103,11 @@ export class UploadHeaderComponent implements OnInit {
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
+
   ngOnInit(): void {
     this.validator.loaddata();
+    
+    console.log(this.PIPO_TARANSACTION,"PIPO_TARANSACTION")
   }
 
   clickPipo(event: any) {
@@ -120,7 +125,7 @@ export class UploadHeaderComponent implements OnInit {
   routechanged(text: any) {
     this.router.navigate([text]);
   }
-  
+
   onSubmit(value: any) {
     let query: any = { date: { $gte: value?.value?.fromdate, $lte: value?.value?.todate } };
     if (value?.value?.buyer != null && value?.value?.buyer != undefined) {

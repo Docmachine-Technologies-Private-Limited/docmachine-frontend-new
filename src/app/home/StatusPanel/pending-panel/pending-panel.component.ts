@@ -309,7 +309,7 @@ export class PendingPanelComponent implements OnInit {
       "Inward-Remitance-Dispoal-Realization": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
-      "Inward-Remitance-Dispoal": () => {
+      "Inward-Remittance-Disposal": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
       "Packing-Credit-Request": () => {

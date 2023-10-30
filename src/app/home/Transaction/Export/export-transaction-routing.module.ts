@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: "export-home/:id", component: ExportHomeComponent, canActivate: [MemberGuard] },
   { path: "Pdf-Upload", component: UploadDocComponent },
   { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "Transaction-Dashboard", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },
 ];
 
 @NgModule({

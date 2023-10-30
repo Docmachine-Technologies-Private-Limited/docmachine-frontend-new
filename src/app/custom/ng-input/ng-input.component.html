@@ -1,6 +1,6 @@
 <ng-container>
     <div class="input-container">
-      <label class="input-container-label" [innerHTML]="item?.label"> <span style="color: red;" *ngIf="this.required==true">*</span></label>
+      <label class="input-container-label" [innerHTML]="item?.label" *ngIf="item?.label!=undefined && item?.label!=null && item?.label!=''"> <span style="color: red;" *ngIf="this.required==true">*</span></label>
       <input class="form-control" [disabled]="disabled" name="input" [type]="item?.type" [(ngModel)]="item.value" 
       [placeholder]="item?.placeHolderText!=undefined?item?.placeHolderText:''"
       (ngModelChange)="onModelChange($event,item?.value)" />

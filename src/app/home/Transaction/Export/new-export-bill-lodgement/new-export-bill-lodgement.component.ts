@@ -555,7 +555,7 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Usance","Usancedays","Usancefrom"]
+          HideShowInput: ["Usance", "Usancedays", "Usancefrom"]
         },
         Usance: {
           type: "yesnocheckbox",
@@ -662,21 +662,22 @@ export class NewExportBillLodgementComponent implements OnInit {
 
   AllCreateTransaction() {
     for (let index = 0; index < this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length; index++) {
-      if (this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION['SB_INDEX_' + index]?.COMMERICAIL_DATA?.length != 0) {
-        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION['SB_INDEX_' + index]['ALL_RELATED_DOCUMENTS'] = [];
+      const element = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS[index];
+      if (this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.length != 0) {
+        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]['ALL_RELATED_DOCUMENTS'] = [];
         this.OTHER_DOCUMENTS[0] = {
           name: 'Shipping Bill',
-          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION['SB_INDEX_' + index]?.doc
+          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.doc
         }
         this.OTHER_DOCUMENTS[1] = {
           name: 'blCopy',
-          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION['SB_INDEX_' + index]?.blCopyDoc
+          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.blCopyDoc
         }
         this.OTHER_DOCUMENTS[2] = {
           name: 'Commercial',
-          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION['SB_INDEX_' + index]?.commercialDoc
+          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.commercialDoc
         }
-        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION['SB_INDEX_' + index]['ALL_RELATED_DOCUMENTS'] = this.OTHER_DOCUMENTS;
+        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]['ALL_RELATED_DOCUMENTS'] = this.OTHER_DOCUMENTS;
       } else {
         this.toastr.error("Please select atleast one commercial no.")
       }
@@ -1189,10 +1190,10 @@ export class NewExportBillLodgementComponent implements OnInit {
           TypeOfPage: 'Transaction',
           FileType: this.USER_DATA?.sideMenu,
         }
-      } else {
+      } else if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
         approval_data = {
-          id: 'EDD' + '_' + this.randomId(5),
-          tableName: 'Export-Direct-Dispatch',
+          id: 'EB_Regularisation' + '_' + this.randomId(5),
+          tableName: 'Export-Bill-Regularisation',
           deleteflag: '-1',
           userdetails: this.USER_DATA,
           status: 'pending',
@@ -1200,7 +1201,22 @@ export class NewExportBillLodgementComponent implements OnInit {
           Types: 'downloadPDF',
           TypeOfPage: 'Transaction',
           FileType: this.USER_DATA?.sideMenu,
-          commercialRef: extradata2
+          commercialRef: extradata2,
+          SBRef: this.ExportBillLodgement_Form['SbRef']
+        }
+      } else if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == false) {
+        approval_data = {
+          id: 'EB_Lodgement' + '_' + this.randomId(5),
+          tableName: 'Export-Bill-Lodgement',
+          deleteflag: '-1',
+          userdetails: this.USER_DATA,
+          status: 'pending',
+          documents: mergePdf_List,
+          Types: 'downloadPDF',
+          TypeOfPage: 'Transaction',
+          FileType: this.USER_DATA?.sideMenu,
+          commercialRef: extradata2,
+          SBRef: this.ExportBillLodgement_Form['SbRef']
         }
       }
       var pipo: any = [];
@@ -1236,14 +1252,61 @@ export class NewExportBillLodgementComponent implements OnInit {
                 this.ExportBillLodgement_Form['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: Uniquekey })
               }
               this.ExportBillLodgement_Form['documents'] = (mergePdf_List);
-              if (this.ExportBillLodgement_Form['AgainstAdvanceReceipt']?.bool == true) {
+              if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
                 var data: any = {
                   data: this.ExportBillLodgement_Form,
-                  TypeTransaction: 'Export-Direct-Dispatch',
-                  fileType: 'Export',
+                  TypeTransaction: 'Export-Bill-Regularisation',
+                  fileType: this.USER_DATA?.sideMenu,
                   UserDetails: approval_data?.id,
                   pipo: pipo_id,
-                  commercialRef: extradata2
+                  commercialRef: extradata2,
+                  SBRef: this.ExportBillLodgement_Form['SbRef']
+                }
+                this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                  let updatedData = {
+                    "TransactionRef": [
+                      res1._id,
+                    ]
+                  }
+                  console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, extradata2, "this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION")
+                  if (this.documentService.MT102_SUBJECT?.file == '' || this.documentService.MT102_SUBJECT?.file == undefined) {
+                    var updateapproval_data: any = {
+                      RejectData: {
+                        tableName: 'masterrecord',
+                        id: approval_data?.id,
+                        TransactionId: res1._id,
+                        data: {
+                          SbRef: UniqueId,
+                          Total_FIRX_Amount: "-1"
+                        },
+                        pipo_id: pipo_id,
+                        pipo_name: pipo_name
+                      }
+                    }
+                    this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                      this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
+                        if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
+                          this.router.navigate(['/home/dashboardTask']);
+                          this.toastr.success(`SB No. ${extradata?.join(',')} sent for for regularisation approval`);
+                        } else {
+                          this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.filter((item: any) => item == this.BUTTON_INDEX)
+                          this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for regularisation approval`);
+                        }
+                        event?.displayHidden;
+                      });
+                    });
+                  }
+                  console.log('addExportBillLodgment', res1);
+                })
+              } else if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == false) {
+                var data: any = {
+                  data: this.ExportBillLodgement_Form,
+                  TypeTransaction: 'Export-Bill-Lodgement',
+                  fileType: this.USER_DATA?.sideMenu,
+                  UserDetails: approval_data?.id,
+                  pipo: pipo_id,
+                  commercialRef: extradata2,
+                  SBRef: this.ExportBillLodgement_Form['SbRef']
                 }
                 this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                   let updatedData = {
@@ -1297,9 +1360,10 @@ export class NewExportBillLodgementComponent implements OnInit {
                   var data: any = {
                     data: changevalue,
                     TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
-                    fileType: 'Export',
+                    fileType: this.USER_DATA?.sideMenu,
                     UserDetails: approval_data?.id,
-                    pipo: pipo_id
+                    pipo: pipo_id,
+                    SBRef: this.ExportBillLodgement_Form['SbRef']
                   }
                   this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                     if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
@@ -1313,10 +1377,11 @@ export class NewExportBillLodgementComponent implements OnInit {
                   if (this.ExportBillLodgement_Form['AgainstAdvanceReceipt']?.bool == false) {
                     var data: any = {
                       data: this.ExportBillLodgement_Form,
-                      TypeTransaction: 'Export-Direct-Dispatch',
-                      fileType: 'Export',
+                      TypeTransaction: 'Export-Bill-Regularisation',
+                      fileType: this.USER_DATA?.sideMenu,
                       UserDetails: approval_data?.id,
-                      pipo: pipo_id
+                      pipo: pipo_id,
+                      SBRef: this.ExportBillLodgement_Form['SbRef']
                     }
                     this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                       let updatedData = {

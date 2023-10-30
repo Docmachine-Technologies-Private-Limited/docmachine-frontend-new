@@ -13,6 +13,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   @ContentChildren(CustomMatStepComponent) MatStepComponent: QueryList<CustomMatStepComponent>;
   @ViewChild('MatStepperHeaderPanel') MatStepperHeaderPanel: ElementRef;
   @Output('event') event: any = new EventEmitter();
+  @Output('TabEvent') TabEvent: any = new EventEmitter();
   @Output('lastbuttonEvent') lastbuttonEvent: any = new EventEmitter();
   @Input('LAST_BUTTON_VISIBLE') LAST_BUTTON_VISIBLE: boolean =false;
 
@@ -40,12 +41,14 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
         }
         this.HEADER_DATA.push(element)
       });
+      this.TabEvent.emit( this.HEADER_DATA[this.BUTTON_COUNTER]);
     }
   }
   constructor() { }
 
   ngOnInit(): void {
   }
+  
   
   lastbuttonclick(){
     this.lastbuttonEvent.emit(true);
@@ -83,6 +86,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
       this.MatStepComponent?.get(0)?.setActivePanel(true);
       this.ERROR_MESSAGE_SHOW = false;
     }
+    this.TabEvent.emit( this.HEADER_DATA[this.BUTTON_COUNTER]);
   }
   
   TIMEOUT_CLEAR: any = null;
@@ -123,6 +127,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
       }
       this.ERROR_MESSAGE_SHOW = true;
     }
+    this.TabEvent.emit( this.HEADER_DATA[this.BUTTON_COUNTER]);
   }
 
   onTabChanges(value: any) {
@@ -144,6 +149,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
     } else {
       this.ERROR_MESSAGE_SHOW = true;
     }
+    this.TabEvent.emit(value);
   }
 
   get BackScrollButton() {
