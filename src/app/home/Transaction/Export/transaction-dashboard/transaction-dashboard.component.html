@@ -3,7 +3,8 @@
     <label for="" class="col-6 Invoice-label-left">Transaction Summary</label>
     <label for="" class="col-6 Invoice-label">{{this.TRANSACTION_NAME}}</label>
   </div>
-  <custom-mat-stepper (TabEvent)="onTabChanges($event)">
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Export-Bill-Regularisation'"
+    (TabEvent)="onTabChanges($event)">
     <custom-mat-step MATSTEP_LABEL="Export Bill Regularisation" [NextTrue]="true">
       <table class="table table-striped">
         <thead>
@@ -37,6 +38,9 @@
         </tbody>
       </table>
     </custom-mat-step>
+  </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Export-Bill-Lodgement'"
+    (TabEvent)="onTabChanges($event)">
     <custom-mat-step MATSTEP_LABEL="Export Bill Lodgement" [NextTrue]="true">
       <table class="table table-striped">
         <thead>
@@ -69,6 +73,9 @@
         </tbody>
       </table>
     </custom-mat-step>
+  </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Inward-Remittance-Disposal'"
+    (TabEvent)="onTabChanges($event)">
     <custom-mat-step MATSTEP_LABEL="Inward Remittance Disposal" [NextTrue]="true">
       <table class="table table-striped">
         <thead>
@@ -100,6 +107,9 @@
         </tbody>
       </table>
     </custom-mat-step>
+  </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Export-Bill-Realisation'"
+    (TabEvent)="onTabChanges($event)">
     <custom-mat-step MATSTEP_LABEL="Export Bill Realisation" [NextTrue]="true">
       <table class="table table-striped">
         <thead>

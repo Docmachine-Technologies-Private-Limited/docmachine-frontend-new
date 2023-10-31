@@ -51,7 +51,8 @@ export class TransactionDashboardComponent implements OnInit {
   UploadUrl: any = '';
   ngOnInit(): void {
     this.actRoute.paramMap.subscribe((params) => {
-      this.TRANSACTION_NAME = params.get('id');
+      this.TRANSACTION_NAME = params.get('id')?.split(" ")?.join('-');
+      // console.log(this.TRANSACTION_NAME=='Export-Bill-Regularisation')
       // this.documentService.filterAnyTable({
       //   TypeTransaction: this.TRANSACTION_NAME?.split(" ")?.join('-'),
       // }, 'ExportTransaction').subscribe((res: any) => {

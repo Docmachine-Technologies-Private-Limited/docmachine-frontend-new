@@ -17,7 +17,7 @@
     </div>
   </div>
   <ng-content select="custom-mat-step"></ng-content>
-  <div class="button-panel">
+  <div class="button-panel" *ngIf="this.BUTTON_PANEL_HIDE==true">
     <p class="alert-danger"
       *ngIf="this.HEADER_DATA[this.BUTTON_COUNTER]?.errorMessage!='' && this.ERROR_MESSAGE_SHOW==true"
       [innerHTML]="this.HEADER_DATA[this.BUTTON_COUNTER]?.errorMessage"></p>

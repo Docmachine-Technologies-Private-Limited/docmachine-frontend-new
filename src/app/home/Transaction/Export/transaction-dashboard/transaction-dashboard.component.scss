@@ -247,6 +247,7 @@
 
 .Invoice ::ng-deep custom-mat-step .content-panel {
     width: 98%;
+    height: calc(100vh - 160px) !important;
 }
 
 .Invoice ::ng-deep custom-mat-stepper .custom-mat-horizontal-stepper-wrapper {
@@ -274,4 +275,12 @@
 .table-striped thead tr th {
     background-color: transparent !important;
     box-shadow: unset !important;
+}
+
+.displayShow {
+    display: block;
+}
+
+.displayHide {
+    display: none;
 }

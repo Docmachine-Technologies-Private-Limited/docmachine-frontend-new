@@ -16,7 +16,8 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   @Output('TabEvent') TabEvent: any = new EventEmitter();
   @Output('lastbuttonEvent') lastbuttonEvent: any = new EventEmitter();
   @Input('LAST_BUTTON_VISIBLE') LAST_BUTTON_VISIBLE: boolean =false;
-
+  @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean =true;
+  
   BUTTON_COUNTER: number = 0;
   BACK_BUTTON_DISABLED: boolean = false;
   NEXT_BUTTON_DISABLED: boolean = false;
@@ -41,7 +42,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
         }
         this.HEADER_DATA.push(element)
       });
-      this.TabEvent.emit( this.HEADER_DATA[this.BUTTON_COUNTER]);
+      this.TabEvent.emit(this.HEADER_DATA[this.BUTTON_COUNTER]);
     }
   }
   constructor() { }
