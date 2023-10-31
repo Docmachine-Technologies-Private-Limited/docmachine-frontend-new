@@ -60,6 +60,7 @@ export class UploadServiceValidatorService implements OnInit {
   CHECK_BOX_REMITTER_LIST: any = [];
   REMITTER_LIST: any = []
   PIPO_LIST: any = [];
+  PAYMENTS_TEMRS:any=[];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -231,6 +232,7 @@ export class UploadServiceValidatorService implements OnInit {
     await this.userService.getUserDetail().then((res: any) => {
       this.userData = res?.result;
       console.log(this.userData, 'asdasdasdasdasdasdasdasdasdasdasd')
+      this.PAYMENTS_TEMRS=[]
     });
   }
 
@@ -330,17 +332,46 @@ export class UploadServiceValidatorService implements OnInit {
         var temp: any = [];
         var tempFormGroup: any = [];
         var ORDER_KEYS: any = [];
+        var ORDER_KEYS2: any = [];
         fieldProps?.formArray?.forEach(async (element, index) => {
           let optiontemp: any = {};
           let OptiontempFormGroup: any = {};
           ORDER_KEYS[index] = [];
-          element?.forEach(optionelement => {
-            ORDER_KEYS[index].push(optionelement?.name?.toString());
-            optiontemp[optionelement?.name?.toString()] = ({ ...optionelement, fieldName: optionelement?.name });
-            OptiontempFormGroup[optionelement?.name?.toString()] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
-              this.setRequired(optionelement?.minLength,
-                optionelement?.maxLength, optionelement?.rules, formid, optionelement)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+          let optiontemp1: any = {};
+          let OptiontempFormGroup1: any = {};
+
+          element?.forEach(async (optionelement) => {
+            if (optionelement?.type == "BankAdd") {
+              var tempFormGroup1: any = [];
+              optionelement?.ChildformArray?.forEach(async (ChildformArrayelement, k) => {
+                ORDER_KEYS2[k]=[];
+                ChildformArrayelement?.forEach(ChildformArrayOptionElement => {
+                  ORDER_KEYS2[k].push(ChildformArrayOptionElement?.name?.toString());
+                  optiontemp1[ChildformArrayOptionElement?.name?.toString()] = ({ ...ChildformArrayOptionElement, fieldName: ChildformArrayOptionElement?.name });
+                  OptiontempFormGroup1[ChildformArrayOptionElement?.name?.toString()] = new FormControl({ value: ChildformArrayOptionElement?.value || "", disabled: ChildformArrayOptionElement?.disabled != undefined ? true : false },
+                    this.setRequired(ChildformArrayOptionElement?.minLength,
+                      ChildformArrayOptionElement?.maxLength, ChildformArrayOptionElement?.rules, formid, ChildformArrayOptionElement)[ChildformArrayOptionElement?.typeOf != undefined ? ChildformArrayOptionElement?.typeOf : ChildformArrayOptionElement?.type])
+                });
+                await tempFormGroup1.push(new FormGroup(OptiontempFormGroup1,null));
+              });
+            }
+            if (optionelement?.ChildformArrayBool==true) {
+              ORDER_KEYS[index].push(optionelement?.name?.toString());
+              optionelement['NewformArray'] = temp;
+              optionelement['ExtraValue'] = '';
+              optionelement['OrderKey'] = ORDER_KEYS2;
+              optionelement['fieldName_More'] = field + '_Extra';
+              optiontemp[optionelement?.name?.toString()] = ({ ...optionelement, fieldName: optionelement?.name });
+              OptiontempFormGroup[optionelement?.name?.toString()] = new FormArray(tempFormGroup1)
+            } else {
+              ORDER_KEYS[index].push(optionelement?.name?.toString());
+              optiontemp[optionelement?.name?.toString()] = ({ ...optionelement, fieldName: optionelement?.name });
+              OptiontempFormGroup[optionelement?.name?.toString()] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
+                this.setRequired(optionelement?.minLength,
+                  optionelement?.maxLength, optionelement?.rules, formid, optionelement)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+            }
           });
+
           await temp.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
         });
@@ -437,6 +468,7 @@ export class UploadServiceValidatorService implements OnInit {
         hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
 
       buyer: rule?.required == true ? [Validators.required] : [],
+      BankAdd: rule?.required == true ? [Validators.required] : [],
       RemitterCheckBox: rule?.required == true ? [Validators.required] : [],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
       BankCheckBox: rule?.required == true ? [Validators.required] : [],

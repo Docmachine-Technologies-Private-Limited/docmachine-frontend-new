@@ -97,7 +97,7 @@ export class CreateTeam1Component implements OnInit {
         teamName: {
           type: "text",
           value: this.LEI_DATA?.entity?.legalName?.name,
-          label: "Company name/ Team name",
+          label: "Company Name",
           rules: {
             required: true,
           }
@@ -108,7 +108,8 @@ export class CreateTeam1Component implements OnInit {
           label: "Company Address",
           rules: {
             required: true,
-          }
+          },
+          maxLength: 1000,
         },
         iec: {
           type: "text",
@@ -213,11 +214,11 @@ export class CreateTeam1Component implements OnInit {
                   required: true,
                 },
               },
-               {
+              {
                 type: "HSCODE",
                 value: "",
                 label: "Select HS Code",
-                name:"HSCODE",
+                name: "HSCODE",
                 rules: {
                   required: true,
                 }
@@ -270,6 +271,7 @@ export class CreateTeam1Component implements OnInit {
                 rules: {
                   required: true,
                 },
+                
               },
               {
                 type: "AccountType",
@@ -290,7 +292,8 @@ export class CreateTeam1Component implements OnInit {
                 },
               },
             ]
-          ]
+          ],
+         
         }
       }, 'SetupCompanyDetails');
     }, 200);

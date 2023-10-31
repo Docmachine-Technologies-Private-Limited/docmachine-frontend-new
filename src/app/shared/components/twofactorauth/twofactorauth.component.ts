@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../service/user.service';
 import { AuthGuard } from '../../../service/authguard.service';
+import { DocumentService } from '../../../service/document.service';
 
 @Component({
   selector: 'app-twofactorauth',
@@ -36,8 +37,11 @@ export class TwofactorauthComponent implements OnInit {
     Transaction: false,
   };
 
+  ADMIN_ACCESS: any = []
+
   constructor(private formBuilder: FormBuilder, private userService: UserService,
     public authGuard: AuthGuard,
+    public documentService: DocumentService,
     private router: Router, private toastr: ToastrService) {
     this.userService.loginData.subscribe((data) => {
       if (data['result']['dataURL']) {
@@ -48,6 +52,15 @@ export class TwofactorauthComponent implements OnInit {
       console.log(data, 'dsjfhsdfjdsfdfdsf');
       this.USER_LOGIN_DATA = data['result'];
       this.tfa = data['result']['otpDetails']
+      if (this.USER_LOGIN_DATA['role'] == 'member') {
+        this.documentService.filterAnyTable({
+          role: "manager",
+          companyId: this.USER_LOGIN_DATA?.companyId
+        }, 'users').subscribe((res: any) => {
+          this.ADMIN_ACCESS = res?.data[0];
+          console.log(res, this.ADMIN_ACCESS, "filterAnyTable")
+        })
+      }
     })
   }
 
@@ -62,12 +75,14 @@ export class TwofactorauthComponent implements OnInit {
     if (this.USER_LOGIN_DATA['role'] == 'member') {
       inputformdata['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
       inputformdata['Subscription'] = this.USER_LOGIN_DATA['Subscription'];
+      inputformdata['Teasury'] = this.ADMIN_ACCESS['Teasury'];
+      inputformdata['Transaction'] = this.ADMIN_ACCESS['Transaction'];
+      inputformdata['DMS'] = this.ADMIN_ACCESS['DMS'];
+      inputformdata['companyName'] = this.ADMIN_ACCESS['companyName'];
+      inputformdata['AdminRole'] = this.USER_LOGIN_DATA['role'];
     }
     this.findEmptyObject(inputformdata, [undefined, null, '', 'Select Subscription', 'Select Role']).then((condition: any) => {
       if (condition == true) {
-        for (const key in this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER) {
-          inputformdata[key] = this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER[key]
-        }
         console.log(condition, inputformdata, 'sfdfsdfdfdsfd')
         this.userService.SingUpVerify(inputformdata).subscribe(data => {
           if (data['status'] == 200) {
