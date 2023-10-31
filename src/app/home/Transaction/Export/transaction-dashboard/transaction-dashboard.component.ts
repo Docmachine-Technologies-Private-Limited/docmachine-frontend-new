@@ -11,7 +11,7 @@ import { MergePdfService } from '../../../../service/MergePdf/merge-pdf.service'
 import { MergePdfListService } from '../../../merge-pdf-list.service';
 
 @Component({
-  selector: 'app-transaction-dashboard',
+  selector: 'export-transaction-dashboard',
   templateUrl: './transaction-dashboard.component.html',
   styleUrls: ['./transaction-dashboard.component.scss']
 })

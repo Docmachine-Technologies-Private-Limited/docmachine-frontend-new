@@ -27,13 +27,6 @@
           <td class="col-td-th-2">
             <div class="column flex-display"
               *ngIf="this.USER_DETAILS?.RoleCheckbox==='Approver' || this.USER_DETAILS?.RoleCheckbox==''">
-              <!-- <button type="submit" class="btn btn-success" (click)="Approved({
-              id: item['_id'],
-              Tableid: item['id'],
-              tableName:item['tableName'],
-              status:'Approved',
-              deleteflag:'2'
-            },i)">Approve</button> -->
               <button type="submit" class="btn btn-danger" (click)="Reject({
               id: item['_id'],
               Tableid: item['id'],
@@ -47,13 +40,6 @@
             </div>
             <div class="column flex-display"
               *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker' && item['status']!='Verify'">
-              <!-- <button type="submit" class="btn btn-success" (click)="Approved({
-              id: item['_id'],
-              Tableid: item['id'],
-              tableName:item['tableName'],
-              status:'Verify',
-              deleteflag:'1'
-            },i)">Verify</button> -->
               <button type="submit" class="btn btn-danger" (click)="Reject({
               id: item['_id'],
               Tableid: item['id'],
@@ -78,76 +64,98 @@
   [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
   EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
   id="CreateNewBeneficiaryMember" [name]="this.BENE_DATA!=''?'Create New Beneficiary as Member':'Create New Buyer as Member'" #CreateBuyerBeneficiaryMember>
+  <custom-model-header *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker' || this.USER_DETAILS?.RoleCheckbox==='Approver'">
+    <button *ngIf="this.BENE_DATA!=''" type="button" class="btn btn-primary"
+    [disabled]="this.Q_TYPE!=''?false:true"
+    (click)="this.Approved({
+      id: this.BENE_DATA['_id'],
+      Tableid: this.BENE_DATA['id'],
+      tableName: this.BENE_DATA['tableName'],
+      status: this.Q_TYPE,
+      deleteflag: this.Q_TYPE=='Verify'?'1':'2'
+    }, this.SELECTED_INDEX);CreateBuyerBeneficiaryMember?.displayHidden">{{this.Q_TYPE}}</button>
+    
+    <button *ngIf="this.BUYER_DATA!=''" type="button" class="btn btn-primary"
+    [disabled]="this.Q_TYPE!=''?false:true"
+    (click)="this.Approved({
+      id: this.BUYER_DATA['_id'],
+      Tableid: this.BUYER_DATA['id'],
+      tableName: this.BUYER_DATA['tableName'],
+      status: this.Q_TYPE,
+      deleteflag: this.Q_TYPE=='Verify'?'1':'2'
+    }, this.SELECTED_INDEX);CreateBuyerBeneficiaryMember?.displayHidden">{{this.Q_TYPE}}</button>
+</custom-model-header>
+  
   <div class="col-12" *ngIf="this.BENE_DATA!=''">
     <div class="form-group mb-3">
       <label>Name</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.benneName" class="form-control" />
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.benneName" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Bank Name</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankName" class="form-control" />
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.beneBankName" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Account Number</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneAccNo" class="form-control" />
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.beneAccNo" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>IBAN</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.iban" class="form-control" />
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.iban" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Sort Code</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.sortCode" class="form-control" />
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.sortCode" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Bene Bank Name</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankName" class="form-control" />
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.beneBankName" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Bene Bank Adress</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankAdress"
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.beneBankAdress"
         class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Bene Bank Swift Code</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankSwiftCode"
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.beneBankSwiftCode"
         class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Inter Bank Name</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.interBankName" class="form-control" />
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.interBankName" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Inter Bank Swift Code</label>
-      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.interBankSwiftCode"
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.data?.interBankSwiftCode"
         class="form-control" />
     </div>
   </div>
   <div class="col-12" *ngIf="this.BUYER_DATA!=''">
     <div class="form-group mb-3">
       <label>Buyer Name</label>
-      <input [value]="this.BUYER_DATA?.buyerName" placeholder="Buyer’s name" disabled="true" class="form-control" />
+      <input [value]="this.BUYER_DATA?.data?.buyerName" placeholder="Buyer’s name" disabled="true" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Buyer Address</label>
-      <input [value]="this.BUYER_DATA?.buyerAdrs" placeholder="Buyer’s name" disabled="true" class="form-control" />
+      <input [value]="this.BUYER_DATA?.data?.buyerAdrs" placeholder="Buyer’s name" disabled="true" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Consignee Name</label>
-      <input [value]="this.BUYER_DATA?.ConsigneeName" placeholder="Buyer’s name" disabled="true" class="form-control" />
+      <input [value]="this.BUYER_DATA?.data?.ConsigneeName" placeholder="Buyer’s name" disabled="true" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Consignee Address</label>
-      <input [value]="this.BUYER_DATA?.ConsigneeAddress" placeholder="Buyer’s name" disabled="true"
+      <input [value]="this.BUYER_DATA?.data?.ConsigneeAddress" placeholder="Buyer’s name" disabled="true"
         class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Buyer Bank</label>
-      <input [value]="this.BUYER_DATA?.buyerbank" placeholder="Buyer’s name" disabled="true" class="form-control" />
+      <input [value]="this.BUYER_DATA?.data?.buyerbank" placeholder="Buyer’s name" disabled="true" class="form-control" />
     </div>
     <div class="form-group mb-3">
       <label>Buyer Bank Address</label>
-      <input [value]="this.BUYER_DATA?.buyerbankaddress" placeholder="Buyer’s name" disabled="true"
+      <input [value]="this.BUYER_DATA?.data?.buyerbankaddress" placeholder="Buyer’s name" disabled="true"
         class="form-control" />
     </div>
   </div>
