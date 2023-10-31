@@ -250,6 +250,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
 
   urlletterhead(url: any) {
     this.LETTER_HEAD_URL = url;
+    console.log(url,"sadsdasdasdsdas")
   }
 
   setSelectedBankDetails(bank: any) {

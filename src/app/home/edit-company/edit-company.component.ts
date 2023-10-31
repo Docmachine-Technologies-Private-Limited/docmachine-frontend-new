@@ -525,8 +525,10 @@ export class EditCompanyComponent implements OnInit {
       var reader = new FileReader();
       reader.onload = async (e: any) => {
         let data = e.target.result.substr(e.target.result.indexOf(',') + 1)
-        await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) => this.LETTER_HEADE_URL = res)
-        console.log('Got here: ', data, this.base64ToArrayBuffer(data), this.LETTER_HEADE_URL);
+        await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) =>{
+          this.LETTER_HEADE_URL = res;
+          console.log('Got here: ', this.LETTER_HEADE_URL);
+        })
       }
       reader.readAsDataURL(input.files[0]);
     }
@@ -545,25 +547,13 @@ export class EditCompanyComponent implements OnInit {
   convertBinaryDataToBase64Image = async (binaryData) => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker;
     try {
-      // Initialize PDF.js with the BinaryData
       const pdfDoc = await pdfjsLib.getDocument({ data: binaryData }).promise;
-
-      // Get the first page of the PDF
       const page: any = await pdfDoc.getPage(1);
-
-      // Get the dimensions and scale of the PDF page
-      const viewport = page.getViewport({ scale: 1 });
-
-      // Create a canvas and rendering context
+      const viewport = page.getViewport({ scale: .5 });
       const canvas = createCanvas(viewport.width, viewport.height)
       const context = canvas.getContext('2d');
-
-      // Render the PDF page as an image on the canvas
       await page.render({ canvasContext: context, viewport }).promise;
-
-      // Convert the canvas content to a data URL (base64)
       const imageDataURL = canvas.toDataURL('image/png'); // Change 'image/png' to the desired format if needed
-
       return imageDataURL;
     } catch (error) {
       // Handle any errors that occur during the conversion
