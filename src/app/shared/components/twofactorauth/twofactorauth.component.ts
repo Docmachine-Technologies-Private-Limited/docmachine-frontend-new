@@ -80,6 +80,10 @@ export class TwofactorauthComponent implements OnInit {
       inputformdata['DMS'] = this.ADMIN_ACCESS['DMS'];
       inputformdata['companyName'] = this.ADMIN_ACCESS['companyName'];
       inputformdata['AdminRole'] = this.USER_LOGIN_DATA['role'];
+    }else{
+      for (const key in this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER) {
+        inputformdata[key] = this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER[key]
+      }
     }
     this.findEmptyObject(inputformdata, [undefined, null, '', 'Select Subscription', 'Select Role']).then((condition: any) => {
       if (condition == true) {
