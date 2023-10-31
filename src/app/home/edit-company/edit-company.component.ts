@@ -13,6 +13,9 @@ import $ from 'jquery'
 import { DomSanitizer } from '@angular/platform-browser';
 import { takeWhile, timer } from 'rxjs';
 import { DocumentService } from '../../service/document.service';
+import * as pdfjsLib from 'pdfjs-dist';
+import * as PDFJSWorker from 'pdfjs-dist/build/pdf.worker';
+import { createCanvas, loadImage } from 'canvas';
 
 @Component({
   selector: 'app-edit-company',
@@ -340,8 +343,8 @@ export class EditCompanyComponent implements OnInit {
           if (this.FOR_SEAL_URL != undefined && this.FOR_SEAL_URL != '') {
             this.UPDATED_DETAILS['forSeal'] = this.FOR_SEAL_URL;
           }
-          if (this.LETTER_HEAD_URL != undefined && this.LETTER_HEAD_URL != '') {
-            this.UPDATED_DETAILS['letterHead'] = this.LETTER_HEAD_URL;
+          if (this.LETTER_HEADE_URL != undefined && this.LETTER_HEADE_URL != '') {
+            this.UPDATED_DETAILS['letterHead'] = this.LETTER_HEADE_URL;
           }
           if (this.publicUrl?.changingThisBreaksApplicationSecurity != undefined && this.publicUrl?.changingThisBreaksApplicationSecurity != '') {
             this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;
@@ -478,6 +481,7 @@ export class EditCompanyComponent implements OnInit {
   letterheadUpload(f: any) {
     this.fileinput = f;
   }
+
   uploadletterhead(id) {
     var input = this.fileinput.target;
     var reader = new FileReader();
@@ -514,4 +518,56 @@ export class EditCompanyComponent implements OnInit {
     this.UPDATED_DETAILS.bankDetails[i]['BankUniqueId'] = e?.BankUniqueId
     console.log(this.bankName, e, 'this.loginForm.value.bankDetails.')
   }
+  LETTER_HEADE_URL: any = ''
+  onFileSelect(input) {
+    console.log(input.files);
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = async (e: any) => {
+        let data = e.target.result.substr(e.target.result.indexOf(',') + 1)
+        await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) => this.LETTER_HEADE_URL = res)
+        console.log('Got here: ', data, this.base64ToArrayBuffer(data), this.LETTER_HEADE_URL);
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  base64ToArrayBuffer(base64) {
+    var binaryString = atob(base64);
+    var bytes = new Uint8Array(binaryString.length);
+    for (var i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+  }
+
+  // Function to convert BinaryData to an image and return the base64 representation
+  convertBinaryDataToBase64Image = async (binaryData) => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker;
+    try {
+      // Initialize PDF.js with the BinaryData
+      const pdfDoc = await pdfjsLib.getDocument({ data: binaryData }).promise;
+
+      // Get the first page of the PDF
+      const page: any = await pdfDoc.getPage(1);
+
+      // Get the dimensions and scale of the PDF page
+      const viewport = page.getViewport({ scale: 1 });
+
+      // Create a canvas and rendering context
+      const canvas = createCanvas(viewport.width, viewport.height)
+      const context = canvas.getContext('2d');
+
+      // Render the PDF page as an image on the canvas
+      await page.render({ canvasContext: context, viewport }).promise;
+
+      // Convert the canvas content to a data URL (base64)
+      const imageDataURL = canvas.toDataURL('image/png'); // Change 'image/png' to the desired format if needed
+
+      return imageDataURL;
+    } catch (error) {
+      // Handle any errors that occur during the conversion
+      throw new Error(`Error converting PDF to image: ${error}`);
+    }
+  };
 }

@@ -330,6 +330,7 @@ export class UploadServiceValidatorService implements OnInit {
         fields.push({ ...fieldProps, fieldName: field });
       } else if (fieldProps?.type == "formGroup" && fieldProps?.formArray != undefined) {
         var temp: any = [];
+        var temp1: any = [];
         var tempFormGroup: any = [];
         var ORDER_KEYS: any = [];
         var ORDER_KEYS2: any = [];
@@ -352,12 +353,13 @@ export class UploadServiceValidatorService implements OnInit {
                     this.setRequired(ChildformArrayOptionElement?.minLength,
                       ChildformArrayOptionElement?.maxLength, ChildformArrayOptionElement?.rules, formid, ChildformArrayOptionElement)[ChildformArrayOptionElement?.typeOf != undefined ? ChildformArrayOptionElement?.typeOf : ChildformArrayOptionElement?.type])
                 });
+                await temp1.push(optiontemp1);
                 await tempFormGroup1.push(new FormGroup(OptiontempFormGroup1,null));
               });
             }
             if (optionelement?.ChildformArrayBool==true) {
               ORDER_KEYS[index].push(optionelement?.name?.toString());
-              optionelement['NewformArray'] = temp;
+              optionelement['NewformArray'] = temp1;
               optionelement['ExtraValue'] = '';
               optionelement['OrderKey'] = ORDER_KEYS2;
               optionelement['fieldName_More'] = field + '_Extra';
@@ -411,6 +413,22 @@ export class UploadServiceValidatorService implements OnInit {
     console.log(myForm, value, "myForm")
     if (callback != undefined && callback != null) {
       callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
+    }
+  }
+  
+  setValueFromChildArray(id: any, form: any, ParentfieldName: any,FormArrayfieldName:any, OptionfieldIndex: any,
+  ChildOptionfieldName:any,ChildOptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined, field: any = undefined) {
+    const myForm: any = form?.controls[ParentfieldName] as FormGroup;
+    let currentVal = value;
+    myForm.value[OptionfieldIndex][FormOptionfieldName][ChildOptionfieldIndex][ChildOptionfieldName] = currentVal;
+    myForm?.controls[OptionfieldIndex]?.controls[FormOptionfieldName]?.setValue(currentVal);
+    myForm['touched'] = true;
+    myForm['status'] = 'VALID';
+    this.dynamicFormGroup[id].get(FormArrayfieldName).clearValidators();
+    this.dynamicFormGroup[id].get(FormArrayfieldName).updateValueAndValidity();
+    console.log(myForm, value, "setValueFromChildArray")
+    if (callback != undefined && callback != null) {
+      callback({ id: id, form: form, fieldName: FormArrayfieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
     }
   }
 

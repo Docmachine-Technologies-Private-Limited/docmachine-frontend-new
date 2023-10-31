@@ -673,9 +673,9 @@
                                             [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
                                     </div>
                                     <!-- <div class="form-group mb-3" *ngSwitchCase="'BankAdd'">
-                                        <div class="form-group mb-3">
-                                            <label *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{FormOptionfield?.GroupLabel[OptionfieldIndex].label}} <span style="color: red;"
-                                                    *ngIf="FormOptionfield?.GroupLabel[FormOptionfieldIndex]?.rules?.required==true">*</span></label>
+                                        <div class="form-group mb-3" [formArrayName]="Optionfield[FormOptionfield]?.fieldName">
+                                            <label *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}} <span style="color: red;"
+                                                    *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
                                             <div class="col-12 p-0">
                                                 <div class="col-12 division-panel"
                                                     *ngFor="let ChildOptionfield of Optionfield[FormOptionfield]?.NewformArray;let ChildOptionfieldIndex=index">
@@ -689,7 +689,7 @@
                                                                 class="fa fa-minus"></i></button>
                                                     </div>
                                                     <div class="col-12 p-0"
-                                                        *ngFor="let ChildFormOptionfield of ChildOptionfield?.OrderKey[ChildOptionfieldIndex];let ChildFormOptionfieldIndex=index"
+                                                        *ngFor="let ChildFormOptionfield of Optionfield[FormOptionfield]?.OrderKey[ChildOptionfieldIndex];let ChildFormOptionfieldIndex=index"
                                                         [formGroupName]="ChildFormOptionfieldIndex">
                                                         <ng-container [ngSwitch]="ChildOptionfield[ChildFormOptionfield]?.type">
                                                             <div class="form-group mb-3" *ngSwitchCase="'text'">
@@ -697,12 +697,14 @@
                                                                     [required]="ChildOptionfield[ChildFormOptionfield]?.rules?.required"
                                                                     [name]="ChildOptionfield[ChildFormOptionfield]?.name"
                                                                     [disabled]="ChildOptionfield[ChildFormOptionfield]?.disabled"
-                                                                    (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,ChildFormOptionfieldIndex,Optionfield[ChildFormOptionfield]?.fieldName,$event)"
+                                                                    (event)="this.validator.setValueFromChildArray(this.id,this.validator.dynamicFormGroup[this.id],
+                                                                    field.fieldName,
+                                                                    Optionfield[FormOptionfield]?.fieldName,ChildFormOptionfieldIndex,OptionfieldIndex,ChildOptionfield[ChildFormOptionfield]?.fieldName,$event)"
                                                                     [(ngModel)]="ChildOptionfield[ChildFormOptionfield].value"></ng-input>
                                                             </div>
                                                             <div class="form-group mb-3" *ngSwitchCase="'currency'">
                                                                 <label
-                                                                    *ngIf="ChildOptionfield[ChildFormOptionfield]?.label!=undefined && ChildOptionfield[ChildFormOptionfield]?.label!=''">{{Optionfield[ChildFormOptionfield]?.label}}
+                                                                    *ngIf="ChildOptionfield[ChildFormOptionfield]?.label!=undefined && ChildOptionfield[ChildFormOptionfield]?.label!=''">{{ChildOptionfield[ChildFormOptionfield]?.label}}
                                                                     <span style="color: red;"
                                                                         *ngIf="ChildOptionfield[ChildFormOptionfield]?.rules?.required==true">*</span></label>
                                                                 <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0"
@@ -710,10 +712,12 @@
                                                                     [placeholder]="ChildOptionfield[ChildFormOptionfield]?.placeholderText!=undefined?ChildOptionfield[ChildFormOptionfield]?.placeholderText:''"
                                                                     [name]="ChildOptionfield[ChildFormOptionfield]?.name"
                                                                     [(ngModel)]="ChildOptionfield[ChildFormOptionfield].value"
-                                                                    (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,ChildFormOptionfieldIndex,ChildOptionfield[ChildFormOptionfield]?.fieldName,$event)">
+                                                                    (change)="this.validator.setValueFromChildArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,ChildFormOptionfieldIndex,ChildOptionfield[ChildFormOptionfield]?.fieldName,$event)">
                                                                 </ng-select>
                                                             </div>
-                                                           
+                                                            <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
+                                                            [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex]?.controls[ChildOptionfield[ChildFormOptionfield].fieldName]?.controls[ChildFormOptionfieldIndex]"
+                                                            [fieldName]="ChildOptionfield[ChildFormOptionfield]?.fieldName"></inner-dynamic-error>
                                                         </ng-container>
                                                         <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
                                                             [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex]"
@@ -722,7 +726,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div>  -->
                                     <div class="form-group mb-3" *ngSwitchCase="'number'">
                                         <div class="form-group mb-3"
                                             *ngIf="Optionfield[FormOptionfield]?.visible==true || Optionfield[FormOptionfield]?.visible==undefined">
