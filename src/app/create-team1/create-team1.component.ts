@@ -113,7 +113,7 @@ export class CreateTeam1Component implements OnInit {
         iec: {
           type: "text",
           value: "",
-          label: "*Importer Exporter code (IEC)",
+          label: "Importer Exporter code (IEC)",
           rules: {
             required: true,
           }
@@ -129,38 +129,14 @@ export class CreateTeam1Component implements OnInit {
         gst: {
           type: "text",
           value: "",
-          label: "*GSTIN",
+          label: "GSTIN",
           rules: {
             required: true,
           }
         },
         AdCode: {
-          type: "text",
-          value: "",
-          label: "AD Code",
-          rules: {
-            required: true,
-          }
-        },
-        caEmail: {
-          type: "text",
-          value: "",
-          label: "CA email id",
-          rules: {
-            required: true,
-          }
-        },
-        chaEmail: {
-          type: "text",
-          value: "",
-          label: "CHA email id",
-          rules: {
-            required: true,
-          }
-        },
-        Location: {
           type: "formGroup",
-          label: "Location List",
+          label: "AD Code",
           GroupLabel: [''],
           AddNewRequried: true,
           rules: {
@@ -171,10 +147,48 @@ export class CreateTeam1Component implements OnInit {
               {
                 type: "text",
                 value: "",
-                label: "Location",
-                name: 'loc',
+                label: "AD Code",
+                name: 'AdCode',
                 rules: {
                   required: true,
+                },
+              },
+            ]
+          ]
+        },
+        caEmail: {
+          type: "text",
+          value: "",
+          label: "CA email id",
+          rules: {
+            required: false,
+          }
+        },
+        chaEmail: {
+          type: "text",
+          value: "",
+          label: "CHA email id",
+          rules: {
+            required: false,
+          }
+        },
+        Location: {
+          type: "formGroup",
+          label: "Branch List",
+          GroupLabel: [''],
+          AddNewRequried: true,
+          rules: {
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "text",
+                value: "",
+                label: "Add Location",
+                name: 'loc',
+                rules: {
+                  required: false,
                 },
               },
             ]
@@ -193,11 +207,20 @@ export class CreateTeam1Component implements OnInit {
               {
                 type: "text",
                 value: "",
-                label: "Commodity",
+                label: "Add Commodity",
                 name: 'como',
                 rules: {
                   required: true,
                 },
+              },
+               {
+                type: "HSCODE",
+                value: "",
+                label: "Select HS Code",
+                name:"HSCODE",
+                rules: {
+                  required: true,
+                }
               },
             ]
           ]
@@ -215,7 +238,7 @@ export class CreateTeam1Component implements OnInit {
               {
                 type: "BankList",
                 value: "",
-                label: "*Bank Name",
+                label: "Bank Name",
                 name: 'bank',
                 rules: {
                   required: true,

@@ -368,17 +368,18 @@ export class UploadServiceValidatorService implements OnInit {
     this.FIELDS_DATA[id]?.[key]?.setValue(value);
   }
 
-  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined,field:any=undefined) {
+  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined, field: any = undefined) {
     const myForm: any = form?.controls[fieldName] as FormGroup;
     let currentVal = value;
     myForm.value[OptionfieldIndex][FormOptionfieldName] = currentVal;
+    myForm?.controls[OptionfieldIndex]?.controls[FormOptionfieldName]?.setValue(currentVal);
     myForm['touched'] = true;
     myForm['status'] = 'VALID';
-    this.dynamicFormGroup[id].get(fieldName).clearValidators(); // 6. Clear All Validators
+    this.dynamicFormGroup[id].get(fieldName).clearValidators();
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
-    console.log(myForm, "myForm")
+    console.log(myForm, value, "myForm")
     if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id] ,field:field});
+      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
     }
   }
 

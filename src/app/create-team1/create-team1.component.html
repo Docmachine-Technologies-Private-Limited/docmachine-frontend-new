@@ -1,10 +1,10 @@
 <div class="controller-setup-form">
     <h6 class="display-5">Setup Company Details</h6>
     <div *ngIf="Visible==true">
-        <p class="side1">Give us some of your information about your company</p>
+        <p class="side1">Please tell us something about of yourselves</p>
         <upload-components FormStyle="
          display: grid;
-         grid-template-columns: repeat(2,1fr);" SubmitName="Get Started" SubmitButtonStyle="position: absolute;
+         grid-template-columns: repeat(3,1fr);" SubmitName="Get Started" SubmitButtonStyle="position: absolute;
          bottom: 10px;
          right: 10px;" id="SetupCompanyDetails" (SubmitEvent)="onSubmit($event)"></upload-components>
     </div>
