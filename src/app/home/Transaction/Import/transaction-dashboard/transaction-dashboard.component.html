@@ -15,7 +15,6 @@
             <th scope="col" class="col-td-th-1">ORM Date</th>
             <th scope="col" class="col-td-th-2">ORM Ref No.</th>
             <th scope="col" class="col-td-th-1">BOE No</th>
-            <th scope="col" class="col-td-th-2">Lodgement Ref no.</th>
             <th scope="col" class="col-td-th-1">Status</th>
             <th scope="col" class="col-td-th-1">Action</th>
           </tr>
@@ -23,18 +22,21 @@
         <tbody>
           <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
             <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getShippingBillCuurency(item?.SBRef)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency(item?.data?.formdata?.paymentTerm)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getFIRX_DETAILS(item?.SBRef)?.FIRX_DATE}}</td>
-            <td scope="col" class="col-td-th-2">{{this.getFIRX_DETAILS(item?.SBRef)?.FIRX_NO}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getFIRX_DETAILS(item?.SBRef)?.FIRX_AMOUNT}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.blcopyrefNumber}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getORM_Details(item?.pipo)?.ORM_DATE}}</td>
+            <td scope="col" class="col-td-th-2">{{this.getORM_Details(item?.pipo)?.ORM_NO}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getBOE_DETAILS(item?.pipo)?.BOE_NO}}</td>
             <td scope="col" class="col-td-th-1">
-              {{item?.Ref_Data?.blCopyRef?.blcopyrefNumber==undefined?'Pending':'Completed'}}</td>
-            <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
-                [disabled]="item?.Ref_Data?.blCopyRef?.blcopyrefNumber!=undefined?true:false"
-                (click)="this.router.navigate(['home/upload-documents/Export/Bill-Lodgement-Referance-AdviceCopy',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
-                AdviceCopy</button></td>
+              {{getStatus(item?.pipo)?.ORM==false && getStatus(item?.pipo)?.BOE==false?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-1">
+            <button class="btn btn-primary"
+                [disabled]="getStatus(item?.pipo)?.ORM"
+                (click)="this.router.navigate(['home/upload-documents/Import/OutwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload ORM</button>
+                <button class="btn btn-primary"
+                [disabled]="getStatus(item?.pipo)?.BOE"
+                (click)="this.router.navigate(['home/upload-documents/Import/Boe',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload BOE</button>
+                </td>
         </tbody>
       </table>
     </custom-mat-step>

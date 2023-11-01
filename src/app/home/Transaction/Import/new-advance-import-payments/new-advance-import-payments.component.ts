@@ -679,13 +679,13 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       var pipo_name: any = [];
       for (let index = 0; index < this.ExportBillLodgement_Form?.paymentTerm?.length; index++) {
         const element = this.ExportBillLodgement_Form?.paymentTerm[index];
-        pipo_id.push(element?.PIPO_LIST?.pipo_id)
+        pipo_id.push(element?.PIPO_LIST?._id)
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
 
       var approval_data: any = {
         id: UniqueId + '_' + this.randomId(10),
-        tableName: 'Advance-Remittance-flow',
+        tableName: 'Advance-Outward-Remittance',
         deleteflag: '-1',
         userdetails: this.validator.userData,
         status: 'pending',
@@ -698,8 +698,6 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         console.log(approval_data, res, 'approval_data')
         if (res?.id != approval_data?.id || res == undefined) {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.validator.userData['RoleCheckbox'], approval_data, () => {
-            var pipo_id: any = [];
-            var pipo_name: any = [];
             var data: any = {
               data: {
                 formdata: this.ExportBillLodgement_Form,
@@ -708,8 +706,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
                 ALL_DATA_HSCODE_FORWARD: this.ALL_DATA_HSCODE_FORWARD
               },
-              TypeTransaction: 'Advance-Remittance-flow',
-              fileType: 'Import',
+              TypeTransaction: 'Advance-Outward-Remittance',
+              fileType: this.validator.userData?.sideMenu,
               UserDetails: approval_data?.id,
               pipo: pipo_id,
             }

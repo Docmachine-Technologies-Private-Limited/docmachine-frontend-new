@@ -12,7 +12,7 @@
                     <div class="form-group mb-3" *ngSwitchCase="'text'">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
+                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -29,7 +29,7 @@
                     <div class="form-group mb-3" *ngSwitchCase="'TextValiadtion'">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
+                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -37,10 +37,22 @@
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
+                    <div class="form-group mb-3" *ngSwitchCase="'SelectOption'">
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
+                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
+                        <select class="form-select" [name]="field?.fieldName" [(ngModel)]="field.value"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            aria-label="Default select example" [disabled]="field?.Inputdisabled">
+                            <option [value]="item" *ngFor="let item of field?.items;let i=index">
+                                {{item}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
                     <div class="form-group mb-3" *ngSwitchCase="'TextGreaterValiadtion'">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
+                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -58,7 +70,7 @@
                     <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
+                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -225,7 +237,7 @@
                     <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <textarea [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
+                        <textarea [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -322,7 +334,7 @@
                 <div class="form-group mb-3" *ngSwitchCase="'date'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
-                    <input [(ngModel)]="field.value" [disbaled]="field?.Inputdisabled"
+                    <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" [type]="field.type"
                         [name]="field.fieldName" class="form-control" [style]="field?.style" />
                 </div>
@@ -345,7 +357,7 @@
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <ng-select [items]="[{value:'Buy'},{value:'Sell'}]" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [disbaled]="field?.Inputdisabled" (change)="this.setValue($event?.value,field?.InputBindValue)"
+                        [disabled]="field?.Inputdisabled" (change)="this.setValue($event?.value,field?.InputBindValue)"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
@@ -354,7 +366,7 @@
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <ng-select
                         [items]="[{value:'Booking'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
-                        bindLabel="value" [multiple]="false" [disbaled]="field?.Inputdisabled"
+                        bindLabel="value" [multiple]="false" [disabled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
@@ -365,7 +377,7 @@
                     <ng-select [id]="field?.id"
                         *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
-                        [disbaled]="field?.Inputdisabled"
+                        [disabled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value" #CommericalNo>
                     </ng-select>
@@ -1288,7 +1300,7 @@
                 [formName]="this.validator.dynamicFormGroup[this.id]"
                 [fieldName]="field.fieldName"></inner-dynamic-error>
         </div>
-        <div [ngClass]="{'more-button-panel':BUTTON_PANEL_SHOW==true}" *ngIf="BUTTON_PANEL_HIDE==true">
+        <div [ngClass]="{'more-button-panel':BUTTON_PANEL_SHOW==true}" [style]="this.BUTTON_PANEL_HIDE==true?'display:block;':'display:none'">
             <ng-content></ng-content>
             <button *ngIf="BUTTON_PANEL_SHOW==true" type="button" class="btn btn-primary submit-button" [id]="this.id"
                 [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block;':'display:none'" [style]="SubmitButtonStyle"

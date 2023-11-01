@@ -42,7 +42,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
     PIPO_AMOUNT: 0,
     REMAINING_AMOUNT: 0
   }
-
+  UPLOAD_STATUS:boolean=false;
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -54,12 +54,13 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
     if (temp_pipo?.length != 0) {
       this.btndisabled = false;
+      await this.documentService.getPipoListNo('import', temp_pipo);
+      this.UPLOAD_STATUS=this.route.snapshot.paramMap.get('upload')=='true'?true:false  
     }
-    await this.documentService.getPipoListNo('import', temp_pipo);
+    console.log(temp_pipo,this.UPLOAD_STATUS, "temp_pipo")
   }
 
   response(args: any) {
@@ -145,12 +146,8 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
     console.log(e, 'value')
     var temp: any = [];
     if (parseFloat(this.CI_INFO_SUM['REMAINING_AMOUNT']) >= parseFloat(e.value?.amount)) {
-      for (let index = 0; index < this.documentService?.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION.length; index++) {
-        const element = this.documentService?.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[index];
-        temp.push(element?._id)
-      }
       e.value.file = 'import';
-      e.value.pipo = temp.length != 0 ? temp : this.pipoArr;
+      e.value.pipo = this.pipoArr;
       e.value.doc = this.pipourl1;
       e.value.beneficiaryName = this.BUYER_LIST;
       e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
@@ -178,7 +175,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
             this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
               this.toastr.success('Remittance Advice Successfully added...');
               this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
-              var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
+              var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
               if (Transaction_id != '') {
                 this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.value } }).subscribe((res: any) => {
                   this.toastr.success('Remittance Advice Successfully added...');

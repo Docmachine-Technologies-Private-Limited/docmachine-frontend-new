@@ -111,10 +111,9 @@ button {
 }
 
 .button-wrapper {
-    display: inline-block;
-    width: 200px;
-    margin-bottom: 19px;
-    margin-top: 19px;
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
     text-align: center;
 }
 

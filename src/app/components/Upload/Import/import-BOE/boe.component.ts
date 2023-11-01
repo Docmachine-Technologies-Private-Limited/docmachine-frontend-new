@@ -5,7 +5,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { BoeBill } from '../../../../../model/boe.model';
 import { FormGroup } from '@angular/forms';
@@ -38,6 +38,7 @@ export class BOEComponent implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
+  UPLOAD_STATUS: boolean = false;
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -45,10 +46,18 @@ export class BOEComponent implements OnInit {
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
+    public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
+    var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
+    if (temp_pipo?.length != 0) {
+      this.btndisabled = false;
+      await this.documentService.getPipoListNo('import', temp_pipo);
+      this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
+    }
+    console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
   }
 
   response(args: any) {
@@ -255,7 +264,14 @@ export class BOEComponent implements OnInit {
             this.userService.updateManyPipo(this.pipoArr, 'import', '', updatedData1).subscribe((data_res) => {
               console.log('updateManyPipo', data_res);
               this.toastr.success('Boe added successfully.');
-              this.router.navigate(['home/Summary/Import/boe']);
+              var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
+              if (Transaction_id != '') {
+                this.documentService.UpdateTransaction({ id: Transaction_id, data: { BOE: newform } }).subscribe((res: any) => {
+                  this.router.navigate(['home/Summary/Import/boe']);
+                });
+              } else {
+                this.router.navigate(['home/Summary/Import/boe']);
+              }
             }, (error) => {
               console.log('error');
             });

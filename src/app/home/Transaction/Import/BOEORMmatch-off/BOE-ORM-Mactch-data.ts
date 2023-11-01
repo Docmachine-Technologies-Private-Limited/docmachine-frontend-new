@@ -451,7 +451,7 @@ export class BOEORMMactchData {
                     tableName: 'iradvices',
                     id: element._id,
                     query: {
-                        sbno: [data?.sbno],
+                        BOE_Ref: [data?._id],
                         BalanceAvail: amount,
                         CommissionUsed: true,
                         MatchOffData: element,

@@ -90,38 +90,56 @@ export class TransactionDashboardComponent implements OnInit {
     return temp.join(',')
   }
 
-  getShippingBillCuurency(pipo: any) {
+  getPIPOCurrency(pipo: any) {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {
-      temp.push(element?.fobCurrency);
+      temp.push(element?.PIPO_LIST?.currency);
     });
     return temp.join(',')
   }
 
-  getShippingBill_Details(pipo: any) {
+  getORM_Details(pipo: any) {
     let temp1: any = [];
     let temp2: any = [];
     let temp3: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {
-      temp1.push(element?.sbdate);
-      temp2.push(element?.sbno);
-      temp3.push(element?.fobValue);
-    });
-    return { SB_DATE: temp1.join(','), SB_NO: temp2.join(','), SB_AMOUNT: temp3.join(',') }
-  }
-
-  getFIRX_DETAILS(pipo: any) {
-    let temp1: any = [];
-    let temp2: any = [];
-    let temp3: any = [];
-    (pipo != 'NF' ? pipo : []).forEach(element => {
-      element?.firxdetails?.forEach(Firxelement => {
-        temp1.push(Firxelement?.firxDate);
-        temp2.push(Firxelement?.firxNumber);
-        temp3.push(Firxelement?.FirxUsed_Balance);
+      element?.AdviceRef?.forEach(ORMelement => {
+        temp1.push(ORMelement?.date);
+        temp2.push(ORMelement?.billNo);
+        temp3.push(ORMelement?.amount);
       });
     });
-    return { FIRX_DATE: temp1.join(','), FIRX_NO: temp2.join(','), FIRX_AMOUNT: temp3.join(',') }
+    return { ORM_DATE: temp1.join(','), ORM_NO: temp2.join(','), ORM_AMOUNT: temp3.join(',') }
+  }
+
+  getBOE_DETAILS(pipo: any) {
+    let temp1: any = [];
+    let temp2: any = [];
+    let temp3: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      element?.boeRef?.forEach(BOEelement => {
+        temp1.push(BOEelement?.boeDate);
+        temp2.push(BOEelement?.boeNumber);
+        temp3.push(BOEelement?.invoiceAmount);
+      })
+    });
+    return { BOE_DATE: temp1.join(','), BOE_NO: temp2.join(','), BOE_AMOUNT: temp3.join(',') }
+  }
+
+  getStatus(pipo: any) {
+    let STATUS: any = {
+      ORM: false,
+      BOE: false
+    }
+    if (pipo?.length != 0) {
+      if (pipo[0]?.AdviceRef?.length != 0) {
+        STATUS['ORM'] = true;
+      }
+      if (pipo[0]?.boeRef?.length != 0) {
+        STATUS['BOE'] = true;
+      }
+    }
+    return STATUS;
   }
 
   getPipoAmountSum(pipo: any) {

@@ -74,7 +74,7 @@ export class TwofactorauthComponent implements OnInit {
     }
     if (this.USER_LOGIN_DATA['role'] == 'member') {
       inputformdata['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
-      inputformdata['Subscription'] = this.USER_LOGIN_DATA['Subscription'];
+      inputformdata['Subscription'] = this.ADMIN_ACCESS['Subscription'];
       inputformdata['Teasury'] = this.ADMIN_ACCESS['Teasury'];
       inputformdata['Transaction'] = this.ADMIN_ACCESS['Transaction'];
       inputformdata['DMS'] = this.ADMIN_ACCESS['DMS'];
