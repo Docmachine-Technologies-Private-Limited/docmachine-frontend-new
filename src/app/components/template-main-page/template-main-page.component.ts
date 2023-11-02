@@ -9,6 +9,7 @@ import { AppConfig } from '../../../environments/environment';
 export class TemplateMainPageComponent implements OnInit {
   @Input('text') TEXT:any='';
   @Input('visible') visible:boolean=true;
+  @Input('NAME_OF_API_TYPE') NAME_OF_API_TYPE:boolean=true;
   API_URL: any = AppConfig?.environment;
   
   constructor() { }

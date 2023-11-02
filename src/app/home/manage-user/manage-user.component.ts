@@ -249,7 +249,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     if (this.userData?.result['Role_Type'] == '1') {
       RoleType = []
     } else if (this.userData?.result['Role_Type'] == '2') {
-      RoleType = ['Maker', 'Checker']
+      RoleType = ['Maker', 'Approver']
     } else if (this.userData?.result['Role_Type'] == '3') {
       RoleType = ['Maker', 'Checker', 'Approver']
     }
@@ -304,7 +304,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
           label: "Role",
           items: RoleType,
           rules: {
-            required: true,
+            required: this.userData?.result['Role_Type'] == '1' ? false : true,
           }
         },
       }, 'ADD_NEW_MEMBER').then((res) => this.SUBMITTED_BUTTON_SHOW = true);
@@ -345,15 +345,16 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
 
 
   editresponse(EDIT_NEW_MEMBER_POPUP_PANEL, data: any) {
-    console.log(data, "EDIT_NEW_MEMBER_POPUP_PANEL");
-    this.SELECTED_EDIT_DATA=this.item1[data?.index]
+    this.SELECTED_EDIT_DATA = this.item1[data?.index]
     let SubscriptionType: any = [];
     let RoleType: any = [];
+    this.img = this.SELECTED_EDIT_DATA?.imageUrl
+    console.log(data, this.SELECTED_EDIT_DATA, "EDIT_NEW_MEMBER_POPUP_PANEL");
 
     if (this.userData?.result['Role_Type'] == '1') {
       RoleType = []
     } else if (this.userData?.result['Role_Type'] == '2') {
-      RoleType = ['Maker', 'Checker']
+      RoleType = ['Maker', 'Approver']
     } else if (this.userData?.result['Role_Type'] == '3') {
       RoleType = ['Maker', 'Checker', 'Approver']
     }
@@ -409,7 +410,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
           label: "Role",
           items: RoleType,
           rules: {
-            required: true,
+            required: this.userData?.result['Role_Type'] == '1' ? false : true,
           }
         },
       }, 'EDIT_NEW_MEMBER').then((res) => {
