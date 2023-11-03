@@ -71,8 +71,8 @@
       id: this.BENE_DATA['_id'],
       Tableid: this.BENE_DATA['id'],
       tableName: this.BENE_DATA['tableName'],
-      status: this.Q_TYPE,
-      deleteflag: this.Q_TYPE=='Verify'?'1':'2'
+      status: this.USER_DETAILS?.RoleCheckbox==='Approver'?'Approver':'Verify',
+      deleteflag: this.USER_DETAILS?.RoleCheckbox==='Approver'?'2': '1'
     }, this.SELECTED_INDEX);CreateBuyerBeneficiaryMember?.displayHidden">{{this.Q_TYPE}}</button>
     
     <button *ngIf="this.BUYER_DATA!=''" type="button" class="btn btn-primary"
@@ -81,8 +81,8 @@
       id: this.BUYER_DATA['_id'],
       Tableid: this.BUYER_DATA['id'],
       tableName: this.BUYER_DATA['tableName'],
-      status: this.Q_TYPE,
-      deleteflag: this.Q_TYPE=='Verify'?'1':'2'
+      status: this.USER_DETAILS?.RoleCheckbox==='Approver'?'Approver':'Verify',
+      deleteflag: this.USER_DETAILS?.RoleCheckbox==='Approver'?'2': '1'
     }, this.SELECTED_INDEX);CreateBuyerBeneficiaryMember?.displayHidden">{{this.Q_TYPE}}</button>
 </custom-model-header>
   
