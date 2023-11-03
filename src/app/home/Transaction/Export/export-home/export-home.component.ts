@@ -981,7 +981,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
       getAllFields[20].setText(updatedata?.currency)
       getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
-      getAllFields[22].setText(updatedata?.Inward_amount_for_disposal)
+      getAllFields[22].setText(updatedata?.Inward_amount_for_disposal?.toString())
       getAllFields[23].setText(a['buyerName'])
       getAllFields[24].setText(this.buyerAds)
       getAllFields[25].setText('ADVANCE AGAINST EXPORT')
