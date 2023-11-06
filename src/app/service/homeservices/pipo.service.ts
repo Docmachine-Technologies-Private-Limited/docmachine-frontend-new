@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PipoDisplayListViewItem, PipoDisplayListView, PipoModel } from "../../../model/pipo.model";
 import { DocumentService } from '../../service/document.service';
+import { data } from "jquery";
 
 @Injectable({ providedIn: "root" })
 export class PipoDataService {

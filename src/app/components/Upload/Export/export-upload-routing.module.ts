@@ -20,8 +20,6 @@ import { ExportBilllodgementreferencenumberadvicecopyComponent } from './export-
 import { ExportRealisationCertificateComponent } from './export-realisation-certificate/export-realisation-certificate.component';
 import { ExportSwiftCopyDocumentComponent } from './export-swift-copy-document/export-swift-copy-document.component';
 import { InwardUploadDocumentsComponent } from './Inward-Remittance-Disposal/inward-upload-doc.component';
-import { ExportCertificateOfOriginComponent } from './export-certificate-of-origin/export-certificate-of-origin.component';
-import { FormatBillOfExchangesComponent } from './bill-of-exchanges-create/bill-of-exchanges-create.component';
 
 const routes: Routes = [
   // Export Upload
@@ -42,13 +40,9 @@ const routes: Routes = [
   { path: "DebitNoteDocument", component: DebitNotesComponent, canActivate: [MemberGuard] },
   { path: "PIPO", component: PIPOSComponent, canActivate: [MemberGuard] },
   { path: "Bill-Lodgement-Referance-AdviceCopy", component: ExportBilllodgementreferencenumberadvicecopyComponent, canActivate: [MemberGuard] },
-  { path: "Bill-Lodgement-Referance-AdviceCopy/:id?", component: ExportBilllodgementreferencenumberadvicecopyComponent, canActivate: [MemberGuard] },
   { path: "Realisation-Cretificate", component: ExportRealisationCertificateComponent, canActivate: [MemberGuard] },
-  { path: "Realisation-Cretificate/:id?", component: ExportRealisationCertificateComponent, canActivate: [MemberGuard] },
   { path: "Swift-Copy-Documents", component: ExportSwiftCopyDocumentComponent, canActivate: [MemberGuard] },
   { path: "Upload-Inward-Remittance-Disposal", component: InwardUploadDocumentsComponent, canActivate: [MemberGuard] },
-  { path: "Certificate-of-Origin", component: ExportCertificateOfOriginComponent, canActivate: [MemberGuard] },
-  { path: "Format-Bill-Of-Exchanges", component: FormatBillOfExchangesComponent, canActivate: [MemberGuard] },
 ];
 
 @NgModule({

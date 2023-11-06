@@ -12,13 +12,77 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button type="button" class="filter-popup btn btn-secondary"><span
-                                class="fi_icon filter-popup"></span>Filter</button>
-                                <ng-custom-filter-popup 
-                                (ResetEvent)="reset()"
-                                FormStyle="display: grid;
-                                grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
-                                *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
+                            <button (click)="filter_Popup.style.display='block'" type="button"
+                                class="btn btn-secondary"><span class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
+                                appFilterToggle>
+
+                                <form class="select_filter_options">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                name="Buyer_Name"
+                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                <option value="">Buyer name</option>
+                                                <option [value]="Buyer_Name"
+                                                    *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
+                                                    {{Buyer_Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                                name="Company_Name">
+                                                <option value="">PI/PO No.</option>
+                                                <option [value]="PI_PO_No"
+                                                    *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No
+                                                    }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">C N No.</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'creditNoteNumber');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">C N No.</option>
+                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.C_N_No">{{ Origin }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Currency</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'currency');filter_Popup.style.display='none'"
+                                                name="Currency">
+                                                <option value="">Currency</option>
+                                                <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
+                                                    [value]="Currency">{{ Currency }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">DATE</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'date');filter_Popup.style.display='none'"
+                                                name="date">
+                                                <option value="">SB DATE</option>
+                                                <option [value]="SB_DATE"
+                                                    *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="footer_buttons">
+                                        <button type="button" class="btn btn-light"
+                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                    </div>
+                                </form>
+                                <i></i>
+                            </div>
                         </div>
                         <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Export/CreditNoteDocument']">
                             <span class="add_icon"></span> ADD NEW
@@ -35,6 +99,79 @@
                 [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewCN($event)"
                 (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
             </custom-expansion-panel>
+            <!-- <div style="width: 100%" class="new_analit" #creditnotes>
+                <div style="width: 100%" class="row">
+                    <div class="" id="container">
+                        <section class="middle_datatable">
+                            <div class="widget-body p-0 support table-wrapper">
+                               <table class="table table-hover">
+                                    <thead>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-3">DATE</th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">C N No.</th>
+                                            <th scope="col" class="col-td-th-3">C N Amount</th>
+                                            <th scope="col" class="col-td-th-3">Currency</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
+                                            <th scope="col" class="col-td-th-3">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
+                                            [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
+                                            <td class="col-td-th-3" [innerHTML]="data?.date"></td>
+                                            <td class="col-td-th-3" [innerHTML]="getPipoNumbers(data)"></td>
+                                            <td class="col-td-th-3">
+                                                <div *ngIf="!optionsVisibility[i]">{{data?.creditNoteNumber}}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="creditNoteNumber"
+                                                        type="text" placeholder="Credit Note Number"
+                                                        [(ngModel)]="data.creditNoteNumber">
+                                                </div>
+                                            </td>
+                                            <td class="col-td-th-3">
+                                                <div *ngIf="!optionsVisibility[i]" [innerHTML]="data.creditNoteAmount"></div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="creditNoteAmount"
+                                                        type="text" placeholder="Credit Note Amount"
+                                                        [(ngModel)]="data.creditNoteAmount">
+                                                </div>
+                                            </td>
+                                            <td class="col-td-th-3">
+                                                <div *ngIf="!optionsVisibility[i]" [innerHTML]="data.currency"></div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="currency" type="text"
+                                                        placeholder="Currency" [(ngModel)]="data.currency">
+                                                </div>
+                                            </td>
+                                            <td class="col-td-th-3" [innerHTML]="data.buyerName"></td>
+                                            <td class="col-td-th-3">
+                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewCN(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                                    aria-hidden="true"></i></a>
+                                                <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"
+                                                    (click)="toSave(data, i)"><i class="fa fa-floppy-o"
+                                                        aria-hidden="true"></i></button>
+                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                                    (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
+                                                        aria-hidden="true"></i></button>
+                                                <button title="Delete" class="savBtn bgnone"
+                                                    *ngIf="!optionsVisibility[i]" (click)="handleDelete(data._id,i)"><a
+                                                        title="Delete" href="javascript:void(0)"><i
+                                                            class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div> -->
         </div>
     </main>
 </div>

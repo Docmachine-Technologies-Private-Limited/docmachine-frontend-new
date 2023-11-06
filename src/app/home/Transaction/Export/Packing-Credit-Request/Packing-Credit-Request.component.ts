@@ -607,12 +607,19 @@ export class PackingCreditRequestComponent implements OnInit {
   filterBuyer: any = [];
   balanceAvai: any = '';
   SET_CREDIT_DEBIT_LIST: any = {
-    Credit: [],
-    Debit: []
+    Credit: []
   };
 
   setBank(event: any, key: any, index, bank: any) {
-    this.SET_CREDIT_DEBIT_LIST[key][0] = (bank);
+    var len: any = this.SET_CREDIT_DEBIT_LIST[key].filter((item) => item?.bank == bank?.bank)
+    if (len?.length == 0) {
+      event.source.checked = true;
+      this.SET_CREDIT_DEBIT_LIST[key][index] = (bank);
+    } else {
+      event.source.checked = false;
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Account Selection',
+        `You select other account number <br> becasue you already selected..`)
+    }
     console.log('SET_CREDIT_DEBIT_LIST', event, this.SET_CREDIT_DEBIT_LIST)
   }
   setBuyer(key: any, bank: any) {

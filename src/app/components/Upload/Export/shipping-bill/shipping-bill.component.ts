@@ -8,7 +8,6 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-shipping-bill',
@@ -38,8 +37,8 @@ export class ShippingBillComponent implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
-  @Input('PipoId') Pipoid: any = '';
-
+  @Input('PipoId') Pipoid:any='';
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -89,8 +88,7 @@ export class ShippingBillComponent implements OnInit {
             name: 'currency',
             rules: {
               required: true,
-            },
-            disabled: true
+            }
           },
           {
             type: "text",
@@ -163,35 +161,28 @@ export class ShippingBillComponent implements OnInit {
         },
         fobCurrency: {
           type: "currency",
-          value: this.PIPO_DATA?.currency,
-          label: "SB CURRENCY",
+          value: this.UPLOAD_FORM['fobCurrency'],
+          label: "FOB CURRENCY",
           rules: {
             required: true,
-          },
-          Inputdisabled: true,
-          autofill: {
-            type: "formGroup",
-            SetInputName: "currency",
-            CONTROLS_NAME: "invoices",
-            GetInputName: "currency"
           }
         },
         fobValue: {
           type: "text",
           value: this.UPLOAD_FORM['fobValue'],
-          label: "SB VALUE",
+          label: "FOB VALUE",
           rules: {
             required: true,
           }
         },
-        // freightCurrency: {
-        //   type: "currency",
-        //   value: this.UPLOAD_FORM['freightCurrency'],
-        //   label: "FREIGHT CURRENCY",
-        //   rules: {
-        //     required: true,
-        //   }
-        // },
+        freightCurrency: {
+          type: "currency",
+          value: this.UPLOAD_FORM['freightCurrency'],
+          label: "FREIGHT CURRENCY",
+          rules: {
+            required: true,
+          }
+        },
         freightValue: {
           type: "text",
           value: this.UPLOAD_FORM['freightValue'],
@@ -217,14 +208,14 @@ export class ShippingBillComponent implements OnInit {
             required: true,
           }
         },
-        // insuranceCurrency: {
-        //   type: "currency",
-        //   value: this.UPLOAD_FORM['insuranceCurrency'],
-        //   label: "Insurance Currency",
-        //   rules: {
-        //     required: true,
-        //   }
-        // },
+        insuranceCurrency: {
+          type: "currency",
+          value: this.UPLOAD_FORM['insuranceCurrency'],
+          label: "Insurance Currency",
+          rules: {
+            required: true,
+          }
+        },
         insuranceValue: {
           type: "text",
           value: this.UPLOAD_FORM['insuranceValue'],
@@ -257,67 +248,46 @@ export class ShippingBillComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: [
+          formArray: this.UPLOAD_FORM['invoices'] != undefined ? [
             [
               {
-                type: "CommericalNo",
-                value: "",
-                label: "Invoices No.",
-                name: 'invoiceno',
-                id: "CommericalNo",
+                type: "text",
+                value: this.UPLOAD_FORM['invoices'][0]['sno'],
+                label: "Invoices Sno.",
+                name: 'sno',
                 rules: {
                   required: true,
                 },
-                callback: (item: any) => {
-                  this.SELECTED_COMMERCIAL_VALUE = this.CommercialFilter(item?.value?.id)?.length != 0 ? this.CommercialFilter(item?.value?.id)[0] : []
-                  console.log(item?.value, this.SELECTED_COMMERCIAL_VALUE, "CommericalNo")
-
-                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.amount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["type"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.type);
-                  if (this.SELECTED_COMMERCIAL_VALUE?.currency == this.PIPO_DATA?.currency) {
-                    myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.currency);
-                    myForm['touched'] = true;
-                    myForm['status'] = 'VALID';
-                  } else {
-                    myForm?.setErrors({
-                      matched: "Your CI Selected Currency and your pipo currency is different..."
-                    });
-                    myForm['touched'] = true;
-                  }
-                  console.log(item, "callback")
+              },
+              {
+                type: "text",
+                value: this.UPLOAD_FORM['invoices'][0]['invoiceno'],
+                label: "Invoices No.",
+                name: 'invoiceno',
+                rules: {
+                  required: true,
                 }
               },
               {
                 type: "currency",
-                value: this.UPLOAD_FORM['invoices'] != null && this.UPLOAD_FORM['invoices'] != undefined ? this.UPLOAD_FORM['invoices'][0]['currency'] : '',
+                value: this.UPLOAD_FORM['invoices'][0]['currency'],
                 label: "Invoices Currency",
                 name: 'currency',
                 rules: {
                   required: true,
-                },
-                disabled: true
+                }
               },
               {
                 type: "text",
-                value: this.UPLOAD_FORM['invoices'] != null && this.UPLOAD_FORM['invoices'] != undefined ? this.UPLOAD_FORM['invoices'][0]['amount'] : '',
+                value: this.UPLOAD_FORM['invoices'][0]['amount'],
                 label: "Invoices Amount",
                 name: 'amount',
                 rules: {
                   required: true,
                 }
-              },
-              {
-                type: "PaymentTermType",
-                value: "",
-                label: "Type",
-                name: 'type',
-                rules: {
-                  required: true,
-                },
-              },
+              }
             ]
-          ]
+          ] : defaultinvoice
         }
       }, 'ShippingBill');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
@@ -329,87 +299,49 @@ export class ShippingBillComponent implements OnInit {
     console.log(e, 'value')
     let invoices: any = [];
     e.value.file = 'export';
-    console.log(this.paymentTermSum(e.value.invoices), e.value.fobValue, "this.paymentTermSum(e.value.invoices)")
-    if (parseInt(this.paymentTermSum(e.value.invoices)) == parseInt(e.value.fobValue)) {
-      e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
-      e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
-      e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
-      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-      e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
-      e.value.buyerName = this.BUYER_LIST
-      e.value.pipo = this.pipoArr;
-      e.value.doc = this.pipourl1?.doc;
-      this.documentService.getInvoice_No({
-        sbno: e.value.sbno
-      }, 'masterrecord').subscribe((resp: any) => {
-        console.log('getInvoice_No', resp)
-        if (resp?.data.length == 0) {
-          this.documentService.addMasterBySb(e.value).subscribe(async (res: any) => {
-            console.log('Shippingbill updated Successfully');
-            let updatedData: any = ''
-            updatedData = {
-              "sbRef": [
-                res?.data._id,
-              ],
-            }
-            let commercialdetails: any = [];
-            await e.value?.invoices?.forEach(element => commercialdetails.push(element?.invoiceno?.id));
-            let updatedDataSB = {
-              "commercialdetails": commercialdetails,
-            }
-            this.documentService.updateMasterBySb(
-              updatedDataSB,
-              e.value.sbno,
-              res?.data._id
-            ).subscribe((data) => {
-              console.log('updateMasterBySbupdateMasterBySb', data);
-            }, (error) => { console.log('error') });
-            e.value?.invoices?.forEach(element => {
-              this.documentService.updateCommercial({
-                sbNo: e.value.sbno,
-                sbRef: [res.data._id],
-                type: element?.type?.value
-              }, element?.invoiceno?.id).subscribe((res) => { });
-
-              this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
-                console.log(data);
-
-                let updatedData = {
-                  "commercialRef": [
-                    element?.invoiceno?.id,
-                  ],
-                }
-                this.userService.updateManyPipo(this.pipoArr, 'commercial', element?.doc, updatedData).subscribe((data) => {
-                  console.log('commercial', data);
-                  this.documentService.updateMasterBySb({ commercialDoc: this.CommercialFilter(element?.invoiceno?.id)[0]?.commercialDoc }, e.value.sbno, element?.invoiceno?.id).subscribe((data) => {
-                    console.log('DATA', data);
-                  }, (error) => { console.log('error') });
-                }, (error) => {
-                  console.log('error');
-                }
-                );
-              }, (err) => console.log('Error adding pipo'));
-            });
-
-
+    for (let i = 0; i < e?.invoices?.length; i++) {
+      invoices = Object.assign(e?.invoices[i], invoices)
+    }
+    console.log(invoices);
+    e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
+    e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
+    e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
+    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+    e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
+    e.value.buyerName = this.BUYER_LIST
+    e.value.pipo = this.pipoArr;
+    e.value.doc = this.pipourl1?.doc;
+    this.documentService.getInvoice_No({
+      sbno: e.value.sbno
+    }, 'masterrecord').subscribe((resp: any) => {
+      console.log('getInvoice_No', resp)
+      if (resp?.data.length == 0) {
+        this.documentService.addMasterBySb(e.value).subscribe((res: any) => {
+          console.log('Shippingbill updated Successfully');
+          let updatedData: any = ''
+          updatedData = {
+            "sbRef": [
+              res?.data._id,
+            ],
+          }
+          this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
+            console.log(data);
             this.toastr.success('shipping Bill added successfully.');
             if (this.validator.SELECTED_PIPO?.length == 0) {
               this.router.navigate(['home/Summary/Export/Shipping-bill']);
             }
           }, (error) => {
             console.log('error');
-          });
-        } else {
-          this.toastr.error(`Please check this sb no. : ${e.value.sbno} already exit...`);
+          }
+          );
+        }, (error) => {
+          console.log('error');
         }
-      })
-    } else {
-      this.toastr.error(`SB Amount and total invoice amount should be equal`);
-    }
-  }
-
-  paymentTermSum(value: any) {
-    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+        );
+      } else {
+        this.toastr.error(`Please check this sb no. : ${e.value.sbno} already exit...`);
+      }
+    })
   }
 
   clickPipo(event: any) {
@@ -419,39 +351,9 @@ export class ShippingBillComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.changedCommercial(this.pipoArr)
-      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
-        this.PIPO_DATA = res?.data[0];
-        console.log(res, "getPipoById")
-      })
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-
-  changedCommercial(pipo: any) {
-    this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
-      this.COMMERCIAL_LIST = res?.data;
-      this.validator.COMMERICAL_NO = [];
-      res?.data.forEach(element => {
-        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
-      });
-      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
-    },
-      (err) => {
-        console.log(err)
-      }
-    );
-  }
-
-  CommercialFilter(id: any) {
-    return this.COMMERCIAL_LIST.filter((item: any) => item?._id?.includes(id) == true)
-  }
-
-  SELECTED_COMMERCIAL_VALUE: any = ''
-  CommericalNo(value: any) {
-
-  }
-
 }

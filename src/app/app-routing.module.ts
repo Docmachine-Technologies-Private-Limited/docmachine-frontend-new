@@ -4,6 +4,7 @@ import { PageNotFoundComponent } from "./shared/components";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { AddMemberComponent } from "./add-member/add-member.component";
 import { MatDialogModule } from '@angular/material/dialog';
+
 import { CreateTeam1Component } from "./create-team1/create-team1.component";
 import { UpdatePasswordComponent } from "./update-password/update-password.component";
 import { NewUserComponent } from "./new-user/new-user.component";
@@ -12,6 +13,7 @@ import { NotVerifiedComponent } from "./not-verified/not-verified.component";
 import { MembersigninComponent } from "./membersignin/membersignin.component";
 import { PdfComponent } from "./pdf/pdf.component";
 import { TwofactorauthComponent } from "./shared/components/twofactorauth/twofactorauth.component";
+import { AuthorizationComponent } from "./Authorization/authorization/authorization.component";
 import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { ResetOTPComponent } from "./forgot-password/reset-otp/reset-otp.component";
 import { RoleVerifyEmailComponent } from "./RoleVerifyEmail/role-verify-email/role-verify-email.component";
@@ -19,8 +21,6 @@ import { SharedHomeModule } from "./home/shared-home.module";
 import { SigninComponent } from "./signIn/signin.component";
 import { SignupComponent } from "./signup/signup.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { AuthorizationComponent } from "./authorization/authorization.component";
-import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-intrgration/authorization-tally-intrgration.component";
 
 const routes: Routes = [
   {
@@ -73,7 +73,6 @@ const routes: Routes = [
     pathMatch: "full",
   },
   { path: "authorization", component: AuthorizationComponent },
-  { path: "TallyAuthorization", component: AuthorizationTallyIntrgrationComponent },
   { path: "createTeam", component: CreateTeam1Component, canActivate: [AdminGuard] },
   { path: "addMember", component: AddMemberComponent, pathMatch: "full", canActivate: [AdminGuard] },
   { path: "newUser", component: NewUserComponent, pathMatch: "full" },

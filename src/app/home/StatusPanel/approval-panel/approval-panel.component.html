@@ -30,8 +30,6 @@
                 (click)="mergeAllPDFs('zip',item?.documents,item['tableName'])">Zip</button>
               <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
                 (click)="mergeAllPDFs('mail',item?.documents,item['tableName'],item['SendMailData'])">Send Mail</button>
-                <button type="submit" *ngIf="item?.tableName=='Export-Direct-Dispatch'" class="btn btn-primary"
-                (click)="exceldownload(item?.commercialRef)">Excel</button>
             </div>
           </td>
         </tr>

@@ -5,14 +5,13 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
-import moment from 'moment';
 
 @Component({
   selector: 'impoprt-import-debit-note-summary',
@@ -45,7 +44,6 @@ export class ImportDebitNoteComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "D N No.",
-      "CI No.",
       "D N Amount",
       "CURRENCY",
       "Beneficiary Name",
@@ -62,7 +60,6 @@ export class ImportDebitNoteComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-2",
       "col-td-th-1"
     ],
     eventId: ''
@@ -83,11 +80,13 @@ export class ImportDebitNoteComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
+    private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+
+  ) {
   }
-  
   async ngOnInit() {
     this.FILTER_VALUE_LIST = [];
     this.wininfo.set_controller_of_width(270, '.content-wrap')
@@ -134,9 +133,8 @@ export class ImportDebitNoteComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: moment(element['date']).format('DD-MM-YYYY'),
+          date: element['date'],
           debitNoteNumber: element['debitNoteNumber'],
-          commercialNumber: element['commercialNumber'],
           DebitAmount: element['totalDebitAmount'],
           currency: element['currency'],
           buyerName: element['buyerName'],
@@ -259,21 +257,15 @@ export class ImportDebitNoteComponent implements OnInit {
   EDIT_DATE: any = [];
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
-    //   totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
-      }
-    };
-    this.router.navigate([`/home/Summary/Import/Edit/DebitNoteDocument`],navigationExtras);
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      date: this.SELECTED_VALUE['date'],
+      debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
+      totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
+      currency: this.SELECTED_VALUE['currency'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
     this.toastr.warning('Debit Note Row Is In Edit Mode');
   }
 

@@ -1,113 +1,510 @@
-<div class="col-12 pt-2 Invoice">
-  <div class="col-12 d-flex">
-    <label for="" class="col-6 Invoice-label-left">Transaction Summary</label>
-    <label for="" class="col-6 Invoice-label">{{this.TRANSACTION_NAME}}</label>
+<div class="content-wrap ml-0 scroll-bar-main">
+  <div class="container-fluid">
+    <div class="content_white_background">
+      <main id="content" class="table-padding" role="main">
+        <div class="filter_section_top p-2">
+          <div class="row">
+            <div class="col-12 mt-3">
+              <h5>{{this.TRANSACTION_NAME}}</h5>
+              <div class="filter_right_new">
+                <button type="button" class="btn btn-primary"><span class="ex_icon"></span>Export</button>
+                <div class="filter_posit">
+                  <button type="button" class="btn btn-secondary"><span class="fi_icon"></span>Filter</button>
+                  <div class="bg-white filter_main_sec mt-2" appFilterToggle>
+                    <!-- <form class="select_filter_options">
+                                      <div class="row">
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1"
+                                                  class="form-label">Commodity</label>
+                                              <select class="form-select form-control"
+                                                  aria-label="Default select example"  [(ngModel)]="commodity" name="com">
+                                                  <option value=""> commodities</option>
+                                                  <option *ngFor="let buyer of commodityArray">{{buyer.como}}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1"
+                                                  class="form-label">Location</label>
+                                              <select class="form-select form-control"
+                                                  aria-label="Default select example"  [(ngModel)]="location" name="location">
+                                                  <option value="">locations</option>
+                                                  <option *ngFor="let bene of locationArray">{{ bene.loc }}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1"
+                                                  class="form-label">Buyer</label>
+                                              <select class="form-select form-control"
+                                                  aria-label="Default select example" [(ngModel)]="buyer" name="banee">
+                                                  <option value="">Buyers</option>
+                                                  <option *ngFor="let bene of benneDetailArray
+                                                  ">{{ bene.buyerName }}
+                                                  </option>
+
+                                              </select>
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1" class="form-label">Start
+                                                  Date</label>
+                                              <input class="form-select form-control" type="date"
+                                                  placeholder="Start Date" [(ngModel)]="startDate" name="startdate" required />
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1" class="form-label">End
+                                                  Date</label>
+                                              <input class="form-select form-control" type="date"
+                                                  placeholder="End Date" [(ngModel)]="endDate" name="enddate" required />
+                                          </div>
+                                      </div>
+                                      <div class="footer_buttons">
+                                          <button type="button" class="btn btn-light" (click)="resetFilter()">RESET</button>
+                                          <button type="submit" class="btn btn-primary" (click)="filter()">APPLY</button>
+                                      </div>
+                                  </form> -->
+                    <i></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="data_table_new" style="overflow: auto;height: 73vh;margin-bottom: 0;">
+          <div class="record-container">
+            <table class="table table-striped">
+              <thead>
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-3">Sr.no.</th>
+                  <th scope="col" class="col-td-th-2" *ngFor="let item of displayedColumns">{{item}}</th>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal'">
+                    <th scope="col" class="col-td-th-2">Buyer Name</th>
+                    <th scope="col" class="col-td-th-2">PI/PO numner</th>
+                    <th scope="col" class="col-td-th-2">PI/PO amount</th>
+                    <th scope="col" class="col-td-th-2">currency</th>
+                    <th scope="col" class="col-td-th-2">IRM Reference No.</th>
+                    <th scope="col" class="col-td-th-2">IRM Amount</th>
+                    <th scope="col" class="col-td-th-2">Export Bill Reference Number</th>
+                    <th scope="col" class="col-td-th-2">Export Bill Amount</th>
+                    <th scope="col" class="col-td-th-2">SB Number</th>
+                    <th scope="col" class="col-td-th-2">SB Amount</th>
+                    <th scope="col" class="col-td-th-2">EBRC No.</th>
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal-Realization' || this.TRANSACTION_NAME=='Packing-Credit-Request'" >
+                    <th scope="col" class="col-td-th-2">Buyer Name</th>
+                    <th scope="col" class="col-td-th-2">PI/PO numner</th>
+                    <th scope="col" class="col-td-th-2">PI/PO amount</th>
+                    <th scope="col" class="col-td-th-2">currency</th>
+                    <th scope="col" class="col-td-th-2">Export Bill Reference Number</th>
+                    <th scope="col" class="col-td-th-2">Export Bill Amount</th>
+                    <th scope="col" class="col-td-th-2">SB Number</th>
+                    <th scope="col" class="col-td-th-2">SB Amount</th>
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Export-Direct-Dispatch'">
+                    <th scope="col" class="col-td-th-2">Buyer Name</th>
+                    <th scope="col" class="col-td-th-2">PI/PO numner</th>
+                    <th scope="col" class="col-td-th-2">PI/PO amount</th>
+                    <th scope="col" class="col-td-th-2">currency</th>
+                    <th scope="col" class="col-td-th-2">Export bill Reference No.</th>
+                    <th scope="col" class="col-td-th-2">Export bill Reference Amount</th>
+                    <th scope="col" class="col-td-th-2">SB Number</th>
+                    <th scope="col" class="col-td-th-2">SB Amount</th>
+                    <th scope="col" class="col-td-th-2">IRM No.</th>
+                    <th scope="col" class="col-td-th-2">IRM Amount</th>
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Import-Direct-Payment' || this.TRANSACTION_NAME=='Advance-Remittance-flow'">
+                    <th scope="col" class="col-td-th-2">Buyer Name</th>
+                    <th scope="col" class="col-td-th-2">PI/PO numner</th>
+                    <th scope="col" class="col-td-th-2">PI/PO amount</th>
+                    <th scope="col" class="col-td-th-2">currency</th>
+                    <th scope="col" class="col-td-th-2">ORM Reference No.</th>
+                    <th scope="col" class="col-td-th-2">ORM Amount</th>
+                    <th scope="col" class="col-td-th-2">BOE Number</th>
+                    <th scope="col" class="col-td-th-2">BOE Amount</th>
+                  </ng-container>
+                  <th scope="col" class="col-td-th-2">User Details</th>
+                  <th scope="col" class="col-td-th-2">More Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-tr" *ngFor="let item of this.dataSource;let i=index">
+                  <td class="col-td-th-3" scope="row">{{(i+1)}}</td>
+                  <td class="col-td-th-2" scope="row" *ngFor="let column of displayedColumns">{{item[column]}}</td>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.buyerName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.irRef?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.irRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.Ref_Data?.blCopyRef?.blcopyrefNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.Ref_Data?.blCopyRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.data?.Shipping_bill_list[0]?.sbno}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.data?.Shipping_bill_list[0]?.fobValue}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.EbrcRef?.EbrcNumber}}</td>  
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal-Realization' || this.TRANSACTION_NAME=='Packing-Credit-Request'" >
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.buyerName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.irRef?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.irRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.data?.Shipping_bill_list[0]?.sbno}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.data?.Shipping_bill_list[0]?.fobValue}}</td>  
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Export-Direct-Dispatch'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.buyerName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.blcopyrefNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.amount}}</td>    
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Shipping_bill_list!=undefined?item?.MoreDetails?.Shipping_bill_list[0]?.sbno:null}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Shipping_bill_list!=undefined?item?.MoreDetails?.Shipping_bill_list[0]?.fobValue:null}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Advance_reference_Number[0]?.irDataItem?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Advance_reference_Number[0]?.irDataItem?.amount}}</td>  
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Advance-Remittance-flow'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.benneName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.ImportDirectPayment?.boeNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.ImportDirectPayment?.invoiceAmount}}</td>  
+                    <!-- <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.EbrcRef?.EbrcNumber}}</td>   -->
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Import-Direct-Payment'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.benneName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.pipo_1[0][0]?.boeNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.pipo_1[0][0]?.invoiceAmount}}</td>  
+                    <!-- <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.EbrcRef?.EbrcNumber}}</td>   -->
+                  </ng-container>
+                  <td class="col-td-th-2" scope="row"><a class="button white-btn table-btn"
+                      (click)="userview(item?.UserDetails);User_Details.style.display='block'">View..</a></td>
+                  <td class="col-td-th-2" scope="row">
+                    <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
+                      (click)="transactionview(item);">View..</a>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload/Export/InwardRemittanceAdvice',item?._id,{MoreDetails:{Url_Redirect:{Transaction_id:'',pipo:getPipoNumber(item?.pipo)}}})">Upload IRN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Import-Direct-Payment'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload ORN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Advance-Remittance-flow'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload ORN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload/Export/Bill-Lodgement-Referance-AdviceCopy',item?._id,{MoreDetails:{Url_Redirect:{Transaction_id:'',pipo:getPipoId(item?.pipo)}}})">Upload EBRC</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Export-Direct-Dispatch'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload EBDRN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal-Realization' || this.TRANSACTION_NAME!='Packing-Credit-Request'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload EBDRN</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
   </div>
-  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Advance-Outward-Remittance'"
-    (TabEvent)="onTabChanges($event)">
-    <custom-mat-step MATSTEP_LABEL="Advance Outward Remittance" [NextTrue]="true">
-      <table class="table table-striped">
-        <thead>
-          <tr class="table-tr">
-            <th scope="col" class="col-td-th-1">PIPO NO.</th>
-            <th scope="col" class="col-td-th-1">Currency</th>
-            <th scope="col" class="col-td-th-1">Amount</th>
-            <th scope="col" class="col-td-th-1">ORM Date</th>
-            <th scope="col" class="col-td-th-2">ORM Ref No.</th>
-            <th scope="col" class="col-td-th-1">BOE No</th>
-            <th scope="col" class="col-td-th-1">Status</th>
-            <th scope="col" class="col-td-th-1">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
-            <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency(item?.data?.formdata?.paymentTerm)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getORM_Details(item?.pipo)?.ORM_DATE}}</td>
-            <td scope="col" class="col-td-th-2">{{this.getORM_Details(item?.pipo)?.ORM_NO}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getBOE_DETAILS(item?.pipo)?.BOE_NO}}</td>
-            <td scope="col" class="col-td-th-1">
-              {{getStatus(item?.pipo)?.ORM==false && getStatus(item?.pipo)?.BOE==false?'Pending':'Completed'}}</td>
-            <td scope="col" class="col-td-th-1">
-            <button class="btn btn-primary"
-                [disabled]="getStatus(item?.pipo)?.ORM"
-                (click)="this.router.navigate(['home/upload-documents/Import/OutwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload ORM</button>
-                <button class="btn btn-primary"
-                [disabled]="getStatus(item?.pipo)?.BOE"
-                (click)="this.router.navigate(['home/upload-documents/Import/Boe',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload BOE</button>
-                </td>
-        </tbody>
-      </table>
-    </custom-mat-step>
-  </custom-mat-stepper>
-  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Direct-Bills'"
-    (TabEvent)="onTabChanges($event)">
-    <custom-mat-step MATSTEP_LABEL="Direct Bills" [NextTrue]="true">
-      <table class="table table-striped">
-        <thead>
-          <tr class="table-tr">
-            <th scope="col" class="col-td-th-1">PIPO NO.</th>
-            <th scope="col" class="col-td-th-1">Currency</th>
-            <th scope="col" class="col-td-th-1">Amount</th>
-            <th scope="col" class="col-td-th-1">SB Date</th>
-            <th scope="col" class="col-td-th-1">SB No.</th>
-            <th scope="col" class="col-td-th-2">Lodgement Ref no.</th>
-            <th scope="col" class="col-td-th-1">Status</th>
-            <th scope="col" class="col-td-th-1">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
-            <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getShippingBillCuurency(item?.SBRef)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getShippingBill_Details(item?.SBRef)?.SB_DATE}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getShippingBill_Details(item?.SBRef)?.SB_NO}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.blcopyrefNumber}}</td>
-            <td scope="col" class="col-td-th-1">
-              {{item?.Ref_Data?.blCopyRef?.blcopyrefNumber==undefined?'Pending':'Completed'}}</td>
-            <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
-                [disabled]="item?.Ref_Data?.blCopyRef?.blcopyrefNumber!=undefined?true:false"
-                (click)="this.router.navigate(['home/upload-documents/Export/Bill-Lodgement-Referance-AdviceCopy',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
-                AdviceCopy</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </custom-mat-step>
-  </custom-mat-stepper>
-  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Import-Under-Collection/LC'"
-    (TabEvent)="onTabChanges($event)">
-    <custom-mat-step MATSTEP_LABEL="Import Under Collection/LC" [NextTrue]="true">
-      <table class="table table-striped">
-        <thead>
-          <tr class="table-tr">
-            <th scope="col" class="col-td-th-1">PIPO NO.</th>
-            <th scope="col" class="col-td-th-1">Currency</th>
-            <th scope="col" class="col-td-th-1">Amount</th>
-            <th scope="col" class="col-td-th-1">MT103 DATE</th>
-            <th scope="col" class="col-td-th-2">MT103 REF</th>
-            <th scope="col" class="col-td-th-2">IRM Advice Ref no.</th>
-            <th scope="col" class="col-td-th-1">Status</th>
-            <th scope="col" class="col-td-th-1">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
-            <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{item?.data?.currency}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{item?.date}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.data?.Bill_lodgment_Number}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.irRef?.billNo}}</td>
-            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.irRef?.billNo==undefined?'Pending':'Completed'}}</td>
-            <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
-                [disabled]="item?.Ref_Data?.irRef?.billNo!=undefined?true:false"
-                (click)="this.router.navigate(['home/upload-documents/Export/InwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id}]);">Upload
-                IRM</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </custom-mat-step>
-  </custom-mat-stepper>
-</div>
+
+  <div class="modal" tabindex="-1" role="dialog" #User_Details>
+    <div class="col-11 mt-2" role="document" style="margin: auto;height: 98vh;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">User Name : {{this.USER_DATA_VIEW?.userdetails?.fullName}} | Email id :
+            {{this.USER_DATA_VIEW?.userdetails?.emailId}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" (click)="User_Details.style.display='none'">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="overflow-panel p-2" style="display: flex;
+          flex-direction: row-reverse;
+          overflow: auto;">
+            <div class="grid" *ngIf="this.USER_DATA_VIEW!=''">
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Summary Page Name</label>
+                <span>{{this.USER_DATA_VIEW?.tableName}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Type of Page</label>
+                <span>{{this.USER_DATA_VIEW?.TypeOfPage}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">comment</label>
+                <span>{{this.USER_DATA_VIEW?.comment}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Approval Request Date</label>
+                <span>{{datetoString(this.USER_DATA_VIEW?.createdAt)}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Approved Request Date</label>
+                <span>{{datetoString(this.USER_DATA_VIEW?.updatedAt)}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column" *ngIf="this.USER_DATA_VIEW?.rejectcomment!=''">
+                <label for="exampleInputEmail1">Reject Comment</label>
+                <span>{{this.USER_DATA_VIEW?.rejectcomment}}</span>
+              </div>
+
+            </div>
+            <div class="form-group mb-0 d-flex flex-column" style="width: 70%;">
+              <label for="exampleInputEmail1">Documents</label>
+              <app-pdf-viewer [downloadShow]="false" *ngFor="let selItems of this.pdflist;let i=index"
+                [name]="'Document'+(i+1)" [src]="selItems" width="100%" height="500px"></app-pdf-viewer>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="User_Details.style.display='none'"
+            data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-custom-model height="98vh" id="TransactionView" [name]="this.TRANSACTION_NAME">
+    <div class="d-flex p-2 flex-row overflow-panel" *ngIf="this.pdflist.length!=0">
+      <div class="form-group mb-0 d-flex flex-column document-panel">
+        <app-pdf-viewer [downloadShow]="false" *ngFor="let selItems of this.pdflist;let i=index"
+          [name]="this.TRANSACTION_NAME+' | Merge All Documents'" [src]="selItems" width="100%"
+          height="500px"></app-pdf-viewer>
+      </div>
+      <div class="right-panel" *ngIf="this.OBJECT_DATA.length!=0">
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Advance-Remittance-flow'">
+          <div class="grid" *ngFor="let item of this.OBJECT_DATA;let i=index">
+            <div class="row w-row m-auto" style="width: 100%;">
+              <div class="basic-column w-col w-col-3">
+                <div class="tag-wrapper m-auto p-0">
+                  <div class="number-card number-card-content1">
+                    <h1 class="number-card-number" title="Inovice No.">{{item?.invoice_number}}</h1>
+                    <div class="number-card-divider"></div>
+                    <div class="number-card-progress-wrapper">
+                      <div class="tagline number-card-currency" title="Currency">{{item?.currency}}</div>
+                      <div class="number-card-progress" title="Amount">${{item?.amount}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sum-panel" *ngIf="this.INOVICE_SUM!=0">
+            <h5 class="sum-amount">Total Inovice Amount : ${{this.INOVICE_SUM}}</h5>
+          </div>
+        </div>
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal'">
+          <div class="grid" *ngIf="this.OBJECT_DATA!=''" style="gap: 10px;">
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5">Bank Name : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.BankName}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Remitter_Name : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Remitter_Name}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Inward_reference_number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Inward_reference_number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Amount : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.amount}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Currency : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.currency}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Bill_lodgment_Number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Bill_lodgment_Number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Charges_Account_Number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Charges_Account_Number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Credit_Account_Number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Credit_Account_Number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Inward_amount_for_disposal: </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Inward_amount_for_disposal}} </h5>
+            </div>
+
+          </div>
+        </div>
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Import-Direct-Payment'">
+          <div class="grid" *ngIf="this.OBJECT_DATA!=''" style="gap: 10px;">
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5">Bank Name </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.bank}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Beneficiary Name </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.benneName}} </h5>
+            </div>
+            <div class="row w-row m-auto" style="width: 100%;" *ngFor="let item of this.OBJECT_DATA?.BOETerm">
+              <div class="basic-column w-col w-col-3">
+                <div class="tag-wrapper m-auto p-0">
+                  <div class="number-card number-card-content1">
+                    <h1 class="number-card-number" title="Boe No.">{{item?.BOE_Number}}</h1>
+                    <div class="number-card-dollars" title="Remittance Amount">${{item?.remittanceAmount}}</div>
+                    <div class="number-card-divider"></div>
+                    <div class="number-card-progress-wrapper">
+                      <div class="tagline number-card-currency" title="Currency">{{item?.currency}}</div>
+                      <div class="number-card-progress" title="Amount">${{item?.amount}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Total Amount </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.sumTotalAmount}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Total Remittance Amount </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.totalremittanceAmount}} </h5>
+            </div>
+          </div>
+        </div>
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Export-Direct-Dispatch'">
+          <div class="grid" *ngIf="this.OBJECT_DATA!=''" style="gap: 10px;">
+            <div class="d-flex noraml-panel" style="background-color: blueviolet;height: auto;">
+              <h5 class="h5-text">Advance Reference Number</h5>
+              <div class="card-1" *ngFor="let item of this.OBJECT_DATA?.Advance_reference_Number;let i=index">
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">billNo {{(i+1)}}</h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.billNo}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> SB No. </h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.sbno}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Amount : </h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.amount}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Used Balance : </h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.Used_Balance}} </h5>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex noraml-panel" style="background-color: blueviolet;height: auto;">
+              <h5 class="h5-text">Shipping Bill</h5>
+              <div class="card-1" *ngFor="let item of this.OBJECT_DATA?.Shipping_bill_list;let i=index">
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> SB No. {{(i+1)}}</h5>
+                  <h5 class="right-h5"> {{item?.sbno}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">Buyer Name</h5>
+                  <h5 class="right-h5"> {{item?.buyerName}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> fobCurrency </h5>
+                  <h5 class="right-h5"> {{item?.fobCurrency}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Amount : </h5>
+                  <h5 class="right-h5"> {{item?.fobValue}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Used Balance : </h5>
+                  <h5 class="right-h5"> {{item?.balanceAvai}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">iecName</h5>
+                  <h5 class="right-h5"> {{item?.iecName}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">ieccode</h5>
+                  <h5 class="right-h5"> {{item?.ieccode}} </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-custom-model>
+
+  <app-custom-model name="Upload Documents" id="Upload" (ModelChange)="UploadUrl=''">
+    <div class="overflow-panel p-2" style="height: calc(100vh - 363px);
+  display: flex;
+  gap: 20px;">
+      <div class="upload-panel col-12" style="height: 210px;" *ngIf="UploadUrl==''">
+        <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
+          (sending)="submit($event)" [dropzone]="config" class="dropzone dropzone-container" id="dropzone" />
+        <i class="fas fa-file-upload"></i>
+        <h5>Drag and Drop files here</h5>
+        <p>Files Supported: PDF, XSLS, Image, Scanner</p>
+        <p>Maximum Size: 5MB</p>
+      </div>
+      <div class="form-group col-12 mb-0 d-flex flex-column"
+        *ngIf="this.TRANSACTION_NAME==='Advance-Remittance-flow' && UploadUrl!=''">
+        <div class="col-12 p-0 d-flex">
+          <div style="height: 100%;
+        display: flex;
+        width: calc(100% - 220px);
+        gap: 20px;">
+            <app-pdf-viewer style="width: 96%;" [downloadShow]="false" name="Upload Document" [src]="UploadUrl"
+              width="100%" height="500px"></app-pdf-viewer>
+          </div>
+          <div class="d-flex flex-column" style="width: 220px;">
+            <label for="exampleInputEmail1">ORM Referance No.</label>
+            <input type="text" name="" id="" class="form-control">
+            <button type="submit" class="btn btn-primary mt-3 PopupClose" popup-close="Upload"
+              (click)="UpdateReferanceNo()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-custom-model>
+
+  <app-custom-model name="Upload Documents" id="TableView">
+    <div class="data_table_new" style="overflow: auto;height: 73vh;margin-bottom: 0;">
+      <div class="record-container">
+        <table class="table table-striped">
+          <thead>
+            <tr class="table-tr">
+              <th scope="col" class="col-td-th-3">Sr.no.</th>
+              <th scope="col" class="col-td-th-2" *ngFor="let item of displayedColumns">{{item}}</th>
+              <th scope="col" class="col-td-th-2">User Details</th>
+              <th scope="col" class="col-td-th-2">More Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-tr" *ngFor="let item of this.dataSource;let i=index">
+              <td class="col-td-th-3" scope="row">{{(i+1)}}</td>
+              <td class="col-td-th-2" scope="row" *ngFor="let column of displayedColumns">{{item[column]}}</td>
+              <td class="col-td-th-2" scope="row"><a class="button white-btn table-btn"
+                  (click)="userview(item?.UserDetails);User_Details.style.display='block'">View..</a></td>
+              <td class="col-td-th-2" scope="row">
+                <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
+                  (click)="transactionview(item);">View..</a>
+                <button type="submit" class="btn btn-primary"
+                  (click)="navigationByUrlParam('upload',item?._id,item)">Upload RN</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </app-custom-model>
+  
+  <div class="loader-cls" *ngIf="this.LOADER_ON_OFF==true">
+    <div class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>

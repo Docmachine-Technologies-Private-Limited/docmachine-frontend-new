@@ -5,17 +5,13 @@
         <div class="col-12">
             <div class="card">
                 <div class="row m-0">
-                    <h3 class="m-auto ml-2" style="margin-left: 0 !important;">{{UploadFilesNames}}</h3>
-                    <button type="button" style="margin-right: 0 !important;"
-                        class="btn btn-primary m-auto mr-2 remove-upload" (click)="removeAll(dropzonecontainer)"><i
-                            class="fa fa-trash" aria-hidden="true"></i></button>
+                    <h3 class="m-auto ml-2" style="margin-left: 0 !important;">Upload Files</h3>
+                    <button type="button" style="margin-right: 0 !important;" class="btn btn-primary m-auto mr-2 remove-upload" (click)="removeAll(dropzonecontainer)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 </div>
                 <div class="drop_box">
-                    <dropzone class="dropzone-container" [config]="config"
-                        [message]="'Click or drag images here to upload'" (error)="onUploadError($event)"
-                        (init)="onUploadInit($event);removeAll(dropzonecontainer)" (sending)="submit($event)"
-                        (success)="onUploadSuccess($event,Uploaddocuments,dropzonecontainer)" #dropzonecontainer>
-                    </dropzone>
+                    <dropzone class="dropzone-container" [config]="config" [message]="'Click or drag images here to upload'" (error)="onUploadError($event)"
+                        (init)="onUploadInit($event);removeAll(dropzonecontainer)" (sending)="submit($event)" (success)="onUploadSuccess($event,Uploaddocuments,dropzonecontainer)"
+                        #dropzonecontainer></dropzone>
                     <h5>Drag and Drop files here</h5>
                     <p>Files Supported: PDF, XSLS, Image, Scanner</p>
                     <p>Maximum Size: 5MB</p>

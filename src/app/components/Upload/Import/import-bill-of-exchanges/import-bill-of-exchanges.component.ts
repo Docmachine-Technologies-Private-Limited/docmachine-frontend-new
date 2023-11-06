@@ -62,15 +62,6 @@ export class ImportBillOfExchangesComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        CommericalNoList: {
-          type: "CommericalListCheckBox",
-          value: "",
-          label: "Commerical Number*",
-          rules: {
-            required: true,
-          },
-          ShowCheckBox: true,
-        },
         billExchangeNumber: {
           type: "text",
           value: "",
@@ -128,24 +119,9 @@ export class ImportBillOfExchangesComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.changedCommercial(this.pipoArr)
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
-  }
-  
-  changedCommercial(pipo: any) {
-    this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
-      this.validator.COMMERICAL_NO=[];
-      res?.data.forEach(element => {
-        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], data: element });
-      });
-      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
-    },
-      (err) => {
-        console.log(err)
-      }
-    );
   }
 }

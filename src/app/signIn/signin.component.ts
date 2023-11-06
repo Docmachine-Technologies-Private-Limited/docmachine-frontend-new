@@ -9,7 +9,6 @@ import { AuthGuard } from '../service/authguard.service';
 import { AppConfig } from '../../environments/environment';
 import { StorageEncryptionDecryptionService } from '../Storage/storage-encryption-decryption.service';
 import { UploadServiceValidatorService } from '../components/Upload/service/upload-service-validator.service';
-import moment from 'moment';
 
 @Component({
   selector: 'user-login-page',
@@ -17,8 +16,6 @@ import moment from 'moment';
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
-  CURREENT_DATE: any = moment(new Date()).format('DD-MM-YYYY')
-
   password;
   show = false;
   loginForm: FormGroup;
@@ -187,11 +184,7 @@ export class SigninComponent implements OnInit {
                     } else {
                       this.userService.role = this.data['result']['role'];
                       if (this.data1['data'][0].companyId != undefined && this.data1['data'][0].companyId != null && this.data1['data'][0].companyId != '') {
-                        if (this.data1['data'][0]?.role == 'manager') {
-                          this.router.navigate(['/home'])
-                        } else {
-                          this.router.navigate(['/home/dashboardTask'])
-                        }
+                        this.router.navigate(['/home/dashboardTask'])
                       } else {
                         if (this.data1['data'][0]?.role == 'manager') {
                           this.router.navigate(['createTeam']);

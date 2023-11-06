@@ -103,10 +103,10 @@ export class FederalBankDirectImportPaymentComponent implements OnInit, OnChange
           getAllFields[25]?.setText(filldata[2]?.sortCode);
           getAllFields[26]?.setText(filldata[2]?.beneBankName + '\n' + filldata[2]?.beneBankAdress);
           getAllFields[26].setFontSize(9)
-          getAllFields[27]?.setText(filldata[2]?.interBankName);
+          getAllFields[27]?.setText(filldata[2]?.beneBankSwiftCode);
 
-          getAllFields[28]?.setText(filldata[2]?.beneBankSwiftCode);
-          getAllFields[29]?.setText(filldata[2]?.beneBankSwiftCode);
+          getAllFields[28]?.setText(filldata[2]?.interBankName);
+          getAllFields[29]?.setText(filldata[2]?.interBankSwiftCode);
 
           getAllFields[30]?.setText(filldata[0]?.accNumber?.split('')[0]);
           getAllFields[31]?.setText(filldata[0]?.accNumber?.split('')[1]);

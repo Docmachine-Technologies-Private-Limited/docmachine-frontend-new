@@ -12,11 +12,120 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button type="button" class="filter-popup btn btn-secondary"><span
-                                class="fi_icon filter-popup"></span>Filter</button>
-                        <ng-custom-filter-popup (ResetEvent)="reset()" FormStyle="display: grid;
-                            grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
-                            *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
+                            <button (click)="filter_Popup.style.display='block'" type="button"
+                                class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
+                                appFilterToggle>
+                                <form class="select_filter_options">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Party name</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                name="Buyer_Name"
+                                                (change)="filter($event.target.value,'partyName');filter_Popup.style.display='none'">
+                                                <option value="">Party name</option>
+                                                <option [value]="Buyer_Name"
+                                                    *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Party_Name">
+                                                    {{Buyer_Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                                name="Company_Name">
+                                                <option value="">PI/PO No.</option>
+                                                <option [value]="PI_PO_No"
+                                                    *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No
+                                                    }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">SB Number</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'sbNo');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">SB Number</option>
+                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.SB_Number">{{ Origin
+                                                    }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">From</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'origin');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">From</option>
+                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.From">{{ Origin }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Branch</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'location');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">Branch</option>
+                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.Branch">{{ Origin }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Description</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'commodity');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">Description</option>
+                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.Description">{{
+                                                    Origin }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">FIRX Number
+                                                ID</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'billNo');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">FIRX Number ID</option>
+                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.FIRX_Number_ID">{{
+                                                    Origin }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Currency</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'currency');filter_Popup.style.display='none'"
+                                                name="Currency">
+                                                <option value="">Currency</option>
+                                                <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
+                                                    [value]="Currency">{{ Currency }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">DATE</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'date');filter_Popup.style.display='none'"
+                                                name="date">
+                                                <option value="">DATE</option>
+                                                <option [value]="SB_DATE"
+                                                    *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="footer_buttons">
+                                        <button type="button" class="btn btn-light"
+                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                    </div>
+                                </form>
+                                <i></i>
+                            </div>
                         </div>
                         <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Export/InwardRemittanceAdvice']">
                             <span class="add_icon"></span> ADD NEW
@@ -34,6 +143,263 @@
             [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
             (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
         </custom-expansion-panel>
+            <!-- <div style="width: 100%" class="analytics_top">
+                <div class="row">
+                    <div class="" id="container" style="padding-right: 20px;">
+                        <section class="middle_datatable">
+                            <div class="widget-body p-0 support table-wrapper">
+                                <div class="padding_move_right">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-3">TT DATE</th>
+                                                <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                                <th scope="col" class="col-td-th-3">SB Number</th>
+                                                <th scope="col" class="col-td-th-2">Party Name</th>
+                                                <th scope="col" class="col-td-th-2">Bank Name</th>
+                                                <th scope="col" class="col-td-th-3">Currency</th>
+                                                <th scope="col" class="col-td-th-3">TT Amount</th>
+                                                <th scope="col" class="col-td-th-3">From</th>
+                                                <th scope="col" class="col-td-th-3">Branch</th>
+                                                <th scope="col" class="col-td-th-3">Description</th>
+                                                <th scope="col" class="col-td-th-3">Recieved Date</th>
+                                                <th scope="col" class="col-td-th-3">Commission/Bank Charges</th>
+                                                <th scope="col" class="col-td-th-3">Recieved Amount USD</th>
+                                                <th scope="col" class="col-td-th-3">Conversion Date</th>
+                                                <th scope="col" class="col-td-th-3">Conversion Rate</th>
+                                                <th scope="col" class="col-td-th-3">Converted Amount</th>
+                                                <th scope="col" class="col-td-th-3">FIRX Number</th>
+                                                <th scope="col" class="col-td-th-3">Payment Type</th>
+                                                <th scope="col" class="col-td-th-3">Available Balance</th>
+                                                <th scope="col" class="col-td-th-3">Action</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr"
+                                                *ngFor="let data of this.FILTER_VALUE_LIST; let i=index"
+                                                [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                            this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{ data.date }}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="date" type="text"
+                                                            placeholder="Date" [(ngModel)]="data.date">
+                                                    </div>
+                                                </td>
+
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{getPipoNumbers(data)}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <select [(ngModel)]="data.pipo" placeholder="Pipo No"
+                                                            class="tblInput form-control" name="pipo" style="border: 1px solid #C6CBD4;
+                                                  color: black;
+                                                  padding: 4px;
+                                                  font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                            <option>{{ pipoValue}}</option>
+                                                            <option *ngFor="let pipo of item3" value="{{pipo._id}}">
+                                                                {{pipo.pi_poNo}}</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.sbno}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="sbNo" type="text"
+                                                            placeholder="Shipping Bill" [(ngModel)]="data.sbNo">
+                                                    </div>
+                                                </td>
+
+                                                <td class="col-td-th-2">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.partyName}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="partyName"
+                                                            type="text" placeholder="Party Name"
+                                                            [(ngModel)]="data.partyName">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-2">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.BankName?.value}}
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{data.currency}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.amount}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="from" type="text"
+                                                            placeholder="Amount" [(ngModel)]="data.amount">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.origin}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <select [(ngModel)]="data.origin" placeholder="Origin"
+                                                            class="tblInput form-control" name="origin" style="border: 1px solid #C6CBD4;
+                                                    color: black;
+                                                    padding: 4px;
+                                                    font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                            <option>{{Originval}}</option>
+                                                            <option *ngFor="let ori of origin">{{ori}}</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.location}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <select [(ngModel)]="data.location" placeholder="Location"
+                                                            class="tblInput form-control" name="location" style="border: 1px solid #C6CBD4;
+                                                    color: black;
+                                                    padding: 4px;
+                                                    font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                            <option>{{Locval}}</option>
+                                                            <option *ngFor="let name of location">{{name.loc}}</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.commodity}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <select [(ngModel)]="data.commodity" placeholder="Commodity"
+                                                            class="tblInput form-control" name="commodity" style="border: 1px solid #C6CBD4;
+                                                    color: black;
+                                                    padding: 4px;
+                                                    font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                            <option>{{Comoval}}</option>
+                                                            <option *ngFor="let buyer of commodity">{{buyer.como}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.recievedDate}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="recievedDate"
+                                                            type="text" placeholder="Recieved Date"
+                                                            [(ngModel)]="data.recievedDate">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.commision}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="commision"
+                                                            type="text" placeholder="Commission/Bank Charges"
+                                                            [(ngModel)]="data.commision">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.recUSD}}
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.conversionDate}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="conversionDate"
+                                                            type="text" placeholder="Conversion Rate"
+                                                            [(ngModel)]="data.conversionDate">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.exchangeRate}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="exchangeRate"
+                                                            type="text" placeholder="Exchange Rate"
+                                                            [(ngModel)]="data.exchangeRate">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.convertedAmount}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="convertedAmount"
+                                                            type="text" placeholder="Converted Amount"
+                                                            [(ngModel)]="data.convertedAmount">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.billNo}}
+                                                    </div>
+
+                                                    <div *ngIf="optionsVisibility[i]">
+                                                        <input class="tblInput form-control" name="firxNumber"
+                                                            type="text" placeholder="FIRX Number/ID"
+                                                            [(ngModel)]="data.billNo">
+                                                    </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{data.PaymentType}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{data.BalanceAvail}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewpdf(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                                        aria-hidden="true"></i></a>
+                                                    <button title="Save" class="savBtn bgnone"
+                                                        *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i
+                                                            class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                    <button title="Edit" class="savBtn bgnone"
+                                                        *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i
+                                                            class="fa fa-pencil-square-o"
+                                                            aria-hidden="true"></i></button>
+                                                    <button title="Edit" class="savBtn bgnone"
+                                                        *ngIf="!optionsVisibility[i]"
+                                                        (click)="handleDelete(data._id,i)"><a title="Delete"
+                                                            href="javascript:void(0)"><i class="fa fa-trash-o"
+                                                                aria-hidden="true"></i></a>
+                                                    </button>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div> -->
         </div>
     </main>
 </div>

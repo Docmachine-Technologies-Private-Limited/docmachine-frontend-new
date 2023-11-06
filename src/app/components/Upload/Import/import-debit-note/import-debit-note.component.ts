@@ -55,14 +55,6 @@ export class ImportDebitNotesComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].publicUrl;
       this.validator.buildForm({
-        commercialNumber: {
-          type: "CommericalNo",
-          value: "",
-          label: "Commerical Number*",
-          rules: {
-            required: true,
-          }
-        },
         debitNoteNumber: {
           type: "text",
           value: "",
@@ -95,13 +87,11 @@ export class ImportDebitNotesComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    const selectedShippingBill: any = e.value?.commercialNumber
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
     e.value.currency = e.value?.currency?.type;
     e.value.file = 'import';
-    e.value.commercialNumber = e.value?.commercialNumber?.value;
     e.value.DebitNote = this.pipourl1;
     console.log(e.value);
     this.documentService.getInvoice_No({
@@ -136,22 +126,10 @@ export class ImportDebitNotesComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.changedCommercial(this.pipoArr)
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  changedCommercial(pipo: any) {
-    this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
-      res?.data.forEach(element => {
-        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0] });
-      });
-      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
-    },
-      (err) => {
-        console.log(err)
-      }
-    );
-  }
+
 }

@@ -29,8 +29,8 @@
                                     <div class="new_left_sidedoc pdf_invoce_scroll">
                                         <federal-bank-direct-import-payment [BankId]="this.selectedBankName"
                                             [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
-                                        this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData]" [RequiredLetterHead]="true"
-                                            (event)="this.UrlList=$event"
+                                        this.selectedItems,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD,this.FormData]"
+                                            [RequiredLetterHead]="true" (event)="this.UrlList=$event"
                                             id="first"></federal-bank-direct-import-payment>
                                         <hdfc-bank-direct-export-payment [BankId]="this.selectedBankName"
                                             [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
@@ -89,7 +89,7 @@
                                                 <label for="exampleInputEmail1" class="form-label">Select
                                                     bank*</label>
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank"
-                                                    [items]="this.BANK_LIST_DROPDOWN" bindLabel="value" bindValue="id"
+                                                [items]="this.BANK_LIST_DROPDOWN" bindLabel="value" bindValue="id"
                                                     [multiple]="false" [ngModel]="form?.bank" formControlName="bank"
                                                     (modelChanges)="form.bank=$event?.value"
                                                     (modelChanges)="onSelectBank($event)" #multiplepipo>
@@ -185,27 +185,6 @@
                                                                     required</div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-12" *ngIf="item?.pipo!=undefined && item?.pipo?.length!=0">
-                                                            <label for="Amount" class="form-label">Payment Terms</label>
-                                                            <div class="col-12"
-                                                                *ngFor="let pipoitem of item?.pipo[0]?.paymentTerm">
-                                                                <div class="col-12">
-                                                                    <label for="Amount" class="form-label">Type</label>
-                                                                    <input type="text" disabled class="form-control"
-                                                                        id="invoice_amount"
-                                                                        [value]="pipoitem?.type?.value"
-                                                                        placeholder="Invoice Amount" autocomplete="off">
-                                                                </div>
-                                                                <div class="col-12">
-                                                                    <label for="Amount"
-                                                                        class="form-label">Amount</label>
-                                                                    <input type="text" disabled class="form-control"
-                                                                        id="invoice_amount"
-                                                                        [value]="pipoitem?.amount"
-                                                                        placeholder="Invoice Amount" autocomplete="off">
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-12">
                                                             <label for="balanceAmount" class="form-label">Balance
                                                                 Amount</label>
@@ -241,8 +220,7 @@
                                                                 <button style="width:100%" type="button"
                                                                     class="btn btn-primary"
                                                                     (click)="removeItems(i)">-</button>
-                                                                <button type="button" class="btn btn-success"
-                                                                    (click)="fillForm()">Fill Pdf</button>
+                                                                <button type="button" class="btn btn-success" (click)="fillForm()">Fill Pdf</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -254,7 +232,7 @@
                                                 <div class="add_new_buttons">
                                                     <button type="button" class="btn btn-success"
                                                         (click)="addItems(pipoForm)">+ Add BOE</button>
-                                                    <button type="button" class="btn btn-success PopupOpen"
+                                                        <button type="button" class="btn btn-success PopupOpen"
                                                         popup-close="FORWARD_CONTRACT">
                                                         Select FDC</button>
                                                     <button type="button" class="btn btn-success PopupOpen"
@@ -729,8 +707,8 @@
     <app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
         name="Document View">
         <div class="col-12 mt-2 mb-2" *ngIf="this.PREVIEWS_URL_STRING!=''">
-            <app-pdf-viewer [downloadShow]="false" name="All Documents Merge" [src]="this.PREVIEWS_URL_STRING"
-                width="100%" height="500px"></app-pdf-viewer>
+            <app-pdf-viewer [downloadShow]="false" name="All Documents Merge"
+               [src]="this.PREVIEWS_URL_STRING" width="100%" height="500px"></app-pdf-viewer>
         </div>
         <div class="modal-footer">
             <div style="display:flex;" class="mt-3">

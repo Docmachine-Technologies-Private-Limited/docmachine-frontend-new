@@ -23,21 +23,12 @@
       <main id="content" class="content22 table-padding" role="main">
         <div cla ss="analytics" *ngIf="proceed">
           <div *ngIf="!selectPurpose">
-            <p class="stp3">Search by Group Name and Purpose code*</p>
+            <p class="stp3">Select a Purpose code*</p>
             <div *ngIf="!purposeSelect" class="top_serah_section">
-              <div style="gap: 10px;
-              display: grid !important;
-              grid-template-columns: repeat(2,1fr);">
-                <ng-select class="col-12" *ngIf="this.GROUP_NAME_LIST?.length!=0" [items]="this.GROUP_NAME_LIST"
-                  class="mb-4" style="margin-bottom: 20px;" placeholder="Search group name" bindLabel="value"
-                  (keyup)="searchDataGroupName($event.target.value);" (change)="this.searchDataGroupName($event?.value)"
-                  [mulitple]="true" #ngSelect> </ng-select>
-
-                <ng-select class="col-12" [items]="Inward_Remittancefilter" class="mb-4" style="margin-bottom: 20px;"
-                  placeholder="Search purpose code" (keyup)="searchData($event.target.value);"
-                  (change)="this.searchData(selection)" [mulitple]="true" [(ngModel)]="selection" name="commodity"
-                  #ngSelect> </ng-select>
-              </div>
+              <ng-select [items]="Inward_Remittancefilter" class="mb-4" style="margin-bottom: 20px;"
+                placeholder="Search purpose code,group name or description" (keyup)="searchData($event.target.value);"
+                (change)="this.searchData(selection)" [mulitple]="true" [(ngModel)]="selection" name="commodity"
+                #ngSelect> </ng-select>
               <div *ngIf="pgNumber != 0"> Matching Result
                 <br> Number of Purpose Group = {{ pgNumber }}
                 <br> Number of Purpose Code or Description = {{ pcNumber }}
@@ -48,54 +39,33 @@
                       (click)="removeClick(i)" style="color: red;    cursor: pointer;padding: 0 0 0 8px;"><i
                         class="fa fa-times" aria-hidden="true"></i></b></span> </div>
                 <br />
+                <button style="margin-top: 10px;" class="button1" (click)="proceedClick()">Proceed</button>
               </div>
-              <div class="col-12 table-custom">
-                <div class="thead-card">
-                  <label for="" class="label-text">Purpose Group Name</label>
-                  <div class="colspan">
-                    <label for="" class="label-text">Purpose Code</label>
-                    <label for="" class="label-text">Description</label>
-                  </div>
-                </div>
-                <div class="tbody-card" *ngFor="let item of this.NEW_PURPOSE_CODE;let j=index">
-                  <p class="p-border groupname-text">{{item?.groupname}}</p>
-                  <div class="colspanitem">
-                    <div class="colspan card-layout" [ngClass]="{'isActive':colspanitem.isActive==true}"
-                      *ngFor="let colspanitem of item?.purpose;let k=index"
-                      (click)="purposeClick(colspanitem?.code,colspanitem);">
-                      <p class="p-text">{{colspanitem?.code}}</p>
-                      <p class="text-left">{{colspanitem?.description}}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- <table class="table table-striped mb-0 change_theheading"
+              <table class="table table-striped mb-0 change_theheading"
                 style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
                 <thead style="width: 100%; font-size: 10px; font-weight: 300;">
-                  <tr class="text-muted table-heading" style="display: grid;
-                  grid-template-columns: 200px 200px calc(100% - 400px);">
-                    <th scope="col"> Purpose Group Name </th>
-                    <th scope="col"> PurposeCode</th>
-                    <th scope="col"> Description</th>
+                  <tr class="text-muted table-heading">
+                    <th scope="col" style="width: 17%; border: 0.1px solid #d3d3d3;"> Purpose Group Name </th>
+                    <th scope="col" style="width: 13%; border: 0.1px solid #d3d3d3;"> PurposeCode</th>
+                    <th scope="col" style="width: 60%; border: 0.1px solid #d3d3d3;"> Description</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr  class="table-row" style="font-size: 12px;display: grid;
-                  grid-template-columns: 200px 200px calc(100% - 400px);" *ngFor="let purposeRow of purposeRows; let i = index">
-                    <td *ngFor="let column of purposeRow;  let j = index"
+                  <tr class="table-row" style="font-size: 12px;" *ngFor="let purposeRow of purposeRows; let i = index">
+                    <td class="columH" *ngFor="let column of purposeRow;  let j = index"
                       [ngClass]='onClass(column.text)' [attr.rowSpan]="column.rowSpan"
-                      [style]="j==1?'width:200px':'vertical-align: top !important;'"
+                      style="vertical-align: top !important;"
                       (click)='purposeClick(purposeRow[j]["text"], purposeRow[j+1]["text"],"#search_box_new")'>
                       {{column.text}} </td>
                   </tr>
                 </tbody>
-              </table> -->
+              </table>
             </div>
           </div>
         </div>
         <div class="analytics" *ngIf="!proceed">
-          <!-- <div> <img src="../../../assets/back.png" style="width: 20px; height: 20px;"
-              (click)="hide('.search_box_new')"><span style="margin-left: 10px;">Back</span> </div> -->
+          <div> <img src="../../../assets/back.png" style="width: 20px; height: 20px;"
+              (click)="hide('.search_box_new')"><span style="margin-left: 10px;">Back</span> </div>
           <div class="flex-container">
             <div *ngFor="let code of selectedPurpose; let i = index" [ngClass]="{'my_class': c === code}"
               (click)="tabClick(code,i)"> {{code}}</div>
@@ -1038,10 +1008,10 @@
               <div *ngFor="let code of selectedPurpose; let j = index">
                 <div *ngIf='code === c && generatePurpose[j] != code || Select_A_bank[code]'>
                   <input style="width: 50%; margin-top: 10px;margin-bottom: 10px;"
-                    placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control PopupOpen"
-                    type="text" searchPIPONumbers id="SearchShippingBill" autocomplete="off"
-                    [value]='StringConverter(selectPIPO)' popup-close="PIPONumbers"
-                    (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers)" #SearchPIPONumbers>
+                    placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control" type="text"
+                    searchPIPONumbers id="SearchShippingBill" autocomplete="off" [value]='StringConverter(selectPIPO)'
+                    (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers.style.display='flex')"
+                    #SearchPIPONumbers>
                   <span *ngIf='filterToggle'>Select PI/PO numbers*</span>
                   <br>
                   <h3 class="select_bg_new">Select a bank <span style="color:red;">*</span></h3>
@@ -1051,33 +1021,29 @@
                     <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
                   </div>
                   <br>
-                  <div *ngIf='bankToggle'> <span>Credit A/C No.*</span>
+                  <div *ngIf='bankToggle'> <span> Credit to {{bankValue}}*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
                         value="value.bank" name="BankToCredit" (click)="creditTo(value)">
                       <label style="flex-direction:row;" class="label1"
-                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value.accNumber}}</label>
+                        for="male">{{value.bank}}-{{value.accType}}</label>
                     </div>
-                    <br><span>Charges A/C No.*</span>
+                    <br><span>Charges To {{bankValue}}*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
-                      <input *ngIf="value?.currency=='INR'" style="flex-direction:row;" type="radio" id="options1"
-                        class="circular_input" value="value.bank" name="BankToCharge" (click)="chargesTo(value)">
-                      <label *ngIf="value?.currency=='INR'" style="flex-direction:row;" class="label1"
-                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value.accNumber}}</label>
+                      <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
+                        value="value.bank" name="BankToCharge" (click)="chargesTo(value)">
+                      <label style="flex-direction:row;" class="label1"
+                        for="male">{{value.bank}}-{{value.accType}}</label>
                     </div>
                     <br>
                   </div>
-                  <div class="btn-control-panel" [ngClass]="{'btn-control-panel-2':this.charge?.length==0}">
-                    <button class="btn btn-primary" style="float:right" (click)='generateDoc(code,j)'
-                      [disabled]="this.charge?.length!=0?false:true"> Preview
-                    </button>
-                  </div>
+                  <button class="opt" style="float:right" (click)='generateDoc(code,j)'> Generate Document </button>
                 </div>
                 <div *ngIf='code === c && generatePurpose[j] == code'>
                   <div>
                     <div id="mainId" class="bc" *ngIf="donePurpose[j] != code && value!='' && value!=undefined">
                       <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
-                        name="Disposal Instruction" [src]="'data:application/pdf;base64,'+value" width="700px"
+                        name="Documents" [src]="'data:application/pdf;base64,'+value" width="700px"
                         height="500px"></app-pdf-viewer>
                     </div>
                     <br>
@@ -1085,53 +1051,29 @@
                       <br>
                       <div style="display: flex; align-items: center;" *ngIf="this.MT103_URL!=''">
                         <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
-                          name="SWIFT Copy" [src]="this.MT103_URL" width="700px" height="500px"></app-pdf-viewer>
+                          name="MT103 Documents" [src]="this.MT103_URL" width="700px" height="500px"></app-pdf-viewer>
                       </div>
                       <br>
                     </div>
-                    <div style="display: flex;flex-direction: column;gap: 20px;">
+                    <div *ngIf='newDone' style="display: flex;flex-direction: column;gap: 20px;">
                       <div class="docStyle" style="width: 500px;"
                         *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
                         <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
-                          [name]="'PIPO-'+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
+                          [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
                       </div>
                     </div>
-                    <div *ngIf="donePurpose[j] != code" class="btn-control-panel">
-                      <!-- <button *ngIf='newDone' class="button1" style="margin-right: 10px;" title="Share As PDF"
+                    <div *ngIf="donePurpose[j] != code" style="display: block; width: 78%;  margin-top: 40px;">
+                      <button *ngIf='newDone' class="button1" style="margin-right: 10px;" title="Share As PDF"
                         (click)="doneDox()">Done </button>
                       <button *ngIf='newDone' class="button1" style="margin-right: 10px;"
-                        (click)="hidePreview()">Edit</button> -->
-                      <!-- <button class="btn btn-primary PopupOpen" popup-close="ExportTransactionView"
-                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL);">Send for
-                        Approval</button> -->
-                      <div style="display: flex;">
-                        <div
-                          *ngIf="this.GetDownloadStatus?.status=='Approved' && this.USER_DATA?.RoleCheckbox!='' && this.USER_DATA?.RoleCheckbox!=null">
-                          <button type="submit" class="btn btn-primary" (click)="mergeAllPDFs('download')"
-                            (click)="modal.dismiss('Cross click')">Download PDF</button>
-                          <button type="submit" class="btn btn-primary" (click)="mergeAllPDFs('sendMail')"
-                            (click)="modal.dismiss('Cross click')">Send Mail</button>
-                        </div>
-                        <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                          <div
-                            *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                            <button *ngIf='newDone' class="btn btn-primary" style="margin-right: 10px; width:200px"
-                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
-                              (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
-                              for Approval</button>
-                          </div>
-                          <div
-                            *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
-                            <button *ngIf='newDone' class="btn btn-primary" style="margin-right: 10px; width:200px"
-                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'">Wait
-                              for Approval</button>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- <button class="btn btn-primary">Download</button> -->
-                      <!-- <button *ngIf='!newDone' id="ProceedPreview" class="button1"
+                        (click)="hidePreview()">Edit</button>
+                      <button *ngIf='newDone' class="button1 PopupOpen" popup-close="ExportTransactionView"
+                        style="margin-right: 10px; width:200px"
+                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL)">Send Mail /
+                        Download</button>
+                      <button *ngIf='!newDone' id="ProceedPreview" class="button1"
                         style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to
-                        Preview</button> -->
+                        Preview</button>
                     </div>
                   </div>
                 </div>
@@ -1151,34 +1093,33 @@
                               height="500px"></app-pdf-viewer>
                           </div>
                         </div>
+                        <div
+                          style="display: flex; width:100%; margin-left: 240px; margin-top: 20px; margin-bottom:20px; ">
+                          <div
+                            *ngIf="this.GetDownloadStatus?.status=='Approved' && this.USER_DATA?.RoleCheckbox!='' && this.USER_DATA?.RoleCheckbox!=null">
+                            <button type="submit" class="submitBTN" (click)="mergeAllPDFs('download')"
+                              (click)="modal.dismiss('Cross click')">Download PDF</button>
+                            <button type="submit" class="submitBTN" (click)="mergeAllPDFs('sendMail')"
+                              (click)="modal.dismiss('Cross click')">Send Mail</button>
+                          </div>
+                          <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                            <div
+                              *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                              <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
+                                [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                                (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
+                                for Approval</button>
+                            </div>
+                            <div
+                              *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
+                              <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
+                                [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'">Wait
+                                for Approval</button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <custom-model-header>
-                      <div style="display: flex;">
-                        <div
-                          *ngIf="this.GetDownloadStatus?.status=='Approved' && this.USER_DATA?.RoleCheckbox!='' && this.USER_DATA?.RoleCheckbox!=null">
-                          <button type="submit" class="btn btn-primary" (click)="mergeAllPDFs('download')"
-                            (click)="modal.dismiss('Cross click')">Download PDF</button>
-                          <button type="submit" class="btn btn-primary" (click)="mergeAllPDFs('sendMail')"
-                            (click)="modal.dismiss('Cross click')">Send Mail</button>
-                        </div>
-                        <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                          <div
-                            *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                            <button *ngIf='newDone' class="btn btn-primary" style="margin-right: 10px; width:200px"
-                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
-                              (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
-                              for Approval</button>
-                          </div>
-                          <div
-                            *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
-                            <button *ngIf='newDone' class="btn btn-primary" style="margin-right: 10px; width:200px"
-                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'">Wait
-                              for Approval</button>
-                          </div>
-                        </div>
-                      </div>
-                    </custom-model-header>
                   </app-custom-model>
                 </div>
               </div>
@@ -1270,7 +1211,7 @@
   </div>
 </div>
 
-<!-- <button style="display: none;visibility: hidden;" type="button" id="POPUP_OPEN_CLOSE" class="PopupOpen"
+ <!-- <button style="display: none;visibility: hidden;" type="button" id="POPUP_OPEN_CLOSE" class="PopupOpen"
   [attr.popup-close]="'InwardRemittanceDisposal'"></button> -->
 
 <app-custom-model [FooterButton]="true" EventButton="false"
@@ -1355,77 +1296,12 @@
     [customstyle]="{'max-width':'98vw !important'}" class="p-2" height="98vh" id="ShippingBill" name="Shipping Bill"
     #ShippingBill>
     <div class="DDDD p-3" *ngIf="this.documentService.MT102_SUBJECT!=''">
-      <app-pdf-viewer [htmlload]="true" class="pt-3" [downloadShow]="false"
-        src="home/Transaction/Export/direct-dispatch" width="100%" height="500px"></app-pdf-viewer>
+      <app-pdf-viewer [htmlload]="true" class="pt-3" [downloadShow]="false" src="home/Transaction/Export/direct-dispatch" width="100%"
+        height="500px"></app-pdf-viewer>
     </div>
   </app-custom-model>
 </div>
-<app-custom-model [FooterButton]="false" modalbodystyle="max-height:90vh" (ModelChange)="removeSession()"
-  [customstyle]="{'max-width':'98vw !important'}" class="p-2" height="98vh" id="PIPONumbers"
-  name="Search PI/PO numbers*" #PIPONumbers>
-  <custom-model-header>
-    <div class="d-flex" style="gap: 10px;">
-      <button class="filter1 btn btn-secondary" aria-label="Close" (click)="PIPONumbers?.displayHidden">Cancel</button>
-      <button class="filter1 btn btn-primary" [disabled]="selectPIPO_data?.length!=0?false:true"
-        style="margin-left:16px" (click)="AmountValidation(PIPONumbers)">Sumbit</button>
-    </div>
-  </custom-model-header>
-  <div class="col-12 p-2">
-    <div class="mt_bottom" style="margin-bottom:20px">
-      <div class="row">
-        <div class="d-flex col-12" style="align-items: baseline;">
-          <select [(ngModel)]="PIPONumbersBuyerName" class="form-control col-4"
-            (change)="PIPOFilter(PIPONumbersBuyerName)" disabled>
-            <option value="BuyerName">BuyerName</option>
-            <option [value]="item?.value" *ngFor="let item of buyerName ; let i = index;" style="color: black;">
-              {{item?.value}}</option>
-          </select>
-          <div class="inerward-remittance-details">
-            <p>Remittance-Details || Currency : {{this.Inward_Remittance_MT103_DATA[0]?.currency}} | Remittance Amount :
-              {{this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal}} </p>
-            <p>PI/PO Deatils || Currency : {{this.Inward_Remittance_MT103_DATA[0]?.currency}} | PI/PO Amount :
-              {{this.PIPO_SUM_AMOUNT}} </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <section class="box-shadow" style="height: 56vh;
-  overflow: auto;">
-      <table class="table mb-0 mt-2">
-        <thead>
-          <tr class="table-tr pr-3">
-            <th scope="col" class="col-td-th-1">#</th>
-            <th scope="col" class="col-td-th-3">Invoice No</th>
-            <th scope="col" class="col-td-th-3">Invoice Date</th>
-            <th scope="col" class="col-td-th-3">Buyer Name</th>
-            <th scope="col" class="col-td-th-3">Branch</th>
-            <th scope="col" class="col-td-th-3">Currency</th>
-            <th scope="col" class="col-td-th-3">Invoice Amount</th>
-            <th scope="col" class="col-td-th-3">Balance Amount</th>
-            <th scope="col" class="col-td-th-3">Utilized Amount</th>
-          </tr>
-        </thead>
-        <tbody *ngIf="dataSource.length!=0">
-          <tr class="table-tr pr-3" *ngFor='let data of dataSource; let i = index'>
-            <td scope="col" class="col-td-th-1">
-              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data,i);" />
-            </td>
-            <td scope="col" class="col-td-th-3"> {{data?.pi_poNo}} </td>
-            <td scope="col" class="col-td-th-3"> {{data?.date}} </td>
-            <td scope="col" class="col-td-th-3"> {{data?.buyerName}} </td>
-            <td scope="col" class="col-td-th-3"> {{data?.location}} </td>
-            <td scope="col" class="col-td-th-3"> {{data?.currency}} </td>
-            <td scope="col" class="col-td-th-3"> {{data?.amount}} </td>
-            <td scope="col" class="col-td-th-3"> {{data?.AvailableAmount}} </td>
-            <td scope="col" class="col-td-th-3"><input type="text" (keypress)="InputValidation($event,data)"
-                [(ngModel)]="data.UtilizedAmount"></td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </div>
-</app-custom-model>
-<!-- <div class="bg-black-opacity" #PIPONumbers>
+<div class="bg-black-opacity" #PIPONumbers>
   <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -1442,48 +1318,50 @@
                   <div class="DDDD">
                     <div class="mt_bottom" style="margin-bottom:20px">
                       <div class="row">
-                        <div class="d-flex col-12" style="align-items: baseline;">
-                          <select [(ngModel)]="PIPONumbersBuyerName" class="form-control col-4"
+                        <div class="col-md-6">
+                          <select [(ngModel)]="PIPONumbersBuyerName" class="form-control"
                             (change)="PIPOFilter(PIPONumbersBuyerName)" disabled>
                             <option value="BuyerName">BuyerName</option>
                             <option [value]="item?.value" *ngFor="let item of buyerName ; let i = index;"
                               style="color: black;">{{item?.value}}</option>
                           </select>
-                          <div class="inerward-remittance-details">
-                            <p>Currency : {{this.Inward_Remittance_MT103_DATA[0]?.currency}} | Remittance Amount : {{this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal}} </p>
-                          </div>
                         </div>
+                        <!-- <div class="col-md-3">
+                          <button class="filter1 btn btn-primary" (click)="PIPONumbersBuyerName = 'BuyerName';
+                                                PIPOFilter(PIPONumbersBuyerName)">Reset</button>
+                        </div> -->
                       </div>
                     </div>
-                    <section class="box-shadow" style="height: 56vh;
-                    overflow: auto;">
-                      <table class="table mb-0 mt-2">
-                        <thead>
-                          <tr class="table-tr pr-3">
-                            <th scope="col" class="col-td-th-1">#</th>
-                            <th scope="col" class="col-td-th-3">Invoice No</th>
-                            <th scope="col" class="col-td-th-3">Invoice Date</th>
-                            <th scope="col" class="col-td-th-3">Buyer Name</th>
-                            <th scope="col" class="col-td-th-3">Branch</th>
-                            <th scope="col" class="col-td-th-3">Currency</th>
-                            <th scope="col" class="col-td-th-3">Amount</th>
-                            <th scope="col" class="col-td-th-3">Balance Amount</th>
-                            <th scope="col" class="col-td-th-3">Utilized Amount</th>
+                    <section style="width: 100%;overflow: auto;
+                                        height: 350px;max-height: 800px;" class="box-shadow">
+                      <table class="table table-striped mb-0">
+                        <thead style="width: 100% ;height: 54px;">
+                          <tr class="text-muted table-heading"
+                            style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
+                            <th scope="col"></th>
+                            <th scope="col">Invoice No</th>
+                            <th scope="col">Invoice Date</th>
+                            <th scope="col">Consignee Name</th>
+                            <th scope="col">Branch</th>
+                            <th scope="col">Commodity</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Incoterm</th>
+                            <th scope="col">Payment Term</th>
                           </tr>
                         </thead>
                         <tbody *ngIf="dataSource.length!=0">
-                          <tr class="table-tr pr-3" *ngFor='let data of dataSource; let i = index'>
-                            <td scope="col" class="col-td-th-1">
-                              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data,i);" />
+                          <tr class="table-row" *ngFor='let data of dataSource let i = index'>
+                            <td>
+                              <input type="checkbox" (change)="changeCheckboxPIPO($event,data['pi_poNo'],data); " />
                             </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.pi_poNo}} </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.date}} </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.buyerName}} </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.location}} </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.currency}} </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.amount}} </td>
-                            <td scope="col" class="col-td-th-3"> {{data?.AvailableAmount}} </td>
-                            <td scope="col" class="col-td-th-3"><input type="text" (changes)="InputValidation($event,data)" [(ngModel)]="data.UtilizedAmount"></td>
+                            <td> {{data.pi_poNo}} </td>
+                            <td> {{data.date}} </td>
+                            <td> {{data.buyerName}} </td>
+                            <td> {{data.fobCurrency}} </td>
+                            <td> {{data.location}} </td>
+                            <td> {{data.commodity}} </td>
+                            <td> {{data.amount}} </td>
+                            <td> {{data?.paymentTerm[0]?.type?.value}} </td>
                           </tr>
                         </tbody>
                       </table>
@@ -1492,8 +1370,8 @@
                   <div class="submit_right_button" style="float:right;">
                     <button class="filter1 btn btn-secondary" aria-label="Close"
                       (click)="PIPONumbers.style.display='none'">Cancel</button>
-                    <button class="filter1 btn btn-primary" [disabled]="selectPIPO_data?.length!=0?false:true"
-                      style="margin-left:16px" (click)="AmountValidation(PIPONumbers)">Sumbit</button>
+                    <button class="filter1 btn btn-primary" style="margin-left:16px"
+                      (click)="PIPONumbers.style.display='none'">Sumbit</button>
                   </div>
                 </div>
               </div>
@@ -1503,7 +1381,7 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>
 
 <app-custom-model [customstyle]="{'max-width':'690vw !important'}" class="p-2" height="75vh" id="FORWARD_CONTRACT"
   [minimizedisabled]="false" modalbodyheight="70vh" name="Select FORWARD CONTRACT View" #FORWARD_CONTRACTPANEL>

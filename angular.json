@@ -17,7 +17,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist/dm-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -61,7 +60,6 @@
           },
           "configurations": {
             "production": {
-              "aot": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -209,8 +207,8 @@
               "builder": "@nguniversal/builders:ssr-dev-server",
               "configurations": {
                 "development": {
-                  "browserTarget": "DevBuildSSR/DevBuild:build:development",
-                  "serverTarget": "DevBuildSSR/DevBuild:server:development"
+                  "browserTarget": "angular-starter:build:development",
+                  "serverTarget": "angular-starter:server:development"
                 },
                 "production": {
                   "browserTarget": "angular-starter:build:production",

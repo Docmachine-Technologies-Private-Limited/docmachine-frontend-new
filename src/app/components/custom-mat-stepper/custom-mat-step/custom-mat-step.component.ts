@@ -13,7 +13,7 @@ export class CustomMatStepComponent implements OnInit {
   @Input('FormIndex') FormIndex: any = -1;
   @Output('FormSubmit') FormSubmit: any = new EventEmitter();
   counter: number = 1;
-  @Input('ActivePanel') ActivePanel: boolean = false;
+  ActivePanel: boolean = false;
   CHANGE_EVENT_ID: any = 0;
   @Input('errorMessage') errorMessage: any = '';
 

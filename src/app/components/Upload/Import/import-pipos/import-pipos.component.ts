@@ -7,7 +7,6 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'import-pipos',
@@ -95,41 +94,22 @@ export class ImportPIPOSComponent implements OnInit {
           value: "",
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Raw Material", value: 'Raw Material' },
+            { text: "Non Capital Goods", value: 'Non Capital Goods' },
             { text: 'Capital Goods', value: 'Capital Goods' },
             { text: 'Services', value: 'Services' },
             { text: 'Samples', value: 'Samples' },
             { text: 'Repairs and returns', value: 'Repairs and returns' }
           ],
           NotificationShow: {
-            "Raw Material": "",
-            "Services": "No BOE traceability and applicability.",
+            "Non Capital Goods": "",
+            "Services": "No SB traceability and applicability.",
             "Capital Goods": "If goods are first imported and to be sent out, FOC should be marked in BOE and while doing export BOE number should be captured.",
             "Samples": "Invoice should be sent to CHA for marking FOC in the BOE.",
-            "Repairs and returns": "If goods are sent from India out and then coming in, BOE number to captured in BOE along with FOC."
+            "Repairs and returns": "If goods are sent from India out and then coming in, SB number to captured in BOE along with FOC."
           },
           rules: {
             required: true,
-          },
-          HideShowInput: {
-            Services: ["incoterm", "ModeofTransport"],
-          },
-          LabelNameChange: {
-            Services: {
-              paymentTerm: {
-                type: "formGroup",
-                name: "lastDayShipment",
-                labelChange: "Last date of delivery"
-              }
-            },
-            default: {
-              paymentTerm: {
-                type: "formGroup",
-                name: "lastDayShipment",
-                labelChange: "Last date of shipment"
-              }
-            }
-          },
+          }
         },
         pi_poNo: {
           type: "text",
@@ -142,7 +122,7 @@ export class ImportPIPOSComponent implements OnInit {
         date: {
           type: "date",
           value: "",
-          label: "PI/PO Date",
+          label: "Invoice Date",
           rules: {
             required: true,
           }
@@ -153,26 +133,12 @@ export class ImportPIPOSComponent implements OnInit {
           label: "Currency",
           rules: {
             required: true,
-          },
-          autofill: {
-            type: "formGroup",
-            SetInputName: "currency",
-            CONTROLS_NAME: "paymentTerm",
-            GetInputName: "currency"
           }
         },
         amount: {
           type: "text",
           value: "",
-          label: "PI/PO Amount",
-          rules: {
-            required: true,
-          },
-        },
-        commodity: {
-          type: "commodity",
-          value: "",
-          label: "Choose commodity",
+          label: "Invoice amount",
           rules: {
             required: true,
           }
@@ -189,6 +155,14 @@ export class ImportPIPOSComponent implements OnInit {
           type: "location",
           value: "",
           label: "Branch",
+          rules: {
+            required: true,
+          }
+        },
+        lastDayShipment: {
+          type: "date",
+          value: "",
+          label: "Last date of shipment",
           rules: {
             required: true,
           }
@@ -254,34 +228,26 @@ export class ImportPIPOSComponent implements OnInit {
           type: "formGroup",
           label: "Payment Terms",
           GroupLabel: ['Payment Terms 1'],
-          AddNewRequried: true,
+          AddNewRequried:true,
           rules: {
             required: false,
           },
           formArray: [
             [
               {
-                type: "PaymentTermType",
-                value: "",
-                label: "Type",
-                name: 'type',
-                rules: {
-                  required: true,
-                },
-                callback: (item: any) => {
-                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                  let currentVal = item?.dynamicFormGroup?.controls['currency']?.value;
-                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.type);
-                  myForm['touched'] = true;
-                  myForm['status'] = 'VALID';
-                  console.log(item, "callback")
-                },
-              },
-              {
                 type: "date",
                 value: "",
                 label: "Last date of shipment",
                 name: 'date',
+                rules: {
+                  required: true,
+                },
+              },
+              {
+                type: "PaymentTermType",
+                value: "",
+                label: "Type",
+                name: 'type',
                 rules: {
                   required: true,
                 },
@@ -302,8 +268,7 @@ export class ImportPIPOSComponent implements OnInit {
                 name: 'currency',
                 rules: {
                   required: true,
-                },
-                disabled: true
+                }
               },
             ]
           ]
@@ -318,47 +283,34 @@ export class ImportPIPOSComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    console.log(this.paymentTermSum(e.value.paymentTerm), e.value.amount, "this.paymentTermSum(e.value.paymentTerm)")
-    if (this.paymentTermSum(e.value.paymentTerm) == parseInt(e.value.amount)) {
-      e.value.file = 'import';
-      e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-      e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
-      e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
-      e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
-     
-      if (e.value?.document == 'PI') {
-        e.value.doc = this.pipourl1
-      }
-      else if (e.value?.document == 'PO') {
-        e.value.doc = this.pipourl1
-      }
-      this.documentService.getInvoice_No({
-        pi_poNo: e.value.pi_poNo
-      }, 'pi_po').subscribe((resp: any) => {
-        console.log('creditNoteNumber Invoice_No', resp)
-        if (resp.data.length == 0) {
-          e?.value?.paymentTerm?.forEach(element => {
-            element['BalanceAmount']=element?.amount
-         });
-          this.documentService.addPipo(e.value).subscribe(
-            (res) => {
-              this.toastr.success('PI/PO added successfully.');
-              this.router.navigateByUrl("home/Summary/Import/Pipo");
-            },
-            (err) => console.log("Error adding pipo")
-          );
-        } else {
-          this.toastr.error(`Please check this pipo no. : ${e.value.pi_poNo} already exit...`);
-        }
-      });
-    } else {
-      this.toastr.error(`Total amount in payment Term should be equal to PIPO amount`);
+    e.value.file = 'import';
+    e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
+    e.value.benneName = e.value.benneName?.value != undefined ? e.value.benneName.value : e.value.benneName;
+    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+    if (e.value?.document == 'PI') {
+      e.value.doc = this.pipourl1
     }
-  }
-
-  paymentTermSum(value: any) {
-    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+    else if (e.value?.document == 'PO') {
+      e.value.doc = this.pipourl1
+    }
+    this.documentService.getInvoice_No({
+      pi_poNo: e.value.pi_poNo
+    }, 'pi_po').subscribe((resp: any) => {
+      console.log('creditNoteNumber Invoice_No', resp)
+      if (resp.data.length == 0) {
+        this.documentService.addPipo(e.value).subscribe(
+          (res) => {
+            this.toastr.success('PI/PO added successfully.');
+            this.router.navigateByUrl("home/Summary/Import/Pipo");
+          },
+          (err) => console.log("Error adding pipo")
+        );
+      } else {
+        this.toastr.error(`Please check this pipo no. : ${e.value.pi_poNo} already exit...`);
+      }
+    });
   }
 
   clickPipo(event: any) {

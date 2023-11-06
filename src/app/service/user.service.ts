@@ -68,7 +68,6 @@ export class UserService implements OnInit {
     );
   }
 
-
   Rolelogin(data: any) {
     let authToken: any = this.loadFromLocalStorage();
     console.log(authToken, data);
@@ -426,10 +425,9 @@ export class UserService implements OnInit {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/team/getUser`, { team: "team", }, httpOptions);
+    return this.http.post(
+      `${this.api_base}/team/getUser`, { team: "team", }, httpOptions);
   }
-  
-
 
   public getUserById(id: any) {
     this.loadFromLocalStorage();

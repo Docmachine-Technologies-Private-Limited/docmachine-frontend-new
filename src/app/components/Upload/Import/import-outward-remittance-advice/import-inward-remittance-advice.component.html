@@ -1,22 +1,9 @@
-<upload-components-header [PIPO_TARANSACTION]="this.UPLOAD_STATUS" title="Upload/Import/Forex Advice Document" id="Shippingbill"
+<upload-components-header title="Upload/Import/Forex Advice Document" id="Shippingbill"
     (UploadHeaderEvent)="clickPipo($event)">
     <div class="upload-panel" *ngIf="publicUrl!=''">
         <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
-            Newheight="calc(100vh - 130px)"></app-pdf-viewer>
-        <upload-components [morecontent]="true" id="OutwardRemittanceAdvice" (SubmitEvent)="onSubmit($event)">
-            <more-content>
-                <div class="label-name-amount">
-                    <p><span class="label-name">Total ORM : </span> <span
-                            class="label-amount">{{this.CI_INFO_SUM['TOTAL_CI']}}</span></p>
-                    <p><span class="label-name">PIPO Amount : </span> <span
-                            class="label-amount">{{this.CI_INFO_SUM['PIPO_AMOUNT']}}</span></p>
-                    <p><span class="label-name">ORM Sum Amount : </span> <span
-                            class="label-amount">{{this.CI_INFO_SUM['CI_SUM']}}</span></p>
-                    <p><span class="label-name">REMAINING AMOUNT : </span> <span
-                            class="label-amount">{{this.CI_INFO_SUM['REMAINING_AMOUNT']}}</span></p>
-                </div>
-            </more-content>
-        </upload-components>
+            Newheight="700px"></app-pdf-viewer>
+        <upload-components id="OutwardRemittanceAdvice" (SubmitEvent)="onSubmit($event)"></upload-components>
     </div>
 </upload-components-header>
 <upload-popup id="Shippingbill" url="documents/InwardOutward/uploadFile" (event)="response($event)"></upload-popup>

@@ -1,6 +1,113 @@
 <!DOCTYPE html>
-<div class="col-12 p-0 mt-2" id="federal-bank-letter-head-2">
-    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-    *ngIf="this.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Request Letter"
-    [src]="this.PREVIWES_URL"></app-pdf-viewer>
+
+<div class="col-12" style="padding: 30px;overflow: auto;" id="federal-bank-letter-head-2">
+    <img [src]="this.LETTER_HEAD_IMAGE" alt="LETTER_HEAD_IMAGE">
+    <div class="hdf-bank" style="
+    background-size: 100% 100%;
+    width: 610px;
+    padding-top: 90px;
+    padding-bottom: 0;
+    position: absolute;
+    top: 0;
+    transform: scale(.9);">
+        <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;position: relative;'>
+        <span style="position: absolute;font-size: 19px;font-weight: bold;top: 0;">The Manager</span>
+        <span style="position: absolute;right: 160px;
+        font-size: 19px;
+        font-weight: bold;">Date</span></p>
+        <p style='margin:0cm;font-size:15px;font-family:"Calibri",sans-serif;margin-top: 25px;'><span
+                style='font-size:16px;font-family:"Arial",sans-serif;'>Federal Bank Ltd.&nbsp;</span></p>
+        <p style='margin:0cm;font-size:15px;font-family:"Calibri",sans-serif;'><span
+                style='font-size:16px;font-family:"Arial",sans-serif;'>CCSC, Federal Bank St, Marks Road</span></p>
+        <p style='margin:0cm;font-size:15px;font-family:"Calibri",sans-serif;'><span
+                style='font-size:16px;font-family:"Arial",sans-serif;'>Bangalore 560 001</span></p>
+        <p
+            style='margin-top:0cm;margin-right:354.4pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;'>
+            <span style='font-family:"Arial",sans-serif;'>&nbsp;</span>
+        </p>
+        <p
+            style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>Dear Sir,</span>
+        </p>
+        <p
+            style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <strong><u><span style='font-family:"Arial",sans-serif;'>Sub: Foreign Outward remittance of
+                        {{data[1][0]?.currency}} </span></u></strong>
+        </p>
+        <p
+            style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <strong><u><span style='font-family:"Arial",sans-serif;'>Ref Cash Credit A/c
+                        No.{{data[0]?.accNumber}}</span></u></strong>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>We request you to please transfer {{data[1][0]?.currency}} to
+                the beneficiary, details of which are mentioned below, towards payment of import of Raw material.</span>
+        </p>
+        <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><span
+                style='font-family:"Arial",sans-serif;color:black;'>&nbsp;</span></p>
+        <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><span
+                style='font-family:"Arial",sans-serif;color:black;'>DEBIT ACCOUNT</span><span
+                style='font-family:"Arial",sans-serif;'>:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; {{data[4]?.currency}} {{data[4]?.accType}}
+                {{data[4]?.accNumber}}&nbsp;</span></p>
+        <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><span
+                style='font-family:"Arial",sans-serif;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>NAME&nbsp;OF&nbsp;BENEFICIARY:&nbsp;
+                {{data[2]?.benneName}}</span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>NAME OF BANK: {{data[2]?.beneBankName}}</span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>BRANCH: </span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>IBAN NO : {{data[2]?.iban}}</span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>SWIFT/BIC CODE: {{data[2]?.beneBankSwiftCode}}</span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>&nbsp;</span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>The related invoice and forms are enclosed herewith. Request
+                you to please process the wire transfer at the earliest and share the remittance advice once
+                completed.</span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>&nbsp;</span>
+        </p>
+        <p
+            style='margin-top:4.6pt;margin-right:36.25pt;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>Thanking You,&nbsp;</span>
+        </p>
+        <p
+            style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <span style='font-family:"Arial",sans-serif;'>For <strong>C M Envirosystems Pvt. Ltd.</strong></span>
+        </p>
+        <p
+            style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <strong><span style='font-family:"Arial",sans-serif;'>&nbsp;</span></strong>
+        </p>
+        <p
+            style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <strong><span style='font-family:"Arial",sans-serif;'>&nbsp;</span></strong>
+        </p>
+        <p
+            style='margin-top:.05pt;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>
+            <strong><span style='font-family:"Arial",sans-serif;'>Authorized signatory</span></strong>
+        </p>
+    </div>
 </div>

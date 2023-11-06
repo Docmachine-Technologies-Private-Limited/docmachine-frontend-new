@@ -2,7 +2,7 @@
     (UploadHeaderEvent)="clickPipo($event)">
     <div class="upload-panel" *ngIf="publicUrl!=''">
         <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
-            Newheight="calc(100vh - 130px)"></app-pdf-viewer>
+            Newheight="700px"></app-pdf-viewer>
         <upload-components id="CreditNoteImport" (SubmitEvent)="onSubmit($event)"></upload-components>
     </div>
 </upload-components-header>

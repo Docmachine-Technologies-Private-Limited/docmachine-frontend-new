@@ -63,7 +63,7 @@ export class MasterServiceAgreementsComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        masterServiceNumber: {
+        masterServiceAmount: {
           type: "text",
           value: "",
           label: "Master Service Number*",
@@ -79,39 +79,15 @@ export class MasterServiceAgreementsComponent implements OnInit {
             required: true,
           }
         },
-        masterServiceAmount: {
+        masterServiceNumber: {
           type: "text",
           value: "",
-          label: "Master Service Amount*",
+          label: "Master Service Amount",
           rules: {
             required: true,
           }
-        },
-        StartDate: {
-          type: "date",
-          value: "",
-          label: "Start Date*",
-          rules: {
-            required: true,
-          }
-        },
-        Expirydate: {
-          type: "date",
-          value: "",
-          label: "Expiry date*",
-          rules: {
-            required: true,
-          }
-        },
-        PartyName: {
-          type: "buyer",
-          value: "",
-          label: "Overseas Party Name*",
-          rules: {
-            required: true,
-          }
-        },     
-      }, 'ExportMasterService');
+        }
+      }, 'ExeportMasterService');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -123,6 +99,7 @@ export class MasterServiceAgreementsComponent implements OnInit {
     e.value.file = 'export';
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
+    e.value.buyerName = this.BUYER_LIST;
     e.value.currency = e.value?.currency?.type;
     this.documentService.getInvoice_No({
       masterServiceNumber: e.value.masterServiceNumber

@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
-import moment from "moment";
 
 @Component({
   selector: 'import-other-documents-summary',
@@ -43,6 +42,8 @@ export class ImportOtherDocumentsComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "Packing List No.",
+      "Currency",
+      "Packing List Amount",
       "Beneficiary Name",
       "Action"],
     items: [],
@@ -53,8 +54,11 @@ export class ImportOtherDocumentsComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
     ],
     eventId: ''
   }
@@ -121,8 +125,10 @@ export class ImportOtherDocumentsComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          packingListDate: moment(element['packingListDate']).format("DD-MM-YYYY"),
+          packingListDate: element['packingListDate'],
           packingListNumber: element['packingListNumber'],
+          currency: element['currency'],
+          packingListAmount: element['packingListAmount'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
@@ -235,21 +241,15 @@ export class ImportOtherDocumentsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   packingListDate: this.SELECTED_VALUE['packingListDate'],
-    //   packingListNumber: this.SELECTED_VALUE['packingListNumber'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   packingListAmount: this.SELECTED_VALUE['packingListAmount'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
-      }
-    };
-    this.router.navigate([`/home/Summary/Import/Edit/PackingListInvoices`],navigationExtras);
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      packingListDate: this.SELECTED_VALUE['packingListDate'],
+      packingListNumber: this.SELECTED_VALUE['packingListNumber'],
+      currency: this.SELECTED_VALUE['currency'],
+      packingListAmount: this.SELECTED_VALUE['packingListAmount'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
     this.toastr.warning('Packing List Row Is In Edit Mode');
   }
 

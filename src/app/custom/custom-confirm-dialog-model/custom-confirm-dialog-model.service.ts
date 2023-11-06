@@ -8,7 +8,6 @@ export class CustomConfirmDialogModelService {
   titleheader:any=[];
   INPUT_VALUES:any=[];
   CALLBACKS:Function;
-  ButtonName:any=''
   url:any='';
   TYPE_OF_COMMENTS: string = '';
   constructor() { }

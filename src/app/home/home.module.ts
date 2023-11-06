@@ -1,6 +1,6 @@
 import { SidenavComponent } from "./sidenav/sidenav.component";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, OnInit } from "@angular/core";
+import { Router, RouterModule } from "@angular/router";
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ModalContentComponent1 } from './pipo-doc-export/pipo-doc-export.component';
@@ -94,12 +94,6 @@ import { ExportSummaryModule } from "./SummaryPage/Export/export-summary.module"
 import { ImportSummaryModule } from "./SummaryPage/Import/import-summary.module";
 import { ImportTransactionModule } from "./Transaction/Import/import-transaction.module";
 import { ExportTransactionModule } from "./Transaction/Export/export-transaction.module";
-import { TallyApiConnectorComponent } from "../TallyConnector/tally-api-connector/tally-api-connector.component";
-import { ContactuspanelComponent } from "./contactuspanel/contactuspanel.component";
-import { ContactusTechnicalComponent } from "./contactuspanel/contactus-technical/contactus-technical.component";
-import { ContactusProductOptionComponent } from "./contactuspanel/contactus-product-option/contactus-product-option.component";
-import { AddBuyerNameAdminMemberComponent } from "./manage-customer/add-buyer-name-admin-member/add-buyer-name-admin-member.component";
-import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-beneficiary-name-admin-member/add-beneficiary-name-admin-member.component";
 
 @NgModule({
   declarations: [
@@ -141,12 +135,8 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
     ForwardContractSummaryComponent,
     RoleBasedSingUpComponent,
     MasterUploadComponent,
-    TallyApiConnectorComponent,
-    ContactuspanelComponent,
-    ContactusTechnicalComponent,
-    ContactusProductOptionComponent,
-    AddBuyerNameAdminMemberComponent,
-    AddBeneficiaryNameAdminMemberComponent
+    EdpmsReconComponent,
+    IdpmsReconComponent,
   ],
   imports: [
     SharedHomeModule,
@@ -185,8 +175,6 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
 
           { path: "Summary/Export", loadChildren: () => import('./SummaryPage/Export/export-summary.module').then(mod => mod.ExportSummaryModule), canActivate: [MemberGuard] },
           { path: "Summary/Import", loadChildren: () => import('./SummaryPage/Import/import-summary.module').then(mod => mod.ImportSummaryModule), canActivate: [MemberGuard] },
-          { path: "Summary/Export/Edit", loadChildren: () => import('../components/Upload/Export_Edit/export-edit.module').then(mod => mod.EditExportUploadModule), canActivate: [MemberGuard] },
-          { path: "Summary/Import/Edit", loadChildren: () => import('../components/Upload/Import_Edit/import-edit.module').then(mod => mod.ImporEditModule), canActivate: [MemberGuard] },
 
           { path: "Status", loadChildren: () => import('./StatusPanel/status-panel.module').then(mod => mod.StatusPanelModule), canActivate: [MemberGuard] },
           
@@ -213,10 +201,8 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
           { path: "data-table", component: DatatableComponent, pathMatch: "full", canActivate: [MemberGuard] },
          
           { path: "createBene", component: CreateBeneComponent, pathMatch: "full", canActivate: [MemberGuard] },
-          { path: "TallyApiConnector", component: TallyApiConnectorComponent, pathMatch: "full", canActivate: [AdminMemberGuard] },
           { path: "inwardRemittance", component: InwardRemittanceComponent, pathMatch: "full", canActivate: [MemberGuard] },
-          { path: "AddBuyerNameAdminMember", component: AddBuyerNameAdminMemberComponent, pathMatch: "full", canActivate: [MemberGuard] },
-          { path: "AddBeneficiaryNameAdminMember", component: AddBeneficiaryNameAdminMemberComponent, pathMatch: "full", canActivate: [MemberGuard] },
+
           {
             path: "edit-remittance",
             component: EditRemittanceComponent,
@@ -224,16 +210,10 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
             canActivate: [MemberGuard]
           },
           {
-            path: "edit-remittance",
-            component: EditRemittanceComponent,
+            path: "add-remittance",
+            component: AddRemittanceComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
-          },
-          {
-            path: "Contact-Us",
-            component: ContactuspanelComponent,
-            pathMatch: "full",
-            canActivate: [AdminMemberGuard]
           },
           {
             path: "remittance-summary",

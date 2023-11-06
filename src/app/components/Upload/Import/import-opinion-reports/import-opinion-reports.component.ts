@@ -61,14 +61,6 @@ export class ImportOpinionReportComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        date: {
-          type: "date",
-          value: "",
-          label: "Opinion Report Number*",
-          rules: {
-            required: true,
-          }
-        },
         opinionReportNumber: {
           type: "text",
           value: "",
@@ -77,26 +69,18 @@ export class ImportOpinionReportComponent implements OnInit {
             required: true,
           }
         },
-        ForeignPartyName: {
-          type: "benne",
+        currency: {
+          type: "currency",
           value: "",
-          label: "Foreign benne Name",
+          label: "Currency*",
           rules: {
             required: true,
           }
         },
-        ReportDate: {
-          type: "date",
-          value: "",
-          label: "Report Date",
-          rules: {
-            required: true,
-          }
-        },
-        ReportRatings: {
+        opinionReportAmount: {
           type: "text",
           value: "",
-          label: "Report Ratings",
+          label: "Opinion Report Amount",
           rules: {
             required: true,
           }
@@ -112,6 +96,8 @@ export class ImportOpinionReportComponent implements OnInit {
     e.value.file = 'import';
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
+    e.value.buyerName = this.BUYER_LIST;
+    e.value.currency = e.value?.currency?.type;
     console.log(e.value);
     this.documentService.getInvoice_No({
       opinionReportNumber: e.value.opinionReportNumber

@@ -7,7 +7,6 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'export-app-pipos',
@@ -54,18 +53,6 @@ export class PIPOSComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].publicUrl;
       this.validator.buildForm({
-        document: {
-          type: "MultiCheckBox",
-          value: "",
-          label: "Select the type of document",
-          checkboxlabel: [
-            { text: "Proforma Inovice", value: 'PI' },
-            { text: 'Purchase Order', value: 'PO' }
-          ],
-          rules: {
-            required: true,
-          }
-        },
         buyerName: {
           type: "buyer",
           value: "",
@@ -74,10 +61,56 @@ export class PIPOSComponent implements OnInit {
             required: true,
           }
         },
-        HSCODE: {
-          type: "HSCODE",
+        commodity: {
+          type: "commodity",
           value: "",
-          label: "Select HS Code",
+          label: "Choose commodity",
+          rules: {
+            required: true,
+          }
+        },
+        MaterialTypes: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Type of goods category",
+          checkboxlabel: [
+            { text: "Non Capital Goods", value: 'Non Capital Goods' },
+            { text: 'Capital Goods', value: 'Capital Goods' },
+            { text: 'Services', value: 'Services' },
+            { text: 'Samples', value: 'Samples' },
+            { text: 'Repairs and returns', value: 'Repairs and returns' }
+          ],
+          NotificationShow: {
+            "Non Capital Goods": "",
+            "Services": "No SB traceability and applicability (SB+9months criteria not applicable).",
+            "Capital Goods": "",
+            "Samples": "Invoice should be sent to CHA for marking FOC in the SB,Cha Email id should be mandatorily registered if not to Admin.",
+            "Repairs and returns": "GR waiver form should be made available."
+          },
+          rules: {
+            required: true,
+          }
+        },
+        ConsigneeName: {
+          type: "consignee",
+          value: "",
+          label: "Consignee Name",
+          rules: {
+            required: true,
+          }
+        },
+        RemitterName: {
+          type: "RemitterName",
+          value: "",
+          label: "Remitter Name",
+          rules: {
+            required: false,
+          }
+        },
+        document: {
+          type: "typedocument",
+          value: "",
+          label: "Select the type of document",
           rules: {
             required: true,
           }
@@ -93,10 +126,10 @@ export class PIPOSComponent implements OnInit {
         date: {
           type: "date",
           value: "",
-          label: "PI/PO Date",
+          label: "Invoice Date",
           rules: {
             required: true,
-          },
+          }
         },
         currency: {
           type: "currency",
@@ -104,77 +137,15 @@ export class PIPOSComponent implements OnInit {
           label: "Currency",
           rules: {
             required: true,
-          },
-          autofill: {
-            type: "formGroup",
-            SetInputName: "currency",
-            CONTROLS_NAME: "paymentTerm",
-            GetInputName: "currency"
           }
         },
         amount: {
           type: "text",
           value: "",
-          label: "PI/PO Amount",
+          label: "Invoice amount",
           rules: {
             required: true,
           }
-        },
-        MaterialTypes: {
-          type: "MultiCheckBox",
-          value: "",
-          label: "Type of goods category",
-          checkboxlabel: [
-            { text: "Finished Goods", value: 'Finished Goods' },
-            { text: 'Services', value: 'Services' },
-            { text: 'Samples', value: 'Samples' },
-            { text: 'Repairs and returns', value: 'Repairs and returns' }
-          ],
-          NotificationShow: {
-            "Finished Goods": "",
-            "Services": "No SB traceability and applicability (SB+9months criteria not applicable).",
-            "Samples": "Invoice should be sent to CHA for marking FOC in the SB,CHA Email id should be mandatorily registered if not to Admin.",
-            "Repairs and returns": "GR waiver form should be made available."
-          },
-          HideShowInput: {
-            Services: ["incoterm", "ModeofTransport"],
-          },
-          LabelNameChange: {
-            Services: {
-              paymentTerm: {
-                type: "formGroup",
-                name: "lastDayShipment",
-                labelChange: "Last date of delivery"
-              }
-            },
-            default: {
-              paymentTerm: {
-                type: "formGroup",
-                name: "lastDayShipment",
-                labelChange: "Last date of shipment"
-              }
-            }
-          },
-          rules: {
-            required: true,
-          }
-        },
-        ConsigneeName: {
-          type: "consignee",
-          value: "",
-          label: "Consignee Name",
-          rules: {
-            required: false,
-          }
-        },
-        RemitterName: {
-          type: "RemitterCheckBox",
-          value: "",
-          label: "Select Inward Remitter Name",
-          rules: {
-            required: false,
-          },
-          RemitterLabel: "Select Inward Remitter Ref No.",
         },
         incoterm: {
           type: "IncoTerm",
@@ -188,6 +159,22 @@ export class PIPOSComponent implements OnInit {
           type: "location",
           value: "",
           label: "Branch",
+          rules: {
+            required: true,
+          }
+        },
+        lastDayShipment: {
+          type: "date",
+          value: "",
+          label: "Last date of shipment",
+          rules: {
+            required: true,
+          }
+        },
+        HSCODE: {
+          type: "HSCODE",
+          value: "",
+          label: "Select HS Code",
           rules: {
             required: true,
           }
@@ -297,27 +284,19 @@ export class PIPOSComponent implements OnInit {
           formArray: [
             [
               {
-                type: "PaymentTermType",
+                type: "date",
                 value: "",
-                label: "Type",
-                name: 'type',
-                callback: (item: any) => {
-                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                  let currentVal = item?.dynamicFormGroup?.controls['currency']?.value;
-                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.type);
-                  myForm['touched'] = true;
-                  myForm['status'] = 'VALID';
-                  console.log(item, "callback")
-                },
+                label: "Last date of shipment",
+                name: 'date',
                 rules: {
                   required: true,
                 },
               },
               {
-                type: "date",
+                type: "PaymentTermType",
                 value: "",
-                label: "Last date of shipment",
-                name: 'lastDayShipment',
+                label: "Type",
+                name: 'type',
                 rules: {
                   required: true,
                 },
@@ -338,8 +317,7 @@ export class PIPOSComponent implements OnInit {
                 name: 'currency',
                 rules: {
                   required: true,
-                },
-                disabled: true
+                }
               },
             ]
           ]
@@ -353,45 +331,39 @@ export class PIPOSComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
-    console.log(this.paymentTermSum(e.value.paymentTerm), e.value.amount, "this.paymentTermSum(e.value.paymentTerm)")
-    if (this.paymentTermSum(e.value.paymentTerm) == parseInt(e.value.amount)) {
-      e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-      e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
-      e.value.buyerName = e.value.buyerName?.value != undefined ? e.value.buyerName.value : e.value.buyerName;
-      e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
-      e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
-      if (e.value?.document == 'PI') {
-        e.value.doc = this.pipourl1
-      }
-      else if (e.value?.document == 'PO') {
-        e.value.doc = this.pipourl1
-      }
-      this.documentService.getInvoice_No({
-        pi_poNo: e.value.pi_poNo
-      }, 'pi_po').subscribe((resp: any) => {
-        console.log('creditNoteNumber Invoice_No', resp)
-        if (resp.data.length == 0) {
-          this.documentService.addPipo(e.value).subscribe(
-            (res) => {
-              this.toastr.success('PI/PO added successfully.');
-              if (this.validator.SELECTED_PIPO?.length == 0) {
-                this.router.navigateByUrl("home/Summary/Export/Pipo");
-              }
-            },
-            (err) => console.log("Error adding pipo")
-          );
-        } else {
-          this.toastr.error(`Please check this sb no. : ${e.value.pi_poNo} already exit...`);
-        }
-      });
-    } else {
-      this.toastr.error(`Total amount in payment Term should be equal to PIPO amount`);
+    e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
+    e.value.buyerName = e.value.buyerName?.value != undefined ? e.value.buyerName.value : e.value.buyerName;
+    e.value.incoterm = e.value.incoterm?.value != undefined ? e.value.incoterm.value : e.value.incoterm;
+    e.value.ConsigneeName = e.value.ConsigneeName?.value != undefined ? e.value.ConsigneeName.value : e.value.ConsigneeName;
+    e.value.RemitterName = e.value.RemitterName?.Remitter_Name != undefined ? e.value.RemitterName.Remitter_Name : e.value.RemitterName;
+    if (e.value?.document == 'PI') {
+      e.value.doc = this.pipourl1
     }
+    else if (e.value?.document == 'PO') {
+      e.value.doc = this.pipourl1
+    }
+    this.documentService.getInvoice_No({
+      pi_poNo: e.value.pi_poNo
+    }, 'pi_po').subscribe((resp: any) => {
+      console.log('creditNoteNumber Invoice_No', resp)
+      if (resp.data.length == 0) {
+        this.documentService.addPipo(e.value).subscribe(
+          (res) => {
+            this.toastr.success('PI/PO added successfully.');
+            if (this.validator.SELECTED_PIPO?.length == 0) {
+              this.router.navigateByUrl("home/Summary/Export/Pipo");
+            }
+          },
+          (err) => console.log("Error adding pipo")
+        );
+      } else {
+        this.toastr.error(`Please check this sb no. : ${e.value.pi_poNo} already exit...`);
+      }
+    });
   }
-  paymentTermSum(value: any) {
-    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
-  }
+
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;

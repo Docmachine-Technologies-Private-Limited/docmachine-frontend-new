@@ -1,8 +1,8 @@
 <ng-container *ngFor="let item of items;let i=index">
   <div class="checkbox-container">
     <label class="checkbox-container-label">
-      <div class="checkbox-border" [ngClass]="{'checkmark-border-color':item?.isToggle==true || value==item?.value}">
-        <div class="checkbox-filling" *ngIf="item?.isToggle==true || value==item?.value"></div>
+      <div class="checkbox-border" [ngClass]="{'checkmark-border-color':item?.isToggle==true}">
+        <div class="checkbox-filling" *ngIf="item?.isToggle==true"></div>
       </div>
       <input class="checkbox-input" [name]="this.name" type="checkbox" [ngModel]="item?.value"
         (ngModelChange)="onModelChange($event,i,item?.value,item?.isToggle);item.isToggle=!item?.isToggle" />

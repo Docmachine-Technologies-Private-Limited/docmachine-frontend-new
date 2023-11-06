@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DebitNoteSummaryComponent } from './debit-note.component';
+import { DebitNoteComponent } from './debit-note.component';
 
-describe('DebitNoteSummaryComponent', () => {
-  let component: DebitNoteSummaryComponent;
-  let fixture: ComponentFixture<DebitNoteSummaryComponent>;
+describe('DebitNoteComponent', () => {
+  let component: DebitNoteComponent;
+  let fixture: ComponentFixture<DebitNoteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DebitNoteSummaryComponent ]
+      declarations: [ DebitNoteComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DebitNoteSummaryComponent);
+    fixture = TestBed.createComponent(DebitNoteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

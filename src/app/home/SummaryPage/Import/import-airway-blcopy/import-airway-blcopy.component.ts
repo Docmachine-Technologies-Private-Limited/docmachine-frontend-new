@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,6 @@ import { WindowInformationService } from '../../../../service/window-information
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import moment from 'moment';
 
 @Component({
   selector: 'import-airway-blcopy-summary',
@@ -54,7 +53,8 @@ export class ImportAirwayBlcopyComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-2"
+      "col-td-th-1",
+      "col-td-th-1"
     ],
     eventId: ''
   }
@@ -121,7 +121,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          airwayBlCopydate: moment(element['airwayBlCopydate']).format("DD-MM-YYYY"),
+          airwayBlCopydate: element['airwayBlCopydate'],
           airwayBlCopyNumber: element['airwayBlCopyNumber'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
@@ -233,20 +233,14 @@ export class ImportAirwayBlcopyComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   airwayBlCopydate: this.SELECTED_VALUE['airwayBlCopydate'],
-    //   airwayBlCopyNumber: this.SELECTED_VALUE['airwayBlCopyNumber'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
-      }
-    };
-    this.router.navigate([`/home/Summary/Import/Edit/AirwayBlCopy`], navigationExtras);
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      airwayBlCopydate: this.SELECTED_VALUE['airwayBlCopydate'],
+      airwayBlCopyNumber: this.SELECTED_VALUE['airwayBlCopyNumber'],
+      currency: this.SELECTED_VALUE['currency'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
     this.toastr.warning('Airway / BlCopy Is In Edit Mode');
   }
 
@@ -266,7 +260,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
   }
 
   newCredit() {
-    this.router.navigate(['/home/upload', { file: 'import', document: 'import-blCopy' }]);
+    this.router.navigate(['/home/upload', {file: 'import', document: 'import-blCopy'}]);
   }
 
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {

@@ -34,8 +34,7 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     IframeModel: false,
     YesNoDialogModel: false,
     DropDownInput: false,
-    Notification_DialogModel: false,
-    YesDialogModel:false
+    Notification_DialogModel: false
   };
   DATA_RECIVED: any = [];
   DownloadStatus: boolean = false;
@@ -93,7 +92,7 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     $('.InputConfirmDialog').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS = callback;
   }
-  public IframeConfirmDialogModel(titleheader: any, url: any, downloadShow: boolean,buttonName:string='', callback: Function): any {
+  public IframeConfirmDialogModel(titleheader: any, url: any, downloadShow: boolean, callback: Function): any {
     this.HIDE_ALL_MODELS('IframeModel').then((res: any) => {
       if (res == true) {
         this.MODEL_TYPE_VIEW['IframeModel'] = true;
@@ -104,7 +103,6 @@ export class CustomConfirmDialogModelComponent implements OnInit {
         this.CustomConfirmDialogModel.CALLBACKS = callback;
         this.DownloadStatus = downloadShow
         window.scroll(0, 0);
-        this.CustomConfirmDialogModel.ButtonName=buttonName;
       }
     });
   }
@@ -114,15 +112,6 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     this.CustomConfirmDialogModel.titleheader = titleheader;
     this.CustomConfirmDialogModel.message = message;
     $('.YesNoDialogModel').css('display', 'flex');
-    this.CustomConfirmDialogModel.CALLBACKS = callback;
-    window.scroll(0, 0)
-  }
-  YesDialogModel(titleheader: any, message: any, callback: Function) {
-    this.HIDE_ALL_MODELS('YesDialogModel');
-    $('.input-remove').val('');
-    this.CustomConfirmDialogModel.titleheader = titleheader;
-    this.CustomConfirmDialogModel.message = message;
-    $('.YesDialogModel').css('display', 'flex');
     this.CustomConfirmDialogModel.CALLBACKS = callback;
     window.scroll(0, 0)
   }
@@ -152,9 +141,5 @@ export class CustomConfirmDialogModelComponent implements OnInit {
   }
   CALLBACKS_CALL(value: any, dump: any) {
     this.CustomConfirmDialogModel.CALLBACKS({ value: value.Inputdata })
-  }
-  
-  PopUpCallBack(value){
-    this.CustomConfirmDialogModel.CALLBACKS(value)
   }
 }

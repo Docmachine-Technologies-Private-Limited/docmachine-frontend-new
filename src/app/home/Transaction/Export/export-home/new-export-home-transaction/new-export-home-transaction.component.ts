@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms'
 import { DocumentService } from "../../../../../service/document.service";
 import { UploadServiceValidatorService } from '../../../../../components/Upload/service/upload-service-validator.service';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'new-export-home-transaction',
@@ -24,13 +23,11 @@ export class NewExportHomeTransactionComponent implements OnInit {
 
   CUSTOM_MAT_STEPPER: any = {
     LABEL_LIST_NAME: ["Select Inward Remittance Disposal No.", "Form Forward Ref No."]
-  }
 
-  ForwardContractFilterDATA: any = [];
+  }
 
   constructor(private _formBuilder: FormBuilder,
     public validator: UploadServiceValidatorService,
-    private toastr: ToastrService,
     public documentService: DocumentService) { }
 
   ngOnInit(): void {
@@ -58,171 +55,135 @@ export class NewExportHomeTransactionComponent implements OnInit {
         element['Checked'] = true;
       }
     });
-    this.ForwardContractFilterDATA = this.ForwardContractDATA.filter((item: any) => item?.Currency?.indexOf(data?.currency) != -1)
     this.MT103_URL = data?.file;
     this.Inward_Remittance_MT103 = [data];
-    setTimeout(() => {
-      this.validator.buildForm({
-        BankName: {
-          type: "LabelShow",
-          value: data?.BankName,
-          label: "Bank Name",
-          Inputdisabled: true,
-          visible: true,
-          rules: {
-            required: true,
-          }
-        },
-        Inward_reference_number: {
-          type: "LabelShow",
-          value: data?.Inward_reference_number,
-          label: "Ref. Number",
-          Inputdisabled: true,
-          visible: true,
-          rules: {
-            required: true,
-          }
-        },
-        currency: {
-          type: "LabelShow",
-          value: data?.currency,
-          label: "Currency",
-          rules: {
-            required: true,
-          },
-        },
-        amount: {
-          type: "LabelShow",
-          value: data?.amount,
-          label: "Remittance Amount",
-          Inputdisabled: true,
-          visible: true,
-          rules: {
-            required: true,
-          }
-        },
-        Remitter_Name: {
-          type: "LabelShow",
-          value: data?.Remitter_Name,
-          label: "Remitter Name",
-          Inputdisabled: true,
-          visible: true,
-          rules: {
-            required: true,
-          }
-        },
-        Inward_amount_for_disposal: {
-          type: "TextValiadtion",
-          value: data?.Inward_amount_for_disposal != '' && data?.Inward_amount_for_disposal != undefined ? data?.Inward_amount_for_disposal : data?.amount,
-          label: "Disposal Amount",
-          visible: true,
-          EqualName: "amount",
-          rules: {
-            required: true,
-          },
-          errormsg: 'Disposal Amount should be lesser than Inward Remittance Amount.',
+    this.validator.buildForm({
+      BankName: {
+        type: "text",
+        value: this.Inward_Remittance_MT103[0]?.BankName,
+        label: "Bank Name",
+        disabled: true,
+        rules: {
+          required: true,
         }
-      }, 'NewInwardRemittanceDisposal');
-    }, 200);
+      },
+      Inward_reference_number: {
+        type: "text",
+        value: this.Inward_Remittance_MT103[0]?.Inward_reference_number,
+        label: "Ref. Number",
+        disabled: true,
+        rules: {
+          required: true,
+        }
+      },
+      currency: {
+        type: "currency",
+        value: this.Inward_Remittance_MT103[0]?.currency,
+        label: "Currency",
+        disabled: true,
+        rules: {
+          required: true,
+        }
+      },
+      amount: {
+        type: "text",
+        value: this.Inward_Remittance_MT103[0]?.amount,
+        label: "Amount",
+        disabled: true,
+        rules: {
+          required: true,
+        }
+      },
+      Bill_lodgment_Number: {
+        type: "text",
+        value: this.Inward_Remittance_MT103[0]?.Bill_lodgment_Number,
+        label: "BL. Number",
+        disabled: true,
+        rules: {
+          required: true,
+        }
+      },
+      Remitter_Name: {
+        type: "text",
+        value: this.Inward_Remittance_MT103[0]?.Remitter_Name,
+        label: "Remitter Name",
+        disabled: true,
+        rules: {
+          required: true,
+        }
+      },
+      Inward_amount_for_disposal: {
+        type: "text",
+        value: this.Inward_Remittance_MT103[0]?.Inward_amount_for_disposal,
+        label: "Disposal Amount",
+        rules: {
+          required: true,
+        }
+      }
+    }, 'InwardRemittanceDisposal');
     console.log(this.REMITTANCE_DATA, 'REMITTANCE_DATA')
   }
 
   ToForwardContract_Selected: any = []
   ToForwardContract(event: any, value: any, index: any) {
     if (event?.target?.checked == true) {
-      if (this.Inward_Remittance_MT103[0]?.currency == value?.Currency) {
-        this.ToForwardContract_Selected[0] = value;
-        this.validator.buildForm({
-          RemittanceAmount: {
-            type: "LabelShow",
-            value: this.INWARD_DISPOSAL_VALUE_FORM[0]?.amount,
-            label: "Remittance Amount",
-            rules: {
-              required: true,
-            }
-          },
-          DisposalAmount: {
-            type: "LabelShow",
-            value: this.INWARD_DISPOSAL_VALUE_FORM[0]?.Inward_amount_for_disposal,
-            label: "Disposal Amount",
-            rules: {
-              required: true,
-            }
-          },
-          ForwardRefNo: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.ForwardRefNo,
-            label: "Forward Ref No",
-            rules: {
-              required: true,
-            }
-          },
-          BookingDate: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.BookingDate,
-            label: "Booking Date",
-            rules: {
-              required: true,
-            }
-          },
-          ToDate: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.ToDate,
-            label: "Due Date",
-            rules: {
-              required: true,
-            }
-          },
-          Currency: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.Currency,
-            label: "Currency",
-            rules: {
-              required: true,
-            }
-          },
-          BookingAmount: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.BookingAmount,
-            label: "Forward Contract Amount",
-            rules: {
-              required: true,
-            }
-          },
-          AvailableAmount: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.AvailableAmount != "" ? this.ToForwardContract_Selected[0]?.AvailableAmount : this.ToForwardContract_Selected[0]?.BookingAmount,
-            label: "Available Amount",
-            rules: {
-              required: true,
-            }
-          },
-          UtilizedAmount: {
-            type: "TextValiadtion",
-            value: this.ToForwardContract_Selected[0]?.UtilizedAmount,
-            label: "Amount to be utilised",
-            EqualName: "DisposalAmount",
-            errormsg: 'Utilisation amount should be equal or less than the forward contract Amount.',
-            rules: {
-              required: true,
-            },
-          },
-          NetRate: {
-            type: "LabelShow",
-            value: this.ToForwardContract_Selected[0]?.NetRate,
-            label: "Exchange rate as per FWC",
-            rules: {
-              required: true,
-            }
+      this.ToForwardContract_Selected[0] = value;
+      this.validator.buildForm({
+        ForwardRefNo: {
+          type: "text",
+          value: this.ToForwardContract_Selected[0]?.ForwardRefNo,
+          label: "Forward Ref No",
+          disabled: true,
+          rules: {
+            required: true,
           }
-        }, 'ForwardRef');
-      } else {
-        event.target.checked = false
-        this.ToForwardContract_Selected[0] = '';
-        this.toastr.error("Forward Contract Currency should be same Remittance Currency.")
-      }
+        },
+        BookingDate: {
+          type: "date",
+          value: this.ToForwardContract_Selected[0]?.BookingDate,
+          label: "Booking Date",
+          disabled: true,
+          rules: {
+            required: true,
+          }
+        },
+        BookingAmount: {
+          type: "text",
+          value: this.ToForwardContract_Selected[0]?.BookingAmount,
+          label: "Forward Contract Amount",
+          disabled: true,
+          rules: {
+            required: true,
+          }
+        },
+        ToDate: {
+          type: "text",
+          value: this.ToForwardContract_Selected[0]?.ToDate,
+          label: "Due Date",
+          disabled: true,
+          rules: {
+            required: true,
+          }
+        },
+        BookedUnderFacility: {
+          type: "text",
+          value: this.ToForwardContract_Selected[0]?.BookedUnderFacility,
+          label: "Amount to be utilised",
+          disabled: true,
+          rules: {
+            required: true,
+          }
+        },
+        NetRate: {
+          type: "text",
+          value: this.ToForwardContract_Selected[0]?.NetRate,
+          label: "Exchange rate as per FWC",
+          rules: {
+            required: true,
+          }
+        }
+      }, 'ForwardRef');
     } else {
-      event.target.checked = false
       this.ToForwardContract_Selected[0] = '';
     }
   }
@@ -230,7 +191,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
   InwardDisposalNext: boolean = false;
   InwardDisposalFormValue(value: any) {
     if (value != false) {
-      this.INWARD_DISPOSAL_VALUE_FORM = [this.mergeObject(value, this.REMITTANCE_DATA)];
+      this.INWARD_DISPOSAL_VALUE_FORM = [this.mergeObject(value,this.REMITTANCE_DATA)];
       this.InwardDisposalNext = true;
     } else {
       this.INWARD_DISPOSAL_VALUE_FORM = [];
@@ -243,7 +204,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
   ForwardRefNext: boolean = false;
   ForwardRefFormValue(value: any) {
     if (value != false) {
-      this.FORWARD_REF_VALUE_FORM = [this.mergeObject(value, this.ToForwardContract_Selected[0])]
+      this.FORWARD_REF_VALUE_FORM = [this.mergeObject(value,this.ToForwardContract_Selected)]
       this.ForwardRefNext = true;
     } else {
       this.FORWARD_REF_VALUE_FORM = [];
@@ -251,7 +212,7 @@ export class NewExportHomeTransactionComponent implements OnInit {
     }
     console.log(value, "ForwardRefFormValue")
   }
-
+  
   mergeObject(obj1: any, obj2: any) {
     for (const key in obj2) {
       if (obj1[key] == undefined) {

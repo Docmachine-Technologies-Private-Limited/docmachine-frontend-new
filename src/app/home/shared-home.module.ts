@@ -85,15 +85,6 @@ import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/Federal
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatInputModule} from '@angular/material/input';
 import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
-import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
-import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
-import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data";
-import { NgCustomFilterPopupComponent } from "../custom/ng-custom-filter-popup/ng-custom-filter-popup.component";
-import { OldFederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterheadold/exportoldletterhead.component";
-import { CustomNgContentHeaderComponent } from "../components/Upload/upload-components/upload-components-header/custom-ng-content-header/custom-ng-content-header.component";
-import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips-custom-ng.component";
-import { SummaryTransactionUIHeaderComponent } from "../custom/SummaryTransactionUI/summary-transaction-uiheader/summary-transaction-uiheader.component";
-import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/summary-transaction-ui.component";
 
 @NgModule({
   declarations: [
@@ -152,14 +143,6 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
-    CustomModelHeaderComponent,
-    MoreContentComponent,
-    NgCustomFilterPopupComponent,
-    OldFederalBankExportletterheadComponent,
-    CustomNgContentHeaderComponent,
-    TooltipsCustomNgComponent,
-    SummaryTransactionUIHeaderComponent,
-    SummaryTransactionUIComponent
   ],
   imports: [
     CommonModule,
@@ -186,7 +169,7 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     CustomMatStepperModule
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,ExportBillLodgementData, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
+  providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     FilternewPipe,
@@ -264,15 +247,7 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
-    CustomMatStepperModule,
-    CustomModelHeaderComponent,
-    MoreContentComponent,
-    NgCustomFilterPopupComponent,
-    OldFederalBankExportletterheadComponent,
-    CustomNgContentHeaderComponent,
-    TooltipsCustomNgComponent,
-    SummaryTransactionUIHeaderComponent,
-    SummaryTransactionUIComponent
+    CustomMatStepperModule
   ],
 })
 export class SharedHomeModule { }

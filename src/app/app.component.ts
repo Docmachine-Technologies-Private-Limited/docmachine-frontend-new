@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
   isOnline: boolean = true;
-  WithoutAuthorization: any = ['RoleVerifyEmail',"TallyAuthorization", 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
+  WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
   SET_TIMEOUT_TIME: any = new Date();
 
   constructor(

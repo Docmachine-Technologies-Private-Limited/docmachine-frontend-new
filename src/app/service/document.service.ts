@@ -53,6 +53,7 @@ export class DocumentService {
       PIPO_TRANSACTION: [],
       PIPO_NO: []
     };
+
     this.getPipoNoList().subscribe((res: any) => {
       console.log(res, 'resssss.................')
       var data: any = res?.data;
@@ -96,39 +97,9 @@ export class DocumentService {
         }
       }
       console.log(this.PI_PO_NUMBER_LIST, type, 'getPipoListNo');
-      return data;
     })
   }
 
-  getPipoListNoFilter = (data) => {
-    this.PI_PO_NUMBER_LIST = {
-      PI_PO_BUYER_NAME: [],
-      PI_PO_BENNE_NAME: [],
-      PIPO_TRANSACTION: [],
-      PIPO_NO: []
-    };
-    var data: any = data;
-    this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'] = [];
-    this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'] = [];
-    this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'] = [];
-    this.PI_PO_NUMBER_LIST['PIPO_NO'] = data;
-    for (let index = 0; index < data?.length; index++) {
-      if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
-        this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
-          pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
-          id: [data[index].pi_poNo, data[index]?.buyerName],
-          _id: data[index]?._id
-        })
-        this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
-          pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
-          id: [data[index].pi_poNo, data[index]?.benneName],
-          _id: data[index]?._id
-        })
-      }
-    }
-    console.log(this.PI_PO_NUMBER_LIST, 'getPipoListNo');
-  }
-  
   // Inward inwardRemittance Advice
   setSessionData(key: any, data: any) {
     sessionStorage.setItem(key, JSON.stringify(data));
@@ -246,26 +217,6 @@ export class DocumentService {
     };
     console.log(query, 'getInvoice_No')
     return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`, { query: query, tableName: table_name }, httpOptions);
-  }
-
-  filterAnyTable(query, table_name: any) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    console.log(query, 'filterAnyTable')
-    return this.http.post(`${this.api_base}/orAdvice/filterAnyTable`, { query: query, tableName: table_name }, httpOptions);
-  }
-  
-  AnyUpdateTable(id,query, table_name: any) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    console.log(query, 'filterAnyTable')
-    return this.http.post(`${this.api_base}/orAdvice/UpdateAnyTable`, {id:id ,query: query, tableName: table_name }, httpOptions);
   }
 
 
@@ -404,17 +355,6 @@ export class DocumentService {
     return this.http.post(url, { limit: limit }, httpOptions);
   }
 
-
-  getEdpmsQuery(data) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    let url = `${this.api_base}/edpms/getEdpmsQuery`;
-    return this.http.post(url,{query:data} ,httpOptions);
-  }
-  
   createIDPMS(payload) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -467,27 +407,6 @@ export class DocumentService {
     let url = `${this.api_base}/master/get`;
     return this.http.get(url, httpOptions);
   }
-  
-
-  getMasterBuyer(user) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    let url = `${this.api_base}/master/buyerName`;
-    return this.http.post(url, { buyerName: user }, httpOptions);
-  }
-
-  updateBlCopyRef(id, user) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    let url = `${this.api_base}/master/updateBlCopyRef`;
-    return this.http.post(url, { _id: id, master: user }, httpOptions);
-  }
 
   getPipoNoList() {
     this.loadFromLocalStorage();
@@ -498,17 +417,7 @@ export class DocumentService {
     let url = `${this.api_base}/pipo/getPipoNo`;
     return this.http.get(url, httpOptions);
   }
-  
-  getPipoNoFilter(query:any) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    let url = `${this.api_base}/pipo/getPipoNoFilter`;
-    return this.http.post(url,{query:query} ,httpOptions);
-  }
-  
+
   getMasterScheduler() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -573,7 +482,14 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/master/update`, { _id: _id, master: user }, httpOptions);
+    return this.http.post(
+      `${this.api_base}/master/update`,
+      {
+        _id: _id,
+        master: user,
+      },
+      httpOptions
+    );
   }
 
   updateMasterBySb(user, sbno, _id) {
@@ -738,13 +654,6 @@ export class DocumentService {
     console.log(this.authToken);
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
-  }
-
-  getPipoById(id: any) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
-    return this.http.post(`${this.api_base}/pipo/getPipoById`, { id: id }, httpOptions);
   }
 
   getInward_remittance() {
@@ -914,16 +823,10 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.patch(`${this.api_base}/pipo/updatePipo/${id}`, data, httpOptions);
-  }
 
-  updatePipo(id, data) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    return this.http.post(`${this.api_base}/pipo/update`, { id: id, pipo: data }, httpOptions);
+    return this.http.patch(
+      `${this.api_base}/pipo/updatePipo/${id}`, data, httpOptions);
+
   }
 
 
@@ -1409,7 +1312,12 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/destruction/post`, { destruction: pipo }, httpOptions);
+
+    return this.http.post(
+      `${this.api_base}/destruction/post`,
+      { destruction: pipo },
+      httpOptions
+    );
   }
 
   getDestruction() {
@@ -1418,36 +1326,9 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
+
     return this.http.get(`${this.api_base}/destruction/get`, httpOptions);
   }
-
-  addCertificateofOrigin(pipo) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    return this.http.post(`${this.api_base}/CertificateofOrigin/post`, { data: pipo }, httpOptions);
-  }
-
-  updateCertificateofOrigin(pipo, id) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    return this.http.post(`${this.api_base}/CertificateofOrigin/update`, { data: pipo, id }, httpOptions);
-  }
-
-  getCertificateofOrigin() {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    return this.http.get(`${this.api_base}/CertificateofOrigin/get`, httpOptions);
-  }
-
   getDestructionfile(type: string) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -2414,15 +2295,6 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(`${this.api_base}/ForwardContract/update`, data, httpOptions);
-  }
-
-  sendContactMessage(data) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    return this.http.post(`${this.api_base}/ContactUs/post`, data, httpOptions);
   }
 
   SendMailNormalTextdcouments(data) {

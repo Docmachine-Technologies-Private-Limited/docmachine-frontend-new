@@ -16,7 +16,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class CustomCheckboxComponent implements ControlValueAccessor, OnInit, OnChanges {
   @Input('items') items: any = [];
   @Input('name') name: any = 'checkbox';
-  @Input('value') value: any = '';
   @Output('event') event: any = new EventEmitter();
 
   onChange: any = () => { };

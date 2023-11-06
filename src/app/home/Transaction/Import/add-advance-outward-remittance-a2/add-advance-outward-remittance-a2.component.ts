@@ -53,8 +53,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   SHIPPING_BILL_LIST: any = [{ value: 'Select BOE' }];
 
   public type: string = "directive";
-  public res: any;
-  public size: any;
+  public res:any;
+  public size:any;
   public uploadUrl: any = '';
   public uploadUrl_Original: any = '';
 
@@ -131,7 +131,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   BOE_DETAILS: any = [];
   PURPOSE_CODE_FILTER_DATA: any = [];
   PURPOSE_CODE_LIST_DATA: any = [];
-  CURRENCY_LIST: any = [];
+  CURRENCY_LIST:any=[];
 
   toppings: any = this.formBuilder.group({
     FormA2CumApplication: new FormControl({ value: false, disabled: true }),
@@ -143,7 +143,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     EXTRA_DOC_3: new FormControl({ value: false, disabled: true }),
   });
   UrlList: any = '';
-
+  
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -169,7 +169,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       PANNo: new FormControl('', Validators.required),
       BRANCH_NAME: new FormControl('', Validators.required)
     });
-    this.FormData = this.pipoForm?.value;
+    this.FormData=this.pipoForm?.value;
     this.getDropdownData();
   }
 
@@ -178,8 +178,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       Authorization: this.authToken,
       timeout: `${200000}`
     };
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    console.log(this.CURRENCY_LIST, 'CURRENCY_LIST')
+    this.CURRENCY_LIST=this.documentService.getCurrencyList();
+    console.log(this.CURRENCY_LIST,'CURRENCY_LIST')
     this.A2_JSON_DATA = A2_JOSN;
     this.A2_JSON_DATA.forEach(element => {
       for (const key in element) {
@@ -196,7 +196,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       }
       for (const key in element) {
         element['isExpand'] = false;
-        element['isActive'] = false;
       }
     });
     temp_purcode.forEach(element => {
@@ -231,7 +230,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
 
     // buyerName commodity doc
     this.getDropdownData()
-
+   
   }
 
   initItems() {
@@ -258,42 +257,42 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   COMPANY_INFO: any = [];
   getDropdownData() {
     this.userService.getTeam().subscribe(data => {
-      this.COMPANY_INFO = data['data'];
-      this.commodity = data['data'][0]['commodity']
-      this.LocationData = data['data'][0]['location']
-      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-      }
-      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-          value: data['data'][0]['bankDetails'][index],
-          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-          org: data['data'][0]['bankDetails'][index]
-        })
-        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-          value: data['data'][0]['bankDetails'][index],
-          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-          org: data['data'][0]['bankDetails'][index]
-        })
-        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-          value: data['data'][0]['bankDetails'][index],
-          text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-          org: data['data'][0]['bankDetails'][index]
-        })
-        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
-          this.BANK_LIST_DROPDOWN.push({
-            value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
-          })
-        }
-      }
-    }, error => console.log("error"));
+          this.COMPANY_INFO = data['data'];
+          this.commodity = data['data'][0]['commodity']
+          this.LocationData = data['data'][0]['location']
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+          }
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+              this.BANK_LIST_DROPDOWN.push({
+                value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+              })
+            }
+          }
+        },error => console.log("error"));
 
     this.userService.getBene(1).subscribe((res: any) => {
-      console.log('benneDetail', res.data);
-      this.benneDetail = res.data
-    }, (err) => console.log("Error", err));
+        console.log('benneDetail', res.data);
+        this.benneDetail = res.data
+      },(err) => console.log("Error", err));
     this.documentService.ForwardContractget().subscribe((res: any) => {
       this.ForwardContractDATA = res?.data;
       console.log(res, 'daasdasdasdasdasdadsd')
@@ -441,7 +440,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   onSelectBank(value) {
     this.selectedBankName = value?.id;
     this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value?.id))[0]?.org;
-    console.log(this.BANK_DETAILS, value, 'this.BANK_DETAILS')
+    console.log(this.BANK_DETAILS,value, 'this.BANK_DETAILS')
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
@@ -508,7 +507,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   public onUploadInit(args: any): void {
     console.log("onUploadInit:", args);
   }
-
+  
   public onUploadSuccess(args: any): void {
     console.log("------ onUploadSuccess called")
     console.log('args', args);
@@ -624,11 +623,11 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     }
   }
   PREVIEWS_URL_STRING: any = '';
-  NEW_PREVIEWS_URL_LIST: any = [];
+  NEW_PREVIEWS_URL_LIST:any=[];
   async PREVIEWS_URL(model, id) {
     this.PREVIEWS_URL_LIST = [];
     this.bankformat = '';
-    this.NEW_PREVIEWS_URL_LIST = [];
+    this.NEW_PREVIEWS_URL_LIST=[];
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
     this.PromiseReturn().then(async (data: any) => {
@@ -677,7 +676,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       }
     })
   }
-
+  
   async getS3Url() {
     return new Promise(async (reslove, reject) => {
       let temp: any = [];
@@ -696,7 +695,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       });
     })
   }
-
+  
   guid() {
     let s4 = () => {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -705,7 +704,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     }
     return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
-
+  
   PromiseReturn() {
     var temp: any = [];
     temp[0] = this.formerge;
@@ -729,9 +728,9 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     if (UniqueId != null) {
       this.pipoForm.value.bank = this.pipoForm.controls?.bank
       this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
-
+      
       var approval_data: any = {
-        id: UniqueId + '_' + this.randomId(10),
+        id: UniqueId+'_'+this.randomId(10),
         tableName: 'Advance-Remittance-A2',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -758,7 +757,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                 pipo_1: this.selectedItems,
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
                 extra_data: this.EXTRA_DOCUMENTS,
-                ALL_DATA_HSCODE_FORWARD: this.ALL_DATA_HSCODE_FORWARD
+                ALL_DATA_HSCODE_FORWARD:this.ALL_DATA_HSCODE_FORWARD
               },
               TypeTransaction: 'Advance-Remittance-A2',
               fileType: 'Import',
@@ -787,12 +786,12 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                           tableName: 'pi_po',
                           id: approval_data?.id,
                           TransactionId: res1._id,
-                          data: this.pipoForm.value,
-                          pipo_id: pipo_id,
-                          pipo_name: pipo_name
+                          data:this.pipoForm.value,
+                          pipo_id:pipo_id,
+                          pipo_name:pipo_name
                         }
                       }
-                      this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
+                      this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
                       });
                     }
@@ -892,7 +891,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     }
     return await tempbol;
   }
-
+  
   showhideSummaryPage(value) {
     var temp: any = {
       FormA2CumApplication: this.toppings?.value?.FormA2CumApplication,
@@ -900,18 +899,18 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       "_CB": this.toppings?.value?._CB,
       Invoice_Debit_Note: this.toppings?.value?.Invoice_Debit_Note,
     }
-    console.log('this.pipoForm.controls;', temp, this.toppings, this.pipoForm.controls);
-
+    console.log('this.pipoForm.controls;',temp,this.toppings, this.pipoForm.controls);
+    
     this.FORM_CHECK_VALUE_2(temp).then(async (res: any) => {
       console.log(temp, res, 'RequestforBCQuote')
       if (res == false) {
         this.showSummaryPage = value;
-      } else {
+      }else{
         this.toastr.error('Please select all nessacary documents...');
       }
-    });
+    });  
   }
-
+  
   async FORM_CHECK_VALUE_2(value: any) {
     console.log(value)
     let tempbol: boolean = false;
@@ -923,7 +922,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     }
     return await tempbol;
   }
-
+  
   CA_CERTIFICATE_DATA: any = []
   get_by_REQUEST_TYPE_CA(REQUEST_TYPE: any) {
     this.documentService.CA_Certificate_RequestType_get(REQUEST_TYPE).subscribe((res: any) => {
@@ -982,7 +981,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.CA_DUMP_SLEECTION[index] = '';
       this.CA_SELECTION_INDEX[index] = false;
     }
-
+    
   }
 
   CB_SELECTION_DATA: any = [];
@@ -998,7 +997,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.CB_DUMP_SLEECTION[index] = ''
       this.CB_SELECTION_INDEX[index] = false;
     }
-
+   
   }
 
   filterData(data: any) {
@@ -1013,19 +1012,19 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   SELECTED_PURPOSE_CODE_DUMP_SLEECTION: any = [];
   SELECT_PURPOSE_CODE(event: any, index: any) {
     console.log(event, 'SELECT_PURPOSE_CODE')
-    this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = this.PURPOSE_CODE_FILTER_DATA[index];
-    this.SELECTED_PURPOSE_CODE_INDEX[index] = true;
-    this.PURPOSE_CODE_FILTER_DATA?.forEach((element, i) => {
-      if (index == i) {
-        element['isActive'] = true;
-      }
-    });
-
+    if (event?.target?.checked) {
+      this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = this.PURPOSE_CODE_FILTER_DATA[index];
+      this.SELECTED_PURPOSE_CODE_INDEX[index] = true;
+    } else {
+      this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = ''
+      this.SELECTED_PURPOSE_CODE_INDEX[index] = false;
+    }
+   
   }
   randomId(length = 6) {
-    return Math.random().toString(36).substring(2, length + 2);
+    return Math.random().toString(36).substring(2, length+2);
   };
-
+  
   filtertimeout: any = ''
   filterHSCode(value: any) {
     clearTimeout(this.filtertimeout);
@@ -1078,12 +1077,12 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       FORWARD_CONTRACT: this.ToForwardContract_Selected
     };
   }
-  FormData: any = []
-  fillForm() {
-    this.FormData = this.pipoForm?.value
+  FormData:any=[]
+  fillForm(){
+    this.FormData=this.pipoForm?.value
   }
-
-  addCA() {
+  
+  addCA(){
     this.CA_SELECTION_DATA = [];
     this.EXTRA_DOCUMENTS['CA_DOCUMENTS'] = [];
     this.CA_DUMP_SLEECTION.forEach(element => {
@@ -1096,8 +1095,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.toppings.controls._CA.setValue(false);
     }
   }
-
-  addCB() {
+  
+  addCB(){
     this.CB_SELECTION_DATA = [];
     this.EXTRA_DOCUMENTS['CB_DOCUMENTS'] = [];
     this.CB_DUMP_SLEECTION.forEach(element => {
@@ -1110,8 +1109,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.toppings.controls._CB.setValue(false);
     }
   }
-
-  addA2_DATA() {
+  
+  addA2_DATA(){
     this.SELECTED_PURPOSE_CODE_DATA = [];
     this.EXTRA_DOCUMENTS['PURPOSE_CODE_DATA'] = [];
     this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION.forEach(element => {

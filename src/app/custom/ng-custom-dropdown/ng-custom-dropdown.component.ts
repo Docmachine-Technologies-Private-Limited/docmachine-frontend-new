@@ -47,7 +47,6 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
   dropdownShow($event) {
     this.FILTER_DROPDOWN = this.items;
     $('#' + $($event.target).parent().attr('id')).addClass('custom-dropdown-active');
-    console.log(this.items,"selectedItems")
   }
   dropdownHide($event, val, inputid) {
     var uq_id: any = $($event.target).parent().parent().attr('id')
@@ -56,7 +55,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
       this.selectedItems = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
       this.arryavalue = val;
       if (this.LABLE_BIND_LIST[uq_id]?.GET_ARRAY_VALUES == true) {
-        this.value = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
+        this.value = val;
         this.modelChanges.emit(this.value);
         this.onChange(this.value);
       } else {
@@ -68,11 +67,11 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
       this.selectedItems = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
       this.arryavalue = val;
       if (this.LABLE_BIND_LIST[uq_id]?.GET_ARRAY_VALUES == true) {
-        this.value = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
+        this.value = val;
         this.modelChanges.emit(this.value);
         this.onChange(this.value);
       } else {
-        this.value = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
+        this.value = val;
         this.modelChanges.emit(this.value);
         this.onChange(this.value);
       }
@@ -89,10 +88,9 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
   }
 
   filterdropdownKeyPress($event: any, val: any) {
-    var uq_id: any = $($event.target).parent().parent().attr('id')
-    this.keyEvent.emit(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
-    this.modelChanges.emit(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
-    this.onChange(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
+    this.keyEvent.emit(val);
+    this.modelChanges.emit(val);
+    this.onChange(val);
     if (this.FILTER_DROPDOWN.length == 0) {
       this.FILTER_DROPDOWN = this.items;
     }
@@ -115,7 +113,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
   }
 
   updateChanges() {
-    this.onChange(this.selectedItems);
+    this.onChange(this.value);
   }
 
   writeValue(value: any): void {
@@ -127,7 +125,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
   };
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.items = changes?.items?.currentValue!=undefined?changes?.items?.currentValue:this.items;
+    this.items = changes?.items?.currentValue
   }
   
   get displayHidden() {

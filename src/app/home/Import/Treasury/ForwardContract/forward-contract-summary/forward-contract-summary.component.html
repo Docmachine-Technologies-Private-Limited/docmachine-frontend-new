@@ -1,4 +1,5 @@
 <div class="content-wrap pb-2 m-0 scroll-bar-main">
+
     <main id="content" class="content table-padding" role="main" style="border-radius: 10px;">
         <div class="header-panel">
             <div class="filter_section_top p-2">
@@ -13,6 +14,152 @@
                         <div class="filter_right_new padding_new_top p-0">
                             <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                     class="ex_icon"></span>Export</button>
+                            <!-- <div class="filter_posit">
+                                <button (click)="filter_Popup.style.display='block'" type="button"
+                                    class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
+                                <div class="bg-white filter_main_sec  mt-2" #filter_Popup appFilterToggle>
+                                    <form class="select_filter_options">
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">Buyer
+                                                    name</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example" name="Buyer_Name"
+                                                    (change)="filter($event.target.value,'benneName');filter_Popup.style.display='none'">
+                                                    <option value="">Buyer name</option>
+                                                    <option [value]="Buyer_Name"
+                                                        *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
+                                                        {{Buyer_Name}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">BOE
+                                                    NUMBER</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'boeNumber');filter_Popup.style.display='none'"
+                                                    name="Company_Name">
+                                                    <option value="">BOE NUMBER</option>
+                                                    <option [value]="PI_PO_No"
+                                                        *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.BOE_NUMBER">{{
+                                                        PI_PO_No
+                                                        }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">AD CODE</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'adCode');filter_Popup.style.display='none'"
+                                                    name="Origin">
+                                                    <option value="">AD CODE</option>
+                                                    <option *ngFor="let Origin of this.ALL_FILTER_DATA?.AD_CODE">{{
+                                                        Origin }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">AD BILL
+                                                    NO.</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'adBillNo');filter_Popup.style.display='none'"
+                                                    name="Origin">
+                                                    <option value="">AD BILL NO.</option>
+                                                    <option *ngFor="let Origin of this.ALL_FILTER_DATA?.AD_BILL_NO">{{
+                                                        Origin }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">IEC
+                                                    CODE</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'iecCode');filter_Popup.style.display='none'"
+                                                    name="Origin">
+                                                    <option value="">IEC CODE</option>
+                                                    <option *ngFor="let Origin of this.ALL_FILTER_DATA?.IEC_CODE">{{
+                                                        Origin }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">IEC
+                                                    NAME</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'iecName');filter_Popup.style.display='none'"
+                                                    name="Origin">
+                                                    <option value="">IEC NAME</option>
+                                                    <option *ngFor="let Origin of this.ALL_FILTER_DATA?.IEC_NAME">{{
+                                                        Origin }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">ORIGIN</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'origin');filter_Popup.style.display='none'"
+                                                    name="Origin">
+                                                    <option value="">ORIGIN</option>
+                                                    <option *ngFor="let Origin of this.ALL_FILTER_DATA?.ORIGIN">{{
+                                                        Origin }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">DISCHARGE
+                                                    PORT</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'dischargePort');filter_Popup.style.display='none'"
+                                                    name="Origin">
+                                                    <option value="">DISCHARGE PORT</option>
+                                                    <option *ngFor="let Origin of this.ALL_FILTER_DATA?.DISCHARGE_PORT">
+                                                        {{ Origin }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1"
+                                                    class="form-label">Currency</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'currency');filter_Popup.style.display='none'"
+                                                    name="Currency">
+                                                    <option value="">Currency</option>
+                                                    <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
+                                                        [value]="Currency">{{ Currency
+                                                        }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">DATE</label>
+                                                <select class="form-select form-control"
+                                                    aria-label="Default select example"
+                                                    (change)="filter($event.target.value,'boeDate');filter_Popup.style.display='none'"
+                                                    name="date">
+                                                    <option value="">DATE</option>
+                                                    <option [value]="SB_DATE"
+                                                        *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="footer_buttons">
+                                            <button type="button" class="btn btn-light"
+                                                (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                        </div>
+                                    </form>
+                                    <i></i>
+                                </div>
+                            </div> -->
+                            <!-- routerLink="/home/Forward-Contract-Add" -->
                             <button class="upload-button btn btn-success PopupOpen"
                                 [attr.popup-close]="'ForwardContractAdd'"><span class="add_icon"></span> ADD NEW
                             </button>
@@ -22,9 +169,7 @@
             </div>
         </div>
         <div class="analytics" #epltable>
-            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header"
-                [EditButton]="false"
-                [ExpansionShowHide]="true"
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="true"
                 [items]="this.FILTER_VALUE_LIST_NEW?.items"
                 [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
                 [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
@@ -33,6 +178,79 @@
                 [ExpansionKeys]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys" (ViewChanges)="VIEW_DOCUMENTS($event)"
                 (EditChanges)="EDIT($event)">
             </custom-expansion-panel>
+            <!-- <div class="widget-body p-0 support table-wrapper">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="table-tr">
+                            <th scope="col" class="col-td-th-3">#</th>
+                            <th scope="col" class="col-td-th-3">Booking Date</th>
+                            <th scope="col" class="col-td-th-3">Forward Ref No.</th>
+                            <th scope="col" class="col-td-th-3">Buy/Sell</th>
+                            <th scope="col" class="col-td-th-3">Currency</th>
+                            <th scope="col" class="col-td-th-3">Booking Amount</th>
+                            <th scope="col" class="col-td-th-3">Utilized Amount</th>
+                            <th scope="col" class="col-td-th-3">Cancellation Date</th>
+                            <th scope="col" class="col-td-th-3">Cancellation Amount</th>
+                            <th scope="col" class="col-td-th-3">Available Amount</th>
+                            <th scope="col" class="col-td-th-3">From Date</th>
+                            <th scope="col" class="col-td-th-3">To Date</th>
+                            <th scope="col" class="col-td-th-3">Net Rate</th>
+                            <th scope="col" class="col-td-th-3">Cancellation rate</th>
+                            <th scope="col" class="col-td-th-3">Booked under Facility</th>
+                            <th scope="col" class="col-td-th-3">Import/Export</th>
+                            <th scope="col" class="col-td-th-3">Status</th>
+                            <th scope="col" class="col-td-th-3">Underlying</th>
+                            <th scope="col" class="col-td-th-3">Edit Cancellation</th>
+                            <th scope="col" class="col-td-th-3">Edit Utilized</th>
+                            <th scope="col" class="col-td-th-3">Upload Documents</th>
+                            <th scope="col" class="col-td-th-3">Edit</th>
+                            <th scope="col" class="col-td-th-3">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-tr" *ngFor="let item of ForwardContract_DATA;let i=index">
+                            <th scope="col" class="col-td-th-3">{{(i+1)}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.BookingDate}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.ForwardRefNo}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.BuySell}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.Currency}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.BookingAmount}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.UtilizedAmount}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.CancellationDate}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.CancellationAmount}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.AvailableAmount}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.FromDate}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.ToDate}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.NetRate}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.CancellationRate}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.BookedUnderFacility}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.ImportExport}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.Status}}</th>
+                            <th scope="col" class="col-td-th-3">{{item?.Underlying}}</th>
+                            <th scope="col" class="col-td-th-3">
+                                <button class="upload-button btn btn-primary PopupOpen"
+                                    [attr.popup-close]="'ForwardContractCancellation'" (click)="upload(item?._id,item)">Cancellation</button>
+                            </th>
+                            <th scope="col" class="col-td-th-3">
+                                <button class="upload-button btn btn-primary PopupOpen"
+                                    [attr.popup-close]="'UPLOAD_DOCUMENTS'" (click)="upload(item?._id,item)">Utilized</button>
+                            </th>
+                            <th scope="col" class="col-td-th-3">
+                                <button class="upload-button btn btn-primary PopupOpen"
+                                    [attr.popup-close]="'UPLOAD_DOCUMENTS'" (click)="upload(item?._id,item)">Upload</button>
+                            </th>
+                            <th scope="col" class="col-td-th-3">
+                                <button class="upload-button btn btn-primary PopupOpen"
+                                    [attr.popup-close]="'EDIT_PAGE'" (click)="EDIT(item?._id,item)">Edit</button>
+                            </th>
+                            <th scope="col" class="col-td-th-3">
+                                <button class="upload-button btn btn-primary PopupOpen"
+                                    [attr.popup-close]="'VIEW_DOCUMENTS'" (click)="VIEW_DOCUMENTS(item?._id,item)">View</button>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> -->
         </div>
     </main>
 </div>
@@ -77,18 +295,17 @@
 
 <app-custom-model modalbodyheight="80vh"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
-    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh"
-    id="EditForwardContract" name="Forward Contract Update" #EditSummaryPagePanel>
+    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh" id="EditSummaryPage"
+    name="Forward Contract Update" #EditSummaryPagePanel>
     <div class="col-12">
-        <upload-components style="width: 100%;" id="EditForwardContract"
-            (SubmitEvent)="Cancellation_FORM_DATA_Update_Form($event,EditSummaryPagePanel)"></upload-components>
+        <upload-components style="width: 100%;" id="EditForwardContract" (SubmitEvent)="UpdateForm($event,EditSummaryPagePanel)"></upload-components>
     </div>
 </app-custom-model>
 
 <app-custom-model modalbodyheight="80vh"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
-    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh" id="PDF_VIEW"
-    name="Forward Contract View Documents">
+    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh"
+    id="PDF_VIEW" name="Forward Contract View Documents">
     <div class="col-12 pb-2" *ngIf="this.PDF_VIEW_URL!=''">
         <app-pdf-viewer [downloadShow]="false" *ngIf="this.PDF_VIEW_URL!=''" name="Documents" [src]="this.PDF_VIEW_URL"
             width="100%" height="500px"></app-pdf-viewer>
@@ -101,8 +318,7 @@
     id="EDIT_DOCUMENTS" name="Forward Contract Cancellation Update" #EDIT_DOCUMENTS_PANEL>
     <div class="ml-0 p-3 col-12">
         <div class="container-fluid m-auto p-0">
-            <upload-components style="width: 100%;" id="ForwardContractCancellationUpdate"
-                (SubmitEvent)="Cancellation_FORM_DATA_Update_Form($event,EDIT_DOCUMENTS_PANEL)"></upload-components>
+            <upload-components style="width: 100%;" id="ForwardContractCancellationUpdate" (SubmitEvent)="Cancellation_FORM_DATA_Update_Form($event,EDIT_DOCUMENTS_PANEL)"></upload-components>
         </div>
     </div>
 </app-custom-model>

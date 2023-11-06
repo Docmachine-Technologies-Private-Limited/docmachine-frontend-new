@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FederalBankExportletterheadComponent } from './exportletterhead.component';
+import { ExportletterheadComponent } from './exportletterhead.component';
 
-describe('FederalBankExportletterheadComponent', () => {
-  let component: FederalBankExportletterheadComponent;
-  let fixture: ComponentFixture<FederalBankExportletterheadComponent>;
+describe('ExportletterheadComponent', () => {
+  let component: ExportletterheadComponent;
+  let fixture: ComponentFixture<ExportletterheadComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FederalBankExportletterheadComponent ]
+      declarations: [ ExportletterheadComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FederalBankExportletterheadComponent);
+    fixture = TestBed.createComponent(ExportletterheadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

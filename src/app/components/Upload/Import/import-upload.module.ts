@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImportUploadRoutingModule } from './import-upload-routing.module';
-import { BOEComponent } from "./import-BOE/boe.component";
+import { BOEComponent } from "../Import/import-BOE/boe.component";
 import { ImportInsurancedocumentsComponent } from './import-insurancedocuments/import-insurancedocuments.component';
 import { ImportLetterofCreditComponent } from './import-letterof-credit/import-letterof-credit.component';
 import { ImportTripartyAgreementsComponent } from './import-triparty-agreements/import-triparty-agreements.component';
@@ -20,7 +20,6 @@ import { ImportBilllodgementreferencenumberadvicecopyComponent } from './import-
 import { ImportRealisationCertificateComponent } from './import-realisation-certificate/import-realisation-certificate.component';
 import { ImportSwiftCopyDocumentComponent } from './import-swift-copy-document/import-swift-copy-document.component';
 import { SharedHomeModule } from '../../../home/shared-home.module';
-import { IdpmsReconComponent } from '../../../home/idpms-recon/idpms-recon.component';
 
 @NgModule({
   declarations: [
@@ -42,8 +41,7 @@ import { IdpmsReconComponent } from '../../../home/idpms-recon/idpms-recon.compo
     ImportPIPOSComponent,
     ImportBilllodgementreferencenumberadvicecopyComponent,
     ImportRealisationCertificateComponent,
-    ImportSwiftCopyDocumentComponent,
-    IdpmsReconComponent,
+    ImportSwiftCopyDocumentComponent
   ],
   imports: [
     CommonModule,

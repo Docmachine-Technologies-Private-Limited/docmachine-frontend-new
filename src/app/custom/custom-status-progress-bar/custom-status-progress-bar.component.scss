@@ -3,22 +3,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: auto;
     padding: 10px;
-    position: absolute;
-    top: 10px;
-    left: 220px;
-    width: calc(100% - 470px);
 }
 
 .documents-panel-status .left-log-panel {
     display: block;
     transition: all 1s ease-in-out;
-    width: 100%;
 }
 
 .documents-panel-status .left-log-panel.not-found::after {
     content: "";
-    width: 100%;
+    width: 80px;
     display: block;
     border-bottom: 2px solid #ff0303;
     margin-top: -8px;
@@ -27,7 +23,7 @@
 
 .documents-panel-status .left-log-panel.found::after {
     content: "";
-    width: 100%;
+    width: 80px;
     display: block;
     border-bottom: 2px solid green;
     margin-top: -8px;
@@ -77,11 +73,6 @@
     width: 60px !important;
 }
 
-.documents-panel-status .view-pdf-text-last {
-    position: absolute;
-    top: -3px;
-    left: 20px;
-}
 
 .documents-panel-status .text-with-circle {
     display: flex;
@@ -89,8 +80,6 @@
     flex-direction: column;
     justify-content: flex-start;
     gap: 7px;
-    position: relative;
-    width: 100%;
 }
 
 .documents-panel-status .text-log{
@@ -116,13 +105,6 @@
 }
 
 .documents-panel-status .view-pdf-text{
-    position: absolute;
-    top: -10px;
-    left: 25px;
-}
-
-.documents-panel-status .view-pdf-text-1{
-    position: absolute;
-    top: 3px;
-    left: -7px;
+    margin: auto;
+    margin-left: 0;
 }

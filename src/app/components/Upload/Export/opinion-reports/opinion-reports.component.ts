@@ -70,26 +70,18 @@ export class OpinionReportsComponent implements OnInit {
             required: true,
           }
         },
-        ForeignPartyName: {
-          type: "buyer",
+        currency: {
+          type: "currency",
           value: "",
-          label: "Foreign Party Name",
+          label: "Currency*",
           rules: {
             required: true,
           }
         },
-        ReportDate: {
-          type: "date",
-          value: "",
-          label: "Report Date",
-          rules: {
-            required: true,
-          }
-        },
-        ReportRatings: {
+        opinionReportAmount: {
           type: "text",
           value: "",
-          label: "Report Ratings",
+          label: "Opinion Report Amount",
           rules: {
             required: true,
           }

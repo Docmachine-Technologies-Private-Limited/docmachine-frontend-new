@@ -1,301 +1,437 @@
 
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../service/user.service';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
+import * as data from '../bank.json';
+import * as data1 from './../currency.json';
 import { DocumentService } from '../service/document.service';
-import { UploadServiceValidatorService } from '../components/Upload/service/upload-service-validator.service';
-import { LEIRecordsService } from '../service/LEIRecord/leirecords.service';
 @Component({
   selector: 'app-create-team1',
   templateUrl: './create-team1.component.html',
   styleUrls: ['./create-team1.component.scss']
 })
-export class CreateTeam1Component implements OnInit {
-  Visible: boolean = false;
-  LEI_YES_NO: boolean = false;
-  LEI_VALIDATION: any = {
-    message: '',
-    status: '',
-    visible: ''
-  }
-  LEI_DATA: any = [];
-  IMAGE_SHOW: any = '';
+export class CreateTeam1Component implements OnInit, AfterViewInit {
 
-  constructor(@Inject(PLATFORM_ID) public platformId,
-    private userService: UserService,
-    private router: Router,
-    public docservice: DocumentService,
-    public validator: UploadServiceValidatorService,
-    private toastr: ToastrService,
-    public leiRecords: LEIRecordsService) {
-  }
+  @Input() que: any;
+  BANK_NAME_LIST:any=[];
+  @Input() entities: any;
+  @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
+  public type: string = 'directive';
+  public disabled: boolean = false;
+  @ViewChild(DropzoneDirective, { static: true }) directiveRef?: DropzoneDirective;
+  item: any;
+  authToken: any;
+  headers: any;
+  file: Array<any> = [];
+  loginForm:any=FormGroup;
+  letterHead = false;
+  roundSeal = false;
+  forSeal = false;
+  letterHeadDone = false;
+  roundSealDone = false;
+  forSealDone = false;
+  public config: DropzoneConfigInterface;
+  submitted: boolean = false;
+  isDisabled: boolean = false;
+  jsondata: any;
+  dataJson: any;
+  bankName:any = [];
+  currencyName:any = [];
+  toggle: boolean;
+  dataJson1: any;
+  jsondata1: any;
+  toggle1: boolean;
+  submitted1: boolean;
+  control: FormArray;
+  x: any;
+  y: any;
+  api_base: any;
+  dynamicVariable = false;
+  modo1: any=['choose Account type'];
+  Account_Type:any=[{
+    type:'OD-over draft'
+  },{
+    type:'CC-cash credit'
+  },{
+    type:'CA-Current account'
+  },{
+    type:'EEFC - Exchange earner Foreign currency'
+  },{
+    type:'PCFC- packing credit Foreign currency'
+  },{
+    type:'EBRD- Bill discounting accoun'
+  }];
+  CURRENCY_LIST:any=[];
+  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
+    private userService: UserService, private router: Router, 
+    public docservice:DocumentService,
+    private toastr: ToastrService) {
+    this.loadFromLocalStorage()
+    this.api_base = userService.api_base;
+    console.log(this.api_base)
+    console.log(this.authToken)
+    this.headers = {
+      Authorization: this.authToken,
+    }
 
-  ngOnInit(): void {
-    this.docservice.getBankNameList().then((res) => {
-      this.validator.BANK_NAME_LIST_GLOABL = res;
-
-    });
-    console.log(this.validator.BANK_NAME_LIST_GLOABL, 'BANK_NAME_LIST')
-  }
-
-  onSubmit(e: any) {
-    let array1: any = []
-    e.value.bankDetails.forEach((value, index) => {
-      const newVal = { ...value };
-      newVal['BankUniqueId'] = value?.bank?.BankUniqueId != undefined ? value?.bank?.BankUniqueId : value?.BankUniqueId;
-      newVal['bank'] = value?.bank?.value != undefined ? value?.bank?.value : value?.bank;
-      newVal['accType'] = value?.accType?.type != undefined ? value?.accType?.type : value?.accType;
-      newVal['currency'] = value?.currency?.type != undefined ? value?.currency?.type : value?.currency;
-      array1.push(newVal)
-    });
-    e.value.bankDetails = array1;
-    this.userService.creatTeam(e.value).subscribe(data => {
-      this.toastr.success('Company details uploaded successfully!');
-      this.router.navigate(['/home/dashboardTask'])
-    }, error => {
-      this.toastr.error('something wrong, please check the details!');
-      console.log("error")
-    });
-  }
-  ValidateLEI(value: any) {
-    if (value != '' && value != undefined && value != null) {
-      this.leiRecords.getRecordsLEI(value).subscribe((res: any) => {
-        console.log(res, "getRecordsLEI")
-        this.LEI_DATA = res?.data[0]?.attributes;
-        this.LEI_VALIDATION['message'] = '';
-        this.LEI_VALIDATION['status'] = '';
-        if (res?.data?.length != 0) {
-          this.LEI_VALIDATION['visible'] = "true";
-          this.IMAGE_SHOW = 'true';
-          setTimeout(() => {
-            this.IMAGE_SHOW = '';
-            this.LEI_VALIDATION['message'] = 'Entity Name : ' + res?.data[0]?.attributes?.entity?.legalName?.name;
-            this.LEI_VALIDATION['status'] = "true";
-          }, 2000);
-        } else {
-          this.IMAGE_SHOW = 'false';
-          this.LEI_VALIDATION['visible'] = "false";
-          setTimeout(() => {
-            this.IMAGE_SHOW = '';
-            this.LEI_DATA = [];
-            this.LEI_VALIDATION['message'] = "";
-            this.LEI_VALIDATION['status'] = "false";
-          }, 2000);
-        }
-      })
-    } else {
-      this.LEI_VALIDATION['status'] = "";
-      this.toastr.error('Please type your LEI No.');
+    if (isPlatformBrowser(this.platformId)) {
+      this.config = {
+        url: `${this.api_base}/member/uploadImage`, //`${this.api_base}/member/uploadImage`
+        method: `POST`,
+        maxFiles: 5,
+        maxFilesize: 5,
+        addRemoveLinks: true,
+        headers: this.headers,
+        timeout: 120000,
+        // autoProcessQueue: false,
+        dictDefaultMessage: 'Drag a document here',
+        acceptedFiles: 'image/*,application/pdf',
+        previewTemplate: '<div  class=\"dz-preview dz-file-preview\" style=\"text-align: right; margin-right:3px;\">\n <div class=\"dz-image\" style=\"text-align: right; margin-right:3px;\"> <img data-dz-thumbnail /></div>\n <div class=\"dz-details\">\n    <div class=\"dz-size\"><span data-dz-size></span></div>\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n  <div class=\"dz-success-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Check</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\n      </g>\n    </svg>\n  </div>\n  <div class=\"dz-error-mark\">\n    <i style=\"color: red; text-align: center;font-size: 30px;\" class=\"fa fa-exclamation-circle\"></i>\n  </div>\n</div>'
+      };
     }
   }
 
-  loadForm() {
-    setTimeout(() => {
-      let Address: any = this.LEI_DATA?.entity?.legalAddress?.addressLines?.join(',') + ' ' + this.LEI_DATA?.entity?.legalAddress?.city + ' ' + this.LEI_DATA?.entity?.legalAddress?.country;
-      this.validator.buildForm({
-        teamName: {
-          type: "text",
-          value: this.LEI_DATA?.entity?.legalName?.name,
-          label: "Company Name",
-          rules: {
-            required: true,
-          }
-        },
-        adress: {
-          type: "text",
-          value: Address?.indexOf('undefined') == -1 ? Address : '',
-          label: "Company Address",
-          rules: {
-            required: true,
-          },
-          maxLength: 1000,
-        },
-        iec: {
-          type: "text",
-          value: "",
-          label: "Importer Exporter code (IEC)",
-          rules: {
-            required: true,
-          }
-        },
-        phone: {
-          type: "text",
-          value: "",
-          label: "Contact Phone number",
-          rules: {
-            required: true,
-          }
-        },
-        gst: {
-          type: "text",
-          value: "",
-          label: "GSTIN",
-          rules: {
-            required: true,
-          }
-        },
-        AdCode: {
-          type: "formGroup",
-          label: "AD Code",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
-          },
-          formArray: [
-            [
-              {
-                type: "text",
-                value: "",
-                label: "AD Code",
-                name: 'AdCode',
-                rules: {
-                  required: true,
-                },
-              },
-            ]
-          ]
-        },
-        caEmail: {
-          type: "text",
-          value: "",
-          label: "CA email id",
-          rules: {
-            required: false,
-          }
-        },
-        chaEmail: {
-          type: "text",
-          value: "",
-          label: "CHA email id",
-          rules: {
-            required: false,
-          }
-        },
-        Location: {
-          type: "formGroup",
-          label: "Branch List",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
-          },
-          formArray: [
-            [
-              {
-                type: "text",
-                value: "",
-                label: "Add Location",
-                name: 'loc',
-                rules: {
-                  required: false,
-                },
-              },
-            ]
-          ]
-        },
-        commodity: {
-          type: "formGroup",
-          label: "Commodity List",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
-          },
-          formArray: [
-            [
-              {
-                type: "text",
-                value: "",
-                label: "Add Commodity",
-                name: 'como',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "HSCODE",
-                value: "",
-                label: "Select HS Code",
-                name: "HSCODE",
-                rules: {
-                  required: true,
-                }
-              },
-            ]
-          ]
-        },
-        bankDetails: {
-          type: "formGroup",
-          label: "Bank Details",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
-          },
-          formArray: [
-            [
-              {
-                type: "BankList",
-                value: "",
-                label: "Bank Name",
-                name: 'bank',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Bank Swift Code",
-                name: 'SwiftCode',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Bank Address",
-                name: 'bicAddress',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Bank Account Number",
-                name: 'accNumber',
-                rules: {
-                  required: true,
-                },
-                
-              },
-              {
-                type: "AccountType",
-                value: "",
-                label: "Bank Account Type",
-                name: 'accType',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "currency",
-                value: "",
-                label: "Bank Currency Type",
-                name: 'currency',
-                rules: {
-                  required: true,
-                },
-              },
-            ]
-          ],
-         
-        }
-      }, 'SetupCompanyDetails');
-    }, 200);
+
+
+  ngOnInit(): void {
+    this.jsondata = data['default'];
+    this.dataJson = data['default']
+    this.jsondata1 = data1['default'];
+    this.dataJson1 = data1['default']
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.CURRENCY_LIST.push({
+        type: data1['default'][index]['value']
+      })
+    }
+    this.loginForm = this.formBuilder.group({
+      teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9 _]+$"), (Validators.minLength(3))]],
+      iec: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9 _]{10}$"), Validators.maxLength(10)]],
+      adress: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern("^[0-9 _]{10}$"), Validators.maxLength(10)]],
+      caEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
+      chaEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
+      gst: ['', [Validators.required, Validators.pattern("^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$"), Validators.maxLength(15)]],
+      location: new FormArray([this.initLocation()]),
+      commodity: new FormArray([this.initComo()]),
+      bankDetails: new FormArray([this.initCourse()], Validators.required)
+    });
+    this.BANK_NAME_LIST=this.docservice.getBankNameList();
+    console.log(this.BANK_NAME_LIST,'BANK_NAME_LIST')
   }
+
+  initLocation() {
+    return this.formBuilder.group({
+      loc: ['']
+    });
+  }
+
+  initComo() {
+    return this.formBuilder.group({
+      como: ['']
+    });
+  }
+
+  initCourse() {
+    return this.formBuilder.group({
+      bank: ['', Validators.required],
+      bicAddress: ['', [Validators.required, Validators.pattern("^[A-Za-z]{6}[A-Za-z0-9]{5}$"), Validators.maxLength(11)]],
+      accNumber: ['', [Validators.required, Validators.pattern("^[0-9]{3,34}")]],
+      accType: ['', Validators.required],
+      currency: ['', Validators.required],
+      BankUniqueId: '',
+    });
+  }
+
+  initProduct() {
+    return new FormGroup({
+      product: new FormControl('')
+    });
+  }
+
+
+
+  getCourses(form): any {
+    return form.get('bankDetails').controls;
+  }
+
+  getCoursesLoc(form) {
+    return form.get('location').controls;
+  }
+
+  getCoursesCom(form) {
+    return form.get('commodity').controls;
+  }
+
+  // getProducts(form) {
+  //   return form.get('products').controls;
+  // }
+
+  onAddCourse(e) {
+
+    if (e.controls.bankDetails.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
+    this.currencyName.push('')
+    this.bankName.push('')
+    const control = this.loginForm.controls.bankDetails as FormArray;
+    control.push(this.initCourse());
+    this.isDisabled = false;
+    this.modo1.push('Choose Account Type');
+  }
+
+  onAddCourseLoc(e) {
+
+    if (e.controls.location.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
+    const control = this.loginForm.controls.location as FormArray;
+    control.push(this.initLocation());
+    this.isDisabled = false;
+  }
+
+  onAddCourseCom(e) {
+
+    if (e.controls.commodity.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
+    const control = this.loginForm.controls.commodity as FormArray;
+    control.push(this.initComo());
+    this.isDisabled = false;
+
+  }
+
+  removeAddress(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.bankDetails as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    this.bankName.splice(i, 1)
+    this.currencyName.splice(i, 1)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
+  CurrencySelect(value:any,i:any){
+    let control1 = this.loginForm.controls.bankDetails as FormArray;
+    // control1[i].currency.setValue(value)
+    console.log(control1,'this.loginForm.controls.bankDetails')
+  
+  }
+  removeAddressLoc(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.location as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
+
+  removeAddressCom(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.commodity as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
+
+
+  public onUploadInit(args: any): void {
+    console.log('onUploadInit:', args);
+  }
+
+  public onUploadError(args: any): void {
+    //this.uploading = false;
+    console.log('onUploadError:', args, args[1].message);
+  }
+  public onUploadSuccess(args: any): void {
+    //this.uploading = false;]
+    console.log(args[1].data)
+    console.log(Object.keys(args[1].data)[0])
+    this.file.push(args[1].data)
+    console.log(this.file)
+    this.letterHead = false;
+    this.roundSeal = false;
+    this.forSeal = false;
+    if (Object.keys(args[1].data)[0] == 'Letter Head') {
+      this.letterHeadDone = true;
+    }
+    else if (Object.keys(args[1].data)[0] == 'Round Seal') {
+      this.roundSealDone = true;
+    }
+    else {
+      this.forSealDone = true;
+    }
+
+  }
+
+  public sending(args: any, value) {
+    args[2].append('fileType', value);
+    if (value == 'Letter Head') {
+      this.letterHead = true;
+    }
+    else if (value == 'Round Seal') {
+      this.roundSeal = true;
+    }
+    else {
+      this.forSeal = true;
+    }
+  }
+
+  get f() { return this.loginForm.controls; }
+
+  get g(): FormArray {
+    return this.loginForm.get('bankDetails') as FormArray;
+  }
+
+  get h(): FormArray {
+    return this.loginForm.get('location') as FormArray;
+  }
+
+  get c(): FormArray {
+    return this.loginForm.get('commodity') as FormArray;
+  }
+
+  onSubmit() {
+    console.log(this.loginForm.value.bankDetails)
+    console.log(this.loginForm.value)
+    console.log("1")
+    this.submitted = true
+    this.submitted1 = true
+    this.isDisabled = true;
+    if (this.loginForm.invalid) {
+      this.toastr.error('Invalid inputs, please check!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("3")
+    this.loginForm.value.file = this.file
+    console.log(this.loginForm.value)
+
+    let array1:any=[]
+      this.loginForm.value.bankDetails.forEach((value, index) => {
+        const newVal = { ...value };
+        newVal['BankUniqueId']=this.bankName[index]?.BankUniqueId
+        array1.push(newVal)
+    });
+    this.loginForm.value.bankDetails=array1
+    this.userService.creatTeam(this.loginForm.value)
+      .subscribe(
+        data => {
+          console.log("king123")
+          console.log(data['data']._id)
+          this.item = data
+          this.toastr.success('Company details uploaded successfully!');
+          this.router.navigate(['/home/dashboardTask'])
+        },
+        error => {
+          this.toastr.error('something wrong, please check the details!');
+          console.log("error")
+        });
+  }
+
+  searchData(e, i) {
+    this.x = i
+    this.toggle = true;
+    console.log(e)
+    this.jsondata = []
+    for (let data of this.dataJson) {
+      if (data.bank.toLowerCase().includes(e.toLowerCase())) {
+        this.jsondata.push(data)
+      }
+
+
+    }
+  }
+
+  searchCurrency(e, i) {
+    this.y = i
+    this.toggle1 = true;
+    console.log(e)
+    this.jsondata1 = []
+    for (let data of this.dataJson1) {
+      if (data.currency.toLowerCase().includes(e.toLowerCase())) {
+        console.log('1')
+        this.jsondata1.push(data)
+      }
+
+
+    }
+    console.log(this.jsondata1)
+    console.log(this.currencyName.length)
+  }
+
+  public loadFromLocalStorage() {
+    const token = sessionStorage.getItem('token');
+    this.authToken = token;
+    return this.authToken;
+  }
+
+  bankClick(e, i) {
+    this.bankName[i] = e;
+    console.log(this.bankName,e,this.loginForm.value.bankDetails,'this.loginForm.value.bankDetails.')
+    this.toggle = false;
+    
+  }
+
+  currencyClick(e, i) {
+    this.currencyName[i] = e
+    console.log(this.currencyName)
+
+    this.toggle1 = false;
+
+
+  }
+
+  modo(e, i) {
+    console.log(e)
+    this.modo1[i]=e
+    // this.modo1[i+1]='choose Account Type'
+    if (e === 'OD-over draft' || e === 'CC- cash credit' || e === 'CA-Current account') {
+      this.currencyName[i] = "INR"
+    }
+
+  }
+  ngAfterViewInit() {
+    //   window['sidebarInit']();
+    //   if (isPlatformBrowser(this.platformId)) {
+    //     this.filePreview();
+    //   }
+  }
+
 }

@@ -168,70 +168,13 @@ export class ForwardContractSummaryComponent implements OnInit {
               }
             },
             {
-              type: 'button', popupid: 'EditForwardContract', className: 'fa fa-pencil-square-o', callback: (i,item: any) => {
-                this.upload(i, item);
+              type: 'button', popupid: 'EDIT_DOCUMENTS', className: 'fa fa-pencil-square-o', callback: (item: any) => {
+                this.upload(item?._id, item);
                 console.log(item, 'asdasdasdasdsad')
-                this.validator.buildForm({
-                  UtilizedDate: {
-                    type: "date",
-                    value: "",
-                    label: "Utilized Date",
-                    rules: {
-                      required: true,
-                    },
-                  },
-                  UtilizedAmount: {
-                    type: "text",
-                    value: "",
-                    label: "Utilized Amount",
-                    rules: {
-                      required: true,
-                    },
-                  },
-                  UtilizedRefereance: {
-                    type: "OptionMultiCheckBox",
-                    value: "",
-                    label: "Utilized Refereance",
-                    checkboxlabel: [{ text: "Inward", value: 'Inward' }, { text: 'Export', value: 'Export' }],
-                    rules: {
-                      required: true,
-                    },
-                    Yes: "Inward",
-                    No: "Export",
-                    option: [
-                      [{
-                        type: "AdvanceInfo",
-                        value: "",
-                        label: "AdvanceInfo",
-                        name: 'AdvanceInfo',
-                        rules: {
-                          required: true,
-                        },
-                        autofillinput: [{ input: 'AdvanceInfo', key: 'billNo' }],
-                      }],
-                    ],
-                    option1: [
-                      [{
-                        type: "AdvanceInfo",
-                        value: "",
-                        name: 'AdvanceInfo1',
-                        label: "AdvanceInfo1",
-                        rules: {
-                          required: true,
-                        },
-                        autofillinput: [{ input: 'AdvanceInfo1', key: 'billNo' }],
-                      }],
-                    ]
-                  }
-                }, 'EditForwardContract');
-                this.documentService.getOrAdvice('').subscribe((res: any) => {
-                  console.log(res, 'getOrAdvice');
-                  this.validator.ORM_BY_PARTY_NAME = res?.data;
-                });
               }
             },
             {
-              type: 'button', popupid: 'UPLOAD_DOCUMENTS', className: 'fa fa-upload', callback: (i,item: any) => {
+              type: 'button', popupid: 'UPLOAD_DOCUMENTS', className: 'fa fa-upload', callback: (item: any) => {
                 this.upload(item?._id, item);
                 console.log(item, 'asdasdasdasdsad')
               }
@@ -293,7 +236,6 @@ export class ForwardContractSummaryComponent implements OnInit {
   upload(index: any, data: any) {
     this.EDIT_DATA['index'] = index;
     this.EDIT_DATA['data'] = data;
-    console.log(data, this.EDIT_DATA, 'edit')
   }
 
   PDF_VIEW_URL: any = ''
@@ -301,36 +243,36 @@ export class ForwardContractSummaryComponent implements OnInit {
     this.EDIT_DATA['index'] = data?.index;
     this.EDIT_DATA['data'] = data?.item;
     this.PDF_VIEW_URL = ''
-    setTimeout(() => { this.PDF_VIEW_URL = this.ForwardContract_DATA[data?.index]?.document }, 100)
+    setTimeout(() => { this.PDF_VIEW_URL = data?.document }, 100)
     console.log(this.EDIT_DATA, data, 'sdfsdfsdfsdfsd')
   }
 
-  UploadDocuments(panel: any) {
-    this.documentService.ForwardContract_update({ id: this.EDIT_DATA?.data?.data?.id, data: { document: this.PDF_URL_UPLOAD } }).subscribe((ForwardContract: any) => {
+  UploadDocuments(panel:any) {
+    this.documentService.ForwardContract_update({ id: this.ForwardContract_DATA[this.EDIT_DATA?.index]?._id, data: { document: this.PDF_URL_UPLOAD } }).subscribe((ForwardContract: any) => {
       console.log(ForwardContract, 'ForwardContract')
       this.toastr.success('ForwardContract updated documents successfully....')
       this.getForwardContract()
       panel.displayHidden;
     })
   }
-
+  
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(this.ForwardContract_DATA);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'ForwardContract.xlsx');
   }
-
-  Cancellation_FORM_DATA_Update_Form(value: any, panel: any) {
-    console.log(this.EDIT_DATA,value?.value,'ForwardContract')
+  
+  Cancellation_FORM_DATA_Update_Form(value: any,panel:any) {
     this.documentService.ForwardContract_update({ id: this.ForwardContract_DATA[this.EDIT_DATA?.index]?._id, data: value?.value }).subscribe((ForwardContract: any) => {
+      console.log(ForwardContract, 'ForwardContract')
       this.toastr.success('ForwardContract updated data successfully....')
       this.getForwardContract();
       panel.displayHidden;
     })
   }
-
-  UpdateForm(value: any, panel: any) {
+  
+  UpdateForm(value: any,panel:any){
     this.documentService.ForwardContract_update({ id: this.ForwardContract_DATA[this.EDIT_DATA?.index]?._id, data: value?.value }).subscribe((ForwardContract: any) => {
       console.log(ForwardContract, 'ForwardContract')
       this.toastr.success('ForwardContract updated data successfully....')

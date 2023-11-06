@@ -13,16 +13,17 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button type="button" class="filter-popup btn btn-secondary"><span
-                                class="fi_icon filter-popup"></span>Filter</button>
-                            <div class="bg-white filter_main_sec mt-2" appFilterToggle>
+                            <button (click)="filter_Popup.style.display='block'" type="button"
+                                class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
+                                appFilterToggle>
                                 <form class="select_filter_options">
                                     <div class="row">
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
                                             <select class="form-select form-control" aria-label="Default select example"
                                                 name="Buyer_Name"
-                                                (change)="filter($event.target.value,'buyerName');">
+                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
                                                 <option value="">Buyer name</option>
                                                 <option [value]="Buyer_Name"
                                                     *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
@@ -33,7 +34,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'pipo');"
+                                                (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
                                                 name="Company_Name">
                                                 <option value="">PI/PO No.</option>
                                                 <option [value]="PI_PO_No"
@@ -46,7 +47,7 @@
                                             <label for="exampleFormControlInput1" class="form-label">BL/Airway
                                                 No.</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'airwayBlCopyNumber');"
+                                                (change)="filter($event.target.value,'airwayBlCopyNumber');filter_Popup.style.display='none'"
                                                 name="Origin">
                                                 <option value="">BL/Airway No.</option>
                                                 <option *ngFor="let Origin of this.ALL_FILTER_DATA?.BL_Airway_No">{{
@@ -57,7 +58,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">DATE</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'airwayBlCopydate');"
+                                                (change)="filter($event.target.value,'airwayBlCopydate');filter_Popup.style.display='none'"
                                                 name="date">
                                                 <option value="">DATE</option>
                                                 <option [value]="SB_DATE"
@@ -68,7 +69,7 @@
                                     </div>
                                     <div class="footer_buttons">
                                         <button type="button" class="btn btn-light"
-                                            (click)="resetFilter();">RESET</button>
+                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
                                     </div>
                                 </form>
                                 <i></i>

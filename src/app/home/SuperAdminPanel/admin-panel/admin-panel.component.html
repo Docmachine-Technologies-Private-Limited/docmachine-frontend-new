@@ -185,10 +185,10 @@
                                             <span class="InActive" *ngIf="item?.isLoggin==false">InActive</span>
                                         </td>
                                         <td class="col-td-th-3 btn-td">
-                                            <button class="btn btn-primary" title="Revoke" (click)='submit(item._id, i, item.emailId)'><i class="fa fa-check" style="color: green;
+                                            <button class="btn btn-primary" title="Revoke" (click)='submit(data._id, i, data.emailId)'><i class="fa fa-check" style="color: green;
                                                 font-size: 15px;" aria-hidden="true"></i></button>
                                             <button title="Reject" class="btn btn-primary" style="color: red;
-                                            font-size: 15px;" (click)='decline(item._id, i, item.emailId)'><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                            font-size: 15px;" (click)='decline(data._id, i, data.emailId)'><i class="fa fa-ban" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>

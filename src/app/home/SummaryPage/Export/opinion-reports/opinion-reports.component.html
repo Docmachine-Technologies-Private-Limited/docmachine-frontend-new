@@ -1,12 +1,11 @@
 <div class="content-wrap pb-2 scroll-bar-main">
-
+   
     <main id="content" class="content table-padding" role="main">
         <div class="filter_section_top p-2">
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
-                        <h3 class="heading_common_tag">Opinion Report Documents ({{this.FILTER_VALUE_LIST?.length}})
-                        </h3>
+                        <h3 class="heading_common_tag">Opinion Report Documents ({{this.FILTER_VALUE_LIST?.length}})</h3>
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-12">
@@ -14,14 +13,78 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button type="button" class="filter-popup btn btn-secondary"><span
-                                class="fi_icon filter-popup"></span>Filter</button>
-                        <ng-custom-filter-popup (ResetEvent)="reset()" FormStyle="display: grid;
-                        grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
-                            *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
+                            <button (click)="filter_Popup.style.display='block'" type="button"
+                                class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
+                                appFilterToggle>
+                                <form class="select_filter_options">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                name="Buyer_Name"
+                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                <option value="">Buyer name</option>
+                                                <option [value]="Buyer_Name"
+                                                    *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
+                                                    {{Buyer_Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                                name="Company_Name">
+                                                <option value="">PI/PO No.</option>
+                                                <option [value]="PI_PO_No"
+                                                    *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No
+                                                    }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">O R No.</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'opinionReportNumber');filter_Popup.style.display='none'"
+                                                name="Origin">
+                                                <option value="">O R No.</option>
+                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.O_R_No">{{ Origin }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">Currency</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'currency');filter_Popup.style.display='none'"
+                                                name="Currency">
+                                                <option value="">Currency</option>
+                                                <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
+                                                    [value]="Currency">{{ Currency }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label for="exampleFormControlInput1" class="form-label">DATE</label>
+                                            <select class="form-select form-control" aria-label="Default select example"
+                                                (change)="filter($event.target.value,'date');filter_Popup.style.display='none'"
+                                                name="date">
+                                                <option value="">DATE</option>
+                                                <option [value]="SB_DATE"
+                                                    *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="footer_buttons">
+                                        <button type="button" class="btn btn-light"
+                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                    </div>
+                                </form>
+                                <i></i>
+                            </div>
                         </div>
-                        <button class="upload-button btn btn-success"
-                            [routerLink]="['/home/upload-documents/Export/OpinionReports']">
+                        <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Export/OpinionReports']">
                             <span class="add_icon"></span> ADD NEW
                         </button>
                     </div>
@@ -31,28 +94,107 @@
 
         <div class="analytics" #epltable>
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
-                [items]="this.FILTER_VALUE_LIST_NEW?.items"
-                [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
-                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
-                (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
-            </custom-expansion-panel>
+            [items]="this.FILTER_VALUE_LIST_NEW?.items"
+            [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+            [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
+            (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
+        </custom-expansion-panel>
+            <!-- <div style="width: 100%" class="analytics_top">
+                <div style="width: 100%" class="row">
+                    <div class="" id="container">
+                        <section class="middle_datatable">
+                            <div class="widget-body p-0 support table-wrapper">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-3">DATE</th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">O R No.</th>
+                                            <th scope="col" class="col-td-th-3">O R Amount</th>
+                                            <th scope="col" class="col-td-th-3">Currency</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
+                                            <th scope="col" class="col-td-th-3">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
+                                            [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
+                                            <td class="col-td-th-3">{{ data.date }}</td>
+                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3">
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.opinionReportNumber}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="opinionReportNumber"
+                                                        type="text" placeholder="Opinion Report Number"
+                                                        [(ngModel)]="data.opinionReportNumber">
+                                                </div>
+                                            </td>
+                                            <td class="col-td-th-3">
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.opinionReportAmount}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="opinionReportAmount"
+                                                        type="text" placeholder="Opinion Report Amount"
+                                                        [(ngModel)]="data.opinionReportAmount">
+                                                </div>
+                                            </td>
+                                            <td class="col-td-th-3">
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.currency}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="currency" type="text"
+                                                        placeholder="Currency" [(ngModel)]="data.currency">
+                                                </div>
+                                            </td>
+                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                            <td class="col-td-th-3">
+                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewpdf(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                                    aria-hidden="true"></i></a>
+                                                <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"
+                                                    (click)="toSave(data, i)"><i class="fa fa-floppy-o"
+                                                        aria-hidden="true"></i></button>
+                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                                    (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
+                                                        aria-hidden="true"></i></button>
+                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                                    (click)="handleDelete(data._id,i)">
+                                                    <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o"
+                                                            aria-hidden="true"></i></a>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div> -->
         </div>
     </main>
 </div>
 
-<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="PDF_VIEW"
-    name="Opinion Report Documents">
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
+    id="PDF_VIEW" name="Opinion Report Documents">
     <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Opinion Report Documents" [src]="viewData"
-            width="100%" height="500px"></app-pdf-viewer>
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Opinion Report Documents" [src]="viewData" width="100%"
+        height="500px"></app-pdf-viewer>
     </div>
 </app-custom-model>
 
 <app-custom-model modalbodyheight="55vh" *ngIf="this.SELECTED_VALUE!=''"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
     EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="60vh"
-    id="EditSummaryPage"
-    [name]="'Opinion Report Documents Update || Opinion Report Documents No. : '+this.SELECTED_VALUE?.opinionReportNumber"
+    id="EditSummaryPage" [name]="'Opinion Report Documents Update || Opinion Report Documents No. : '+this.SELECTED_VALUE?.opinionReportNumber"
     #EditSummaryPagePanel>
     <div class="ml-0 p-3 col-12">
         <div class="container-fluid m-auto p-0">
@@ -69,16 +211,14 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="inputEmail4">O R Number</label>
-                                        <ng-custom-input type="text"
-                                            [(ngInput)]="this.EDIT_FORM_DATA.opinionReportNumber"
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.opinionReportNumber"
                                             placeHolderText="O R Number"></ng-custom-input>
                                     </div>
                                 </div>
                                 <div class="row col-12 p-0">
                                     <div class="form-group col-md-6">
                                         <label for="inputEmail4">O R Amount</label>
-                                        <ng-custom-input type="text"
-                                            [(ngInput)]="this.EDIT_FORM_DATA.opinionReportAmount"
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.opinionReportAmount"
                                             placeHolderText="O R Amount"></ng-custom-input>
                                     </div>
                                     <div class="form-group col-md-6">

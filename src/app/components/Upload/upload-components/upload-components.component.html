@@ -1,253 +1,32 @@
-<div class="form-container-fluid" [style]="MainStyle" *ngIf="this.validator.dynamicFormGroup!=undefined"
+<div class="form-container-fluid" *ngIf="this.validator.dynamicFormGroup!=undefined"
     [hidden]="this.validator.dynamicFormGroup[this.id]!=undefined?false:true">
     <form class="col-12" [formGroup]="this.validator.dynamicFormGroup[this.id]" onsubmit="return false;"
-        [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}" [style]="this.FormStyle"
+        [ngClass]="{'division-panel':this.HIDE_BACKGROUND==true}"
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
-        <label *ngIf="label!=undefined && label!=''" [style]="labelStyle">{{label}}</label>
-        <ng-content *ngIf="morecontent==true" select="more-content"></ng-content>
-        <div class="col-12" [ngClass]="{'hidden':field?.disabled==true}"
-            *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
+        <div class="col-12" *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
-                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
-                    <div class="form-group mb-3" *ngSwitchCase="'text'">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
-                            [type]="field.type" [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            class="form-control" [style]="field?.style" />
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
-                    <div class="form-group mb-3" *ngSwitchCase="'button'">
-                        <button type="button" class="btn btn-primary"
-                            (click)="this.AddButton?.emit({text:field?.text})">{{field?.text}}</button>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
-                    <div class="form-group mb-3" *ngSwitchCase="'TextValiadtion'">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
-                            [type]="field.type" [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            class="form-control" [style]="field?.style" />
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
-                    <div class="form-group mb-3" *ngSwitchCase="'SelectOption'">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <select class="form-select" [name]="field?.fieldName" [(ngModel)]="field.value"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            aria-label="Default select example" [disabled]="field?.Inputdisabled">
-                            <option [value]="item" *ngFor="let item of field?.items;let i=index">
-                                {{item}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
-                    <div class="form-group mb-3" *ngSwitchCase="'TextGreaterValiadtion'">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
-                            [type]="field.type" [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            class="form-control" [style]="field?.style" />
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngIf="field?.visible==true || field?.visible==undefined">
-                    <div class="form-group mb-3" *ngSwitchCase="'LabelShow'">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <label for="" class="form-label-control" [innerHTML]="field?.value"></label>
-                    </div>
+                <div class="form-group mb-3" *ngSwitchCase="'text'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <input [(ngModel)]="field.value"
+                        (keypress)="this.validator.max_length_validator(this.id,field.fieldName);" [type]="field.type"
+                        [name]="field.fieldName"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" class="form-control"
+                        [style]="field?.style" />
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'number'">
                     <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <input [(ngModel)]="field.value"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.style" />
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'SB_DETAILS_SHOW'">
-                    <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <div class="p-2 SHIPING_BILL_POPUP" style="overflow: auto;"
-                            *ngIf="this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.length!=0">
-                            <mat-accordion>
-                                <mat-expansion-panel>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-description>
-                                            <div class="d-flex flex-column">
-                                                <mat-panel-title>
-                                                    SB DETAILS
-                                                </mat-panel-title>
-                                                <table class="table mb-0">
-                                                    <tbody>
-                                                        <tr class="table-tr">
-                                                            <td class="col-td-th-3">
-                                                                SB DATE :
-                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.sbdate}}
-                                                            </td>
-                                                            <td class="col-td-th-3">
-                                                                SB NUMBER :
-                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.sbno}}
-                                                            </td>
-                                                            <td class="col-td-th-3">
-                                                                BUYER NAME :
-                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.buyerName}}
-                                                            </td>
-                                                            <td class="col-td-th-3">
-                                                                CURRENCY :
-                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.fobCurrency}}
-                                                            </td>
-                                                            <td class="col-td-th-3">
-                                                                SB AMOUNT :
-                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.fobValue}}
-                                                            </td>
-                                                            <td class="col-td-th-3">
-                                                                AVAILABLE AMOUNT :
-                                                                {{this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL.balanceAvai}}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="d-flex flex-column">
-                                        <mat-expansion-panel
-                                            *ngFor='let commercialdata of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL?.commercialdetails;let i = index'>
-                                            <mat-expansion-panel-header>
-                                                <mat-panel-description>
-                                                    <div class="d-flex flex-column">
-                                                        <mat-panel-title>
-                                                            CI DETAILS
-                                                        </mat-panel-title>
-                                                        <table class="table mb-0">
-                                                            <tbody>
-                                                                <tr class="table-tr">
-                                                                    <td class="col-td-th-3">
-                                                                        CI DATE : {{commercialdata.commercialDate}}
-                                                                    </td>
-                                                                    <td class="col-td-th-3">
-                                                                        CI NO. : {{commercialdata.commercialNumber}}
-                                                                    </td>
-                                                                    <td class="col-td-th-3">
-                                                                        CI Value(USD) : {{commercialdata.amount}}
-                                                                    </td>
-                                                                    <td class="col-td-th-3">
-                                                                        Damages / Deductions(Debit Note) :
-                                                                        {{commercialdata.debitAmount}}
-                                                                    </td>
-                                                                    <td class="col-td-th-3">
-                                                                        SB Amout to be realized :
-                                                                        {{commercialdata.SB_Amout_Realized}}
-                                                                    </td>
-                                                                    <td class="col-td-th-3">
-                                                                        Value to be Realised in FIRX(USD) :
-                                                                        {{commercialdata.IRADVICE_SUM}}
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </mat-panel-description>
-                                            </mat-expansion-panel-header>
-                                            <table class="table mb-0">
-                                                <thead>
-                                                    <tr class="table-tr">
-                                                        <th scope="col" class="col-td-th-1">FIRX Number/ID</th>
-                                                        <th scope="col" class="col-td-th-1">Recieved Amount</th>
-                                                        <th scope="col" class="col-td-th-1">Commision Amount</th>
-                                                        <th scope="col" class="col-td-th-1">UsedAmount</th>
-                                                        <th scope="col" class="col-td-th-3">Available Balance</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="table-tr"
-                                                        *ngFor='let IRM_REFdata of commercialdata?.IRM_REF;let j = index'>
-                                                        <td class="col-td-th-1">
-                                                            {{IRM_REFdata?.billNo}}
-                                                        </td>
-                                                        <td class="col-td-th-1">
-                                                            {{IRM_REFdata?.amount}}
-                                                        </td>
-                                                        <td class="col-td-th-1">
-                                                            {{IRM_REFdata?.commision}}
-                                                        </td>
-                                                        <td class="col-td-th-1">
-                                                            {{IRM_REFdata?.MatchOffData?.InputValue}}
-                                                        </td>
-                                                        <td class="col-td-th-3">
-                                                            {{IRM_REFdata?.BalanceAvail}}
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </mat-expansion-panel>
-
-                                    </div>
-                                </mat-expansion-panel>
-                            </mat-accordion>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'ImagesList'">
-                    <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <div class="container">
-                            <div class="form-group">
-                                <div class="input-group shadow">
-                                    <span class="input-group-text px-3 text-muted"><i
-                                            class="fas fa-image fa-lg"></i></span>
-                                    <input type="file" x-ref="file" class="d-none" multiple="multiple"
-                                        (change)="onUploadChanges($event,field?.autofill)"
-                                        accept="image/png, image/jpeg" #loadFile>
-                                    <input style="font-size: 11px;" (click)="loadFile.click()" type="text"
-                                        class="form-control form-control-lg"
-                                        [value]="this.IMAGE_UPLOAD_NAME_LIST?.join(',')" placeholder="Upload Image">
-                                    <button class="browse btn btn-primary px-4" type="button"
-                                        (click)="loadFile.click()"><i class="fas fa-image"></i>
-                                        Browse</button>
-
-                                </div>
-                                <div class="image-card-list">
-                                    <div class="image-card" *ngFor="let item of this.IMAGE_UPLOAD_LIST;let i=index">
-                                        <button class="btn-primary" (click)="removeImage(i,field?.autofill)">X</button>
-                                        <img [src]="item?.buffer" alt="not found">
-                                        <p>{{item?.name}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'textarea'">
-                    <div class="form-group mb-3" *ngIf="field.visible==true || field.visible==undefined">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <textarea [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
-                            [type]="field.type" [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            class="form-control" [style]="field?.style"></textarea>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'email'">
                     <div class="col-12 p-0">
-                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
-                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        <!-- <i class="fa fa-envelope envelope-icon" aria-hidden="true"></i> -->
                         <div class="email-input-icon">
                             <input [(ngModel)]="field.value"
                                 (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
@@ -260,64 +39,11 @@
                 <div class="form-group mb-3" *ngSwitchCase="'checkbox'">
                     <div class="col-12 p-0 ml-3">
                         <mat-checkbox [(ngModel)]="field.value" [type]="field.type" [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{field.label}}
-                            <span style="color: red;" *ngIf="field?.rules?.required==true">*</span></mat-checkbox>
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{field.label}}</mat-checkbox>
                     </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'yesnocheckbox'">
-                    <div class="col-12 p-0 d-flex" style="align-items: center;">
-                        <label style="margin: auto;margin-left: 0;"
-                            *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                                *ngIf="field?.rules?.required==true">*</span></label>
-                        <div class="d-flex" [ngClass]="field?.class" [style]="field?.style"
-                            *ngIf="field?.CoveringLetter==false || field?.CoveringLetter==undefined">
-                            <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button"
-                                (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName},field.fieldName);HideShowInputCheckBox(true,field?.HideShowInput)"
-                                [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">{{field?.text1!=undefined?field?.text1:'Yes'}}</button>
-                            <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button"
-                                (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName},field.fieldName);HideShowInputCheckBox(false,field?.HideShowInput)"
-                                [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">{{field?.text2!=undefined?field?.text2:'No'}}</button>
-                        </div>
-                        <custom-ng-content-header *ngIf="field?.CoveringLetter==true">
-                            <div class="d-flex">
-                                <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button"
-                                    (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName},field.fieldName);HideShowInputCheckBox(true,field?.HideShowInput)"
-                                    [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">{{field?.text1!=undefined?field?.text1:'Yes'}}</button>
-                                <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button"
-                                    (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName},field.fieldName);HideShowInputCheckBox(false,field?.HideShowInput)"
-                                    [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">{{field?.text2!=undefined?field?.text2:'No'}}</button>
-                            </div>
-                        </custom-ng-content-header>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'PopupOpen'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <app-ng-dropdown-custom [class]="field?.class" [popup-close]="field?.id"
-                        [bindLabel]="field?.bindLabel" [name]="field?.fieldName" [items]="field?.item"
-                        [multiple]="false">
-                    </app-ng-dropdown-custom>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'ArrayList'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-custom-dropdown [items]="field?.item" [bindLabel]="field?.bindLabel" [multiple]="false"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field?.fieldName" [selectedItems]="field?.value"
-                        [(ngModel)]="field.value"></ng-custom-dropdown>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'PIPO_LIST'">
-                    <label *ngIf="field.label!=undefined">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator?.PIPO_LIST?.length!=0" [items]="this.validator?.PIPO_LIST"
-                        bindLabel="pi_poNo" [multiple]="false"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
-                    </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'password'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div class="col-12 p-0">
                         <i class="fa fa-lock lock-icon" aria-hidden="true"></i>
                         <input [(ngModel)]="field.value"
@@ -332,148 +58,60 @@
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'date'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <input [(ngModel)]="field.value"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" [type]="field.type"
                         [name]="field.fieldName" class="form-control" [style]="field?.style" />
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'currency'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select
-                        *ngIf="this.validator.CURRENCY_LIST?.length!=0 && (field?.Inputdisabled==false || field?.Inputdisabled==undefined)"
-                        [disabled]="field?.Inputdisabled" [items]="this.validator.CURRENCY_LIST" bindLabel="type"
-                        [multiple]="false" (change)="AutoFillCurrency($event,field?.autofill)"
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0" [items]="this.validator.CURRENCY_LIST"
+                        bindLabel="type" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
-                    <input *ngIf="field?.Inputdisabled==true"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value" class="form-control" type="text" readonly>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'BuySell'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select [items]="[{value:'Buy'},{value:'Sell'}]" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [disabled]="field?.Inputdisabled" (change)="this.setValue($event?.value,field?.InputBindValue)"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
+                        (change)="this.setValue($event?.value,field?.InputBindValue)" [name]="field.fieldName"
+                        [(ngModel)]="field.value">
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'Underlying'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select
-                        [items]="[{value:'Booking'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
-                        bindLabel="value" [multiple]="false" [disabled]="field?.Inputdisabled"
+                        [items]="[{value:'Pending'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
+                        bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select [id]="field?.id"
-                        *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
-                        [disabled]="field?.Inputdisabled"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value" #CommericalNo>
+                        [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
-                    <ng-select [id]="field?.id"
-                        *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==true"
+                    <ng-select *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==true"
                         [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                         (change)="autofillCommerical($event,field?.autofill)"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value" #CommericalNo>
-                    </ng-select>
-                    <div *ngFor="let item of this.validator.COMMERICAL_NO;let in=index">
-                        <mat-checkbox *ngIf="field?.ShowCheckBox==true" [(ngModel)]="field.value"
-                            [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.value}}</mat-checkbox>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'BankCheckBox'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator.BANK_LIST_DROPDOWN?.length!=0"
-                        [items]="this.validator.BANK_LIST_DROPDOWN" bindLabel="value" [multiple]="false"
-                        (change)="BANK_CHECKBOX($event)"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
-                    </ng-select>
-                    <label class="mt-2 mb-2"
-                        *ngIf="field.Banklabel!=undefined && field.Banklabel!='' && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
-                    <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST;let in=index" class="mt-2">
-                        <mat-checkbox *ngIf="field.TypeOfCurrency==item?.value?.currency" [checked]="item?.checked"
-                            (change)="onBankCheckBox($event,field.fieldName,item?.value,item)" [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
-                        <mat-checkbox *ngIf="field.TypeOfCurrency=='' || field.TypeOfCurrency==undefined"
-                            [checked]="item?.checked" (change)="onBankCheckBox($event,field.fieldName,item?.value,item)"
-                            [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
-                    </div>
-
-                    <label class="mt-2 mb-2"
-                        *ngIf="field.Banklabel2!=undefined && field.Banklabel2!='' && this.validator.CHECK_BOX_BANK_LIST_CHARGES?.length!=0">{{field.Banklabel2}}</label>
-                    <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST_CHARGES;let in=index" class="mt-2">
-                        <mat-checkbox [checked]="item?.checked"
-                            (change)="onChargerBankCheckBox($event,field.fieldName2,item?.value,item)"
-                            [name]="field.fieldName2"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
-                    </div>
-
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'RemitterCheckBox'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator.NEW_INWARD_REMITTANCE_NAME_LIST?.length!=0"
-                        [items]="this.validator.NEW_INWARD_REMITTANCE_NAME_LIST" bindLabel="Remitter_Name"
-                        [multiple]="false" (change)="REMITTER_CHECKBOX($event)"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
-                    </ng-select>
-                    <label class="mt-2 mb-2"
-                        *ngIf="field.RemitterLabel!=undefined && field.RemitterLabel!='' && this.validator.CHECK_BOX_REMITTER_LIST?.length!=0">{{field.RemitterLabel}}</label>
-                    <div *ngFor="let item of this.validator.CHECK_BOX_REMITTER_LIST;let in=index" class="mt-2">
-                        <mat-checkbox *ngIf="field.TypeOfCurrency=='' || field.TypeOfCurrency==undefined"
-                            [checked]="item?.checked" (change)="onRemitterCheckBox($event,field.fieldName,item,item)"
-                            [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.Inward_reference_number}}
-                            | {{item?.currency}} | {{item?.Inward_amount_for_disposal}}</mat-checkbox>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'CommericalListCheckBox'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <div *ngFor="let item of this.validator.COMMERICAL_NO;let in=index">
-                        <mat-checkbox *ngIf="field?.ShowCheckBox==true"
-                            (change)="onCommericalListCheckBox($event,field.fieldName,in,item)" [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.value}}
-                            => {{item?.amount}}</mat-checkbox>
-                    </div>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator?.SHIPPING_BILL_LIST?.length!=0"
-                        [items]="this.validator?.SHIPPING_BILL_LIST" bindLabel="sbno" bindValue="SB_ID"
-                        (change)="onSHIPPING_BILL_EVENT($event)" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'BLCopy'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator?.BL_COPY_LIST?.length!=0" [items]="this.validator?.BL_COPY_LIST"
-                        bindLabel="no" (change)="onBL_COPY_EVENT($event)" [multiple]="false"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.validator?.SHIPPING_BILL_LIST?.length!=0"
+                        [items]="this.validator?.SHIPPING_BILL_LIST" bindLabel="sbno" bindValue="SB_ID"
+                        [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'buyer'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.BUYER_DETAILS?.length!=0" [items]="this.validator?.BUYER_DETAILS"
                         bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -481,27 +119,22 @@
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'benne'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.BENEFICIARY_DETAILS?.length!=0"
                         [items]="this.validator?.BENEFICIARY_DETAILS" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        (change)="this.BENEFICIARY_EVENT.emit($event)" [name]="field.fieldName"
-                        [(ngModel)]="field.value">
+                        [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'RemitterName'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-custom-dropdown *ngIf="this.validator?.INWARD_REMITTANCE_NAME_LIST?.length!=0"
                         [items]="this.validator?.INWARD_REMITTANCE_NAME_LIST" bindLabel="Remitter_Name"
                         [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [selectedItems]="field.value"
-                        [(ngModel)]="field.value"></ng-custom-dropdown>
+                        [name]="field.fieldName" [(ngModel)]="field.value"></ng-custom-dropdown>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'consignee'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.ConsigneeNameList?.length!=0"
                         [items]="this.validator?.ConsigneeNameList" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -509,27 +142,14 @@
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'MultiCheckBox'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [value]="field.value"
-                        [(ngModel)]="field.value"
-                        (event)="HideShowInput($event,field?.HideShowInput,fieldIndex);onLabelNameChange($event,field?.LabelNameChange,fieldIndex)">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [(ngModel)]="field.value">
                     </custom-checkbox>
-                    <!-- <label style="color: green;"
-                        *ngIf="field?.value!=undefined && field?.value!='' && field?.NotificationShow[field.value]!=undefined">{{field?.NotificationShow[field.value]}}</label> -->
+                    <label style="color: green;" *ngIf="field?.value!=undefined && field?.value!='' && field?.NotificationShow[field.value]!=undefined">{{field?.NotificationShow[field.value]}}</label>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'CheckboxMultiple'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName" [value]="field.value"
-                        [(ngModel)]="field.value">
-                    </custom-checkbox>
-                </div>
-                <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'"
-                    [ngClass]="{'hidden': field?.disabled==true}" [formArrayName]="field.fieldName">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <custom-checkbox [items]="field?.checkboxlabel" [value]="field.value" [name]="field.fieldName"
+                <div class="form-group mb-3" *ngSwitchCase="'OptionMultiCheckBox'" [formArrayName]="field.fieldName">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <custom-checkbox [items]="field?.checkboxlabel" [name]="field.fieldName"
                         (event)="field.value=$event">
                     </custom-checkbox>
                     <div class="col-12 p-0" *ngIf="field?.value==field?.Yes">
@@ -540,9 +160,7 @@
                                 <ng-container [ngSwitch]="FormOptionfield?.value?.type">
                                     <div class="form-group mb-3" *ngSwitchCase="'text'">
                                         <label
-                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}
-                                            <span style="color: red;"
-                                                *ngIf="FormOptionfield?.value?.rules?.required==true">*</span></label>
+                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
                                         <input
                                             [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]"
                                             [type]="FormOptionfield?.value?.type"
@@ -554,9 +172,7 @@
                                         <div class="form-group mb-3"
                                             *ngIf="FormOptionfield?.value?.visible==true || FormOptionfield?.value?.visible==undefined">
                                             <label
-                                                *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}
-                                                <span style="color: red;"
-                                                    *ngIf="FormOptionfield?.value?.rules?.required==true">*</span></label>
+                                                *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
                                             <input
                                                 [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]"
                                                 [type]="FormOptionfield?.value?.type"
@@ -567,28 +183,11 @@
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'checkbox'">
                                         <div class="col-12 p-0 ml-3">
-                                            <mat-checkbox
-                                                [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]"
-                                                [name]="FormOptionfield?.value?.fieldName"
-                                                [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
-                                                class="form-control"
-                                                [style]="FormOptionfield?.value?.style">{{FormOptionfield?.value?.label}}
-                                                <span style="color: red;"
-                                                    *ngIf="FormOptionfield?.value?.rules?.required==true">*</span></mat-checkbox>
+                                            <mat-checkbox [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]"
+                                            [name]="FormOptionfield?.value?.fieldName"
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            class="form-control" [style]="FormOptionfield?.value?.style">{{FormOptionfield?.value?.label}}</mat-checkbox>
                                         </div>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'AdvanceInfo'">
-                                        <label
-                                            *ngIf="FormOptionfield.label!=undefined && FormOptionfield.label!=''">{{field.label}}
-                                            <span style="color: red;"
-                                                *ngIf="FormOptionfield?.value?.rules?.required==true">*</span></label>
-                                        <app-ng-dropdown-custom class="PopupOpen" popup-close="UPLOAD_ORM_POPUP"
-                                            bindLabel="value" placeHolderText="Select Advance no."
-                                            (modelChanges)="dump(FormOptionfield?.value?.autofillinput,FormOptionfield?.value?.PopupClose)"
-                                            [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]=this.validator.ORM_SELECTION_DATA"
-                                            [name]="FormOptionfield?.value?.fieldName" [items]="[{value:'Advance no.'}]"
-                                            [multiple]="false">
-                                        </app-ng-dropdown-custom>
                                     </div>
                                 </ng-container>
                                 <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
@@ -605,9 +204,7 @@
                                 <ng-container [ngSwitch]="FormOptionfield?.value?.type">
                                     <div class="form-group mb-3" *ngSwitchCase="'text'">
                                         <label
-                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}
-                                            <span style="color: red;"
-                                                *ngIf="field?.rules?.required==true">*</span></label>
+                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
                                         <input
                                             [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex+1][FormOptionfield?.value?.fieldName]"
                                             [type]="FormOptionfield?.value?.type"
@@ -619,9 +216,7 @@
                                         <div class="form-group mb-3"
                                             *ngIf="FormOptionfield?.value?.visible==true || FormOptionfield?.value?.visible==undefined">
                                             <label
-                                                *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}
-                                                <span style="color: red;"
-                                                    *ngIf="FormOptionfield?.value?.rules?.required==true">*</span></label>
+                                                *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
                                             <input
                                                 [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex+1][FormOptionfield?.value?.fieldName]"
                                                 [type]="FormOptionfield?.value?.type"
@@ -632,28 +227,11 @@
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'checkbox'">
                                         <div class="col-12 p-0 ml-3">
-                                            <mat-checkbox
-                                                [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex+1][FormOptionfield?.value?.fieldName]"
-                                                [name]="FormOptionfield?.value?.fieldName"
-                                                [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
-                                                class="form-control"
-                                                [style]="FormOptionfield?.value?.style">{{FormOptionfield?.value?.label}}
-                                                <span style="color: red;"
-                                                    *ngIf="FormOptionfield?.value?.rules?.required==true">*</span></mat-checkbox>
+                                            <mat-checkbox [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex+1][FormOptionfield?.value?.fieldName]"
+                                            [name]="FormOptionfield?.value?.fieldName"
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            class="form-control" [style]="FormOptionfield?.value?.style">{{FormOptionfield?.value?.label}}</mat-checkbox>
                                         </div>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'AdvanceInfo'">
-                                        <label
-                                            *ngIf="FormOptionfield.label!=undefined && FormOptionfield.label!=''">{{field.label}}
-                                            <span style="color: red;"
-                                                *ngIf="FormOptionfield?.value?.rules?.required==true">*</span></label>
-                                        <app-ng-dropdown-custom class="PopupOpen" popup-close="UPLOAD_ORM_POPUP"
-                                            bindLabel="value" placeHolderText="Select Advance no."
-                                            (modelChanges)="dump(FormOptionfield?.value?.autofillinput,FormOptionfield?.value?.PopupClose)"
-                                            [(ngModel)]="this.validator.dynamicFormGroup[this.id].controls[field.fieldName].value[OptionfieldIndex][FormOptionfield?.value?.fieldName]=this.validator.ORM_SELECTION_DATA"
-                                            [name]="FormOptionfield?.value?.fieldName" [items]="[{value:'Advance no.'}]"
-                                            [multiple]="false">
-                                        </app-ng-dropdown-custom>
                                     </div>
                                 </ng-container>
                                 <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
@@ -664,10 +242,9 @@
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'formGroup'" [formArrayName]="field.fieldName">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div class="col-12 p-0">
-                        <div class="col-12 division-panel" [style]="field?.Style"
+                        <div class="col-12 division-panel"
                             *ngFor="let Optionfield of field?.NewformArray;let OptionfieldIndex=index">
                             <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="field?.AddNewRequried==true">
                                 <label>{{field?.GroupLabel[OptionfieldIndex]}}</label>
@@ -679,287 +256,62 @@
                                     (click)="this.validator.removeNewFormArray(this.id,fieldIndex,field.fieldName,OptionfieldIndex)"><i
                                         class="fa fa-minus"></i></button>
                             </div>
-
                             <div class="col-12 p-0"
-                                *ngFor="let FormOptionfield of field?.OrderKey[OptionfieldIndex];let FormOptionfieldIndex=index"
+                                *ngFor="let FormOptionfield of Optionfield | keyvalue;let FormOptionfieldIndex=index"
                                 [formGroupName]="OptionfieldIndex">
-                                <ng-container [ngSwitch]="Optionfield[FormOptionfield]?.type">
+                                <ng-container [ngSwitch]="FormOptionfield?.value?.type">
                                     <div class="form-group mb-3" *ngSwitchCase="'text'">
-                                        <ng-input [item]="Optionfield[FormOptionfield]"
-                                            [required]="Optionfield[FormOptionfield]?.rules?.required"
-                                            [name]="Optionfield[FormOptionfield]?.name"
-                                            [disabled]="Optionfield[FormOptionfield]?.disabled"
-                                            (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
+                                        <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
+                                            (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
+                                            [(ngModel)]="FormOptionfield.value.value"></ng-input>
                                     </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'CheckboxMultiple'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield]?.label!=undefined && Optionfield[FormOptionfield]?.label!=''">{{Optionfield[FormOptionfield]?.label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <mat-checkbox [name]="Optionfield[FormOptionfield]?.fieldName"
-                                            [checked]="Optionfield[FormOptionfield].value"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event?.checked,Optionfield[FormOptionfield]?.callback)"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value">{{Optionfield[FormOptionfield]?.checkboxlabel}}</mat-checkbox>
-                                    </div>
-                                    <!-- <div class="form-group mb-3" *ngSwitchCase="'BankAdd'">
-                                        <div class="form-group mb-3" [formArrayName]="Optionfield[FormOptionfield]?.fieldName">
-                                            <label *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}} <span style="color: red;"
-                                                    *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                            <div class="col-12 p-0">
-                                                <div class="col-12 division-panel"
-                                                    *ngFor="let ChildOptionfield of Optionfield[FormOptionfield]?.NewformArray;let ChildOptionfieldIndex=index">
-                                                    <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="Optionfield[FormOptionfield]?.AddNewRequried==true">
-                                                        <button type="button" class="btn btn-primary"
-                                                            *ngIf="(Optionfield[FormOptionfield]?.NewformArray?.length-1)==ChildOptionfieldIndex"
-                                                            (click)="this.validator.addNewFormArray(this.id,fieldIndex,Optionfield[FormOptionfield]?.fieldName)"><i
-                                                                class='fa fa-plus'></i></button>
-                                                        <button type="button" class="btn btn-primary" *ngIf="ChildOptionfieldIndex!=0"
-                                                            (click)="this.validator.removeNewFormArray(this.id,fieldIndex,Optionfield[FormOptionfield]?.fieldName,ChildOptionfieldIndex)"><i
-                                                                class="fa fa-minus"></i></button>
-                                                    </div>
-                                                    <div class="col-12 p-0"
-                                                        *ngFor="let ChildFormOptionfield of Optionfield[FormOptionfield]?.OrderKey[ChildOptionfieldIndex];let ChildFormOptionfieldIndex=index"
-                                                        [formGroupName]="ChildFormOptionfieldIndex">
-                                                        <ng-container [ngSwitch]="ChildOptionfield[ChildFormOptionfield]?.type">
-                                                            <div class="form-group mb-3" *ngSwitchCase="'text'">
-                                                                <ng-input [item]="ChildOptionfield[ChildFormOptionfield]"
-                                                                    [required]="ChildOptionfield[ChildFormOptionfield]?.rules?.required"
-                                                                    [name]="ChildOptionfield[ChildFormOptionfield]?.name"
-                                                                    [disabled]="ChildOptionfield[ChildFormOptionfield]?.disabled"
-                                                                    (event)="this.validator.setValueFromChildArray(this.id,this.validator.dynamicFormGroup[this.id],
-                                                                    field.fieldName,
-                                                                    Optionfield[FormOptionfield]?.fieldName,ChildFormOptionfieldIndex,OptionfieldIndex,ChildOptionfield[ChildFormOptionfield]?.fieldName,$event)"
-                                                                    [(ngModel)]="ChildOptionfield[ChildFormOptionfield].value"></ng-input>
-                                                            </div>
-                                                            <div class="form-group mb-3" *ngSwitchCase="'currency'">
-                                                                <label
-                                                                    *ngIf="ChildOptionfield[ChildFormOptionfield]?.label!=undefined && ChildOptionfield[ChildFormOptionfield]?.label!=''">{{ChildOptionfield[ChildFormOptionfield]?.label}}
-                                                                    <span style="color: red;"
-                                                                        *ngIf="ChildOptionfield[ChildFormOptionfield]?.rules?.required==true">*</span></label>
-                                                                <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0"
-                                                                    [items]="this.validator.CURRENCY_LIST" bindLabel="type" [multiple]="false"
-                                                                    [placeholder]="ChildOptionfield[ChildFormOptionfield]?.placeholderText!=undefined?ChildOptionfield[ChildFormOptionfield]?.placeholderText:''"
-                                                                    [name]="ChildOptionfield[ChildFormOptionfield]?.name"
-                                                                    [(ngModel)]="ChildOptionfield[ChildFormOptionfield].value"
-                                                                    (change)="this.validator.setValueFromChildArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,ChildFormOptionfieldIndex,ChildOptionfield[ChildFormOptionfield]?.fieldName,$event)">
-                                                                </ng-select>
-                                                            </div>
-                                                            <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
-                                                            [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex]?.controls[ChildOptionfield[ChildFormOptionfield].fieldName]?.controls[ChildFormOptionfieldIndex]"
-                                                            [fieldName]="ChildOptionfield[ChildFormOptionfield]?.fieldName"></inner-dynamic-error>
-                                                        </ng-container>
-                                                        <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
-                                                            [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex]"
-                                                            [fieldName]="Optionfield[FormOptionfield]?.fieldName"></inner-dynamic-error>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>  -->
                                     <div class="form-group mb-3" *ngSwitchCase="'number'">
                                         <div class="form-group mb-3"
-                                            *ngIf="Optionfield[FormOptionfield]?.visible==true || Optionfield[FormOptionfield]?.visible==undefined">
-                                            <ng-input [item]="Optionfield[FormOptionfield]"
-                                                [required]="Optionfield[FormOptionfield]?.rules?.required"
-                                                [name]="Optionfield[FormOptionfield]?.name"
-                                                [disabled]="Optionfield[FormOptionfield]?.disabled"
-                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
-                                                [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
+                                            *ngIf="FormOptionfield?.value?.visible==true || FormOptionfield?.value?.visible==undefined">
+                                            <ng-input [item]="FormOptionfield?.value"
+                                                [name]="FormOptionfield?.value?.name"
+                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
+                                                [(ngModel)]="FormOptionfield.value.value"></ng-input>
                                         </div>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'AccountType'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield]?.label!=undefined && Optionfield[FormOptionfield]?.label!=''">{{Optionfield[FormOptionfield]?.label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select *ngIf="this.Account_Type?.length!=0" [items]="this.Account_Type"
-                                            bindLabel="type" [multiple]="false"
-                                            [placeholder]="Optionfield[FormOptionfield]?.placeholderText!=undefined?Optionfield[FormOptionfield]?.placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield]?.fieldName"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value">
-                                        </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'currency'">
                                         <label
-                                            *ngIf="Optionfield[FormOptionfield]?.label!=undefined && Optionfield[FormOptionfield]?.label!=''">{{Optionfield[FormOptionfield]?.label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
+                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
                                         <ng-select *ngIf="this.validator.CURRENCY_LIST?.length!=0"
                                             [items]="this.validator.CURRENCY_LIST" bindLabel="type" [multiple]="false"
-                                            [placeholder]="Optionfield[FormOptionfield]?.placeholderText!=undefined?Optionfield[FormOptionfield]?.placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield]?.name"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)">
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            [name]="FormOptionfield?.value?.name"
+                                            [(ngModel)]="FormOptionfield.value.value"
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)">
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'PaymentTermType'">
                                         <label
-                                            *ngIf="Optionfield[FormOptionfield]?.label!=undefined && Optionfield[FormOptionfield]?.label!=''">{{Optionfield[FormOptionfield]?.label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
+                                            *ngIf="FormOptionfield?.value?.label!=undefined && FormOptionfield?.value?.label!=''">{{FormOptionfield?.value?.label}}</label>
                                         <ng-select
-                                            [items]="[{value:'Advance Payment'},{value:'Letter of Credit'},{value:'CAD(Cash Against Devliery)'},{value:this.validator?.userData?.sideMenu=='export'?'Direct Dispatch':'Direct Imports(Payment Against Bill of entry)'}]"
+                                            [items]="[{value:'Advance Payment'},{value:'Letter of Credit'},{value:'Collection Bill'},{value:'Direct Dispatch'}]"
                                             bindLabel="value" [multiple]="false"
-                                            [placeholder]="Optionfield[FormOptionfield]?.placeholderText!=undefined?Optionfield[FormOptionfield]?.placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield]?.name"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback)"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value">
+                                            [placeholder]="FormOptionfield?.value?.placeholderText!=undefined?FormOptionfield?.value?.placeholderText:''"
+                                            [name]="FormOptionfield?.value?.name"
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
+                                            [(ngModel)]="FormOptionfield.value.value">
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'date'">
-                                        <ng-input [item]="Optionfield[FormOptionfield]"
-                                            [name]="Optionfield[FormOptionfield]?.name"
-                                            [disabled]="Optionfield[FormOptionfield]?.disabled"
-                                            (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'BankList'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select *ngIf="this.validator.BANK_NAME_LIST_GLOABL?.length!=0"
-                                            [items]="this.validator.BANK_NAME_LIST_GLOABL" bindLabel="value"
-                                            [multiple]="false"
-                                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield].fieldName"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value">
-                                        </ng-select>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'BankCheckBox'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select *ngIf="this.validator.BANK_NAME_LIST_GLOABL?.length!=0"
-                                            [items]="this.validator.BANK_NAME_LIST_GLOABL" bindLabel="value"
-                                            [multiple]="false"
-                                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield].fieldName"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value">
-                                        </ng-select>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select [id]="Optionfield[FormOptionfield].id"
-                                            *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && Optionfield[FormOptionfield].autofillrequired==undefined"
-                                            [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
-                                            [placeholder]="Optionfield[FormOptionfield].placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback);CommericalNoEvent?.emit($event)"
-                                            [name]="Optionfield[FormOptionfield].fieldName"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value" #CommericalNo>
-                                        </ng-select>
-                                        <ng-select [id]="Optionfield[FormOptionfield].id"
-                                            *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && Optionfield[FormOptionfield].autofillrequired==true"
-                                            [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
-                                            (change)="autofillCommerical($event,Optionfield[FormOptionfield].autofill)"
-                                            [placeholder]="Optionfield[FormOptionfield].placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield].fieldName"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value" #CommericalNo>
-                                        </ng-select>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'AdvanceInfo'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <app-ng-dropdown-custom class="PopupOpen" popup-close="UPLOAD_ORM_POPUP"
-                                            bindLabel="value" placeHolderText="Select Advance no."
-                                            (modelChanges)="dump(Optionfield[FormOptionfield]?.autofillinput,Optionfield[FormOptionfield]?.PopupClose)"
-                                            [name]="Optionfield[FormOptionfield].fieldName"
-                                            [items]="[{value:'Advance no.'}]" [multiple]="false">
-                                        </app-ng-dropdown-custom>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'PIPO_LIST'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select
-                                            *ngIf="this.validator?.PIPO_LIST?.length!=0 && (Optionfield[FormOptionfield]?.Inputdisabled==false || Optionfield[FormOptionfield]?.Inputdisabled==undefined)"
-                                            [items]="this.validator?.PIPO_LIST" bindLabel="pi_poNo" [multiple]="false"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback);PIPO_EVENT.emit($event)"
-                                            [placeholder]="Optionfield[FormOptionfield].placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield].fieldName"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value">
-                                        </ng-select>
-                                        <label [name]="Optionfield[FormOptionfield].fieldName"
-                                            *ngIf="Optionfield[FormOptionfield]?.Inputdisabled==true"
-                                            class="form-control"
-                                            for="">{{Optionfield[FormOptionfield].value?.pi_poNo}}</label>
-                                    </div>
-                                    <div class="form-group mb-3"
-                                        *ngIf="Optionfield[FormOptionfield]?.visible==true || Optionfield[FormOptionfield]?.visible==undefined">
-                                        <div class="form-group mb-3" *ngSwitchCase="'TextValiadtion'">
-                                            <label
-                                                *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                                <span style="color: red;"
-                                                    *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                            <ng-input [item]="{value:Optionfield[FormOptionfield]?.value,type:'text'}"
-                                                [required]="Optionfield[FormOptionfield]?.rules?.required"
-                                                [name]="Optionfield[FormOptionfield]?.name"
-                                                [disabled]="Optionfield[FormOptionfield]?.disabled"
-                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
-                                                [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
-                                        </div>
-                                        <div class="form-group mb-3" *ngSwitchCase="'TextGreaterValiadtion'">
-                                            <label
-                                                *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                                <span style="color: red;"
-                                                    *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                            <ng-input [item]="{value:Optionfield[FormOptionfield]?.value,type:'text'}"
-                                                [required]="Optionfield[FormOptionfield]?.rules?.required"
-                                                [name]="Optionfield[FormOptionfield]?.name"
-                                                [disabled]="Optionfield[FormOptionfield]?.disabled"
-                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
-                                                [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'BOE'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <ng-select *ngIf="this.validator.BOE_LIST?.length!=0"
-                                            [items]="this.validator.BOE_LIST" bindLabel="boeNumber" [multiple]="false"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback,field)"
-                                            [placeholder]="Optionfield[FormOptionfield]?.placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
-                                            [name]="Optionfield[FormOptionfield].fieldName"
-                                            [(ngModel)]="Optionfield[FormOptionfield].value">
-                                        </ng-select>
-                                    </div>
-                                    <div class="form-group mb-3" *ngSwitchCase="'HSCODE'">
-                                        <label
-                                            *ngIf="Optionfield[FormOptionfield].label!=undefined && Optionfield[FormOptionfield].label!=''">{{Optionfield[FormOptionfield].label}}
-                                            <span style="color: red;"
-                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <div class="row m-0">
-                                            <ng-input [item]="{value:this.ALL_DATA_HSCODE,type:'text'}"
-                                                [required]="Optionfield[FormOptionfield]?.rules?.required"
-                                                [name]="Optionfield[FormOptionfield]?.name" [disabled]="true"
-                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
-                                                [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
-                                            <button type="button" class="btn btn-primary PopupOpen"
-                                                popup-close="HS_CODE_POPUP"
-                                                (click)="ValueAdd(this.id,Optionfield[FormOptionfield].fieldName)">Select
-                                                HS Code</button>
-                                        </div>
+                                        <ng-input [item]="FormOptionfield?.value" [name]="FormOptionfield?.value?.name"
+                                            (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,FormOptionfield?.value?.fieldName,$event)"
+                                            [(ngModel)]="FormOptionfield.value.value"></ng-input>
                                     </div>
                                 </ng-container>
                                 <inner-dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
                                     [formName]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.controls[OptionfieldIndex]"
-                                    [fieldName]="Optionfield[FormOptionfield]?.fieldName"></inner-dynamic-error>
+                                    [fieldName]="FormOptionfield?.value?.fieldName"></inner-dynamic-error>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'commodity'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.commodity?.length!=0" [items]="this.validator?.commodity"
                         bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -967,8 +319,7 @@
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'typedocument'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select
                         [items]="[{value:'Select Document',id:''},{value:'Proforma Invoice',id:'PI'},{value:'Purchase Order',id:'PO'}]"
                         bindLabel="value" bindValue="id" [multiple]="false"
@@ -977,8 +328,7 @@
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'PaymentTermType'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select
                         [items]="[{value:'Advance Payment'},{value:'Letter of Credit'},{value:'Collection Bill'},{value:'Direct Dispatch'}]"
                         bindLabel="value" [multiple]="false"
@@ -987,25 +337,15 @@
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'origin'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.origin?.length!=0" [items]="this.validator?.origin"
                         bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'AccountType'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.Account_Type?.length!=0" [items]="this.Account_Type" bindLabel="type"
-                        [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
-                    </ng-select>
-                </div>
                 <div class="form-group mb-3" *ngSwitchCase="'location'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.location?.length!=0" [items]="this.validator?.location"
                         bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -1013,8 +353,7 @@
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'PaymentType'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select
                         [items]="[{value:'Advance Import Payment'},{value:'Direct Import Payment'},{value:'Service Payment'}]"
                         bindLabel="value" [multiple]="false"
@@ -1022,12 +361,11 @@
                         [name]="field.fieldName" [(ngModel)]="field.value" required>
                     </ng-select>
                 </div>
-                <div class="form-group mb-3" *ngSwitchCase="'IncoTerm'" [ngClass]="{'hidden': field?.disabled==true}">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                <div class="form-group mb-3" *ngSwitchCase="'IncoTerm'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div class="row m-0">
                         <ng-select style="width: 86% !important;"
-                            [items]="[{value:'EXW | Ex-Works or Ex-Warehouse'},{value:'DDU | Delivered duty unpaid'},{value:'FCA | Free to Carrier'},{value:'FAS | Free Alongside Ship'},{value:'FOB | Free on Board'},
+                            [items]="[{value:'EXW | Ex-Works or Ex-Warehouse'},{value:'FCA | Free to Carrier'},{value:'FAS | Free Alongside Ship'},{value:'FOB | Free on Board'},
                         {value:'CFR | Cost and Freight'},{value:'CIF | Cost, Insurance and Freight'},{value:'CPT | Carriage Paid To'},{value:'CIP | Carriage and Insurance Paid To'},
                         {value:'DAP | Delivered at Place'},{value:'DPU | Delivered at Place Unloaded (replaces Incoterm® 2010 DAT)'},{value:'DDP | Delivered Duty Paid'}]"
                             bindLabel="value" [multiple]="false"
@@ -1038,23 +376,21 @@
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'HSCODE'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div class="row m-0">
                         <input [value]="this.ALL_DATA_HSCODE" ngModel
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);" type="text"
-                            [name]="field.fieldName" disabled
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            class="form-control" [style]="field?.style" />
-                        <button type="button" class="btn btn-primary PopupOpen" popup-close="HS_CODE_POPUP"
-                            (click)="ValueAdd(this.id,field.fieldName)">Select HS Code</button>
+                        (keypress)="this.validator.max_length_validator(this.id,field.fieldName);" type="text"
+                        [name]="field.fieldName"
+                        disabled
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" class="form-control"
+                        [style]="field?.style" />
+                        <button type="button" class="btn btn-primary PopupOpen" popup-close="HS_CODE_POPUP" (click)="ValueAdd(this.id,field.fieldName)">Select HS Code</button>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'Bank'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator?.BANK_LIST_DROPDOWN?.length!=0"
-                        [items]="this.validator?.BANK_LIST_DROPDOWN" bindLabel="value" [multiple]="false"
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                    <ng-select *ngIf="this.validator?.BANK_LIST_DROPDOWN?.length!=0" [items]="this.validator?.BANK_LIST_DROPDOWN"
+                        bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.ExtraValue">
                     </ng-select>
@@ -1062,12 +398,11 @@
                         <label for="exampleInputEmail1" class="form-label">
                             Select Account no. & Account Type*</label>
                         <custom-radio-button [items]="this.validator?.ToChargesAccountdata[field?.ExtraValue?.id]"
-                            [name]="field.fieldName" (event)="field.value=$event"></custom-radio-button>
+                        [name]="field.fieldName" (event)="field.value=$event"></custom-radio-button>
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'BankList'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div class="row m-0">
                         <ng-select *ngIf="this.validator.BANK_NAME_LIST_GLOABL?.length!=0"
                             [style]="this.ADD_NEW_BUTTON_VISIBLE==true?'width: 85% !important;':''"
@@ -1080,8 +415,7 @@
                     </div>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'BOE'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <ng-select *ngIf="this.validator.BOE_LIST?.length!=0" [items]="this.validator.BOE_LIST"
                         bindLabel="boeNumber" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -1089,8 +423,7 @@
                     </ng-select>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'AdvanceInfo'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <app-ng-dropdown-custom class="PopupOpen" popup-close="UPLOAD_ORM_POPUP" bindLabel="value"
                         placeHolderText="Select Advance no." (modelChanges)="dump(field?.autofillinput)"
                         [name]="field.fieldName" [(ngModel)]="this.validator.ORM_SELECTION_DATA"
@@ -1098,8 +431,7 @@
                     </app-ng-dropdown-custom>
                 </div>
                 <div class="form-group mb-3" *ngSwitchCase="'formArray'">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
-                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     <div [formArrayName]="field.fieldName">
                         <div class="division-panel"
                             *ngFor="let GroupLabelItem of field?.GroupLabel;let labelIndex=index;">
@@ -1117,9 +449,7 @@
                                 [formGroupName]="formGroupItem?.index">
                                 <ng-container [ngSwitch]="formGroupItem.type">
                                     <div class="form-group mb-3" *ngSwitchCase="'text'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <input [(ngModel)]="formGroupItem.value" [type]="formGroupItem.type"
                                             [name]="formGroupItem.fieldName"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
@@ -1127,9 +457,7 @@
                                             class="form-control" [style]="field?.style" />
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'number'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <input [(ngModel)]="formGroupItem.value"
                                             (keypress)="this.validator.max_length_validatorFormArray(this.id,field.fieldName,formGroupItem?.index,formGroupItem.fieldName);"
                                             [type]="formGroupItem.type" [name]="formGroupItem.fieldName"
@@ -1137,29 +465,22 @@
                                             class="form-control" [style]="field?.style" />
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'date'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <input [(ngModel)]="formGroupItem.value" [type]="formGroupItem.type"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
                                             [name]="formGroupItem.fieldName" class="form-control"
                                             [style]="field?.style" />
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'currency'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.CURRENCY_LIST?.length!=0"
                                             [items]="this.validator?.CURRENCY_LIST" bindLabel="type" [multiple]="false"
-                                            (change)="AutoFillCurrency($event,formGroupItem?.autofill)"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
                                             [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value">
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'buyer'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.BUYER_DETAILS?.length!=0"
                                             [items]="this.validator?.BUYER_DETAILS" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
@@ -1169,9 +490,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'benne'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.BENEFICIARY_DETAILS?.length!=0"
                                             [items]="this.validator?.BENEFICIARY_DETAILS" bindLabel="value"
                                             [multiple]="false"
@@ -1181,21 +500,15 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
-                                        <ng-select [id]="formGroupItem?.id"
-                                            *ngIf="this.validator?.COMMERICAL_NO?.length!=0"
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
+                                        <ng-select *ngIf="this.validator?.COMMERICAL_NO?.length!=0"
                                             [items]="this.validator?.COMMERICAL_NO" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
-                                            [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value"
-                                            #CommericalNo>
+                                            [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value">
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.SHIPPING_BILL_LIST?.length!=0"
                                             [items]="this.validator?.SHIPPING_BILL_LIST" bindLabel="sbno"
                                             bindValue="_id" [multiple]="false"
@@ -1204,9 +517,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'consignee'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.ConsigneeNameList?.length!=0"
                                             [items]="this.validator?.ConsigneeNameList" bindLabel="value"
                                             [multiple]="false"
@@ -1215,9 +526,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'commodity'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.commodity?.length!=0"
                                             [items]="this.validator?.commodity" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
@@ -1225,9 +534,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'typedocument'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select
                                             [items]="[{value:'Select Document',id:''},{value:'Proforma Invoice',id:'PI'},{value:'Purchase Order',id:'PO'}]"
                                             bindLabel="value" bindValue="id" [multiple]="false"
@@ -1236,9 +543,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'PaymentTermType'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select
                                             [items]="[{value:'Advance Payment'},{value:'Letter of Credit'},{value:'Collection Bill'},{value:'Direct Dispatch'}]"
                                             bindLabel="value" [multiple]="false"
@@ -1247,9 +552,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'origin'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.origin?.length!=0"
                                             [items]="this.validator?.origin" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
@@ -1257,9 +560,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'location'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.location?.length!=0"
                                             [items]="this.validator?.location" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
@@ -1267,9 +568,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'PaymentType'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select
                                             [items]="[{value:'Advance Import Payment'},{value:'Direct Import Payment'},{value:'Service Payment'}]"
                                             bindLabel="value" [multiple]="false"
@@ -1278,9 +577,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'Bank'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <ng-select *ngIf="this.validator?.bankDetail?.length!=0"
                                             [items]="this.validator?.bankDetail" bindLabel="value" [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
@@ -1288,9 +585,7 @@
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-3" *ngSwitchCase="'BankList'">
-                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}} <span
-                                                style="color: red;"
-                                                *ngIf="formGroupItem?.rules?.required==true">*</span></label>
+                                        <label *ngIf="formGroupItem.label!=undefined">{{formGroupItem.label}}</label>
                                         <div class="row m-0">
                                             <ng-select *ngIf="this.validator.BANK_NAME_LIST_GLOABL?.length!=0"
                                                 [style]="this.ADD_NEW_BUTTON_VISIBLE==true?'width: 85% !important;':''"
@@ -1301,8 +596,7 @@
                                             </ng-select>
                                             <button type="button" class="btn btn-primary PopupOpen"
                                                 popup-close="Add_New_Bank_Name"
-                                                *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true" (click)="onAddNewBank()">Add
-                                                New</button>
+                                                *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true">Add New</button>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -1318,17 +612,10 @@
                 [formName]="this.validator.dynamicFormGroup[this.id]"
                 [fieldName]="field.fieldName"></inner-dynamic-error>
         </div>
-        <div [ngClass]="{'more-button-panel':BUTTON_PANEL_SHOW==true}"
-            [style]="this.BUTTON_PANEL_HIDE==true?'display:block;':'display:none'">
-            <ng-content></ng-content>
-            <button *ngIf="BUTTON_PANEL_SHOW==true" type="button" class="btn btn-primary submit-button" [id]="this.id"
-                [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block;':'display:none'" [style]="SubmitButtonStyle"
-                (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
-            <button *ngIf="BUTTON_PANEL_SHOW==false" type="button" class="btn btn-primary submit-button" [id]="this.id"
-                [ngClass]="{'button-show':this.HIDE_SUBMIT_BUTTON==true,'button-hide':this.HIDE_SUBMIT_BUTTON==false}"
-                [style]="SubmitButtonStyle"
-                (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
-        </div>
+        <ng-content></ng-content>
+        <button type="button" class="btn btn-primary submit-button" [id]="this.id"
+            [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block':'display:none'"
+            (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">Submit</button>
     </form>
 </div>
 
@@ -1351,8 +638,7 @@
                         <tbody>
                             <tr class="table-tr" *ngFor="let item of this.validator.ORM_BY_PARTY_NAME;let i=index">
                                 <td scope="col" class="col-td-th-1"><input type="checkbox" id="orm_checkbox"
-                                        (change)="ORM_SELECTION($event,i,item,this.AUTOFILL_INPUT_NAME_LIST,'formGroup')" />
-                                </td>
+                                        (change)="ORM_SELECTION($event,i,item,this.AUTOFILL_INPUT_NAME_LIST)" /></td>
                                 <td scope="col" class="col-td-th-2">{{item?.billNo}}</td>
                                 <td scope="col" class="col-td-th-2">{{item?.amount}}</td>
                                 <td scope="col" class="col-td-th-2">
@@ -1366,14 +652,14 @@
     </div>
 </app-custom-model>
 
-<!-- <app-custom-model *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true" [minimizedisabled]="false" EventButton="false"
+<app-custom-model *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true" [minimizedisabled]="false" EventButton="false"
     [RemoveBgTop]="false" class="p-2 mt-2" id="Add_New_Bank_Name" [customstyle]="{'max-width':'40vw !important'}"
     height="30vh" [name]="'Add New Bank Name'" #Add_New_Bank_NamePanel>
     <div class="p-2">
         <upload-components id="AddNewBankName"
             (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)"></upload-components>
     </div>
-</app-custom-model> -->
+</app-custom-model>
 
 <app-custom-model [minimizedisabled]="false" EventButton="false" [RemoveBgTop]="false" class="p-2 mt-2" id="IncoTerm"
     [customstyle]="{'max-width':'60vw !important','margin-top':'100px !important'}" height="40vh" [name]="'Inco Term'">
@@ -1382,9 +668,8 @@
     </div>
 </app-custom-model>
 
-<app-custom-model [customstyle]="{'max-width':'90vw !important','position':'relative'}" class="p-2" height="75vh"
-    id="HS_CODE_POPUP" [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View"
-    #HS_CODE_POPUP_PANEL>
+<app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="HS_CODE_POPUP"
+    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
     <div class="col-12 mt-2 mb-2">
         <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
             (event)="filterHSCode($event)"></ng-input>
@@ -1407,10 +692,9 @@
             </tbody>
         </table>
     </div>
-    <div class="modal-footer" style="position: absolute;bottom: -10px;right: 0px;">
+    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
         <div style="display:flex;" class="mt-3">
-            <button type="button" class="btn btn-primary"
-                (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
+            <button type="button" class="btn btn-primary" (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
         </div>
     </div>
 </app-custom-model>

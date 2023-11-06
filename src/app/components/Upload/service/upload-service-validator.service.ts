@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, OnInit } from '@angular/core';
+import { AfterViewInit, ElementRef, Injectable, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { UserService } from '../../../service/user.service';
@@ -12,7 +12,6 @@ export class UploadServiceValidatorService implements OnInit {
   dynamicFormGroup: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
-  BL_COPY_LIST: any = [];
   COMMERICAL_NO: any = [];
   ORM_BY_PARTY_NAME: any = [];
   ORM_SELECTION_DATA: any = [];
@@ -23,7 +22,6 @@ export class UploadServiceValidatorService implements OnInit {
   BENEFICIARY_DETAILS: any = [];
   BENEFICIARY_ADDRESS_DETAILS: any = [];
   INWARD_REMITTANCE_NAME_LIST: any = [];
-  NEW_INWARD_REMITTANCE_NAME_LIST: any = [];
   ConsigneeNameList: any = [];
   PIPO_DATA: any = [];
   pipourl1: any = '';
@@ -33,13 +31,11 @@ export class UploadServiceValidatorService implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
-  SHIPPING_BILL_MASTER_DATA: any = [];
   SUBMIT_ERROR: boolean = false;
   origin: any = [];
   commodity: any = [];
   location: any = [];
   bankDetail: any = [];
-  bankDetail2: any = [];
   Id: any = '';
   BANK_NAME_LIST_GLOABL: any = [];
   FIELDS_DATA: any = [];
@@ -52,15 +48,6 @@ export class UploadServiceValidatorService implements OnInit {
   ToChargesAccountdata: any = [];
   ToCreditAccountdata: any = [];
   BANK_LIST_DROPDOWN: any = [];
-  CommericalNo: ElementRef | any;
-  BUYER_DETAILS_MASTER: any = [];
-  COMPANY_INFO: any = [];
-  CHECK_BOX_BANK_LIST: any = [];
-  CHECK_BOX_BANK_LIST_CHARGES: any = [];
-  CHECK_BOX_REMITTER_LIST: any = [];
-  REMITTER_LIST: any = []
-  PIPO_LIST: any = [];
-  PAYMENTS_TEMRS:any=[];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -70,16 +57,18 @@ export class UploadServiceValidatorService implements OnInit {
 
   ngOnInit(): void {
   }
-  BENEFICIARY_DETAILS_LIST: any = [];
+
   async loaddata() {
     return new Promise(async (reslove, reject) => {
       let token = this.authGuard.loadFromLocalStorage();
       this.LOGIN_TOEKN = token;
       if (token != undefined) {
-        this.getCompanyInfo();
         this.CURRENCY_LIST = this.documentService.getCurrencyList();
         let USER_DATA: any = await this.userService.getUserDetail();
-
+        await this.userService.getUserDetail().then((res: any) => {
+          this.userData = res?.result;
+          console.log(this.userData, 'asdasdasdasdasdasdasdasdasdasdasd')
+        });
         if (USER_DATA?.result?.sideMenu == 'import') {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
@@ -88,7 +77,7 @@ export class UploadServiceValidatorService implements OnInit {
           await this.userService.getBene(1).subscribe((res: any) => {
             this.BENEFICIARY_DETAILS = [];
             this.ConsigneeNameList = [];
-            this.BENEFICIARY_DETAILS_LIST = res.data;
+
             res.data?.forEach(element => {
               if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
                 this.ConsigneeNameList.push({ value: element?.ConsigneeName })
@@ -109,7 +98,7 @@ export class UploadServiceValidatorService implements OnInit {
             console.log('Master Data File', res);
             res.data.forEach((element, i) => {
               element?.pipo.forEach((ele, j) => {
-                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
               });
               this.origin[i] = { value: element.origin, id: element?._id };
             });
@@ -122,7 +111,6 @@ export class UploadServiceValidatorService implements OnInit {
             this.documentService.getPipoListNo('export', this.SELECTED_PIPO?.length != 0 ? this.SELECTED_PIPO : []);
           }
           await this.userService.getBuyer(1).subscribe((res: any) => {
-            this.BUYER_DETAILS_MASTER = res?.data;
             this.BUYER_DETAILS = [];
             this.ConsigneeNameList = [];
             res.data?.forEach(element => {
@@ -136,17 +124,16 @@ export class UploadServiceValidatorService implements OnInit {
             } else {
               this.BUYER_NOT_EXITS = false;
             }
-            console.log('getBuyer Details', res, this.ConsigneeNameList, this.BUYER_DETAILS);
+            console.log('getBuyer Details', this.ConsigneeNameList, this.BUYER_DETAILS);
           }, (err) => console.log('Error', err));
           this.documentService.getMaster(1).subscribe((res: any) => {
             console.log('Master Data File', res);
-            this.SHIPPING_BILL_MASTER_DATA = res?.data;
             this.origin = [];
             this.SHIPPING_BUNDEL = [];
             res.data.forEach((element, i) => {
               element?.pipo?.forEach((ele, j) => {
                 if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
-                  this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+                  this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
                 }
               });
               this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
@@ -156,84 +143,59 @@ export class UploadServiceValidatorService implements OnInit {
 
           this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
             this.INWARD_REMITTANCE_NAME_LIST = res?.data;
-            this.NEW_INWARD_REMITTANCE_NAME_LIST = [];
-            this.CHECK_BOX_REMITTER_LIST = [];
-            res?.data.forEach(element => {
-              element['checked'] = false;
-              this.REMITTER_LIST[element?.Remitter_Name] = [];
-              if (this.NEW_INWARD_REMITTANCE_NAME_LIST?.filter((item: any) => item?.Remitter_Name?.indexOf(element?.Remitter_Name) != -1)?.length == 0) {
-                this.NEW_INWARD_REMITTANCE_NAME_LIST.push({ Remitter_Name: element?.Remitter_Name })
-              }
-            });
-            res?.data.forEach(element => {
-              element['checked'] = false;
-              this.REMITTER_LIST[element?.Remitter_Name].push(element);
-            });
-            console.log(res, this.REMITTER_LIST, 'getInward_remittanceName')
+            console.log(res, 'getInward_remittanceName')
           })
           await reslove(true)
         } else {
           reslove(true)
         }
+
+        await this.userService.getTeam().subscribe(async (data) => {
+          console.log(data['data'][0]);
+          this.location = [];
+          this.commodity = [];
+          data['data'][0]['location']?.forEach(element => {
+            this.location.push({ value: element?.loc })
+          });
+          data['data'][0]['commodity']?.forEach(element => {
+            this.commodity.push({ value: element?.como })
+          });
+          this.commodity = this.removeDuplicates(this.commodity, 'value');
+          this.location = this.removeDuplicates(this.location, 'value')
+          console.log(this.location);
+          console.log(this.commodity);
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
+          }
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
+              value: data['data'][0]['bankDetails'][index],
+              text: data['data'][0]['bankDetails'][index]?.accType + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+              org: data['data'][0]['bankDetails'][index]
+            })
+            if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+              this.BANK_LIST_DROPDOWN.push({
+                value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+              })
+            }
+          }
+        }, (error) => { console.log('error'); });
       } else {
         reslove(true);
       }
     })
-  }
-
-  async getCompanyInfo() {
-    await this.userService.getTeam().subscribe(async (data: any) => {
-      this.COMPANY_INFO = data?.data;
-      console.log(this.COMPANY_INFO, "COMPANY_INFO")
-      this.CHECK_BOX_BANK_LIST = []
-      this.CHECK_BOX_BANK_LIST_CHARGES = [];
-      console.log(data['data'][0]);
-      this.location = [];
-      this.commodity = [];
-      data['data'][0]['location']?.forEach(element => {
-        this.location.push({ value: element?.loc })
-      });
-      data['data'][0]['commodity']?.forEach(element => {
-        this.commodity.push({ value: element?.como })
-      });
-      this.commodity = this.removeDuplicates(this.commodity, 'value');
-      this.location = this.removeDuplicates(this.location, 'value')
-      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-        data['data'][0]['bankDetails']['checked'] = false
-        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId] = [];
-      }
-      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-        data['data'][0]['bankDetails']['checked'] = false
-        this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-          value: data['data'][0]['bankDetails'][index],
-          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-          org: data['data'][0]['bankDetails'][index]
-        })
-        this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-          value: data['data'][0]['bankDetails'][index],
-          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-          org: data['data'][0]['bankDetails'][index]
-        })
-        this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
-          value: data['data'][0]['bankDetails'][index],
-          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
-          org: data['data'][0]['bankDetails'][index]
-        })
-        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
-          this.BANK_LIST_DROPDOWN.push({
-            value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
-          })
-        }
-      }
-    }, (error) => { console.log('error'); });
-
-    await this.userService.getUserDetail().then((res: any) => {
-      this.userData = res?.result;
-      console.log(this.userData, 'asdasdasdasdasdasdasdasdasdasdasd')
-      this.PAYMENTS_TEMRS=[]
-    });
   }
 
   async buildForm(model: any, id: any) {
@@ -244,7 +206,7 @@ export class UploadServiceValidatorService implements OnInit {
           const formGroupFields = await this.getFormControlsFields(model, id);
           this.dynamicFormGroup[id] = await new FormGroup(formGroupFields?.formGroupFields);
           this.FIELDS_DATA[id] = formGroupFields?.fields;
-          console.log(this.dynamicFormGroup, formGroupFields, model, 'dynamicFormGroup');
+          console.log(this.dynamicFormGroup, formGroupFields, 'dynamicFormGroup');
           await this.dynamicFormGroup;
           await resolve(this.dynamicFormGroup);
         }
@@ -274,8 +236,7 @@ export class UploadServiceValidatorService implements OnInit {
             temp.push({ ...element[field2], fieldName: field2, index: count });
             tempFormGroup.push(new FormGroup({
               [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength,
-                  element[field2]?.rules, formid, fieldProps)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
             }));
             count++;
           }
@@ -285,27 +246,26 @@ export class UploadServiceValidatorService implements OnInit {
         if (fieldProps?.AutoFill == true && fieldProps?.AutoFill != undefined) {
           formGroupFields[field] = await new FormArray(tempFormGroup, hasDuplicateFormArray(fieldProps?.EqualList));
           fieldProps['ExtraValue'] = '';
-          fieldProps['fieldName_More'] = field + '_Extra';
+          fieldProps['fieldName_More'] = field+'_Extra';
           fields.push({ ...fieldProps, fieldName: field });
         } else {
           formGroupFields[field] = await new FormArray(tempFormGroup);
           fieldProps['ExtraValue'] = '';
-          fieldProps['fieldName_More'] = field + '_Extra';
+          fieldProps['fieldName_More'] = field+'_Extra';
           fields.push({ ...fieldProps, fieldName: field });
         }
       } else if (fieldProps?.type == "OptionMultiCheckBox" && fieldProps?.option != undefined) {
         var temp: any = [];
         var tempFormGroup: any = [];
         var temp1: any = [];
-        var ORDER_KEYS: any = [];
-
+        var tempFormGroup1: any = [];
         fieldProps?.option?.forEach(async (element) => {
           let optiontemp: any = {};
           let OptiontempFormGroup: any = {};
           element?.forEach(optionelement => {
             optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
             OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
-              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid, fieldProps)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
@@ -316,8 +276,7 @@ export class UploadServiceValidatorService implements OnInit {
           element?.forEach(optionelement => {
             optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
             OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
-              this.setRequired(optionelement?.minLength,
-                optionelement?.maxLength, optionelement?.rules, formid, fieldProps)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
+              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
           await temp1.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
@@ -325,70 +284,34 @@ export class UploadServiceValidatorService implements OnInit {
         fieldProps['NewOption'] = temp;
         fieldProps['NewOption1'] = temp1;
         fieldProps['ExtraValue'] = '';
-        fieldProps['fieldName_More'] = field + '_Extra';
+        fieldProps['fieldName_More'] = field+'_Extra';
         formGroupFields[field] = await new FormArray(tempFormGroup)
         fields.push({ ...fieldProps, fieldName: field });
       } else if (fieldProps?.type == "formGroup" && fieldProps?.formArray != undefined) {
         var temp: any = [];
-        var temp1: any = [];
         var tempFormGroup: any = [];
-        var ORDER_KEYS: any = [];
-        var ORDER_KEYS2: any = [];
-        fieldProps?.formArray?.forEach(async (element, index) => {
+        fieldProps?.formArray?.forEach(async (element) => {
           let optiontemp: any = {};
           let OptiontempFormGroup: any = {};
-          ORDER_KEYS[index] = [];
-          let optiontemp1: any = {};
-          let OptiontempFormGroup1: any = {};
-
-          element?.forEach(async (optionelement) => {
-            if (optionelement?.type == "BankAdd") {
-              var tempFormGroup1: any = [];
-              optionelement?.ChildformArray?.forEach(async (ChildformArrayelement, k) => {
-                ORDER_KEYS2[k]=[];
-                ChildformArrayelement?.forEach(ChildformArrayOptionElement => {
-                  ORDER_KEYS2[k].push(ChildformArrayOptionElement?.name?.toString());
-                  optiontemp1[ChildformArrayOptionElement?.name?.toString()] = ({ ...ChildformArrayOptionElement, fieldName: ChildformArrayOptionElement?.name });
-                  OptiontempFormGroup1[ChildformArrayOptionElement?.name?.toString()] = new FormControl({ value: ChildformArrayOptionElement?.value || "", disabled: ChildformArrayOptionElement?.disabled != undefined ? true : false },
-                    this.setRequired(ChildformArrayOptionElement?.minLength,
-                      ChildformArrayOptionElement?.maxLength, ChildformArrayOptionElement?.rules, formid, ChildformArrayOptionElement)[ChildformArrayOptionElement?.typeOf != undefined ? ChildformArrayOptionElement?.typeOf : ChildformArrayOptionElement?.type])
-                });
-                await temp1.push(optiontemp1);
-                await tempFormGroup1.push(new FormGroup(OptiontempFormGroup1,null));
-              });
-            }
-            if (optionelement?.ChildformArrayBool==true) {
-              ORDER_KEYS[index].push(optionelement?.name?.toString());
-              optionelement['NewformArray'] = temp1;
-              optionelement['ExtraValue'] = '';
-              optionelement['OrderKey'] = ORDER_KEYS2;
-              optionelement['fieldName_More'] = field + '_Extra';
-              optiontemp[optionelement?.name?.toString()] = ({ ...optionelement, fieldName: optionelement?.name });
-              OptiontempFormGroup[optionelement?.name?.toString()] = new FormArray(tempFormGroup1)
-            } else {
-              ORDER_KEYS[index].push(optionelement?.name?.toString());
-              optiontemp[optionelement?.name?.toString()] = ({ ...optionelement, fieldName: optionelement?.name });
-              OptiontempFormGroup[optionelement?.name?.toString()] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
-                this.setRequired(optionelement?.minLength,
-                  optionelement?.maxLength, optionelement?.rules, formid, optionelement)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
-            }
+          element?.forEach(optionelement => {
+            optiontemp[optionelement?.name] = ({ ...optionelement, fieldName: optionelement?.name });
+            OptiontempFormGroup[optionelement?.name] = new FormControl({ value: optionelement?.value || "", disabled: optionelement?.disabled != undefined ? true : false },
+              this.setRequired(optionelement?.minLength, optionelement?.maxLength, optionelement?.rules, formid)[optionelement?.typeOf != undefined ? optionelement?.typeOf : optionelement?.type])
           });
-
           await temp.push(optiontemp);
           await tempFormGroup.push(new FormGroup(OptiontempFormGroup, null));
         });
         fieldProps['NewformArray'] = temp;
         fieldProps['ExtraValue'] = '';
-        fieldProps['OrderKey'] = ORDER_KEYS;
-        fieldProps['fieldName_More'] = field + '_Extra';
+        fieldProps['fieldName_More'] = field+'_Extra';
         formGroupFields[field] = await new FormArray(tempFormGroup);
         fields.push({ ...fieldProps, fieldName: field });
         console.log('formGroup', fields)
       } else {
         formGroupFields[field] = new FormControl({ value: fieldProps.value, disabled: fieldProps?.disabled != undefined ? true : false },
-          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid, fieldProps)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
+          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
         fieldProps['ExtraValue'] = '';
-        fieldProps['fieldName_More'] = field + '_Extra';
+        fieldProps['fieldName_More'] = field+'_Extra';
         fields.push({ ...fieldProps, fieldName: field });
       }
     }
@@ -401,35 +324,14 @@ export class UploadServiceValidatorService implements OnInit {
     this.FIELDS_DATA[id]?.[key]?.setValue(value);
   }
 
-  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined, field: any = undefined) {
+  setValueFromArray(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any) {
     const myForm: any = form?.controls[fieldName] as FormGroup;
     let currentVal = value;
     myForm.value[OptionfieldIndex][FormOptionfieldName] = currentVal;
-    myForm?.controls[OptionfieldIndex]?.controls[FormOptionfieldName]?.setValue(currentVal);
     myForm['touched'] = true;
     myForm['status'] = 'VALID';
-    this.dynamicFormGroup[id].get(fieldName).clearValidators();
+    this.dynamicFormGroup[id].get(fieldName).clearValidators(); // 6. Clear All Validators
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
-    console.log(myForm, value, "myForm")
-    if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
-    }
-  }
-  
-  setValueFromChildArray(id: any, form: any, ParentfieldName: any,FormArrayfieldName:any, OptionfieldIndex: any,
-  ChildOptionfieldName:any,ChildOptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined, field: any = undefined) {
-    const myForm: any = form?.controls[ParentfieldName] as FormGroup;
-    let currentVal = value;
-    myForm.value[OptionfieldIndex][FormOptionfieldName][ChildOptionfieldIndex][ChildOptionfieldName] = currentVal;
-    myForm?.controls[OptionfieldIndex]?.controls[FormOptionfieldName]?.setValue(currentVal);
-    myForm['touched'] = true;
-    myForm['status'] = 'VALID';
-    this.dynamicFormGroup[id].get(FormArrayfieldName).clearValidators();
-    this.dynamicFormGroup[id].get(FormArrayfieldName).updateValueAndValidity();
-    console.log(myForm, value, "setValueFromChildArray")
-    if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: FormArrayfieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
-    }
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string): any {
@@ -450,13 +352,9 @@ export class UploadServiceValidatorService implements OnInit {
     };
   }
 
-  setRequired(minLength: any, maxLength: any, rule: any, formid: any, field: any) {
+  setRequired(minLength: any, maxLength: any, rule: any, formid: any) {
     return {
-      text: rule?.required == true ?
-        [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
-        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
-      textarea: rule?.required == true ?
-        [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
+      text: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
       date: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
@@ -464,35 +362,8 @@ export class UploadServiceValidatorService implements OnInit {
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(200)],
       number: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
-
-      TextValiadtion: rule?.required == true ?
-        [Validators.required, minLength != undefined ?
-          Validators.minLength(minLength) :
-          Validators.minLength(0), maxLength != undefined ?
-          Validators.maxLength(maxLength) : Validators.maxLength(50), hasAmountLessThanForm(field?.EqualName, field?.errormsg)] :
-        [minLength != undefined ? Validators.minLength(minLength) :
-          Validators.minLength(0), maxLength != undefined ?
-          Validators.maxLength(maxLength) : Validators.maxLength(50),
-        hasAmountLessThanForm(field?.EqualName, field?.errormsg)],
-
-      TextGreaterValiadtion: rule?.required == true ?
-        [Validators.required, minLength != undefined ?
-          Validators.minLength(minLength) :
-          Validators.minLength(0), maxLength != undefined ?
-          Validators.maxLength(maxLength) : Validators.maxLength(50), hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)] :
-        [minLength != undefined ? Validators.minLength(minLength) :
-          Validators.minLength(0), maxLength != undefined ?
-          Validators.maxLength(maxLength) : Validators.maxLength(50),
-        hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
-
-      buyer: rule?.required == true ? [Validators.required] : [],
-      CheckboxMultiple: rule?.required == true ? [Validators.required] : [],
-      SelectOption: rule?.required == true ? [Validators.required] : [],
-      BankAdd: rule?.required == true ? [Validators.required] : [],
-      RemitterCheckBox: rule?.required == true ? [Validators.required] : [],
+      buyer: [rule?.required == true ? Validators.required : ''],
       ShippingBill: rule?.required == true ? [Validators.required] : [],
-      BankCheckBox: rule?.required == true ? [Validators.required] : [],
-      ImagesList: rule?.required == true ? [Validators.required] : [],
       consignee: rule?.required == true ? [Validators.required] : [],
       commodity: rule?.required == true ? [Validators.required] : [],
       origin: rule?.required == true ? [Validators.required] : [],
@@ -514,15 +385,8 @@ export class UploadServiceValidatorService implements OnInit {
       RemitterName: rule?.required == true ? [Validators.required] : [],
       formGroup: rule?.required == true ? [Validators.required] : [],
       benne: rule?.required == true ? [Validators.required] : [],
-      CommericalListCheckBox: rule?.required == true ? [Validators.required] : [],
-      BLCopy: rule?.required == true ? [Validators.required] : [],
-      yesnocheckbox: rule?.required == true ? [Validators.required] : [],
-      ArrayList: rule?.required == true ? [Validators.required] : [],
-      BOE: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
-      LabelShow: [],
-      SB_DETAILS_SHOW: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50), alphaNumericValidator],
       email: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(100)] :
@@ -575,7 +439,7 @@ export class UploadServiceValidatorService implements OnInit {
         this.FIELDS_DATA[formid][index]['NewformGroup'].push({ ...element[field2], fieldName: field2, index: count });
         tempFormGroup.push(new FormGroup({
           [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid, field2)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
         }));
         count++;
       }
@@ -594,12 +458,11 @@ export class UploadServiceValidatorService implements OnInit {
       const fieldProps: any = dumpformdata[key];
       optiontemp[fieldProps?.name] = ({ ...fieldProps, fieldName: fieldProps?.name });
       OptiontempFormGroup[fieldProps?.name] = new FormControl({ value: "", disabled: fieldProps?.disabled != undefined ? true : false },
-        this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, id, fieldProps)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type])
+        this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, id)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type])
     }
     this.dynamicFormGroup[id]?.controls[fieldName]?.controls?.push(new FormGroup(OptiontempFormGroup));
     this.dynamicFormGroup[id]?.controls[fieldName]?.value?.push(this.emptyvalue(this.dynamicFormGroup[id]?.controls[fieldName]?.value[this.dynamicFormGroup[id]?.controls[fieldName]?.value?.length - 1]));
     this.FIELDS_DATA[id][index]['NewformArray']?.push(optiontemp);
-    this.FIELDS_DATA[id][index]['OrderKey']?.push(this.FIELDS_DATA[id][index]['OrderKey'][this.FIELDS_DATA[id][index]['OrderKey']?.length - 1]);
     await this.FIELDS_DATA[id][index]?.GroupLabel?.push(this.FIELDS_DATA[id][index]?.GroupLabel[0]?.replace('1', this.FIELDS_DATA[id][index]?.GroupLabel?.length + 1));
     console.log('New formGroup', this.FIELDS_DATA, this.dynamicFormGroup[id])
   }
@@ -689,48 +552,6 @@ export function hasDuplicateFormArray(data: any): ValidatorFn {
       return null;
     }
   };
-}
-
-export function hasAmountLessThanFormArray(control: FormControl): ValidationErrors | null {
-  console.log(control, "hasAmountLessThanFormArray")
-  const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
-  const ALPHA_NUMERIC_VALIDATION_ERROR = { alphaNumericError: 'only alpha numeric values are allowed' }
-  return ALPHA_NUMERIC_REGEX.test(control.value) ? null : ALPHA_NUMERIC_VALIDATION_ERROR;
-}
-
-export function hasAmountLessThanForm(equals: string, Message: string) {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const equalsField: any = control.root.get(equals)
-    if (equalsField) {
-      if (parseFloat(control.value) <= parseFloat(equalsField?.value)) {
-        return null;
-      } else {
-        return { matched: Message };
-      }
-    }
-    return null;
-  }
-}
-
-export function hasAmountGreaterThanForm(equals: string, Message: string) {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const equalsField: any = control.root.get(equals)
-    if (equalsField) {
-      if (parseFloat(control.value) >= parseFloat(equalsField?.value)) {
-        return null;
-      } else {
-        return { matched: Message };
-      }
-    }
-    return null;
-  }
-}
-
-export function hasAmountGreaterThanFormArray(control: FormControl): ValidationErrors | null {
-  console.log(control, "hasAmountGreaterThanFormArray")
-  const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
-  const ALPHA_NUMERIC_VALIDATION_ERROR = { alphaNumericError: 'only alpha numeric values are allowed' }
-  return ALPHA_NUMERIC_REGEX.test(control.value) ? null : ALPHA_NUMERIC_VALIDATION_ERROR;
 }
 
 export function RemoveValidator(): ValidatorFn {

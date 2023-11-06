@@ -1,6 +1,9 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DocumentService } from '../../service/document.service';
+import { PipoDisplayListView, PipoDisplayListViewItem } from '../../../model/pipo.model';
+import { PipoDataService } from '../../service/homeservices/pipo.service';
 import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 import $ from 'jquery';
 
 @Component({
@@ -8,11 +11,11 @@ import $ from 'jquery';
   templateUrl: './custom-hover-panel.component.html',
   styleUrls: ['./custom-hover-panel.component.scss']
 })
-export class CustomHoverPanelComponent implements OnInit, OnChanges {
+export class CustomHoverPanelComponent implements OnInit {
   @Input('pipoid') pipoID: any = '';
   SbData: any = [];
   inWardData: any = [];
-  inwardRemitanceAmount:any = 0;
+  inwardRemitanceAmount: number = 0;
   inwardBalanceAmount: number = 0;
   balanceAmount: number = 0
   SbAmountAndCurrency: any = [];
@@ -22,20 +25,36 @@ export class CustomHoverPanelComponent implements OnInit, OnChanges {
   item: any = [];
   PDF_URL: any = '';
   public pipoArrayList: any = [];
+  public pipoDisplayListData: PipoDisplayListView;
   public pipoData?: any = [];
-  public selectedIndexPIPO: any = 0;
-
-  constructor(private documentService: DocumentService, private router: Router) { }
+  public selectedIndexPIPO:any=0;
+  
+  constructor(private documentService: DocumentService,
+    private pipoDataService: PipoDataService,
+    private sanitizer: DomSanitizer,
+    private router: Router) { }
 
   ngOnInit(): void {
+    console.log(this.pipoID, 'dfsjdgfdsdsgfdshfdsgfdsfds')
+    this.getPIPOData(this.pipoID)
 
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes, "ngOnChanges")
-    if (changes?.pipoID?.currentValue!=undefined && changes?.pipoID?.currentValue!=null && changes?.pipoID?.currentValue!="") {
-      this.loadPipoHoverData(changes?.pipoID?.currentValue)
-    }
+    this.documentService.getPipo().subscribe(
+      (res: any) => {
+        this.item = res.data;
+        for (let index = 0; index < this.item.length; index++) {
+          const element = this.item[index];
+          if (element?._id==this.pipoID) {
+            this.selectedIndexPIPO=index;
+          }
+        }
+        console.log(this.selectedIndexPIPO,'sdfdfdsfdsfdf')
+        this.getPipoExport(res.data).then((pipores: any) => {
+          this.pipoArrayList = pipores;
+          console.log(this.pipoArrayList, res.data, 'dgfdgdfgdfgdfgdfgfdgdfgdfgfg')
+        });
+      },
+      (err) => console.log(err, '**********')
+    );
   }
 
   getSBDetails(id) {
@@ -50,41 +69,22 @@ export class CustomHoverPanelComponent implements OnInit, OnChanges {
           };
           result.push(res[value.fobCurrency])
         }
-        res[value.fobCurrency].fobValue += value.fobValue;
+        res[value.fobCurrency].fobValue += value.fobValue
+          ;
         return res;
       }, {});
       this.SbAmountAndCurrency = result
     })
   }
 
-  loadPipoHoverData(pipoID:any) {
-    this.getPIPOData(pipoID)
-
-    this.documentService.getPipo().subscribe((res: any) => {
-      this.item = res.data;
-      for (let index = 0; index < this.item.length; index++) {
-        const element = this.item[index];
-        if (element?._id == pipoID) {
-          this.selectedIndexPIPO = index;
-        }
-      }
-      this.getPipoExport(res.data).then((pipores: any) => {
-        this.pipoArrayList = pipores;
-        console.log(this.pipoArrayList, res.data, 'dgfdgdfgdfgdfgdfgfdgdfgdfgfg')
-      });
-    }, (err) => console.log(err, '**********'));
-  }
-
   getInwardData(id) {
-    this.documentService.getInwardDetailsByPIPO(id).subscribe((inwardRes: any) => {
-      this.inWardData = inwardRes
-      this.inwardRemitanceAmount = this.inWardData.reduce((accum, item) => parseFloat(accum) + parseFloat(item.amount), 0)
-      this.inwardBalanceAmount = parseFloat(this.pipoData.amount) - parseFloat(this.inwardRemitanceAmount)
-    })
+    // this.documentService.getInwardDetailsByPIPO(id).subscribe((inwardRes: any) => {
+    //   this.inWardData = inwardRes
+    //   this.inwardRemitanceAmount = this.inWardData.reduce((accum, item) => accum + item.amount, 0)
+    //   this.inwardBalanceAmount = this.pipoData.amount - this.inwardRemitanceAmount
+    // })
   }
-  onTabChanged(event:any){
-    this.selectedIndexPIPO=event?.index;
-  }
+
   getPIPOData(id) {
     this.documentService.getPipoByid(id).subscribe((pipoRes: any) => {
       console.log("-->", pipoRes)
@@ -133,18 +133,18 @@ export class CustomHoverPanelComponent implements OnInit, OnChanges {
   getIRMSum(irmdata: any) {
     return { SumAmount: irmdata.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0), Currency: irmdata[0]?.currency };
   }
-
+  
   viewDetails(data: any) {
     console.log("pipoData", this.pipoData)
     this.router.navigate(['home/pipo-export', data]);
   }
-
+  
   get displayHidden() {
-    return $('#CUSTOM_HOVER_PANEL').css('display', 'none');
+    return $('#CUSTOM_HOVER_PANEL').css('display','none');
   }
-
+  
   get displayShow() {
     return $('.custom-Hover-Panel-btn').click()
   }
-
+  
 }

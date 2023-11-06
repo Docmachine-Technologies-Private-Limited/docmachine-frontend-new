@@ -12,7 +12,7 @@ import {
   ViewChild
 } from '@angular/core';
 import * as xlsx from 'xlsx';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
@@ -63,8 +63,8 @@ export class ExportBilllodgementreferencenumberadvicecopySummaryComponent implem
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1",
       "col-td-th-1",
     ],
     eventId: ''
@@ -132,7 +132,7 @@ export class ExportBilllodgementreferencenumberadvicecopySummaryComponent implem
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          SbNo: element['SbRef'] != 'NF' ? element['SbRef'][0]?.sbno : 'NF',
+          SbNo: this.getPipoNumber(element['pipo']),
           date: moment(element['date']).format('DD-MM-YYYY'),
           blcopyrefNumber: element['blcopyrefNumber'],
           amount: element['amount'],
@@ -256,21 +256,15 @@ export class ExportBilllodgementreferencenumberadvicecopySummaryComponent implem
   EDIT_DATE: any = [];
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
-    //   totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
-      }
-    };
-    this.router.navigate([`/home/Summary/Export/Edit/Bill-Lodgement-Referance-AdviceCopy`], navigationExtras);
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      date: this.SELECTED_VALUE['date'],
+      debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
+      totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
+      currency: this.SELECTED_VALUE['currency'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
     this.toastr.warning('Debit Note Row Is In Edit Mode');
   }
 

@@ -285,7 +285,9 @@
                             <div class="new_form_selct" method="POST" style="display: flex;
                                   flex-direction: row;
                                   align-items: center;">
-                              <input type="file" accept="application/pdf" (change)="onFileSelect($event.target)" class="dropzone dropzone-container" id="dropzone" />
+                              <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
+                                (success)="onSoLetterHeadUploadSuccess($event)" (sending)="submit($event)"
+                                [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
                               <img src="assets/new-img/Icon-feather-upload.svg"
                                 alt="Drag & drop files here or Browse" />
                             </div>

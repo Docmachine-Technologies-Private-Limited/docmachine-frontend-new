@@ -49,7 +49,7 @@ export class InwardUploadDocumentsComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].publicUrl;
-      console.log(args, 'ahdakjhsdjkhdasds')
+      console.log(args,'ahdakjhsdjkhdasds')
       this.validator.buildForm({
         BuyerName: {
           type: "buyer",
@@ -69,7 +69,7 @@ export class InwardUploadDocumentsComponent implements OnInit {
         },
         Inward_reference_number: {
           type: "text",
-          value: this.removeallSpace2('Uniquedigitldentifier', args[1]?.data[0]) != '' ? this.removeallSpace2('Uniquedigitldentifier', args[1]?.data[0]) : 0,
+          value: this.removeallSpace2('Uniquedigitldentifier', args[1]?.data[0])!='' ? this.removeallSpace2('Uniquedigitldentifier', args[1]?.data[0]) : 0,
           label: "Inward reference number",
           rules: {
             required: true,
@@ -77,7 +77,7 @@ export class InwardUploadDocumentsComponent implements OnInit {
         },
         amount: {
           type: "number",
-          value: this.replaceText(args[1]?.data[0]['Amount'], '32A') == '' ? 0 : this.replaceText(args[1]?.data[0]['Amount'], '32A'),
+          value: this.replaceText(args[1]?.data[0]['Amount'],'32A')==''?0 : this.replaceText(args[1]?.data[0]['Amount'],'32A'),
           label: "Amount",
           rules: {
             required: true,
@@ -93,17 +93,25 @@ export class InwardUploadDocumentsComponent implements OnInit {
         },
         Remitter_Name: {
           type: "text",
-          value: this.replaceText(args[1]?.data[0]['RemittersCustomerName'], '50A/50K'),
+          value: this.replaceText(args[1]?.data[0]['RemittersCustomerName'],'50A/50K'),
           label: "Remitter name ( as per MT103 )",
           rules: {
             required: true,
           },
-          maxLength: 200
+          maxLength:200
         },
         Bill_lodgment_Number: {
           type: "text",
-          value: args[1]?.data[0]['RemittanceInformation'] != undefined ? args[1]?.data[0]['RemittanceInformation'] : 0,
-          label: "Remittance Information",
+          value: args[1]?.data[0]['RemittanceInformation']!=undefined?args[1]?.data[0]['RemittanceInformation'] : 0,
+          label: "Bill lodgment number",
+          rules: {
+            required: true,
+          }
+        },
+        Inward_amount_for_disposal: {
+          type: "number",
+          value: "",
+          label: "Inward amount for disposal",
           rules: {
             required: true,
           }
@@ -114,7 +122,7 @@ export class InwardUploadDocumentsComponent implements OnInit {
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
   ngOnInit(): void {
-
+      
   }
   onUpload(e) {
     e.value.BankName = e.value?.BankName?.value != undefined ? e.value?.BankName?.value : e.value?.BankName
@@ -123,7 +131,7 @@ export class InwardUploadDocumentsComponent implements OnInit {
     this.documentService.addInward_remittance(e.value).subscribe((res: any) => {
       console.log(res, 'addInward_remittance')
       if (res.data.length != 0) {
-        this.router.navigate(['home/Summary/Export/Inward-Remittance-Disposal','PendingCaliming'])
+        this.router.navigate(['home/Summary/Export/Inward-Remittance-Disposal'])
       }
     })
   }

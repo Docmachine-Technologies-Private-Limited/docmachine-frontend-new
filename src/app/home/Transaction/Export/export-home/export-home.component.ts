@@ -256,8 +256,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   Inward_Remittance_MT103_DATA: any = [];
   MT103_URL: any = '';
   MT103_ID: any = ''
-  NEW_PURPOSE_CODE: any = [];
-  GROUP_NAME_LIST: any = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes, "ngOnChanges")
@@ -265,12 +263,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.ForwardNo = changes?.data?.currentValue[1] != undefined ? changes?.data?.currentValue[1] : this.ForwardNo;
     this.ToForwardContract_Selected = this.ForwardNo;
     this.Inward_Remittance_MT103_DATA = this.InwardDisposalData;
-    this.Inward_Remittance_MT103_DATA[0]['REMITANCE_AMOUNT'] = this.InwardDisposalData[0]?.Inward_amount_for_disposal
     this.Inward_Remittance_MT103 = this.InwardDisposalData;
     this.bank = [this.InwardDisposalData[0]?.BankName];
     this.MT103_URL = this.InwardDisposalData[0]?.file;
-    this.PIPONumbersBuyerName = this.InwardDisposalData[0]?.BuyerName?.value
-    this.PIPOFilter(this.InwardDisposalData[0])
+    this.PIPONumbersBuyerName=this.InwardDisposalData[0]?.BuyerName?.value
+    this.PIPOFilter(this.PIPONumbersBuyerName)
     console.log(this.bank, 'sallBankallBankallBankallBankallBank')
   }
   async ngOnInit() {
@@ -286,16 +283,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.ToForwardContract_Selected = this.ForwardNo
     console.log("pipoId", this.redirectid);
     for (let index = 0; index < data['default'].length; index++) {
-      for (let j = 0; j < data['default'][index]['purpose'].length; j++) {
-        data['default'][index]['purpose']['isActive'] = false;
-      }
-    }
-    this.NEW_PURPOSE_CODE = data['default'];
-    for (let index = 0; index < data['default'].length; index++) {
       var temp: any = [];
-      if (this.GROUP_NAME_LIST?.filter((item: any) => item?.value?.includes(data['default'][index]['groupname']))?.length == 0) {
-        this.GROUP_NAME_LIST.push({ value: data['default'][index]['groupname'] })
-      }
       for (let j = 0; j < data['default'][index]['purpose'].length; j++) {
         if (this.Inward_Remittance.includes(data['default'][index]['purpose'][j].code)) {
           temp.push(data['default'][index]['purpose'][j]);
@@ -305,7 +293,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         this.default_value[data['default'][index]['groupname']] = temp;
       }
     }
-    console.log(this.GROUP_NAME_LIST, "GROUP_NAME_LIST")
     this.documentService.getBlcopyrefPromies().then((res: any) => {
       this.Blcopyref = res;
       this.Blcopyrefoldata = res;
@@ -331,11 +318,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
 
     this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer, 'export').subscribe((res: any) => {
       console.log(res, 'resssssssssssssss');
-      res?.docs?.forEach(element => {
-        element['AvailableAmount'] = element?.AvailableAmount != undefined && element?.AvailableAmount != '-1' ? element?.AvailableAmount : element?.amount
-        element['UtilizedAmount'] = 0;
-        element['SUM_AMOUNT'] = 0;
-      });
       this.OLD_dataSource = res.docs;
       this.dataSource = res.docs
       console.log("res", this.dataSource)
@@ -657,7 +639,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         i++
       }
-      this.selectedPurpose = newArray;
+      this.selectedPurpose = newArray
     }
     else {
       this.Question5 = '';
@@ -725,64 +707,28 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   }
   selectPIPO: any = [];
   selectPIPO_data: any = [];
-  PIPO_SUM_AMOUNT: any = 0;
-
-  changeCheckboxPIPO(event: any, value, data: any, index) {
-    const FindIndex = this.selectPIPO_data.findIndex(item => item?._id === data?._id);
-    if (event.target.checked == true) {
-      if (parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) > parseFloat(this.PIPO_SUM_AMOUNT)) {
-        this.selectPIPO_data.push(data)
+  changeCheckboxPIPO(event: any, value, data: any) {
+    this.selectPIPO_data.push(data)
+    let sumpipoamount: any = this.selectPIPO_data?.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.amount) }, 0);
+    console.log(this.selectPIPO, sumpipoamount, this.selectPIPO_data,
+    sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal),'selectPIPO')
+    
+    if ((sumpipoamount <= parseInt(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal))) {
+      let j = this.selectPIPO.indexOf(value);
+      if (j == -1) {
         this.selectPIPO.push(value);
-        if (parseFloat(data['UtilizedAmount']) == 0) {
-          data['UtilizedAmount'] = parseFloat(data?.amount);
-        }
-      } else {
-        event.target.checked = false;
-        this.toastr.error("Invoice amount should be equal or more than  remittance amount")
+      }
+      else {
+        this.selectPIPO.splice(j, 1);
+        this.selectPIPO_data.splice(j, 1)
       }
     } else {
-      data['UtilizedAmount'] = 0;
-      data['AvailableAmount'] = parseFloat(data?.amount);
-      data['UtilizedAmount'] = 0;
-      this.selectPIPO.splice(FindIndex, 1);
-      this.selectPIPO_data.splice(FindIndex, 1)
+      this.selectPIPO_data.pop();
+      event.target.checked = false;
+      this.toastr.error("You don't have much enough money...");
     }
-    this.PIPO_SUM_AMOUNT = this.selectPIPO_data.reduce((a, b) => parseFloat(a) + parseFloat(b?.UtilizedAmount), 0);
-    console.log(this.selectPIPO, this.Inward_Remittance_MT103_DATA[0],
-      this.PIPO_SUM_AMOUNT, this.selectPIPO_data, 'selectPIPO')
-  }
+    console.log(this.selectPIPO, sumpipoamount, this.selectPIPO_data, 'selectPIPO')
 
-  CLEAR_TIMEOUT: any = null
-  InputValidation(event: any, data: any) {
-    clearTimeout(this.CLEAR_TIMEOUT)
-    if (data['UtilizedAmount'] != '' && parseFloat(data['UtilizedAmount']) != 0) {
-      if (parseFloat(data['UtilizedAmount']) < parseFloat(data?.AvailableAmount)) {
-        this.PIPO_SUM_AMOUNT = this.selectPIPO_data.reduce((a, b) => parseFloat(a) + parseFloat(b?.UtilizedAmount), 0);
-      } else {
-        this.CLEAR_TIMEOUT = setTimeout(() => {
-          data['UtilizedAmount'] = parseFloat(data?.AvailableAmount)
-          this.toastr.error("Utilized Amount should be equal or more than Available Amount")
-        }, 200);
-      }
-    }
-  }
-
-  AmountValidation(display: any) {
-    console.log(parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal),
-      parseFloat(this.PIPO_SUM_AMOUNT), parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) == parseFloat(this.PIPO_SUM_AMOUNT), "hghghjghjfjhdjj")
-    if (parseFloat(this.Inward_Remittance_MT103_DATA[0]?.Inward_amount_for_disposal) <= parseFloat(this.PIPO_SUM_AMOUNT)) {
-      display?.displayHidden;
-    } else {
-      this.toastr.error("Invoice amount should be equal or more than  remittance amount")
-    }
-  }
-
-  resetActive(data: any, i) {
-    data?.forEach((element, index) => {
-      if (i != index) {
-        element['isActive'] = false
-      }
-    });
   }
 
   changeCheckbox2(value) {
@@ -793,48 +739,92 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     else {
       this.tryArray.splice(j, 1)
     }
+
     console.log(this.tryArray)
   }
 
   searchData(e) {
     console.log(e)
+
     this.jsondata = []
     if (e != null && e != '') {
       for (let data of this.dataJson) {
-        data?.purpose?.forEach(element => {
-          if (element?.code?.toLowerCase()?.indexOf(e?.toLowerCase()) != -1) {
-            this.jsondata.push({
-              groupname: data?.groupname,
-              purpose: [element]
-            });
+        if (data.groupname.toLowerCase().indexOf(e.toLowerCase()) != -1) {
+          this.jsondata.push(data)
+        }
+        else {
+          let purpose: any = []
+          for (let value of data.purpose) {
+            if (value.code.toLowerCase().indexOf(e.toLowerCase()) != -1
+              || value.description.toLowerCase().indexOf(e.toLowerCase()) != -1) {
+              purpose.push({
+                "code": value.code,
+                "description": value.description
+              })
+            }
           }
-        });
+          if (purpose.length > 0) {
+            this.jsondata[data.groupname] = purpose;
+          }
+        }
+
       }
-      console.log(this.jsondata, "jsondata")
-      this.NEW_PURPOSE_CODE = this.jsondata;
-      if (this.jsondata?.length == 0) {
-        this.NEW_PURPOSE_CODE = data['default']
+      console.log(this.jsondata.length)
+      this.pgNumber = Object.keys(this.jsondata).length
+      this.pcNumber = 0;
+      for (let data of this.jsondata) {
+        console.log(data.purpose.length)
+        this.pcNumber = this.pcNumber + data.purpose.length
       }
+      this.default_value = this.jsondata
+      this.purposeFun(this.default_value)
     } else {
-      this.NEW_PURPOSE_CODE = data['default']
+      this.default_value = this.old_data;
+      this.purposeFun(this.default_value)
     }
+
   }
+  searchMulitpleData(multipleselectedvalue) {
+    console.log(multipleselectedvalue, 'multipleselectedvalue')
+    this.jsondata = [];
+    if (multipleselectedvalue.length != 0) {
+      for (let index = 0; index < multipleselectedvalue.length; index++) {
 
-
-  searchDataGroupName(e) {
-    console.log(e)
-    this.jsondata = []
-    if (e != null && e != '') {
-      let filtervalue = this.dataJson?.filter((item: any) => item?.groupname?.toLowerCase()?.indexOf(e?.toLowerCase()) != -1)
-      this.jsondata = filtervalue
-      console.log(this.jsondata, "jsondata")
-      this.NEW_PURPOSE_CODE = this.jsondata;
-      if (this.jsondata?.length == 0) {
-        this.NEW_PURPOSE_CODE = data['default']
+        for (let data of this.dataJson) {
+          if (data.groupname.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1) {
+            this.jsondata.push(data)
+          }
+          else {
+            let purpose: any = []
+            for (let value of data.purpose) {
+              if (value.code.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1
+                || value.description.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1) {
+                purpose.push({
+                  "code": value.code,
+                  "description": value.description
+                })
+              }
+            }
+            if (purpose.length > 0) {
+              this.jsondata[data.groupname] = purpose;
+            }
+          }
+        }
       }
+      console.log(this.jsondata.length)
+      this.pgNumber = Object.keys(this.jsondata).length
+      this.pcNumber = 0;
+      for (let data of this.jsondata) {
+        console.log(data.purpose.length)
+        this.pcNumber = this.pcNumber + data.purpose.length
+      }
+      this.default_value = this.jsondata
+      this.purposeFun(this.default_value)
     } else {
-      this.NEW_PURPOSE_CODE = data['default']
+      this.default_value = this.old_data;
+      this.purposeFun(this.default_value)
     }
+
   }
 
   purposeFun(data: any) {
@@ -934,7 +924,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
     }
-    this.showPreview(code)
     console.log("hello there", this.newTask);
   }
   replaceText(text: any, repl_text: any) {
@@ -954,10 +943,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       getAllFields?.forEach(element => {
         const elementvalue: any = element?.acroField?.dict?.values();
         if (elementvalue[0]?.encodedName == '/Tx') {
-          element?.setFontSize(8);
+          element?.setFontSize(11);
           element?.enableReadOnly();
           const [widget]: any = element?.acroField?.getWidgets();
           widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
+          element?.enableCombing(); // trying to restore combing
         }
       });
       getAllFields[0].setText(this.COMPANY_INFO?.BranchName)
@@ -978,12 +968,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       getAllFields[17].setText(this.charge[13])
       getAllFields[18].setText('Export')
       getAllFields[19].setText('')
+      getAllFields[20].setText(a['currency'])
       const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      getAllFields[20].setText(updatedata?.currency)
-      getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
-      getAllFields[22].setText(updatedata?.Inward_amount_for_disposal?.toString())
-      getAllFields[23].setText(a['buyerName'])
-      getAllFields[24].setText(this.buyerAds)
+      getAllFields[21].setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
+      getAllFields[22].setText(updatedata?.Inward_amount_for_disposal)
+      getAllFields[23].setText(this.buyerAds)
+      getAllFields[24].setText(a['buyerName'])
       getAllFields[25].setText('ADVANCE AGAINST EXPORT')
       getAllFields[25].setFontSize(8);
       getAllFields[26].setText(this.generatePurpose[0])
@@ -1287,7 +1277,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     })
 
     const text21Field = form.createTextField('best.text21')
-    text21Field.setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal))
+    text21Field.setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
     text21Field.addToPage(firstpage, {
       x: 340, y: 580, width: 220,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -2759,15 +2749,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         (err) => console.log("ERROR")
       );
     });
-  }
 
-  get proceedtrue() {
-    return this.SELECTED_PURPOSE_CODE;
-  }
 
+  }
   OLD_INPUT_VALUE: string = '';
-  SELECTED_PURPOSE_CODE: boolean = false;
-  purposeClick(e, colspanitem) {
+  purposeClick(e, f, inputid: any) {
     if (e.startsWith("P0") || e.startsWith("P1")) {
       if (this.Inward_Remittance.includes(e)) {
         if (this.selectedPurpose.includes(e)) {
@@ -2775,23 +2761,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         else if (!this.selectedPurpose.includes(e)) {
           this.OLD_INPUT_VALUE = e;
+          // $(inputid).val(e);
+          // this.searchData(e)
           this.selectedPurpose.push(e)
           this.toastr.info(`Purpose code added`);
           this.selection = this.selectedPurpose[0];
-          this.SELECTED_PURPOSE_CODE = true;
         }
-        colspanitem['isActive'] = !colspanitem?.isActive;
       }
       else {
-        this.SELECTED_PURPOSE_CODE = false;
-        colspanitem['isActive'] = false
         this.toastr.warning(`You can't add this purpose code`);
       }
+
     }
     else {
-      this.SELECTED_PURPOSE_CODE = false
       this.toastr.error(`Click on purpose code`);
     }
+
+    // this.select = true;
+    // this.purposeCode = e
+    // this.detail = f
   }
 
   removeClick(i) {
@@ -2815,9 +2803,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.mailArray[j] != code
     code !== this.c
     this.importPurpose[j] != code
+    //  this.doneImportPurpose[j] == code
+
   }
 
-  get proceedClick() {
+  proceedClick() {
     console.log("gggg")
     this.proceed = false
     this.c = this.selectedPurpose[0];
@@ -2837,9 +2827,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
       i++
     }
-    this.showPreview(this.c)
     this.z = this.selectedPurpose.length
-    return;
   }
 
   tabClick(a, i) {
@@ -2956,7 +2944,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     var n = a.accNumber
     this.charge = n.split("");
     console.log(this.charge)
-    this.SELECTED_PURPOSE_CODE = false;
   }
 
   openToPdf(content2, pipo) {
@@ -2968,6 +2955,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedPdfs.push(this.ARRAY_BUFFER_PDF2[index])
     }
     console.log('line no. 2493', this.selectedPdfs);
+
+    // this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
+    //   (result) => {
+    //     this.closeResult = `Closed with: ${result}`;
+    //   },
+    //   (reason) => {
+    //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    //   }
+    // );
   }
 
   addPdfToSelectedPdf(value, e) {
@@ -3189,11 +3185,21 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     return this.Inward_Remittancefilter;
   }
 
-  PIPOFilter(data: any) {
-    this.dataSource = this.OLD_dataSource?.filter((e) => e?.currency?.indexOf(data?.currency) != -1 &&
-      e?.buyerName?.indexOf(data?.BuyerName?.value) != -1);
+  PIPOFilter(searchvalue) {
+    if (searchvalue != null && searchvalue != undefined && searchvalue != 'BuyerName') {
+      this.dataSource = this.OLD_dataSource.filter((e) => {
+        var temp = (e['buyerName']);
+        if (temp != null && temp != undefined) {
+          if ((temp.toLowerCase()).indexOf(searchvalue.toLowerCase()) != -1) {
+            return e;
+          }
+        }
+      });
+    }
+    else {
+      this.dataSource = this.OLD_dataSource;
+    }
   }
-
   ShippingBillnumberFil(searchvalue) {
     if (searchvalue != '' && searchvalue[0] != null && searchvalue[0] != undefined && searchvalue[0] != 'BuyerName') {
       this.ShippingbillNumberfilter = this.item1.filter((e: any) => e?.buyerName[0]?.indexOf(searchvalue[0]) != -1);
@@ -3318,89 +3324,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.Lodgement[this.selection][mainkey][hidekey] = '';
     // console.log(this.Lodgement[this.selection],'Lodgement')
   }
-
-  ConvertNumberToWords(number: any) {
-    var words = new Array();
-    words[0] = '';
-    words[1] = 'One';
-    words[2] = 'Two';
-    words[3] = 'Three';
-    words[4] = 'Four';
-    words[5] = 'Five';
-    words[6] = 'Six';
-    words[7] = 'Seven';
-    words[8] = 'Eight';
-    words[9] = 'Nine';
-    words[10] = 'Ten';
-    words[11] = 'Eleven';
-    words[12] = 'Twelve';
-    words[13] = 'Thirteen';
-    words[14] = 'Fourteen';
-    words[15] = 'Fifteen';
-    words[16] = 'Sixteen';
-    words[17] = 'Seventeen';
-    words[18] = 'Eighteen';
-    words[19] = 'Nineteen';
-    words[20] = 'Twenty';
-    words[30] = 'Thirty';
-    words[40] = 'Forty';
-    words[50] = 'Fifty';
-    words[60] = 'Sixty';
-    words[70] = 'Seventy';
-    words[80] = 'Eighty';
-    words[90] = 'Ninety';
-    number = number.toString();
-    var atemp = number.split(".");
-    var number = atemp[0].split(",").join("");
-    var n_length = number.length;
-    var words_string = "";
-    if (n_length <= 9) {
-      var n_array: any = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
-      var received_n_array = new Array();
-      for (var i = 0; i < n_length; i++) {
-        received_n_array[i] = number.substr(i, 1);
-      }
-      for (var i = 9 - n_length, j = 0; i < 9; i++, j++) {
-        n_array[i] = received_n_array[j];
-      }
-      for (var i = 0, j = 1; i < 9; i++, j++) {
-        if (i == 0 || i == 2 || i == 4 || i == 7) {
-          if (n_array[i] == 1) {
-            n_array[j] = 10 + parseInt(n_array[j]);
-            n_array[i] = 0;
-          }
-        }
-      }
-      var value: any = "";
-      for (var i = 0; i < 9; i++) {
-        if (i == 0 || i == 2 || i == 4 || i == 7) {
-          value = n_array[i] * 10;
-        } else {
-          value = n_array[i];
-        }
-        if (value != 0) {
-          words_string += words[value] + " ";
-        }
-        if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
-          words_string += "Crores ";
-        }
-        if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
-          words_string += "Lakhs ";
-        }
-        if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
-          words_string += "Thousand ";
-        }
-        if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
-          words_string += "Hundred and ";
-        } else if (i == 6 && value != 0) {
-          words_string += "Hundred ";
-        }
-      }
-      words_string = words_string.split("  ").join(" ");
+  Number_to_word(numberInput: any) {
+    let oneToTwenty = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ',
+      'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+    let tenth = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    //let num = ('0000000000'+ numberInput).slice(-10).match(/^(\d{1})(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    let num: any = ('0000000' + numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
+    console.log(num);
+    if (numberInput.toString().length > 7 || !num) {
+      return '';
+    } else {
+      console.log(numberInput);
+      let outputText = num[1] != 0 ? (oneToTwenty[Number(num[1])] || `${tenth[num[1][0]]} ${oneToTwenty[num[1][1]]}`) + ' million ' : '';
+      outputText += num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}`) + 'hundred ' : '';
+      outputText += num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`) + ' thousand ' : '';
+      outputText += num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) + 'hundred ' : '';
+      outputText += num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : '';
+      return outputText;
     }
-    return words_string;
   }
-
   async SendApproval(Status: string, UniqueId: any, code: any) {
     var temp_doc: any = [];
     var approval_data: any = [];
@@ -3429,9 +3371,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           var filterValue: any = {
             Amount: [],
             Number: [],
-            Documents: [],
-            Id:[],
-            SB_REF:[]
+            Documents: []
           }
           var tempPipo: any = [];
           var P102_DATA: any = [];
@@ -3442,14 +3382,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
               filterValue['Amount'].push(filterItem?.amount)
               filterValue['Number'].push(filterItem?.blcopyrefNumber)
               filterValue['Documents'].push(filterItem?.doc)
-              filterValue['Id'].push(filterItem?._id)
-              filterValue['SB_REF'].push(filterItem?.SbRef[0])
               tempPipo.push(filterItem?.pipo[0]?._id)
             })
           });
           approval_data = {
-            id: 'IRDR' + '_' + this.randomId(5),
-            tableName: 'Export-Bill-Realisation',
+            id: 'IRDR' + '_' + UniqueId,
+            tableName: 'Inward-Remitance-Dispoal-Realization',
             deleteflag: '-1',
             userdetails: this.USER_DATA,
             status: 'pending',
@@ -3462,21 +3400,17 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
           updatedata['documents'] = UpdatedUrl;
           updatedata['extradata'] = P102_DATA;
-          updatedata['filterValue'] = filterValue;
           updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               var data: any = {
                 data: updatedata,
-                TypeTransaction: 'Export-Bill-Realisation',
-                fileType: this.USER_DATA?.sideMenu,
+                TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+                fileType: 'Export',
                 UserDetails: approval_data?.id,
                 pipo: tempPipo,
-                UniqueId: approval_data?.id,
-                MT103Ref: updatedata?._id,
-                SBRef: filterValue['SB_REF'],
-                LodgementAdviceCopy: filterValue['Id']
+                UniqueId: approval_data?.id
               }
               this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                 console.log(res1, 'addExportBillLodgment')
@@ -3524,12 +3458,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         if ((index + 1 == temp_doc.length)) {
           approval_data = {
-            id: 'Inward_Remitance_Dispoal' + '_' + this.randomId(5),
-            tableName: 'Inward-Remittance-Disposal',
+            id: 'Inward_Remitance_Dispoal' + '_' + UniqueId,
+            tableName: 'Inward-Remitance-Dispoal',
             deleteflag: '-1',
             userdetails: this.USER_DATA,
             status: 'pending',
-            documents: UpdatedUrl?.reverse(),
+            documents: UpdatedUrl,
             Types: 'downloadPDF',
             TypeOfPage: 'Transaction',
             FileType: this.USER_DATA?.sideMenu,
@@ -3540,7 +3474,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             tempPipo.push(findPipo[0]?._id)
           }
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-          updatedata['documents'] = UpdatedUrl?.reverse();
+          updatedata['documents'] = UpdatedUrl;
           updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
 
@@ -3548,33 +3482,24 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               var data: any = {
                 data: updatedata,
-                TypeTransaction: 'Inward-Remittance-Disposal',
-                fileType: this.USER_DATA?.sideMenu,
+                TypeTransaction: 'Inward-Remitance-Dispoal',
+                fileType: 'Export',
                 UserDetails: approval_data?.id,
                 pipo: tempPipo,
-                UniqueId: approval_data?.id,
-                MT103Ref: updatedata?._id
+                UniqueId: approval_data?.id
               }
               this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                 console.log(res1, 'addExportBillLodgment')
                 let updatedData = {
                   "TransactionRef": [
                     res1._id,
-                  ],
-                  "InwardRemittanceTracker": [
-                    updatedata?._id
                   ]
                 }
                 this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
                   console.log('king123');
                   console.log(data);
-                  this.documentService.UpdateInward_Remittance(updatedata?._id, { Inward_amount_for_disposal: updatedata?.Inward_amount_for_disposal, pipoRef: tempPipo, SubmitDate: new Date().toLocaleTimeString() }).subscribe((res) => {
-                    this.documentService.ForwardContract_update({
-                      id: this.ToForwardContract_Selected[0]?._id, data:
-                        { AvailableAmount: (parseInt(this.ToForwardContract_Selected[0]?.BookingAmount) - parseInt(this.ToForwardContract_Selected[0]?.UtilizedAmount)) }
-                    }).subscribe((res) => {
-                      this.router.navigate(['/home/dashboardTask'])
-                    })
+                  this.documentService.UpdateInward_Remittance(updatedata?._id, { Inward_amount_for_disposal: updatedata?.Inward_amount_for_disposal }).subscribe((res) => {
+                    this.router.navigate(['/home/dashboardTask'])
                   })
                 }, (error) => {
                   console.log('error');
@@ -3597,9 +3522,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         var filterValue: any = {
           Amount: [],
           Number: [],
-          Documents: [],
-          Id:[],
-          SB_REF:[]
+          Documents: []
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
@@ -3610,14 +3533,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             filterValue['Amount'].push(filterItem?.amount)
             filterValue['Number'].push(filterItem?.blcopyrefNumber)
             filterValue['Documents'].push(filterItem?.doc)
-            filterValue['Id'].push(filterItem?._id),
-            filterValue['SB_REF'].push(filterItem?.SbRef[0])
             tempPipo.push(filterItem?.pipo[0]?._id)
           })
         });
         approval_data = {
-          id: 'IRDR' + '_' + this.randomId(5),
-          tableName: 'Export-Bill-Realisation',
+          id: 'IRDR' + '_' + UniqueId,
+          tableName: 'Inward-Remitance-Dispoal-Realization',
           deleteflag: '-1',
           userdetails: this.USER_DATA,
           status: 'pending',
@@ -3630,7 +3551,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
         updatedata['documents'] = temp_doc;
         updatedata['extradata'] = P102_DATA;
-        updatedata['filterValue'] = filterValue;
         updatedata['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
         updatedata['ALL_DATA_HSCODE_FORWARD'] = this.ALL_DATA_HSCODE_FORWARD
         console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, P102_DATA, 'approval_data')
@@ -3638,13 +3558,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
             var data: any = {
               data: updatedata,
-              TypeTransaction: 'Export-Bill-Realisation',
-              fileType: this.USER_DATA?.sideMenu,
+              TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+              fileType: 'Export',
               UserDetails: approval_data?.id,
               pipo: tempPipo,
-              UniqueId: approval_data?.id,
-              SBRef: filterValue['SB_REF'],
-              LodgementAdviceCopy: filterValue['Id']
+              UniqueId: approval_data?.id
             }
             console.log(UniqueId, approval_data, data, 'uiiiiiiiiiiiiii')
             this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
@@ -3666,10 +3584,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
+
   }
   checkapproval(name: any) {
     return new Promise((resolve, reject) => {
-      this.documentService.getApprovedData(name + '_' + this.randomId(5)).subscribe((res: any) => {
+      this.documentService.getApprovedData(name + '_' + this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id).subscribe((res: any) => {
         console.log(res, 'dsdsdsdsdsdsds');
         if (res.length == 0) {
           resolve(true)
@@ -3680,10 +3599,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       })
     })
   }
-
-  randomId(length = 6) {
-    return Math.random().toString(36).substring(2, length + 2);
-  };
 
   ToForwardContract_Selected: any = []
   ToForwardContract(event: any, value: any, index: any) {

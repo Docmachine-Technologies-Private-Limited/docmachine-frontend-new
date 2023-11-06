@@ -6,13 +6,12 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service';
 import * as data1 from '../../../../currency.json';
 import * as xlsx from 'xlsx';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import moment from "moment";
 
 @Component({
   selector: 'export-letter-of-credit-export-lc-summary',
@@ -35,7 +34,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    NO: [],
+    L_C_No: [],
     Currency: [],
     DATE: []
   };
@@ -44,8 +43,6 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "L C No.",
-      "Expiry Date",
-      "Last Date of Shipment",
       "L C Amount",
       "CURRENCY",
       "Buyer Name",
@@ -60,8 +57,6 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1"
@@ -74,11 +69,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     letterOfCreditAmount: '',
     currency: '',
     buyerName: '',
-    Expirydate: '',
-    LastDateofShipment: '',
   }
-  FILTER_FORM: any = ''
-  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -107,86 +98,26 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       this.FILTER_VALUE_LIST = this.item;
       console.log(res, 'getLetterLCfile');
       for (let value of res.data) {
-        if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-          this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
+        if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
+          this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
         }
-        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
-          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+        value?.buyerName.forEach(element => {
+          if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+          }
+        });
+        if (this.ALL_FILTER_DATA['L_C_No'].includes(value?.letterOfCreditNumber) == false) {
+          this.ALL_FILTER_DATA['L_C_No'].push(value?.letterOfCreditNumber);
         }
-        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.letterOfCreditNumber)?.length == 0) {
-          this.ALL_FILTER_DATA['NO'].push({ value: value?.letterOfCreditNumber });
+        if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
+          this.ALL_FILTER_DATA['DATE'].push(value?.date);
         }
-        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
-          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
-        }
-      }
-      this.FILTER_FORM = {
-        buyerName: {
-          type: "ArrayList",
-          value: "",
-          label: "Select buyerName",
-          rules: {
-            required: false,
-          },
-          item: this.ALL_FILTER_DATA['Buyer_Name'],
-          bindLabel: "value"
-        },
-        date: {
-          type: "ArrayList",
-          value: "",
-          label: "Select Date",
-          rules: {
-            required: false,
-          },
-          item: this.ALL_FILTER_DATA['DATE'],
-          bindLabel: "value"
-        },
-        NO: {
-          type: "ArrayList",
-          value: "",
-          label: "Select L C NO.",
-          rules: {
-            required: false,
-          },
-          item: this.ALL_FILTER_DATA['NO'],
-          bindLabel: "value"
-        },
       }
       this.LetterLCTable(this.item)
     },
       (err) => console.log(err)
     );
   }
-  
-  onSubmit(value: any) {
-    let form_value: any = {
-      buyerName: value?.value?.buyerName,
-      date: value?.value?.date,
-      letterOfCreditNumber: value?.value?.NO
-    };
-
-    const removeEmptyValues = (object) => {
-      let newobject = {}
-      for (const key in object) {
-        if (object[key] != '' && object[key] != null && object[key] != undefined) {
-          newobject[key] = object[key];
-        }
-      }
-      return newobject;
-    };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'letterlcs').subscribe((resp: any) => {
-      console.log(resp, value, "letterlcs")
-      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
-      this.LetterLCTable(this.FILTER_VALUE_LIST)
-    });
-  }
-
-  reset() {
-    this.FILTER_VALUE_LIST = this.item;
-    this.LetterLCTable(this.FILTER_VALUE_LIST)
-  }
-  
   LetterLCTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -194,10 +125,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: moment(element['date']).format("DD-MM-YYYY"),
+          date: element['date'],
           letterOfCreditNumber: element['letterOfCreditNumber'],
-          Expirydate: element['Expirydate'],
-          LastDateofShipment: element['LastDateofShipment'],
           letterOfCreditAmount: element['letterOfCreditAmount'],
           currency: element['currency'],
           buyerName: element['buyerName'],
@@ -286,7 +215,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     //this.sharedData.changeretunurl('home/letterofcredit-lc')
     // this.router.navigate(['home/upload', { file: 'export', document: 'lcCopy' }]);
     this.router.navigate(['/home/upload/Export/LetterofCredit']);
-
+    
   }
 
   toSave(data, index) {
@@ -319,23 +248,15 @@ export class LetterOfCreditExportLCComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   letterOfCreditNumber: this.SELECTED_VALUE['letterOfCreditNumber'],
-    //   letterOfCreditAmount: this.SELECTED_VALUE['letterOfCreditAmount'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    //   Expirydate: this.SELECTED_VALUE['Expirydate'],
-    //   LastDateofShipment: this.SELECTED_VALUE['LastDateofShipment'],
-    // }
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
-      }
-    };
-    this.router.navigate([`/home/Summary/Export/Edit/LetterofCredit`],navigationExtras);
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      date: this.SELECTED_VALUE['date'],
+      letterOfCreditNumber: this.SELECTED_VALUE['letterOfCreditNumber'],
+      letterOfCreditAmount: this.SELECTED_VALUE['letterOfCreditAmount'],
+      currency: this.SELECTED_VALUE['currency'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
     this.toastr.warning('LetterLC Row Is In Edit Mode');
   }
 
@@ -401,8 +322,6 @@ class LetterOfCreditFormat {
         PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
         letterOfCreditNumber: element['letterOfCreditNumber'],
-        Expirydate: element['Expirydate'],
-        LastDateofShipment: element['LastDateofShipment'],
         letterOfCreditAmount: element['letterOfCreditAmount'],
         currency: element['currency'],
         buyerName: this.getBuyerName(element['buyerName']),

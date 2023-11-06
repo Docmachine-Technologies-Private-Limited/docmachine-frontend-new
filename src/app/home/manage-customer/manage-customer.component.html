@@ -183,13 +183,3 @@
         </form>
     </div>
 </app-custom-model>
-
-
-<app-custom-model [minimizedisabled]="false" EventButton="false"
-    [RemoveBgTop]="false" class="p-2 mt-2" id="Add_New_Bank_Name" [customstyle]="{'max-width':'40vw !important'}"
-    height="30vh" [name]="'Add New Bank Name'" #Add_New_Bank_NamePanel>
-    <div class="p-2">
-        <upload-components id="AddNewBankName"
-            (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)" (AddNewBank)="CreateFormBank()"></upload-components>
-    </div>
-</app-custom-model>

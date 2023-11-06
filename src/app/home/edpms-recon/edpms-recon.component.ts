@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { timer } from "rxjs";
+import { async, forkJoin, timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DocumentService } from '../../service/document.service';
@@ -51,16 +51,6 @@ export class EdpmsReconComponent implements OnInit {
   LIMIT: number = 10;
   pageSizeOptionsList: any = [];
   pageSizeOptionsList2: any = [];
-  USER_DETAILS: any = [];
-
-  AD_CODE_BUCKET_LIST: any = [];
-  AD_CODE_BUCKET_LIST_KEY: any = [];
-
-  AD_CODE_PREVIOUS_BUCKET_LIST: any = [];
-  AD_CODE_PREVIOUS_BUCKET_LIST_KEY: any = [];
-
-  AD_CODE_CLEARED_BUCKET_LIST: any = [];
-  AD_CODE_CLEARED_BUCKET_LIST_KEY: any = [];
 
   constructor(
     private userService: UserService,
@@ -77,12 +67,11 @@ export class EdpmsReconComponent implements OnInit {
     this.config3 = {
       url: `${this.api_base}/documents/uploadFile3`,
       method: `POST`,
-      maxFiles: 5,
+      maxFiles: 1,
       maxFilesize: 5,
       addRemoveLinks: true,
       headers: this.headers,
       timeout: 820000,
-      clickable: false,
       dictDefaultMessage: "Drag a document here",
       acceptedFiles:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
@@ -100,35 +89,18 @@ export class EdpmsReconComponent implements OnInit {
   async getUserID() {
     const data: any = await this.userService.getUserDetail();
     this.applicant = data.result?.companyId;
-    return data;
   }
 
   async ngOnInit() {
     this.documentService.Inner_loading = true;
     this.getUserID();
     await this.userService.getTeam().subscribe((res: any) => {
-      this.USER_DETAILS = res?.data[0];
-      console.log(res, "userService.getTeam")
       this.masterTeam = res?.data[0]?.bankDetails;
-      this.masterTeam.forEach((acc: any) => {
-        if (!this.bankAccounts?.includes(acc?.bank)) {
-          this.bankAccounts.push(acc?.bank)
-        }
-      });
+      this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
     })
-    await this.documentService.getclearedEDPMS(this.LIMIT).subscribe(async (cleareddata: any) => {
+    await this.documentService.getclearedEDPMS(this.LIMIT).subscribe((cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
-
-      await cleareddata?.data?.forEach(element => {
-        this.AD_CODE_CLEARED_BUCKET_LIST[element["adCode"]] = [];
-      });
-      this.AD_CODE_CLEARED_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_CLEARED_BUCKET_LIST);
-      await cleareddata?.data?.forEach(element => {
-        element["isActive"] = false;
-        this.AD_CODE_CLEARED_BUCKET_LIST[element["adCode"]].push(element);
-      });
-
       this.SB_NO_LIST2 = [];
       var temp: any = [];
       this.GET_EDMPS_CLEARED.forEach(element => {
@@ -145,7 +117,7 @@ export class EdpmsReconComponent implements OnInit {
         this.pageSizeOptionsList2.push(10 * (index + 1))
       }
       console.log(cleareddata, 'getclearedEDPMS')
-    });
+    })
     await this.documentService.Hide_InnerLoader();
   }
 
@@ -169,8 +141,8 @@ export class EdpmsReconComponent implements OnInit {
     }
   }
 
-  saveData(data, type: any) {
-    this.documentService.createEDPMS({ data: data, type: type }).subscribe((res: any) => {
+  saveData() {
+    this.documentService.createEDPMS(this.preparePayload()).subscribe((res: any) => {
       console.log('create edpms res: ', res);
       this.edpmsData = res?.data;
       this.pageSizeOptionsList = [];
@@ -179,12 +151,6 @@ export class EdpmsReconComponent implements OnInit {
         this.pageSizeOptionsList.push(10 * (index + 1))
       }
       this.SBdata();
-      this.ngOnInit();
-      this.AD_CODE_BUCKET_LIST = [];
-      this.AD_CODE_BUCKET_LIST_KEY = [];
-      this.AD_CODE_BUCKET_LIST = [];
-      this.edpmsData = [];
-
       this.toastr.success('Successfully upload file in your system...')
     }, err => {
       console.log('create EDPMS error: ', err)
@@ -195,47 +161,29 @@ export class EdpmsReconComponent implements OnInit {
   preparePayload() {
     let payload: any = [];
     console.log('create edpms res: ', this.masterExcelData);
-    for (let index = 0; index < this.masterExcelData?.length; index++) {
-      const item: any = this.masterExcelData[index];
-      if (item['IE Code'] == this.USER_DETAILS?.iec) {
-        const tempObject = {
-          userId: this.applicant,
-          bank: '',
-          sbNo: item['Shipping Bill No'],
-          sbDate: new Date((item['Shipping Bill Date'] - 25569) * 24 * 60 * 60 * 1000),
-          adCode: item['AD Code'],
-          portCode: item['Port Code'],
-          edpmsStatus: item['STATUS'],
-          adRefNo: item?.adRefNo,
-          sbAmount: item['sbAmount'],
-          sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai != "-1" ? this.getSBAmount(item['Shipping Bill No'])?.balanceAvai : this.getSBAmount(item['Shipping Bill No'])?.sbAmount,
-          sbCurrency: item['sbCurrency'],
-          statusMeaning: this.getStatusMeaning(item['STATUS']),
-          systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
-          docAvailable: this.checkAllDocuments(item?.sbdata, item['systemStatus']),
-          action: this.getAction(item['systemStatus']),
-          sbdata: item['sbdata']
-        };
-        payload.push(tempObject);
-      } else {
-        payload = [];
-        this.toastr.error("Your excel sheet iec code and your registration iec code is different please check...");
-        break;
-      }
-    }
+    this.masterExcelData.forEach((item: any) => {
+      console.log(item?.sbdata, 'jguhgjhghjgdfjsfsdfdsfdsfd')
+      const tempObject = {
+        userId: this.applicant,
+        bank: this.bankSelection,
+        sbNo: item['Shipping Bill No'],
+        sbDate: new Date((item['Shipping Bill Date'] - 25569) * 24 * 60 * 60 * 1000),
+        adCode: item['AD Code'],
+        portCode: item['Port Code'],
+        edpmsStatus: item['STATUS'],
+        adRefNo: item['adBillNo'],
+        sbAmount: item['sbAmount'],
+        sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai,
+        sbCurrency: item['sbCurrency'],
+        statusMeaning: this.getStatusMeaning(item['STATUS']),
+        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
+        docAvailable: item['systemStatus'] === 'Available' ? true : false,
+        action: this.getAction(item['systemStatus']),
+        sbdata: item['sbdata']
+      };
+      payload.push(tempObject);
+    });
     return payload
-  }
-
-  checkAllDocuments(item: any, status: any) {
-    let docbool: boolean = false;
-    if (status == "Available") {
-      if (item?.commercialdetails?.length != 0 && item?.packingdetails?.length != 0 && item?.blcopydetails?.length != 0) {
-        docbool = true;
-      } else {
-        docbool = false;
-      }
-    }
-    return docbool;
   }
 
   getSystemStatus(status, pipo, sbAmount, sbNo, sbdata: any) {
@@ -276,7 +224,7 @@ export class EdpmsReconComponent implements OnInit {
     if (pipo == undefined) {
       return false;
     }
-    if (this.blMaster?.some((bl: any) => bl?.pipo?.includes(pipo?.pi_poNo) == true)) {
+    if (this.blMaster?.some((bl: any) => bl?.pipo?.includes(pipo?.pi_poNo)==true)) {
       return true
     } else {
       return false
@@ -328,70 +276,52 @@ export class EdpmsReconComponent implements OnInit {
     console.log("onUploadInit:", args);
   }
 
-
   async onUploadSuccess(args: any) {
     this.uploading = false;
     this.uploaded = true;
     console.log("onUploadSuccess ARGS", args);
     this.masterExcelData = args[1].data;
     await this.getData();
-    await this.compareEDPMS(false, null, '');
+    await this.compareEDPMS(false);
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
-
-  async onSubmit(data: any, type: any) {
-    console.log(data, "sdfsdfsdfsdfdsfsdfdsfd")
+  
+  async onSubmit(){
     await this.getData();
-    await this.compareEDPMS(true, data, type)
+    await this.compareEDPMS(true)
   }
 
-  async compareEDPMS(bool: boolean, data: any, type: any) {
-    await this.gatherSBdata(bool, data, type);
+  async compareEDPMS(bool:boolean) {
+    await this.gatherSBdata(bool);
   }
 
-  async gatherSBdata(bool: boolean, data: any, type: any) {
+  async gatherSBdata(bool:boolean) {
     await this.documentService.getMaster(1).subscribe(async (res: any) => {
       this.masterSB = res?.data;
       await this.masterExcelData.forEach((data, i) => {
-        let index = this.masterSB.findIndex((item) => (item?.sbno)?.toString()?.toLowerCase() == (data['Shipping Bill No'])?.toString()?.toLowerCase());
-        console.log('sbexit:', res, index, data['Shipping Bill No']);
-        if (index != -1) {
+        let sbexit: any = this.masterSB.filter((item: any) => item?.sbno?.includes(data['Shipping Bill No']));
+        console.log('sbexit:', res, sbexit, data['Shipping Bill No']);
+        if (sbexit.length != 0) {
           this.masterExcelData[i]['systemStatus'] = 'Available';
-          this.masterExcelData[i]['sbAmount'] = this.masterSB[index]?.fobValue;
-          this.masterExcelData[i]['sbCurrency'] = this.masterSB[index]?.fobCurrency;
-          this.masterExcelData[i]['adRefNo'] = this.getBlRefNo(this.masterSB[index]?.blcopyRef)?.join(",");
-          this.masterExcelData[i]['adBillNo'] = this.getBlRefNo(this.masterSB[index]?.blcopyRef)?.join(",");
-          this.masterExcelData[i]['pipo'] = this.masterSB[index]?.pipo[index];
-          this.masterExcelData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai != "-1" ? this.masterSB[index]?.balanceAvai : this.masterSB[index]?.sbAmount;
-          this.masterExcelData[i]['sbdata'] = this.masterSB[index];
+          this.masterExcelData[i]['sbAmount'] = sbexit[0]?.fobValue;
+          this.masterExcelData[i]['sbCurrency'] = sbexit[0]?.fobCurrency;
+          this.masterExcelData[i]['adBillNo'] = sbexit[0]?.adBillNo;
+          this.masterExcelData[i]['pipo'] = sbexit[0]?.pipo[0];
+          this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai;
+          this.masterExcelData[i]['sbdata'] = sbexit[0];
         } else {
           this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
         }
       });
+      await this.preparePayload();
       this.edpmsData = await this.preparePayload();
-      await this.edpmsData?.forEach(element => {
-        this.AD_CODE_BUCKET_LIST[element["adCode"]] = [];
-      });
-      this.AD_CODE_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_BUCKET_LIST);
-      await this.edpmsData?.forEach(element => {
-        element["isActive"] = false;
-        this.AD_CODE_BUCKET_LIST[element["adCode"]].push(element);
-      });
-      if (bool == true) {
-        await this.saveData(data, type);
+      if (bool==true) {
+        await this.saveData();        
       }
-      console.log('this.masterExcelData', this.edpmsData, this.masterExcelData);
+      console.log('this.masterExcelData', this.masterExcelData);
     }, (err: any) => {
       console.log(err);
     });
-  }
-
-  getBlRefNo(data: any) {
-    let no: any = [];
-    data?.forEach(element => {
-      no.push(element?.blcopyrefNumber)
-    });
-    return no;
   }
 
   async SBdata() {
@@ -406,7 +336,7 @@ export class EdpmsReconComponent implements OnInit {
       console.log("index:", index);
       if (index !== -1) {
         this.edpmsData[i]['sbdata'] = this.masterSB[index];
-        this.edpmsData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai != "-1" ? this.masterSB[index]?.balanceAvai : this.masterSB[index]?.sbAmount;
+        this.edpmsData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai;
       } else {
         this.edpmsData[i]['sbdata'] = [];
       }
@@ -511,33 +441,33 @@ export class EdpmsReconComponent implements OnInit {
     this.pipoArrayListdata = [];
     console.log(data, 'sdfsdfdf')
     if (data?.pipo) {
-      this.pipoArrayListdata.push({ status: true, text: 'PIPO', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'PIPO', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata.push({ status: true, text: 'SB', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'SB', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'BL', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'BL', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'Commercial Invoice', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Commercial Invoice', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'Packing List', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Packing List', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -552,33 +482,33 @@ export class EdpmsReconComponent implements OnInit {
       this.SUBMIT_BUTTON = true;
     }
     if (data?.pipo) {
-      this.pipoArrayListdata2.push({ status: true, text: 'PIPO', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'PIPO', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'SB', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'SB', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'BL', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'BL', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'Commercial Invoice', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Commercial Invoice', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'Packing List', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Packing List', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -586,33 +516,33 @@ export class EdpmsReconComponent implements OnInit {
     this.pipoArrayListdata3 = [];
     console.log(data, 'sdfsdfdf')
     if (data?.pipo) {
-      this.pipoArrayListdata3.push({ status: true, text: 'PIPO', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'PIPO', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PIPO', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'SB', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'SB', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/Shippingbill', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'BL', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'BL', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/AirwayBlCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'Commercial Invoice', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Commercial Invoice', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/CommercialInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.packingDoc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'Packing List', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Packing List', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload-documents/Export/PackingListInvoices', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 
@@ -655,12 +585,9 @@ export class EdpmsReconComponent implements OnInit {
     await this.documentService.getMaster(1).subscribe((res: any) => {
       this.masterSB = res?.data;
       console.log('getMaster:', res);
-      this.documentService.getEDPMSbyLimit(this.LIMIT).subscribe(async (res: any) => {
+      this.documentService.getEDPMSbyLimit(this.LIMIT).subscribe((res: any) => {
         this.SB_NO_LIST = [];
         this.GET_EDMPS = this.addSBdata(res?.data);
-        this.GET_EDMPS?.forEach(element => {
-          element["isActive"] = false;
-        });
         var temp: any = [];
         this.GET_EDMPS.forEach(element => {
           if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
@@ -670,19 +597,8 @@ export class EdpmsReconComponent implements OnInit {
         temp.forEach(element => {
           this.SB_NO_LIST.push({ value: element })
         });
-
         this.FILTER_EDPMS_DATA = this.GET_EDMPS;
-
-        await this.GET_EDMPS?.forEach(element => {
-          this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]] = [];
-        });
-        this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_PREVIOUS_BUCKET_LIST);
-        await this.GET_EDMPS?.forEach(element => {
-          element["isActive"] = false;
-          this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]].push(element);
-        });
-
-        console.log(this.GET_EDMPS, this.SB_NO_LIST,this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY,this.AD_CODE_PREVIOUS_BUCKET_LIST, 'getEDPMS')
+        console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
 
         this.pageSizeOptionsList = [];
         let lenforloop: number = parseInt(res?.TotalLength) / 10;
@@ -712,7 +628,7 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   async PAGINATION_EVENT(event: any) {
-    await this.documentService.getEDPMSbyLimit(event?.pageSize).subscribe(async (res: any) => {
+    await this.documentService.getEDPMSbyLimit(event?.pageSize).subscribe((res: any) => {
       console.log(event, res, 'PAGINATION_EVENT')
       this.SB_NO_LIST = [];
       this.GET_EDMPS = this.addSBdata(res?.data);
@@ -726,25 +642,12 @@ export class EdpmsReconComponent implements OnInit {
         this.SB_NO_LIST.push({ value: element })
       });
       this.FILTER_EDPMS_DATA = this.GET_EDMPS;
-      await this.GET_EDMPS?.forEach(element => {
-        this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]] = [];
-      });
-      this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY = Object.keys(this.AD_CODE_PREVIOUS_BUCKET_LIST);
-      await this.GET_EDMPS?.forEach(element => {
-        element["isActive"] = false;
-        this.AD_CODE_PREVIOUS_BUCKET_LIST[element["adCode"]].push(element);
-      });
-
-      console.log(this.GET_EDMPS, this.SB_NO_LIST,this.AD_CODE_PREVIOUS_BUCKET_LIST_KEY,this.AD_CODE_PREVIOUS_BUCKET_LIST, 'getEDPMS')
-
+      console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
     })
   }
   async PAGINATION_EVENT2(event: any) {
     this.documentService.getclearedEDPMS(event?.pageSize).subscribe((cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
-      this.GET_EDMPS_CLEARED?.forEach(element => {
-        element["isActive"] = false;
-      });
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
       this.SB_NO_LIST2 = [];
       var temp: any = [];
@@ -758,15 +661,5 @@ export class EdpmsReconComponent implements OnInit {
       });
       console.log(cleareddata, 'getclearedEDPMS')
     })
-  }
-
-  ActiveRemove(index: any, data) {
-    data?.forEach((element, i) => {
-      if (i == index) {
-        element["isActive"] = true;
-      } else {
-        element["isActive"] = false;
-      }
-    });
   }
 }

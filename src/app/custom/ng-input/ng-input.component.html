@@ -1,16 +1,7 @@
 <ng-container>
-  <div class="input-container">
-    <div class="col-12" style="display: flex;">
-      <label class="input-container-label" [innerHTML]="item?.label"
-        *ngIf="item?.label!=undefined && item?.label!=null && item?.label!=''"> <span style="color: red;"
-          *ngIf="this.required==true">*</span></label>
-      <!-- <div class="col-12" style="display: flex;" *ngIf="ButtonProps?.Active==true">
-        <button (click)="AddButtonEvent.emit({})" class="btn btn-primary">{{ButtonProps?.Text1}}</button>
-        <button (click)="RemoveButtonEvent.emit({})" class="btn btn-primary">{{ButtonProps?.Text2}}</button>
-      </div> -->
-    </div>
-    <input class="form-control" [disabled]="disabled" name="input" [type]="item?.type" [(ngModel)]="item.value"
-      [placeholder]="item?.placeHolderText!=undefined?item?.placeHolderText:''"
+    <div class="input-container">
+      <label class="input-container-label" [innerHTML]="item?.label"></label>
+      <input class="form-control" name="input" [type]="item?.type" [(ngModel)]="item.value"  [placeholder]="item?.placeHolderText"
       (ngModelChange)="onModelChange($event,item?.value)" />
-  </div>
-</ng-container>
+    </div>
+  </ng-container>
