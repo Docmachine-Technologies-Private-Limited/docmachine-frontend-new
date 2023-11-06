@@ -22,6 +22,7 @@
                     id="IMPORT_TRANSACTION"
                     (BankEvent)="setSelectedBankDetails($event)"
                     (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
+                    (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)"
                        #RawValueEventPanel>
                     <button class="btn btn-primary" style="position: absolute;
                     bottom: 10px;

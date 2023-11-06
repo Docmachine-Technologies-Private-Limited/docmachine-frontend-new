@@ -295,15 +295,17 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       res?.data.forEach(element => {
         element['ischecked'] = false;
         element['isDisabled'] = false;
-        // element?.paymentTerm?.forEach(paymentTermelement => {
-        //   paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
-        //   if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
-        //     element['isDisabled'] = true;
-        //     element['ischecked'] = true;
-        //   }
-        // });
+        if (element?.paymentTerm?.length != 0) {
+          element?.paymentTerm?.forEach(paymentTermelement => {
+            paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
+            if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
+              element['isDisabled'] = true;
+              element['ischecked'] = true;
+            }
+          });
+        }
       });
-      this.validator.PIPO_LIST=res?.data
+      this.validator.PIPO_LIST = res?.data
       this.PIPO_LIST = res?.data
       console.log(value, res, this.BENEFICIARY_DETAILS, "BENEFICIARY_CALLBACK")
     });
@@ -339,15 +341,15 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
         });
         getAllFields[8]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
         getAllFields[9]?.setText(this.validator.COMPANY_INFO[0]?.BRANCH_NAME);
-        
-        if (this.BENEFICIARY_DETAILS?.length!=0) {
+
+        if (this.BENEFICIARY_DETAILS?.length != 0) {
           getAllFields[70]?.setText(this.BENEFICIARY_DETAILS[0]?.benneName);
           getAllFields[71]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAdrs);
-          getAllFields[72]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAccNo+'\n'+this.BENEFICIARY_DETAILS[0]?.iban);
-          getAllFields[73]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankName+''+this.BENEFICIARY_DETAILS[0]?.beneBankAdress);
-          
-          let spliSwiftCode:any=this.BENEFICIARY_DETAILS[0]?.beneBankSwiftCode?.split('');
-          if (spliSwiftCode!=undefined) {
+          getAllFields[72]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + this.BENEFICIARY_DETAILS[0]?.iban);
+          getAllFields[73]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankName + '' + this.BENEFICIARY_DETAILS[0]?.beneBankAdress);
+
+          let spliSwiftCode: any = this.BENEFICIARY_DETAILS[0]?.beneBankSwiftCode?.split('');
+          if (spliSwiftCode != undefined) {
             getAllFields[74]?.setText(spliSwiftCode[0]);
             getAllFields[75]?.setText(spliSwiftCode[1]);
             getAllFields[76]?.setText(spliSwiftCode[2]);
@@ -358,13 +360,13 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             getAllFields[81]?.setText(spliSwiftCode[7]);
             getAllFields[82]?.setText(spliSwiftCode[8]);
             getAllFields[83]?.setText(spliSwiftCode[9]);
-            getAllFields[84]?.setText(spliSwiftCode[10]); 
-          }        
+            getAllFields[84]?.setText(spliSwiftCode[10]);
+          }
           getAllFields[85]?.setText(this.BENEFICIARY_DETAILS[0]?.sortCode);
           getAllFields[86]?.setText(this.BENEFICIARY_DETAILS[0]?.interBankName);
-          
-          let spliIntermediarySwiftCode:any=this.BENEFICIARY_DETAILS[0]?.interBankSwiftCode?.split('')
-          if (spliIntermediarySwiftCode!=undefined) {
+
+          let spliIntermediarySwiftCode: any = this.BENEFICIARY_DETAILS[0]?.interBankSwiftCode?.split('')
+          if (spliIntermediarySwiftCode != undefined) {
             getAllFields[87]?.setText(spliIntermediarySwiftCode[0]);
             getAllFields[88]?.setText(spliIntermediarySwiftCode[1]);
             getAllFields[89]?.setText(spliIntermediarySwiftCode[2]);
@@ -380,8 +382,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
         }
 
         if (filldata != undefined && filldata != null && filldata != '') {
-          let splitDebitAccount:any=filldata?.BankDebit?.accNumber?.split('');
-          if (splitDebitAccount!=undefined) {
+          let splitDebitAccount: any = filldata?.BankDebit?.accNumber?.split('');
+          if (splitDebitAccount != undefined) {
             getAllFields[40]?.setText(splitDebitAccount[0]);
             getAllFields[41]?.setText(splitDebitAccount[1]);
             getAllFields[42]?.setText(splitDebitAccount[2]);
@@ -395,10 +397,10 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             getAllFields[50]?.setText(splitDebitAccount[10]);
             getAllFields[51]?.setText(splitDebitAccount[11]);
             getAllFields[52]?.setText(splitDebitAccount[12]);
-            getAllFields[53]?.setText(splitDebitAccount[13]);   
+            getAllFields[53]?.setText(splitDebitAccount[13]);
           }
-          
-          let splitcustomerid:any=filldata?.CustomerID?.split('')
+
+          let splitcustomerid: any = filldata?.CustomerID?.split('')
           getAllFields[15]?.setText(splitcustomerid[0]);
           getAllFields[16]?.setText(splitcustomerid[1]);
           getAllFields[17]?.setText(splitcustomerid[2]);
@@ -409,8 +411,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           getAllFields[22]?.setText(splitcustomerid[7]);
           getAllFields[23]?.setText(splitcustomerid[8]);
           getAllFields[24]?.setText(splitcustomerid[9]);
-          
-          let splitPANNo:any=filldata?.PANNo?.split('')
+
+          let splitPANNo: any = filldata?.PANNo?.split('')
           getAllFields[25]?.setText(splitPANNo[0]);
           getAllFields[26]?.setText(splitPANNo[1]);
           getAllFields[27]?.setText(splitPANNo[2]);
@@ -421,9 +423,9 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           getAllFields[32]?.setText(splitPANNo[7]);
           getAllFields[33]?.setText(splitPANNo[8]);
           getAllFields[34]?.setText(splitPANNo[9]);
-                   
-          let splitDebitChargesAccount:any=filldata?.BankCharges?.accNumber?.split('')
-          if (splitDebitChargesAccount!=undefined) {
+
+          let splitDebitChargesAccount: any = filldata?.BankCharges?.accNumber?.split('')
+          if (splitDebitChargesAccount != undefined) {
             getAllFields[54]?.setText(splitDebitChargesAccount[0]);
             getAllFields[55]?.setText(splitDebitChargesAccount[1]);
             getAllFields[56]?.setText(splitDebitChargesAccount[2]);
@@ -437,7 +439,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             getAllFields[64]?.setText(splitDebitChargesAccount[10]);
             getAllFields[65]?.setText(splitDebitChargesAccount[11]);
             getAllFields[66]?.setText(splitDebitChargesAccount[12]);
-            getAllFields[67]?.setText(splitDebitChargesAccount[13]);   
+            getAllFields[67]?.setText(splitDebitChargesAccount[13]);
           }
         }
         const pdfBytes = await pdfDoc.save()
@@ -619,41 +621,35 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     if (fromValue?.status != "INVALID") {
       fromValue.value['BenneName'] = this.BENEFICIARY_DETAILS
       this.ExportBillLodgement_Form = fromValue?.value;
-      let BOE_SUM: any = this.ExportBillLodgement_Form?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
-      let PIPO_SUM: any = this.ExportBillLodgement_Form?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0)
-      if (PIPO_SUM <= BOE_SUM) {
-        this.PREVIEWS_URL_LIST = ''
-        this.alldocuments = [];
-        this.SELECTED_PIPO_URL_LIST = []
-        this.fillForm(fromValue?.value).then(async (res: any) => {
-          await this.getS3Url().then(async (res: any) => {
-            await res?.forEach(element => {
-              this.alldocuments.push(element)
-            });
-            await this.OTHER_DOCUMENTS?.forEach(element => {
-              this.alldocuments.push(element?.pdf)
-            });
-            this.ExportBillLodgement_Form?.paymentTerm?.forEach((paymentTermelement, index) => {
-              this.SELECTED_PIPO_URL_LIST.push({ name: 'pipo-' + (index + 1), pdf: paymentTermelement?.PIPO_LIST?.doc })
-              this.alldocuments.push(paymentTermelement?.PIPO_LIST?.doc);
-            });
-            this.ExportBillLodgement_Form?.BOE_DETAIILS?.forEach((paymentTermelement, index) => {
-              this.SELECTED_PIPO_URL_LIST.push({ name: 'BOE-' + (index + 1), pdf: paymentTermelement?.BOE?.doc })
-              this.alldocuments.push(paymentTermelement?.BOE?.doc);
-            });
-            var fitertemp: any = this.alldocuments.filter(n => n);
-            this.SELECTED_PREVIEWS_URL = '';
-            await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-              this.PREVIEWS_URL_LIST = merge?.pdfurl;
-              this.SELECTED_PREVIEWS_URL = merge?.pdfurl
-              this.Send_for_Approval_button = true;
-              console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'FormValuePreviewSlideToggle')
-            });
+      this.PREVIEWS_URL_LIST = ''
+      this.alldocuments = [];
+      this.SELECTED_PIPO_URL_LIST = []
+      this.fillForm(fromValue?.value).then(async (res: any) => {
+        await this.getS3Url().then(async (res: any) => {
+          await res?.forEach(element => {
+            this.alldocuments.push(element)
           });
-        })
-      } else {
-        this.toastr.error("Remittance amount should not exceed BOE amount")
-      }
+          await this.OTHER_DOCUMENTS?.forEach(element => {
+            this.alldocuments.push(element?.pdf)
+          });
+          this.ExportBillLodgement_Form?.paymentTerm?.forEach((paymentTermelement, index) => {
+            this.SELECTED_PIPO_URL_LIST.push({ name: 'pipo-' + (index + 1), pdf: paymentTermelement?.PIPO_LIST?.doc })
+            this.alldocuments.push(paymentTermelement?.PIPO_LIST?.doc);
+          });
+          this.ExportBillLodgement_Form?.BOE_DETAIILS?.forEach((paymentTermelement, index) => {
+            this.SELECTED_PIPO_URL_LIST.push({ name: 'BOE-' + (index + 1), pdf: paymentTermelement?.BOE?.doc })
+            this.alldocuments.push(paymentTermelement?.BOE?.doc);
+          });
+          var fitertemp: any = this.alldocuments.filter(n => n);
+          this.SELECTED_PREVIEWS_URL = '';
+          await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+            this.PREVIEWS_URL_LIST = merge?.pdfurl;
+            this.SELECTED_PREVIEWS_URL = merge?.pdfurl
+            this.Send_for_Approval_button = true;
+            console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'FormValuePreviewSlideToggle')
+          });
+        });
+      })
     }
   }
 
@@ -667,7 +663,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
         pipo_id.push(element?.PIPO_LIST?._id)
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
-      
+
       for (let index = 0; index < this.ExportBillLodgement_Form?.BOE_DETAIILS?.length; index++) {
         const element = this.ExportBillLodgement_Form?.BOE_DETAIILS[index];
         boe_id.push(element?.BOE?._id)
@@ -700,7 +696,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
               fileType: this.validator.userData?.sideMenu,
               UserDetails: approval_data?.id,
               pipo: pipo_id,
-              BOERef:boe_id
+              BOERef: boe_id
             }
             this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
               let updatedData = {
@@ -736,7 +732,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                           data: this.ExportBillLodgement_Form,
                           pipo_id: pipo_id,
                           pipo_name: pipo_name,
-                          BOERef:boe_id
+                          BOERef: boe_id
                         }
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
