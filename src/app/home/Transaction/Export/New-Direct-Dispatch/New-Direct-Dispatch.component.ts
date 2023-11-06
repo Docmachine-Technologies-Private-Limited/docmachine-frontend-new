@@ -2388,7 +2388,7 @@ export class NewDirectDispatchComponent implements OnInit {
       this.nameSearch4 = $event;
       var temp_filter: any = this.item13.filter((item: any) => item?.buyerName.includes($event));
       this.SELECT_BUYER_DETAILS = this.BUYER_DETAILS.filter((item: any) => item?.buyerName.includes($event))[0];
-      this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAvail), 0)).toFixed(3);
+      this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.InputValue), 0)).toFixed(3);
     } else {
       this.nameSearch4 = ''
     }
