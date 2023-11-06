@@ -1,4 +1,4 @@
-<upload-components-header title="Upload/Import/Bill-Lodgement-Referance-AdviceCopy" id="Shippingbill"
+<upload-components-header [PIPO_TARANSACTION]="this.UPLOAD_STATUS" title="Upload/Import/Bill-Lodgement-Referance-AdviceCopy" id="Shippingbill"
     (UploadHeaderEvent)="clickPipo($event)">
     <div class="upload-panel" *ngIf="publicUrl!=''">
         <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"

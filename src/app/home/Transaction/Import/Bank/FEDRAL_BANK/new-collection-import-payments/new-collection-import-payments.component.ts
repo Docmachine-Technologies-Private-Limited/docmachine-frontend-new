@@ -1,26 +1,26 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PDFDocument } from 'pdf-lib';
-import { UserService } from '../../../../service/user.service';
-import { DocumentService } from '../../../../service/document.service';
-import { DateFormatService } from '../../../../DateFormat/date-format.service';
-import { PipoDataService } from '../../../../service/homeservices/pipo.service';
+import { UserService } from '../../../../../../service/user.service';
+import { DocumentService } from '../../../../../../service/document.service';
+import { DateFormatService } from '../../../../../../DateFormat/date-format.service';
+import { PipoDataService } from '../../../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
-import { ExportBillLodgementData } from '../../Export/new-export-bill-lodgement/export-bill-lodgemet-data';
-import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
-import { StorageEncryptionDecryptionService } from '../../../../Storage/storage-encryption-decryption.service';
-import { MergePdfListService } from '../../../merge-pdf-list.service';
+import { UploadServiceValidatorService } from '../../../../../../components/Upload/service/upload-service-validator.service';
+import { ExportBillLodgementData } from '../../../../Export/new-export-bill-lodgement/export-bill-lodgemet-data';
+import { AprrovalPendingRejectTransactionsService } from '../../../../../../service/aprroval-pending-reject-transactions.service';
+import { StorageEncryptionDecryptionService } from '../../../../../../Storage/storage-encryption-decryption.service';
+import { MergePdfListService } from '../../../../../merge-pdf-list.service';
 import moment from 'moment';
 
 @Component({
-  selector: 'app-new-advance-import-payments',
-  templateUrl: './new-advance-import-payments.component.html',
-  styleUrls: ['./new-advance-import-payments.component.scss', '../../commoncss/common.component.scss']
+  selector: 'app-new-collection-import-payments',
+  templateUrl: './new-collection-import-payments.component.html',
+  styleUrls: ['./new-collection-import-payments.component.scss','../../../../commoncss/common.component.scss']
 })
-export class NewAdvanceImportPaymentsComponent implements OnInit {
+export class NewCollectionImportPaymentsComponent implements OnInit {
   @Input('data') data: any = [];
   @Input('BankId') BankId: any = '';
   PREVIWES_URL: any = '';
@@ -106,20 +106,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       this.exportbilllodgementdata.clear();
       this.PREVIWES_URL = ''
       this.VISIBLITY_PDF = false;
-
-      this.validator.PIPO_LIST = [];
-      setTimeout(() => {
-        this.validator.buildForm({
-          BenneName: {
-            type: "benne",
-            value: "",
-            label: "Select Beneficiary",
-            rules: {
-              required: true,
-            }
-          },
-        }, 'Invoice_IMPORT_TRANSACTION');
-      }, 200);
+      this.documentService.ForwardContractget().subscribe((res: any) => {
+        this.ForwardContractDATA = res?.data;
+        console.log(res, 'daasdasdasdasdasdadsd')
+      });
+      this.validator.PIPO_LIST=[];
+      this.response(null);
     });
   }
 
@@ -147,10 +139,18 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
             required: true,
           }
         },
+        BenneName: {
+          type: "benne",
+          value: "",
+          label: "Select Beneficiary",
+          rules: {
+            required: true,
+          }
+        },
         forwardCall: {
           type: "button",
           value: "",
-          text: "Select FWC",
+          text: "Select FDC",
           rules: {
             required: false,
           }
@@ -158,8 +158,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         paymentTerm: {
           type: "formGroup",
           label: "",
-          GroupLabel: ['PI/PO 1'],
-          AddNewRequried: false,
+          GroupLabel: ['Selection PI/PO 1'],
+          AddNewRequried: true,
           rules: {
             required: false,
           },
@@ -167,13 +167,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
             [
               {
                 type: "PIPO_LIST",
-                value: this.validator.PIPO_LIST[0],
-                label: "Select",
+                value: "",
+                label: "Select PI/PO",
                 name: 'PIPO_LIST',
                 rules: {
                   required: true,
                 },
-                Inputdisabled: true,
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
@@ -188,7 +187,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
               },
               {
                 type: "text",
-                value: this.validator.PIPO_LIST[0]?.paymentTerm[0]?.BalanceAmount,
+                value: "",
                 label: "Available Amount",
                 name: 'amount',
                 rules: {
@@ -198,7 +197,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
               },
               {
                 type: "currency",
-                value: this.validator.PIPO_LIST[0]?.currency,
+                value: "",
                 label: "Currency",
                 name: 'currency',
                 rules: {
@@ -208,7 +207,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
               },
               {
                 type: "TextValiadtion",
-                value: this.validator.PIPO_LIST[0]?.paymentTerm[0]?.BalanceAmount,
+                value: "",
                 label: "Remittance amount",
                 name: 'RemittanceAmount',
                 EqualName: "amount",
@@ -250,7 +249,6 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
 
   urlletterhead(url: any) {
     this.LETTER_HEAD_URL = url;
-    console.log(url,"sadsdasdasdsdas")
   }
 
   setSelectedBankDetails(bank: any) {
@@ -261,61 +259,25 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
   }
 
   BENEFICIARY_DETAILS: any = [];
-  PIPO_LIST: any = [];
   BENEFICIARY_CALLBACK(value: any) {
     this.BENEFICIARY_DETAILS = this.validator.BENEFICIARY_DETAILS_LIST.filter((item: any) => item?._id == value?.id);
     this.documentService.filterAnyTable({
       benneName: value?.value,
-      "paymentTerm": { $elemMatch: { type: { value:  "Advance Payment" } } }
+      "paymentTerm.type": { value: "Direct Imports(Payment Against Bill of entry)" }
     }, 'pi_po').subscribe((res: any) => {
       res?.data.forEach(element => {
-        element['ischecked'] = false;
-        element['isDisabled'] = false;
         element?.paymentTerm?.forEach(paymentTermelement => {
           paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
-          if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
-            element['isDisabled'] = true;
-            element['ischecked'] = true;
-          }
         });
       });
-
-      this.PIPO_LIST = res?.data
+      this.validator.PIPO_LIST = res?.data
       console.log(value, res, this.BENEFICIARY_DETAILS, "BENEFICIARY_CALLBACK")
     });
   }
 
-  PIPO_LIST_CHECKED(value: any, index: any) {
-    this.validator.PIPO_LIST = [value]
-    this.validator.BOE_LIST = value?.boeRef
-    this.documentService.filterAnyTable({
-      Currency: value?.currency,
-    }, 'ForwardContract').subscribe((res: any) => {
-      this.ForwardContractDATA = res?.data;
-      console.log(res, 'ForwardContractDATA')
-    });
-    this.response(null);
-    this.PIPO_LIST.forEach((element, i) => {
-      if (i != index) {
-        element['ischecked'] = false;
-      } else {
-        element['ischecked'] = true;
-      }
-    });
-  }
-
-  getORMRef(advice: any) {
-    let advicelist: any = [];
-    advice?.forEach(element => {
-      advicelist.push(element?.billNo)
-    });
-    return advicelist?.join(',')
-  }
-
   SELECTED_PIPO_ORM_DETAILS: any = [];
   PIPO_CALLBACK(value: any, panel: any) {
-    this.SELECTED_PIPO_ORM_DETAILS = value;
-    this.validator.BOE_LIST = value?.boeRef
+    this.SELECTED_PIPO_ORM_DETAILS = value
     panel?.displayShow
   }
   formvalue: any = [];
@@ -601,7 +563,9 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     return words_string?.toUpperCase();
   }
 
-  TITLE_CHANGED: string = 'ADVANCE OUTWARD REMITTANCE'
+
+
+  TITLE_CHANGED: string = 'Direct Import Payment'
 
   async getS3Url() {
     return new Promise(async (reslove, reject) => {
@@ -679,13 +643,13 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       var pipo_name: any = [];
       for (let index = 0; index < this.ExportBillLodgement_Form?.paymentTerm?.length; index++) {
         const element = this.ExportBillLodgement_Form?.paymentTerm[index];
-        pipo_id.push(element?.PIPO_LIST?._id)
+        pipo_id.push(element?.PIPO_LIST?.pipo_id)
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
 
       var approval_data: any = {
         id: UniqueId + '_' + this.randomId(10),
-        tableName: 'Advance-Outward-Remittance',
+        tableName: 'Advance-Remittance-flow',
         deleteflag: '-1',
         userdetails: this.validator.userData,
         status: 'pending',
@@ -698,6 +662,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         console.log(approval_data, res, 'approval_data')
         if (res?.id != approval_data?.id || res == undefined) {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.validator.userData['RoleCheckbox'], approval_data, () => {
+            var pipo_id: any = [];
+            var pipo_name: any = [];
             var data: any = {
               data: {
                 formdata: this.ExportBillLodgement_Form,
@@ -706,8 +672,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
                 ALL_DATA_HSCODE_FORWARD: this.ALL_DATA_HSCODE_FORWARD
               },
-              TypeTransaction: 'Advance-Outward-Remittance',
-              fileType: this.validator.userData?.sideMenu,
+              TypeTransaction: 'Advance-Remittance-flow',
+              fileType: 'Import',
               UserDetails: approval_data?.id,
               pipo: pipo_id,
             }
@@ -725,12 +691,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                   const element: any = this.ExportBillLodgement_Form?.paymentTerm[index];
                   const sum = parseFloat(element?.PIPO_LIST?.paymentTerm[0].BalanceAmount) - parseFloat(element?.RemittanceAmount);
                   element.PIPO_LIST.paymentTerm[0].BalanceAmount = sum;
-                  this.documentService.AnyUpdateTable({
-                    _id: element?.PIPO_LIST?._id,
-                    "paymentTerm.type.value": "Advance Payment"
-                  }, { "paymentTerm.$.BalanceAmount": sum }, 'pi_po').subscribe((res: any) => { })
-
-                  this.userService.updatePipo({ balanceAmount: sum }, element?.PIPO_LIST?._id).subscribe((data) => {
+                  this.userService.updatePipo({ balanceAmount: sum, paymentTerm: element.PIPO_LIST.paymentTerm }, element?.PIPO_LIST?._id).subscribe((data) => {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.ExportBillLodgement_Form?.paymentTerm.length) {

@@ -1,0 +1,48 @@
+<div class="col-12 pt-2 Invoice">
+    <label for="" class="col-12 Invoice-label">Outward Remittance (A2)</label>
+    <custom-mat-stepper>
+        <custom-mat-step MATSTEP_LABEL="Outward Remittance (A2) Transaction"
+            errorMessage="Please select Inward Remittance" [NextTrue]="true">
+            <div class="upload-panel-2">
+                <div class="left-panel">
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
+                        [src]="PREVIWES_URL"></app-pdf-viewer>
+                    <div id="federal-bank-letter-head">
+                        <federal-bank-import-letter-head *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                            [data]="[this.ExportBillLodgement_Form,this.BENEFICIARY_DETAILS[0]]"
+                            (url)="urlletterhead($event)"></federal-bank-import-letter-head>
+                    </div>
+                    <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
+                        <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                            [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
+                    </div>
+                </div>
+                <upload-components [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
+                    id="IMPORT_TRANSACTION"
+                       #RawValueEventPanel>
+                    <button class="btn btn-primary" style="position: absolute;
+                    bottom: 10px;
+                    right: 100px;
+                    height: 50px;">Previews</button>
+                </upload-components>
+            </div>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Generate 15 CA" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Request for 15 CB" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="15 CA Generate Summary" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="15 CB Request Summary" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+
+        </custom-mat-step>
+    </custom-mat-stepper>
+</div>

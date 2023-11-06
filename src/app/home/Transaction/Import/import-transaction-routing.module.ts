@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddAdvanceOutwardRemittanceA2Component } from './add-advance-outward-remittance-a2/add-advance-outward-remittance-a2.component';
 import { MemberGuard } from '../../../service/RolePermission/Member/member.guard';
 import { BuyerCreditPanelComponent } from './BuyerCreditPanel/Buyer-Credit-Panel.component';
 import { TransactionDashboardComponent } from './transaction-dashboard/transaction-dashboard.component';
 import { NewLcInsuranceComponent } from './new-lc-insurance/new-lc-insurance.component';
 import { BOE_ORMMMatchOffComponent } from './BOEORMmatch-off/BOE_ORMmatch-off.component';
-import { NewAdvanceImportPaymentsComponent } from './new-advance-import-payments/new-advance-import-payments.component';
-import { NewDirectImportPaymentsComponent } from './new-direct-import-payments/new-direct-import-payments.component';
+import { NewAdvanceImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-advance-import-payments/new-advance-import-payments.component';
+import { NewDirectImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-direct-import-payments/new-direct-import-payments.component';
+import { NewAdvanceOutwardRemittanceA2Component } from './Bank/FEDRAL_BANK/new-advance-outward-remittance-a2/new-advance-outward-remittance-a2.component';
+
 
 const routes: Routes = [
   {
@@ -18,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: "add-advance-outward-remittance-a2",
-    component: AddAdvanceOutwardRemittanceA2Component,
+    component: NewAdvanceOutwardRemittanceA2Component,
     pathMatch: "full",
     canActivate: [MemberGuard]
   },

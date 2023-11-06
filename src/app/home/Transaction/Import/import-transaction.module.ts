@@ -12,10 +12,11 @@ import { NewLcInsuranceComponent } from './new-lc-insurance/new-lc-insurance.com
 import { LcInsuranceFormatComponent } from './new-lc-insurance/lc-insurance-format/lc-insurance-format.component';
 import { BOE_ORMMMatchOffComponent } from './BOEORMmatch-off/BOE_ORMmatch-off.component';
 import { BOEORMMactchData } from './BOEORMmatch-off/BOE-ORM-Mactch-data';
-import { NewAdvanceImportPaymentsComponent } from './new-advance-import-payments/new-advance-import-payments.component';
-import { NewCollectionImportPaymentsComponent } from './new-collection-import-payments/new-collection-import-payments.component';
 import { NewLCImportPaymentsComponent } from './new-lcimport-payments/new-lcimport-payments.component';
-import { NewDirectImportPaymentsComponent } from './new-direct-import-payments/new-direct-import-payments.component';
+import { NewAdvanceImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-advance-import-payments/new-advance-import-payments.component';
+import { NewCollectionImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-collection-import-payments/new-collection-import-payments.component';
+import { NewDirectImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-direct-import-payments/new-direct-import-payments.component';
+import { NewAdvanceOutwardRemittanceA2Component } from './Bank/FEDRAL_BANK/new-advance-outward-remittance-a2/new-advance-outward-remittance-a2.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { NewDirectImportPaymentsComponent } from './new-direct-import-payments/n
     NewAdvanceImportPaymentsComponent,
     NewCollectionImportPaymentsComponent,
     NewLCImportPaymentsComponent,
-    NewDirectImportPaymentsComponent
+    NewDirectImportPaymentsComponent,
+    NewAdvanceOutwardRemittanceA2Component
   ],
   providers:[BOEORMMactchData],
   imports: [
