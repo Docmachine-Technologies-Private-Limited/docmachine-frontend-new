@@ -20,6 +20,8 @@
                 </div>
                 <upload-components [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
                     id="IMPORT_TRANSACTION"
+                    (BankEvent)="setSelectedBankDetails($event)"
+                    (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
                        #RawValueEventPanel>
                     <button class="btn btn-primary" style="position: absolute;
                     bottom: 10px;

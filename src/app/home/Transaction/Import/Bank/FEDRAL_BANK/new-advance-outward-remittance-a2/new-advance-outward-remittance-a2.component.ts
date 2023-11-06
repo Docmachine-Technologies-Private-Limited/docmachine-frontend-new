@@ -151,11 +151,43 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: false,
           }
         },
+        ADBranch: {
+          type: "text",
+          value: "",
+          label: "Name of AD Branch",
+          rules: {
+            required: true,
+          }
+        },
+        CustomerID: {
+          type: "text",
+          value: "",
+          label: "Customer ID",
+          rules: {
+            required: true,
+          }
+        },
+        PANNo: {
+          type: "text",
+          value: "",
+          label: "PAN No.",
+          rules: {
+            required: true,
+          }
+        },
+        TotalPIAmount: {
+          type: "text",
+          value: "",
+          label: "Total PI Amount",
+          rules: {
+            required: true,
+          }
+        },
         paymentTerm: {
           type: "formGroup",
           label: "",
           GroupLabel: ['PI/PO 1'],
-          AddNewRequried: false,
+          AddNewRequried: true,
           rules: {
             required: false,
           },
@@ -163,7 +195,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             [
               {
                 type: "PIPO_LIST",
-                value: this.validator.PIPO_LIST[0],
+                value: "",
                 label: "Select",
                 name: 'PIPO_LIST',
                 rules: {
@@ -183,7 +215,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
               },
               {
                 type: "text",
-                value: this.validator.PIPO_LIST[0]?.paymentTerm[0]?.BalanceAmount,
+                value: "",
                 label: "Available Amount",
                 name: 'amount',
                 rules: {
@@ -193,7 +225,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
               },
               {
                 type: "currency",
-                value: this.validator.PIPO_LIST[0]?.currency,
+                value: "",
                 label: "Currency",
                 name: 'currency',
                 rules: {
@@ -203,74 +235,10 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
               },
               {
                 type: "TextValiadtion",
-                value: this.validator.PIPO_LIST[0]?.paymentTerm[0]?.BalanceAmount,
+                value: "",
                 label: "Remittance amount",
                 name: 'RemittanceAmount',
                 EqualName: "amount",
-                rules: {
-                  required: true,
-                },
-                errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
-              },
-            ]
-          ]
-        },
-        BOE_DETAIILS: {
-          type: "formGroup",
-          label: "",
-          GroupLabel: ['BOE 1'],
-          AddNewRequried: true,
-          rules: {
-            required: false,
-          },
-          formArray: [
-            [
-              {
-                type: "BOE",
-                value: "",
-                label: "Select",
-                name: 'BOE',
-                rules: {
-                  required: true,
-                },
-                callback: (item: any) => {
-                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                  let currentVal = item?.value;
-                  item['field']['NewformArray'][item?.OptionfieldIndex]["BOEAmount"]['value'] = currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount;
-                  myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["BOEAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
-                  myForm['touched'] = true;
-                  myForm['status'] = 'VALID';
-                  console.log(item, this.validator.FIELDS_DATA, "callback")
-                },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Available Amount",
-                name: 'AvailableAmount',
-                rules: {
-                  required: true,
-                },
-                disabled: true,
-              },
-              {
-                type: "currency",
-                value: "",
-                label: "Currency",
-                name: 'currency',
-                rules: {
-                  required: true,
-                },
-                disabled: true
-              },
-              {
-                type: "TextValiadtion",
-                value: "",
-                label: "BOE Amount",
-                name: 'BOEAmount',
-                EqualName: "AvailableAmount",
                 rules: {
                   required: true,
                 },
@@ -321,6 +289,24 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
   PIPO_LIST: any = [];
   BENEFICIARY_CALLBACK(value: any) {
     this.BENEFICIARY_DETAILS = this.validator.BENEFICIARY_DETAILS_LIST.filter((item: any) => item?._id == value?.id);
+    this.documentService.filterAnyTable({
+      benneName: value?.value,
+    }, 'pi_po').subscribe((res: any) => {
+      res?.data.forEach(element => {
+        element['ischecked'] = false;
+        element['isDisabled'] = false;
+        // element?.paymentTerm?.forEach(paymentTermelement => {
+        //   paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
+        //   if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
+        //     element['isDisabled'] = true;
+        //     element['ischecked'] = true;
+        //   }
+        // });
+      });
+      this.validator.PIPO_LIST=res?.data
+      this.PIPO_LIST = res?.data
+      console.log(value, res, this.BENEFICIARY_DETAILS, "BENEFICIARY_CALLBACK")
+    });
   }
 
   formvalue: any = [];
@@ -331,12 +317,12 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
   }
 
   async fillForm(filldata: any) {
-    console.log(filldata, "sdfsdfsdfdsfd")
+    console.log(filldata, "fillForm")
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     return new Promise(async (resolve, reject) => {
       if (this.BankId == 'F_B_L_6') {
-        formUrl = './../../assets/pdf/FedralBank/Direct_Import_Bills_new.pdf'
+        formUrl = './../../assets/pdf/FedralBank/Revised_Form_A2_BLANK.pdf'
         console.log(filldata, 'filldata')
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
         const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -351,125 +337,108 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             widget?.getOrCreateBorderStyle()?.setWidth(0);
           }
         });
-        getAllFields[16]?.setText(this.validator.COMPANY_INFO[0]?.teamName + '\n' + this.validator.COMPANY_INFO[0]?.adress);
-        getAllFields[23]?.setText(this.BENEFICIARY_DETAILS[0]?.benneName + '\n' + this.BENEFICIARY_DETAILS[0]?.beneAdrs);
-        getAllFields[24]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + this.BENEFICIARY_DETAILS[0]?.iban);
-        getAllFields[25]?.setText(this.BENEFICIARY_DETAILS[0]?.sortCode);
-        getAllFields[26]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + this.BENEFICIARY_DETAILS[0]?.beneBankAdress);
-        getAllFields[27]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-        getAllFields[28]?.setText(this.BENEFICIARY_DETAILS[0]?.interBankName);
-        getAllFields[29]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
+        getAllFields[8]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
+        getAllFields[9]?.setText(this.validator.COMPANY_INFO[0]?.BRANCH_NAME);
+        
+        if (this.BENEFICIARY_DETAILS?.length!=0) {
+          getAllFields[70]?.setText(this.BENEFICIARY_DETAILS[0]?.benneName);
+          getAllFields[71]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAdrs);
+          getAllFields[72]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAccNo+'\n'+this.BENEFICIARY_DETAILS[0]?.iban);
+          getAllFields[73]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankName+''+this.BENEFICIARY_DETAILS[0]?.beneBankAdress);
+          
+          let spliSwiftCode:any=this.BENEFICIARY_DETAILS[0]?.beneBankSwiftCode?.split('');
+          if (spliSwiftCode!=undefined) {
+            getAllFields[74]?.setText(spliSwiftCode[0]);
+            getAllFields[75]?.setText(spliSwiftCode[1]);
+            getAllFields[76]?.setText(spliSwiftCode[2]);
+            getAllFields[77]?.setText(spliSwiftCode[3]);
+            getAllFields[78]?.setText(spliSwiftCode[4]);
+            getAllFields[79]?.setText(spliSwiftCode[5]);
+            getAllFields[80]?.setText(spliSwiftCode[6]);
+            getAllFields[81]?.setText(spliSwiftCode[7]);
+            getAllFields[82]?.setText(spliSwiftCode[8]);
+            getAllFields[83]?.setText(spliSwiftCode[9]);
+            getAllFields[84]?.setText(spliSwiftCode[10]); 
+          }        
+          getAllFields[85]?.setText(this.BENEFICIARY_DETAILS[0]?.sortCode);
+          getAllFields[86]?.setText(this.BENEFICIARY_DETAILS[0]?.interBankName);
+          
+          let spliIntermediarySwiftCode:any=this.BENEFICIARY_DETAILS[0]?.interBankSwiftCode?.split('')
+          if (spliIntermediarySwiftCode!=undefined) {
+            getAllFields[87]?.setText(spliIntermediarySwiftCode[0]);
+            getAllFields[88]?.setText(spliIntermediarySwiftCode[1]);
+            getAllFields[89]?.setText(spliIntermediarySwiftCode[2]);
+            getAllFields[90]?.setText(spliIntermediarySwiftCode[3]);
+            getAllFields[91]?.setText(spliIntermediarySwiftCode[4]);
+            getAllFields[92]?.setText(spliIntermediarySwiftCode[5]);
+            getAllFields[93]?.setText(spliIntermediarySwiftCode[6]);
+            getAllFields[94]?.setText(spliIntermediarySwiftCode[7]);
+            getAllFields[95]?.setText(spliIntermediarySwiftCode[8]);
+            getAllFields[96]?.setText(spliIntermediarySwiftCode[9]);
+            getAllFields[97]?.setText(spliIntermediarySwiftCode[10]);
+          }
+        }
 
         if (filldata != undefined && filldata != null && filldata != '') {
-          getAllFields[0]?.setText('');
-          getAllFields[1]?.setText('');
-          let paymentTermSum: any = filldata?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0)
-          getAllFields[2]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + paymentTermSum?.toString());
-
-          var today: any = new Date();
-          var dd = String(today.getDate()).padStart(2, '0');
-          var mm = String(today.getMonth() + 1).padStart(2, '0');
-          var yyyy = today.getFullYear();
-          today = yyyy + "-" + mm + "-" + dd;
-          today = today?.split("-")
-          getAllFields[3]?.setText(today[2]?.split('')[0]);
-          getAllFields[4]?.setText(today[2]?.split('')[1]);
-          getAllFields[5]?.setText(today[1]?.split('')[0]);
-          getAllFields[6]?.setText(today[1]?.split('')[1]);
-          getAllFields[7]?.setText(today[0]?.split('')[2]);
-          getAllFields[8]?.setText(today[0]?.split('')[3]);
-          getAllFields[9]?.setText(paymentTermSum?.toString() != undefined ? filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(paymentTermSum?.toString()) : '-');
-
-          let BOE_DETAIILSSum: any = filldata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
-          let BOE_DETAIILS_FILTER: any = {
-            boeNumber: [],
-            boeDate: [],
-            BOEAmount: []
+          let splitDebitAccount:any=filldata?.BankDebit?.accNumber?.split('');
+          if (splitDebitAccount!=undefined) {
+            getAllFields[40]?.setText(splitDebitAccount[0]);
+            getAllFields[41]?.setText(splitDebitAccount[1]);
+            getAllFields[42]?.setText(splitDebitAccount[2]);
+            getAllFields[43]?.setText(splitDebitAccount[3]);
+            getAllFields[44]?.setText(splitDebitAccount[4]);
+            getAllFields[45]?.setText(splitDebitAccount[5]);
+            getAllFields[46]?.setText(splitDebitAccount[6]);
+            getAllFields[47]?.setText(splitDebitAccount[7]);
+            getAllFields[48]?.setText(splitDebitAccount[8]);
+            getAllFields[49]?.setText(splitDebitAccount[9]);
+            getAllFields[50]?.setText(splitDebitAccount[10]);
+            getAllFields[51]?.setText(splitDebitAccount[11]);
+            getAllFields[52]?.setText(splitDebitAccount[12]);
+            getAllFields[53]?.setText(splitDebitAccount[13]);   
           }
-          filldata?.BOE_DETAIILS?.forEach(element => {
-            BOE_DETAIILS_FILTER['boeNumber'].push(element?.BOE?.boeNumber)
-            BOE_DETAIILS_FILTER['boeDate'].push(element?.BOE?.boeDate)
-            BOE_DETAIILS_FILTER['BOEAmount'].push(element?.BOEAmount)
-          });
-          getAllFields[19]?.setText(BOE_DETAIILS_FILTER['boeNumber']?.join(','));
-          getAllFields[20]?.setText(BOE_DETAIILS_FILTER['boeDate']?.join(','));
-          getAllFields[21]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.dischargePort);
-          getAllFields[22]?.setText(BOE_DETAIILSSum?.toString());
-
-          getAllFields[30]?.setText(filldata?.BankDebit?.accNumber?.split('')[0]);
-          getAllFields[31]?.setText(filldata?.BankDebit?.accNumber?.split('')[1]);
-          getAllFields[32]?.setText(filldata?.BankDebit?.accNumber?.split('')[2]);
-          getAllFields[33]?.setText(filldata?.BankDebit?.accNumber?.split('')[3]);
-          getAllFields[34]?.setText(filldata?.BankDebit?.accNumber?.split('')[4]);
-          getAllFields[35]?.setText(filldata?.BankDebit?.accNumber?.split('')[5]);
-          getAllFields[36]?.setText(filldata?.BankDebit?.accNumber?.split('')[6]);
-          getAllFields[37]?.setText(filldata?.BankDebit?.accNumber?.split('')[7]);
-          getAllFields[38]?.setText(filldata?.BankDebit?.accNumber?.split('')[8]);
-          getAllFields[39]?.setText(filldata?.BankDebit?.accNumber?.split('')[9]);
-          getAllFields[40]?.setText(filldata?.BankDebit?.accNumber?.split('')[10]);
-          getAllFields[41]?.setText(filldata?.BankDebit?.accNumber?.split('')[11]);
-          getAllFields[42]?.setText(filldata?.BankDebit?.accNumber?.split('')[12]);
-          getAllFields[43]?.setText(filldata?.BankDebit?.accNumber?.split('')[13]);
-
-          getAllFields[44]?.setText(filldata?.BankCharges?.accNumber?.split('')[0]);
-          getAllFields[45]?.setText(filldata?.BankCharges?.accNumber?.split('')[1]);
-          getAllFields[46]?.setText(filldata?.BankCharges?.accNumber?.split('')[2]);
-          getAllFields[47]?.setText(filldata?.BankCharges?.accNumber?.split('')[3]);
-          getAllFields[48]?.setText(filldata?.BankCharges?.accNumber?.split('')[4]);
-          getAllFields[49]?.setText(filldata?.BankCharges?.accNumber?.split('')[5]);
-          getAllFields[50]?.setText(filldata?.BankCharges?.accNumber?.split('')[6]);
-          getAllFields[51]?.setText(filldata?.BankCharges?.accNumber?.split('')[7]);
-          getAllFields[52]?.setText(filldata?.BankCharges?.accNumber?.split('')[8]);
-          getAllFields[53]?.setText(filldata?.BankCharges?.accNumber?.split('')[9]);
-          getAllFields[54]?.setText(filldata?.BankCharges?.accNumber?.split('')[10]);
-          getAllFields[55]?.setText(filldata?.BankCharges?.accNumber?.split('')[11]);
-          getAllFields[56]?.setText(filldata?.BankCharges?.accNumber?.split('')[12]);
-          getAllFields[57]?.setText(filldata?.BankCharges?.accNumber?.split('')[13]);
-
-          if (this.ToForwardContract_Selected?.length != 0 && this.ToForwardContract_Selected != undefined) {
-            let booking_date: any = this.ToForwardContract_Selected[0]?.BookingDate?.split('-');
-            let due_date: any = this.ToForwardContract_Selected[0]?.ToDate?.split('-');
-            getAllFields[58]?.setText(this.ToForwardContract_Selected[0]?.ForwardRefNo);
-
-            if (booking_date != undefined) {
-              getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
-              getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
-              getAllFields[61]?.setText(booking_date[1]?.split('')[0]);
-              getAllFields[62]?.setText(booking_date[1]?.split('')[1]);
-              getAllFields[63]?.setText(booking_date[0]?.split('')[0]);
-              getAllFields[64]?.setText(booking_date[0]?.split('')[1]);
-              getAllFields[65]?.setText(booking_date[0]?.split('')[2]);
-              getAllFields[66]?.setText(booking_date[0]?.split('')[3]);
-            }
-
-            getAllFields[67]?.setText(this.ToForwardContract_Selected[0]?.BookingAmount);
-
-            if (due_date != undefined) {
-              getAllFields[68]?.setText(due_date[2]?.split('')[0]);
-              getAllFields[69]?.setText(due_date[2]?.split('')[1]);
-              getAllFields[70]?.setText(due_date[1]?.split('')[0]);
-              getAllFields[71]?.setText(due_date[1]?.split('')[1]);
-              getAllFields[72]?.setText(due_date[0]?.split('')[0]);
-              getAllFields[73]?.setText(due_date[0]?.split('')[1]);
-              getAllFields[74]?.setText(due_date[0]?.split('')[2]);
-              getAllFields[75]?.setText(due_date[0]?.split('')[3]);
-            }
-
-            getAllFields[76]?.setText(this.ToForwardContract_Selected[0]?.UtilizedAmount);
-            getAllFields[77]?.setText(this.ToForwardContract_Selected[0]?.NetRate);
+          
+          let splitcustomerid:any=filldata?.CustomerID?.split('')
+          getAllFields[15]?.setText(splitcustomerid[0]);
+          getAllFields[16]?.setText(splitcustomerid[1]);
+          getAllFields[17]?.setText(splitcustomerid[2]);
+          getAllFields[18]?.setText(splitcustomerid[3]);
+          getAllFields[19]?.setText(splitcustomerid[4]);
+          getAllFields[20]?.setText(splitcustomerid[5]);
+          getAllFields[21]?.setText(splitcustomerid[6]);
+          getAllFields[22]?.setText(splitcustomerid[7]);
+          getAllFields[23]?.setText(splitcustomerid[8]);
+          getAllFields[24]?.setText(splitcustomerid[9]);
+          
+          let splitPANNo:any=filldata?.PANNo?.split('')
+          getAllFields[25]?.setText(splitPANNo[0]);
+          getAllFields[26]?.setText(splitPANNo[1]);
+          getAllFields[27]?.setText(splitPANNo[2]);
+          getAllFields[28]?.setText(splitPANNo[3]);
+          getAllFields[29]?.setText(splitPANNo[4]);
+          getAllFields[30]?.setText(splitPANNo[5]);
+          getAllFields[31]?.setText(splitPANNo[6]);
+          getAllFields[32]?.setText(splitPANNo[7]);
+          getAllFields[33]?.setText(splitPANNo[8]);
+          getAllFields[34]?.setText(splitPANNo[9]);
+                   
+          let splitDebitChargesAccount:any=filldata?.BankCharges?.accNumber?.split('')
+          if (splitDebitChargesAccount!=undefined) {
+            getAllFields[54]?.setText(splitDebitChargesAccount[0]);
+            getAllFields[55]?.setText(splitDebitChargesAccount[1]);
+            getAllFields[56]?.setText(splitDebitChargesAccount[2]);
+            getAllFields[57]?.setText(splitDebitChargesAccount[3]);
+            getAllFields[58]?.setText(splitDebitChargesAccount[4]);
+            getAllFields[59]?.setText(splitDebitChargesAccount[5]);
+            getAllFields[60]?.setText(splitDebitChargesAccount[6]);
+            getAllFields[61]?.setText(splitDebitChargesAccount[7]);
+            getAllFields[62]?.setText(splitDebitChargesAccount[8]);
+            getAllFields[63]?.setText(splitDebitChargesAccount[9]);
+            getAllFields[64]?.setText(splitDebitChargesAccount[10]);
+            getAllFields[65]?.setText(splitDebitChargesAccount[11]);
+            getAllFields[66]?.setText(splitDebitChargesAccount[12]);
+            getAllFields[67]?.setText(splitDebitChargesAccount[13]);   
           }
-          getAllFields[80]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
-          getAllFields[81]?.setText('');
-          getAllFields[82]?.setText('');
-          getAllFields[83]?.setText('');
-          getAllFields[84]?.setText('');
-          getAllFields[85]?.setText(moment(new Date()).format('DD-MM-YYYY'));
-          getAllFields[86]?.setText('');
-          getAllFields[87]?.setText('');
-
-          getAllFields[95]?.setText(moment(new Date()).format('DD-MM-YYYY'));
-          getAllFields[96]?.setText('');
-          getAllFields[97]?.setText('');
         }
         const pdfBytes = await pdfDoc.save()
         var base64String = this._arrayBufferToBase64(pdfBytes)
