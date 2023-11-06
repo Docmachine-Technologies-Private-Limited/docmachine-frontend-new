@@ -33,6 +33,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   WithoutAuthorization: any = ['RoleVerifyEmail',"TallyAuthorization", 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
   SET_TIMEOUT_TIME: any = new Date();
 
+
+
   constructor(
     private translate: TranslateService,
     private router: Router,
