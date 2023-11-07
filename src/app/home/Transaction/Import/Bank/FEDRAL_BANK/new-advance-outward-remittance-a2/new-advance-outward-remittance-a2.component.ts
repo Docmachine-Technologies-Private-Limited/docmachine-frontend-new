@@ -193,16 +193,21 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
-                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.paymentTerm[0]?.BalanceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
+                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.amount);
                   myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
                   myForm['touched'] = true;
                   myForm['status'] = 'VALID';
-                  let TotalPIAmount = currentVal?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAmount), 0);
+                  let TotalPIAmount = currentVal?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
                   myForm?.root?.controls['TotalPIAmount'].setValue(TotalPIAmount)
                   myForm.root['value']['TotalPIAmount'] = TotalPIAmount;
                   console.log(item, TotalPIAmount, "callback")
+                  if (currentVal!='' && currentVal!=undefined && currentVal!=null) {
+                    this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['PIPODOCUMENTS'].setValue(true);
+                  }else{
+                    this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['PIPODOCUMENTS'].setValue(false);
+                  }
                 },
               },
               {
@@ -260,7 +265,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           value: "",
           text: "Select 15 CA",
           rules: {
-            required: false,
+            required: true,
           }
         },
         "15CB": {
@@ -268,7 +273,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           value: "",
           text: "Select 15 CB",
           rules: {
-            required: false,
+            required: true,
           }
         },
         "A2CUMAPPLICATION": {
@@ -276,7 +281,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           value: false,
           label: "Form A2 Cum Application",
           rules: {
-            required: false,
+            required: true,
           },
           CheckboxDisabled: true
         },
@@ -285,7 +290,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           value: false,
           label: "15 CA",
           rules: {
-            required: false,
+            required: true,
           },
           CheckboxDisabled: true
         },
@@ -294,7 +299,16 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           value: false,
           label: "15 CB",
           rules: {
-            required: false,
+            required: true,
+          },
+          CheckboxDisabled: true
+        },
+        "PIPODOCUMENTS": {
+          type: "checkbox",
+          value: false,
+          label: "Invoice/Debit Note",
+          rules: {
+            required: true,
           },
           CheckboxDisabled: true
         },
@@ -312,6 +326,15 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       panel2?.displayShow;
     }
     console.log(event)
+  }
+  
+  onTabChanges(event:any){
+    if (event?.name == "15 CA Generate Summary") {
+      this.get_by_REQUEST_TYPE_CA("CA")
+    } else if (event?.name == "15 CB Request Summary") {
+      this.get_by_REQUEST_TYPE_CA("CB")
+    }
+    console.log(event,"onTabChanges")
   }
 
   CA15Form() {
@@ -691,15 +714,6 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       res?.data.forEach(element => {
         element['ischecked'] = false;
         element['isDisabled'] = false;
-        if (element?.paymentTerm?.length != 0) {
-          element?.paymentTerm?.forEach(paymentTermelement => {
-            paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
-            if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
-              element['isDisabled'] = true;
-              element['ischecked'] = true;
-            }
-          });
-        }
       });
       this.validator.PIPO_LIST = res?.data
       this.PIPO_LIST = res?.data
@@ -733,7 +747,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     console.log(formvalue, "SubmitButton")
   }
 
-  RequestforCASubmit(value: any) {
+  RequestforCASubmit(value: any,panel:any) {
     console.log(value, 'RequestforBCQuote')
     var temp_doc: any = [];
     var pipo_id: any = [];
@@ -742,19 +756,46 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       pipo_id.push(value?.value?.BOE[index]?.pipo[0]?._id)
       pipo_name.push(value?.value?.BOE[index]?.pipo[0]?.pipo_no)
     }
-    value['documents'] = temp_doc;
-    value['pipo'] = pipo_id;
-    value['extradata'] = value?.value
+    value.value['documents'] = temp_doc;
+    value.value['pipo'] = pipo_id;
     var filterdoc = temp_doc.filter(n => n)
-    value['RequestType'] = ""
+    value.value['RequestType'] = "CA"
+    value.value['BenneName']=value.value['BenneName']?.value!=undefined?value.value['BenneName']?.value:value.value['BenneName'];
+    value.value['Commodity']=value.value['Commodity']?.value!=undefined?value.value['Commodity']?.value:value.value['Commodity'];
     this.documentService.CA_Certificate_add(value?.value).subscribe((buyer_beneficiary_creditaddres: any) => {
       console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
       this.toastr.success('buyer_beneficiary_credit added successfully....')
       this.documentService.SendMaildocuments({ subject: 'Buyer credit details added...', documentsList: filterdoc, data: value?.value }).subscribe((docres: any) => {
         this.toastr.success('Mail Sended Successfully....')
-        this.router.navigate(['/home/dashboardTask'])
+        this.get_by_REQUEST_TYPE_CA("CA");
+        panel?.resetForm;
       })
-      // this.get_by_REQUEST_TYPE_CA("");
+    })
+  }
+  
+  RequestforCBSubmit(value: any,panel:any) {
+    console.log(value, 'RequestforBCQuote')
+    var temp_doc: any = [];
+    var pipo_id: any = [];
+    var pipo_name: any = [];
+    for (let index = 0; index < value?.value?.BOE.length; index++) {
+      pipo_id.push(value?.value?.BOE[index]?.pipo[0]?._id)
+      pipo_name.push(value?.value?.BOE[index]?.pipo[0]?.pipo_no)
+    }
+    value.value['documents'] = temp_doc;
+    value.value['pipo'] = pipo_id;
+    var filterdoc = temp_doc.filter(n => n)
+    value.value['RequestType'] = "CB"
+    value.value['BenneName']=value.value['BenneName']?.value!=undefined?value.value['BenneName']?.value:value.value['BenneName'];
+    value.value['Commodity']=value.value['Commodity']?.value!=undefined?value.value['Commodity']?.value:value.value['Commodity'];
+    this.documentService.CA_Certificate_add(value?.value).subscribe((buyer_beneficiary_creditaddres: any) => {
+      console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
+      this.toastr.success('buyer_beneficiary_credit added successfully....')
+      this.documentService.SendMaildocuments({ subject: 'Buyer credit details added...', documentsList: filterdoc, data: value?.value }).subscribe((docres: any) => {
+        this.toastr.success('Mail Sended Successfully....')
+        this.get_by_REQUEST_TYPE_CA("CB");
+        panel?.resetForm;
+      })
     })
   }
 
@@ -1006,6 +1047,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           setTimeout(() => {
             resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
             this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+            this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['A2CUMAPPLICATION'].setValue(true);
           }, 200);
         }, 200);
       }
@@ -1180,10 +1222,25 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             this.SELECTED_PIPO_URL_LIST.push({ name: 'pipo-' + (index + 1), pdf: paymentTermelement?.PIPO_LIST?.doc })
             this.alldocuments.push(paymentTermelement?.PIPO_LIST?.doc);
           });
-          this.ExportBillLodgement_Form?.BOE_DETAIILS?.forEach((paymentTermelement, index) => {
-            this.SELECTED_PIPO_URL_LIST.push({ name: 'BOE-' + (index + 1), pdf: paymentTermelement?.BOE?.doc })
-            this.alldocuments.push(paymentTermelement?.BOE?.doc);
+
+          this.ExportBillLodgement_Form["15CA"]?.forEach((paymentTermelement, index) => {
+            paymentTermelement?.documents?.forEach(caelement => {
+              if (caelement != '' && caelement != undefined && caelement != null) {
+                this.SELECTED_PIPO_URL_LIST.push({ name: 'CA-' + (index + 1), pdf: caelement })
+                this.alldocuments.push(caelement);
+              }
+            });
           });
+          
+          this.ExportBillLodgement_Form["15CB"]?.forEach((paymentTermelement, index) => {
+            paymentTermelement?.documents?.forEach(caelement => {
+              if (caelement != '' && caelement != undefined && caelement != null) {
+                this.SELECTED_PIPO_URL_LIST.push({ name: 'CB-' + (index + 1), pdf: caelement })
+                this.alldocuments.push(caelement);
+              }
+            });
+          });
+
           var fitertemp: any = this.alldocuments.filter(n => n);
           this.SELECTED_PREVIEWS_URL = '';
           await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
@@ -1208,14 +1265,9 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
 
-      for (let index = 0; index < this.ExportBillLodgement_Form?.BOE_DETAIILS?.length; index++) {
-        const element = this.ExportBillLodgement_Form?.BOE_DETAIILS[index];
-        boe_id.push(element?.BOE?._id)
-      }
-
       var approval_data: any = {
         id: UniqueId + '_' + this.randomId(10),
-        tableName: 'Direct-Bills',
+        tableName: 'Outward-Remittance-A2',
         deleteflag: '-1',
         userdetails: this.validator.userData,
         status: 'pending',
@@ -1236,11 +1288,10 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
                 ALL_DATA_HSCODE_FORWARD: this.ALL_DATA_HSCODE_FORWARD
               },
-              TypeTransaction: 'Direct-Bills',
+              TypeTransaction: 'Outward-Remittance-A2',
               fileType: this.validator.userData?.sideMenu,
               UserDetails: approval_data?.id,
               pipo: pipo_id,
-              BOERef: boe_id
             }
             this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
               let updatedData = {
@@ -1251,19 +1302,9 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
               this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
                 console.log('king123');
                 console.log(data, this.ExportBillLodgement_Form?.paymentTerm);
-                for (let index = 0; index < this.ExportBillLodgement_Form?.BOE_DETAIILS?.length; index++) {
-                  const element: any = this.ExportBillLodgement_Form?.BOE_DETAIILS[index];
-                  const sum = parseFloat(element?.BOE?.balanceAmount != "-1" ? element?.BOE?.balanceAmount : element?.BOE?.invoiceAmount) - parseFloat(element?.BOEAmount);
-                  this.documentService.updateBoe({ balanceAmount: sum }, element?.BOE?._id).subscribe((data) => { })
-                }
                 for (let index = 0; index < this.ExportBillLodgement_Form?.paymentTerm?.length; index++) {
                   const element: any = this.ExportBillLodgement_Form?.paymentTerm[index];
                   const sum = parseFloat(element?.PIPO_LIST?.paymentTerm[0].BalanceAmount) - parseFloat(element?.RemittanceAmount);
-                  element.PIPO_LIST.paymentTerm[0].BalanceAmount = sum;
-                  this.documentService.AnyUpdateTable({
-                    _id: element?.PIPO_LIST?._id,
-                    "paymentTerm.type.value": "Direct Imports(Payment Against Bill of entry)"
-                  }, { "paymentTerm.$.BalanceAmount": sum }, 'pi_po').subscribe((res: any) => { })
                   this.userService.updatePipo({ balanceAmount: sum }, element?.PIPO_LIST?._id).subscribe((data) => {
                     console.log('king123');
                     console.log(data);
@@ -1281,7 +1322,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
-                        this.toastr.success("Direct Import Payment transaction created successfully...")
+                        this.toastr.success("Outward-Remittance-A2 transaction created successfully...")
                       });
                     }
                   }, (error) => {

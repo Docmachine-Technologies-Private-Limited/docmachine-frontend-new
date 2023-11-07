@@ -266,8 +266,12 @@ export class BOEComponent implements OnInit {
               this.toastr.success('Boe added successfully.');
               var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
               if (Transaction_id != '') {
-                this.documentService.UpdateTransaction({ id: Transaction_id, data: { BOE: newform } }).subscribe((res: any) => {
-                  this.router.navigate(['home/Summary/Import/boe']);
+                this.documentService.AnyUpdateTable(Transaction_id, { BOERef: [data?._id] }, "ExportTransaction").subscribe((res: any) => {
+                  this.documentService.UpdateTransaction({
+                    id: Transaction_id, data: { BOE: newform }
+                  }).subscribe((res: any) => {
+                    this.router.navigate(['home/Summary/Import/boe']);
+                  });
                 });
               } else {
                 this.router.navigate(['home/Summary/Import/boe']);
