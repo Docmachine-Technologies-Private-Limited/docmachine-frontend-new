@@ -72,10 +72,10 @@ export class CreditNoteComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].publicUrl;
       this.validator.buildForm({
-        creditNoteAmount: {
+        creditNoteNumber: {
           type: "text",
           value: "",
-          label: "Credit Note Number*",
+          label: "Credit Note Number",
           rules: {
             required: true,
           }
@@ -88,7 +88,7 @@ export class CreditNoteComponent implements OnInit {
             required: true,
           }
         },
-        creditNoteNumber: {
+        creditNoteAmount: {
           type: "text",
           value: "",
           label: "Credit Note Amount",

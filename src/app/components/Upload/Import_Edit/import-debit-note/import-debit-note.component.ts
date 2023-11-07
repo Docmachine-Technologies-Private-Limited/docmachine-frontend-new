@@ -61,7 +61,7 @@ export class EditImportDebitNotesComponent implements OnInit {
         debitNoteNumber: {
           type: "text",
           value: args?.debitNoteNumber,
-          label: "Debit Note Number*",
+          label: "Debit Note Number",
           rules: {
             required: true,
           }
