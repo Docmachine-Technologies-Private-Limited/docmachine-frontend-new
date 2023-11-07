@@ -336,3 +336,7 @@
     text-align: end;
     padding-right: 10px;
 }
+
+.Invoice ::ng-deep custom-mat-stepper upload-components .form-container-fluid {
+    overflow: unset !important;
+}

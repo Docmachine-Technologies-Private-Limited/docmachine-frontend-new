@@ -107,11 +107,13 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       this.PREVIWES_URL = ''
       this.VISIBLITY_PDF = false;
       this.validator.PIPO_LIST = [];
-      this.response();
+      this.NewAdvanceOutwardRemittanceA2ComponentForm();
+      this.CA15Form();
+      this.CB15Form();
     });
   }
 
-  response() {
+  NewAdvanceOutwardRemittanceA2ComponentForm() {
     this.publicUrl = '';
     setTimeout(() => {
       this.validator.buildForm({
@@ -143,14 +145,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: true,
           }
         },
-        forwardCall: {
-          type: "button",
-          value: "",
-          text: "Select FWC",
-          rules: {
-            required: false,
-          }
-        },
+
         ADBranch: {
           type: "text",
           value: "",
@@ -165,7 +160,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           label: "Customer ID",
           rules: {
             required: true,
-          }
+          },
+          maxLength: 10
         },
         PANNo: {
           type: "text",
@@ -173,15 +169,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           label: "PAN No.",
           rules: {
             required: true,
-          }
-        },
-        TotalPIAmount: {
-          type: "text",
-          value: "",
-          label: "Total PI Amount",
-          rules: {
-            required: true,
-          }
+          },
+          maxLength: 10
         },
         paymentTerm: {
           type: "formGroup",
@@ -210,7 +199,10 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                   myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
                   myForm['touched'] = true;
                   myForm['status'] = 'VALID';
-                  console.log(item, "callback")
+                  let TotalPIAmount = currentVal?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAmount), 0);
+                  myForm?.root?.controls['TotalPIAmount'].setValue(TotalPIAmount)
+                  myForm.root['value']['TotalPIAmount'] = TotalPIAmount;
+                  console.log(item, TotalPIAmount, "callback")
                 },
               },
               {
@@ -247,7 +239,408 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             ]
           ]
         },
+        TotalPIAmount: {
+          type: "text",
+          value: "",
+          label: "Total PI Amount",
+          rules: {
+            required: true,
+          }
+        },
+        PURPOSE_CODE: {
+          type: "PURPOSE_CODE",
+          value: "",
+          label: "Select Purpose Code",
+          rules: {
+            required: true,
+          }
+        },
+        "15CA": {
+          type: "button",
+          value: "",
+          text: "Select 15 CA",
+          rules: {
+            required: false,
+          }
+        },
+        "15CB": {
+          type: "button",
+          value: "",
+          text: "Select 15 CB",
+          rules: {
+            required: false,
+          }
+        },
+        "A2CUMAPPLICATION": {
+          type: "checkbox",
+          value: false,
+          text: "Form A2 Cum Application",
+          rules: {
+            required: false,
+          }
+        },
+        "15CADOCUMENTS": {
+          type: "checkbox",
+          value: false,
+          text: "15 CA",
+          rules: {
+            required: false,
+          }
+        },
+        "15CBDOCUMENTS": {
+          type: "checkbox",
+          value: false,
+          text: "15 CB",
+          rules: {
+            required: false,
+          }
+        },
       }, 'IMPORT_TRANSACTION');
+      console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
+    }, 200);
+  }
+
+  AddButton(event, panel1, panel2) {
+    if (event?.text == "Select 15 CA") {
+      panel1?.displayShow;
+      this.get_by_REQUEST_TYPE_CA("CA")
+    } else if (event?.text == "Select 15 CB") {
+      this.get_by_REQUEST_TYPE_CA("CB")
+      panel2?.displayShow;
+    }
+    console.log(event)
+  }
+
+  CA15Form() {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.validator.buildForm({
+        BenneName: {
+          type: "benne",
+          value: "",
+          label: "Select Beneficiary",
+          rules: {
+            required: true,
+          }
+        },
+        BOE: {
+          type: "BOE",
+          value: "",
+          label: "Select BOE",
+          rules: {
+            required: true,
+          },
+          callback: (item: any) => {
+            item?.dynamicFormGroup?.controls['Currency']?.setValue(item?.value?.currency)
+            item?.dynamicFormGroup?.controls['LCNoBOENo']?.setValue(item?.value?.boeNumber)
+            item?.dynamicFormGroup?.controls['LCBOEAmount']?.setValue(item?.value?.invoiceAmount)
+
+            item.dynamicFormGroup.value['Currency'] = (item?.value?.currency)
+            item.dynamicFormGroup.value['LCNoBOENo'] = (item?.value?.boeNumber)
+            item.dynamicFormGroup.value['LCBOEAmount'] = (item?.value?.invoiceAmount)
+            console.log(item, "BOE_Value")
+          }
+        },
+        ApplicantName: {
+          type: "text",
+          value: "",
+          label: "Applicant Name",
+          rules: {
+            required: true,
+          }
+        },
+        LCIssuingBank: {
+          type: "text",
+          value: "",
+          label: "LC Issuing Bank",
+          rules: {
+            required: true,
+          },
+        },
+        SupplierName: {
+          type: "text",
+          value: "",
+          label: "Supplier Name",
+          rules: {
+            required: true,
+          },
+        },
+        SupplierBankNameSWIFTCode: {
+          type: "text",
+          value: "",
+          label: "Supplier Bank Name & SWIFT Code",
+          rules: {
+            required: true,
+          }
+        },
+        Currency: {
+          type: "currency",
+          value: "",
+          label: "Currency",
+          rules: {
+            required: true,
+          },
+        },
+        LCNoBOENo: {
+          type: "text",
+          value: "",
+          label: "LC No/BOE No.",
+          rules: {
+            required: true,
+          },
+        },
+        LCBOEAmount: {
+          type: "text",
+          value: "",
+          label: "LC/BOE Amount",
+          rules: {
+            required: true,
+          }
+        },
+        Tenor: {
+          type: "text",
+          value: "",
+          label: "Tenor",
+          rules: {
+            required: true,
+          },
+        },
+        Commodity: {
+          type: "commodity",
+          value: "",
+          label: "Commodity",
+          rules: {
+            required: true,
+          },
+        },
+        LatestdateofShipment: {
+          type: "date",
+          value: "",
+          label: "Latest date of Shipment",
+          rules: {
+            required: true,
+          },
+        },
+        OriginOfGoods: {
+          type: "text",
+          value: "",
+          label: "Origin Of Goods",
+          rules: {
+            required: true,
+          }
+        },
+        PortofLoading: {
+          type: "text",
+          value: "",
+          label: "Port of Loading",
+          rules: {
+            required: true,
+          },
+        },
+        PortofDischarge: {
+          type: "text",
+          value: "",
+          label: "Port of Discharge",
+          rules: {
+            required: true,
+          },
+        },
+        NumberofShipment: {
+          type: "text",
+          value: "",
+          label: "Number of Shipment",
+          rules: {
+            required: true,
+          },
+        },
+        ConfirmationChargesborneby: {
+          type: "ArrayList",
+          value: "",
+          item: [{ value: "Beneficiary" }, { value: "Applicant" }],
+          bindLabel: "value",
+          label: "Confirmation Charges borne by",
+          rules: {
+            required: true,
+          },
+        },
+        DiscountingChargesborneby: {
+          type: "ArrayList",
+          value: "",
+          item: [{ value: "Beneficiary" }, { value: "Applicant" }],
+          bindLabel: "value",
+          label: "Discounting Charges borne by",
+          rules: {
+            required: true,
+          },
+        },
+      }, 'From_Client_Generate_15_CA');
+      console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
+    }, 200);
+  }
+
+  CB15Form() {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.validator.buildForm({
+        BenneName: {
+          type: "benne",
+          value: "",
+          label: "Select Beneficiary",
+          rules: {
+            required: true,
+          }
+        },
+        BOE: {
+          type: "BOE",
+          value: "",
+          label: "Select BOE",
+          rules: {
+            required: true,
+          },
+          callback: (item: any) => {
+            item?.dynamicFormGroup?.controls['Currency']?.setValue(item?.value?.currency)
+            item?.dynamicFormGroup?.controls['LCNoBOENo']?.setValue(item?.value?.boeNumber)
+            item?.dynamicFormGroup?.controls['LCBOEAmount']?.setValue(item?.value?.invoiceAmount)
+
+            item.dynamicFormGroup.value['Currency'] = (item?.value?.currency)
+            item.dynamicFormGroup.value['LCNoBOENo'] = (item?.value?.boeNumber)
+            item.dynamicFormGroup.value['LCBOEAmount'] = (item?.value?.invoiceAmount)
+            console.log(item, "BOE_Value")
+          }
+        },
+        ApplicantName: {
+          type: "text",
+          value: "",
+          label: "Applicant Name",
+          rules: {
+            required: true,
+          }
+        },
+        LCIssuingBank: {
+          type: "text",
+          value: "",
+          label: "LC Issuing Bank",
+          rules: {
+            required: true,
+          },
+        },
+        SupplierName: {
+          type: "text",
+          value: "",
+          label: "Supplier Name",
+          rules: {
+            required: true,
+          },
+        },
+        SupplierBankNameSWIFTCode: {
+          type: "text",
+          value: "",
+          label: "Supplier Bank Name & SWIFT Code",
+          rules: {
+            required: true,
+          }
+        },
+        Currency: {
+          type: "currency",
+          value: "",
+          label: "Currency",
+          rules: {
+            required: true,
+          },
+        },
+        LCNoBOENo: {
+          type: "text",
+          value: "",
+          label: "LC No/BOE No.",
+          rules: {
+            required: true,
+          },
+        },
+        LCBOEAmount: {
+          type: "text",
+          value: "",
+          label: "LC/BOE Amount",
+          rules: {
+            required: true,
+          }
+        },
+        Tenor: {
+          type: "text",
+          value: "",
+          label: "Tenor",
+          rules: {
+            required: true,
+          },
+        },
+        Commodity: {
+          type: "commodity",
+          value: "",
+          label: "Commodity",
+          rules: {
+            required: true,
+          },
+        },
+        LatestdateofShipment: {
+          type: "date",
+          value: "",
+          label: "Latest date of Shipment",
+          rules: {
+            required: true,
+          },
+        },
+        OriginOfGoods: {
+          type: "text",
+          value: "",
+          label: "Origin Of Goods",
+          rules: {
+            required: true,
+          }
+        },
+        PortofLoading: {
+          type: "text",
+          value: "",
+          label: "Port of Loading",
+          rules: {
+            required: true,
+          },
+        },
+        PortofDischarge: {
+          type: "text",
+          value: "",
+          label: "Port of Discharge",
+          rules: {
+            required: true,
+          },
+        },
+        NumberofShipment: {
+          type: "text",
+          value: "",
+          label: "Number of Shipment",
+          rules: {
+            required: true,
+          },
+        },
+        ConfirmationChargesborneby: {
+          type: "ArrayList",
+          value: "",
+          item: [{ value: "Beneficiary" }, { value: "Applicant" }],
+          bindLabel: "value",
+          label: "Confirmation Charges borne by",
+          rules: {
+            required: true,
+          },
+        },
+        DiscountingChargesborneby: {
+          type: "ArrayList",
+          value: "",
+          item: [{ value: "Beneficiary" }, { value: "Applicant" }],
+          bindLabel: "value",
+          label: "Discounting Charges borne by",
+          rules: {
+            required: true,
+          },
+        },
+      }, 'From_Client_Generate_15_CB');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
   }
@@ -311,11 +704,138 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     });
   }
 
+  BENEFICIARY_CALLBACK_CA_15(value: any) {
+    this.documentService.filterAnyTable({
+      benneName: value?.value,
+    }, 'boerecords').subscribe((res: any) => {
+      this.validator.BOE_LIST = res?.data;
+      console.log(value, res, "BENEFICIARY_CALLBACK_CA_15")
+    });
+  }
+
+
+  BENEFICIARY_CALLBACK_CB_15(value: any) {
+    this.documentService.filterAnyTable({
+      benneName: value?.value,
+    }, 'boerecords').subscribe((res: any) => {
+      this.validator.BOE_LIST = res?.data;
+      console.log(value, res, "BENEFICIARY_CALLBACK_CA_15")
+    });
+  }
+
   formvalue: any = [];
   SubmitButton(formvalue: any) {
     this.FormValue(formvalue);
     this.formvalue = formvalue?.value
     console.log(formvalue, "SubmitButton")
+  }
+
+  RequestforCASubmit(value: any) {
+    console.log(value, 'RequestforBCQuote')
+    var temp_doc: any = [];
+    var pipo_id: any = [];
+    var pipo_name: any = [];
+    for (let index = 0; index < value?.value?.BOE.length; index++) {
+      pipo_id.push(value?.value?.BOE[index]?.pipo[0]?._id)
+      pipo_name.push(value?.value?.BOE[index]?.pipo[0]?.pipo_no)
+    }
+    value['documents'] = temp_doc;
+    value['pipo'] = pipo_id;
+    value['extradata'] = value?.value
+    var filterdoc = temp_doc.filter(n => n)
+    value['RequestType'] = ""
+    this.documentService.CA_Certificate_add(value?.value).subscribe((buyer_beneficiary_creditaddres: any) => {
+      console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
+      this.toastr.success('buyer_beneficiary_credit added successfully....')
+      this.documentService.SendMaildocuments({ subject: 'Buyer credit details added...', documentsList: filterdoc, data: value?.value }).subscribe((docres: any) => {
+        this.toastr.success('Mail Sended Successfully....')
+        this.router.navigate(['/home/dashboardTask'])
+      })
+      // this.get_by_REQUEST_TYPE_CA("");
+    })
+  }
+
+  CA_CERTIFICATE_DATA: any = []
+  get_by_REQUEST_TYPE_CA(type: any) {
+    this.documentService.CA_Certificate_RequestType_get(type).subscribe((res: any) => {
+      this.CA_CERTIFICATE_DATA = res?.data;
+      console.log(res, this.CA_CERTIFICATE_DATA, 'get_CA_CB')
+    })
+  }
+
+  CA_SELECTION_DATA: any = [];
+  CA_SELECTION_INDEX: any = [];
+  CA_DUMP_SLEECTION: any = [];
+  EXTRA_DOCUMENTS: any = {
+    CA_DOCUMENTS: [],
+    CB_DOCUMENTS: [],
+    INVOICE_DOCUMENTS: [],
+    DEBIT_NOTES_DOCUMENTS: [],
+    PURPOSE_CODE_DATA: []
+  };
+  CA_SELECTION(event: any, index: any) {
+    console.log(event, 'CA_SELECTION')
+    if (event?.target?.checked) {
+      this.CA_DUMP_SLEECTION[index] = this.CA_CERTIFICATE_DATA[index];
+      this.CA_SELECTION_INDEX[index] = true;
+    } else {
+      this.CA_DUMP_SLEECTION[index] = '';
+      this.CA_SELECTION_INDEX[index] = false;
+    }
+
+  }
+
+  CB_SELECTION_DATA: any = [];
+  CB_SELECTION_INDEX: any = [];
+  CB_DUMP_SLEECTION: any = [];
+
+  CB_SELECTION(event: any, index: any) {
+    console.log(event, 'CB_SELECTION')
+    if (event?.target?.checked) {
+      this.CB_DUMP_SLEECTION[index] = this.CA_CERTIFICATE_DATA[index];
+      this.CB_SELECTION_INDEX[index] = true;
+    } else {
+      this.CB_DUMP_SLEECTION[index] = ''
+      this.CB_SELECTION_INDEX[index] = false;
+    }
+  }
+
+  addCA() {
+    this.CA_SELECTION_DATA = [];
+    this.EXTRA_DOCUMENTS['CA_DOCUMENTS'] = [];
+    this.CA_DUMP_SLEECTION.forEach(element => {
+      this.CA_SELECTION_DATA.push(element)
+      this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].push(element?.document);
+    });
+    if (this.CA_SELECTION_DATA.length != 0) {
+      this.validator.dynamicFormGroup.controls['15CA'].setValue(this.CA_SELECTION_DATA);
+    } else {
+      this.validator.dynamicFormGroup.controls['15CA'].setValue('');
+    }
+    if (this.CA_SELECTION_DATA.length != 0) {
+      this.validator.dynamicFormGroup.controls['15CADOCUMENTS'].setValue(true);
+    } else {
+      this.validator.dynamicFormGroup.controls['15CADOCUMENTS'].setValue(false);
+    }
+  }
+
+  addCB() {
+    this.CB_SELECTION_DATA = [];
+    this.EXTRA_DOCUMENTS['CB_DOCUMENTS'] = [];
+    this.CB_DUMP_SLEECTION.forEach(element => {
+      this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].push(element?.document);
+      this.CB_SELECTION_DATA.push(element)
+    });
+    if (this.CA_SELECTION_DATA.length != 0) {
+      this.validator.dynamicFormGroup.controls['15CB'].setValue(this.CA_SELECTION_DATA);
+    } else {
+      this.validator.dynamicFormGroup.controls['15CB'].setValue('');
+    }
+    if (this.CB_SELECTION_DATA.length != 0) {
+      this.validator.dynamicFormGroup.controls['15CBDOCUMENTS'].setValue(true);
+    } else {
+      this.validator.dynamicFormGroup.controls['15CBDOCUMENTS'].setValue(false);
+    }
   }
 
   async fillForm(filldata: any) {
@@ -340,7 +860,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           }
         });
         getAllFields[8]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
-        getAllFields[9]?.setText(this.validator.COMPANY_INFO[0]?.BRANCH_NAME);
+        getAllFields[14]?.setText(this.validator.COMPANY_INFO[0]?.teamName + '\n' + this.validator.COMPANY_INFO[0]?.adress);
 
         if (this.BENEFICIARY_DETAILS?.length != 0) {
           getAllFields[70]?.setText(this.BENEFICIARY_DETAILS[0]?.benneName);
@@ -382,6 +902,19 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
         }
 
         if (filldata != undefined && filldata != null && filldata != '') {
+          getAllFields[9]?.setText(filldata?.ADBranch);
+          let remitancedata: any = {
+            Currency: filldata?.paymentTerm[0]?.PIPO_LIST?.currency,
+            CurrencyAmount: [],
+            ExchangeRate: [],
+            INREquivalentAmount: []
+          }
+          filldata?.paymentTerm?.forEach(element => {
+            remitancedata?.CurrencyAmount.push(element?.RemittanceAmount);
+          });
+          getAllFields[10]?.setText(remitancedata?.Currency);
+          getAllFields[11]?.setText(remitancedata?.CurrencyAmount?.join(','))
+
           let splitDebitAccount: any = filldata?.BankDebit?.accNumber?.split('');
           if (splitDebitAccount != undefined) {
             getAllFields[40]?.setText(splitDebitAccount[0]);
@@ -441,6 +974,14 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             getAllFields[66]?.setText(splitDebitChargesAccount[12]);
             getAllFields[67]?.setText(splitDebitChargesAccount[13]);
           }
+
+          let purppose: any = { Code: [], Description: [] }
+          this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION?.forEach(element => {
+            purppose?.Code?.push(element?.PurposeCode)
+            purppose?.Description?.push(element?.Description?.join(','))
+          });
+          getAllFields[106]?.setText(purppose?.Code?.join(','));
+          getAllFields[107]?.setText(purppose?.Description?.join(','));
         }
         const pdfBytes = await pdfDoc.save()
         var base64String = this._arrayBufferToBase64(pdfBytes)

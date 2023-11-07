@@ -4,6 +4,7 @@ import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
 import { AuthGuard } from '../../../service/authguard.service';
+import A2_JOSN from '../../../../assets/JSON/A2.json';
 
 @Injectable({
   providedIn: 'root'
@@ -60,12 +61,43 @@ export class UploadServiceValidatorService implements OnInit {
   CHECK_BOX_REMITTER_LIST: any = [];
   REMITTER_LIST: any = []
   PIPO_LIST: any = [];
-  PAYMENTS_TEMRS:any=[];
-
+  PAYMENTS_TEMRS: any = [];
+  PURPOSE_CODE_FILTER_DATA: any = [];
+  PURPOSE_CODE_LIST_DATA: any = [];
+  A2_JSON_DATA: any = []
+  sumTotalAmount: any = 0;
+  SELECTED_PURPOSE_CODE_DATA: any = [];
+  SELECTED_PURPOSE_CODE_INDEX: any = [];
+  SELECTED_PURPOSE_CODE_DUMP_SLEECTION: any = [];
+  
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public authGuard: AuthGuard,
     public userService: UserService) {
+    this.A2_JSON_DATA = A2_JOSN;
+    this.A2_JSON_DATA.forEach(element => {
+      for (const key in element) {
+        if (key != 'SL_No' && key != 'isActive' && key != 'isExpand' && key != '') {
+          element[key] = this.text_array(element[key])
+        }
+      }
+    });
+    this.PURPOSE_CODE_LIST_DATA = [];
+    var temp_purcode: any = [];
+    this.A2_JSON_DATA.forEach(element => {
+      if (!temp_purcode.includes(element?.RBI_Purpose_Code[0])) {
+        temp_purcode.push(element?.RBI_Purpose_Code[0])
+      }
+      for (const key in element) {
+        element['isExpand'] = false;
+        element['isActive'] = false;
+      }
+    });
+    temp_purcode.forEach(element => {
+      this.PURPOSE_CODE_LIST_DATA.push({ value: element })
+    });
+    this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
+    console.log(this.A2_JSON_DATA, this.PURPOSE_CODE_FILTER_DATA, this.PURPOSE_CODE_LIST_DATA, 'A2_JOSN')
   }
 
   ngOnInit(): void {
@@ -181,6 +213,19 @@ export class UploadServiceValidatorService implements OnInit {
     })
   }
 
+  filterData(data: any) {
+    this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA.filter((item: any) => item?.RBI_Purpose_Code.includes(data));
+    console.log(data, this.PURPOSE_CODE_FILTER_DATA, 'asdhasdkasdsads')
+    if (this.PURPOSE_CODE_FILTER_DATA.length == 0 || data == '') {
+      this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
+    }
+  }
+
+  text_array(text: any) {
+    let split_text: any = text?.indexOf("\n") != -1 ? text?.split('\n') : [text];
+    return split_text;
+  }
+
   async getCompanyInfo() {
     await this.userService.getTeam().subscribe(async (data: any) => {
       this.COMPANY_INFO = data?.data;
@@ -232,7 +277,7 @@ export class UploadServiceValidatorService implements OnInit {
     await this.userService.getUserDetail().then((res: any) => {
       this.userData = res?.result;
       console.log(this.userData, 'asdasdasdasdasdasdasdasdasdasdasd')
-      this.PAYMENTS_TEMRS=[]
+      this.PAYMENTS_TEMRS = []
     });
   }
 
@@ -345,7 +390,7 @@ export class UploadServiceValidatorService implements OnInit {
             if (optionelement?.type == "BankAdd") {
               var tempFormGroup1: any = [];
               optionelement?.ChildformArray?.forEach(async (ChildformArrayelement, k) => {
-                ORDER_KEYS2[k]=[];
+                ORDER_KEYS2[k] = [];
                 ChildformArrayelement?.forEach(ChildformArrayOptionElement => {
                   ORDER_KEYS2[k].push(ChildformArrayOptionElement?.name?.toString());
                   optiontemp1[ChildformArrayOptionElement?.name?.toString()] = ({ ...ChildformArrayOptionElement, fieldName: ChildformArrayOptionElement?.name });
@@ -354,10 +399,10 @@ export class UploadServiceValidatorService implements OnInit {
                       ChildformArrayOptionElement?.maxLength, ChildformArrayOptionElement?.rules, formid, ChildformArrayOptionElement)[ChildformArrayOptionElement?.typeOf != undefined ? ChildformArrayOptionElement?.typeOf : ChildformArrayOptionElement?.type])
                 });
                 await temp1.push(optiontemp1);
-                await tempFormGroup1.push(new FormGroup(OptiontempFormGroup1,null));
+                await tempFormGroup1.push(new FormGroup(OptiontempFormGroup1, null));
               });
             }
-            if (optionelement?.ChildformArrayBool==true) {
+            if (optionelement?.ChildformArrayBool == true) {
               ORDER_KEYS[index].push(optionelement?.name?.toString());
               optionelement['NewformArray'] = temp1;
               optionelement['ExtraValue'] = '';
@@ -415,9 +460,23 @@ export class UploadServiceValidatorService implements OnInit {
       callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
     }
   }
-  
-  setValueFromChildArray(id: any, form: any, ParentfieldName: any,FormArrayfieldName:any, OptionfieldIndex: any,
-  ChildOptionfieldName:any,ChildOptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined, field: any = undefined) {
+
+  setValueFrom(id: any, form: any, fieldName: any, value: any, callback: any = undefined, field: any = undefined) {
+    const myForm: any = form?.controls[fieldName] as FormGroup;
+    let currentVal = value;
+    myForm?.setValue(currentVal);
+    myForm['touched'] = true;
+    myForm['status'] = 'VALID';
+    this.dynamicFormGroup[id].get(fieldName).clearValidators();
+    this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
+    console.log(myForm, value, "myForm")
+    if (callback != undefined && callback != null) {
+      callback({ id: id, form: form, fieldName: fieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
+    }
+  }
+
+  setValueFromChildArray(id: any, form: any, ParentfieldName: any, FormArrayfieldName: any, OptionfieldIndex: any,
+    ChildOptionfieldName: any, ChildOptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined, field: any = undefined) {
     const myForm: any = form?.controls[ParentfieldName] as FormGroup;
     let currentVal = value;
     myForm.value[OptionfieldIndex][FormOptionfieldName][ChildOptionfieldIndex][ChildOptionfieldName] = currentVal;
@@ -486,6 +545,7 @@ export class UploadServiceValidatorService implements OnInit {
         hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
 
       buyer: rule?.required == true ? [Validators.required] : [],
+      PURPOSE_CODE: rule?.required == true ? [Validators.required] : [],
       CheckboxMultiple: rule?.required == true ? [Validators.required] : [],
       SelectOption: rule?.required == true ? [Validators.required] : [],
       BankAdd: rule?.required == true ? [Validators.required] : [],

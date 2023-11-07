@@ -662,3 +662,120 @@
     border-radius: 0.25rem;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+
+
+
+// 
+.table-custom {
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+}
+
+.thead-card {
+    display: grid;
+    grid-template-columns: 200px calc(100% - 200px);
+    align-items: center;
+}
+
+.tbody-card {
+    display: grid;
+    grid-template-columns: 200px auto;
+    align-items: center;
+    background-color: rgb(33, 96, 155);
+    margin-bottom: 20px;
+    border-radius: 5px;
+    color: black;
+}
+
+.tbody-card .p-border {
+    height: 99%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.colspan {
+    display: grid;
+    grid-template-columns: 150px auto;
+}
+
+.colspan p {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    text-align: left !important;
+    padding: 10px;
+    width: 100%;
+}
+
+.groupname-text {
+    background-color: rgb(62, 52, 201);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: white;
+}
+
+.colspanitem {
+    background-color: rgb(117, 8, 206);
+    width: 100%;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.text-left {
+    text-align: left !important;
+    padding: 10px;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-overflow: clip;
+    white-space: pre-wrap;
+    font-size: 12px;
+}
+
+.card-layout {
+    background-color: #fff;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    height: 100%;
+    min-height: 50px;
+    max-height: 100%;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 97%;
+    cursor: pointer;
+}
+
+.label-text {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.p-text {
+    font-size: 12px;
+}
+
+.isActive {
+    background-color: coral;
+    color: white;
+}
+
+.btn-control-panel {
+    position: fixed;
+    bottom: 22px;
+    right: 100px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-control-panel-2 {
+    right: 165px;
+}

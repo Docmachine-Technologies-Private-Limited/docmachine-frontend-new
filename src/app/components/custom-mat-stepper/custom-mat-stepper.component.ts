@@ -12,6 +12,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   @Input('LAST_BUTTON_NAME') LAST_BUTTON_NAME: any ="";
   @ContentChildren(CustomMatStepComponent) MatStepComponent: QueryList<CustomMatStepComponent>;
   @ViewChild('MatStepperHeaderPanel') MatStepperHeaderPanel: ElementRef;
+  @ViewChild('AdditionButtonPanel') AdditionButtonPanel: ElementRef;
   @Output('event') event: any = new EventEmitter();
   @Output('TabEvent') TabEvent: any = new EventEmitter();
   @Output('lastbuttonEvent') lastbuttonEvent: any = new EventEmitter();
@@ -25,7 +26,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   ERROR_MESSAGE_SHOW: boolean = false;
 
   ngAfterContentInit() {
-    console.log(this.MatStepperHeaderPanel, "MatStepperHeaderPanel")
+    console.log(this.MatStepperHeaderPanel,this.MatStepComponent, this.AdditionButtonPanel,"MatStepperHeaderPanel")
     if (this.MatStepComponent?.length != 0) {
       this.MatStepComponent?.get(this.BUTTON_COUNTER)?.setActivePanel(true);
       this.MatStepComponent?.forEach((element: any, index) => {

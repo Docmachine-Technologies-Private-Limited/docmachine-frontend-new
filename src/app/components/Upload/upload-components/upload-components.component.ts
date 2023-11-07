@@ -292,7 +292,40 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.HSCODE_FEILD_FORM['id'] = id;
     this.HSCODE_FEILD_FORM['field'] = field;
   }
-
+  
+  PUPOSE_CODE_FEILD_FORM: any = {
+    id: '',
+    field: ''
+  }
+  
+  
+  SELECT_PURPOSE_CODE(event: any, index: any) {
+    console.log(event, 'SELECT_PURPOSE_CODE')
+    this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = {PurposeCode:event[0],Description:this.validator.PURPOSE_CODE_FILTER_DATA[index]?.Value_greater_25000_equv[0]};
+    this.validator.SELECTED_PURPOSE_CODE_INDEX[index] = true;
+    this.validator.PURPOSE_CODE_FILTER_DATA?.forEach((element, i) => {
+      if (index == i) {
+        element['isActive'] = true;
+      }
+    });
+  }
+  
+  PURPOSE_ValueAdd(id: any, field: any) {
+    this.PUPOSE_CODE_FEILD_FORM['id'] = id;
+    this.PUPOSE_CODE_FEILD_FORM['field'] = field;
+  }
+  
+  ALL_DATA_PURPOSE_CODE: any = '';
+  PURPOSEDoneButton() {
+    let temp2: any = [];
+    this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION.forEach(element => {
+      temp2.push(element?.PurposeCode);
+    });
+    console.log(temp2,"PURPOSEDoneButton")
+    this.ALL_DATA_PURPOSE_CODE = temp2.join(',');
+    this.setValue(this.ALL_DATA_PURPOSE_CODE, this.PUPOSE_CODE_FEILD_FORM?.field);
+  }
+  
   IMAGE_UPLOAD_LIST: any = [];
   onUploadChanges(event: any, autofill: any) {
     if (event.target.files.length > 0) {
