@@ -211,7 +211,7 @@ export class PendingPanelComponent implements OnInit {
 
   RejectedData(index: any, download: any) {
     return {
-      'Import-Direct-Payment': () => {
+      'Direct-Bills': () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => {
           var rejecteddata: any = this.DATA_CREATE[index]['RejectData']
           await rejecteddata?.data?.BOETerm?.forEach((element: any) => {
@@ -239,7 +239,7 @@ export class PendingPanelComponent implements OnInit {
           await this.ngOnInit();
         });
       },
-      'Advance-Remittance-flow': () => {
+      'Advance-Outward-Remittance': () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => {
           var rejecteddata: any = this.DATA_CREATE[index]['RejectData']
           await rejecteddata?.data?.pipoTerm?.forEach((element: any) => {
@@ -267,7 +267,7 @@ export class PendingPanelComponent implements OnInit {
           await this.ngOnInit();
         });
       },
-      "Inward-Remitance-Dispoal-Realization": () => {
+      "Export-Bill-Realisation": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
       "Inward-Remitance-Dispoal": () => {
@@ -276,7 +276,19 @@ export class PendingPanelComponent implements OnInit {
       "Packing-Credit-Request": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
-      "Export-Direct-Dispatch": () => {
+      "Export-Bill-Regularisation": () => {
+        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => {
+          var rejecteddata: any = this.DATA_CREATE[index]['RejectData']
+          this.documentService.getDataAnyTable(rejecteddata?.tableName, rejecteddata?.data?.SbRef).subscribe((res) => {
+            const sum = parseFloat(res[0]?.balanceAvai) + parseFloat(rejecteddata?.data?.Total_FIRX_Amount);
+            this.documentService.UpdateAnyTable(rejecteddata?.tableName, rejecteddata?.data?.SbRef, { balanceAvai: sum, firxdetails: [] }).subscribe((data) => {
+              this.toastr.success('Successfully Rejected data...')
+            })
+          })
+          await this.ngOnInit();
+        });
+      },
+      "Export-Bill-Lodgement": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => {
           var rejecteddata: any = this.DATA_CREATE[index]['RejectData']
           this.documentService.getDataAnyTable(rejecteddata?.tableName, rejecteddata?.data?.SbRef).subscribe((res) => {

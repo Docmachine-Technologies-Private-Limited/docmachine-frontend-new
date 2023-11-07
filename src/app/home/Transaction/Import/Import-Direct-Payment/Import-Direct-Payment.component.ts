@@ -1,12 +1,10 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../../../service/user.service";
 import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { ActivatedRoute } from '@angular/router';
-import $, { data, event } from 'jquery'
-declare var Flickity: any;
-declare var kendo: any;
+import $ from 'jquery'
+
 
 import {
   DropzoneDirective,

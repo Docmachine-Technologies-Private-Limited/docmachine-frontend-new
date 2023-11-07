@@ -5,7 +5,7 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -31,18 +31,29 @@ export class ImportBilllodgementreferencenumberadvicecopyComponent implements On
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-
+  UPLOAD_STATUS:boolean=false;
+  
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
+    public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+    var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
+    var Transaction_pipoid: any = this.route.snapshot.paramMap.get('pipo');
+    console.log(Transaction_pipoid, Transaction_id)
+    var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
+    if (temp_pipo?.length != 0) {
+      this.btndisabled = false;
+      await this.documentService.getPipoListNo('import', temp_pipo);
+      this.UPLOAD_STATUS=this.route.snapshot.paramMap.get('upload')=='true'?true:false  
+    }
+    console.log(temp_pipo, this.UPLOAD_STATUS,"temp_pipo")
   }
   response(args: any) {
     this.publicUrl = '';
@@ -95,7 +106,22 @@ export class ImportBilllodgementreferencenumberadvicecopyComponent implements On
               (data) => {
                 console.log('Blcopyref Document document', this.pipourl1);
                 console.log(data);
-                this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
+                var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
+                if (Transaction_id != '' && Transaction_id != undefined && Transaction_id != null) {
+                  this.documentService.AnyUpdateTable({
+                    _id: Transaction_id
+                  }, {
+                    "LodgementAdviceCopy": [
+                      res.data._id,
+                    ]
+                  }, 'ExportTransaction').subscribe((res: any) => { })
+                  this.documentService.UpdateTransaction({ id: Transaction_id, data: { blCopyRef: e.value } }).subscribe((res: any) => {
+                     this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
+                  });
+                } else {
+                   this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
+                }
+               
               },
               (error) => {
                 console.log('error');

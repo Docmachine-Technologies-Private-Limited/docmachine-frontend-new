@@ -1,0 +1,169 @@
+<div class="col-12 pt-2 Invoice">
+    <label for="" class="col-12 Invoice-label">Outward Remittance (A2)</label>
+    <custom-mat-stepper>
+        <custom-mat-step MATSTEP_LABEL="Outward Remittance (A2) Transaction"
+            errorMessage="Please select Inward Remittance" [NextTrue]="true">
+            <div class="upload-panel-2">
+                <div class="left-panel">
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
+                        [src]="PREVIWES_URL"></app-pdf-viewer>
+                    <div id="federal-bank-letter-head">
+                        <federal-bank-import-letter-head *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                            [data]="[this.ExportBillLodgement_Form,this.BENEFICIARY_DETAILS[0]]"
+                            (url)="urlletterhead($event)"></federal-bank-import-letter-head>
+                    </div>
+                    <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
+                        <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                            [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
+                    </div>
+                </div>
+                <upload-components [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
+                    id="IMPORT_TRANSACTION" (BankEvent)="setSelectedBankDetails($event)"
+                    (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)" (AddButton)="AddButton($event,CA_DATA_PANEL,CB_DATA_PANEL)"
+                    (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)" #RawValueEventPanel>
+                    <button class="btn btn-primary" style="position: absolute;
+                    bottom: 10px;
+                    right: 100px;
+                    height: 50px;">Previews</button>
+                </upload-components>
+            </div>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Generate 15 CA" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+            <upload-components FormStyle="
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            box-shadow: unset;
+            background-color: #f0f0f0;
+            " (SubmitEvent)="this.RequestforCASubmit(RawValueEventPanel?.geForm)"
+                (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK_CA_15($event)" id="From_Client_Generate_15_CA"
+                #RawValueEventPanel>
+            </upload-components>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Request for 15 CB" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+            <upload-components FormStyle="
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            box-shadow: unset;
+            background-color: #f0f0f0;
+            " (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK_CB_15($event)" id="From_Client_Generate_15_CB"
+                #RawValueEventPanel>
+            </upload-components>
+            <custom_mat_step_button>
+                <button type="button">Submit</button>
+            </custom_mat_step_button>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="15 CA Generate Summary" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="15 CB Request Summary" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+
+        </custom-mat-step>
+    </custom-mat-stepper>
+</div>
+
+<app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="CA_DATA"
+    name="CA SELECTION" #CA_DATA_PANEL>
+    <custom-model-header>
+        <button type="button" class="btn btn-primary"
+        (click)="addCA();CA_DATA_PANEL?.displayHidden">Done</button>
+    </custom-model-header>
+    <div class="p-2" style="position: relative;">
+        <div class="row p-2 modal-bg">
+            <div class="d-flex" style="height: 83vh;">
+                <div class="row mt-0 p-2">
+                    <table class="table AcceptReject">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Supplier Name</th>
+                                <th scope="col" class="col-td-th-2">LC No/BOE No</th>
+                                <th scope="col" class="col-td-th-2">LC/BOE Amount</th>
+                                <th scope="col" class="col-td-th-2">Currency</th>
+                                <th scope="col" class="col-td-th-2">Tenor</th>
+                                <th scope="col" class="col-td-th-2">Lending Bank Name and Swift code
+                                </th>
+                                <th scope="col" class="col-td-th-2">Term SOFR</th>
+                                <th scope="col" class="col-td-th-2">ROI (Spread)</th>
+                                <th scope="col" class="col-td-th-2">Arrangement Fee</th>
+                                <th scope="col" class="col-td-th-2">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr"
+                                *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                                <td scope="col" class="col-td-th-1">
+                                    <input type="checkbox" (click)="CA_SELECTION($event,i)" />
+                                </td>
+                                <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCNoBOENo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.Currency}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.Tenor}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LendingBankNameandSwiftcode}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.TermSOFR}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.ROISpread}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.ArrangementFee}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>
+
+<app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="CB_DATA"
+    name="CB SELECTION" #CB_DATA_PANEL>
+    <custom-model-header>
+        <button type="button" class="btn btn-primary"
+        (click)="addCB();CB_DATA_PANEL?.displayHidden">Done</button>
+    </custom-model-header>
+    <div class="p-2" style="position: relative;">
+        <div class="row p-2 modal-bg">
+            <div class="d-flex" style="height: 83vh;">
+                <div class="row mt-0 p-2">
+                    <table class="table AcceptReject">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Supplier Name</th>
+                                <th scope="col" class="col-td-th-2">LC No/BOE No</th>
+                                <th scope="col" class="col-td-th-2">LC/BOE Amount</th>
+                                <th scope="col" class="col-td-th-2">Currency</th>
+                                <th scope="col" class="col-td-th-2">Tenor</th>
+                                <th scope="col" class="col-td-th-2">Lending Bank Name and Swift code
+                                </th>
+                                <th scope="col" class="col-td-th-2">Term SOFR</th>
+                                <th scope="col" class="col-td-th-2">ROI (Spread)</th>
+                                <th scope="col" class="col-td-th-2">Arrangement Fee</th>
+                                <th scope="col" class="col-td-th-2">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr"
+                                *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                                <td scope="col" class="col-td-th-1">
+                                    <input type="checkbox" (click)="CB_SELECTION($event,i)" />
+                                </td>
+                                <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCNoBOENo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.Currency}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.Tenor}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LendingBankNameandSwiftcode}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.TermSOFR}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.ROISpread}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.ArrangementFee}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>
