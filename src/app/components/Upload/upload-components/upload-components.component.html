@@ -259,7 +259,7 @@
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'checkbox'">
                     <div class="col-12 p-0 ml-3">
-                        <mat-checkbox [(ngModel)]="field.value" [type]="field.type" [name]="field.fieldName"
+                        <mat-checkbox [(ngModel)]="field.value" [disabled]="field?.CheckboxDisabled" [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{field.label}}
                             <span style="color: red;" *ngIf="field?.rules?.required==true">*</span></mat-checkbox>
                     </div>

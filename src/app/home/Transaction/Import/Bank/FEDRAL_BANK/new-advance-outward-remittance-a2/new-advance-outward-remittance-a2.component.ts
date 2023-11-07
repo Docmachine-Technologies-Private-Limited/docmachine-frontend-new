@@ -274,26 +274,29 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
         "A2CUMAPPLICATION": {
           type: "checkbox",
           value: false,
-          text: "Form A2 Cum Application",
+          label: "Form A2 Cum Application",
           rules: {
             required: false,
-          }
+          },
+          CheckboxDisabled: true
         },
         "15CADOCUMENTS": {
           type: "checkbox",
           value: false,
-          text: "15 CA",
+          label: "15 CA",
           rules: {
             required: false,
-          }
+          },
+          CheckboxDisabled: true
         },
         "15CBDOCUMENTS": {
           type: "checkbox",
           value: false,
-          text: "15 CB",
+          label: "15 CB",
           rules: {
             required: false,
-          }
+          },
+          CheckboxDisabled: true
         },
       }, 'IMPORT_TRANSACTION');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
@@ -808,14 +811,14 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].push(element?.document);
     });
     if (this.CA_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup.controls['15CA'].setValue(this.CA_SELECTION_DATA);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CA'].setValue(this.CA_SELECTION_DATA);
     } else {
-      this.validator.dynamicFormGroup.controls['15CA'].setValue('');
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CA'].setValue('');
     }
     if (this.CA_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup.controls['15CADOCUMENTS'].setValue(true);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CADOCUMENTS'].setValue(true);
     } else {
-      this.validator.dynamicFormGroup.controls['15CADOCUMENTS'].setValue(false);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CADOCUMENTS'].setValue(false);
     }
   }
 
@@ -827,14 +830,14 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       this.CB_SELECTION_DATA.push(element)
     });
     if (this.CA_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup.controls['15CB'].setValue(this.CA_SELECTION_DATA);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CB'].setValue(this.CA_SELECTION_DATA);
     } else {
-      this.validator.dynamicFormGroup.controls['15CB'].setValue('');
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CB'].setValue('');
     }
     if (this.CB_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup.controls['15CBDOCUMENTS'].setValue(true);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CBDOCUMENTS'].setValue(true);
     } else {
-      this.validator.dynamicFormGroup.controls['15CBDOCUMENTS'].setValue(false);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CBDOCUMENTS'].setValue(false);
     }
   }
 

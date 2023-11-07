@@ -62,7 +62,7 @@ export class EditDebitNotesComponent implements OnInit {
         commercialNumber: {
           type: "CommericalNo",
           value: args?.commercialNumber,
-          label: "Commerical Number*",
+          label: "Commerical Number",
           rules: {
             required: true,
           }
@@ -70,7 +70,7 @@ export class EditDebitNotesComponent implements OnInit {
         debitNoteNumber: {
           type: "text",
           value: args?.debitNoteNumber,
-          label: "Debit Note Number*",
+          label: "Debit Note Number",
           rules: {
             required: true,
           }

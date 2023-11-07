@@ -58,7 +58,7 @@ export class ImportDebitNotesComponent implements OnInit {
         commercialNumber: {
           type: "CommericalNo",
           value: "",
-          label: "Commerical Number*",
+          label: "Commerical Number",
           rules: {
             required: true,
           }
@@ -66,7 +66,7 @@ export class ImportDebitNotesComponent implements OnInit {
         debitNoteNumber: {
           type: "text",
           value: "",
-          label: "Debit Note Number*",
+          label: "Debit Note Number",
           rules: {
             required: true,
           }

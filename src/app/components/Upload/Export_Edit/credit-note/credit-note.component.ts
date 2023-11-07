@@ -57,10 +57,10 @@ export class EditCreditNoteComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
-        creditNoteAmount: {
+        creditNoteNumber: {
           type: "text",
-          value: args?.creditNoteAmount,
-          label: "Credit Note Number*",
+          value: args?.creditNoteNumber,
+          label: "Credit Note Number",
           rules: {
             required: true,
           }
@@ -73,14 +73,14 @@ export class EditCreditNoteComponent implements OnInit {
             required: true,
           }
         },
-        creditNoteNumber: {
+        creditNoteAmount: {
           type: "text",
-          value: args?.creditNoteNumber,
+          value: args?.creditNoteAmount,
           label: "Credit Note Amount",
           rules: {
             required: true,
           }
-        }
+        },
       }, 'CreditNoteExport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
