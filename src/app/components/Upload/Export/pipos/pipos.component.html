@@ -1,10 +1,10 @@
-<upload-components-header title="Upload/Export/PI PO details" id="Shippingbill"
+<upload-components-header title="Upload/Export/PI / PO / Order Copy" id="Shippingbill"
     (UploadHeaderEvent)="clickPipo($event)" [PIPO_DISABLED]="false">
     <div class="upload-panel" *ngIf="publicUrl!=''">
         <app-pdf-viewer class="pt-3" [downloadShow]="false"  [src]="publicUrl" width="100%"
-            Newheight="700px"></app-pdf-viewer>
+            Newheight="calc(100vh - 130px)"></app-pdf-viewer>
         <upload-components id="PIPO_EXPORT" [AddNewRequried]="true" (SubmitEvent)="onSubmit($event)"></upload-components>
     </div>
 </upload-components-header>
-<upload-popup id="Shippingbill" url="member/uploadImage" (event)="response($event)"></upload-popup>
+<upload-popup UploadFilesNames="Upload Invoice" id="Shippingbill" url="member/uploadImage" (event)="response($event)"></upload-popup>
 

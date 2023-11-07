@@ -102,22 +102,6 @@ export class ImportPackingListInvoicesComponent implements OnInit {
             required: true,
           }
         },
-        currency: {
-          type: "currency",
-          value: "",
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        packingListAmount: {
-          type: "text",
-          value: "",
-          label: "Packing List Amount",
-          rules: {
-            required: true,
-          }
-        }
       }, 'Importpackinglist');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -205,11 +189,13 @@ export class ImportPackingListInvoicesComponent implements OnInit {
       }
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
-      this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.documentService.getBoebyPipo(this.BUYER_LIST[0]).subscribe((res: any) => {
-        this.validator.BOE_LIST = res?.data;
-        console.log(res, 'getBoebyPipo')
+      this.pipoDataService.getShippingNo(event?._id, 'import');
+      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
+        this.PIPO_DATA = res?.data[0];
+        this.validator.BOE_LIST = res?.data[0]?.boeRef;
+        console.log(res, "getPipoById")
       })
+
     } else {
       this.btndisabled = true;
     }

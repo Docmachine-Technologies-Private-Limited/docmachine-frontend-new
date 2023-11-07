@@ -1,21 +1,5 @@
-<!-- <div>
-    <div class="banner">
-        <button type="button" class="drawer-toggle drawer-hamburger">
-            <span class="sr-only">toggle navigation</span>
-            <span class="drawer-hamburger-icon"></span>
-        </button>
-        <nav class="drawer-nav" role="navigation">
-            <ul class="drawer-menu">
-                <li><a class="drawer-brand" href="#">Brand</a></li>
-                <li><a class="drawer-menu-item" href="#">Nav1</a></li>
-                <li><a class="drawer-menu-item" href="#">Nav2</a></li>
-            </ul>
-        </nav>
-    </div>
-</div> -->
 <div class="content-wrap pb-2 scroll-bar-main">
     <main id="content" class="content table-padding" role="main">
-
         <div class="header-panel">
             <div style="display: flex; align-items: center;width: 190px;">
                 <h3 class="heading">EDPMS Recon</h3>
@@ -37,32 +21,20 @@
                         <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}</option>
                     </select>
                 </div>
-
                 <div style="padding-top: 0.7%">
-                    <!-- <button style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
-                      background-color: #49A2D7;
-                      border: none;
-                      border-radius: 5px;">Export To Excel</button> -->
-                    <!-- (click)="exportToExcel()" -->
                     <button class="upload-button" (click)="openNew()">
-                        <!-- (click)="newDebit()" -->
                         Upload New
                     </button>
                 </div>
             </div>
-
         </div>
-
         <div class="analytics">
             <div style="width: 100%" class="analytics-side" #debitnotes>
-                <!-- *ngIf="!showInvoice" -->
                 <div style="width: 100%" class="row">
                     <div style="width: 100%; height:523px" class="col-12 mb-lg padding" id="container">
-                        <!-- *ngIf="!showInvoice" -->
                         <section style="width: 120%; margin-left: 10px" class="widget pb-0 box-shadow">
                             <div class="widget-body p-0 support table-wrapper">
                                 <table style="width: 100%" class="table table-striped mb-0">
-                                    <!-- *ngIf='pipo' -->
                                     <thead style="width: 100%">
                                         <tr class="table-tr">
                                             <th scope="col" class="col-td-th-3">Shipping Bill No.</th>

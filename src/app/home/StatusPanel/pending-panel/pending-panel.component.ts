@@ -25,7 +25,7 @@ export class PendingPanelComponent implements OnInit {
     public mergerpdf: MergePdfService,
     public pdfmerge: MergePdfListService,
     private toastr: ToastrService,
-    public documentService: DocumentService, public dialog: MatDialog, private sanitizer: DomSanitizer, public userserivce: UserService,) { }
+    public documentService: DocumentService, public dialog: MatDialog, public userserivce: UserService) { }
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270, '.content_top_common')
     this.userserivce.getUserDetail().then((status: any) => {
@@ -58,6 +58,7 @@ export class PendingPanelComponent implements OnInit {
       }
       this.documentService.setDownloadStatus(download).subscribe((res: any) => {
         console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
+        this.toastr.success('Successfully Updated data...')
         this.ngOnInit();
       });
     } else if (this.DATA_CREATE[index]['Types'] == 'BuyerAddition') {
@@ -153,7 +154,9 @@ export class PendingPanelComponent implements OnInit {
       });
     }
   }
-  async openView(item: any, index: any, panel: any) {
+  SELECTED_INDEX:any='';
+  Q_TYPE:any=''
+  async openView(item: any, index: any, panel: any, roletype: any) {
     console.log(item, 'sdfgsfhsdgfdfsd')
     var temp: any = [];
     if (item != undefined && item != '') {
@@ -162,7 +165,26 @@ export class PendingPanelComponent implements OnInit {
           try {
             var temp: any = item?.documents.filter(n => n)
             await this.pdfmerge._multiple_merge_pdf(temp).then(async (merge: any) => {
-              this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+              this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, roletype, (value: any) => {
+                console.log(value, "IframeConfirmDialogModel")
+                if (value?.Name == "Verify") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Verify',
+                    deleteflag: '1'
+                  }, index)
+                } else if (value?.Name == "Approve") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Approved',
+                    deleteflag: '2'
+                  }, index)
+                }
+              });
             });
           } catch (error) {
             console.log(error, 'errror')
@@ -173,16 +195,22 @@ export class PendingPanelComponent implements OnInit {
       } else if (item?.Types === 'BuyerAddition') {
         try {
           this.BENE_DATA = ''
-          this.BUYER_DATA = item?.data;
+          this.BUYER_DATA = item;
+          this.SELECTED_INDEX=index;
+          this.Q_TYPE=this.DATA_CREATE[index]?.status == 'Approved' ? 'Approved' : 'Verify'
           panel.displayShow;
+          console.log(item,"BuyerAddition")
         } catch (error) {
           console.log(error, 'errror')
         }
       } else if (item?.Types === 'BeneficiaryAddition') {
         try {
           this.BUYER_DATA = '';
-          this.BENE_DATA = item?.data
+          this.BENE_DATA = item
+          this.SELECTED_INDEX=index;
+          this.Q_TYPE=this.DATA_CREATE[index]?.status == 'Approved' ? 'Approved' : 'Verify'
           panel.displayShow;
+          console.log(item,"BeneficiaryAddition")
         } catch (error) {
           console.log(error, 'errror')
         }
@@ -190,7 +218,26 @@ export class PendingPanelComponent implements OnInit {
       else {
         try {
           await this.pdfmerge._multiple_merge_pdf([item['dummydata']['doc'] != '' ? item['dummydata']['doc'] : item['dummydata']['doc1']]).then(async (merge: any) => {
-            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, roletype, (value) => {
+              console.log(value, "IframeConfirmDialogModel")
+                if (value?.Name == "Verify") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Verify',
+                    deleteflag: '1'
+                  }, index)
+                } else if (value?.Name == "Approve") {
+                  this.Approved({
+                    id: item['_id'],
+                    Tableid: item['id'],
+                    tableName: item['tableName'],
+                    status: 'Approved',
+                    deleteflag: '2'
+                  }, index)
+                }
+            });
           });
         } catch (error) {
           console.log(error, 'errror')
@@ -270,7 +317,7 @@ export class PendingPanelComponent implements OnInit {
       "Export-Bill-Realisation": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
-      "Inward-Remitance-Dispoal": () => {
+      "Inward-Remittance-Disposal": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
       "Packing-Credit-Request": () => {

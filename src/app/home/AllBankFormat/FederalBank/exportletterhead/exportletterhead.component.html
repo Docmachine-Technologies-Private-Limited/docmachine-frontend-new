@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <div class="col-12" style="padding: 30px;overflow: auto;" id="federal-bank-letter-head-2">
-    <img [src]="this.LETTER_HEAD_IMAGE" alt="LETTER_HEAD_IMAGE" class="letter-head">
+    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+    *ngIf="this.PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Bank Pdf"
+    [src]="this.PREVIWES_URL"></app-pdf-viewer>
+    <!-- <img [src]="this.LETTER_HEAD_IMAGE" alt="LETTER_HEAD_IMAGE" class="letter-head">
     <div class="hdf-bank" style="
     background-size: 100% 100%;
     width: 610px;
@@ -25,7 +28,7 @@
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><strong><u>Sub: RE- Submission Export
                     documents against remittance received ; </u></strong></p>
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><strong><u>Ref: Cash Credit account
-                    no: {{this.data[2][0]?.accNumber}}</u></strong></p>
+                    no: {{this.data[2]?.accNumber}}</u></strong></p>
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><strong>&nbsp;</strong></p>
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;text-align:justify;'>Inviting reference
             to
@@ -223,5 +226,5 @@
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><strong>&nbsp;</strong></p>
         <p style='margin:0cm;font-size:16px;font-family:"Times New Roman",serif;'><strong>Authorized Signatory</strong>
         </p>
-    </div>
+    </div> -->
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DocumentService } from "../../../../service/document.service";
 import * as xlsx from 'xlsx';
-import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
+import { ActivatedRoute, NavigationExtras, NavigationStart, Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -80,10 +80,10 @@ export class ImportBOEComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
       "col-td-th-2",
-      "col-td-th-1"
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2"
     ],
     eventId: 2
   }
@@ -287,24 +287,30 @@ export class ImportBOEComponent implements OnInit {
 
   SELECTED_SHIPPING_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_SHIPPING_VALUE = '';
-    this.SELECTED_SHIPPING_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.SHIPPING_BILL_EDIT_FORM_DATA = {
-      boeDate: this.SELECTED_SHIPPING_VALUE['boeDate'],
-      commercialNumber: this.SELECTED_SHIPPING_VALUE['commercialNumber'],
-      boeNumber: this.SELECTED_SHIPPING_VALUE['boeNumber'],
-      benneName: this.SELECTED_SHIPPING_VALUE['benneName'],
-      currency: this.SELECTED_SHIPPING_VALUE['currency'],
-      invoiceAmount: this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
-      balanceAmount: this.SELECTED_SHIPPING_VALUE['balanceAmount'] != '-1' ? this.SELECTED_SHIPPING_VALUE['balanceAmount'] : this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
-      adCode: this.SELECTED_SHIPPING_VALUE['adCode'],
-      adBillNo: this.SELECTED_SHIPPING_VALUE['adBillNo'],
-      iecCode: this.SELECTED_SHIPPING_VALUE['iecCode'],
-      iecName: this.SELECTED_SHIPPING_VALUE['iecName'],
-      origin: this.SELECTED_SHIPPING_VALUE['origin'],
-      dischargePort: this.SELECTED_SHIPPING_VALUE['dischargePort']
-    }
+    // this.SELECTED_SHIPPING_VALUE = '';
+    // this.SELECTED_SHIPPING_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.SHIPPING_BILL_EDIT_FORM_DATA = {
+    //   boeDate: this.SELECTED_SHIPPING_VALUE['boeDate'],
+    //   commercialNumber: this.SELECTED_SHIPPING_VALUE['commercialNumber'],
+    //   boeNumber: this.SELECTED_SHIPPING_VALUE['boeNumber'],
+    //   benneName: this.SELECTED_SHIPPING_VALUE['benneName'],
+    //   currency: this.SELECTED_SHIPPING_VALUE['currency'],
+    //   invoiceAmount: this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
+    //   balanceAmount: this.SELECTED_SHIPPING_VALUE['balanceAmount'] != '-1' ? this.SELECTED_SHIPPING_VALUE['balanceAmount'] : this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
+    //   adCode: this.SELECTED_SHIPPING_VALUE['adCode'],
+    //   adBillNo: this.SELECTED_SHIPPING_VALUE['adBillNo'],
+    //   iecCode: this.SELECTED_SHIPPING_VALUE['iecCode'],
+    //   iecName: this.SELECTED_SHIPPING_VALUE['iecName'],
+    //   origin: this.SELECTED_SHIPPING_VALUE['origin'],
+    //   dischargePort: this.SELECTED_SHIPPING_VALUE['dischargePort']
+    // }
     // this.optionsVisibility[index] = true;
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/Boe`],navigationExtras);
     this.toastr.warning('Bill Of Entry Row Is In Edit Mode');
   }
 

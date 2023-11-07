@@ -1,4 +1,4 @@
-import { Component, Directive, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { Component,EventEmitter, forwardRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 import $ from 'jquery'
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } from '@angular/forms';
 
@@ -36,10 +36,9 @@ export class NgCustomInputComponent implements OnInit, ControlValueAccessor,Vali
   @ViewChild('nginputcustom') input;
   @Input('label') label;
   
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
+  constructor() { }
   ngOnInit(): void {
     this.id = this.randomNameGenerator();
-    console.log(this.ngInput,'ngInput')
     if (this.value != '') {
       this.ngInput = this.value;
       this.modelChanges.emit(this.ngInput);
@@ -63,7 +62,6 @@ export class NgCustomInputComponent implements OnInit, ControlValueAccessor,Vali
     }
   }
   onChange: (_: any) => void = (_: any) => {
-    console.log(_,this.value,'sdsjfgdjfhdgfjdfgdjfgsdjfdsgf')
     if (this.value != '') {
       this.ngInput = this.value;
       this.modelChanges.emit(this.ngInput);

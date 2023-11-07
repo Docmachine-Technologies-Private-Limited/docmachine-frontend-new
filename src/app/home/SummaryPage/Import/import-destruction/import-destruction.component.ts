@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-
+import moment from 'moment';
 
 @Component({
   selector: 'import-destruction-summary',
@@ -55,9 +55,8 @@ export class ImportDestructionComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
+      "col-td-th-2",
+      "col-td-th-2"
     ],
     eventId: ''
   }
@@ -118,7 +117,7 @@ export class ImportDestructionComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          destructionDate: element['destructionDate'],
+          destructionDate: moment(element['destructionDate']).format('DD-MM-YYYY') ,
           destructionNumber: element['destructionNumber'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
@@ -227,13 +226,19 @@ export class ImportDestructionComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      destructionDate: this.SELECTED_VALUE['destructionDate'],
-      destructionNumber: this.SELECTED_VALUE['destructionNumber'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   destructionDate: this.SELECTED_VALUE['destructionDate'],
+    //   destructionNumber: this.SELECTED_VALUE['destructionNumber'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/DestructionCertificates`],navigationExtras);
     this.toastr.warning('Destruction Certificate Row Is In Edit Mode');
   }
 

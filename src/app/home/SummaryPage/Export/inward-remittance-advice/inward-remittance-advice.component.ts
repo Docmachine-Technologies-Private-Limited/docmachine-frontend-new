@@ -8,7 +8,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { DocumentService } from '../../../../service/document.service';
 import { UserService } from '../../../../service/user.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from '../../../shared-Data-Servies/shared-data.service';
 import * as xlsx from 'xlsx';
 import * as data1 from '../../../../currency.json';
@@ -18,6 +18,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
+import moment from "moment";
 
 @Component({
   selector: 'export-inward-remittance-advice-summary',
@@ -54,12 +55,12 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
-    Party_Name: [],
+    Buyer_Name: [],
     SB_Number: [],
     From: [],
     Branch: [],
     Description: [],
-    FIRX_Number_ID: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -68,9 +69,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "SB Number",
-      "Party Name",
       "Buyer Name",
-      "Bank Name",
       "Currency",
       "TT Amount",
       "FIRX Number",
@@ -100,9 +99,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-1"
+      "col-td-th-2"
     ],
     eventId: ''
   }
@@ -117,7 +114,8 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     billNo: "",
     BalanceAvail: "",
   }
-
+  FILTER_FORM: any = ''
+  
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
@@ -146,43 +144,63 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     this.documentService.getIrAdvice(1).subscribe((res: any) => {
       console.log(res), (this.item = res.data);
       console.log('king', this.item);
-      for (let value of this.item) {
-        if (value['file'] == 'export') {
-          this.item1.push(value);
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          if (this.ALL_FILTER_DATA['Party_Name'].includes(value?.partyName) == false) {
-            this.ALL_FILTER_DATA['Party_Name'].push(value?.partyName);
-          }
-          if (this.ALL_FILTER_DATA['SB_Number'].includes(value?.sbNo) == false) {
-            this.ALL_FILTER_DATA['SB_Number'].push(value?.sbNo);
-          }
-          if (this.ALL_FILTER_DATA['From'].includes(value?.origin) == false) {
-            this.ALL_FILTER_DATA['From'].push(value?.origin);
-          }
-          if (this.ALL_FILTER_DATA['Branch'].includes(value?.location) == false) {
-            this.ALL_FILTER_DATA['Branch'].push(value?.location);
-          }
-          if (this.ALL_FILTER_DATA['Description'].includes(value?.commodity) == false) {
-            this.ALL_FILTER_DATA['Description'].push(value?.commodity);
-          }
-          if (this.ALL_FILTER_DATA['FIRX_Number_ID'].includes(value?.billNo) == false) {
-            this.ALL_FILTER_DATA['FIRX_Number_ID'].push(value?.billNo);
-          }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.date);
+      this.item1 = res?.data;
+        for (let value of res.data) {
+          if (value['file'] == 'export') {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
+            }
+            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+            }
+            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.billNo)?.length == 0) {
+              this.ALL_FILTER_DATA['NO'].push({ value: value?.billNo });
+            }
+            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+              this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+            }
           }
         }
-      }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Buyer",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select FIRX Number",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
       this.item1.forEach((element, i) => {
-        let amount = element.amount
         let commision = parseFloat(element.commision)
         let exchangeRate = parseFloat(element.exchangeRate)
         let pipoamount: any = parseFloat(element?.pipo[0]?.amount)
         this.item1[i].recUSD = (pipoamount - commision).toFixed(2);
         let cv = (parseFloat(this.item1[i].recUSD) * exchangeRate).toFixed(2);
         this.item1[i].convertedAmount = cv != "NaN" ? cv : null;
+        element['BalanceAvail'] = element['BalanceAvail'] == 0 ? (element['BalanceAvail']).toString() : element['BalanceAvail']
       });
       this.FILTER_VALUE_LIST = this.item1;
       this.ForexAdviceTable(this.item1);
@@ -201,25 +219,38 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       this.commodity = this.commodity.filter((value, index) => this.commodity.indexOf(value) === index);
     }, (error) => {
       console.log('error');
-    }
-    );
-
-    this.documentService.getMaster(1).subscribe((res: any) => {
-      console.log('Master Data File', res);
-      this.item5 = res.data;
-      this.item5.forEach((element, i) => {
-        this.origin[i] = element.countryOfFinaldestination;
-      });
-      this.origin = this.origin.filter((value, index) => this.origin.indexOf(value) === index);
-      console.log('Master Country', this.origin);
-    }, (err) => console.log(err)
-    );
-
-    this.documentService.getPipo().subscribe((res: any) => {
-      console.log('Data fetched successfully', res), (this.item3 = res.data);
-    }, (err) => console.log(err)
-    );
+    });
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      date: value?.value?.date,
+      billNo: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'iradvices').subscribe((resp: any) => {
+      console.log(resp, value, "iradvices")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.ForexAdviceTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.ForexAdviceTable(this.FILTER_VALUE_LIST)
+  }
+
 
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
@@ -234,24 +265,22 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
-          boeno: element['boeno'],
-          partyName: element['partyName'],
+          date:  moment(element['date']).format("DD-MM-YYYY"),
+          boeno: element['sbno'],
           buyerName: element['buyerName'],
-          BankName: element['BankName']?.value,
           currency: element['currency'],
           amount: element['amount'],
           billNo: element['billNo'],
-          BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+          BalanceAvail: element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element['amount'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           Expansion_Items: [{
             From: element['origin'],
             Branch: element['location'],
             Description: element['commodity'],
-            RecievedDate: element['recievedDate'],
+            RecievedDate:  moment(element['recievedDate']).format("DD-MM-YYYY"),
             CommissionBankCharges: element['commision'],
             RecievedAmountUSD: element['recUSD'],
-            ConversionDate: element['conversionDate'],
+            ConversionDate:  moment(element['conversionDate']).format("DD-MM-YYYY"),
             ConversionRate: element['exchangeRate'],
             ConvertedAmount: element['convertedAmount'],
             PaymentType: element['PaymentType'],
@@ -261,7 +290,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length!=0) {
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
@@ -275,7 +304,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
   async removeEmpty(data: any) {
     await data.forEach(element => {
       for (const key in element) {
-        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined && element[key] != 0) {
           element[key] = 'NF'
         }
       }
@@ -309,60 +338,6 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       { file: 'export', document: 'irAdvice' },
     ]);
   }
-
-  // merging() {
-  //   let filterForexData: any = [];
-  //   if (this.item5 && this.item5.length) {
-  //     for (let irData of this.item1) {
-  //       console.log('irdata', irData);
-  //       var temp: any = [];
-  //       for (let shippingdata of this.item5) {
-  //         console.log('shipping', shippingdata);
-  //         temp['deleteflag'] = shippingdata['deleteflag']
-  //         for (let i = 0; i <= irData.sbNo.length; i++) {
-  //           console.log('index of shipping Bill', irData.sbNo[i]);
-  //           if (irData.sbNo[i] == shippingdata.sbno) {
-  //             const newVal: any = { ...irData };
-  //             console.log('Line no. 211', newVal);
-  //             let sbBalance = shippingdata.fobValue;
-  //             let irAmount = irData.amount
-  //             let availableBalance = irAmount - sbBalance;
-
-  //             if (availableBalance <= 0) {
-  //               newVal['BalanceAvail'] = 0;
-  //             } else {
-  //               newVal['BalanceAvail'] = availableBalance;
-  //             }
-
-  //             console.log('Forex data Value', newVal);
-  //             filterForexData.push(newVal);
-  //           }
-  //         }
-  //       }
-  //     }
-  //     for (let irData of this.item1) {
-  //       console.log("229", irData.sbNo.length)
-  //       if (irData.sbNo.length == 0) {
-  //         const newVal = { ...irData };
-  //         let availableBal = irData.amount
-  //         newVal['BalanceAvail'] = availableBal;
-  //         filterForexData.push(newVal);
-  //         console.log('235', filterForexData);
-  //       }
-  //     }
-
-  //   } else {
-  //     for (let ir of this.item1) {
-  //       const newVal = { ...ir };
-  //       let availableBal = ir.amount
-  //       newVal['BalanceAvail'] = availableBal;
-  //       filterForexData.push(newVal);
-  //       console.log('245', filterForexData);
-  //     }
-  //   }
-  //   this.item6 = filterForexData
-  //   console.log("Full data", this.item6)
-  // }
 
   openIradvice(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
@@ -406,18 +381,24 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      sbno: this.SELECTED_VALUE['sbno'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-      BankName: this.SELECTED_VALUE['BankName'],
-      currency: this.SELECTED_VALUE['currency'],
-      amount: this.SELECTED_VALUE['amount'],
-      billNo: this.SELECTED_VALUE['billNo'],
-      BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   sbno: this.SELECTED_VALUE['sbno'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    //   BankName: this.SELECTED_VALUE['BankName'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   amount: this.SELECTED_VALUE['amount'],
+    //   billNo: this.SELECTED_VALUE['billNo'],
+    //   BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/InwardRemittanceAdvice`], navigationExtras);
     this.toastr.warning('Forex Advice Row Is In Edit Mode');
   }
 

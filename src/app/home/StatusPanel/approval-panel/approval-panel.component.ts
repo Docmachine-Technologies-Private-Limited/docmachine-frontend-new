@@ -9,6 +9,8 @@ import JSZip from 'jszip/dist/jszip';
 import * as FileSaver from 'file-saver';
 import { MergePdfListService } from '../../merge-pdf-list.service';
 import { ToastrService } from 'ngx-toastr';
+import * as xlsx from 'xlsx';
+
 @Component({
   selector: 'app-approval-panel',
   templateUrl: './approval-panel.component.html',
@@ -73,6 +75,7 @@ export class ApprovalPanelComponent implements OnInit {
     this.detailsViewdata = this.DATA_CREATE[id];
     console.log(this.detailsViewdata, 'detailsViewdata')
   }
+
   mergeAllPDFs = async (type: String, doc: any, tableName: any, emaildata: any) => {
     if (type == 'download') {
       var fitertemp: any = doc.filter(n => n)
@@ -94,6 +97,7 @@ export class ApprovalPanelComponent implements OnInit {
       });
     }
   }
+
   downloadAsSingleFile = async (filename, pdfDoc: any) => {
     this.blobToSaveAs(filename, pdfDoc)
   };
@@ -182,6 +186,46 @@ export class ApprovalPanelComponent implements OnInit {
     zip.generateAsync({ type: "blob" }).then(function (content) {
       FileSaver.saveAs(content, name_zip + ".zip");
     });
+  }
 
+  exceldownload(data: any) {
+    this.commercialdata(data).then((res: any) => {
+      const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(res);
+      const wb: xlsx.WorkBook = xlsx.utils.book_new();
+      xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+      xlsx.writeFile(wb, 'SB_DEATILS_' + new Date().getTime() + '.xlsx');
+      console.log(data, "exceldownload")
+    })
+
+  }
+
+  commercialdata(data: any) {
+    let data_array: any = [];
+    return new Promise((resolve, reject) => {
+      if (data?.length == 0) {
+        resolve({
+          SB_Date: '',
+          SB_No: '',
+          FIRX_NO: '',
+          FIRX_AMOUNT: ''
+        })
+        return;
+      }
+      for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        for (let j = 0; j < element?.MatchOffData?.length; j++) {
+          const elementMatchOffData = element?.MatchOffData[j];
+          data_array.push({
+            SB_Date: element?.sbRef[0]?.sbdate,
+            SB_No: element?.sbNo,
+            FIRX_NO: elementMatchOffData?.billNo,
+            FIRX_AMOUNT: elementMatchOffData?.InputValue
+          })
+          if ((index + 1) == data.length) {
+            resolve(data_array);
+          }
+        }
+      }
+    })
   }
 }

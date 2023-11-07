@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UploadServiceValidatorService } from '../components/Upload/service/upload-service-validator.service';
 import { AppConfig } from '../../environments/environment';
+import moment from 'moment';
 
 @Component({
   selector: 'user-registration-page',
@@ -16,6 +17,7 @@ import { AppConfig } from '../../environments/environment';
 export class SignupComponent implements OnInit {
   password = 'password';
   password1 = 'password';
+  CURREENT_DATE: any = moment(new Date()).format('DD-MM-YYYY')
   show = false;
   show1 = false;
   isDisabled: boolean = false;

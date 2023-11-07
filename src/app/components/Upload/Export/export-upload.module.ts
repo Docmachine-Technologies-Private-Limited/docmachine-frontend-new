@@ -22,6 +22,9 @@ import { ExportRealisationCertificateComponent } from './export-realisation-cert
 import { ExportSwiftCopyDocumentComponent } from './export-swift-copy-document/export-swift-copy-document.component';
 import { SharedHomeModule } from '../../../home/shared-home.module';
 import { InwardUploadDocumentsComponent } from './Inward-Remittance-Disposal/inward-upload-doc.component';
+import { EdpmsReconComponent } from '../../../home/edpms-recon/edpms-recon.component';
+import { ExportCertificateOfOriginComponent } from './export-certificate-of-origin/export-certificate-of-origin.component';
+import { FormatBillOfExchangesComponent } from './bill-of-exchanges-create/bill-of-exchanges-create.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,10 @@ import { InwardUploadDocumentsComponent } from './Inward-Remittance-Disposal/inw
     ExportSwiftCopyDocumentComponent,
     ExportBilllodgementreferencenumberadvicecopyComponent,
     ExportRealisationCertificateComponent,
-    InwardUploadDocumentsComponent
+    InwardUploadDocumentsComponent,
+    EdpmsReconComponent,
+    ExportCertificateOfOriginComponent,
+    FormatBillOfExchangesComponent
   ],
   imports: [
     CommonModule,

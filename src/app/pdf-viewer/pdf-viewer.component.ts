@@ -87,7 +87,7 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
             this.Sppinloader = false
           });
         }
-      } else if (this.src.indexOf('data:application/pdf;base64,') != -1) {
+      } else if (this.src?.toString()?.indexOf('data:application/pdf;base64,') != -1) {
         this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
         this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
         console.log(this.URL_IFRAME, 'data:application found');
@@ -97,7 +97,7 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
         this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
         console.log(this.URL_IFRAME, 'home/Transaction/Export/direct-dispatch');
         this.Sppinloader = false
-      } else if (this.src.indexOf('.pdf') != -1) {
+      } else if (this.src?.toString()?.indexOf('.pdf') != -1) {
         let url_replace: any = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
         this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
           this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
@@ -107,16 +107,25 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
           this.Sppinloader = false
         });
       }
-      else if (this.src.indexOf(this.documentService.AppConfig?.FRONT_END_URL) != -1) {
+      else if (this.src?.toString()?.indexOf(this.documentService.AppConfig?.FRONT_END_URL) != -1) {
+        let url_replace: any = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
+        this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
+          this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+          this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+          this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+          console.log(this.URL_IFRAME, 'changingThisBreaksApplicationSecurity without');
+          this.Sppinloader = false
+        });
+      }else if(this.src?.includes(this.documentService.AppConfig?.FRONT_END_URL)){
         this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
         this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
         this.Sppinloader = false
-        console.log(this.URL_IFRAME, 'changingThisBreaksApplicationSecurity without');
       }
     } else {
       console.log('pdf not found...');
     }
   }
+  
   _arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array(buffer);

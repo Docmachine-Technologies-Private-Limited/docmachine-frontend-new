@@ -85,6 +85,22 @@ export class LetterofCreditComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        Expirydate: {
+          type: "date",
+          value: "",
+          label: "Expiry Date",
+          rules: {
+            required: true,
+          }
+        },
+        LastDateofShipment: {
+          type: "date",
+          value: "",
+          label: "Last Date of Shipment",
+          rules: {
+            required: true,
+          }
         }
       }, 'ExportLetterOfCredit');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')

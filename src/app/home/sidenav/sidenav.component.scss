@@ -25,9 +25,20 @@ footer {
 }
 
 .footer-heading {
-  font-size: 12px !important;
-  font-weight: 400 !important;
+  font-size: 17px!important;
   color: #fff;
+  position: fixed;
+  bottom: -8px;
+  left: 0;
+  background-color: #354f6e;
+  width: 200px;
+  height: 29px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-family: system-ui;
 }
 
 .footer-content {
@@ -947,7 +958,7 @@ body {
 }
 
 .scroll-bar {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 200px);
   overflow: auto;
 }
 

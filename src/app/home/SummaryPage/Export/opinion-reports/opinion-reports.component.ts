@@ -6,13 +6,12 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as data1 from '../../../../currency.json';
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
+import { NavigationExtras, Router } from '@angular/router';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-
+import moment from "moment";
 
 @Component({
   selector: 'export-opinion-reports-summary',
@@ -35,18 +34,19 @@ export class ExportOpinionReportsComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    O_R_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
-      "Pipo No.",
       "DATE",
       "O R No.",
-      "O R Amount",
-      "CURRENCY",
+      "Foreign Party Name",
+      "Report Date",
+      "Report Ratings",
       "Buyer Name",
+      "Ageing Days",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -56,11 +56,12 @@ export class ExportOpinionReportsComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
     ],
     eventId: ''
   }
@@ -71,6 +72,7 @@ export class ExportOpinionReportsComponent implements OnInit {
     currency: '',
     buyerName: '',
   }
+  FILTER_FORM: any = ''
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -78,7 +80,6 @@ export class ExportOpinionReportsComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
@@ -100,20 +101,50 @@ export class ExportOpinionReportsComponent implements OnInit {
         console.log(res, 'getOpinionReportfile');
         this.FILTER_VALUE_LIST = this.item;
         for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
           }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['O_R_No'].includes(value?.opinionReportNumber) == false) {
-            this.ALL_FILTER_DATA['O_R_No'].push(value?.opinionReportNumber);
+          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
           }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.date);
+          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.opinionReportNumber)?.length == 0) {
+            this.ALL_FILTER_DATA['NO'].push({ value: value?.opinionReportNumber });
           }
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+          }
+        }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select buyerName",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select O R No.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
         }
         this.OpinionReportTable(this.item)
       },
@@ -121,18 +152,49 @@ export class ExportOpinionReportsComponent implements OnInit {
     );
   }
 
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      date: value?.value?.date,
+      opinionReportNumber: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'opinionreports').subscribe((resp: any) => {
+      console.log(resp, value, "opinionreports")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.OpinionReportTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.OpinionReportTable(this.FILTER_VALUE_LIST)
+  }
+  
   OpinionReportTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date: moment(element['date']).format("DD-MM-YYYY"),
           opinionReportNumber: element['opinionReportNumber'],
-          opinionReportAmount: element['opinionReportAmount'],
-          currency: element['currency'],
+          ForeignPartyName: element['ForeignPartyName']?.value,
+          ReportDate: moment(element['ReportDate']).format("DD-MM-YYYY"),
+          ReportRatings: element['ReportRatings'],
           buyerName: element['buyerName'],
+          AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
@@ -147,7 +209,18 @@ export class ExportOpinionReportsComponent implements OnInit {
       }
     });
   }
-
+  public SubtractDates(startDate: Date, endDate: Date): any {
+    let dateDiff = (endDate.getTime() - startDate.getTime()) / 1000;
+    var h: any = Math.floor(dateDiff / 3600);
+    return (h > 24 ? this.SplitTime(h)?.Days + 'days' :startDate.toDateString());
+  }
+  SplitTime(numberOfHours) {
+    var Days = Math.floor(numberOfHours / 24);
+    var Remainder = numberOfHours % 24;
+    var Hours = Math.floor(Remainder);
+    var Minutes = Math.floor(60 * (Remainder - Hours));
+    return ({ "Days": Days, "Hours": Hours, "Minutes": Minutes })
+  }
   async removeEmpty(data: any) {
     await data.forEach(element => {
       for (const key in element) {
@@ -258,6 +331,12 @@ export class ExportOpinionReportsComponent implements OnInit {
       currency: this.SELECTED_VALUE['currency'],
       buyerName: this.SELECTED_VALUE['buyerName'],
     }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/OpinionReports`],navigationExtras);
     this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
 
@@ -321,11 +400,13 @@ class OpinionReportFormat {
     var temp: any = [];
     this.data?.forEach(element => {
       temp.push({
-        PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
         opinionReportNumber: element['opinionReportNumber'],
         opinionReportAmount: element['opinionReportAmount'],
         currency: element['currency'],
+        ForeignPartyName: element['ForeignPartyName']?.value,
+        ReportDate: element['ReportDate'],
+        ReportRatings: element['ReportRatings'],
         buyerName: this.getBuyerName(element['buyerName']),
       })
     });

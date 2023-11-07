@@ -19,7 +19,7 @@ export class AprrovalPendingRejectTransactionsService {
 
   deleteByRole_PI_PO_Type(RoleCheckbox: string, id: any, index: any, data: any, callback: any) {
     if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
-      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments', 'Comments',"Summary", (res: any) => {
+      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Remarks', 'Comments',"Summary", (res: any) => {
         var approval_data: any = data;
         approval_data['comment'] = res.value.value;
         this.documentService.deletflagPiPo({ id: id, deleteflag: -1 }).subscribe((res: any) => {
@@ -35,7 +35,7 @@ export class AprrovalPendingRejectTransactionsService {
   DownloadByRole_Transaction_Type(roleType: string, data: any, callback: any) {
     console.log('DownloadByRole_Transaction_Type')
     if (roleType == 'Maker' || roleType == 'Checker') {
-      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments', 'Comments',"Transaction", (res: any) => {
+      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Remarks', 'Comments',"Transaction", (res: any) => {
         var approval_data: any = data;
         approval_data['comment'] = res.value.value;
         this.documentService.adddeletflag(approval_data).subscribe((r: any) => {

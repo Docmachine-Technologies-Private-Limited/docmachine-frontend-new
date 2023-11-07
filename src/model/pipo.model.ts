@@ -38,6 +38,7 @@ export class PipoModel {
   public swiftRef: any;
   public blcopyRefs: any;
   balanceAmount:any
+  public AdviceRef:any
   public TransactionRef: any;
 
   constructor(data: any) {
@@ -79,6 +80,7 @@ export class PipoModel {
     this.blcopyRefs = data?.blcopyRefs? data?.blcopyRefs: [];
     this.balanceAmount=data?.balanceAmount?data?.balanceAmount:undefined
     this.TransactionRef=data?.TransactionRef? data?.TransactionRef: [];
+    this.AdviceRef=data?.AdviceRef? data?.AdviceRef: [];
   }
 }
 export class PipoDisplayListViewItem {

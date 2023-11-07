@@ -5,13 +5,15 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from "moment";
+
 @Component({
   selector: 'import-opinion-reports-summary',
   templateUrl: './import-opinion-reports.component.html',
@@ -39,12 +41,13 @@ export class ImportOpinionReportsComponent implements OnInit {
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
-      "Pipo No.",
       "DATE",
       "O R No.",
-      "O R Amount",
-      "CURRENCY",
+      "Foreign Party Name",
+      "Report Date",
+      "Report Ratings",
       "Beneficiary Name",
+      "Ageing Days",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -54,11 +57,10 @@ export class ImportOpinionReportsComponent implements OnInit {
     TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
+      "col-td-th-2",
+      "col-td-th-2",
+      "col-td-th-2",
+      "col-td-th-2",
     ],
     eventId: ''
   }
@@ -125,12 +127,13 @@ export class ImportOpinionReportsComponent implements OnInit {
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date: moment(element['date']).format("DD-MM-YYYY"),
           opinionReportNumber: element['opinionReportNumber'],
-          opinionReportAmount: element['opinionReportAmount'],
-          currency: element['currency'],
+          ForeignPartyName: element['ForeignPartyName']?.value,
+          ReportDate: element['ReportDate'],
+          ReportRatings: element['ReportRatings'],
           buyerName: element['buyerName'],
+          AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
@@ -156,7 +159,19 @@ export class ImportOpinionReportsComponent implements OnInit {
     });
     return await new Promise(async (resolve, reject) => { await resolve(data) });
   }
-
+  
+  public SubtractDates(startDate: Date, endDate: Date): any {
+    let dateDiff = (endDate.getTime() - startDate.getTime()) / 1000;
+    var h: any = Math.floor(dateDiff / 3600);
+    return (h > 24 ? this.SplitTime(h)?.Days + 'days' :startDate.toDateString());
+  }
+  SplitTime(numberOfHours) {
+    var Days = Math.floor(numberOfHours / 24);
+    var Remainder = numberOfHours % 24;
+    var Hours = Math.floor(Remainder);
+    var Minutes = Math.floor(60 * (Remainder - Hours));
+    return ({ "Days": Days, "Hours": Hours, "Minutes": Minutes })
+  }
   getPipoNumber(pipo: any) {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {
@@ -244,15 +259,12 @@ export class ImportOpinionReportsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      opinionReportNumber: this.SELECTED_VALUE['opinionReportNumber'],
-      opinionReportAmount: this.SELECTED_VALUE['opinionReportAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/OpinionReports`],navigationExtras);
     this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
 

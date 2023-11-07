@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -46,7 +46,7 @@ export class ImportRealisationCertificateSummaryComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "EBRC No.",
-      "Buyer Name",
+      "Beneficiary Name",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -57,7 +57,7 @@ export class ImportRealisationCertificateSummaryComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
     ],
     eventId: ''
   }
@@ -80,9 +80,7 @@ export class ImportRealisationCertificateSummaryComponent implements OnInit {
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-
-  ) {
+    public dialog: MatDialog) {
   }
   async ngOnInit() {
     this.FILTER_VALUE_LIST = [];
@@ -244,15 +242,12 @@ export class ImportRealisationCertificateSummaryComponent implements OnInit {
   EDIT_DATE: any = [];
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
-      totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/Realisation-Cretificate`],navigationExtras);
     this.toastr.warning('Debit Note Row Is In Edit Mode');
   }
 

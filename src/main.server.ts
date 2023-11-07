@@ -9,9 +9,9 @@ import '@angular/platform-server/init';
 
 import { enableProdMode } from '@angular/core';
 
-import { environment } from './environments/environment';
+import {AppConfig}  from './environments/environment';
 
-if (environment.production) {
+if (AppConfig.production) {
   enableProdMode();
 }
 

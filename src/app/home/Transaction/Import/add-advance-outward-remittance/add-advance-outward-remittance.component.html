@@ -11,17 +11,15 @@
                     <div class="float_right_page">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-
                                 <li class="breadcrumb-item"><a routerLink="/home/remittance-flow">Advance outward
                                         remittance</a></li>
-                                <!-- <li class="breadcrumb-item active" aria-current="page">Add new</li> -->
                             </ol>
                         </nav>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="content_white_background" style="height: auto;">
+        <div class="content_white_background" style="overflow: auto;height: calc(100vh - 110px);">
             <main id="content" class="table-padding" role="main">
                 <div class="new_document_list1">
                     <div class="new_document_list_add_data">
@@ -34,38 +32,22 @@
                                             this.FORM_VALUE,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
                                             [RequiredLetterHead]="true" (event)="this.UrlList=$event"
                                             id="first"></federal-bank-remittance-advance-against>
-                                        <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName" [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
-                                        this.FORM_VALUE,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]"
-                                            id="first"></hdfc-bank-remittance-advance-against>
-                                        <div>
-
-                                        </div>
-                                        <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
+                                        <hdfc-bank-remittance-advance-against [BankId]="this.selectedBankName"
+                                            [data]="[this.ToCreditAccount_Selected,this.selectedItems,this.selectedBenne,
+                                        this.FORM_VALUE,this.ToChargesAccount_Selected,this.COMPANY_INFO,this.ALL_DATA_HSCODE_FORWARD]" id="first"></hdfc-bank-remittance-advance-against>
+                                       
+                                        <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="this.SELECTED_PIPO_DOCUMENTS.length!=0">
                                             <div class="content_white_background">
-                                                <h5 class="header-text">PI_PO or Advance Outward remittance Details
-                                                </h5>
-                                                <div class="accordion"
-                                                    *ngFor="let item of this.selectedItems;let i=index">
-                                                    <div class="accordion-item">
-                                                        <div class="accordion-titel" (click)="SlideToggle($event,i)">
-                                                            <h2>PI_PO No. : {{(i+1)}} </h2>
-                                                        </div>
-                                                        <div class="accordion-contant">
-                                                            <div *ngFor="let selItems of this.PDF_LIST[i]">
-                                                                <app-pdf-viewer [downloadShow]="false"
-                                                                    [name]="selItems?.name" [src]="selItems?.pdf"
-                                                                    width="100%" height="500px"></app-pdf-viewer>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div *ngFor="let selItems of this.SELECTED_PIPO_DOCUMENTS">
+                                                    <app-pdf-viewer [downloadShow]="false" [name]="selItems?.name"
+                                                        [src]="selItems?.pdf" width="100%"
+                                                        height="500px"></app-pdf-viewer>
                                                 </div>
                                             </div>
                                             <div *ngIf="isUploaded">
                                                 <app-pdf-viewer *ngIf="uploadUrl!=''" [downloadShow]="false"
                                                     [name]="selItems?.name" [src]="uploadUrl" width="100%"
                                                     height="500px"></app-pdf-viewer>
-                                                <!-- <iframe *ngIf="uploadUrl!=''" style="border:none;" [src]="uploadUrl"
-                                                    width="100%"> </iframe> -->
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +117,7 @@
                                                         <select class="form-control" aria-label="Default select example"
                                                             formControlName="pi_poNo" autocomplete="off"
                                                             [ngModel]="items?.pi_poNo"
-                                                            (change)="choosenItems($event.target.value,i)"
+                                                            (change)="choosenItems($event.target.value,i);ORM_POPUP_PANEL?.displayShow"
                                                             #multiplepipo>
                                                             <option value="">Select PI/PO</option>
                                                             <option value="{{pipolist._id}}" *ngFor="let pipolist of pipoData
@@ -190,8 +172,8 @@
                                                         <div *ngIf="form.payableAmount.errors.required">Balance
                                                             Amount is required</div>
                                                     </div>
-
                                                 </div>
+
                                                 <div class="col-12 mb-4">
                                                     <label for="remittanceAmount" class="form-label">Remittance
                                                         Amount</label>
@@ -215,10 +197,7 @@
                                                         (click)="addItems(pipoForm)">+ Add PI</button>
                                                     <button type="button" class="btn btn-success PopupOpen"
                                                         popup-close="FORWARD_CONTRACT">
-                                                        Select FDC</button>
-                                                    <button type="button" class="btn btn-success PopupOpen"
-                                                        popup-close="HS_CODE_POPUP">
-                                                        Select HS Code</button>
+                                                        Select FWC</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,7 +327,8 @@
                                                 <tr *ngFor="let items of selectedItems">
                                                     <td><b>{{items.pipo_no}} </b></td>
                                                     <td>
-                                                        <p> ( Amount: {{items.amount}}, Date: {{items.date}}, Buyer
+                                                        <p> ( Amount: {{items.amount}}, Date: {{items.date}},
+                                                            Beneficiary
                                                             name: {{items.buyerName}} )
                                                         </p>
                                                     </td>
@@ -432,8 +412,31 @@
     </div>
     <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
         <div style="display:flex;" class="mt-3">
-            <button type="button" class="btn btn-primary" (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
+            <button type="button" class="btn btn-primary"
+                (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
         </div>
+    </div>
+</app-custom-model>
+
+<app-custom-model [customstyle]="{'max-width':'34vw !important'}" class="p-2" height="33vh" id="ORM_POPUP"
+    [minimizedisabled]="false" modalbodyheight="27vh" ModalTitleStyle="font-size:13px;"
+    [name]="'Invoice Utilisation Details | '+this.SELECTED_PIPO_ORM_DETAILS?.pi_poNo" #ORM_POPUP_PANEL>
+    <div class="col-12 mt-2 mb-2">
+        <table class="table">
+            <thead>
+                <tr class="table-tr pr-3">
+                    <th scope="col" class="col-td-th-2">ORM No.</th>
+                    <th scope="col" class="col-td-th-3">ORM Amount</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="this.SELECTED_PIPO_ORM_DETAILS!=undefined && this.SELECTED_PIPO_ORM_DETAILS?.length!=0">
+                <tr class="table-tr mt-2 pr-3"
+                    *ngFor="let item of this.SELECTED_PIPO_ORM_DETAILS?.AdviceRef;let i=index">
+                    <td scope="col" class="col-td-th-2">{{item?.billNo}}</td>
+                    <td scope="col" class="col-td-th-3">{{item?.amount}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </app-custom-model>
 
@@ -468,7 +471,8 @@
     </div>
     <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
         <div style="display:flex;" class="mt-3">
-            <button type="button" class="btn btn-primary" (click)="DoneButton();FORWARD_CONTRACTPANEL?.displayHidden">Done</button>
+            <button type="button" class="btn btn-primary"
+                (click)="DoneButton();FORWARD_CONTRACTPANEL?.displayHidden">Done</button>
         </div>
     </div>
 </app-custom-model>

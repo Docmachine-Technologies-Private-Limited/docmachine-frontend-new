@@ -7,7 +7,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { DocumentService } from '../../../../service/document.service';
 import { UserService } from '../../../../service/user.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from '../../../shared-Data-Servies/shared-data.service';
 import * as xlsx from 'xlsx';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,6 +17,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
+import moment from "moment";
 
 @Component({
   selector: 'import-outward-remittance-sheet-summar',
@@ -68,7 +69,6 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       "DATE",
       "BOE Number",
       "Party Name",
-      "Bank Name",
       "Currency",
       "TT Amount",
       "Ref No.",
@@ -90,7 +90,6 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     Objectkeys: [],
     ExpansionKeys: [],
     TableHeaderClass: [
-      "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
@@ -253,22 +252,21 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date:  moment(element['date']).format("DD-MM-YYYY"),
           boeno: element['sbno'],
           beneficiaryName: element['beneficiaryName'],
-          BankName: element['BankName']?.value,
           currency: element['currency'],
           amount: element['amount'],
           billNo: element['billNo'],
-          BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+          BalanceAvail: element['BalanceAvail'] != '-1' ? element['BalanceAvail'] : element['amount'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           Expansion_Items: [{
             Branch: element['location'],
             Description: element['commodity'],
-            RecievedDate: element['recievedDate'],
+            RecievedDate:  moment(element['recievedDate']).format("DD-MM-YYYY"),
             CommissionBankCharges: element['commision'],
             RecievedAmountUSD: element['recUSD'],
-            ConversionDate: element['conversionDate'],
+            ConversionDate:  moment(element['conversionDate']).format("DD-MM-YYYY"),
             ConversionRate: element['exchangeRate'],
             ConvertedAmount: element['convertedAmount'],
             PaymentType: element['PaymentType'],
@@ -329,58 +327,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       { file: 'import', document: 'orAdvice' },
     ]);
   }
-
-  // merging() {
-  //   let filterForexData: any = [];
-  //   if (this.item5 && this.item5.length) {
-  //     for (let irData of this.item1) {
-  //       console.log('irdata', irData);
-  //       for (let shippingdata of this.item5) {
-  //         console.log('shipping', shippingdata);
-  //         for (let i = 0; i <= irData.sbNo.length; i++) {
-  //           console.log('index of shipping Bill', irData.sbNo[i]);
-  //           if (irData.sbNo[i] == shippingdata.sbno) {
-  //             const newVal = { ...irData };
-  //             console.log('Line no. 211', newVal);
-  //             let sbBalance = shippingdata.fobValue;
-  //             let irAmount = irData.amount
-  //             let availableBalance = irAmount - sbBalance;
-  //             if (availableBalance <= 0) {
-  //               newVal['BalanceAvail'] = 0;
-  //             } else {
-  //               newVal['BalanceAvail'] = availableBalance;
-  //             }
-  //             console.log('Forex data Value', newVal);
-  //             filterForexData.push(newVal);
-  //           }
-  //         }
-  //       }
-  //     }
-  //     for (let irData of this.item1) {
-  //       console.log("229", irData.sbNo.length)
-  //       if (irData.sbNo.length == 0) {
-  //         const newVal = { ...irData };
-  //         let availableBal = irData.amount
-  //         newVal['BalanceAvail'] = availableBal;
-  //         filterForexData.push(newVal);
-  //         console.log('235', filterForexData);
-  //       }
-  //     }
-
-  //   } else {
-  //     for (let ir of this.item1) {
-  //       const newVal = { ...ir };
-  //       let availableBal = ir.amount
-  //       newVal['BalanceAvail'] = availableBal;
-  //       filterForexData.push(newVal);
-  //       console.log('245', filterForexData);
-  //     }
-  //   }
-  //   this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET = filterForexData;
-  //   this.item6 = filterForexData
-  //   console.log("Full data", this.item6, this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET)
-  // }
-
+  
   openIradvice(content) {
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
@@ -426,17 +373,23 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      partyName: this.SELECTED_VALUE['partyName'],
-      beneficiaryName: this.SELECTED_VALUE['beneficiaryName'],
-      currency: this.SELECTED_VALUE['currency'],
-      amount: this.SELECTED_VALUE['amount'],
-      billNo: this.SELECTED_VALUE['billNo'],
-      BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   partyName: this.SELECTED_VALUE['partyName'],
+    //   beneficiaryName: this.SELECTED_VALUE['beneficiaryName'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   amount: this.SELECTED_VALUE['amount'],
+    //   billNo: this.SELECTED_VALUE['billNo'],
+    //   BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/OutwardRemittanceAdvice`],navigationExtras);
     this.toastr.warning('Forex Advice Row Is In Edit Mode');
   }
 

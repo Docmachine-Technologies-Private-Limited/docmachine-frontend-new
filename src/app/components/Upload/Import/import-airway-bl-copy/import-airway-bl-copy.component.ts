@@ -11,7 +11,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'import-airway-bl-copy',
   templateUrl: './import-airway-bl-copy.component.html',
-  styleUrls: ['./import-airway-bl-copy.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-airway-bl-copy.component.scss', '../../commoncss/common.component.scss']
 })
 export class ImportAirwayBlCopyComponent implements OnInit {
   publicUrl: any = '';
@@ -42,7 +42,7 @@ export class ImportAirwayBlCopyComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+
   }
 
   response(args: any) {
@@ -51,18 +51,26 @@ export class ImportAirwayBlCopyComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        airwayBlCopyNumber: {
-          type: "text",
+        CommercialNumber: {
+          type: "CommericalNo",
           value: "",
-          label: "Airway / BlCopy Number*",
+          label: "Select Commercial Invoice",
           rules: {
             required: true,
           }
         },
-        CommercialNumber: {
-          type: "CommericalNo",
+        airwayBlCopydate: {
+          type: "date",
           value: "",
-          label: "Select Commercial Number",
+          label: "Airway / BlCopy Date",
+          rules: {
+            required: true,
+          }
+        },
+        airwayBlCopyNumber: {
+          type: "text",
+          value: "",
+          label: "Airway / BlCopy Number",
           rules: {
             required: true,
           }
@@ -120,7 +128,7 @@ export class ImportAirwayBlCopyComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
       this.changedCommercial(this.pipoArr)
@@ -132,6 +140,7 @@ export class ImportAirwayBlCopyComponent implements OnInit {
 
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
+      this.validator.COMMERICAL_NO=[];
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0] });
       });

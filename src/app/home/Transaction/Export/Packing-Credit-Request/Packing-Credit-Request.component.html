@@ -80,7 +80,7 @@
                               <td>{{this.Advance_Amount_Sum?.AmountSum}}</td>
                             </tr>
                             <tr>
-                              <th>Last date of service :</th>
+                              <th>Last date of delivery :</th>
                               <td>{{this.getTimeDifferenceContract(180)}}</td>
                             </tr>
                           </table>
@@ -99,7 +99,7 @@
                             </tr>
                             <tr>
                               <th>A/c no to be debit for all charges : </th>
-                              <td>{{this.SET_CREDIT_DEBIT_LIST?.Credit[1]?.accNumber}}</td>
+                              <td>{{this.SET_CREDIT_DEBIT_LIST?.Debit[0]?.accNumber}}</td>
                             </tr>
                           </table>
                         </div>
@@ -241,7 +241,7 @@
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
                                     <ng-select [items]="this.bankDetail" *ngIf="this.bankDetail.length!=0"
                                     formcontrolname="bank_name" #bankName (change)="setradio('Credit',$event.bank)" ngModel
-                                      bindLabel="bank" [multiple]="false" placeholder="Select Buyer Name"></ng-select>
+                                      bindLabel="bank" [multiple]="false" placeholder="Select Bank Name"></ng-select>
                                   </div>
                                   <div class="col-md-10 mb-0" *ngIf="this.newBankArray['Credit'].length!=0">
                                     <div class="col mt-2">
@@ -257,7 +257,7 @@
                                     <div class="col mt-2">
                                       <label for="exampleInputEmail1" class="form-label">Select Debit bank*</label>
                                       <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                        <mat-radio-button [value]="item" (change)="setBank($event,'Credit',1,item)"
+                                        <mat-radio-button [value]="item" (change)="setBank($event,'Debit',1,item)"
                                           *ngFor="let item of this.newBankArray['Credit'];let i=index">{{item?.bank}} |
                                           {{item?.accNumber}}</mat-radio-button>
                                       </mat-radio-group>
@@ -358,7 +358,7 @@
                                       </div>
                                     </div>
                                     <div class="col-md-10 mb-3">
-                                      <label for="email" class="form-label">Due Date (Show max Tenor from
+                                      <label for="email" class="form-label">Last date of delivery (Show max Tenor from
                                         Account)</label>
                                       <input type="date" class="form-control" placeholder="dd/mm/yyyy"
                                         (change)="this.Advance_Amount_Sum['Last_date_of_service']=$event.target.value">

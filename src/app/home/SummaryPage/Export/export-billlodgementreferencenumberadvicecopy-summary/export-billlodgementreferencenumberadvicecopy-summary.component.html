@@ -12,17 +12,16 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button (click)="filter_Popup.style.display='block'" type="button"
-                                class="btn btn-secondary"><span class="fi_icon"></span>Filter</button>
-                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
-                                appFilterToggle>
+                            <button type="button" class="filter-popup btn btn-secondary"><span
+                                class="fi_icon filter-popup"></span>Filter</button>
+                            <div class="bg-white filter_main_sec mt-2" appFilterToggle>
                                 <form class="select_filter_options">
                                     <div class="row">
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
                                             <select class="form-select form-control" aria-label="Default select example"
                                                 name="Buyer_Name"
-                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                (change)="filter($event.target.value,'buyerName');">
                                                 <option value="">Buyer name</option>
                                                 <option [value]="Buyer_Name"
                                                     *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
@@ -33,7 +32,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'pipo');"
                                                 name="Company_Name">
                                                 <option value="">PI/PO No.</option>
                                                 <option [value]="PI_PO_No"
@@ -45,7 +44,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">D N No.</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'debitNoteNumber');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'debitNoteNumber');"
                                                 name="Origin">
                                                 <option value="">D N No.</option>
                                                 <option *ngFor="let Origin of this.ALL_FILTER_DATA?.D_N_No">{{ Origin }}
@@ -55,7 +54,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Currency</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'currency');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'currency');"
                                                 name="Currency">
                                                 <option value="">Currency</option>
                                                 <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
@@ -66,7 +65,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">DATE</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'date');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'date');"
                                                 name="date">
                                                 <option value="">SB DATE</option>
                                                 <option [value]="SB_DATE"
@@ -77,7 +76,7 @@
                                     </div>
                                     <div class="footer_buttons">
                                         <button type="button" class="btn btn-light"
-                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                            (click)="resetFilter();">RESET</button>
                                     </div>
                                 </form>
                                 <i></i>
@@ -94,7 +93,8 @@
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
                 [items]="this.FILTER_VALUE_LIST_NEW?.items"
                 [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
-                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewDN($event)"
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
+                (EditChanges)="toEdit($event)" (ViewChanges)="viewDN($event)"
                 >
             </custom-expansion-panel>
         </div>
@@ -108,59 +108,3 @@
             height="500px"></app-pdf-viewer>
     </div>
 </app-custom-model>
-
-<!-- <app-custom-model modalbodyheight="55vh" *ngIf="this.SELECTED_VALUE!=''"
-    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
-    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="60vh"
-    id="EditSummaryPage" [name]="'Debit Note Update || Debit Note No. : '+this.SELECTED_VALUE?.debitNoteNumber"
-    #EditSummaryPagePanel>
-    <div class="ml-0 p-3 col-12">
-        <div class="container-fluid m-auto p-0">
-            <div class="content_white_background" style="height: auto;">
-                <main id="content" class="table-padding" role="main" style="border-radius: 10px;">
-                    <div class="new_document_list1">
-                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest" style="flex-direction: column;">
-                            <div class="row col-12 mt-0 p-0">
-                                <div class="row col-12 p-0">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputEmail4">DATE</label>
-                                        <ng-custom-input type="date" [(ngInput)]="this.EDIT_FORM_DATA.date"
-                                            placeHolderText="SB DATE"></ng-custom-input>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputEmail4">Debit Note Number</label>
-                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.debitNoteNumber"
-                                            placeHolderText="Debit Note Number"></ng-custom-input>
-                                    </div>
-                                </div>
-                                <div class="row col-12 p-0">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputEmail4">Debit Note Amount</label>
-                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.totalDebitAmount"
-                                            placeHolderText="Debit Note Amount"></ng-custom-input>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputEmail4">Currency</label>
-                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.currency"
-                                            placeHolderText="Currency"></ng-custom-input>
-                                    </div>
-                                </div>
-                                <div class="row col-12 p-0">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputEmail4">BUYER NAME</label>
-                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.buyerName"
-                                            placeHolderText="BUYER NAME"></ng-custom-input>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row col-12 mt-0 p-0 pl-2 pb-2">
-                                <button class="btn btn-primary"
-                                    (click)="toSaveNew(this.EDIT_FORM_DATA,this.SELECTED_VALUE?._id,EditSummaryPagePanel)">Update</button>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        </div>
-    </div>
-</app-custom-model> -->

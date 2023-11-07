@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
@@ -60,6 +59,14 @@ export class AirwayBlCopyComponent implements OnInit {
             required: true,
           }
         },
+        date: {
+          type: "date",
+          value: "",
+          label: "Date",
+          rules: {
+            required: true,
+          }
+        },
         airwayBlCopyNumber: {
           type: "text",
           value: "",
@@ -94,7 +101,7 @@ export class AirwayBlCopyComponent implements OnInit {
       console.log('creditNoteNumber Invoice_No', resp)
       if (resp.data.length == 0) {
         this.documentService.addAirwayBlcopyFile(e.value).subscribe((res: any) => {
-          this.toastr.success(`addAirwayBlcopy Document Added Successfully`);
+          this.toastr.success(`AWB/Bl Copy Succesffuly added`);
           let updatedDataSB = {
             "blcopydetails": [
               res.data._id,

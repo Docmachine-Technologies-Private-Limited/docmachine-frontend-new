@@ -33,8 +33,8 @@ export class SidenavComponent implements OnInit {
   ct: boolean;
   userData: any = [];
   TRANSACTION_DASHBOARD_LIST: any = {
-    Export: ["Packing-Credit-Request", "Export-Direct-Dispatch", "Inward-Remitance-Dispoal", "Inward-Remitance-Dispoal-Realization"],
-    Import: ["Import-Direct-Payment", "Advance-Remittance-flow"]
+    Export: ["Export Bill Regularisation", "Export Bill Lodgement", "Inward Remittance Disposal", "Export Bill Realisation"],
+    Import: ["Advance Outward Remittance", "Direct Bills","Import Under Collection/LC"]
   };
 
   constructor(
@@ -47,7 +47,7 @@ export class SidenavComponent implements OnInit {
     private sharedData: SharedDataService) {
     this.userService.getUserDetail().then((user: any) => {
       this.userData = user['result'];
-      console.log("userData", this.userData)
+      console.log("userData", this.TRANSACTION_DASHBOARD_LIST,this.userData)
     });
   }
 

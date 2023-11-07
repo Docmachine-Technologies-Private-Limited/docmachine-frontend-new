@@ -66,14 +66,14 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <app-custom-dropdown name="depot_Name" placeholdertext="Please select...." key="depot_Name"
-            [labeltext]="this.CustomConfirmDialogModel.message" limit="15" [data]="this.COMMENTS_LIST[this.CustomConfirmDialogModel.TYPE_OF_COMMENTS]" #input
+          <app-custom-dropdown name="depot_Name" placeholdertext="remarks..." key="depot_Name"
+            [labeltext]="this.CustomConfirmDialogModel.message" limit="15" [data]="[]" #input
             autocomplete_on_off="off"></app-custom-dropdown>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary"
-          (click)="this.CALLBACKS_CALL({Inputdata:input.value},DropDownInputConfirmDialog.style.display='none')">Save</button>
+          (click)="this.CALLBACKS_CALL({Inputdata:input.value},DropDownInputConfirmDialog.style.display='none')">Send</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal"
           (click)="DropDownInputConfirmDialog.style.display='none'">Close</button>
       </div>
@@ -101,7 +101,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary"
-          (click)="this.CALLBACKS_CALL({Inputdata:normal_input.value},InputConfirmDialog.style.display='none')">Save</button>
+          (click)="this.CALLBACKS_CALL({Inputdata:normal_input.value},InputConfirmDialog.style.display='none')">Send</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal"
           (click)="InputConfirmDialog.style.display='none'">Close</button>
       </div>
@@ -111,7 +111,12 @@
 <div class="iframecustommodel" tabindex="-1" role="dialog" #iframecustommodel
   [style]="this.MODEL_TYPE_VIEW['IframeModel']==true?'display: block;' : 'display: none;'">
   <app-custom-model height="98vh" *ngIf="this.CustomConfirmDialogModel?.url?.length!=0" id="Documents_View"
-    name="Document View" (ModelChange)="this.HIDE_ALL_MODELS('IframeModel');">
+    name="Document View" (ModelChange)="this.HIDE_ALL_MODELS('IframeModel');" #iframecustommodelPopup>
+    <custom-model-header *ngIf="this.CustomConfirmDialogModel?.ButtonName!=''">
+      <div style="display: flex;">
+        <button type="button" class="btn btn-primary" (click)="PopUpCallBack({Name:this.CustomConfirmDialogModel?.ButtonName});this.HIDE_ALL_MODELS('IframeModel');iframecustommodelPopup?.displayHidden">{{this.CustomConfirmDialogModel?.ButtonName}}</button>
+      </div>
+      </custom-model-header>
     <div class="form-group iframe-group">
       <app-pdf-viewer [downloadShow]="false" *ngFor="let url of this.CustomConfirmDialogModel.url" name="Documents"
         [src]="url" width="100%" height="100%"></app-pdf-viewer>
@@ -127,12 +132,29 @@
       <span aria-hidden="true">&times;</span>
     </button>
     <div class="column">
-      <h5 class="modal-title">{{this.CustomConfirmDialogModel.titleheader}}</h5>
+      <h5 class="modal-title" [innerHTML]="this.CustomConfirmDialogModel.titleheader"></h5>
       <div class="row" style="gap: 10px;">
         <button type="button" class="btn btn-primary"
           (click)="this.CALLBACKS_CALL({Inputdata:'Yes'},YesNoDialogModel.style.display='none')">Yes</button>
         <button type="button" class="btn btn-secondary"
           (click)="this.CALLBACKS_CALL({Inputdata:'No'},YesNoDialogModel.style.display='none')">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal YesDialogModel" tabindex="-1" role="dialog" #YesDialogModel
+  [style]="this.MODEL_TYPE_VIEW['YesDialogModel']==true?'display: block;' : 'display: none;'">
+  <div class="form-group YesDialogModel-group">
+    <button type="button" class="close YesNoDialogModel-btn" data-dismiss="modal" aria-label="Close"
+      (click)="YesDialogModel.style.display='none'">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="column" style="width: 100%;padding: 20px;">
+      <h5 class="modal-title" [innerHTML]="this.CustomConfirmDialogModel.titleheader"></h5>
+      <div class="row" style="gap: 10px;justify-content: end;">
+        <button type="button" class="btn btn-primary"
+          (click)="this.CALLBACKS_CALL({Inputdata:'Ok'},YesDialogModel.style.display='none')">Ok</button>
       </div>
     </div>
   </div>

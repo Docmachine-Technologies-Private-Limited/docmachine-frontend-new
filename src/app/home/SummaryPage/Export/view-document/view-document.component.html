@@ -17,88 +17,11 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button (click)="filter_Popup.style.display='block'" type="button"
-                                class="btn btn-secondary"><span class="fi_icon"></span>Filter</button>
-                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
-                                appFilterToggle>
-                                <form class="select_filter_options">
-                                    <div class="row">
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                name="Buyer_Name"
-                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
-                                                <option value="">Buyer name</option>
-                                                <option [value]="Buyer_Name"
-                                                    *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
-                                                    {{Buyer_Name}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Company
-                                                name</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'consigneeName');filter_Popup.style.display='none'"
-                                                name="Company_Name">
-                                                <option value="">Company name</option>
-                                                <option [value]="Company_Name"
-                                                    *ngFor="let Company_Name of this.ALL_FILTER_DATA?.Company_Name">{{
-                                                    Company_Name }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Origin</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'exporterLocationCode');filter_Popup.style.display='none'"
-                                                name="Origin">
-                                                <option value="">Origin</option>
-                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.Origin">{{ Origin }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Destination</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'countryOfFinaldestination');filter_Popup.style.display='none'"
-                                                name="Destination">
-                                                <option value="">Destination</option>
-                                                <option *ngFor="let Destination of this.ALL_FILTER_DATA?.Destination">
-                                                    {{Destination }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Currency</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'freightCurrency');filter_Popup.style.display='none'"
-                                                name="Currency">
-                                                <option value="">Currency</option>
-                                                <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
-                                                    [value]="Currency">{{ Currency }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">SB DATE</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'sbdate');filter_Popup.style.display='none'"
-                                                name="SB_DATE">
-                                                <option value="">SB DATE</option>
-                                                <option [value]="SB_DATE"
-                                                    *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.SB_DATE">{{ SB_DATE }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="footer_buttons">
-                                        <button type="button" class="btn btn-light"
-                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
-                                    </div>
-                                </form>
-                                <i></i>
-                            </div>
+                            <button type="button" class="filter-popup btn btn-secondary"><span
+                                class="fi_icon filter-popup"></span>Filter</button>
+                        <ng-custom-filter-popup (ResetEvent)="reset()" FormStyle="display: grid;
+                        grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
+                            *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
                         </div>
                         <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Export/Shippingbill']">
                             <span class="add_icon"></span> ADD NEW
@@ -113,11 +36,17 @@
             [ExpansionShowHide]="true"
             [items]="this.FILTER_VALUE_LIST_NEW?.items"
             [Expansionheader]="this.FILTER_VALUE_LIST_NEW?.Expansion_header"
+            [Expansionheader2]="this.FILTER_VALUE_LIST_NEW?.Expansion_header2"
             [Expansionitems]="this.FILTER_VALUE_LIST_NEW?.Expansion_Items"
             [ExpansionKeys]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys"
             [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
-            [ExpansionTitle]="'Shipping of Against : '+this.SB_NO" [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
+            [ExpansionKeys2]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys2"
+            ExpansionTitle2="Invoice Details"
+            [ExpansionTitle]="'Shipping of Against : '+this.SB_NO"
+            [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
             (ViewChanges)="viewCN($event)" (EditChanges)="toEdit($event)"
+            ExpandTitle1="SB Details"
+            ExpandTitle2="Invoice Details"
             (event)="getInvoicesNew($event,SHIPPING_BILL_ALL_RELATED_DOCUMENTS_VIEW_PANEL) && getTransactionsNew($event);"
             [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId"
             (ArrowEvent)="getSbNo($event)"

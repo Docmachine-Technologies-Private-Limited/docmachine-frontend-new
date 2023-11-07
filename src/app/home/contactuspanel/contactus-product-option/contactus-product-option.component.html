@@ -1,0 +1,15 @@
+<section class="contact-us" id="contact-section">
+  <upload-components style="width: 100%;" label="CONTACT US" labelStyle="{
+    color: rgb(220, 140, 219);
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 0;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+  }"  [HIDE_SUBMIT_BUTTON]="false" id="ContactUsProduct"
+    (SubmitEvent)="onChangesContactUsProduct($event)" #ContactUsProductPanel>
+    <button type="button" class="btn btn-primary submit-button" (click)="ContactUsProductPanel?.onClickButton">Send a
+      message</button>
+  </upload-components>
+</section>

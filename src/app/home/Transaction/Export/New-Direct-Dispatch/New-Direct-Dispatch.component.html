@@ -36,11 +36,7 @@
                 <div class="col-md-7 col-sm-12 col-12">
                   <federal-bank-bill-submission-format [BankId]="this.bankValue"
                     [data]="[this.itemArray,this.advanceArray,this.CHARGE_TO_DATA,this.CUSTOMER_DETAILS,this.Lodgement,this.SB_NO_FILTER,this.SELECT_BUYER_DETAILS,this.ALL_DATA_HSCODE_FORWARD]"
-                    [RequiredLetterHead]="true"
-                    (event)="this.UrlList=$event"></federal-bank-bill-submission-format>
-                  <!-- <hdfc-bank-remittance-advance-against [BankId]="this.bankValue"
-                    [data]="[this.itemArray,this.advanceArray,this.newBankArray]"
-                    id="first"></hdfc-bank-remittance-advance-against> -->
+                    [RequiredLetterHead]="true" (event)="this.UrlList=$event"></federal-bank-bill-submission-format>
                   <div class="new_left_sidedoc p-2 pdf_invoce_scroll" *ngIf="this.PDF_LIST.length!=0">
                     <div *ngFor="let selItems of this.PDF_LIST">
                       <app-pdf-viewer [downloadShow]="false" [name]="selItems?.name" [src]="selItems?.pdf" width="100%"
@@ -67,9 +63,10 @@
                                   <div class="col-md-10 mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
                                     <ng-custom-dropdown placeHolderText="Select Bank Name" #Bank_Name
-                                      [items]="this.BANK_LIST_DROPDOWN" bindLabel="value" [(ngModel)]="ExportBillLodgement_Form.controls.bank_name"
-                                      formControlName="bank_name"
-                                      bindValue="id" [multiple]="false" (modelChanges)="setradio($event)">
+                                      [items]="this.BANK_LIST_DROPDOWN" bindLabel="value"
+                                      [(ngModel)]="ExportBillLodgement_Form.controls.bank_name"
+                                      formControlName="bank_name" bindValue="id" [multiple]="false"
+                                      (modelChanges)="setradio($event)">
                                     </ng-custom-dropdown>
                                   </div>
                                   <div class="col-md-8 mt-2 col-sm-8 col-7"
@@ -91,12 +88,6 @@
 
                                   <div class="col-md-10 mb-3">
                                     <label for="email" class="form-label">Select PI/PO or shipping bill</label>
-                                    <!-- <ng-select
-                                       [items]="this.SHIPPING_BILL_LIST"
-                                       bindLabel="value"
-                                       [multiple]="false"
-                                       placeholder="Select PI/PO or shipping bill"
-                                       (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select> -->
                                     <app-ng-dropdown-custom class="PopupOpen" popup-close="ShippingBill"
                                       placeHolderText="Select PI/PO or shipping bill" [items]="this.SHIPPING_BILL_LIST"
                                       bindLabel="value" [multiple]="false"
@@ -183,29 +174,9 @@
                                               </tbody>
                                             </table>
                                           </div>
-                                          <!-- <button class="col-3 mr-0 mb-3 ml-2" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button> -->
                                         </mat-tab>
                                       </mat-tab-group>
                                     </div>
-                                    <!-- <div class="col-12">
-                                      <h3 style="font-size:17px;">Advance reference Number</h3>
-                                        <div class="col-12">
-                                          <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start" >
-                                            <mat-tab  [label]="'SB_No_'+item?.sbno" [id]="item?.sbno" *ngFor="let item of this.itemArray;let i=index">
-                                              <div class="custom">
-                                                <div class="col-12 d-flex flex-column">
-                                                  <div class="header-panl col-12">
-                                                    <label *ngFor="let data of this.ACCORDING_LIST['SB_'+item?.sbno]" style="display: inline-block;">
-                                                      <span class="selecter1">{{data.billNo}}</span>
-                                                    </label>
-                                                  </div>
-                                                  <button class="col-2 mr-0 mt-3" style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add +</button>
-                                                </div>
-                                              </div>
-                                            </mat-tab>
-                                          </mat-tab-group>
-                                        </div>
-                                    </div> -->
                                   </div>
                                   <div class="space_bottom"></div>
                                   <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"'
@@ -244,6 +215,44 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-8 col-sm-8 col-7">
+                                    <label for="email" class="form-label">Sight?</label>
+                                  </div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-4 col-sm-4 col-5">
+                                    <div class="check_box_button">
+                                      <button type="button" [class]="ClassRetrun('Sight','Hide','btn no-button active1',
+                                                                          'btn btn-primary remove-no-button','no')"
+                                        (click)="Changebutton('Sight','Hide','Show','no')">No</button>
+                                      <button type="button"
+                                        [class]="ClassRetrun('Sight','Show',
+                                                                          'btn yes-button active','btn yes-button','yes')"
+                                        (click)="Changebutton('Sight','Show','Hide','yes')">Yes</button>
+                                    </div>
+                                  </div>
+                                  <div class="space_bottom"></div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-8 col-sm-8 col-7">
+                                    <label for="email" class="form-label">Usance?</label>
+                                  </div>
+                                  <div
+                                    *ngIf='this.Lodgement["UnderLC"]["Show"]=== "yes" || this.Lodgement["UnderLC"]["Hide"]== "no"'
+                                    class="col-md-4 col-sm-4 col-5">
+                                    <div class="check_box_button">
+                                      <button type="button" [class]="ClassRetrun('Usance','Hide','btn no-button active1',
+                                                                          'btn btn-primary remove-no-button','no')"
+                                        (click)="Changebutton('Usance','Hide','Show','no')">No</button>
+                                      <button type="button"
+                                        [class]="ClassRetrun('Usance','Show',
+                                                                          'btn yes-button active','btn yes-button','yes')"
+                                        (click)="Changebutton('Usance','Show','Hide','yes')">Yes</button>
+                                    </div>
+                                  </div>
+                                  <div class="space_bottom"></div>
                                   <div *ngIf='this.Lodgement["UnderLC"]["Show"]==="yes"' style="width:100%;">
                                     <div class="col-md-12">
                                       <div class="row">
@@ -270,12 +279,14 @@
                                     <div class="space_bottom"></div>
                                   </div>
                                   <div
-                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" 
+                                    && this.Lodgement["DirectDispatch"]["Hide"]== "no" && this.Lodgement["UnderLC"]["Show"]==="yes"'
                                     class="col-md-8 col-sm-8 col-7">
                                     <label for="email" class="form-label">With Scrutiny?</label>
                                   </div>
                                   <div
-                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"
+                                    && this.Lodgement["DirectDispatch"]["Hide"]== "no" && this.Lodgement["UnderLC"]["Show"]==="yes"'
                                     class="col-md-4 col-sm-4 col-5">
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('WithScrutiny','Hide','btn no-button active1',
@@ -368,41 +379,19 @@
                                   <div class="space_bottom"></div>
                                   <div *ngIf='Bank_Name.selectedItems!=""' style="width:100%;">
                                     <div class="col-md-12 col-sm-12 col-12">
-                                      Charges to {{Bank_Name.selectedItems}}*
+                                      Charges A/C No.*
                                       <div *ngFor='let value of newBankArray'
                                         style="display: flex; align-items: center;">
                                         <input style="flex-direction:row;" [value]="value" name="Charges_to_Bank"
                                           ngModel (click)="model1.option = value" [checked]="value === model1.option"
                                           type="radio" id="options1" class="circular_input1"
                                           (click)="chargesTo(value);">
-                                        <label style="flex-direction:row;" class="label1"
-                                          for="male">{{value.bank}}-{{value.accType}}</label>
+                                        <label style="flex-direction:row;" class="label1" for="male">{{value.bank}} -
+                                          {{value.accType?.split("-")[0]}} - {{value.accNumber}}</label>
                                       </div>
                                       <br>
                                     </div>
                                   </div>
-                                  
-                                  <button type="button" class="btn btn-success PopupOpen"
-                                  popup-close="HS_CODE_POPUP">
-                                  Select HS Code</button>
-                                  <!-- <div class="col-md-4 col-sm-4 col-5 column" style="display: grid;
-                                  grid-template-columns: repeat(2,1fr);
-                                  max-width: 93%;
-                                  width: 100%;
-                                  flex: 90%;">
-                                    <div class="row d-flex flex-row" *ngIf="this.balanceAvai!=''">
-                                      <label for="email" class="form-label">Total SB Amount</label>
-                                      <input type="text" ngModel name="Total_SB_Amount" disabled class="form-control">
-                                    </div>
-                                    <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
-                                      <label for="email" class="form-label">Total FIRX Amount</label>
-                                      <input type="text" name="Total_FIRX_Amount" disabled ngModel class="form-control">
-                                    </div>
-                                    <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
-                                      <label for="email" class="form-label">Total Reaming Amount</label>
-                                      <input type="text" name="Total_Reaming_Amount" disabled ngModel class="form-control">
-                                    </div>
-                                  </div> -->
                                   <br>
                                 </div>
                               </div>
@@ -618,11 +607,6 @@
                 placeHolderText="Select Party Name" [items]="this.irBuyerName" bindLabel="value" [multiple]="false"
                 style="margin: auto;margin-left: 10px; width: 280px;" #buyerNameSelection>
               </app-ng-dropdown-custom>
-              <!-- <div class="streep-panel">
-                <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
-                <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
-                <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
-            </div> -->
               <div class="button-group mr-0">
                 <div class="d-flex" style="align-items: center;gap: 10px;">
                   <div class="temp">
@@ -807,12 +791,14 @@
                     <th scope="col" class="col-td-th-2">Recieved Amount</th>
                     <th scope="col" class="col-td-th-2">Commision Amount</th>
                     <th scope="col" class="col-td-th-2">Available Balance</th>
+                    <th scope="col" class="col-td-th-2">Utilization Amount</th>
                   </tr>
                 </thead>
                 <tbody *ngIf="item13.length!=0">
                   <tr class="table-tr"
                     *ngFor='let data of item13 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
-                    <td class="col-td-th-1"><input type="checkbox" (change)="addToSbArray(data, $event,i)" />
+                    <td class="col-td-th-1"><input [disabled]="data?.Enabled" type="checkbox"
+                        (change)="addToSbArray(data, $event,i)" />
                     </td>
                     <td class="col-td-th-2">
                       {{data.billNo}}
@@ -825,6 +811,9 @@
                     </td>
                     <td class="col-td-th-2">
                       {{data.BalanceAvail}}
+                    </td>
+                    <td class="col-td-th-2">
+                      <input type="text" (keypress)="FIRXAMOUNT(data, $event)" [(ngModel)]="data.InputValue">
                     </td>
                   </tr>
                 </tbody>
@@ -874,6 +863,7 @@
                     <td class="col-td-th-2">
                       {{data?.irDataItem?.BalanceAvail}}
                     </td>
+
                   </tr>
                 </tbody>
               </table>
@@ -963,32 +953,33 @@
 </div>
 
 <app-custom-model [customstyle]="{'max-width':'90vw !important'}" class="p-2" height="75vh" id="HS_CODE_POPUP"
-    [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
-    <div class="col-12 mt-2 mb-2">
-        <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
-            (event)="filterHSCode($event)"></ng-input>
-        <table class="table">
-            <thead>
-                <tr class="table-tr pr-3">
-                    <th scope="col" class="col-td-th-1">#</th>
-                    <th scope="col" class="col-td-th-1">Section</th>
-                    <th scope="col" class="col-td-th-1">HS Code</th>
-                    <th scope="col" class="col-td-th-3" [style.width]="'430px'">Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.FILTER_HS_CODE_DATA;let i=index">
-                    <td scope="col" class="col-td-th-1"><input type="checkbox" (change)="ToHSCode($event,item,i)"></td>
-                    <td scope="col" class="col-td-th-1">{{item?.section}}</td>
-                    <td scope="col" class="col-td-th-1">{{item?.hscode}}</td>
-                    <td scope="col" class="col-td-th-3" [style.width]="'430px'">{{item?.description}}</td>
-                </tr>
-            </tbody>
-        </table>
+  [minimizedisabled]="false" modalbodyheight="70vh" name="Select HS Code View" #HS_CODE_POPUP_PANEL>
+  <div class="col-12 mt-2 mb-2">
+    <ng-input [item]="{value:'',type:'text',placeHolderText:'Search Description or HS Code',label:''}"
+      (event)="filterHSCode($event)"></ng-input>
+    <table class="table">
+      <thead>
+        <tr class="table-tr pr-3">
+          <th scope="col" class="col-td-th-1">#</th>
+          <th scope="col" class="col-td-th-1">Section</th>
+          <th scope="col" class="col-td-th-1">HS Code</th>
+          <th scope="col" class="col-td-th-3" [style.width]="'430px'">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.FILTER_HS_CODE_DATA;let i=index">
+          <td scope="col" class="col-td-th-1"><input type="checkbox" (change)="ToHSCode($event,item,i)"></td>
+          <td scope="col" class="col-td-th-1">{{item?.section}}</td>
+          <td scope="col" class="col-td-th-1">{{item?.hscode}}</td>
+          <td scope="col" class="col-td-th-3" [style.width]="'430px'">{{item?.description}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
+    <div style="display:flex;" class="mt-3">
+      <button type="button" class="btn btn-primary"
+        (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
     </div>
-    <div class="modal-footer" style="position: fixed;bottom: -30px;right: 20px;">
-        <div style="display:flex;" class="mt-3">
-            <button type="button" class="btn btn-primary" (click)="DoneButton();HS_CODE_POPUP_PANEL?.displayHidden">Done</button>
-        </div>
-    </div>
+  </div>
 </app-custom-model>

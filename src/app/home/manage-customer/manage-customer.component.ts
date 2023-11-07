@@ -13,10 +13,7 @@ import { UploadServiceValidatorService } from "../../components/Upload/service/u
 @Component({
   selector: "app-manage-customer",
   templateUrl: "./manage-customer.component.html",
-  styleUrls: [
-    
-    "./manage-customer.component.scss",
-  ],
+  styleUrls: ["./manage-customer.component.scss"],
 })
 export class ManageCustomerComponent implements OnInit {
   item2: any;
@@ -733,5 +730,40 @@ export class ManageCustomerComponent implements OnInit {
     } else {
       this.toastr.error('Sorry you have not access to delete buyer...');
     }
+  }
+  
+  CreateFormBank() {
+    this.validator.buildForm({
+      BankName: {
+        type: "text",
+        value: "",
+        label: "Bank Name",
+        placeholderText: 'Bank Name',
+        rules: {
+          required: true,
+        },
+        maxLength: 200
+      },
+    }, 'AddNewBankName');
+  }
+  
+  addNewBank(e: any, panel: any) {
+    this.documentService.addNewBankInfo({ value: e?.value?.BankName, BankUniqueId: this.initialName(this.removeAllSpecialChar(e?.value?.BankName)) }).subscribe(async (res: any) => {
+      this.validator.BANK_NAME_LIST_GLOABL = await this.documentService.getBankNameList();
+      this.toastr.success(res?.message);
+      panel?.displayHidden;
+    })
+  }
+  initialName(words) {
+    'use strict'
+    return words
+      .replace(/\b(\w)\w+/g, '$1_')
+      .replace(/\s/g, '')
+      .replace(/\.$/, '')
+      .toUpperCase();
+  }
+
+  removeAllSpecialChar(string: any) {
+    return string?.replace(/[^a-zA-Z ]/g, "");
   }
 }

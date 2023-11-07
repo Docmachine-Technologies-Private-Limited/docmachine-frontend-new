@@ -55,7 +55,6 @@ export class ForwardContractAddComponent implements OnInit,OnChanges {
 
   ngOnInit(): void {
     console.log(this.data, 'ghshgjfsfsdgfsdjfgsdjfgd')
-   
   }
   SubmitForm(e: any) {
     console.log(e, 'sdfgsjgdjfd')
@@ -120,7 +119,7 @@ export class ForwardContractAddComponent implements OnInit,OnChanges {
             value: "",
             label: "Utilized amount",
             rules: {
-              required: true,
+              required: false,
             },
           },
           AvailableAmount: {
@@ -128,7 +127,7 @@ export class ForwardContractAddComponent implements OnInit,OnChanges {
             value: "",
             label: "Available Amount",
             rules: {
-              required: true,
+              required: false,
             },
           },
           FromDate: {
@@ -228,7 +227,7 @@ export class ForwardContractAddComponent implements OnInit,OnChanges {
             value: "",
             label: "Utilized amount",
             rules: {
-              required: true,
+              required: false,
             },
           },
           AvailableAmount: {
@@ -236,7 +235,7 @@ export class ForwardContractAddComponent implements OnInit,OnChanges {
             value: "",
             label: "Available Amount",
             rules: {
-              required: true,
+              required: false,
             },
           },
           FromDate: {

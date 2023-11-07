@@ -1,53 +1,61 @@
-import { Directive,
-  OnInit,
-  Renderer2,
+import {
+  Directive,
   ElementRef,
   HostListener,
   Input,
-  HostBinding } from '@angular/core';
+} from '@angular/core';
 
 @Directive({
   selector: '[appFilterToggle]'
 })
 export class FilterToggleDirective {
-  @Input() defaultColor : string;
-  @Input() highlightColor : string = 'pink';
-  @HostBinding('style.backgroundColor') backgroundColor: string;
+  constructor(private elementRef: ElementRef) { }
 
- constructor(private elementRef: ElementRef ,private renderer : Renderer2){
+  ngOnInit() {
+  }
 
- }
-
- ngOnInit(){
-   this.backgroundColor = this.defaultColor;
-   //this.renderer.setStyle(this.elementRef.nativeElement,'background-color','pink');
- }
-
-
-
- @HostListener('mouseenter') mouseover(eventData: Event){
-   //this.renderer.setStyle(this.elementRef.nativeElement,'background-color','pink');
-   this.backgroundColor =this.highlightColor;
- }
-
- @HostListener('mouseleave') mouseleave(eventData: Event){
-   //this.renderer.setStyle(this.elementRef.nativeElement,'background-color','transparent');
-   this.backgroundColor = this.defaultColor;
- }
- @HostListener('document:mousedown', ['$event'])
- onGlobalClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-
+  @HostListener('document:click', ['$event'])
+  onClick(event): void {
+    var ClassList: any = []
+    for (let index = 0; index < event?.target?.classList.length; index++) {
+      ClassList.push(event?.target?.classList[index])
     }
- }
- @HostListener('document:click', ['$event'])
- onClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target) && ['fi_icon','filter-popup'].includes(event.target.className)==false) {
-      this.elementRef.nativeElement.style.display = 'none';
-    }else{
-      if (['fi_icon','filter-popup'].includes(event.target.className)==true) {
-        this.elementRef.nativeElement.style.display = 'block';
+    if (ClassList.length == 0) {
+      ClassList = (typeof event?.target?.className)?.toLowerCase()!=="object"?event?.target?.className?.split(' '):[]
+    }
+
+    if (ClassList?.includes('filter-popup') == true) {
+      this.elementRef.nativeElement.style.display = 'block';
+    } else {
+      this.getAllClassNameList().then((res: any) => {
+        if (!this.checkvalue(res, ClassList)) {
+          this.elementRef.nativeElement.style.display = 'none';
+        }
+      })
+    }
+  }
+  getAllClassNameList() {
+    return new Promise((resolve, reject) => {
+      var temp: any = [];
+      $(async function () {
+        var doc: any = document.getElementById("filter_main") as any;
+        doc = doc?.getElementsByTagName("*")
+        await doc?.forEach(async (element) => {
+          await element?.classList?.forEach(async (classelement) => {
+            await temp.push(classelement)
+          });
+        });
+        await resolve(temp);
+      });
+    })
+  }
+  checkvalue(array1, array2) {
+    let bool: boolean = false;
+    array2.forEach(element2 => {
+      if (array1.includes(element2)) {
+        bool = true;
       }
-    }
- }
+    });
+    return bool;
+  }
 }

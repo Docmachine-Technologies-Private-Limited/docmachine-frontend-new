@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
+import moment from "moment";
 
 @Component({
   selector: 'app-inward-remittance-disposal',
@@ -33,19 +34,20 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    BL_Airway_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
       "BankName",
+      "PI/PO No.",
       "Ref_Number",
       "Currency",
       "Amount",
       "Remitter_Name",
-      "BL_Number",
-      "disposal Amount",
+      "Amount Claimed",
+      "Balance Amount",
       "Action"],
     items: [],
     Expansion_header: [],
@@ -58,8 +60,9 @@ export class InwardRemittanceDisposalComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-2",
+      "col-td-th-2",
     ],
     eventId: ''
   }
@@ -68,14 +71,17 @@ export class InwardRemittanceDisposalComponent implements OnInit {
     airwayBlCopyNumber: '',
     buyerName: '',
   }
-  Inward_Remittance:any=[];
-  
+  Inward_Remittance: any = [];
+  FILTER_FORM: any = ''
+  GET_FILE_NAME_ROUTE: any = ''
+
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
     private router: Router,
+    private actRoute: ActivatedRoute,
     private userService: UserService,
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
@@ -84,45 +90,242 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   ) {
   }
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
-    this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getInward_remittance().subscribe(async (res: any) => {
-     this.Inward_Remittance = res?.data;
-     await this.AirwayBlCopyTable(this.Inward_Remittance)
-      console.log(res, 'getInward_remittance')
-    })
+    this.actRoute.paramMap.subscribe(async (params) => {
+      this.GET_FILE_NAME_ROUTE = params.get('file');
+      console.log(this.GET_FILE_NAME_ROUTE, "GET_FILE_NAME_ROUTE")
+      this.wininfo.set_controller_of_width(270, '.content-wrap')
+      this.USER_DATA = await this.userService.getUserDetail();
+      console.log("this.USER_DATA", this.USER_DATA)
+      for (let index = 0; index < data1['default']?.length; index++) {
+        this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+      }
+      this.item = [];
+      this.documentService.getInward_remittance().subscribe(async (res: any) => {
+        this.item = res?.data;
+        if (this.GET_FILE_NAME_ROUTE == "DisposalSubmitted") {
+          this.Inward_Remittance = res?.data?.filter((item: any) => item?.pipoRef?.length != 0);
+          this.FILTER_VALUE_LIST_NEW = {
+            header: [
+              "BankName",
+              "PI/PO No.",
+              "Ref_Number",
+              "Submitted date",
+              "Currency",
+              "Amount",
+              "Remitter_Name",
+              "Amount Claimed",
+              "Balance Amount",
+              "Action"],
+            items: [],
+            Expansion_header: [],
+            Expansion_Items: [],
+            Objectkeys: [],
+            ExpansionKeys: [],
+            TableHeaderClass: [
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-2",
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-2",
+              "col-td-th-2",
+              "col-td-th-2",
+            ],
+            eventId: ''
+          }
+          await this.AirwayBlCopyTable(this.Inward_Remittance)
+        } else if (this.GET_FILE_NAME_ROUTE == "PendingCaliming") {
+          this.Inward_Remittance = res?.data?.filter((item: any) => item?.pipoRef?.length == 0);
+          this.FILTER_VALUE_LIST_NEW = {
+            header: [
+              "BankName",
+              "Ref_Number",
+              "Currency",
+              "Amount",
+              "Remitter_Name",
+              "Amount Claimed",
+              "Balance Amount",
+              "Action"],
+            items: [],
+            Expansion_header: [],
+            Expansion_Items: [],
+            Objectkeys: [],
+            ExpansionKeys: [],
+            TableHeaderClass: [
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-2",
+              "col-td-th-2",
+              "col-td-th-2",
+            ],
+            eventId: ''
+          }
+          await this.AirwayBlCopyTable(this.Inward_Remittance)
+        } else if (this.GET_FILE_NAME_ROUTE == "Processed") {
+          this.Inward_Remittance = res?.data?.filter((item: any) => item?.AdviceRef?.length != 0);
+          this.FILTER_VALUE_LIST_NEW = {
+            header: [
+              "BankName",
+              "PI/PO No.",
+              "FIRX No.",
+              "Ref_Number",
+              "Currency",
+              "Amount",
+              "Remitter_Name",
+              "Amount Claimed",
+              "Balance Amount",
+              "Action"],
+            items: [],
+            Expansion_header: [],
+            Expansion_Items: [],
+            Objectkeys: [],
+            ExpansionKeys: [],
+            TableHeaderClass: [
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-1",
+              "col-td-th-2",
+              "col-td-th-2",
+              "col-td-th-2",
+            ],
+            eventId: ''
+          }
+          await this.AirwayBlCopyTable(this.Inward_Remittance)
+        }
+        for (let value of res.data) {
+          // if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+          //   this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
+          // }
+          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.Remitter_Name)?.length == 0) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.Remitter_Name });
+          }
+          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.Inward_reference_number)?.length == 0) {
+            this.ALL_FILTER_DATA['NO'].push({ value: value?.Inward_reference_number });
+          }
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+          }
+        }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Remitter_Name",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Reference Number",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
+        console.log(res, 'getInward_remittance')
+      })
+    });
+  }
+
+  onSubmit(value: any) {
+    let form_value: any = {
+      Remitter_Name: value?.value?.buyerName,
+      Inward_reference_number: value?.value?.NO
+    };
+
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'Inward_remittance').subscribe((resp: any) => {
+      console.log(resp, value, "Inward_remittance")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.AirwayBlCopyTable(this.FILTER_VALUE_LIST)
+    });
+  }
+
+  reset() {
+    this.FILTER_VALUE_LIST = this.item;
+    this.AirwayBlCopyTable(this.FILTER_VALUE_LIST)
   }
 
   AirwayBlCopyTable(data: any) {
-  console.log(data,'AirwayBlCopyTable')
+    console.log(data, 'AirwayBlCopyTable')
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          BankName: element['BankName'],
-          Inward_reference_number: element['Inward_reference_number'],
-          currency: element['currency'],
-          amount: element['amount'],
-          Remitter_Name: element['Remitter_Name'],
-          Bill_lodgment_Number: element['Bill_lodgment_Number'],
-          Inward_amount_for_disposal: element['Inward_amount_for_disposal'],
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
+        if (this.GET_FILE_NAME_ROUTE == "PendingCaliming") {
+          await this.FILTER_VALUE_LIST_NEW['items'].push({
+            BankName: element['BankName'],
+            Inward_reference_number: element['Inward_reference_number'],
+            currency: element['currency'],
+            amount: element['amount'],
+            Remitter_Name: element['Remitter_Name'],
+            Inward_amount_for_disposal: element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0,
+            BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
+            isExpand: false,
+            disabled: element['deleteflag'] != '-1' ? false : true,
+            RoleType: this.USER_DATA?.result?.RoleCheckbox
+          })
+        }
+        else if (this.GET_FILE_NAME_ROUTE == "DisposalSubmitted") {
+          await this.FILTER_VALUE_LIST_NEW['items'].push({
+            BankName: element['BankName'],
+            Pipo: this.getPipoNumber(element['pipoRef']),
+            Inward_reference_number: element['Inward_reference_number'],
+            date: moment(new Date(element?.updatedAt)).format("DD-MM-YYYY"),
+            currency: element['currency'],
+            amount: element['amount'],
+            Remitter_Name: element['Remitter_Name'],
+            Inward_amount_for_disposal: element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0,
+            BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
+            isExpand: false,
+            disabled: element['deleteflag'] != '-1' ? false : true,
+            RoleType: this.USER_DATA?.result?.RoleCheckbox
+          })
+        }
+        else if (this.GET_FILE_NAME_ROUTE == "Processed") {
+          await this.FILTER_VALUE_LIST_NEW['items'].push({
+            BankName: element['BankName'],
+            Pipo: this.getPipoNumber(element['pipoRef']),
+            FirxNo: this.getFIRXNumber(element['AdviceRef']),
+            Inward_reference_number: element['Inward_reference_number'],
+            currency: element['currency'],
+            amount: element['amount'],
+            Remitter_Name: element['Remitter_Name'],
+            Inward_amount_for_disposal: element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0,
+            BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
+            isExpand: false,
+            disabled: element['deleteflag'] != '-1' ? false : true,
+            RoleType: this.USER_DATA?.result?.RoleCheckbox
+          })
+        }
+
       });
       if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
       }
-      console.log(this.FILTER_VALUE_LIST_NEW,'AirwayBlCopyTable')
+      console.log(this.FILTER_VALUE_LIST_NEW, 'AirwayBlCopyTable')
     });
   }
 
@@ -141,6 +344,14 @@ export class InwardRemittanceDisposalComponent implements OnInit {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  getFIRXNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.billNo);
     });
     return temp.join(',')
   }
@@ -193,42 +404,20 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   }
 
   toSave(data, index) {
-    // this.optionsVisibility[index] = false;
-    // console.log(data);
-    // this.documentService.updateAirwayBlcopy(data, data._id).subscribe(
-    //   (data) => {
-    //     console.log('king123');
-    //     this.toastr.success('Airway / BlCopy updated successfully.');
-    //   },
-    //   (error) => {
-    //     console.log('error');
-    //   }
-    // );
   }
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
-    // this.documentService.updateAirwayBlcopy(data, id).subscribe((data) => {
-    //   console.log(data);
-    //   this.toastr.success('Airway / BlCopy Is Updated Successfully.');
-    //   this.ngOnInit();
-    //   EditSummaryPagePanel?.displayHidden
-    // }, (error) => {
-    //   console.log('error');
-    // });
   }
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   airwayBlCopydate: this.SELECTED_VALUE['airwayBlCopydate'],
-    //   airwayBlCopyNumber: this.SELECTED_VALUE['airwayBlCopyNumber'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
-    // this.toastr.warning('Airway / BlCopy Is In Edit Mode');
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        "item": JSON.stringify(this.Inward_Remittance[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/Inward-Remittance-Disposal`], navigationExtras);
   }
 
   handleDelete(data: any) {
@@ -247,7 +436,7 @@ export class InwardRemittanceDisposalComponent implements OnInit {
   }
 
   newCredit() {
-    this.router.navigate(['/home/upload', {file: 'import', document: 'import-blCopy'}]);
+    this.router.navigate(['/home/upload', { file: 'import', document: 'import-blCopy' }]);
   }
 
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {

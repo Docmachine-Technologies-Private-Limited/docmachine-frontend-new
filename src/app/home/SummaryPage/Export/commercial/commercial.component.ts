@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
+import moment from 'moment';
 
 @Component({
   selector: 'app-commercial',
@@ -32,7 +33,7 @@ export class CommercialComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    Commercial_Invoice_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -41,7 +42,9 @@ export class CommercialComponent implements OnInit {
       "Pipo No.",
       "DATE",
       "SB No.",
+      "Payments Terms",
       "Commercial Invoice No.",
+      "Commercial Amount",
       "Buyer Name",
       "Action"],
     items: [],
@@ -53,7 +56,9 @@ export class CommercialComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-2",
+      "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1"
     ],
@@ -65,6 +70,7 @@ export class CommercialComponent implements OnInit {
     commercialNumber: '',
     buyerName: '',
   }
+  FILTER_FORM: any = ''
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -90,24 +96,55 @@ export class CommercialComponent implements OnInit {
     this.documentService.getCommercial().subscribe(
       (res: any) => {
         console.log('Res', res);
+        this.item = res?.data;
+        this.FILTER_VALUE_LIST = this.item;
         for (let value of res.data) {
           if (value['file'] == 'export') {
-            this.item.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
             }
-            value?.buyerName.forEach(element => {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-              }
-            });
-            if (this.ALL_FILTER_DATA['Commercial_Invoice_No'].includes(value?.commercialNumber) == false) {
-              this.ALL_FILTER_DATA['Commercial_Invoice_No'].push(value?.commercialNumber);
+            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
             }
-            if (this.ALL_FILTER_DATA['DATE'].includes(value?.commercialDate) == false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.commercialDate);
+            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.commercialNumber)?.length == 0) {
+              this.ALL_FILTER_DATA['NO'].push({ value: value?.commercialNumber });
+            }
+            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.commercialDate)?.length == 0) {
+              this.ALL_FILTER_DATA['DATE'].push({ value: value?.commercialDate });
             }
           }
+        }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Buyer",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Commercial Invoice No.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
         }
         this.FILTER_VALUE_LIST = this.item;
         this.CommercialTable(this.item)
@@ -115,7 +152,36 @@ export class CommercialComponent implements OnInit {
       (err) => console.log(err)
     );
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      commercialDate: value?.value?.date,
+      commercialNumber: value?.value?.NO
+    };
 
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'commercials').subscribe((resp: any) => {
+      console.log(resp, value,"commercials")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.CommercialTable(this.FILTER_VALUE_LIST)
+    }); 
+  }
+  
+  reset(){
+    this.FILTER_VALUE_LIST = this.item;
+    this.CommercialTable(this.FILTER_VALUE_LIST)
+  }
+  
   CommercialTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -123,9 +189,11 @@ export class CommercialComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          commercialDate: element['commercialDate'],
+          commercialDate: moment(element['commercialDate']).format("DD-MM-YYYY"),
           sbNo: element['sbNo'],
+          type: element['type'],
           commercialNumber: element['commercialNumber'],
+          amount: element['amount'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
@@ -241,14 +309,20 @@ export class CommercialComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      commercialDate: this.SELECTED_VALUE['commercialDate'],
-      sbNo: this.SELECTED_VALUE['sbNo'],
-      commercialNumber: this.SELECTED_VALUE['commercialNumber'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   commercialDate: this.SELECTED_VALUE['commercialDate'],
+    //   sbNo: this.SELECTED_VALUE['sbNo'],
+    //   commercialNumber: this.SELECTED_VALUE['commercialNumber'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/CommercialInvoices`], navigationExtras);
     this.toastr.warning('Commercial Invoie Row Is In Edit Mode');
   }
 
@@ -314,8 +388,10 @@ class CommercialFormat {
         PipoNo: this.getPipoNumber(element['pipo']),
         commercialDate: element['commercialDate'],
         sbNo: element['sbNo'],
+        type: element['type'],
         commercialNumber: element['commercialNumber'],
-        buyerName: this.getBuyerName(element['buyerName']),
+        amount: element['amount'],
+        buyerName: element['buyerName'][0],
       })
     });
     return temp;
@@ -330,7 +406,7 @@ class CommercialFormat {
 
   getBuyerName(buyerName: any) {
     let temp: any = [];
-    buyerName.forEach(element => {
+    buyerName != 'NF' ? buyerName : []?.forEach(element => {
       temp.push(element);
     });
     return temp.join(',')

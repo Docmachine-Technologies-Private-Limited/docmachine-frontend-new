@@ -256,7 +256,7 @@ export class CommonOpenPopUpDirective implements OnInit {
       $(async function () {
         var doc: any = document.getElementById("CUSTOM_HOVER_PANEL") as any;
         doc = doc?.getElementsByTagName("*")
-        await doc.forEach(async (element) => {
+        await doc?.forEach(async (element) => {
           await element?.classList?.forEach(async (classelement) => {
             await temp.push(classelement)
           });

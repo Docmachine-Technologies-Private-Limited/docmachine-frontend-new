@@ -16,7 +16,7 @@ import {
   FormArray,
   FormBuilder,
 } from '@angular/forms';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, NavigationStart, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
 import { ToastrService } from 'ngx-toastr';
@@ -33,12 +33,13 @@ import { WindowInformationService } from '../../../../service/window-information
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-pipo-documents',
   templateUrl: './pipo-documents.component.html',
   styleUrls: [
-    
+
     './pipo-documents.component.scss',
   ],
 })
@@ -151,14 +152,13 @@ export class PipoDocumentsComponent implements OnInit {
   FILTER_VALUE_LIST_NEW: any = {
     header: [
       "DATE",
-      "INVOICE NUMBER",
+      "INVOICE No.",
       "INVOICE DATE",
-      "SELLER NAMES",
-      "INVOICE CURRENCY",
-      "INVOICE VALUE - USD",
+      "Beneficiary NAMES",
+      "CURRENCY",
       "BRANCH",
       "COMMODITY",
-      "BALANCE IF ANY",
+      "Amount",
       "Action"],
     items: [],
     Expansion_header: [
@@ -191,15 +191,13 @@ export class PipoDocumentsComponent implements OnInit {
     ExpansionKeys2: [],
     TableHeaderClass: [
       "col-td-th-0",
-      "col-td-th-2",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-2",
-      "col-td-th-1"
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
     ],
     eventId: 1
   }
@@ -286,7 +284,7 @@ export class PipoDocumentsComponent implements OnInit {
         console.log('Data fetched successfully', res);
         this.item = res.data;
         console.log(this.item);
-        this.item1=[];
+        this.item1 = [];
         this.pipoDataService.setPipoData(res.data, 'import');
         this.pipoDataService.pipo$.subscribe((data) => {
           for (let value of data) {
@@ -317,7 +315,7 @@ export class PipoDocumentsComponent implements OnInit {
         console.log(this.item);
         this.pipoDataService.setPipoData(res.data, 'import');
         this.pipoDataService.pipo$.subscribe((data) => {
-          this.item1=[];
+          this.item1 = [];
           for (let value of data) {
             this.item1.push(value);
             this.mergeBoe();
@@ -1087,7 +1085,7 @@ export class PipoDocumentsComponent implements OnInit {
         }])?.forEach(boeelement => {
           boedata.push({
             BOENO: boeelement['boeNumber'],
-            BOEDATE: boeelement['boeDate'],
+            BOEDATE: moment(boeelement['boeDate']).format("DD-MM-YYYY"),
             REGION: boeelement['origin'],
             FOBVALUE: boeelement['invoiceAmount'],
             PORTCODE: boeelement['iecCode'],
@@ -1111,7 +1109,7 @@ export class PipoDocumentsComponent implements OnInit {
           STATUSOFBOESUBMISSIONINBANK: "NF",
         }])?.forEach(adviceelement => {
           advice.push({
-            TTDATE: adviceelement['date'],
+            TTDATE: moment(adviceelement['date']).format("DD-MM-YYYY"),
             TTUSD: adviceelement['amount'],
             PaymentDate: adviceelement['amount'],
             Amount: adviceelement['amount'],
@@ -1126,15 +1124,14 @@ export class PipoDocumentsComponent implements OnInit {
           })
         });
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          DATE: element['date'],
+          DATE: moment(element['purchasedate']).format("DD-MM-YYYY"),
           INVOICENUMBER: element['pi_poNo'],
-          INVOICEDATE: element['purchasedate'],
+          INVOICEDATE: moment(element['date']).format("DD-MM-YYYY"),
           SELLERNAMES: element['benneName'],
           INVOICECURRENCY: element['currency'],
-          INVOICEVALUEUSD: element['amount'],
           BRANCH: element['location'],
           COMMODITY: element['commodity'],
-          BALANCEIFANY: element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['amount'],
+          BALANCEIFANY: element['amount'],
           Expansion_Items: boedata,
           Expansion_Items2: advice,
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
@@ -1213,18 +1210,12 @@ export class PipoDocumentsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.item3[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      sbno: this.SELECTED_VALUE['sbno'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-      BankName: this.SELECTED_VALUE['BankName'],
-      currency: this.SELECTED_VALUE['currency'],
-      amount: this.SELECTED_VALUE['amount'],
-      billNo: this.SELECTED_VALUE['billNo'],
-      BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
-    }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.item3[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/PIPO`],navigationExtras);
     this.toastr.warning('PI/PO Row Is In Edit Mode');
   }
 

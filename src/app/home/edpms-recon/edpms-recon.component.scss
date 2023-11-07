@@ -187,7 +187,7 @@ p {
     display: grid;
     grid-template-rows: 40px calc(100% - 40px);
     grid-template-columns: repeat(1, 1fr);
-    height: 91vh;
+    height: 89vh;
     border-radius: 5px;
     margin-top: 4px;
     box-shadow: 0px 0px 11px 3px #d1cece;
@@ -210,12 +210,12 @@ p {
     gap: 20px;
     align-items: center;
     justify-content: center;
-    background: #fefefe;
-    border-radius: 10px;
-    box-shadow: 0 0 2px 2px #c6c2c2;
-    width: 98%;
-    position: relative;
-    margin: auto 0 auto 1%;
+    width: 86%;
+    margin: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
 }
 
 .upload-panel {
@@ -223,6 +223,9 @@ p {
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    overflow: auto;
+    background: white;
+    border-radius: 10px;
 }
 
 .heading {
@@ -305,7 +308,7 @@ p {
 .table-panel {
     width: 100%;
     margin: auto auto auto 0;
-    height: calc(100% - 105px);
+    height: calc(100% - 0px);
     overflow: auto;
 }
 
@@ -333,4 +336,87 @@ p {
 
 ::ng-deep .mat-tab-body-wrapper {
     height: 100% !important;
+}
+
+.table-wrapper {
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 100%;
+    color: white;
+}
+
+.table-wrapper tr th,
+.table-wrapper tr td {
+    background-color: transparent;
+}
+
+.table-wrapper tr th:hover th,
+.table-wrapper tr th:hover td {
+    background-color: transparent;
+}
+
+.right-button-area {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    top: 118px;
+    left: 100%;
+}
+
+.right-button-area-1 {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    top: 118px;
+    right: -150px;
+}
+
+.right-button-area-2 {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    top: 118px;
+    left: 91%;
+}
+
+.edpms-table {
+    position: relative;
+}
+
+.edpms-table .submit-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+}
+
+.submit-btn-2 {
+    position: fixed;
+    top: 78px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.submit-btn-2 button{
+    font-size: 12px;
+}
+
+.isActive {
+    background-color: #496687 !important;
+    color: white;
+    border-radius: 5px !important;
+    margin-top: 10px !important;
+}
+
+.isActive td {
+    color: white !important;
+}
+
+.isDocumentsAvailable{
+    background: #89fe89;
+}
+
+.isDocumentsNotAvailable{
+    background: #fa6e6e;
 }

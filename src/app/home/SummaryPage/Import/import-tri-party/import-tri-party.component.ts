@@ -5,7 +5,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../../../currency.json';
 import * as _ from 'lodash';
+import moment from 'moment';
 
 @Component({
   selector: 'import-tri-party-summary',
@@ -59,8 +60,7 @@ export class ImportTriPartyComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1"
+      "col-td-th-2"
     ],
     eventId: ''
   }
@@ -130,7 +130,7 @@ export class ImportTriPartyComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: element['date'],
+          date: moment(element['date']).format('DD-MM-YYYY'),
           triPartyAgreementNumber: element['triPartyAgreementNumber'],
           triPartyAgreementAmount: element['triPartyAgreementAmount'],
           currency: element['currency'],
@@ -249,15 +249,21 @@ export class ImportTriPartyComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      triPartyAgreementNumber: this.SELECTED_VALUE['triPartyAgreementNumber'],
-      triPartyAgreementAmount: this.SELECTED_VALUE['triPartyAgreementAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   date: this.SELECTED_VALUE['date'],
+    //   triPartyAgreementNumber: this.SELECTED_VALUE['triPartyAgreementNumber'],
+    //   triPartyAgreementAmount: this.SELECTED_VALUE['triPartyAgreementAmount'],
+    //   currency: this.SELECTED_VALUE['currency'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/TripartyAgreements`],navigationExtras);
     this.toastr.warning('Tri-Party Agreement Row Is In Edit Mode');
   }
 

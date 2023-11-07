@@ -256,7 +256,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   }
   ITEM_FILL_PDF: any = [];
   temp1: any = [];
-
+  SELECTED_PIPO_ORM_DETAILS: any = [];
+  SELECTED_PIPO_DOCUMENTS: any = [];
   choosenItems(id, i) {
     let temp: any = [];
     let temp2: any = [];
@@ -281,19 +282,33 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       };
     });
     this.selectedItems[i] = temp.pop();
+    this.SELECTED_PIPO_ORM_DETAILS = this.pipoData?.filter(items => items._id == id)?.length != 0 ? this.pipoData?.filter(items => items._id == id)[0] : [];
     temp2[0] = temp2.pop();
+    this.SELECTED_PIPO_DOCUMENTS = []
     for (let index = 0; index < temp2.length; index++) {
       this.temp1[i].push({
         pdf: (temp2[index]['doc']),
         name: 'PIPO'
       });
     }
-    console.log(this.temp1, temp2, 'selectedItemsselectedItems')
+    this.temp1?.forEach(element => {
+      element?.forEach(urlelement => {
+        this.SELECTED_PIPO_DOCUMENTS.push({
+          pdf: urlelement?.pdf,
+          name: urlelement?.name
+        })
+      });
+    });
+    console.log(this.temp1, temp2, this.SELECTED_PIPO_ORM_DETAILS, 'selectedItemsselectedItems')
     this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.balanceAmount), 0);
     this.showOpinionReport = 0;
     // this.fillForm();
     this.OTHER_BANK_VISIBLE = false;
     setTimeout(() => { this.OTHER_BANK_VISIBLE = true; }, 150)
+  }
+
+  ShowORM(indexL: any) {
+
   }
 
   showhideOpinionReport(value) {
@@ -467,20 +482,25 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
     }
   }
-  
-  NEW_PREVIEWS_URL_LIST:any=[];
+
+  NEW_PREVIEWS_URL_LIST: any = [];
   PREVIEWS_URL_STRING: any = '';
   async PREVIEWS_URL(model, id) {
     this.PREVIEWS_URL_LIST = [];
-    this.NEW_PREVIEWS_URL_LIST=[];
+    this.NEW_PREVIEWS_URL_LIST = [];
     this.PREVIEWS_URL_STRING = '';
     console.log(this.UrlList, 'UrlList')
     this.PromiseReturn().then(async (data: any) => {
+      let urllist: any = []
       this.getS3Url().then(async (element: any) => {
-        await element?.forEach(urlelement => {
-          data.push(urlelement);
+        await element.forEach(urlelement => {
+          urllist.push(urlelement)
         });
-        var fitertemp: any = await data.filter(n => n);
+
+        await data.forEach(urldata => {
+          urllist.push(urldata)
+        });
+        var fitertemp: any = await urllist.filter(n => n);
         this.NEW_PREVIEWS_URL_LIST = fitertemp;
         await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
           this.PREVIEWS_URL_LIST = [];
@@ -529,12 +549,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         fileName: this.guid() + '.pdf', buffer: this.UrlList?.BankUrl,
         type: 'application/pdf'
       }).subscribe(async (pdfresponse: any) => {
-        temp[0] = pdfresponse?.url;
+        temp[1] = pdfresponse?.url;
         await this.userService?.UploadS3Buket({
           fileName: this.guid() + '.pdf', buffer: this.UrlList?.LetterHeadUrl,
           type: 'application/pdf'
         }).subscribe(async (pdfresponse1: any) => {
-          temp[1] = pdfresponse1?.url;
+          temp[0] = pdfresponse1?.url;
           reslove(temp);
         });
       });
@@ -566,7 +586,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         pipo_id.push(this.selectedItems[index]?.pipo_id)
         pipo_name.push(this.selectedItems[index]?.pipo_no)
       }
-     
+
       this.pipoForm.value.bank = this.pipoForm.controls?.bank
       this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
       var approval_data: any = {
@@ -596,7 +616,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
                 documents: this.NEW_PREVIEWS_URL_LIST,
                 pipo_1: this.selectedItems,
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
-                ALL_DATA_HSCODE_FORWARD:this.ALL_DATA_HSCODE_FORWARD
+                ALL_DATA_HSCODE_FORWARD: this.ALL_DATA_HSCODE_FORWARD
               },
               TypeTransaction: 'Advance-Remittance-flow',
               fileType: 'Import',
@@ -699,7 +719,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   ToForwardContract_Selected: any = []
   ToHSCode_Selected: any = [];
-  FORM_VALUE:any=[];
+  FORM_VALUE: any = [];
   ToForwardContract(event: any, value: any, index: any) {
     if (event?.target?.checked == true) {
       this.ToForwardContract_Selected[0] = value;
@@ -726,9 +746,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       HS_CODE: temp2?.join(','),
       FORWARD_CONTRACT: this.ToForwardContract_Selected
     };
-    this.FORM_VALUE=this.pipoForm?.controls?.pipoTerm?.value;
+    this.FORM_VALUE = this.pipoForm?.controls?.pipoTerm?.value;
   }
-  fillData(){
-    this.FORM_VALUE=this.pipoForm?.controls?.pipoTerm?.value;
+  fillData() {
+    this.FORM_VALUE = this.pipoForm?.controls?.pipoTerm?.value;
   }
 }

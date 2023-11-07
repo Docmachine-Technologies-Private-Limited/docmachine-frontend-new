@@ -1,4 +1,4 @@
-import { Component,EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'custom-mat-stepper-header',
@@ -14,7 +14,7 @@ export class CustomMatStepperHeaderComponent implements OnInit {
   CHANGE_EVENT_ID: any = 0;
 
   onTabChanges(value: any) {
-    this.event.emit({ counter: this.COUNTER });
+    this.event.emit({ counter: this.COUNTER, name: value });
   }
   ngOnInit(): void {
 

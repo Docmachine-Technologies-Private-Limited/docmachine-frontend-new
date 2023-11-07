@@ -12,6 +12,8 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('data') data: any = [];
   @Input('Keys') Keys: any = [];
   @Input('eventId') eventId: any = '';
+  @Input('ExpandTitle1') ExpandTitle1: any = 'Data Show and Hide';
+  @Input('ExpandTitle2') ExpandTitle2: any = 'Data Show and Hide';
   @Input('ViewButton') ViewButton: boolean = true;
   @Input('EditButton') EditButton: boolean = true;
   @Input('DeleteButton') DeleteButton: boolean = true;

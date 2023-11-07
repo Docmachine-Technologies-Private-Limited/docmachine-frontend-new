@@ -4,7 +4,7 @@
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
-                        <h3 class="heading_common_tag">Insurance Documents ({{this.FILTER_VALUE_LIST?.length}})</h3>
+                        <h3 class="heading_common_tag">Insurance Policy ({{this.FILTER_VALUE_LIST?.length}})</h3>
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-12">
@@ -12,17 +12,16 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button (click)="filter_Popup.style.display='block'" type="button"
-                                class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
-                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
-                                appFilterToggle>
+                            <button type="button" class="filter-popup btn btn-secondary"><span
+                                class="fi_icon filter-popup"></span>Filter</button>
+                            <div class="bg-white filter_main_sec mt-2" appFilterToggle>
                                 <form class="select_filter_options">
                                     <div class="row">
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
                                             <select class="form-select form-control" aria-label="Default select example"
                                                 name="Buyer_Name"
-                                                (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                (change)="filter($event.target.value,'buyerName');">
                                                 <option value="">Buyer name</option>
                                                 <option [value]="Buyer_Name"
                                                     *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
@@ -33,7 +32,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'pipo');"
                                                 name="Company_Name">
                                                 <option value="">PI/PO No.</option>
                                                 <option [value]="PI_PO_No"
@@ -46,7 +45,7 @@
                                             <label for="exampleFormControlInput1" class="form-label">Insurance
                                                 No.</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'insuranceNumber');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'insuranceNumber');"
                                                 name="Origin">
                                                 <option value="">Insurance No.</option>
                                                 <option *ngFor="let Origin of this.ALL_FILTER_DATA?.Insurance_No">{{
@@ -57,7 +56,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">Currency</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'currency');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'currency');"
                                                 name="Currency">
                                                 <option value="">Currency</option>
                                                 <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
@@ -68,7 +67,7 @@
                                         <div class="col-md-6 col-12">
                                             <label for="exampleFormControlInput1" class="form-label">DATE</label>
                                             <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'date');filter_Popup.style.display='none'"
+                                                (change)="filter($event.target.value,'date');"
                                                 name="date">
                                                 <option value="">DATE</option>
                                                 <option [value]="SB_DATE"
@@ -79,7 +78,7 @@
                                     </div>
                                     <div class="footer_buttons">
                                         <button type="button" class="btn btn-light"
-                                            (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                            (click)="resetFilter();">RESET</button>
                                     </div>
                                 </form>
                                 <i></i>
@@ -99,96 +98,14 @@
             [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
             (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
         </custom-expansion-panel>
-            <!-- <div style="width: 100%" class="analytics_top" #insurance>
-                <div style="width: 100%" class="row">
-                    <div class="" id="container">
-                        <section class="middle_datatable">
-                            <div class="widget-body p-0 support table-wrapper">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr class="table-tr">
-                                            <th scope="col" class="col-td-th-3">DATE</th>
-                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
-                                            <th scope="col" class="col-td-th-3">Insurance No.</th>
-                                            <th scope="col" class="col-td-th-3">Insurance Amount</th>
-                                            <th scope="col" class="col-td-th-3">Currency</th>
-                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
-                                            <th scope="col" class="col-td-th-3">Action</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
-                                            [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
-                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <td class="col-td-th-3">{{ data.date }}</td>
-                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
-                                            <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.insuranceNumber}}
-                                                </div>
-
-                                                <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="insuranceNumber"
-                                                        type="text" placeholder="Insurance Document Number"
-                                                        [(ngModel)]="data.insuranceNumber">
-                                                </div>
-                                            </td>
-                                            <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.insuranceAmount}}
-                                                </div>
-
-                                                <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="insuranceAmount"
-                                                        type="text" placeholder="Insurance Amount"
-                                                        [(ngModel)]="data.insuranceAmount">
-                                                </div>
-                                            </td>
-                                            <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.currency}}
-                                                </div>
-
-                                                <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="currency" type="text"
-                                                        placeholder="Currency" [(ngModel)]="data.currency">
-                                                </div>
-                                            </td>
-                                            <td class="col-td-th-3">{{data.buyerName}}</td>
-                                            <td class="col-td-th-3">
-                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS"
-                                                    (click)="viewpdf(data)"><i class="fa fa-eye PopupOpen"
-                                                        popup-close="VIEW_DOCUMENTS" aria-hidden="true"></i></a>
-                                                <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"
-                                                    (click)="toSave(data, i)"><i class="fa fa-floppy-o"
-                                                        aria-hidden="true"></i></button>
-                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
-                                                    (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
-                                                        aria-hidden="true"></i></button>
-                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
-                                                    (click)="handleDelete(data._id,i)"><a title="Delete"
-                                                        href="javascript:void(0)"><i class="fa fa-trash-o"
-                                                            aria-hidden="true"></i></a>
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div> -->
-        </div>
+       </div>
     </main>
 </div>
 
 <app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
-    id="PDF_VIEW" name="Insurance Documents">
+    id="PDF_VIEW" name="Insurance Policy">
     <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Insurance Documents" [src]="viewData" width="100%"
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Insurance Policy" [src]="viewData" width="100%"
             height="500px"></app-pdf-viewer>
     </div>
 </app-custom-model>
@@ -196,8 +113,14 @@
 <app-custom-model modalbodyheight="55vh" *ngIf="this.SELECTED_VALUE!=''"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
     EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="60vh"
-    id="EditSummaryPage" [name]="'Insurance Documents Update || Insurance Documents No. : '+this.SELECTED_VALUE?.insuranceNumber"
+    id="EditSummaryPage" [name]="'Insurance Policy Update || Insurance Policy No. : '+this.SELECTED_VALUE?.insuranceNumber"
     #EditSummaryPagePanel>
+    <custom-model-header>
+        <div class="row col-12 mt-0 p-0 pl-2 pb-2">
+            <button class="btn btn-primary"
+                (click)="toSaveNew(this.EDIT_FORM_DATA,this.SELECTED_VALUE?._id,EditSummaryPagePanel)">Update</button>
+        </div>
+    </custom-model-header>
     <div class="ml-0 p-3 col-12">
         <div class="container-fluid m-auto p-0">
             <div class="content_white_background" style="height: auto;">
@@ -219,28 +142,69 @@
                                 </div>
                                 <div class="row col-12 p-0">
                                     <div class="form-group col-md-6">
-                                        <label for="inputEmail4">Insurance Amount</label>
-                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.insuranceAmount"
-                                            placeHolderText="Insurance Amount"></ng-custom-input>
+                                        <label for="inputEmail4">Start Date</label>
+                                        <ng-custom-input type="date" [(ngInput)]="this.EDIT_FORM_DATA.StartDate"
+                                            placeHolderText="Start Date"></ng-custom-input>
                                     </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Expiry Date</label>
+                                        <ng-custom-input type="date" [(ngInput)]="this.EDIT_FORM_DATA.Expirydate"
+                                            placeHolderText="Expiry Date"></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
                                     <div class="form-group col-md-6">
                                         <label for="inputEmail4">Currency</label>
                                         <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.currency"
                                             placeHolderText="Currency"></ng-custom-input>
                                     </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Insurance Amount</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.insuranceAmount"
+                                            placeHolderText="Insurance Amount"></ng-custom-input>
+                                    </div>
                                 </div>
                                 <div class="row col-12 p-0">
                                     <div class="form-group col-md-6">
-                                        <label for="inputEmail4">BUYER NAME</label>
+                                        <label for="inputEmail4">BENEFICIARY NAME</label>
                                         <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.buyerName"
                                             placeHolderText="BUYER NAME"></ng-custom-input>
                                     </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="col-12 p-0" *ngFor="let item of this.EDIT_FORM_DATA?.UtilizationAddition;let i=index">
+                                            <div class="form-group col-md-12" style="display: flex;margin-bottom: 0;gap: 10px;justify-content: end;">
+                                               <button class="btn btn-primary" (click)="AddMore()" *ngIf="this.EDIT_FORM_DATA?.UtilizationAddition?.length==(i+1)">Add +</button>
+                                               <button class="btn btn-primary" (click)="RemoveMore(i)">Remove</button>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label for="inputEmail4">Pipo Select</label>
+                                                <ng-select class="custom-ng-select"
+                                                    [items]="this.PIPO_DROP_DOWN_DATA"
+                                                    bindLabel="pi_poNo" [selectableGroup]="true" placeholder="Select PI/PO"
+                                                    (change)="clickPipo($event,i)">
+                                                </ng-select>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label for="inputEmail4">Invoice no.</label>
+                                                <ng-custom-input type="text" [disabled]="true" [(ngInput)]="item.pi_poNo"
+                                                    placeHolderText="Invoice no."></ng-custom-input>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label for="inputEmail4">Invoice Amount</label>
+                                                <ng-custom-input type="text" [disabled]="true" [(ngInput)]="item.amount"
+                                                    placeHolderText="Invoice Amount"></ng-custom-input>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label for="inputEmail4">Current Utilization Amount</label>
+                                                <ng-custom-input type="text" [(ngInput)]="item.UtilizationAmount"
+                                                    placeHolderText="Current Utilization Amount" (ngInputChange)="AmountValidation($event,i,item.amount,this.EDIT_FORM_DATA.insuranceAmount)"></ng-custom-input>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row col-12 mt-0 p-0 pl-2 pb-2">
-                                <button class="btn btn-primary"
-                                    (click)="toSaveNew(this.EDIT_FORM_DATA,this.SELECTED_VALUE?._id,EditSummaryPagePanel)">Update</button>
-                            </div>
+                          
+                          
                         </div>
                     </div>
                 </main>

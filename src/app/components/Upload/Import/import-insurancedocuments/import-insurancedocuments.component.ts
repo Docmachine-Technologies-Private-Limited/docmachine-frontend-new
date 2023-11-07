@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from "../../service/upload-service-validator.service";
 
 @Component({
@@ -65,7 +64,7 @@ export class ImportInsurancedocumentsComponent implements OnInit {
         insuranceNumber: {
           type: "text",
           value: "",
-          label: "Insurance Number*",
+          label: "Insurance Policy Number*",
           rules: {
             required: true,
           }
@@ -78,10 +77,26 @@ export class ImportInsurancedocumentsComponent implements OnInit {
             required: true,
           }
         },
+        StartDate: {
+          type: "date",
+          value: "",
+          label: "Start Date*",
+          rules: {
+            required: true,
+          }
+        },
+        Expirydate: {
+          type: "date",
+          value: "",
+          label: "Expiry date*",
+          rules: {
+            required: true,
+          }
+        },
         insuranceAmount: {
           type: "text",
           value: "",
-          label: "Insurance Amount",
+          label: "Insurance Policy Amount",
           rules: {
             required: true,
           }

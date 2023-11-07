@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ import { WindowInformationService } from '../../../../service/window-information
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-
+import moment from 'moment';
 
 @Component({
   selector: 'export-bill-of-exchange-summary',
@@ -34,7 +34,7 @@ export class BillOfExchangeComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    Bill_Of_Exchange_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -64,6 +64,7 @@ export class BillOfExchangeComponent implements OnInit {
     billExchangeNumber: '',
     buyerName: '',
   }
+  FILTER_FORM: any = ''
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -85,25 +86,66 @@ export class BillOfExchangeComponent implements OnInit {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
     this.item = [];
-    this.documentService.getBillExchangefile("export").subscribe(
-      (res: any) => {
+    this.documentService.getBillExchangefile("export").subscribe((res: any) => {
         this.item = res?.data;
         this.FILTER_VALUE_LIST = this.item;
         for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+          if (value['file'] == 'export') {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
             }
-          });
-          if (this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].includes(value?.billExchangeNumber) == false) {
-            this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].push(value?.billExchangeNumber);
+            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+            }
+            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.billExchangeNumber)?.length == 0) {
+              this.ALL_FILTER_DATA['NO'].push({ value: value?.billExchangeNumber });
+            }
+            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.billOfExchangeDate)?.length == 0) {
+              this.ALL_FILTER_DATA['DATE'].push({ value: value?.billOfExchangeDate });
+            }
           }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.billOfExchangeDate) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.billOfExchangeDate);
-          }
+        }
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Buyer",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            bindLabel: "value"
+          },
+          date: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          // PipoList: {
+          //   type: "ArrayList",
+          //   value: "",
+          //   label: "Select Pipo",
+          //   rules: {
+          //     required: false,
+          //   },
+          //   item: this.ALL_FILTER_DATA['PI_PO_No'],
+          //   bindLabel: "value",
+          // },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select BILL OF EX. NO.",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
         }
         this.BillOfExchangeTable(this.item)
         console.log(res, 'getBillExchangefile');
@@ -111,7 +153,35 @@ export class BillOfExchangeComponent implements OnInit {
       (err) => console.log(err)
     );
   }
+  
+  onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      billOfExchangeDate: value?.value?.date,
+      billExchangeNumber: value?.value?.NO
+    };
 
+    const removeEmptyValues = (object) => {
+      let newobject = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+
+    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'billofexchanges').subscribe((resp: any) => {
+      console.log(resp, value,"billofexchanges")
+      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
+      this.BillOfExchangeTable(this.FILTER_VALUE_LIST)
+    }); 
+  }
+  
+  reset(){
+    this.FILTER_VALUE_LIST = this.item;
+    this.BillOfExchangeTable(this.FILTER_VALUE_LIST)
+  }
   BillOfExchangeTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -119,7 +189,7 @@ export class BillOfExchangeComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          billOfExchangeDate: element['billOfExchangeDate'],
+          billOfExchangeDate: moment(element['billOfExchangeDate']).format("DD-MM-YYYY"),
           billExchangeNumber: element['billExchangeNumber'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
@@ -236,13 +306,19 @@ export class BillOfExchangeComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    this.EDIT_FORM_DATA = {
-      billOfExchangeDate: this.SELECTED_VALUE['billOfExchangeDate'],
-      billExchangeNumber: this.SELECTED_VALUE['billExchangeNumber'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
+    // this.SELECTED_VALUE = '';
+    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    // this.EDIT_FORM_DATA = {
+    //   billOfExchangeDate: this.SELECTED_VALUE['billOfExchangeDate'],
+    //   billExchangeNumber: this.SELECTED_VALUE['billExchangeNumber'],
+    //   buyerName: this.SELECTED_VALUE['buyerName'],
+    // }
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Export/Edit/BillOfExchanges`],navigationExtras);
     this.toastr.warning('Bill Of Exchange Row Is In Edit Mode');
   }
 

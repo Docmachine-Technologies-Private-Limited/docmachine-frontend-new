@@ -1,0 +1,108 @@
+.tally-connector-panel {
+    background-color: #fff;
+    height: 88vh;
+    width: 95%;
+    margin: 20px auto auto;
+    border-radius: 10px;
+    padding: 0;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    box-shadow: 0 0 8px 8px #c5c5c599;
+}
+
+.tally-connector-panel .top-label {
+    font-size: 35px;
+    font-weight: 700;
+    font-family: system-ui;
+    margin: 0;
+    line-height: 1;
+}
+
+.tally-connector-panel p {
+    font-family: system-ui !important;
+}
+
+.icon-text-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.left-panel {
+    background-color: #fdfdfd;
+    width: 98%;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #c8c8c8;
+    box-shadow: 0px 0px 8px 2px #cecece;
+}
+
+.tally-connector-panel label {
+    margin: 0;
+}
+
+.tally-connector-panel .right-panel .drak-text {
+    font-weight: 600;
+}
+
+.circle-text-number {
+    background-color: #111118;
+    color: #fff;
+    padding: 10px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tally-connector-panel .top-label-p {
+    color: darkgray;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: system-ui;
+}
+
+.icon-text-card-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: baseline;
+}
+
+.right-panel {
+    width: 100%;
+    margin: 0 0 auto auto;
+    overflow: auto;
+    height: 86vh;
+    padding: 10px;
+}
+
+.note-card {
+    background: #ffba5e4f;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #babf26;
+}
+
+.button-panel {
+    margin: auto;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-top: 20px;
+}
+
+.button-panel .button-download {
+    background: black;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 16px;
+    border-radius: 30px;
+    box-shadow: 0px 0px 7px 2px black;
+}

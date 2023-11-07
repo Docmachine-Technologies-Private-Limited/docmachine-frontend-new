@@ -12,9 +12,20 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     useExisting: forwardRef(() => NgInputComponent)
   }]
 })
-export class NgInputComponent implements OnInit,ControlValueAccessor {
+export class NgInputComponent implements OnInit, ControlValueAccessor {
   @Input('item') item: any = {};
-  @Output('event') event: any = new EventEmitter();   
+  @Input('disabled') disabled: boolean = false;
+  @Input('ButtonProps') ButtonProps: any = {
+    Text1: '',
+    Text2: '',
+    Active: false
+  };
+  @Input('required') required: boolean = false;
+  @Output('event') event: any = new EventEmitter();
+  @Output('AddButtonEvent') AddButtonEvent: any = new EventEmitter();
+  @Output('RemoveButtonEvent') RemoveButtonEvent: any = new EventEmitter();
+
+
   onChange: any = () => { };
   onTouch: any = () => { };
 
@@ -28,9 +39,14 @@ export class NgInputComponent implements OnInit,ControlValueAccessor {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.ButtonProps, "ButtonProps")
+    if (this.item?.value != undefined && this.item?.value != null && this.item?.value != '') {
+      this.event.emit(this.item?.value);
+    }
+  }
 
-  checked:any = '';
+  checked: any = '';
   writeValue(checked: any) {
     this.checked = checked;
   }
@@ -40,9 +56,16 @@ export class NgInputComponent implements OnInit,ControlValueAccessor {
     this.onChange(value);
     this.event.emit(value);
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
-     this.item=changes?.item?.currentValue;
+    this.item = changes?.item?.currentValue;
+    if (this.item?.value != undefined && this.item?.value != null && this.item?.value != '') {
+      this.event.emit(this.item?.value);
+    }
+    if (changes?.ButtonProps?.currentValue != undefined && changes?.ButtonProps?.currentValue != null && changes?.ButtonProps?.currentValue != '') {
+      this.ButtonProps = changes?.ButtonProps?.currentValue
+    }
+    console.log(changes, "ng-input-ngOnChanges")
   }
 
 }

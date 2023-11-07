@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 
@@ -62,7 +61,7 @@ export class ImportMasterServiceAgreementsComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        masterServiceAmount: {
+        masterServiceNumber: {
           type: "text",
           value: "",
           label: "Master Service Number*",
@@ -78,15 +77,39 @@ export class ImportMasterServiceAgreementsComponent implements OnInit {
             required: true,
           }
         },
-        masterServiceNumber: {
+        masterServiceAmount: {
           type: "text",
           value: "",
-          label: "Master Service Amount",
+          label: "Master Service Amount*",
           rules: {
             required: true,
           }
-        }
-      },'ImportMasterService');
+        },
+        StartDate: {
+          type: "date",
+          value: "",
+          label: "Start Date*",
+          rules: {
+            required: true,
+          }
+        },
+        Expirydate: {
+          type: "date",
+          value: "",
+          label: "Expiry date*",
+          rules: {
+            required: true,
+          }
+        },
+        PartyName: {
+          type: "benne",
+          value: "",
+          label: "Overseas benne Name*",
+          rules: {
+            required: true,
+          }
+        },     
+      }, 'ImportMasterService');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -97,7 +120,6 @@ export class ImportMasterServiceAgreementsComponent implements OnInit {
     e.value.file = 'import';
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
-    e.value.buyerName = this.BUYER_LIST;
     e.value.currency = e.value?.currency?.type;
     this.documentService.getInvoice_No({
       masterServiceNumber: e.value.masterServiceNumber
