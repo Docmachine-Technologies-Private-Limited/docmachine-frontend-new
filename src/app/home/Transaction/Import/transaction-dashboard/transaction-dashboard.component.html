@@ -145,4 +145,44 @@
       </table>
     </custom-mat-step>
   </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Buyer-Credit'"
+    (TabEvent)="onTabChanges($event)">
+    <custom-mat-step MATSTEP_LABEL="Buyer Credit" [NextTrue]="true">
+      <table class="table table-striped">
+        <thead>
+          <tr class="table-tr">
+            <th scope="col" class="col-td-th-1">Supplier Name</th>
+            <th scope="col" class="col-td-th-1">LC No/BOE No.</th>
+            <th scope="col" class="col-td-th-1">LC/BOE Amount</th>
+            <th scope="col" class="col-td-th-1">Currency</th>
+            <th scope="col" class="col-td-th-2">Tenor</th>
+            <th scope="col" class="col-td-th-2">Lending Bank Name</th>
+            <th scope="col" class="col-td-th-2">ROI (Spread)</th>
+            <th scope="col" class="col-td-th-2">BC Ref No.</th>
+            <th scope="col" class="col-td-th-2">Due Date</th>
+            <th scope="col" class="col-td-th-1">Status</th>
+            <th scope="col" class="col-td-th-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.SupplierName}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.LCNoBOENo}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.LCBOEAmount}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.Currency}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.BCRef?.billNo==undefined?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
+                [disabled]="item?.Ref_Data?.BCRef?.billNo!=undefined?true:false"
+                (click)="this.router.navigate(['home/upload-documents/Export/InwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id}]);">Upload
+                IRM</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </custom-mat-step>
+  </custom-mat-stepper>
 </div>
