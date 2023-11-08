@@ -1,10 +1,11 @@
-import { ElementRef, Injectable, OnInit } from '@angular/core';
+import { ElementRef, Injectable, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
 import { AuthGuard } from '../../../service/authguard.service';
 import A2_JOSN from '../../../../assets/JSON/A2.json';
+import { EventEmitter } from 'stream';
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +70,7 @@ export class UploadServiceValidatorService implements OnInit {
   SELECTED_PURPOSE_CODE_DATA: any = [];
   SELECTED_PURPOSE_CODE_INDEX: any = [];
   SELECTED_PURPOSE_CODE_DUMP_SLEECTION: any = [];
-  
+
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public authGuard: AuthGuard,
@@ -545,6 +546,8 @@ export class UploadServiceValidatorService implements OnInit {
         hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
 
       buyer: rule?.required == true ? [Validators.required] : [],
+      button: rule?.required == true ? [Validators.required] : [],
+      checkbox: rule?.required == true ? [Validators.required] : [],
       PURPOSE_CODE: rule?.required == true ? [Validators.required] : [],
       CheckboxMultiple: rule?.required == true ? [Validators.required] : [],
       SelectOption: rule?.required == true ? [Validators.required] : [],
@@ -591,8 +594,6 @@ export class UploadServiceValidatorService implements OnInit {
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
       confirmPassword: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup, formid)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup, formid)],
-      checkbox: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
-        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)]
     }
   }
 

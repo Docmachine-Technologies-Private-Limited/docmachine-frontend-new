@@ -102,12 +102,10 @@ export class TransactionDashboardComponent implements OnInit {
     let temp1: any = [];
     let temp2: any = [];
     let temp3: any = [];
-    (pipo != 'NF' ? pipo : []).forEach(element => {
-      element?.AdviceRef?.forEach(ORMelement => {
-        temp1.push(ORMelement?.date);
-        temp2.push(ORMelement?.billNo);
-        temp3.push(ORMelement?.amount);
-      });
+    pipo?.forEach(ORMelement => {
+      temp1.push(ORMelement?.date);
+      temp2.push(ORMelement?.billNo);
+      temp3.push(ORMelement?.amount);
     });
     return { ORM_DATE: temp1.join(','), ORM_NO: temp2.join(','), ORM_AMOUNT: temp3.join(',') }
   }
@@ -116,28 +114,18 @@ export class TransactionDashboardComponent implements OnInit {
     let temp1: any = [];
     let temp2: any = [];
     let temp3: any = [];
-    (pipo != 'NF' ? pipo : []).forEach(element => {
-      element?.boeRef?.forEach(BOEelement => {
-        temp1.push(BOEelement?.boeDate);
-        temp2.push(BOEelement?.boeNumber);
-        temp3.push(BOEelement?.invoiceAmount);
-      })
-    });
+    pipo?.forEach(BOEelement => {
+      temp1.push(BOEelement?.boeDate);
+      temp2.push(BOEelement?.boeNumber);
+      temp3.push(BOEelement?.invoiceAmount);
+    })
     return { BOE_DATE: temp1.join(','), BOE_NO: temp2.join(','), BOE_AMOUNT: temp3.join(',') }
   }
 
   getStatus(pipo: any) {
-    let STATUS: any = {
-      ORM: false,
-      BOE: false
-    }
+    let STATUS: boolean = false;
     if (pipo?.length != 0) {
-      if (pipo[0]?.AdviceRef?.length != 0) {
-        STATUS['ORM'] = true;
-      }
-      if (pipo[0]?.boeRef?.length != 0) {
-        STATUS['BOE'] = true;
-      }
+      STATUS = true;
     }
     return STATUS;
   }

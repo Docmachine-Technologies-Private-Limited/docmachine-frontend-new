@@ -271,13 +271,15 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       res?.data.forEach(element => {
         element['ischecked'] = false;
         element['isDisabled'] = false;
-        element?.paymentTerm?.forEach(paymentTermelement => {
+        let filterDirectImports=element?.paymentTerm?.filter((item:any)=>item?.type?.value==="Advance Payment")
+        filterDirectImports.forEach((paymentTermelement:any) => {
           paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
           if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
             element['isDisabled'] = true;
             element['ischecked'] = true;
           }
         });
+        element["paymentTerm"]=filterDirectImports;
       });
 
       this.PIPO_LIST = res?.data

@@ -1,5 +1,5 @@
 <upload-components-header [PIPO_TARANSACTION]="this.UPLOAD_STATUS" title="Upload/Import/Forex Advice Document" id="Shippingbill"
-    (UploadHeaderEvent)="clickPipo($event)">
+    (UploadHeaderEvent)="clickPipo($event)" (LoadCompleted)="load()">
     <div class="upload-panel" *ngIf="publicUrl!=''">
         <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
             Newheight="calc(100vh - 130px)"></app-pdf-viewer>

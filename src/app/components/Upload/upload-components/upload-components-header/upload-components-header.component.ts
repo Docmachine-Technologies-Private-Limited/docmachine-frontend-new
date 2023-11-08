@@ -40,6 +40,7 @@ export class UploadHeaderComponent implements OnInit {
   @Input('PIPO_VISIBLE') PIPO_VISIBLE: boolean = false;
   @Input('UPLOAD_BUTTON') UPLOAD_BUTTON: boolean = true;
   @Input('HIDE_OPTION') HIDE_OPTION: boolean = true;
+  @Output('LoadCompleted') LoadCompleted: any = new EventEmitter();
   EXPORT_FORM: any = {
     buyer: {
       type: "buyer",
@@ -105,8 +106,7 @@ export class UploadHeaderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.validator.loaddata();
-    
+    this.validator.loaddata().then((res)=>this.LoadCompleted.emit(res));
     console.log(this.PIPO_TARANSACTION,"PIPO_TARANSACTION")
   }
 

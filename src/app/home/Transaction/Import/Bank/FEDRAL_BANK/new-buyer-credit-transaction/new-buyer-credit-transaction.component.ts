@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, rgb } from 'pdf-lib';
 import { UserService } from '../../../../../../service/user.service';
 import { DocumentService } from '../../../../../../service/document.service';
 import { DateFormatService } from '../../../../../../DateFormat/date-format.service';
@@ -16,11 +16,11 @@ import { MergePdfListService } from '../../../../../merge-pdf-list.service';
 import moment from 'moment';
 
 @Component({
-  selector: 'app-new-advance-outward-remittance-a2',
-  templateUrl: './new-advance-outward-remittance-a2.component.html',
-  styleUrls: ['./new-advance-outward-remittance-a2.component.scss', '../../../../commoncss/common.component.scss']
+  selector: 'app-new-buyer-credit-transaction',
+  templateUrl: './new-buyer-credit-transaction.component.html',
+  styleUrls: ['./new-buyer-credit-transaction.component.scss', '../../../../commoncss/common.component.scss']
 })
-export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
+export class NewBuyerCreditTransactionComponent implements OnInit {
   @Input('data') data: any = [];
   @Input('BankId') BankId: any = '';
   PREVIWES_URL: any = '';
@@ -145,37 +145,10 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: true,
           }
         },
-
-        ADBranch: {
-          type: "text",
-          value: "",
-          label: "Name of AD Branch",
-          rules: {
-            required: true,
-          }
-        },
-        CustomerID: {
-          type: "text",
-          value: "",
-          label: "Customer ID",
-          rules: {
-            required: true,
-          },
-          maxLength: 10
-        },
-        PANNo: {
-          type: "text",
-          value: "",
-          label: "PAN No.",
-          rules: {
-            required: true,
-          },
-          maxLength: 10
-        },
         paymentTerm: {
           type: "formGroup",
           label: "",
-          GroupLabel: ['PI/PO 1'],
+          GroupLabel: ['BOE 1'],
           AddNewRequried: true,
           rules: {
             required: false,
@@ -183,31 +156,26 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           formArray: [
             [
               {
-                type: "PIPO_LIST",
+                type: "BOE",
                 value: "",
                 label: "Select",
-                name: 'PIPO_LIST',
+                name: 'BOE',
                 rules: {
                   required: true,
                 },
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
-                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.amount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.amount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.amount);
+                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.invoiceAmount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.invoiceAmount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.invoiceAmount);
                   myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
                   myForm['touched'] = true;
                   myForm['status'] = 'VALID';
-                  let TotalPIAmount = currentVal?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+                  let TotalPIAmount = currentVal?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOE?.invoiceAmount), 0);
                   myForm?.root?.controls['TotalPIAmount'].setValue(TotalPIAmount)
                   myForm.root['value']['TotalPIAmount'] = TotalPIAmount;
                   console.log(item, TotalPIAmount, "callback")
-                  if (currentVal!='' && currentVal!=undefined && currentVal!=null) {
-                    this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['PIPODOCUMENTS'].setValue(true);
-                  }else{
-                    this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['PIPODOCUMENTS'].setValue(false);
-                  }
                 },
               },
               {
@@ -252,65 +220,13 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: true,
           }
         },
-        PURPOSE_CODE: {
-          type: "PURPOSE_CODE",
-          value: "",
-          label: "Select Purpose Code",
-          rules: {
-            required: true,
-          }
-        },
-        "15CA": {
+        "BCQuote": {
           type: "button",
           value: "",
-          text: "Select 15 CA",
+          text: "Select BC Quote",
           rules: {
             required: true,
           }
-        },
-        "15CB": {
-          type: "button",
-          value: "",
-          text: "Select 15 CB",
-          rules: {
-            required: true,
-          }
-        },
-        "A2CUMAPPLICATION": {
-          type: "checkbox",
-          value: false,
-          label: "Form A2 Cum Application",
-          rules: {
-            required: true,
-          },
-          CheckboxDisabled: true
-        },
-        "15CADOCUMENTS": {
-          type: "checkbox",
-          value: false,
-          label: "15 CA",
-          rules: {
-            required: true,
-          },
-          CheckboxDisabled: true
-        },
-        "15CBDOCUMENTS": {
-          type: "checkbox",
-          value: false,
-          label: "15 CB",
-          rules: {
-            required: true,
-          },
-          CheckboxDisabled: true
-        },
-        "PIPODOCUMENTS": {
-          type: "checkbox",
-          value: false,
-          label: "Invoice/Debit Note",
-          rules: {
-            required: true,
-          },
-          CheckboxDisabled: true
         },
       }, 'IMPORT_TRANSACTION');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
@@ -318,23 +234,33 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
   }
 
   AddButton(event, panel1, panel2) {
-    if (event?.text == "Select 15 CA") {
+    if (event?.text == "Select BC Quote") {
       panel1?.displayShow;
-      this.get_by_REQUEST_TYPE_CA("CA")
-    } else if (event?.text == "Select 15 CB") {
-      this.get_by_REQUEST_TYPE_CA("CB")
-      panel2?.displayShow;
+      this.getbuyer_beneficiary_credit()
     }
     console.log(event)
   }
-  
-  onTabChanges(event:any){
-    if (event?.name == "15 CA Generate Summary") {
-      this.get_by_REQUEST_TYPE_CA("CA")
-    } else if (event?.name == "15 CB Request Summary") {
-      this.get_by_REQUEST_TYPE_CA("CB")
+
+  onTabChanges(event: any) {
+    if (event?.name == "BC Quote Summary") {
+      this.getbuyer_beneficiary_credit()
     }
-    console.log(event,"onTabChanges")
+    console.log(event, "onTabChanges")
+  }
+
+  BUYER_BENEFICIARY_CREDIT_DATA: any = []
+  BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA: any = []
+  getbuyer_beneficiary_credit() {
+    this.documentService.buyer_beneficiary_creditget().subscribe((res: any) => {
+      this.BUYER_BENEFICIARY_CREDIT_DATA = res?.data;
+      this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA = [];
+      res?.data.forEach(element => {
+        if (element?.AcceptReject == 'Accept') {
+          this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA.push(element)
+        }
+      });
+      console.log(res, this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA, 'buyer_beneficiary_creditaddres')
+    })
   }
 
   CA15Form() {
@@ -710,13 +636,12 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     this.BENEFICIARY_DETAILS = this.validator.BENEFICIARY_DETAILS_LIST.filter((item: any) => item?._id == value?.id);
     this.documentService.filterAnyTable({
       benneName: value?.value,
-    }, 'pi_po').subscribe((res: any) => {
+    }, 'boerecords').subscribe((res: any) => {
       res?.data.forEach(element => {
         element['ischecked'] = false;
         element['isDisabled'] = false;
       });
-      this.validator.PIPO_LIST = res?.data
-      this.PIPO_LIST = res?.data
+      this.validator.BOE_LIST = res?.data
       console.log(value, res, this.BENEFICIARY_DETAILS, "BENEFICIARY_CALLBACK")
     });
   }
@@ -747,7 +672,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     console.log(formvalue, "SubmitButton")
   }
 
-  RequestforCASubmit(value: any,panel:any) {
+  RequestforCASubmit(value: any, panel: any) {
     console.log(value, 'RequestforBCQuote')
     var temp_doc: any = [];
     var pipo_id: any = [];
@@ -759,21 +684,20 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     value.value['documents'] = temp_doc;
     value.value['pipo'] = pipo_id;
     var filterdoc = temp_doc.filter(n => n)
-    value.value['RequestType'] = "CA"
-    value.value['BenneName']=value.value['BenneName']?.value!=undefined?value.value['BenneName']?.value:value.value['BenneName'];
-    value.value['Commodity']=value.value['Commodity']?.value!=undefined?value.value['Commodity']?.value:value.value['Commodity'];
-    this.documentService.CA_Certificate_add(value?.value).subscribe((buyer_beneficiary_creditaddres: any) => {
+    value.value['BenneName'] = value.value['BenneName']?.value != undefined ? value.value['BenneName']?.value : value.value['BenneName'];
+    value.value['Commodity'] = value.value['Commodity']?.value != undefined ? value.value['Commodity']?.value : value.value['Commodity'];
+    this.documentService.buyer_beneficiary_creditadd(value?.value).subscribe((buyer_beneficiary_creditaddres: any) => {
       console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
       this.toastr.success('buyer_beneficiary_credit added successfully....')
       this.documentService.SendMaildocuments({ subject: 'Buyer credit details added...', documentsList: filterdoc, data: value?.value }).subscribe((docres: any) => {
         this.toastr.success('Mail Sended Successfully....')
-        this.get_by_REQUEST_TYPE_CA("CA");
+        this.getbuyer_beneficiary_credit()
         panel?.resetForm;
       })
     })
   }
-  
-  RequestforCBSubmit(value: any,panel:any) {
+
+  RequestforCBSubmit(value: any, panel: any) {
     console.log(value, 'RequestforBCQuote')
     var temp_doc: any = [];
     var pipo_id: any = [];
@@ -786,8 +710,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     value.value['pipo'] = pipo_id;
     var filterdoc = temp_doc.filter(n => n)
     value.value['RequestType'] = "CB"
-    value.value['BenneName']=value.value['BenneName']?.value!=undefined?value.value['BenneName']?.value:value.value['BenneName'];
-    value.value['Commodity']=value.value['Commodity']?.value!=undefined?value.value['Commodity']?.value:value.value['Commodity'];
+    value.value['BenneName'] = value.value['BenneName']?.value != undefined ? value.value['BenneName']?.value : value.value['BenneName'];
+    value.value['Commodity'] = value.value['Commodity']?.value != undefined ? value.value['Commodity']?.value : value.value['Commodity'];
     this.documentService.CA_Certificate_add(value?.value).subscribe((buyer_beneficiary_creditaddres: any) => {
       console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
       this.toastr.success('buyer_beneficiary_credit added successfully....')
@@ -807,6 +731,17 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     })
   }
 
+  AcceptReject(id: any, data: any) {
+    this.AprrovalPendingRejectService.CustomConfirmDialogModel.YesNoDialogModel(`Are you sure you want to ${data?.AcceptReject} this item?`, '', (resmodel) => {
+      if (resmodel?.value == 'Yes') {
+        this.documentService.buyer_beneficiary_credit_update({ id: id, data: data }).subscribe((res: any) => {
+          this.toastr.success('Successfully updated....');
+          this.getbuyer_beneficiary_credit()
+        })
+      }
+    })
+  }
+
   CA_SELECTION_DATA: any = [];
   CA_SELECTION_INDEX: any = [];
   CA_DUMP_SLEECTION: any = [];
@@ -820,27 +755,11 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
   CA_SELECTION(event: any, index: any) {
     console.log(event, 'CA_SELECTION')
     if (event?.target?.checked) {
-      this.CA_DUMP_SLEECTION[index] = this.CA_CERTIFICATE_DATA[index];
+      this.CA_DUMP_SLEECTION[index] = this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA[index];
       this.CA_SELECTION_INDEX[index] = true;
     } else {
       this.CA_DUMP_SLEECTION[index] = '';
       this.CA_SELECTION_INDEX[index] = false;
-    }
-
-  }
-
-  CB_SELECTION_DATA: any = [];
-  CB_SELECTION_INDEX: any = [];
-  CB_DUMP_SLEECTION: any = [];
-
-  CB_SELECTION(event: any, index: any) {
-    console.log(event, 'CB_SELECTION')
-    if (event?.target?.checked) {
-      this.CB_DUMP_SLEECTION[index] = this.CA_CERTIFICATE_DATA[index];
-      this.CB_SELECTION_INDEX[index] = true;
-    } else {
-      this.CB_DUMP_SLEECTION[index] = ''
-      this.CB_SELECTION_INDEX[index] = false;
     }
   }
 
@@ -852,181 +771,109 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].push(element?.document);
     });
     if (this.CA_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CA'].setValue(this.CA_SELECTION_DATA);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['BCQuote'].setValue(this.CA_SELECTION_DATA);
     } else {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CA'].setValue('');
-    }
-    if (this.CA_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CADOCUMENTS'].setValue(true);
-    } else {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CADOCUMENTS'].setValue(false);
+      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['BCQuote'].setValue('');
     }
   }
-
-  addCB() {
-    this.CB_SELECTION_DATA = [];
-    this.EXTRA_DOCUMENTS['CB_DOCUMENTS'] = [];
-    this.CB_DUMP_SLEECTION.forEach(element => {
-      this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].push(element?.document);
-      this.CB_SELECTION_DATA.push(element)
-    });
-    if (this.CA_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CB'].setValue(this.CA_SELECTION_DATA);
-    } else {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CB'].setValue('');
-    }
-    if (this.CB_SELECTION_DATA.length != 0) {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CBDOCUMENTS'].setValue(true);
-    } else {
-      this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CBDOCUMENTS'].setValue(false);
-    }
-  }
-
+  
   async fillForm(filldata: any) {
     console.log(filldata, "fillForm")
-    let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     return new Promise(async (resolve, reject) => {
       if (this.BankId == 'F_B_L_6') {
-        formUrl = './../../assets/pdf/FedralBank/Revised_Form_A2_BLANK.pdf'
-        console.log(filldata, 'filldata')
+        const formUrl = './../../assets/Import_direct_Payment.pdf'
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
         const pdfDoc = await PDFDocument.load(formPdfBytes)
-        const form: any = pdfDoc.getForm()
-        const getAllFields = form?.getFields();
-        getAllFields?.forEach(element => {
-          const elementvalue: any = element?.acroField?.dict?.values();
-          if (elementvalue[0]?.encodedName == '/Tx') {
-            element?.setFontSize(11);
-            element?.enableReadOnly();
-            const [widget]: any = element?.acroField?.getWidgets();
-            widget?.getOrCreateBorderStyle()?.setWidth(0);
-          }
-        });
-        getAllFields[8]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
-        getAllFields[14]?.setText(this.validator.COMPANY_INFO[0]?.teamName + '\n' + this.validator.COMPANY_INFO[0]?.adress);
-
-        if (this.BENEFICIARY_DETAILS?.length != 0) {
-          getAllFields[70]?.setText(this.BENEFICIARY_DETAILS[0]?.benneName);
-          getAllFields[71]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAdrs);
-          getAllFields[72]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + this.BENEFICIARY_DETAILS[0]?.iban);
-          getAllFields[73]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankName + '' + this.BENEFICIARY_DETAILS[0]?.beneBankAdress);
-
-          let spliSwiftCode: any = this.BENEFICIARY_DETAILS[0]?.beneBankSwiftCode?.split('');
-          if (spliSwiftCode != undefined) {
-            getAllFields[74]?.setText(spliSwiftCode[0]);
-            getAllFields[75]?.setText(spliSwiftCode[1]);
-            getAllFields[76]?.setText(spliSwiftCode[2]);
-            getAllFields[77]?.setText(spliSwiftCode[3]);
-            getAllFields[78]?.setText(spliSwiftCode[4]);
-            getAllFields[79]?.setText(spliSwiftCode[5]);
-            getAllFields[80]?.setText(spliSwiftCode[6]);
-            getAllFields[81]?.setText(spliSwiftCode[7]);
-            getAllFields[82]?.setText(spliSwiftCode[8]);
-            getAllFields[83]?.setText(spliSwiftCode[9]);
-            getAllFields[84]?.setText(spliSwiftCode[10]);
-          }
-          getAllFields[85]?.setText(this.BENEFICIARY_DETAILS[0]?.sortCode);
-          getAllFields[86]?.setText(this.BENEFICIARY_DETAILS[0]?.interBankName);
-
-          let spliIntermediarySwiftCode: any = this.BENEFICIARY_DETAILS[0]?.interBankSwiftCode?.split('')
-          if (spliIntermediarySwiftCode != undefined) {
-            getAllFields[87]?.setText(spliIntermediarySwiftCode[0]);
-            getAllFields[88]?.setText(spliIntermediarySwiftCode[1]);
-            getAllFields[89]?.setText(spliIntermediarySwiftCode[2]);
-            getAllFields[90]?.setText(spliIntermediarySwiftCode[3]);
-            getAllFields[91]?.setText(spliIntermediarySwiftCode[4]);
-            getAllFields[92]?.setText(spliIntermediarySwiftCode[5]);
-            getAllFields[93]?.setText(spliIntermediarySwiftCode[6]);
-            getAllFields[94]?.setText(spliIntermediarySwiftCode[7]);
-            getAllFields[95]?.setText(spliIntermediarySwiftCode[8]);
-            getAllFields[96]?.setText(spliIntermediarySwiftCode[9]);
-            getAllFields[97]?.setText(spliIntermediarySwiftCode[10]);
-          }
-        }
-
+        const form = pdfDoc.getForm()
+        const pages = pdfDoc.getPages()
+        const firstpage = pages[0]
+        var INVOICE_NO: any = {
+          INVOICE_NO: [],
+          BEO_NO: [],
+          AWBNo: [],
+          AMOUNT: [],
+          Currency: ''
+        };
         if (filldata != undefined && filldata != null && filldata != '') {
-          getAllFields[9]?.setText(filldata?.ADBranch);
-          let remitancedata: any = {
-            Currency: filldata?.paymentTerm[0]?.PIPO_LIST?.currency,
-            CurrencyAmount: [],
-            ExchangeRate: [],
-            INREquivalentAmount: []
-          }
+          INVOICE_NO.Currency = filldata?.paymentTerm[0]?.BOE?.currency
           filldata?.paymentTerm?.forEach(element => {
-            remitancedata?.CurrencyAmount.push(element?.RemittanceAmount);
+            INVOICE_NO?.INVOICE_NO.push("");
+            INVOICE_NO?.BEO_NO.push(element?.BOE?.boeNumber);
+            INVOICE_NO?.AWBNo.push(element?.BOE?.AWBNo);
+            INVOICE_NO?.AMOUNT.push(element?.RemittanceAmount);
           });
-          getAllFields[10]?.setText(remitancedata?.Currency);
-          getAllFields[11]?.setText(remitancedata?.CurrencyAmount?.join(','))
-
-          let splitDebitAccount: any = filldata?.BankDebit?.accNumber?.split('');
-          if (splitDebitAccount != undefined) {
-            getAllFields[40]?.setText(splitDebitAccount[0]);
-            getAllFields[41]?.setText(splitDebitAccount[1]);
-            getAllFields[42]?.setText(splitDebitAccount[2]);
-            getAllFields[43]?.setText(splitDebitAccount[3]);
-            getAllFields[44]?.setText(splitDebitAccount[4]);
-            getAllFields[45]?.setText(splitDebitAccount[5]);
-            getAllFields[46]?.setText(splitDebitAccount[6]);
-            getAllFields[47]?.setText(splitDebitAccount[7]);
-            getAllFields[48]?.setText(splitDebitAccount[8]);
-            getAllFields[49]?.setText(splitDebitAccount[9]);
-            getAllFields[50]?.setText(splitDebitAccount[10]);
-            getAllFields[51]?.setText(splitDebitAccount[11]);
-            getAllFields[52]?.setText(splitDebitAccount[12]);
-            getAllFields[53]?.setText(splitDebitAccount[13]);
-          }
-
-          let splitcustomerid: any = filldata?.CustomerID?.split('')
-          getAllFields[15]?.setText(splitcustomerid[0]);
-          getAllFields[16]?.setText(splitcustomerid[1]);
-          getAllFields[17]?.setText(splitcustomerid[2]);
-          getAllFields[18]?.setText(splitcustomerid[3]);
-          getAllFields[19]?.setText(splitcustomerid[4]);
-          getAllFields[20]?.setText(splitcustomerid[5]);
-          getAllFields[21]?.setText(splitcustomerid[6]);
-          getAllFields[22]?.setText(splitcustomerid[7]);
-          getAllFields[23]?.setText(splitcustomerid[8]);
-          getAllFields[24]?.setText(splitcustomerid[9]);
-
-          let splitPANNo: any = filldata?.PANNo?.split('')
-          getAllFields[25]?.setText(splitPANNo[0]);
-          getAllFields[26]?.setText(splitPANNo[1]);
-          getAllFields[27]?.setText(splitPANNo[2]);
-          getAllFields[28]?.setText(splitPANNo[3]);
-          getAllFields[29]?.setText(splitPANNo[4]);
-          getAllFields[30]?.setText(splitPANNo[5]);
-          getAllFields[31]?.setText(splitPANNo[6]);
-          getAllFields[32]?.setText(splitPANNo[7]);
-          getAllFields[33]?.setText(splitPANNo[8]);
-          getAllFields[34]?.setText(splitPANNo[9]);
-
-          let splitDebitChargesAccount: any = filldata?.BankCharges?.accNumber?.split('')
-          if (splitDebitChargesAccount != undefined) {
-            getAllFields[54]?.setText(splitDebitChargesAccount[0]);
-            getAllFields[55]?.setText(splitDebitChargesAccount[1]);
-            getAllFields[56]?.setText(splitDebitChargesAccount[2]);
-            getAllFields[57]?.setText(splitDebitChargesAccount[3]);
-            getAllFields[58]?.setText(splitDebitChargesAccount[4]);
-            getAllFields[59]?.setText(splitDebitChargesAccount[5]);
-            getAllFields[60]?.setText(splitDebitChargesAccount[6]);
-            getAllFields[61]?.setText(splitDebitChargesAccount[7]);
-            getAllFields[62]?.setText(splitDebitChargesAccount[8]);
-            getAllFields[63]?.setText(splitDebitChargesAccount[9]);
-            getAllFields[64]?.setText(splitDebitChargesAccount[10]);
-            getAllFields[65]?.setText(splitDebitChargesAccount[11]);
-            getAllFields[66]?.setText(splitDebitChargesAccount[12]);
-            getAllFields[67]?.setText(splitDebitChargesAccount[13]);
-          }
-
-          let purppose: any = { Code: [], Description: [] }
-          this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION?.forEach(element => {
-            purppose?.Code?.push(element?.PurposeCode)
-            purppose?.Description?.push(element?.Description?.join(','))
-          });
-          getAllFields[106]?.setText(purppose?.Code?.join(','));
-          getAllFields[107]?.setText(purppose?.Description?.join(','));
         }
+        const textField = form.createTextField('best.text')
+        let result = this.BENEFICIARY_DETAILS[0]?.benneName.concat(" ", this.BENEFICIARY_DETAILS[0]?.beneAdrs);
+        textField.setText(result)
+        textField.addToPage(firstpage, {
+          x: 392, y: 575, width: 127,
+          height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+
+        const text1Field = form.createTextField('best.text1')
+        text1Field.setText(INVOICE_NO?.AMOUNT?.join(","))
+        text1Field.addToPage(firstpage, {
+          x: 392, y: 563, width: 127,
+          height: 12, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+
+        const text2Field = form.createTextField('best.text2')
+        text2Field.setText(INVOICE_NO['INVOICE_NO'].toString())
+        text2Field.addToPage(firstpage, {
+          x: 392, y: 545, width: 127,
+          height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+        const text3Field = form.createTextField('best.text3')
+        text3Field.setText(INVOICE_NO['AWBNo'].toString())
+        text3Field.addToPage(firstpage, {
+          x: 392, y: 528, width: 127,
+          height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+
+        const text4Field = form.createTextField('best.text4')
+        text4Field.setText(INVOICE_NO['BEO_NO'].toString())
+        text4Field.addToPage(firstpage, {
+          x: 392, y: 510, width: 127,
+          height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+
+        let result1 = this.BENEFICIARY_DETAILS[0]?.beneBankName.concat(" ", this.BENEFICIARY_DETAILS[0]?.beneBankAdress);
+        const text4Field1 = form.createTextField('best.text41')
+        text4Field1.setText(result1)
+        text4Field1.addToPage(firstpage, {
+          x: 392, y: 483, width: 127,
+          height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+
+        const text5Field = form.createTextField('best.text5')
+        text5Field.setText(this.BENEFICIARY_DETAILS[0]?.beneAccNo)
+        text5Field.addToPage(firstpage, {
+          x: 392, y: 460, width: 127,
+          height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+        let result2 = this.BENEFICIARY_DETAILS[0]?.interBankName.concat(" ", this.BENEFICIARY_DETAILS[0]?.interBankSwiftCode);
+        const text6Field = form.createTextField('best.text6')
+        text6Field.setText(result2)
+        text6Field.addToPage(firstpage, {
+          x: 392, y: 440, width: 127,
+          height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+
+        const text7Field = form.createTextField('best.text7')
+        text7Field.setText(this.BENEFICIARY_DETAILS[0]?.iban)
+        text7Field.addToPage(firstpage, {
+          x: 392, y: 420, width: 127,
+          height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
+
+        const text8Field = form.createTextField('best.text8')
+        text8Field.setText(filldata?.BankDebit?.accNumber)
+        text8Field.addToPage(firstpage, {
+          x: 181, y: 355, width: 67,
+          height: 14, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+        })
         const pdfBytes = await pdfDoc.save()
         var base64String = this._arrayBufferToBase64(pdfBytes)
         const x = 'data:application/pdf;base64,' + base64String;
@@ -1047,7 +894,6 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           setTimeout(() => {
             resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
             this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-            this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['A2CUMAPPLICATION'].setValue(true);
           }, 200);
         }, 200);
       }
@@ -1219,28 +1065,18 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             this.alldocuments.push(element?.pdf)
           });
           this.ExportBillLodgement_Form?.paymentTerm?.forEach((paymentTermelement, index) => {
-            this.SELECTED_PIPO_URL_LIST.push({ name: 'pipo-' + (index + 1), pdf: paymentTermelement?.PIPO_LIST?.doc })
-            this.alldocuments.push(paymentTermelement?.PIPO_LIST?.doc);
+            this.SELECTED_PIPO_URL_LIST.push({ name: 'BOE-' + (index + 1), pdf: paymentTermelement?.BOE?.doc })
+            this.alldocuments.push(paymentTermelement?.BOE?.doc);
           });
 
-          this.ExportBillLodgement_Form["15CA"]?.forEach((paymentTermelement, index) => {
+          this.ExportBillLodgement_Form["BCQuote"]?.forEach((paymentTermelement, index) => {
             paymentTermelement?.documents?.forEach(caelement => {
               if (caelement != '' && caelement != undefined && caelement != null) {
-                this.SELECTED_PIPO_URL_LIST.push({ name: 'CA-' + (index + 1), pdf: caelement })
+                this.SELECTED_PIPO_URL_LIST.push({ name: 'BCQuote-' + (index + 1), pdf: caelement })
                 this.alldocuments.push(caelement);
               }
             });
           });
-          
-          this.ExportBillLodgement_Form["15CB"]?.forEach((paymentTermelement, index) => {
-            paymentTermelement?.documents?.forEach(caelement => {
-              if (caelement != '' && caelement != undefined && caelement != null) {
-                this.SELECTED_PIPO_URL_LIST.push({ name: 'CB-' + (index + 1), pdf: caelement })
-                this.alldocuments.push(caelement);
-              }
-            });
-          });
-
           var fitertemp: any = this.alldocuments.filter(n => n);
           this.SELECTED_PREVIEWS_URL = '';
           await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
@@ -1261,13 +1097,14 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       var pipo_name: any = [];
       for (let index = 0; index < this.ExportBillLodgement_Form?.paymentTerm?.length; index++) {
         const element = this.ExportBillLodgement_Form?.paymentTerm[index];
-        pipo_id.push(element?.PIPO_LIST?._id)
-        pipo_name.push(element?.PIPO_LIST?.pipo_no)
+        pipo_id.push(element?.BOE?.pipo[0]?._id)
+        boe_id.push(element?.BOE?._id)
+        pipo_name.push(element?.BOE?.pipo[0]?.pipo_no)
       }
 
       var approval_data: any = {
         id: UniqueId + '_' + this.randomId(10),
-        tableName: 'Outward-Remittance-A2',
+        tableName: 'Buyer-Credit',
         deleteflag: '-1',
         userdetails: this.validator.userData,
         status: 'pending',
@@ -1286,12 +1123,12 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                 documents: this.alldocuments,
                 pipo_1: pipo_id,
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
-                ALL_DATA_HSCODE_FORWARD: this.ALL_DATA_HSCODE_FORWARD
               },
-              TypeTransaction: 'Outward-Remittance-A2',
+              TypeTransaction: 'Buyer-Credit',
               fileType: this.validator.userData?.sideMenu,
               UserDetails: approval_data?.id,
               pipo: pipo_id,
+              BOERef:[boe_id]
             }
             this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
               let updatedData = {
@@ -1304,8 +1141,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                 console.log(data, this.ExportBillLodgement_Form?.paymentTerm);
                 for (let index = 0; index < this.ExportBillLodgement_Form?.paymentTerm?.length; index++) {
                   const element: any = this.ExportBillLodgement_Form?.paymentTerm[index];
-                  const sum = parseFloat(element?.PIPO_LIST?.paymentTerm[0].BalanceAmount) - parseFloat(element?.RemittanceAmount);
-                  this.userService.updatePipo({ balanceAmount: sum }, element?.PIPO_LIST?._id).subscribe((data) => {
+                  const sum = parseFloat(element?.BOE?.invoiceAmount) - parseFloat(element?.RemittanceAmount);
+                  this.documentService.updateBoe({ balanceAmount: sum, moredata: [element] }, element?.BOE?._id).subscribe((updateBoeres: any) => {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.ExportBillLodgement_Form?.paymentTerm.length) {
@@ -1322,7 +1159,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
-                        this.toastr.success("Outward-Remittance-A2 transaction created successfully...")
+                        this.toastr.success("Buyer-Credit transaction created successfully...")
                       });
                     }
                   }, (error) => {
@@ -1358,5 +1195,10 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     return new Promise((resolve, reject) => {
       this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
     })
+  }
+  PDF_VIEW_URL: any = ''
+  VIEW_DOCUMENTS(index: any, data: any) {
+    this.PDF_VIEW_URL = ''
+    setTimeout(() => { this.PDF_VIEW_URL = data?.document }, 100)
   }
 }

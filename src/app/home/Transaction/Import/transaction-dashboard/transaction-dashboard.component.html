@@ -24,16 +24,16 @@
             <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency(item?.data?.formdata?.paymentTerm)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getORM_Details(item?.pipo)?.ORM_DATE}}</td>
-            <td scope="col" class="col-td-th-2">{{this.getORM_Details(item?.pipo)?.ORM_NO}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getBOE_DETAILS(item?.pipo)?.BOE_NO}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getORM_Details(item?.ORMRef)?.ORM_DATE}}</td>
+            <td scope="col" class="col-td-th-2">{{this.getORM_Details(item?.ORMRef)?.ORM_NO}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getBOE_DETAILS(item?.BOERef)?.BOE_NO}}</td>
             <td scope="col" class="col-td-th-1">
-              {{getStatus(item?.pipo)?.ORM==false && getStatus(item?.pipo)?.BOE==false?'Pending':'Completed'}}</td>
+              {{getStatus(item?.ORMRef)==false && getStatus(item?.BOERef)==false?'Pending':'Completed'}}</td>
             <td scope="col" class="col-td-th-1">
-              <button class="btn btn-primary" [disabled]="getStatus(item?.pipo)?.ORM"
+              <button class="btn btn-primary" [disabled]="getStatus(item?.ORMRef)"
                 (click)="this.router.navigate(['home/upload-documents/Import/OutwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
                 ORM</button>
-              <button class="btn btn-primary" [disabled]="getStatus(item?.pipo)?.BOE"
+              <button class="btn btn-primary" [disabled]="getStatus(item?.BOERef)"
                 (click)="this.router.navigate(['home/upload-documents/Import/Boe',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
                 BOE</button>
             </td>
@@ -68,11 +68,45 @@
             <td scope="col" class="col-td-th-1">
               {{item?.Ref_Data?.blCopyRef?.blcopyrefNumber==undefined?'Pending':'Completed'}}</td>
             <td scope="col" class="col-td-th-1">
-              <button class="btn btn-primary" [disabled]="item?.Ref_Data?.blCopyRef?.blcopyrefNumber==undefined?false:true"
+              <button class="btn btn-primary"
+                [disabled]="item?.Ref_Data?.blCopyRef?.blcopyrefNumber==undefined?false:true"
                 (click)="this.router.navigate(['home/upload-documents/Import/Bill-Lodgement-Referance-AdviceCopy',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
                 AdviceCopy</button>
             </td>
           </tr>
+        </tbody>
+      </table>
+    </custom-mat-step>
+  </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Outward-Remittance-A2'"
+    (TabEvent)="onTabChanges($event)">
+    <custom-mat-step MATSTEP_LABEL="Outward Remittance A2" [NextTrue]="true">
+      <table class="table table-striped">
+        <thead>
+          <tr class="table-tr">
+            <th scope="col" class="col-td-th-1">PIPO NO.</th>
+            <th scope="col" class="col-td-th-1">Currency</th>
+            <th scope="col" class="col-td-th-1">Amount</th>
+            <th scope="col" class="col-td-th-1">ORM Date</th>
+            <th scope="col" class="col-td-th-2">ORM Ref No.</th>
+            <th scope="col" class="col-td-th-1">Status</th>
+            <th scope="col" class="col-td-th-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
+            <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency(item?.data?.formdata?.paymentTerm)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getORM_Details(item?.ORMRef)?.ORM_DATE}}</td>
+            <td scope="col" class="col-td-th-2">{{this.getORM_Details(item?.ORMRef)?.ORM_NO}}</td>
+            <td scope="col" class="col-td-th-1">
+              {{getStatus(item?.ORMRef)==false?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-1">
+              <button class="btn btn-primary" [disabled]="getStatus(item?.ORMRef)"
+                (click)="this.router.navigate(['home/upload-documents/Import/OutwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
+                ORM</button>
+            </td>
         </tbody>
       </table>
     </custom-mat-step>
@@ -104,6 +138,46 @@
             <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.irRef?.billNo==undefined?'Pending':'Completed'}}</td>
             <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
                 [disabled]="item?.Ref_Data?.irRef?.billNo!=undefined?true:false"
+                (click)="this.router.navigate(['home/upload-documents/Export/InwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id}]);">Upload
+                IRM</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </custom-mat-step>
+  </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Buyer-Credit'"
+    (TabEvent)="onTabChanges($event)">
+    <custom-mat-step MATSTEP_LABEL="Buyer Credit" [NextTrue]="true">
+      <table class="table table-striped">
+        <thead>
+          <tr class="table-tr">
+            <th scope="col" class="col-td-th-1">Supplier Name</th>
+            <th scope="col" class="col-td-th-1">LC No/BOE No.</th>
+            <th scope="col" class="col-td-th-1">LC/BOE Amount</th>
+            <th scope="col" class="col-td-th-1">Currency</th>
+            <th scope="col" class="col-td-th-2">Tenor</th>
+            <th scope="col" class="col-td-th-2">Lending Bank Name</th>
+            <th scope="col" class="col-td-th-2">ROI (Spread)</th>
+            <th scope="col" class="col-td-th-2">BC Ref No.</th>
+            <th scope="col" class="col-td-th-2">Due Date</th>
+            <th scope="col" class="col-td-th-1">Status</th>
+            <th scope="col" class="col-td-th-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.SupplierName}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.LCNoBOENo}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.LCBOEAmount}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.data?.formdata?.BCQuote[0]?.Currency}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.BCRef?.billNo==undefined?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
+                [disabled]="item?.Ref_Data?.BCRef?.billNo!=undefined?true:false"
                 (click)="this.router.navigate(['home/upload-documents/Export/InwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id}]);">Upload
                 IRM</button></td>
           </tr>

@@ -14,7 +14,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'import-outward-remittance-advice',
   templateUrl: './import-inward-remittance-advice.component.html',
-  styleUrls: ['./import-inward-remittance-advice.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-inward-remittance-advice.component.scss', '../../commoncss/common.component.scss']
 })
 export class ImportOutwardRemittanceAdviceComponent implements OnInit {
   publicUrl: any = '';
@@ -42,7 +42,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
     PIPO_AMOUNT: 0,
     REMAINING_AMOUNT: 0
   }
-  UPLOAD_STATUS:boolean=false;
+  UPLOAD_STATUS: boolean = false;
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -54,13 +54,19 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-    var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
-    if (temp_pipo?.length != 0) {
-      this.btndisabled = false;
-      await this.documentService.getPipoListNo('import', temp_pipo);
-      this.UPLOAD_STATUS=this.route.snapshot.paramMap.get('upload')=='true'?true:false  
-    }
-    console.log(temp_pipo,this.UPLOAD_STATUS, "temp_pipo")
+   
+  }
+  
+  load(){
+    setTimeout(async () => {
+      var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
+      if (temp_pipo?.length != 0) {
+        this.btndisabled = false;
+        await this.documentService.getPipoListNo('import', temp_pipo);
+        this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
+      }
+      console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
+    }, 200);
   }
 
   response(args: any) {
@@ -154,7 +160,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
       e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
       e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
       e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-  
+
       console.log('doc', temp, this.pipourl1);
       console.log('onSubmitIrAdvice', e.value);
       this.documentService.getInvoice_No({
@@ -172,14 +178,16 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
                 data?.data._id,
               ]
             }
-            this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data) => {
+            this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data1) => {
               this.toastr.success('Remittance Advice Successfully added...');
               this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
               var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
               if (Transaction_id != '') {
-                this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.value } }).subscribe((res: any) => {
-                  this.toastr.success('Remittance Advice Successfully added...');
-                  this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
+                this.documentService.AnyUpdateTable(Transaction_id, { ORMRef: [data?.data._id] }, "ExportTransaction").subscribe((res: any) => {
+                  this.documentService.UpdateTransaction({ id: Transaction_id, data: { ORMRefData: e.value } }).subscribe((res: any) => {
+                    this.toastr.success('Remittance Advice Successfully added...');
+                    this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
+                  });
                 });
               } else {
                 this.toastr.success('Remittance Advice Successfully added...');
@@ -197,10 +205,10 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           this.toastr.error(`Please check this Firex Document no. : ${e.value.billNo} already exit...`);
         }
       });
-    }else{
+    } else {
       this.toastr.error(`Total ORM amount is exceeding PI amount by.... Plz check`);
     }
-   
+
   }
 
   clickPipo(event: any) {
