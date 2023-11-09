@@ -1,0 +1,88 @@
+<div class="col-12 pt-2 Invoice">
+    <label for="" class="col-12 Invoice-label">FLC Application</label>
+    <custom-mat-stepper (TabEvent)="onTabChanges($event)">
+        <custom-mat-step MATSTEP_LABEL="FLC Application-Transaction" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+            <div class="upload-panel-2">
+                <div class="left-panel">
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
+                        [src]="PREVIWES_URL"></app-pdf-viewer>
+                    <div id="federal-bank-letter-head">
+                        <federal-bank-import-letter-head *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
+                            [data]="[this.ExportBillLodgement_Form,this.BENEFICIARY_DETAILS[0]]"
+                            (url)="urlletterhead($event)"></federal-bank-import-letter-head>
+                    </div>
+                    <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
+                        <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                            [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
+                    </div>
+                </div>
+                <upload-components [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
+                    id="IMPORT_TRANSACTION" (BankEvent)="setSelectedBankDetails($event)"
+                    (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
+                    (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)" #RawValueEventPanel>
+                    <button class="btn btn-primary" *ngIf="this.Send_for_Approval_button==true"
+                        (click)="PREVIEWS_PANEL?.displayShow" style="position: absolute;
+                    bottom: 10px;
+                    right: 100px;
+                    height: 50px;">Previews</button>
+                </upload-components>
+            </div>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="FLC Application Summary" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+            <div class="row mt-0 p-2">
+                <table class="table AcceptReject">
+                    <thead>
+                        <tr class="table-tr">
+                            <th scope="col" class="col-td-th-1">Date</th>
+                            <th scope="col" class="col-td-th-1">Party Name</th>
+                            <th scope="col" class="col-td-th-3">Pipo No.</th>
+                            <th scope="col" class="col-td-th-3">Currency</th>
+                            <th scope="col" class="col-td-th-3">Amount</th>
+                            <th scope="col" class="col-td-th-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-tr" *ngFor="let item of this.BUYER_BENEFICIARY_CREDIT_DATA;let i=index">
+                            <td scope="col" class="col-td-th-1">{{item?.date}}</td>
+                            <td scope="col" class="col-td-th-1">{{item?.bundel[1][0]?.benneName}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[3][0]?.pi_poNo}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[3][0]?.currency}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[3][0]?.amount}}</td>
+                            <td scope="col" class="col-td-th-3">
+                                <!-- <a title="View" class="PopupOpen" popup-close="VIEW_PDF" (click)="view_pdf(item?.doc)">
+                                    <i class="fa fa-eye PopupOpen" popup-close="VIEW_PDF" aria-hidden="true"></i>
+                                </a> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </custom-mat-step>
+    </custom-mat-stepper>
+</div>
+
+<app-custom-model [customstyle]="{'max-width':'98vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
+    name="Document View" #PREVIEWS_PANEL>
+    <div class="col-12 mt-2 mb-2">
+        <app-pdf-viewer *ngIf="this.PREVIEWS_URL_LIST!=''" [downloadShow]="false" [src]="this.PREVIEWS_URL_LIST"
+            name="Documents" width="100%" height="100%"></app-pdf-viewer>
+    </div>
+    <custom-model-header>
+        <button type="button" class="btn btn-primary"
+            (click)="SendApproval(this.GetDownloadStatus?.status,'SendApprover');">Send for
+            Approval</button>
+    </custom-model-header>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="80vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh"
+    id="VIEW_DOCUMENTS" name="Forward Contract View Documents">
+    <div class="col-12 pb-2" *ngIf="this.PDF_VIEW_URL!=''">
+        <app-pdf-viewer [downloadShow]="false" *ngIf="this.PDF_VIEW_URL!=''" name="Documents" [src]="this.PDF_VIEW_URL"
+            width="100%" height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>

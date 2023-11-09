@@ -94,6 +94,7 @@ import { CustomNgContentHeaderComponent } from "../components/Upload/upload-comp
 import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips-custom-ng.component";
 import { SummaryTransactionUIHeaderComponent } from "../custom/SummaryTransactionUI/summary-transaction-uiheader/summary-transaction-uiheader.component";
 import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/summary-transaction-ui.component";
+import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-up-local-file/upload-pop-up-local-file.component";
 
 @NgModule({
   declarations: [
@@ -159,7 +160,8 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     CustomNgContentHeaderComponent,
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
-    SummaryTransactionUIComponent
+    SummaryTransactionUIComponent,
+    UploadPopUpLocalFileComponent
   ],
   imports: [
     CommonModule,
@@ -272,7 +274,8 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     CustomNgContentHeaderComponent,
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
-    SummaryTransactionUIComponent
+    SummaryTransactionUIComponent,
+    UploadPopUpLocalFileComponent
   ],
 })
 export class SharedHomeModule { }

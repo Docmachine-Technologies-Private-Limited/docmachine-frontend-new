@@ -100,6 +100,7 @@ import { ContactusTechnicalComponent } from "./contactuspanel/contactus-technica
 import { ContactusProductOptionComponent } from "./contactuspanel/contactus-product-option/contactus-product-option.component";
 import { AddBuyerNameAdminMemberComponent } from "./manage-customer/add-buyer-name-admin-member/add-buyer-name-admin-member.component";
 import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-beneficiary-name-admin-member/add-beneficiary-name-admin-member.component";
+import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-db/back-up-panel-mongo-db.component";
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
     ContactusTechnicalComponent,
     ContactusProductOptionComponent,
     AddBuyerNameAdminMemberComponent,
-    AddBeneficiaryNameAdminMemberComponent
+    AddBeneficiaryNameAdminMemberComponent,
+    BackUpPanelMongoDBComponent
   ],
   imports: [
     SharedHomeModule,
@@ -220,6 +222,12 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
           {
             path: "edit-remittance",
             component: EditRemittanceComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "backup-mongodb",
+            component: BackUpPanelMongoDBComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },

@@ -785,7 +785,25 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/companyinfo/deletealldata`, { companyId: id }, httpOptions).toPromise();
   }
+  
+  getCollectionNameData(data:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/companyinfo/getCollectionNameData`, data, httpOptions).toPromise();
+  }
 
+  AddDataTabel(data:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/companyinfo/add`, data, httpOptions).toPromise();
+  }
+  
   DeletebyCollectionName(id: any, name: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

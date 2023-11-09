@@ -9,6 +9,7 @@ import { NewAdvanceImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-advanc
 import { NewDirectImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-direct-import-payments/new-direct-import-payments.component';
 import { NewAdvanceOutwardRemittanceA2Component } from './Bank/FEDRAL_BANK/new-advance-outward-remittance-a2/new-advance-outward-remittance-a2.component';
 import { NewBuyerCreditTransactionComponent } from './Bank/FEDRAL_BANK/new-buyer-credit-transaction/new-buyer-credit-transaction.component';
+import { NewFLCApplicationComponent } from './Bank/FEDRAL_BANK/new-flc-application/new-flc-application.component';
 
 
 const routes: Routes = [

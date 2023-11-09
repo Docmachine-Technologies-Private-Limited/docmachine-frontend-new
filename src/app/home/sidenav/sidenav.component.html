@@ -619,6 +619,10 @@
                 Super Admin Panel</h6>
             </li>
             <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/backup-mongodb')">
+                BackUp Panel</h6>
+            </li>
+            <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
               <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/RoleBase')">Role Panel
               </h6>
             </li>

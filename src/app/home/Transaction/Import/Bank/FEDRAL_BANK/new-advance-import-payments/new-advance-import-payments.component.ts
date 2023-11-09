@@ -650,6 +650,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       this.PREVIEWS_URL_LIST = ''
       this.alldocuments = [];
       this.SELECTED_PIPO_URL_LIST = []
+      this.Send_for_Approval_button = false;
       this.fillForm(fromValue?.value).then(async (res: any) => {
         await this.getS3Url().then(async (res: any) => {
           await res?.forEach(element => {

@@ -1,9 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { UserService } from '../../../../service/user.service';
-import $ from 'jquery'
-declare var kendo: any;
 import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
 import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
 import moment from 'moment';
 

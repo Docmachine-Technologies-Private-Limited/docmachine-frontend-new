@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+    width: 600px;
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.card h3,
+.card h5,
+.card p {
+    font-size: 22px;
+    font-weight: 600;
+    color: black;
+}
+
+.drop_box {
+    margin: 10px 0;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 3px dotted #a3a3a3;
+    border-radius: 5px;
+}
+
+.drop_box h4 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #2e2e2e;
+}
+
+.drop_box p {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: #a3a3a3;
+}
+
+.btn {
+    text-decoration: none;
+    background-color: #005af0;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    text-decoration: none;
+    background-color: #ffffff;
+    color: #005af0;
+    padding: 10px 20px;
+    border: none;
+    outline: 1px solid #010101;
+}
+
+.form input {
+    margin: 10px 0;
+    width: 100%;
+    background-color: #e2e2e2;
+    border: none;
+    outline: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+}
+
+#dropzone {
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+::ng-deep .dropzone.dz-wrapper .dz-message {
+    background-color: #eee;
+    border: 0;
+    display: inline-block;
+    margin: 8px;
+    max-height: 100%;
+    max-width: calc(100% - 16px);
+    min-height: 40px;
+    min-width: calc(100% - 16px);
+    overflow: auto;
+    position: relative;
+    width: calc(100% - 16px);
+    border-radius: 40px;
+}
+
+::ng-deep .dropzone.dz-wrapper .dz-message .dz-text {
+    padding: 0 !important;
+}
+
+::ng-deep .dropzone.dz-wrapper {
+    background: transparent;
+    border: none;
+    color: #666;
+    max-height: 100%;
+    min-height: 0;
+    overflow: auto;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+::ng-deep .dropzone .dz-preview .dz-image {
+    width: 100% !important;
+}
+
+.remove-upload {
+    background-color: transparent;
+    outline: none;
+    border: 0;
+    box-shadow: none;
+    color: black;
+}

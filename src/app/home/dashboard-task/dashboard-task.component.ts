@@ -126,15 +126,14 @@ export class DashboardTaskComponent implements OnInit {
 
   getDashboardData = () => {
     return new Promise(async (resolve, reject) => {
-      await this.dashboardService.getDashboardData().subscribe(
-        (res: any) => {
+      await this.dashboardService.getDashboardData().subscribe((res: any) => {
 
           // Import data..
           this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
           this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
           this.BOE_DATA = res?.BOE_DEATILS;
           this.BOE_PENDING_DATA = res?.Pending_BOE_Submission;
-          this.BOE_SUBMISSION_DATA= res?.BOE_Submission;
+          this.BOE_SUBMISSION_DATA = res?.BOE_Submission;
           console.log("pipoBuyerImportData", res, this.pipoBuyerImportData)
           this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
             if (data._id !== null && data._id !== '') {
@@ -358,6 +357,7 @@ export class DashboardTaskComponent implements OnInit {
           let tooltipData = w?.config?.chartData[seriesIndex]
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
+            console.log(tooltipData?.convertData[i].amount,"tooltipData")
             toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
@@ -937,7 +937,6 @@ export class DashboardTaskComponent implements OnInit {
   }
 
   currencyFormate(number, currencyType) {
-
     try {
       return number.toLocaleString('en-US', { style: 'currency', currency: currencyType });
     }

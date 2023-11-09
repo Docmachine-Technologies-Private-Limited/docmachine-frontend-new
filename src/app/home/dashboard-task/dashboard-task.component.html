@@ -6,7 +6,8 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="Dashbord_sec">
-                                <h2>DASHBOARD -<span class="italic-text"> design under construction - currently some dummy values are also displayed</span></h2>
+                                <h2>DASHBOARD -<span class="italic-text"> design under construction - currently some
+                                        dummy values are also displayed</span></h2>
                             </div>
                         </div>
                     </div>
@@ -15,7 +16,7 @@
                     <div class="row">
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="Total_pipo">
-                                <h5>{{ isImport ===  false ? 'Total PI/PO' : 'PI/PO'}} </h5>
+                                <h5>{{ isImport === false ? 'Total PI/PO' : 'PI/PO'}} </h5>
                                 <div id="pipiChart" class="chart"></div>
                             </div>
                         </div>
@@ -46,17 +47,18 @@
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
-                                            <tr>
-                                                <th scope="col">Party Name</th>
-                                                <th scope="col">No. of documents</th>
-                                                <th scope="col">Amount</th>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-2">Party Name</th>
+                                                <th scope="col" class="col-td-th-2">No. of documents</th>
+                                                <th scope="col" class="col-td-th-2">Currency | Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let row of shipmentPending; let i = index">
-                                                <td>{{row._id}}</td>
-                                                <td>{{row.toTalcount}}</td>
-                                                <td class="INR">{{row.toTalAmount | number : '1.2-2'}}</td>
+                                            <tr class="table-tr" *ngFor="let row of shipmentPending; let i = index">
+                                                <td scope="col" class="col-td-th-2">{{row._id}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row.toTalcount}}</td>
+                                                <td scope="col" class="col-td-th-2 INR">{{row.toTalAmount | number :
+                                                    '1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -67,7 +69,7 @@
                                 <h3>Advance Payment pending for BOE submission</h3>
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
-                                        <thead >
+                                        <thead>
                                             <tr class="table-tr">
                                                 <th scope="col" class="col-td-th-2">Party Name</th>
                                                 <th scope="col" class="col-td-th-2">No. of documents</th>
@@ -75,15 +77,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-tr" *ngFor="let row of this.BOE_PENDING_DATA; let i = index">
+                                            <tr class="table-tr"
+                                                *ngFor="let row of this.BOE_PENDING_DATA; let i = index">
                                                 <td scope="col" class="col-td-th-2">{{row._id[0]}}</td>
                                                 <td scope="col" class="col-td-th-2">{{row.count}}</td>
-                                                <td scope="col" class="col-td-th-2">{{row._id[1]}} | {{row.InvoiceAmountSum | number : '1.2-2'}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row._id[1]}} |
+                                                    {{row.InvoiceAmountSum | number : '1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <span class="nodata_table">{{this.BOE_PENDING_DATA?.length === 0 ? 'No Data' :''}}</span>
+                                <span class="nodata_table">{{this.BOE_PENDING_DATA?.length === 0 ? 'No Data'
+                                    :''}}</span>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -93,23 +98,19 @@
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
-                                            <tr>
-                                                <th>Party Name</th>
-                                                <th>Doc generated</th>
-                                                <th class="right_price_list"
-                                                    style="text-align:right;padding-right: 9px;">Ref no. awaited
+                                            <tr class="table-tr">
+                                                <th class="col-td-th-2">Party Name</th>
+                                                <th class="col-td-th-2">Doc generated</th>
+                                                <th class="col-td-th-2">Ref no. awaited
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let row of shipmentSubmit; let i = index">
-                                                <td>{{row._id}}</td>
-                                                <td>{{row.toTalcount}}</td>
-                                                <td class="INR right_price_list"
-                                                    style="text-align:right;    padding-right: 9px;">{{row.awaitSubmit}}
-                                                </td>
+                                            <tr class="table-tr" *ngFor="let row of shipmentSubmit; let i = index">
+                                                <td class="col-td-th-2">{{row._id}}</td>
+                                                <td class="col-td-th-2">{{row.toTalcount}}</td>
+                                                <td class="col-td-th-2">{{row.awaitSubmit}}</td>
                                             </tr>
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -123,12 +124,12 @@
                                             <tr class="table-tr">
                                                 <th scope="col" class="col-td-th-2">Party Name</th>
                                                 <th scope="col" class="col-td-th-2">Doc generated</th>
-                                                <th scope="col" class="col-td-th-2">Ref no. awaited
-                                                </th>
+                                                <th scope="col" class="col-td-th-2">Ref no. awaited</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-tr" *ngFor="let row of this.BOE_SUBMISSION_DATA; let i = index">
+                                            <tr class="table-tr"
+                                                *ngFor="let row of this.BOE_SUBMISSION_DATA; let i = index">
                                                 <td scope="col" class="col-td-th-2">{{row._id[0]}}</td>
                                                 <td scope="col" class="col-td-th-2">{{row.count}}</td>
                                                 <td scope="col" class="col-td-th-2">{{row.count}}</td>
@@ -136,12 +137,14 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <span class="nodata_table">{{this.BOE_SUBMISSION_DATA?.length === 0 ? 'No Data' :''}}</span>
+                                <span class="nodata_table">{{this.BOE_SUBMISSION_DATA?.length === 0 ? 'No Data'
+                                    :''}}</span>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec remittances">
-                                <p *ngIf="isImport ===  false ">Total inward remittances <br /> pending for document submission </p>
+                                <p *ngIf="isImport ===  false ">Total inward remittances <br /> pending for document
+                                    submission </p>
                                 <p *ngIf="isImport ===  true ">BOE Pending for Bank Submission </p>
                                 <div class="radio_sec">
                                     <div>
@@ -176,7 +179,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec map_height Pending_realisation">
                                 <b class="bold_titles_common">
-                                    {{ isImport ===  false  ? 'Pending realisation ' : 'BOE Pending for Payment'}}
+                                    {{ isImport === false ? 'Pending realisation ' : 'BOE Pending for Payment'}}
                                 </b>
                                 <ul>
                                     <li class="Full_icon">Full</li>
@@ -189,12 +192,14 @@
                             <div class="submission_secs map_height Pending_realisation">
                                 <div class="row">
                                     <div class="col-md-8 col-8"><strong class="bold_titles_common">
-                                        {{ isImport ===  false  ? ' Order pending for shipment ' : 'Order pending for Dispatch'}}
-                                    </strong></div>
+                                            {{ isImport === false ? ' Order pending for shipment ' : 'Order pending for
+                                            Dispatch'}}
+                                        </strong></div>
                                     <div class="col-md-4 col-4">
                                         <div>
-                                            <select class="form-select" [(ngModel)]="ospType" (ngModelChange)="ospTypeChange(ospType)">
-                                                <option *ngFor="let data of ospData" >{{ data }} </option>
+                                            <select class="form-select" [(ngModel)]="ospType"
+                                                (ngModelChange)="ospTypeChange(ospType)">
+                                                <option *ngFor="let data of ospData">{{ data }} </option>
                                             </select>
                                         </div>
                                     </div>
@@ -204,7 +209,8 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_secs map_height Pending_realisation">
-                                <b class="bold_titles_common">{{this.documentService.EXPORT_IMPORT['import']==true?'Buyer’s credit availed':'Packing credit availed'}}</b>
+                                <b class="bold_titles_common">{{this.documentService.EXPORT_IMPORT['import']==true?'Buyer’s
+                                    credit availed':'Packing credit availed'}}</b>
                                 <h2>Maturity : 360</h2>
                                 <div id="PackingCreditAvailedChart" class="chart"></div>
 

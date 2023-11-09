@@ -1056,7 +1056,7 @@ export class NewLcInsuranceComponent implements OnInit {
                 Url_Redirect: { file: 'import', document: 'null', pipo: pipo_name.toString() },
               },
               TypeTransaction: 'LC-Transaction',
-              fileType: 'Import',
+              fileType: this.USER_DATA?.sideMenu,
               UserDetails: approval_data?.id,
               pipo: pipo_id,
             }
@@ -1075,9 +1075,13 @@ export class NewLcInsuranceComponent implements OnInit {
 
               this.documentService.addLCTransaction({
                 bundel: [this.LIST_OF_QUESTION2, this.BENE_INFO, this.TEAM_DETAILS, this.PIPO_INFO,
-                this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, this.SELECTED_BANK_NAME], file: 'import', doc: this.NEW_PREVIEWS_URL_LIST[0]
-              }).subscribe((res1: any) => {
-                this.router.navigate(['/home/dashboardTask'])
+                this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, this.SELECTED_BANK_NAME], file: this.USER_DATA?.sideMenu, doc: this.NEW_PREVIEWS_URL_LIST[0]
+              }).subscribe((res2: any) => {
+                this.documentService.AnyUpdateTable({
+                  id: res1._id,
+                }, { LCTransactionRef:[res2?.data?._id] }, 'ExportTransaction').subscribe((res: any) => {
+                  this.router.navigate(['/home/dashboardTask'])
+                })
               })
               this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
                 console.log(res, 'dsdsdsdsdsdsds');

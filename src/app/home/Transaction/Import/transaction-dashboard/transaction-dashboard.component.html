@@ -173,16 +173,66 @@
             <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
             <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
             <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
-            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.BCRef?.billNo==undefined?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.BCRefNo}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.DueDate}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.BCRef?.BCRefNo==undefined?'Pending':'Completed'}}</td>
             <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
-                [disabled]="item?.Ref_Data?.BCRef?.billNo!=undefined?true:false"
-                (click)="this.router.navigate(['home/upload-documents/Export/InwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id}]);">Upload
-                IRM</button></td>
+              [disabled]="item?.Ref_Data?.BCRef?.BCRefNo!=undefined?true:false"
+              (click)="uploadBC(BCRefNoPanel,item)">Upload
+              BC Ref No.</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </custom-mat-step>
+  </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='LC-Transaction'"
+    (TabEvent)="onTabChanges($event)">
+    <custom-mat-step MATSTEP_LABEL="LC Transaction" [NextTrue]="true">
+      <table class="table table-striped">
+        <thead>
+          <tr class="table-tr">
+            <th scope="col" class="col-td-th-1">Date</th>
+            <th scope="col" class="col-td-th-1">Party Name</th>
+            <th scope="col" class="col-td-th-1">Pipo No.</th>
+            <th scope="col" class="col-td-th-1">Currency</th>
+            <th scope="col" class="col-td-th-1">Amount</th>
+            <th scope="col" class="col-td-th-2">FLC Ref No.</th>
+            <th scope="col" class="col-td-th-2">Issuance Date</th>
+            <th scope="col" class="col-td-th-1">Status</th>
+            <th scope="col" class="col-td-th-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
+            <td scope="col" class="col-td-th-1">{{item?.date}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPIPOBenneName(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency2(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.FLCRef?.FLCRefNo}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.FLCRef?.IssuanceDate}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.FLCRef?.FLCRefNo==undefined?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
+                [disabled]="item?.Ref_Data?.FLCRef?.FLCRefNo!=undefined?true:false"
+                (click)="uploadFLC(FLCRefNoPanel,item)">Upload
+                FLC Ref No.</button></td>
           </tr>
         </tbody>
       </table>
     </custom-mat-step>
   </custom-mat-stepper>
 </div>
+
+<app-custom-model [FooterButton]="false" [minimizedisabled]="false" [customstyle]="{'max-width':'50vw !important'}"
+  [modalbodystyle]="{'max-height':'44vh !important','height':'44vh !important','max-width':'50vw !important'}"
+  height="44vh" id="FLCRefNo" name="FLC Ref No." #FLCRefNoPanel>
+  <upload-components id="FLCRefNo_UPLOAD" (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm,FLCRefNoPanel)"
+    #RawValueEventPanel></upload-components>
+</app-custom-model>
+
+<app-custom-model [FooterButton]="false" [minimizedisabled]="false" [customstyle]="{'max-width':'50vw !important'}"
+  [modalbodystyle]="{'max-height':'44vh !important','height':'44vh !important','max-width':'50vw !important'}"
+  height="44vh" id="BCRefNo" name="BC Ref No." #BCRefNoPanel>
+  <upload-components id="BCRefNo_UPLOAD" (SubmitEvent)="this.SubmitButtonBC(BCRefNoRawValueEventPanel?.geForm,BCRefNoPanel)"
+    #BCRefNoRawValueEventPanel></upload-components>
+</app-custom-model>

@@ -9,6 +9,8 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MergePdfService } from '../../../../service/MergePdf/merge-pdf.service';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
+import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'import-transaction-dashboard',
@@ -44,6 +46,8 @@ export class TransactionDashboardComponent implements OnInit {
     public pipoDataService: PipoDataService,
     public mergerpdf: MergePdfService,
     public pdfmerge: MergePdfListService,
+    public validator: UploadServiceValidatorService,
+    public toastr: ToastrService,
     public wininfo: WindowInformationService) {
     this.api_base = userService.api_base;
   }
@@ -52,13 +56,6 @@ export class TransactionDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.actRoute.paramMap.subscribe((params) => {
       this.TRANSACTION_NAME = params.get('id')?.split(" ")?.join('-');
-      // console.log(this.TRANSACTION_NAME=='Export-Bill-Regularisation')
-      // this.documentService.filterAnyTable({
-      //   TypeTransaction: this.TRANSACTION_NAME?.split(" ")?.join('-'),
-      // }, 'ExportTransaction').subscribe((res: any) => {
-      //   this.TRANSACTION_DATA = res?.data;
-      //   console.log(res, this.TRANSACTION_DATA, "TransactionDashboardComponent")
-      // });
     });
   }
 
@@ -94,6 +91,21 @@ export class TransactionDashboardComponent implements OnInit {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.PIPO_LIST?.currency);
+    });
+    return temp.join(',')
+  }
+  getPIPOCurrency2(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.currency);
+    });
+    return temp.join(',')
+  }
+
+  getPIPOBenneName(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.benneName);
     });
     return temp.join(',')
   }
@@ -141,6 +153,82 @@ export class TransactionDashboardComponent implements OnInit {
     });
     return temp.join(',')
   }
-
+  SELECTED_DATA_FLC:any=''
+  uploadFLC(panel: any,data:any) {
+    this.SELECTED_DATA_FLC=data;
+    console.log(data,"uploadFLC")
+    setTimeout(() => {
+      this.validator.buildForm({
+        FLCRefNo: {
+          type: "text",
+          value: "",
+          label: "FLC Ref No.",
+          rules: {
+            required: true,
+          }
+        },
+        IssuanceDate: {
+          type: "date",
+          value: "",
+          label: "Issuance Date",
+          rules: {
+            required: true,
+          }
+        },
+      }, 'FLCRefNo_UPLOAD').then((res) => {
+        panel?.displayShow;
+      });
+    }, 200);
+  }
+  
+  SubmitButton(formvalue: any,panel) {
+    this.documentService.UpdateTransaction({ id: this.SELECTED_DATA_FLC._id, data: { FLCRef: formvalue?.value } }).subscribe((res: any) => {
+      this.documentService.AnyUpdateTable({
+        id: this.SELECTED_DATA_FLC?.LCTransactionRef[0]?._id,
+      }, formvalue?.value, 'LCTransaction').subscribe((res: any) => {
+        panel?.displayHidden;
+        this.toastr.success('Successfully added...');
+        this.onTabChanges({name:"LC Transaction"})
+      })
+    });
+    console.log(formvalue, this.SELECTED_DATA_FLC,"formvalue")
+  }
+  
+  SELECTED_DATA_BC:any=''
+  uploadBC(panel: any,data:any) {
+    this.SELECTED_DATA_BC=data;
+    console.log(data,"uploadFLC")
+    setTimeout(() => {
+      this.validator.buildForm({
+        BCRefNo: {
+          type: "text",
+          value: "",
+          label: "BC Ref No.",
+          rules: {
+            required: true,
+          }
+        },
+        DueDate: {
+          type: "date",
+          value: "",
+          label: "Due Date",
+          rules: {
+            required: true,
+          }
+        },
+      }, 'BCRefNo_UPLOAD').then((res) => {
+        panel?.displayShow;
+      });
+    }, 200);
+  }
+  
+  SubmitButtonBC(formvalue: any,panel) {
+    this.documentService.UpdateTransaction({ id: this.SELECTED_DATA_BC._id, data: { BCRef: formvalue?.value } }).subscribe((res: any) => {
+      panel?.displayHidden;
+        this.toastr.success('Successfully added...');
+        this.onTabChanges({name:"Buyer Credit"})
+    });
+    console.log(formvalue, this.SELECTED_DATA_BC,"formvalue")
+  }
 }
 
