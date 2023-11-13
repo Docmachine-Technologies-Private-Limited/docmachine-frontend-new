@@ -42,22 +42,23 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec" *ngIf="isImport ===  false ">
-                                <h3>shipment pending for submission</h3>
+                                <h3>shipping bill pending for Lodgment</h3>
                                 <h5 *ngIf="isImport === false "> >21 Days from shipping bill date</h5>
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
                                             <tr class="table-tr">
                                                 <th scope="col" class="col-td-th-2">Party Name</th>
-                                                <th scope="col" class="col-td-th-2">No. of documents</th>
+                                                <th scope="col" class="col-td-th-1">No. of documents</th>
                                                 <th scope="col" class="col-td-th-2">Currency | Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="table-tr" *ngFor="let row of shipmentPending; let i = index">
-                                                <td scope="col" class="col-td-th-2">{{row._id}}</td>
-                                                <td scope="col" class="col-td-th-2">{{row.toTalcount}}</td>
-                                                <td scope="col" class="col-td-th-2 INR">{{row.toTalAmount | number :
+                                                <td scope="col" class="col-td-th-2">{{row?._id[0]}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.toTalcount}}</td>
+                                                <td scope="col" class="col-td-th-2 INR">{{row?._id[1]}} | {{
+                                                    row.toTalAmount | number :
                                                     '1.2-2'}}</td>
                                             </tr>
                                         </tbody>
@@ -72,16 +73,16 @@
                                         <thead>
                                             <tr class="table-tr">
                                                 <th scope="col" class="col-td-th-2">Party Name</th>
-                                                <th scope="col" class="col-td-th-2">No. of documents</th>
+                                                <th scope="col" class="col-td-th-1">No. of documents</th>
                                                 <th scope="col" class="col-td-th-2">Currency | Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="table-tr"
                                                 *ngFor="let row of this.BOE_PENDING_DATA; let i = index">
-                                                <td scope="col" class="col-td-th-2">{{row._id[0]}}</td>
-                                                <td scope="col" class="col-td-th-2">{{row.count}}</td>
-                                                <td scope="col" class="col-td-th-2">{{row._id[1]}} |
+                                                <td scope="col" class="col-td-th-2">{{row?._id[0]}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.count}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row?._id[1]}} |
                                                     {{row.InvoiceAmountSum | number : '1.2-2'}}</td>
                                             </tr>
                                         </tbody>
@@ -93,23 +94,22 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec" *ngIf="isImport ===  false ">
-                                <h3>shipment submitted to bank</h3>
+                                <h3>shipping bill submitted to bank</h3>
                                 <h5>Reference number awaited</h5>
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
                                             <tr class="table-tr">
                                                 <th class="col-td-th-2">Party Name</th>
-                                                <th class="col-td-th-2">Doc generated</th>
-                                                <th class="col-td-th-2">Ref no. awaited
-                                                </th>
+                                                <th class="col-td-th-1">Doc generated</th>
+                                                <!-- <th class="col-td-th-2">Ref no.</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="table-tr" *ngFor="let row of shipmentSubmit; let i = index">
-                                                <td class="col-td-th-2">{{row._id}}</td>
-                                                <td class="col-td-th-2">{{row.toTalcount}}</td>
-                                                <td class="col-td-th-2">{{row.awaitSubmit}}</td>
+                                                <td class="col-td-th-2">{{row?._id}}</td>
+                                                <td class="col-td-th-1">{{row?.toTalcount}}</td>
+                                                <!-- <td class="col-td-th-2 d-flex flex-column"><p *ngFor="let item of row?.blcopyrefNumber;let j=index">{{(j+1)}}. {{item}}</p></td> -->
                                             </tr>
                                         </tbody>
                                     </table>
@@ -123,16 +123,16 @@
                                         <thead>
                                             <tr class="table-tr">
                                                 <th scope="col" class="col-td-th-2">Party Name</th>
-                                                <th scope="col" class="col-td-th-2">Doc generated</th>
+                                                <th scope="col" class="col-td-th-1">Doc generated</th>
                                                 <th scope="col" class="col-td-th-2">Ref no. awaited</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="table-tr"
                                                 *ngFor="let row of this.BOE_SUBMISSION_DATA; let i = index">
-                                                <td scope="col" class="col-td-th-2">{{row._id[0]}}</td>
-                                                <td scope="col" class="col-td-th-2">{{row.count}}</td>
-                                                <td scope="col" class="col-td-th-2">{{row.count}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row?._id[0]}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.count}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row?.count}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -182,13 +182,69 @@
                                     {{ isImport === false ? 'Pending realisation ' : 'BOE Pending for Payment'}}
                                 </b>
                                 <ul>
-                                    <li class="Full_icon">Full</li>
                                     <li class="Partial_icon">Partial</li>
                                 </ul>
-                                <div id="PendingRealisationChart" class="chart"></div>
+                                <div class="submission_sec_table_scroll">
+                                    <table class="table">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-2">Bill Ref No.</th>
+                                                <th scope="col" class="col-td-th-1">Bill Amount</th>
+                                                <th scope="col" class="col-td-th-1">Sb No.</th>
+                                                <th scope="col" class="col-td-th-1">Sb Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr"
+                                                *ngFor="let row of this.billLoedgmentPartial; let i = index">
+                                                <td scope="col" class="col-td-th-2">{{row?.blcopyRef?.blcopyrefNumber}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.blcopyRef?.amount}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.SBRef?.sbno}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.SBRef?.fobValue}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span class="nodata_table">{{this.billLoedgmentPartial?.length === 0 ? 'No Data'
+                                    :''}}</span>
+                                <!-- <div id="PartialPendingRealisationChart" class="chart"></div> -->
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="submission_sec map_height Pending_realisation">
+                                <b class="bold_titles_common">
+                                    {{ isImport === false ? 'Pending realisation ' : 'BOE Pending for Payment'}}
+                                </b>
+                                <ul>
+                                    <li class="Full_icon">Full</li>
+                                </ul>
+                                <div class="submission_sec_table_scroll">
+                                    <table class="table">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-2">Bill Ref No.</th>
+                                                <th scope="col" class="col-td-th-1">Bill Amount</th>
+                                                <th scope="col" class="col-td-th-1">Sb No.</th>
+                                                <th scope="col" class="col-td-th-1">Sb Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr"
+                                                *ngFor="let row of this.billLoedgmentFull; let i = index">
+                                                <td scope="col" class="col-td-th-2">{{row?.blcopyRef?.blcopyrefNumber}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.blcopyRef?.amount}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.SBRef?.sbno}}</td>
+                                                <td scope="col" class="col-td-th-1">{{row?.SBRef?.fobValue}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span class="nodata_table">{{this.billLoedgmentFull?.length === 0 ? 'No Data'
+                                    :''}}</span>
+                                <!-- <div id="FullPendingRealisationChart" class="chart"></div> -->
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_secs map_height Pending_realisation">
                                 <div class="row">
                                     <div class="col-md-8 col-8"><strong class="bold_titles_common">
@@ -206,7 +262,7 @@
                                 </div>
                                 <div id="orderShipmentChart" class="chart"></div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_secs map_height Pending_realisation">
                                 <b class="bold_titles_common">{{this.documentService.EXPORT_IMPORT['import']==true?'Buyer’s
@@ -216,16 +272,52 @@
 
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <!-- <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec map_height Pending_realisation">
                                 <b class="bold_titles_common">Total bill lodged</b>
                                 <h2>Maturity : 580</h2>
                                 <div id="TotalBillLodgedChart" class="chart"></div>
                             </div>
+                        </div> -->
+                        <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="this.ORDER_PENDING_SHIPMENT_SHOW_CHART==true">
+                            <div class="submission_sec map_height Pending_realisation">
+                                <div class="row">
+                                    <div class="col-md-8 col-8">
+                                        <strong class="bold_titles_common">
+                                            {{ isImport === false ? ' Order pending for shipment ' : 'Order pending for
+                                            Dispatch'}}
+                                        </strong>
+                                    </div>
+                                    <div>
+                                        <select class="form-select" [(ngModel)]="ospType"
+                                            (ngModelChange)="ospTypeChange(ospType)">
+                                            <option *ngFor="let data of ospData">{{ data }} </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <canvasjs-chart [options]="ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS"
+                                    [styles]="{width: '100%', height:'280px'}"></canvasjs-chart>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="this.TOTAL_BILL_LODGEMENT_SHOW_CHART==true">
+                            <div class="submission_sec map_height Pending_realisation">
+                                <div class="row">
+                                    <div class="col-md-8 col-8">
+                                        <strong class="bold_titles_common">Total bill lodged</strong>
+                                    </div>
+                                    <div>
+                                        <select class="form-select" [(ngModel)]="ospType"
+                                            (ngModelChange)="ospTypeChange(ospType)">
+                                            <option *ngFor="let data of ospData">{{ data }} </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <canvasjs-chart [options]="TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS"
+                                    [styles]="{width: '100%', height:'280px'}"></canvasjs-chart>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- <custom-jpxscheduler></custom-jpxscheduler> -->
             </div>
         </section>
     </div>

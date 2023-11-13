@@ -95,6 +95,7 @@ import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips
 import { SummaryTransactionUIHeaderComponent } from "../custom/SummaryTransactionUI/summary-transaction-uiheader/summary-transaction-uiheader.component";
 import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/summary-transaction-ui.component";
 import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-up-local-file/upload-pop-up-local-file.component";
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 @NgModule({
   declarations: [
@@ -185,7 +186,8 @@ import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-u
     MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
-    CustomMatStepperModule
+    CustomMatStepperModule,
+    CanvasJSAngularChartsModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal,ExportBillLodgementData, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
@@ -275,7 +277,8 @@ import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-u
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
     SummaryTransactionUIComponent,
-    UploadPopUpLocalFileComponent
+    UploadPopUpLocalFileComponent,
+    CanvasJSAngularChartsModule
   ],
 })
 export class SharedHomeModule { }
