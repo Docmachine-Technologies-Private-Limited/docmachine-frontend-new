@@ -35,21 +35,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: "Read JSON"
-        uses: actions/github-script@v6
-        id: check-env
-        with:
-            result-encoding: string
-            script: |
-              try {
-                const fs = require('fs')
-                const jsonString = fs.readFileSync('**/package.json')
-                var apps = JSON.parse(jsonString)
-                core.error(jsonString)
-              } catch(err) {
-                core.error("Error while reading or parsing the JSON")
-                core.setFailed(err)
-              }
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
