@@ -90,12 +90,12 @@ export class DashboardTaskComponent implements OnInit {
 
   ORDER_PENDING_SHIPMENT_SHOW_CHART: boolean = false;
   ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS: any;
-  
+
   TOTAL_BILL_LODGEMENT_SHOW_CHART: boolean = false;
   TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS: any;
-  billLoedgmentPartial:any=[];
-  billLoedgmentFull:any=[];
-  
+  billLoedgmentPartial: any = [];
+  billLoedgmentFull: any = [];
+
   constructor(public documentService: DocumentService, public dashboardService: DashBoardService,
     public userService: UserService, public wininfo: WindowInformationService) {
   }
@@ -144,9 +144,9 @@ export class DashboardTaskComponent implements OnInit {
         this.BOE_DATA = res?.BOE_DEATILS;
         this.BOE_PENDING_DATA = res?.Pending_BOE_Submission;
         this.BOE_SUBMISSION_DATA = res?.BOE_Submission;
-        this.billLoedgmentPartial=res?.billLoedgmentPartial;
-        this.billLoedgmentFull=res?.billLoedgmentFully
-        
+        this.billLoedgmentPartial = res?.billLoedgmentPartial;
+        this.billLoedgmentFull = res?.billLoedgmentFully
+
         console.log("pipoBuyerImportData", res, this.pipoBuyerImportData)
         this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
           if (data._id !== null && data._id !== '') {
@@ -1073,126 +1073,110 @@ export class DashboardTaskComponent implements OnInit {
   OrderPendingforShipment(data: any) {
     var dataPointsAmount: any = [];
     var dataPointsInovice: any = [];
+    var dataPointsCurrency: any = [];
     data?.forEach(element => {
-      dataPointsAmount?.push({ label: element?._id, y: element?.totalAmount })
-      dataPointsInovice?.push({ label: element?._id, y: element?.totalItems })
+      dataPointsAmount?.push(element?.totalAmount)
+      dataPointsInovice?.push(element?.totalItems)
+      dataPointsCurrency?.push(element?._id)
     });
+    this.ORDER_PENDING_SHIPMENT_SHOW_CHART = true;
     setTimeout(() => {
-      this.ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS = {
-        animationEnabled: true,
-        theme: "light2",
-        title: {
-          text: ""
-        },
-        axisY: {
-          title: "Number of Invoice",
-          includeZero: true
-        },
-        axisY2: {
-          title: "Total Amount",
-          includeZero: true,
-          labelFormatter: (e: any) => {
-            var suffixes = ["", "K", "M", "B"];
-            var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
-            if (order > suffixes.length - 1)
-              order = suffixes.length - 1;
-            var suffix = suffixes[order];
-            return '$' + (e.value / Math.pow(1000, order)) + suffix;
-          }
-        },
-        toolTip: {
-          shared: true
-        },
-        legend: {
-          cursor: "pointer",
-          itemclick: function (e: any) {
-            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-              e.dataSeries.visible = false;
-            } else {
-              e.dataSeries.visible = true;
-            }
-            e.chart.render();
-          }
-        },
-        data: [{
-          type: "column",
-          showInLegend: true,
-          name: "Amount",
-          axisYType: "secondary",
-          yValueFormatString: "$#,###",
-          dataPoints: dataPointsAmount
+      var options = {
+        series: [{
+          name: 'No of Invoice',
+          type: 'column',
+          data: dataPointsInovice
         }, {
-          type: "spline",
-          showInLegend: true,
-          name: "No of Invoice",
-          dataPoints: dataPointsInovice
+          name: 'Amount',
+          type: 'line',
+          data: dataPointsAmount
+        }],
+        chart: {
+          height: 230,
+          type: 'line',
+          toolbar: {
+            show: false
+          }
+        },
+        stroke: {
+          width: [0, 4]
+        },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1]
+        },
+        labels: dataPointsCurrency,
+        yaxis: [{
+          title: {
+            text: 'No of Invoice',
+          },
+        }, {
+          opposite: true,
+          title: {
+            text: 'Amount'
+          }
         }]
-      }
-      this.ORDER_PENDING_SHIPMENT_SHOW_CHART = true;
-      console.log(data, dataPointsAmount, dataPointsInovice, "newChart")
+      };
+
+      var chart: any = new ApexCharts(document.querySelector("#ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS"), options);
+      chart?.render();
+
+      console.log(data, dataPointsAmount, dataPointsInovice,dataPointsCurrency, "newChart")
     }, (150 * data?.length));
   }
-  
+
   TotalBillLodgement(data: any) {
     var dataPointsAmount: any = [];
     var dataPointsInovice: any = [];
+    var dataPointsCurrency: any = [];
     data?.forEach(element => {
-      dataPointsAmount?.push({ label: element?._id[0], y: element?.totalAmount })
-      dataPointsInovice?.push({ label: element?._id[0], y: element?.totalItems })
+      dataPointsAmount?.push(element?.totalAmount)
+      dataPointsInovice?.push(element?.totalItems)
+      dataPointsCurrency?.push(element?._id)
     });
+    this.TOTAL_BILL_LODGEMENT_SHOW_CHART = true;
     setTimeout(() => {
-      this.TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS = {
-        animationEnabled: true,
-        theme: "light2",
-        title: {
-          text: ""
-        },
-        axisY: {
-          title: "Number of bill Ref no.",
-          includeZero: true
-        },
-        axisY2: {
-          title: "Total Amount",
-          includeZero: true,
-          labelFormatter: (e: any) => {
-            var suffixes = ["", "K", "M", "B"];
-            var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
-            if (order > suffixes.length - 1)
-              order = suffixes.length - 1;
-            var suffix = suffixes[order];
-            return '$' + (e.value / Math.pow(1000, order)) + suffix;
-          }
-        },
-        toolTip: {
-          shared: true
-        },
-        legend: {
-          cursor: "pointer",
-          itemclick: function (e: any) {
-            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-              e.dataSeries.visible = false;
-            } else {
-              e.dataSeries.visible = true;
-            }
-            e.chart.render();
-          }
-        },
-        data: [{
-          type: "column",
-          showInLegend: true,
-          name: "Amount",
-          axisYType: "secondary",
-          yValueFormatString: "$#,###",
-          dataPoints: dataPointsAmount
+      var options = {
+        series: [{
+          name: 'No of Bill Ref.',
+          type: 'column',
+          data: dataPointsInovice
         }, {
-          type: "spline",
-          showInLegend: true,
-          name: "No of bill Ref no.",
-          dataPoints: dataPointsInovice
+          name: 'Amount',
+          type: 'line',
+          data: dataPointsAmount
+        }],
+        chart: {
+          height: 230,
+          type: 'line',
+          toolbar: {
+            show: false
+          }
+        },
+        stroke: {
+          width: [0, 4]
+        },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1]
+        },
+        labels: dataPointsCurrency,
+        yaxis: [{
+          title: {
+            text: 'No of Bill Ref.',
+          },
+        }, {
+          opposite: true,
+          title: {
+            text: 'Amount'
+          }
         }]
-      }
-      this.TOTAL_BILL_LODGEMENT_SHOW_CHART = true;
-      console.log(data, dataPointsAmount, dataPointsInovice, "newChart")
+      };
+
+      var chart: any = new ApexCharts(document.querySelector("#TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS"), options);
+      chart?.render();
+
+      console.log(data, dataPointsAmount, dataPointsInovice,dataPointsCurrency, "newChart")
     }, (150 * data?.length));
   }
 }
