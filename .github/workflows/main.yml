@@ -46,6 +46,9 @@ jobs:
             npm version patch -m "[RELEASE] %s" --no-git-tag-version --allow-same-version
             CURRENT_VERSION=$(node -p "require('./package.json').version")
             UPDATED_VERSION=$(node -p "require('./package.json').version")
+            git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
+            git config --global user.name ${{secrets.GIT_USER_DEPLOY}}
+            git config --global credential.helper cache
             git add package.json
             [ -f package-lock.json ] && git add package-lock.json
             git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION"
