@@ -5,5 +5,6 @@ export const AppConfig = {
   ROLE_URL:'http://localhost:4201',
   FRONT_END_URL:'http://localhost:4200/',
   S3_BUCKET_URL:'http://localhost:4200/',
-  TALLY_API:"http://localhost:8083/v1"
+  TALLY_API:"http://localhost:8083/v1",
+  appVersion: require('../../package.json').version,
 };

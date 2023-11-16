@@ -95,7 +95,6 @@ export class DashboardTaskComponent implements OnInit {
   TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS: any;
   billLoedgmentPartial: any = [];
   billLoedgmentFull: any = [];
-
   constructor(public documentService: DocumentService, public dashboardService: DashBoardService,
     public userService: UserService, public wininfo: WindowInformationService) {
   }

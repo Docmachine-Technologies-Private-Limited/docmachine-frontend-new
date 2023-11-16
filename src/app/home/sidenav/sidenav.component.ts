@@ -36,6 +36,7 @@ export class SidenavComponent implements OnInit {
     Export: ["Export Bill Regularisation", "Export Bill Lodgement", "Inward Remittance Disposal", "Export Bill Realisation"],
     Import: ["Advance Outward Remittance", "Direct Bills", "Outward Remittance A2","Import Under Collection/LC","Buyer Credit","LC Transaction"]
   };
+  APP_VERSION:string=''
 
   constructor(
     public router: Router,
@@ -49,6 +50,7 @@ export class SidenavComponent implements OnInit {
       this.userData = user['result'];
       console.log("userData", this.TRANSACTION_DASHBOARD_LIST,this.userData)
     });
+    this.APP_VERSION='v'+documentService.AppConfig?.appVersion
   }
 
   userDataListener;
