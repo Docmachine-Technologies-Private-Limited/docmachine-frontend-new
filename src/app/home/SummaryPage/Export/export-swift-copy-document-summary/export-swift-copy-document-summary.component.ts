@@ -3,8 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
-import * as data1 from '../../../../currency.json';
-
 import {
   Component,
   ElementRef,
@@ -20,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from 'moment';
 import { TableServiceController } from '../../../../service/v1/TableServiceController';
+
 @Component({
   selector: 'app-export-swift-copy-document-summary',
   templateUrl: './export-swift-copy-document-summary.component.html',

@@ -1,19 +1,17 @@
-
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../../../service/user.service';
+import { UserService } from '../../../../service/user.service';
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import * as data1 from '../../../../currency.json';
-import moment from 'moment';
+import moment from "moment";
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'letter-of-credit-import-lc-summary',
@@ -36,7 +34,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    L_C_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -70,7 +68,12 @@ export class LetterOfCreditImportLCComponent implements OnInit {
     letterOfCreditAmount: '',
     currency: '',
     buyerName: '',
+    Expirydate: '',
+    LastDateofShipment: '',
   }
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -78,7 +81,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
+    public filteranytablepagination: TableServiceController,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog
@@ -87,38 +90,124 @@ export class LetterOfCreditImportLCComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getLetterLCfile("import").subscribe((res: any) => {
-      this.item = res?.data;
-      this.FILTER_VALUE_LIST = this.item;
-      console.log(res, 'getLetterLCfile');
-      for (let value of res.data) {
-        if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-          this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'letterlcs',this.FILTER_VALUE_LIST_NEW)?.letterlcs().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        value?.buyerName.forEach(element => {
-          if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-            this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-          }
-        });
-        if (this.ALL_FILTER_DATA['L_C_No'].includes(value?.letterOfCreditNumber) == false) {
-          this.ALL_FILTER_DATA['L_C_No'].push(value?.letterOfCreditNumber);
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
         }
-        if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-          this.ALL_FILTER_DATA['DATE'].push(value?.date);
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
         }
       }
-      this.LetterLCTable(this.item)
-    },
-      (err) => console.log(err)
-    );
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
+          bindLabel: "value"
+        },
+        todate: {
+          type: "date",
+          value: "",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
+    })
   }
+
+ async onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+    };
+
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        airwayBlCopydate: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          airwayBlCopydate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        airwayBlCopydate: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          airwayBlCopydate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
+    const removeEmptyValues = (object) => {
+      let newobject: any = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'letterlcs',this.FILTER_VALUE_LIST_NEW)?.letterlcs().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
+  }
+  
+  reset(){
+    this.ngOnInit()
+  }
+  
   LetterLCTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -126,8 +215,10 @@ export class LetterOfCreditImportLCComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: moment(element['date']).format('DD-MM-YYYY'),
+          date: moment(element['date']).format("DD-MM-YYYY"),
           letterOfCreditNumber: element['letterOfCreditNumber'],
+          Expirydate: element['Expirydate'],
+          LastDateofShipment: element['LastDateofShipment'],
           letterOfCreditAmount: element['letterOfCreditAmount'],
           currency: element['currency'],
           buyerName: element['buyerName'],
@@ -207,12 +298,12 @@ export class LetterOfCreditImportLCComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
   letterOfCredit() {
-    this.router.navigate(['home/upload', { file: 'import', document: 'import-lcCopy' }]);
+    this.router.navigate(['/home/upload/Export/LetterofCredit']);
   }
 
   toSave(data, index) {
@@ -245,18 +336,9 @@ export class LetterOfCreditImportLCComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   letterOfCreditNumber: this.SELECTED_VALUE['letterOfCreditNumber'],
-    //   letterOfCreditAmount: this.SELECTED_VALUE['letterOfCreditAmount'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/LetterofCredit`],navigationExtras);
@@ -271,9 +353,9 @@ export class LetterOfCreditImportLCComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -305,7 +387,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new LetterOfCreditFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new LetterOfCreditFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'LetterOfCredit.xlsx');
@@ -325,6 +407,8 @@ class LetterOfCreditFormat {
         PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
         letterOfCreditNumber: element['letterOfCreditNumber'],
+        Expirydate: element['Expirydate'],
+        LastDateofShipment: element['LastDateofShipment'],
         letterOfCreditAmount: element['letterOfCreditAmount'],
         currency: element['currency'],
         buyerName: this.getBuyerName(element['buyerName']),

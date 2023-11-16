@@ -4,7 +4,7 @@
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
-                        <h3 class="heading_common_tag">Debit Note Documents ({{this.FILTER_VALUE_LIST?.length}})</h3>
+                        <h3 class="heading_common_tag">Debit Note Documents ({{this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length}})</h3>
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-12">
@@ -13,76 +13,13 @@
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
                             <button type="button" class="filter-popup btn btn-secondary"><span
-                                class="fi_icon filter-popup"></span>Filter</button>
-                            <div class="bg-white filter_main_sec mt-2" appFilterToggle>
-                                <form class="select_filter_options">
-                                    <div class="row">
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                name="Buyer_Name"
-                                                (change)="filter($event.target.value,'buyerName');">
-                                                <option value="">Buyer name</option>
-                                                <option [value]="Buyer_Name"
-                                                    *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">
-                                                    {{Buyer_Name}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'pipo');"
-                                                name="Company_Name">
-                                                <option value="">PI/PO No.</option>
-                                                <option [value]="PI_PO_No"
-                                                    *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No
-                                                    }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">D N No.</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'debitNoteNumber');"
-                                                name="Origin">
-                                                <option value="">D N No.</option>
-                                                <option *ngFor="let Origin of this.ALL_FILTER_DATA?.D_N_No">{{ Origin }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Currency</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'currency');"
-                                                name="Currency">
-                                                <option value="">Currency</option>
-                                                <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency"
-                                                    [value]="Currency">{{ Currency }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">DATE</label>
-                                            <select class="form-select form-control" aria-label="Default select example"
-                                                (change)="filter($event.target.value,'date');"
-                                                name="date">
-                                                <option value="">SB DATE</option>
-                                                <option [value]="SB_DATE"
-                                                    *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="footer_buttons">
-                                        <button type="button" class="btn btn-light"
-                                            (click)="resetFilter();">RESET</button>
-                                    </div>
-                                </form>
-                                <i></i>
-                            </div>
+                                    class="fi_icon filter-popup"></span>Filter</button>
+                            <ng-custom-filter-popup (ResetEvent)="reset()" FormStyle="display: grid;
+                                grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
+                                *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
                         </div>
-                        <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Import/DebitNoteDocument']">
+                        <button class="upload-button btn btn-success"
+                        [routerLink]="['/home/upload-documents/Import/DebitNoteDocument']">
                             <span class="add_icon"></span> ADD NEW
                         </button>
                     </div>
@@ -93,64 +30,17 @@
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
                 [items]="this.FILTER_VALUE_LIST_NEW?.items"
                 [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
-                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewDN($event)"
-                (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" [PageSize]="this.FILTER_VALUE_LIST_NEW?.PageSize"
+                TableName="debitnotes" [SHOW_TABLE_TBODY]="this.filteranytablepagination?.SHOW_TABLE_TBODY"
+                [TableFormat]="this.FILTER_VALUE_LIST_NEW" [FILTER_FORM_VALUE]="this.FILTER_FORM_VALUE"
+                (ViewChanges)="viewDN($event)" (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
             </custom-expansion-panel>
-            <!-- <div style="width: 100%" class="analytics_top" #debitnotes>
-                <div style="width: 100%" class="row">
-                    <div class="" id="container">
-                        <section class="middle_datatable">
-                            <div class="widget-body p-0 support table-wrapper">
-                               <table class="table table-hover">
-                                    <thead>
-                                        <tr class="table-tr">
-                                            <th scope="col" class="col-td-th-3">DATE</th>
-                                            <th scope="col" class="col-td-th-3">PI/PO no.</th>
-                                            <th scope="col" class="col-td-th-3">CI no.</th>
-                                            <th scope="col" class="col-td-th-3">D N No.</th>
-                                            <th scope="col" class="col-td-th-3">D N Amount</th>
-                                            <th scope="col" class="col-td-th-3">Currency</th>
-                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
-                                            <th scope="col" class="col-td-th-3">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
-                                            [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
-                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <td class="col-td-th-3" [innerHTML]="data.date"></td>
-                                            <td class="col-td-th-3" [innerHTML]="getPipoNumbers(data)"></td>
-                                            <td class="col-td-th-3" [innerHTML]="data.commercialNumber"></td>
-                                            <td class="col-td-th-3" [innerHTML]="data.debitNoteNumber"></td>
-                                            <td class="col-td-th-3" [innerHTML]="data.totalDebitAmount"></td>
-                                            <td class="col-td-th-3" [innerHTML]="data.currency"></td>
-                                            <td class="col-td-th-3" [innerHTML]="data.buyerName"></td>
-                                            <td class="col-td-th-3">
-                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewDN(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
-                                                    aria-hidden="true"></i></a>
-                                                <button title="Edit" class="savBtn bgnone" 
-                                                    (click)="toEdit(i);edittable.style.display='flex'"><i
-                                                        class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                                <button title="Delete" class="savBtn bgnone"
-                                                     (click)="handleDelete(data._id,i)"><a
-                                                        title="Delete" href="javascript:void(0)"><i
-                                                            class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </main>
 </div>
 
-<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
-    id="PDF_VIEW" name="Debit Note">
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="PDF_VIEW"
+    name="Debit Note">
     <div class="p-2">
         <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Debit Note" [src]="viewData" width="100%"
             height="500px"></app-pdf-viewer>

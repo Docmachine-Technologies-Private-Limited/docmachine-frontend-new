@@ -1878,19 +1878,19 @@ export class TableServiceController {
                             "BOE AMOUNT",
                             "AVAILABLE BALANCE",
                             "Action"],
-                          items: [],
-                          Expansion_header: [
+                        items: [],
+                        Expansion_header: [
                             "AD CODE",
                             "AD BILL NO",
                             "IEC CODE",
                             "IEC NAME",
                             "ORIGIN",
                             "DISCHARGE PORT"
-                          ],
-                          Expansion_Items: [],
-                          Objectkeys: [],
-                          ExpansionKeys: [],
-                          TableHeaderClass: [
+                        ],
+                        Expansion_Items: [],
+                        Objectkeys: [],
+                        ExpansionKeys: [],
+                        TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
@@ -1899,7 +1899,7 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2"
-                          ],
+                        ],
                         eventId: 2,
                         Expansion_header2: [],
                         Expansion_Items2: [],
@@ -1926,12 +1926,12 @@ export class TableServiceController {
                                     disabled: element['deleteflag'] != '-1' ? false : true,
                                     RoleType: this.USER_RESULT?.RoleCheckbox,
                                     Expansion_Items: [{
-                                      adCode: element['adCode'],
-                                      adBillNo: element['adBillNo'],
-                                      IECCODE: element['iecCode'],
-                                      IECNAME: element['iecName'],
-                                      ORIGIN: element['origin'],
-                                      DISCHARGEPORT: element['dischargePort']
+                                        adCode: element['adCode'],
+                                        adBillNo: element['adBillNo'],
+                                        IECCODE: element['iecCode'],
+                                        IECNAME: element['iecName'],
+                                        ORIGIN: element['origin'],
+                                        DISCHARGEPORT: element['dischargePort']
                                     }]
                                 })
                             });
@@ -1962,17 +1962,17 @@ export class TableServiceController {
                             "BL/Airway No.",
                             "Beneficiary Name",
                             "Action"],
-                          items: [],
-                          Expansion_header: [],
-                          Expansion_Items: [],
-                          Objectkeys: [],
-                          ExpansionKeys: [],
-                          TableHeaderClass: [
+                        items: [],
+                        Expansion_header: [],
+                        Expansion_Items: [],
+                        Objectkeys: [],
+                        ExpansionKeys: [],
+                        TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2"
-                          ],
+                        ],
                         eventId: '0',
                         PageSize: 0
                     }
@@ -2018,17 +2018,17 @@ export class TableServiceController {
                             "Packing List No.",
                             "Beneficiary Name",
                             "Action"],
-                          items: [],
-                          Expansion_header: [],
-                          Expansion_Items: [],
-                          Objectkeys: [],
-                          ExpansionKeys: [],
-                          TableHeaderClass: [
+                        items: [],
+                        Expansion_header: [],
+                        Expansion_Items: [],
+                        Objectkeys: [],
+                        ExpansionKeys: [],
+                        TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
                             "col-td-th-2",
-                          ],
+                        ],
                         eventId: '',
                         PageSize: 0
                     }
@@ -2128,7 +2128,7 @@ export class TableServiceController {
                             "Pipo No.",
                             "DATE",
                             "Bill Of Ex. No.",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
                         Expansion_header: [],
@@ -2139,8 +2139,7 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1"
+                            "col-td-th-2",
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2187,22 +2186,22 @@ export class TableServiceController {
                             "C N No.",
                             "C N Amount",
                             "CURRENCY",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
-                        items: [],
-                        Expansion_header: [],
-                        Expansion_Items: [],
-                        Objectkeys: [],
-                        ExpansionKeys: [],
-                        TableHeaderClass: [
+                          items: [],
+                          Expansion_header: [],
+                          Expansion_Items: [],
+                          Objectkeys: [],
+                          ExpansionKeys: [],
+                          TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1",
+                            "col-td-th-2",
                             "col-td-th-1"
-                        ],
+                          ],
                         eventId: '',
                         PageSize: 0
                     }
@@ -2318,7 +2317,7 @@ export class TableServiceController {
                             "Expiry Date",
                             "IP Amount",
                             "CURRENCY",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
                         Expansion_header: [],
@@ -2333,7 +2332,7 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1"
+                            "col-td-th-2"
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2382,11 +2381,9 @@ export class TableServiceController {
                             "Pipo No.",
                             "DATE",
                             "L C No.",
-                            "Expiry Date",
-                            "Last Date of Shipment",
                             "L C Amount",
                             "CURRENCY",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
                         Expansion_header: [],
@@ -2398,11 +2395,8 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
+                            "col-td-th-1",
                             "col-td-th-2",
-                            "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1"
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2416,10 +2410,8 @@ export class TableServiceController {
                             await newdata?.forEach(async (element) => {
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
-                                    date: moment(element['date']).format("DD-MM-YYYY"),
+                                    date: moment(element['date']).format('DD-MM-YYYY'),
                                     letterOfCreditNumber: element['letterOfCreditNumber'],
-                                    Expirydate: element['Expirydate'],
-                                    LastDateofShipment: element['LastDateofShipment'],
                                     letterOfCreditAmount: element['letterOfCreditAmount'],
                                     currency: element['currency'],
                                     buyerName: element['buyerName'],
@@ -2456,7 +2448,7 @@ export class TableServiceController {
                             "Overseas Party Name",
                             "M S A Amount",
                             "CURRENCY",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
                         Expansion_header: [],
@@ -2472,8 +2464,7 @@ export class TableServiceController {
                             "col-td-th-2",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1"
+                            "col-td-th-2",
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2525,7 +2516,7 @@ export class TableServiceController {
                             "T P A No.",
                             "T P A Amount",
                             "CURRENCY",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
                         Expansion_header: [],
@@ -2538,8 +2529,7 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1"
+                            "col-td-th-2"
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2553,7 +2543,7 @@ export class TableServiceController {
                             await newdata?.forEach(async (element) => {
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
-                                    date: moment(element['date']).format("DD-MM-YYYY"),
+                                    date: moment(element['date']).format('DD-MM-YYYY'),
                                     triPartyAgreementNumber: element['triPartyAgreementNumber'],
                                     triPartyAgreementAmount: element['triPartyAgreementAmount'],
                                     currency: element['currency'],
@@ -2588,7 +2578,7 @@ export class TableServiceController {
                             "Foreign Party Name",
                             "Report Date",
                             "Report Ratings",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Ageing Days",
                             "Action"],
                         items: [],
@@ -2600,11 +2590,9 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
-                            "col-td-th-1",
                             "col-td-th-2",
-                            "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1",
+                            "col-td-th-2",
+                            "col-td-th-2",
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2620,7 +2608,7 @@ export class TableServiceController {
                                     date: moment(element['date']).format("DD-MM-YYYY"),
                                     opinionReportNumber: element['opinionReportNumber'],
                                     ForeignPartyName: element['ForeignPartyName']?.value,
-                                    ReportDate: moment(element['ReportDate']).format("DD-MM-YYYY"),
+                                    ReportDate: element['ReportDate'],
                                     ReportRatings: element['ReportRatings'],
                                     buyerName: element['buyerName'],
                                     AgeingDays: this.SubtractDates(new Date(element['ReportDate']), new Date()),
@@ -2849,21 +2837,20 @@ export class TableServiceController {
                         header: [
                             "Pipo No.",
                             "DATE",
-                            "SB Number",
-                            "Buyer Name",
+                            "BOE Number",
+                            "Party Name",
                             "Currency",
                             "TT Amount",
-                            "FIRX Number",
+                            "Ref No.",
                             "Available Balance",
                             "Action"],
                         items: [],
                         Expansion_header: [
-                            "From",
                             "Branch",
                             "Description",
-                            "Recieved Date",
+                            "Payment Date",
                             "Commission/Bank Charges",
-                            "Recieved Amount USD",
+                            "Payment Amount",
                             "Conversion Date",
                             "Conversion Rate",
                             "Converted Amount",
@@ -2880,7 +2867,8 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-2"
+                            "col-td-th-2",
+                            "col-td-th-1"
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2896,13 +2884,12 @@ export class TableServiceController {
                                     PipoNo: this.getPipoNumber(element['pipo']),
                                     date: moment(element['date']).format("DD-MM-YYYY"),
                                     boeno: element['sbno'],
-                                    buyerName: element['buyerName'],
+                                    beneficiaryName: element['beneficiaryName'],
                                     currency: element['currency'],
                                     amount: element['amount'],
                                     billNo: element['billNo'],
-                                    BalanceAvail: element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element['amount'],
+                                    BalanceAvail: element['BalanceAvail'] != '-1' ? element['BalanceAvail'] : element['amount'],
                                     Expansion_Items: [{
-                                        From: element['origin'],
                                         Branch: element['location'],
                                         Description: element['commodity'],
                                         RecievedDate: moment(element['recievedDate']).format("DD-MM-YYYY"),
@@ -2943,7 +2930,7 @@ export class TableServiceController {
                             "Pipo No.",
                             "DATE",
                             "Destruction Certificate No.",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
                         Expansion_header: [],
@@ -2954,8 +2941,7 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
-                            "col-td-th-1",
-                            "col-td-th-1"
+                            "col-td-th-2"
                         ],
                         eventId: '',
                         PageSize: 0
@@ -2998,11 +2984,10 @@ export class TableServiceController {
                     TableFormat = {
                         header: [
                             "Pipo No.",
-                            "Sb no.",
                             "DATE",
                             "blcopy Ref No.",
-                            "blcopy Amount",
-                            "Buyer Name",
+                            "Amount",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
                         Expansion_header: [],
@@ -3012,10 +2997,9 @@ export class TableServiceController {
                         TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-2",
                             "col-td-th-2",
                             "col-td-th-1",
+                            "col-td-th-2",
                         ],
                         eventId: '',
                         PageSize: 0
@@ -3029,7 +3013,6 @@ export class TableServiceController {
                             await newdata?.forEach(async (element) => {
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
-                                    SbNo: element['SbRef'] != 'NF' ? element['SbRef'][0]?.sbno : 'NF',
                                     date: moment(element['date']).format('DD-MM-YYYY'),
                                     blcopyrefNumber: element['blcopyrefNumber'],
                                     amount: element['amount'],
@@ -3118,19 +3101,19 @@ export class TableServiceController {
                             "Pipo No.",
                             "DATE",
                             "Swift-Copy No.",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
-                        items: [],
-                        Expansion_header: [],
-                        Expansion_Items: [],
-                        Objectkeys: [],
-                        ExpansionKeys: [],
-                        TableHeaderClass: [
+                          items: [],
+                          Expansion_header: [],
+                          Expansion_Items: [],
+                          Objectkeys: [],
+                          ExpansionKeys: [],
+                          TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
-                            "col-td-th-1",
-                        ],
+                            "col-td-th-2",
+                          ],
                         eventId: '',
                         PageSize: 0
                     }

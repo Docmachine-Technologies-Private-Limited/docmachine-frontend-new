@@ -10,7 +10,7 @@ import { InwardRemittanceAdviceSummaryComponent } from './inward-remittance-advi
 import { ExportOpinionReportsComponent } from './opinion-reports/opinion-reports.component';
 import { ExportTryPartyAgreementsComponent } from './try-party-agreements/try-party-agreements.component';
 import { MasterServiceComponent } from './master-service/master-service.component';
-import { LetterOfCreditExportLCComponent } from './letter-of-credit-export-lc/letter-of-credit-export-lc.component';
+import { LetterOfCreditExportLCComponent } from './export-letter-of-credit/letter-of-credit-export-lc.component';
 import { InsuranceDocumentComponent } from './insurance-document/insurance-document.component';
 import { DebitNoteSummaryComponent } from './debit-note/debit-note.component';
 import { CreditNoteSummaryComponent } from './credit-note/credit-note.component';

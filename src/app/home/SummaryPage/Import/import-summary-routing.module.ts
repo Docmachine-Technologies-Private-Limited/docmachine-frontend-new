@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ImportBOEComponent } from './boe/boe.component';
 import { MemberGuard } from '../../../service/RolePermission/Member/member.guard';
-import { ImportsCreditNoteComponent } from './imports-credit-note/imports-credit-note.component';
+import { ImportsCreditNoteComponent } from './import-credit-note/imports-credit-note.component';
 import { ImportDebitNoteComponent } from './import-debit-note/import-debit-note.component';
 import { ImportInsuranceComponent } from './import-insurance/import-insurance.component';
 import { ImportTriPartyComponent } from './import-tri-party/import-tri-party.component';
@@ -17,7 +17,7 @@ import { ImportAirwayBlcopyComponent } from './import-airway-blcopy/import-airwa
 import { ImportOutwardRemittanceSheetComponent } from './import-outward-remittance-sheet/import-outward-remittance-sheet.component';
 import { ImportOpinionReportsComponent } from './import-opinion-reports/import-opinion-reports.component';
 import { ImportMasterServiceComponent } from './import-master-service/import-master-service.component';
-import { LetterOfCreditImportLCComponent } from './letter-of-credit-import-lc/letter-of-credit-import-lc.component';
+import { LetterOfCreditImportLCComponent } from './import-letter-of-credit/letter-of-credit-import-lc.component';
 import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
 
 const routes: Routes = [

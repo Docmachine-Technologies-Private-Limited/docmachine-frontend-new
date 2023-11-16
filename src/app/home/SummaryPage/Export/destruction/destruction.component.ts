@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';

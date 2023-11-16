@@ -278,7 +278,7 @@ export class PipoDocumentsComponent implements OnInit {
         "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/PIPO`], navigationExtras);
+    this.router.navigate([`/home/Summary/Import/Edit/PIPO`], navigationExtras);
   }
 
   toView(data: any) {

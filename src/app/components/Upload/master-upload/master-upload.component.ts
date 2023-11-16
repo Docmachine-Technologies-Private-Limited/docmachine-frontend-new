@@ -32,7 +32,7 @@ import { InwardRemittanceAdviceSummaryComponent } from '../../../home/SummaryPag
 import { ExportOpinionReportsComponent } from '../../../home/SummaryPage/Export/opinion-reports/opinion-reports.component';
 import { ExportTryPartyAgreementsComponent } from '../../../home/SummaryPage/Export/try-party-agreements/try-party-agreements.component';
 import { MasterServiceComponent } from '../../../home/SummaryPage/Export/master-service/master-service.component';
-import { LetterOfCreditExportLCComponent } from '../../../home/SummaryPage/Export/letter-of-credit-export-lc/letter-of-credit-export-lc.component';
+import { LetterOfCreditExportLCComponent } from '../../../home/SummaryPage/Export/export-letter-of-credit/letter-of-credit-export-lc.component';
 import { InsuranceDocumentComponent } from '../../../home/SummaryPage/Export/insurance-document/insurance-document.component';
 import { DebitNoteSummaryComponent } from '../../../home/SummaryPage/Export/debit-note/debit-note.component';
 import { CreditNoteSummaryComponent } from '../../../home/SummaryPage/Export/credit-note/credit-note.component';
@@ -53,10 +53,6 @@ import { ImportOpinionReportComponent } from '../../../components/Upload/Import/
 import { ImportOutwardRemittanceAdviceComponent } from '../../../components/Upload/Import/import-outward-remittance-advice/import-inward-remittance-advice.component';
 import { ImportCreditNoteComponent } from '../../../components/Upload/Import/import-credit-note/import-credit-note.component';
 import { ImportDebitNotesComponent } from '../../../components/Upload/Import/import-debit-note/import-debit-note.component';
-import { ImportPIPOSComponent } from '../../../components/Upload/Import/import-pipos/import-pipos.component';
-import { ImportBilllodgementreferencenumberadvicecopyComponent } from '../../../components/Upload/Import/import-billlodgementreferencenumberadvicecopy/import-billlodgementreferencenumberadvicecopy.component';
-import { ImportRealisationCertificateComponent } from '../../../components/Upload/Import/import-realisation-certificate/import-realisation-certificate.component';
-import { ImportSwiftCopyDocumentComponent } from '../../../components/Upload/Import/import-swift-copy-document/import-swift-copy-document.component';
 
 import $ from 'jquery'
 

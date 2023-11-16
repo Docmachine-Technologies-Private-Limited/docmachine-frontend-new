@@ -5,7 +5,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as xlsx from 'xlsx';
-import * as data1 from '../../../../currency.json';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';

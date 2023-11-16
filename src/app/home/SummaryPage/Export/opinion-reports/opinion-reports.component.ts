@@ -4,7 +4,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
-import * as data1 from '../../../../currency.json';
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
 import { WindowInformationService } from '../../../../service/window-information.service';

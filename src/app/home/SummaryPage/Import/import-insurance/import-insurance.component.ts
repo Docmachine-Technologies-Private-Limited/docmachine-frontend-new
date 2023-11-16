@@ -1,18 +1,22 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import * as xlsx from 'xlsx';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../../../service/user.service';
+import { UserService } from '../../../../service/user.service';
 import { Router } from '@angular/router';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import * as data1 from '../../../../currency.json';
-import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import moment from "moment";
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'import-insurance-summary',
@@ -31,10 +35,12 @@ export class ImportInsuranceComponent implements OnInit {
   USER_DATA: any = [];
   filtervisible: boolean = false;
   FILTER_VALUE_LIST: any = [];
+  PIPO_DROP_DOWN_DATA: any = [];
+  PIPO_SELECTED_DROP_DOWN_DATA: any = {};
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    Insurance_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -81,9 +87,9 @@ export class ImportInsuranceComponent implements OnInit {
       buyerName:""
     }]
   }
-  PIPO_DROP_DOWN_DATA: any = [];
-  PIPO_SELECTED_DROP_DOWN_DATA: any = {};
-  
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
+
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -92,65 +98,129 @@ export class ImportInsuranceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     public wininfo: WindowInformationService,
-    private pipodataservice: PipoDataService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) {
   }
 
   async ngOnInit() {
-    this.FILTER_VALUE_LIST = [];
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item1 = [];
-    this.documentService.getInsurance().subscribe(
-      (res: any) => {
-        for (let value of res.data) {
-          if (value['file'] == 'import') {
-            this.item1.push(value);
-            this.FILTER_VALUE_LIST.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-            }
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0]) == false) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
-            }
-            if (this.ALL_FILTER_DATA['Insurance_No'].includes(value?.insuranceNumber) == false) {
-              this.ALL_FILTER_DATA['Insurance_No'].push(value?.insuranceNumber);
-            }
-            if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.date);
-            }
-          }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'insurances',this.FILTER_VALUE_LIST_NEW)?.insurances().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        this.InsuranceNoTable(this.item1)
-        console.log(res, 'yuyuyuyuyuyuyuuy')
-        this.pipodataservice.getPipoList("import").then((res: any) => {
-          this.PIPO_DROP_DOWN_DATA = [];
-          this.PIPO_SELECTED_DROP_DOWN_DATA = [];
-          res?.pipoModelList?.forEach(element => {
-            this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
-              pi_poNo: element?.pi_poNo,
-              amount: element?.amount,
-              UtilizationAmount: 0,
-              buyerName: element?.benneName,
-            }
-            this.PIPO_DROP_DOWN_DATA.push({
-              pi_poNo: element?.pi_poNo,
-              amount: element?.amount,
-              UtilizationAmount: 0,
-              id: element?._id,
-              buyerName: element?.benneName,
-            });
-          });
-          console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
-    
-        })
-      }, (err) => console.log(err));
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
+          bindLabel: "value"
+        },
+        todate: {
+          type: "date",
+          value: "",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
+    })
+  }
+
+ async onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+    };
+
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
+    const removeEmptyValues = (object) => {
+      let newobject: any = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'insurances',this.FILTER_VALUE_LIST_NEW)?.insurances().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
+  }
+  
+  reset(){
+    this.ngOnInit()
   }
 
   InsuranceNoTable(data: any) {
@@ -219,50 +289,7 @@ export class ImportInsuranceComponent implements OnInit {
   onclick() {
     this.filtervisible = !this.filtervisible
   }
-  clickPipo($event, index) {
-    this.EDIT_FORM_DATA["UtilizationAddition"][index]['pi_poNo'] = $event["pi_poNo"];
-    this.EDIT_FORM_DATA["UtilizationAddition"][index]['amount'] = $event["amount"];
-    this.EDIT_FORM_DATA["UtilizationAddition"][index]['UtilizationAmount'] = $event["UtilizationAmount"];
-    this.EDIT_FORM_DATA["UtilizationAddition"][index]['buyerName'] = $event["buyerName"];
-  }
-  AddMore() {
-    this.EDIT_FORM_DATA?.UtilizationAddition.push({
-      pi_poNo: "",
-      amount: "",
-      UtilizationAmount: 0,
-      buyerName:""
-    });
-  }
-  RemoveMore(index) {
-    this.EDIT_FORM_DATA?.UtilizationAddition.splice(index, 1);
-  }
-  timeout: any = null;
-  AmountValidation(UtilizationAmount: any, index: any, PipoAmount: any, InsuranceAmount: any) {
-    clearTimeout(this.timeout);
-    if (UtilizationAmount!='') {
-      let SUM_OF_PIPO: any = this.EDIT_FORM_DATA.UtilizationAddition?.reduce(function (acc, obj) { return parseInt(acc) + parseInt(obj.amount); }, 0);
-      console.log(UtilizationAmount, SUM_OF_PIPO , UtilizationAmount ,InsuranceAmount,"shdkhdjksdhsk")  
-      if (UtilizationAmount > InsuranceAmount) {
-        this.timeout = setTimeout(() => {
-          this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
-        }, 200);
-        this.toastr.error("You don't have much engouh amount");
-        return;
-      }else if (UtilizationAmount > SUM_OF_PIPO) {
-        this.timeout = setTimeout(() => {
-          this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
-        }, 200);
-        this.toastr.error("You don't have much engouh amount");
-        return;
-      }else if (SUM_OF_PIPO > InsuranceAmount) {
-        this.timeout = setTimeout(() => {
-          this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
-        }, 200);
-        this.toastr.error("insurance value insufficient");
-        return;
-      }
-    }
-  }
+
   openInsuranceDoc(content) {
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
@@ -296,7 +323,7 @@ export class ImportInsuranceComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -329,16 +356,18 @@ export class ImportInsuranceComponent implements OnInit {
   }
 
   newInsurance() {
-    this.router.navigate(['home/upload', { file: 'import', document: 'insuranceCopy' }]);
+    this.router.navigate(['/home/upload/Export/Insurancedocuments']);
   }
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
     this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.SELECTED_VALUE = this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index];
     this.EDIT_FORM_DATA = {
       date: this.SELECTED_VALUE['date'],
       insuranceNumber: this.SELECTED_VALUE['insuranceNumber'],
+      StartDate: this.SELECTED_VALUE['StartDate'],
+      Expirydate: this.SELECTED_VALUE['Expirydate'],
       insuranceAmount: this.SELECTED_VALUE['insuranceAmount'],
       currency: this.SELECTED_VALUE['currency'],
       buyerName: this.SELECTED_VALUE['buyerName'],
@@ -349,6 +378,7 @@ export class ImportInsuranceComponent implements OnInit {
         buyerName:""
       }]
     }
+    console.log(this.EDIT_FORM_DATA, "EDIT_FORM_DATA")
     this.toastr.warning('Insurance Document Row Is In Edit Mode');
   }
 
@@ -360,9 +390,9 @@ export class ImportInsuranceComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -394,12 +424,48 @@ export class ImportInsuranceComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new InsurancesFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new InsurancesFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'insurances.xlsx');
   }
 
+  clickPipo($event, index) {
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['pi_poNo'] = $event["pi_poNo"];
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['amount'] = $event["amount"];
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['UtilizationAmount'] = $event["UtilizationAmount"];
+    this.EDIT_FORM_DATA["UtilizationAddition"][index]['buyerName'] = $event["buyerName"];
+  }
+  AddMore() {
+    this.EDIT_FORM_DATA?.UtilizationAddition.push({
+      pi_poNo: "",
+      amount: "",
+      UtilizationAmount: 0,
+      buyerName:""
+    });
+  }
+  RemoveMore(index) {
+    this.EDIT_FORM_DATA?.UtilizationAddition.splice(index, 1);
+  }
+  timeout: any = null;
+  AmountValidation(UtilizationAmount: any, index: any, PipoAmount: any, InsuranceAmount: any) {
+    clearTimeout(this.timeout);
+    let SUM_OF_PIPO: any = this.EDIT_FORM_DATA.UtilizationAddition?.reduce(function (acc, obj) { return parseInt(acc) + parseInt(obj.amount); }, 0);
+    if (UtilizationAmount > SUM_OF_PIPO || UtilizationAmount > InsuranceAmount) {
+      this.timeout = setTimeout(() => {
+        this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
+      }, 200);
+      this.toastr.error("You don't have much engouh amount");
+      return;
+    }
+    if (SUM_OF_PIPO > InsuranceAmount) {
+      this.timeout = setTimeout(() => {
+        this.EDIT_FORM_DATA.UtilizationAddition[index]["UtilizationAmount"] = PipoAmount;
+      }, 200);
+      this.toastr.error("insurance value insufficient");
+      return;
+    }
+  }
 }
 
 
@@ -413,12 +479,14 @@ class InsurancesFormat {
     var temp: any = [];
     this.data?.forEach(element => {
       temp.push({
-        PipoNo: this.getPipoNumber(element['pipo']),
-        date: element['date'],
+        PipoNo: this.getPipoNumber(element['UtilizationAddition']),
+        date: moment(element['date']).format("YYYY-MM-DD"),
         insuranceNumber: element['insuranceNumber'],
+        StartDate: moment(element['StartDate']).format("YYYY-MM-DD"),
+        Expirydate: moment(element['Expirydate']).format("YYYY-MM-DD"),
         insuranceAmount: element['insuranceAmount'],
         currency: element['currency'],
-        buyerName: this.getBuyerName(element['buyerName']),
+        buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
       })
     });
     return temp;
@@ -431,10 +499,10 @@ class InsurancesFormat {
     return temp.join(',')
   }
 
-  getBuyerName(buyerName: any) {
+  getPipoBuyerName(pipo: any) {
     let temp: any = [];
-    buyerName.forEach(element => {
-      temp.push(element);
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.buyerName);
     });
     return temp.join(',')
   }

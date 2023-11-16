@@ -1,18 +1,27 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../../../service/user.service';
+import { UserService } from '../../../../service/user.service';
+import * as data1 from '../../../../currency.json';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
+import { ActivatedRoute, Data, NavigationExtras, NavigationStart, Router } from '@angular/router';
 import * as xlsx from 'xlsx';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
-import {NavigationExtras, Router } from '@angular/router';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import * as data1 from '../../../../currency.json';
 import moment from 'moment';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'imports-credit-note-summary',
@@ -34,7 +43,7 @@ export class ImportsCreditNoteComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    C_N_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -72,6 +81,8 @@ export class ImportsCreditNoteComponent implements OnInit {
     currency: '',
     buyerName: '',
   }
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
 
   constructor(
     private documentService: DocumentService,
@@ -82,47 +93,131 @@ export class ImportsCreditNoteComponent implements OnInit {
     private userService: UserService,
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) {
   }
 
   async ngOnInit() {
-    this.FILTER_VALUE_LIST = [];
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    console.log("this.USER_DATA", this.USER_DATA)
-    this.item1 = [];
-    this.documentService.getCredit().subscribe((res: any) => {
-      for (let value of res.data) {
-        if (value['file'] == 'import') {
-          this.item1.push(value);
-          this.FILTER_VALUE_LIST.push(value);
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['C_N_No'].includes(value?.creditNoteNumber) == false) {
-            this.ALL_FILTER_DATA['C_N_No'].push(value?.creditNoteNumber);
-          }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.date);
-          }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'creditNote', this.FILTER_VALUE_LIST_NEW)?.creditNote().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+        }
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
         }
       }
-      this.CreditNoteTable(this.item1)
-      console.log(res, 'yuyuyuyuyuyuyuuy')
-    },
-      (err) => console.log(err)
-    );
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
+          bindLabel: "value"
+        },
+        todate: {
+          type: "date",
+          value: "",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
+    })
   }
+
+  async onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+    };
+
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
+    const removeEmptyValues = (object) => {
+      let newobject: any = {}
+      for (const key in object) {
+        if (object[key] != '' && object[key] != null && object[key] != undefined) {
+          newobject[key] = object[key];
+        }
+      }
+      return newobject;
+    };
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'creditNote', this.FILTER_VALUE_LIST_NEW)?.creditNote().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
+  }
+
+  reset() {
+    this.ngOnInit()
+  }
+
 
   CreditNoteTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
@@ -201,7 +296,7 @@ export class ImportsCreditNoteComponent implements OnInit {
   viewCN(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -230,7 +325,8 @@ export class ImportsCreditNoteComponent implements OnInit {
   }
 
   newCredit() {
-    this.router.navigate(['home/upload', {file: 'import', document: 'creditNote'}]);
+    this.sharedData.changeretunurl('home/credit-note')
+    this.router.navigate(['home/upload', { file: 'export', document: 'creditNote' }]);
   }
 
   filter(value, key) {
@@ -247,29 +343,20 @@ export class ImportsCreditNoteComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new CreditNoteFormat(this.FILTER_VALUE_LIST).getCreditNote());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new CreditNoteFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).getCreditNote());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'ImportCreditNotes.xlsx');
+    xlsx.writeFile(wb, 'creditnotes.xlsx');
   }
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   creditNoteNumber: this.SELECTED_VALUE['creditNoteNumber'],
-    //   creditNoteAmount: this.SELECTED_VALUE['creditNoteAmount'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Import/Edit/CreditNoteDocument`],navigationExtras);
+    this.router.navigate([`/home/Summary/Import/Edit/CreditNoteDocument`], navigationExtras);
     this.toastr.warning('Credit Note Row Is In Edit Mode');
   }
 
@@ -281,9 +368,9 @@ export class ImportsCreditNoteComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -345,7 +432,7 @@ class CreditNoteFormat {
 
   getBuyerName(buyerName: any) {
     let temp: any = [];
-    buyerName.forEach(element => {
+    (buyerName != 'NF' ? buyerName : [])?.forEach(element => {
       temp.push(element);
     });
     return temp.join(',')
