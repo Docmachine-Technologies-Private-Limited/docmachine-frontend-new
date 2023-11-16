@@ -21,22 +21,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: "Read JSON"
-        uses: actions/github-script@v6
-        id: check-env
-        with:
-          result-encoding: string
-          script: |
-            try {
-              const fs = require('fs')
-              const jsonString = fs.readFileSync('package.json')
-              var apps = JSON.parse(jsonString)
-              apps['version']=parseFloat(apps['version'])+1
-              fs.writeFile('package.json', JSON.stringify(apps),'utf8', ()=>{});
-            } catch(err) {
-              core.error("Error while reading or parsing the JSON")
-              core.setFailed(err)
-            }
       - name: Cache node modules
         id: cache-nodemodules
         uses: actions/cache@v2
@@ -60,10 +44,10 @@ jobs:
         run: |
             npm version ${{env.version}} --no-git-tag-version --allow-same-version
             npm version patch -m "[RELEASE] %s" --no-git-tag-version --allow-same-version
-            CURRENT_VERSION=$(node -p "require('./package.json').version")
-            UPDATED_VERSION=$(node -p "require('./package.json').version")
+            CURRENT_VERSION=$(node -p "require('package.json').version")
+            UPDATED_VERSION=$(node -p "require('package.json').version")
             git add package.json
-            [ -f ./package-lock.json ] && git add package-lock.json
+            [ -f package-lock.json ] && git add package-lock.json
             git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION"
             npm run dev --
       - name: deploy
