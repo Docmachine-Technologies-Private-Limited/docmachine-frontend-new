@@ -259,7 +259,8 @@
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'checkbox'">
                     <div class="col-12 p-0 ml-3">
-                        <mat-checkbox [(ngModel)]="field.value" [disabled]="field?.CheckboxDisabled" [type]="field.type" [name]="field.fieldName"
+                        <mat-checkbox [(ngModel)]="field.value" [disabled]="field?.CheckboxDisabled" [type]="field.type"
+                            [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{field.label}}
                             <span style="color: red;" *ngIf="field?.rules?.required==true">*</span></mat-checkbox>
                     </div>
@@ -399,16 +400,16 @@
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <ng-select *ngIf="this.validator.BANK_LIST_DROPDOWN?.length!=0"
                         [items]="this.validator.BANK_LIST_DROPDOWN" bindLabel="value" [multiple]="false"
-                        (change)="BANK_CHECKBOX($event)"
+                        (change)="BANK_CHECKBOX($event,field?.ChargeLabelHide)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
                     </ng-select>
                     <label class="mt-2 mb-2"
-                        *ngIf="field.Banklabel!=undefined && field.Banklabel!='' && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
+                        *ngIf="(field.Banklabel!=undefined || field.Banklabel!='') && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
                     <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST;let in=index" class="mt-2">
                         <mat-checkbox *ngIf="field.TypeOfCurrency==item?.value?.currency" [checked]="item?.checked"
                             (change)="onBankCheckBox($event,field.fieldName,item?.value,item)" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
-                        <mat-checkbox *ngIf="field.TypeOfCurrency=='' || field.TypeOfCurrency==undefined"
+                        <mat-checkbox *ngIf="field?.TypeOfCurrency=='' || field?.TypeOfCurrency==undefined"
                             [checked]="item?.checked" (change)="onBankCheckBox($event,field.fieldName,item?.value,item)"
                             [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
@@ -416,8 +417,9 @@
 
                     <label class="mt-2 mb-2"
                         *ngIf="field.Banklabel2!=undefined && field.Banklabel2!='' && this.validator.CHECK_BOX_BANK_LIST_CHARGES?.length!=0">{{field.Banklabel2}}</label>
-                    <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST_CHARGES;let in=index" class="mt-2">
-                        <mat-checkbox [checked]="item?.checked"
+                    <div *ngIf="field?.ChargeLabelHide!=null" class="mt-2">
+                        <mat-checkbox *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST_CHARGES;let in=index"
+                            [checked]="item?.checked"
                             (change)="onChargerBankCheckBox($event,field.fieldName2,item?.value,item)"
                             [name]="field.fieldName2"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
@@ -466,7 +468,7 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <ng-select *ngIf="this.validator?.BL_COPY_LIST?.length!=0" [items]="this.validator?.BL_COPY_LIST"
-                        bindLabel="no" (change)="onBL_COPY_EVENT($event)" [multiple]="false"
+                        bindLabel="value" (change)="onBL_COPY_EVENT($event)" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
@@ -1050,15 +1052,13 @@
                             (click)="ValueAdd(this.id,field.fieldName)">Select HS Code</button>
                     </div>
                 </div>
-                
+
                 <div class="form-group mb-0" *ngSwitchCase="'PURPOSE_CODE'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <div class="row m-0">
-                        <input [value]="this.ALL_DATA_PURPOSE_CODE" ngModel
-                            type="text"
-                            [name]="field.fieldName" disabled
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        <input [value]="this.ALL_DATA_PURPOSE_CODE" ngModel type="text" [name]="field.fieldName"
+                            disabled [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.style" />
                         <button type="button" class="btn btn-primary PopupOpen" popup-close="Purpose_Code_POPUP"
                             (click)="PURPOSE_ValueAdd(this.id,field.fieldName)">Select Purpose Code</button>
@@ -1437,8 +1437,8 @@
             <div class="d-flex col-12" style="height:80vh;flex-direction: column;gap: 20px;">
                 <div class="header-dropdown d-flex" style="gap: 10px;">
                     <app-ng-dropdown-custom style="width: 300px;margin-left: 20px;"
-                        placeHolderText="Search Purpose Code" [items]="this.validator.PURPOSE_CODE_LIST_DATA" bindLabel="value"
-                        (modelChanges)="this.validator.filterData($event?.value)">
+                        placeHolderText="Search Purpose Code" [items]="this.validator.PURPOSE_CODE_LIST_DATA"
+                        bindLabel="value" (modelChanges)="this.validator.filterData($event?.value)">
                     </app-ng-dropdown-custom>
                 </div>
                 <div class="row col-12 mt-0">
@@ -1450,7 +1450,8 @@
                                 <label for="" class="label-text">Description</label>
                             </div>
                         </div>
-                        <div class="tbody-card" *ngFor="let item of this.validator.PURPOSE_CODE_FILTER_DATA;let j=index">
+                        <div class="tbody-card"
+                            *ngFor="let item of this.validator.PURPOSE_CODE_FILTER_DATA;let j=index">
                             <p class="p-border groupname-text">{{item?.RBI_Purpose_Code}}</p>
                             <div class="colspanitem">
                                 <div class="colspan card-layout" [ngClass]="{'isActive':item.isActive==true}"
@@ -1461,7 +1462,8 @@
                                         <span
                                             *ngFor="let colspanitem of item?.Value_greater_25000_equv[0]">{{colspanitem}}</span>
                                     </p>
-                                    <p class="text-left" *ngIf="this.validator.sumTotalAmount!= 0 && this.validator.sumTotalAmount > 25000">
+                                    <p class="text-left"
+                                        *ngIf="this.validator.sumTotalAmount!= 0 && this.validator.sumTotalAmount > 25000">
                                         <span
                                             *ngFor="let colspanitem of item?.Value_less_25000_equv[0]">{{colspanitem}}</span>
                                     </p>
@@ -1475,7 +1477,7 @@
     </div>
     <custom-model-header>
         <button type="button" class="btn btn-primary"
-        [disabled]="this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION?.length!=0?false:true"
-        (click)="this.PURPOSEDoneButton();Purpose_Code_POPUP_PANEL?.displayHidden">Done</button>
+            [disabled]="this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION?.length!=0?false:true"
+            (click)="this.PURPOSEDoneButton();Purpose_Code_POPUP_PANEL?.displayHidden">Done</button>
     </custom-model-header>
 </app-custom-model>

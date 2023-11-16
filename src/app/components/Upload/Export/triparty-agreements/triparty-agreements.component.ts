@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -32,7 +30,6 @@ export class TripartyAgreementsComponent implements OnInit {
   };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup?: any | FormGroup;
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
@@ -204,7 +201,7 @@ export class TripartyAgreementsComponent implements OnInit {
               );
           }, (err) => console.log('Error adding pipo'));
         } else {
-          this.toastr.error(`Please check this sb no. : ${e.value.triPartyAgreementNumber} already exit...`);
+          this.toastr.error(`Please check this Third Party no. : ${e.value.triPartyAgreementNumber} already exit...`);
         }
       });
   }

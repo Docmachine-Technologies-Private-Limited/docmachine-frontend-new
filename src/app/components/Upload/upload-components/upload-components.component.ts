@@ -50,7 +50,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('morecontent') morecontent: boolean = false;
   @Input('BUTTON_PANEL_SHOW') BUTTON_PANEL_SHOW: boolean = false;
   @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean = true;
-  
+
   Account_Type: any = [{
     type: 'OD-over draft'
   }, {
@@ -293,16 +293,16 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.HSCODE_FEILD_FORM['id'] = id;
     this.HSCODE_FEILD_FORM['field'] = field;
   }
-  
+
   PUPOSE_CODE_FEILD_FORM: any = {
     id: '',
     field: ''
   }
-  
-  
+
+
   SELECT_PURPOSE_CODE(event: any, index: any) {
     console.log(event, 'SELECT_PURPOSE_CODE')
-    this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = {PurposeCode:event[0],Description:this.validator.PURPOSE_CODE_FILTER_DATA[index]?.Value_greater_25000_equv[0]};
+    this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = { PurposeCode: event[0], Description: this.validator.PURPOSE_CODE_FILTER_DATA[index]?.Value_greater_25000_equv[0] };
     this.validator.SELECTED_PURPOSE_CODE_INDEX[index] = true;
     this.validator.PURPOSE_CODE_FILTER_DATA?.forEach((element, i) => {
       if (index == i) {
@@ -310,23 +310,23 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  
+
   PURPOSE_ValueAdd(id: any, field: any) {
     this.PUPOSE_CODE_FEILD_FORM['id'] = id;
     this.PUPOSE_CODE_FEILD_FORM['field'] = field;
   }
-  
+
   ALL_DATA_PURPOSE_CODE: any = '';
   PURPOSEDoneButton() {
     let temp2: any = [];
     this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION.forEach(element => {
       temp2.push(element?.PurposeCode);
     });
-    console.log(temp2,"PURPOSEDoneButton")
+    console.log(temp2, "PURPOSEDoneButton")
     this.ALL_DATA_PURPOSE_CODE = temp2.join(',');
     this.setValue(this.ALL_DATA_PURPOSE_CODE, this.PUPOSE_CODE_FEILD_FORM?.field);
   }
-  
+
   IMAGE_UPLOAD_LIST: any = [];
   onUploadChanges(event: any, autofill: any) {
     if (event.target.files.length > 0) {
@@ -479,7 +479,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.validator.dynamicFormGroup[this.id].controls[fieldName].setValue(item);
     console.log(event, item, this.CommericalListCheckBoxList, "CommericalListCheckBox")
   }
-  
+
   onChargerBankCheckBox(event, fieldName, item: any, ItemChecked) {
     this.validator.CHECK_BOX_BANK_LIST_CHARGES.forEach(element => {
       element['checked'] = false;
@@ -507,10 +507,13 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     console.log(event, item, "onRemitterCheckBox")
   }
 
-  BANK_CHECKBOX(value: any) {
+  BANK_CHECKBOX(value: any, CHECK_BOX_BANK_LIST_CHARGES) {
     console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, "BANK_CHECKBOX")
     this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.id];
-    this.validator.CHECK_BOX_BANK_LIST_CHARGES = this.validator?.ToCreditAccountdata[value?.id];
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES = []
+    if (CHECK_BOX_BANK_LIST_CHARGES == undefined) {
+      this.validator.CHECK_BOX_BANK_LIST_CHARGES = this.validator?.ToCreditAccountdata[value?.id];
+    }
     this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
       element['checked'] = false;
     });

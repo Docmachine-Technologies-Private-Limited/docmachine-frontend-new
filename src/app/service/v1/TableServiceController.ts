@@ -26,7 +26,7 @@ export class TableServiceController {
         PageSize: 0
     }
     constructor(public filteranytablepagination: filterAnyTablePagination, private userService: UserService, public UploadServiceValidatorService: UploadServiceValidatorService) {
-        this.USER_RESULT = this.userService.getUserDetail();
+        this.userService.getUserDetail().then((res: any) => this.USER_RESULT = res?.result);
         console.log("this.USER_DATA", this.USER_RESULT);
         UploadServiceValidatorService.getBuyerLoad()
     }
@@ -93,7 +93,7 @@ export class TableServiceController {
                                     "PaymentTerm": element['paymentTerm'][0]?.type?.value,
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -159,7 +159,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -285,7 +285,7 @@ export class TableServiceController {
                                     isExpand: false,
                                     isExpand2: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox,
+                                    RoleType: this.USER_RESULT?.RoleCheckbox,
                                     Expansion_Items: [{
                                         adCode: element['adCode'],
                                         adBillNo: element['adBillNo'],
@@ -364,7 +364,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -424,7 +424,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -480,7 +480,7 @@ export class TableServiceController {
                                     CommercialNumber: element['CommercialNumber']?.value,
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -537,7 +537,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -600,7 +600,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -666,7 +666,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -734,7 +734,7 @@ export class TableServiceController {
                                     buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -803,7 +803,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -875,7 +875,7 @@ export class TableServiceController {
                                     buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -938,7 +938,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1004,7 +1004,7 @@ export class TableServiceController {
                                     AgeingDays: this.SubtractDates(new Date(element['ReportDate']), new Date()),
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1075,7 +1075,7 @@ export class TableServiceController {
                                         BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
                                         isExpand: false,
                                         disabled: element['deleteflag'] != '-1' ? false : true,
-                                        RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                        RoleType: this.USER_RESULT?.RoleCheckbox
                                     })
                                 })
                                 if (TableFormat['items']?.length != 0) {
@@ -1135,7 +1135,7 @@ export class TableServiceController {
                                         BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
                                         isExpand: false,
                                         disabled: element['deleteflag'] != '-1' ? false : true,
-                                        RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                        RoleType: this.USER_RESULT?.RoleCheckbox
                                     })
                                 })
                                 if (TableFormat['items']?.length != 0) {
@@ -1200,7 +1200,7 @@ export class TableServiceController {
                                         BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
                                         isExpand: false,
                                         disabled: element['deleteflag'] != '-1' ? false : true,
-                                        RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                        RoleType: this.USER_RESULT?.RoleCheckbox
                                     })
                                 })
                                 if (TableFormat['items']?.length != 0) {
@@ -1293,7 +1293,7 @@ export class TableServiceController {
                                     }],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1352,7 +1352,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1414,7 +1414,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1470,7 +1470,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1526,7 +1526,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1547,7 +1547,7 @@ export class TableServiceController {
             },
         }
     }
-    
+
     LoadTableImport(Query: any = {}, PageFilter: any, TableName: any, TableFormat: any, ExtraData: any = {}) {
         this.SHOW_TABLE_TBODY = false;
         this.TABLE_CONTROLLER_DATA = [];
@@ -1570,28 +1570,55 @@ export class TableServiceController {
                 return new Promise((resolve, reject) => {
                     TableFormat = {
                         header: [
-                            "Invoice No.",
-                            "Invoice Date",
-                            "Consignee Name",
+                            "DATE",
+                            "INVOICE No.",
+                            "INVOICE DATE",
+                            "Beneficiary NAMES",
+                            "CURRENCY",
                             "BRANCH",
+                            "COMMODITY",
                             "Amount",
-                            "Payment Term",
                             "Action"],
                         items: [],
-                        Expansion_header: [],
+                        Expansion_header: [
+                            "BOE NO",
+                            "BOE DATE",
+                            "REGION",
+                            "FOB VALUE",
+                            "PORT CODE",
+                            "BOE Balance Amount",
+                            "Freight Charges"
+                        ],
+                        Expansion_header2: [
+                            "TT DATE",
+                            "TT USD",
+                            "Payment Date",
+                            "Amount",
+                            "Currency",
+                            "CCY Rate",
+                            "INR Amount",
+                            "ORM REF NUMBER/ID",
+                            "TOTAL DEDUCTIONS/DAMGES/USD",
+                            "FINAL AMOUNT - USD",
+                            "DEBIT NOTE STATUS",
+                            "STATUS OF BOE SUBMISSION IN BANK"
+                        ],
                         Expansion_Items: [],
+                        Expansion_Items2: [],
                         Objectkeys: [],
                         ExpansionKeys: [],
+                        ExpansionKeys2: [],
                         TableHeaderClass: [
+                            "col-td-th-0",
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1"
+                            "col-td-th-1",
                         ],
-                        eventId: '0',
+                        eventId: 1,
                         PageSize: 0
                     }
                     this.filteranytablepagination.PaginationfilterAnyTable(Query, PageFilter, 'pi_po').subscribe((res: any) => {
@@ -1601,22 +1628,83 @@ export class TableServiceController {
                         TableFormat['Expansion_Items'] = [];
                         this.removeEmpty(res?.data).then(async (newdata: any) => {
                             await newdata?.forEach(async (element) => {
+                                let boedata: any = [];
+                                (element?.boeRef != 'NF' ? element?.boeRef : [{
+                                    BOENO: "NF",
+                                    BOEDATE: "NF",
+                                    REGION: "NF",
+                                    FOBVALUE: "NF",
+                                    PORTCODE: "NF",
+                                    BOEBalanceAmount: "NF",
+                                    FreightCharges: "NF"
+                                }])?.forEach(boeelement => {
+                                    boedata.push({
+                                        BOENO: boeelement['boeNumber'],
+                                        BOEDATE: moment(boeelement['boeDate']).format("DD-MM-YYYY"),
+                                        REGION: boeelement['origin'],
+                                        FOBVALUE: boeelement['invoiceAmount'],
+                                        PORTCODE: boeelement['iecCode'],
+                                        BOEBalanceAmount: boeelement['balanceAmount'],
+                                        FreightCharges: boeelement['freightAmount']
+                                    })
+                                });
+                                let advice: any = [];
+                                (element?.AdviceRef != 'NF' ? element?.AdviceRef : [{
+                                    TTDATE: 'NF',
+                                    TTUSD: 'NF',
+                                    PaymentDate: 'NF',
+                                    Amount: "NF",
+                                    Currency: "NF",
+                                    CCYRate: "NF",
+                                    INRAmount: "NF",
+                                    ORMREFNUMBERID: "NF",
+                                    TOTALDEDUCTIONSDAMGESUSD: "NF",
+                                    FINALAMOUNTUSD: "NF",
+                                    DEBITNOTESTATUS: "NF",
+                                    STATUSOFBOESUBMISSIONINBANK: "NF",
+                                }])?.forEach(adviceelement => {
+                                    advice.push({
+                                        TTDATE: moment(adviceelement['date']).format("DD-MM-YYYY"),
+                                        TTUSD: adviceelement['amount'],
+                                        PaymentDate: adviceelement['amount'],
+                                        Amount: adviceelement['amount'],
+                                        Currency: adviceelement['currency'],
+                                        CCYRate: adviceelement['amount'],
+                                        INRAmount: adviceelement['amount'],
+                                        ORMREFNUMBERID: adviceelement['billNo'],
+                                        TOTALDEDUCTIONSDAMGESUSD: adviceelement['amount'],
+                                        FINALAMOUNTUSD: adviceelement['amount'],
+                                        DEBITNOTESTATUS: adviceelement['amount'],
+                                        STATUSOFBOESUBMISSIONINBANK: adviceelement['amount'],
+                                    })
+                                });
                                 await TableFormat['items'].push({
-                                    "InvoiceNo": element['pi_poNo'],
-                                    "InvoiceDate": moment(element['date']).format('DD-MM-YYYY'),
-                                    "ConsigneeName": element['buyerName'],
-                                    "BRANCH": element['location'],
-                                    "Amount": element['amount'],
-                                    "PaymentTerm": element['paymentTerm'][0]?.type?.value,
+                                    DATE: moment(element['purchasedate']).format("DD-MM-YYYY"),
+                                    INVOICENUMBER: element['pi_poNo'],
+                                    INVOICEDATE: moment(element['date']).format("DD-MM-YYYY"),
+                                    SELLERNAMES: element['benneName'],
+                                    INVOICECURRENCY: element['currency'],
+                                    BRANCH: element['location'],
+                                    COMMODITY: element['commodity'],
+                                    BALANCEIFANY: element['amount'],
+                                    Expansion_Items: boedata,
+                                    Expansion_Items2: advice,
                                     isExpand: false,
+                                    isExpand2: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
+
                             if (TableFormat['items']?.length != 0) {
                                 TableFormat['Objectkeys'] = await Object.keys(TableFormat['items'][0])?.filter((item: any) => item != 'isExpand')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'isExpand2')
                                 TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'disabled')
                                 TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'RoleType')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2');
+                                TableFormat['ExpansionKeys'] = await Object.keys(TableFormat['items'][0]['Expansion_Items'][0])
+                                TableFormat['ExpansionKeys2'] = await TableFormat['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(TableFormat['items'][0]['Expansion_Items2'][0]) : []
                                 resolve(TableFormat);
                                 this.TABLE_CONTROLLER_DATA = res?.data;
                                 this.SHOW_TABLE_TBODY = true;
@@ -1635,26 +1723,49 @@ export class TableServiceController {
                         header: [
                             "Pipo No.",
                             "DATE",
-                            "SB No.",
-                            "Payments Terms",
                             "Commercial Invoice No.",
-                            "Commercial Amount",
-                            "Buyer Name",
+                            "Advance No.",
+                            "Currency",
+                            "Amount",
+                            "Beneficiary Name",
                             "Action"],
                         items: [],
-                        Expansion_header: [],
+                        Expansion_header: [
+                            "BOE NO",
+                            "BOE DATE",
+                            "REGION",
+                            "FOB VALUE",
+                            "PORT CODE",
+                            "BOE Balance Amount",
+                            "Freight Charges"
+                        ],
+                        Expansion_header2: [
+                            "TT DATE",
+                            "TT USD",
+                            "Payment Date",
+                            "Amount",
+                            "Currency",
+                            "CCY Rate",
+                            "INR Amount",
+                            "ORM REF NUMBER/ID",
+                            "TOTAL DEDUCTIONS/DAMGES/USD",
+                            "FINAL AMOUNT - USD",
+                            "DEBIT NOTE STATUS",
+                            "STATUS OF BOE SUBMISSION IN BANK"
+                        ],
                         Expansion_Items: [],
+                        Expansion_Items2: [],
                         Objectkeys: [],
                         ExpansionKeys: [],
+                        ExpansionKeys2: [],
                         TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-2",
-                            "col-td-th-2",
                             "col-td-th-2",
                             "col-td-th-1",
-                            "col-td-th-1"
+                            "col-td-th-1",
+                            "col-td-th-1",
+                            "col-td-th-2",
                         ],
                         eventId: '0',
                         PageSize: 0
@@ -1666,23 +1777,82 @@ export class TableServiceController {
                         TableFormat['Expansion_Items'] = [];
                         this.removeEmpty(res?.data).then(async (newdata: any) => {
                             await newdata?.forEach(async (element) => {
+                                let boedata: any = [];
+                                (element?.BoeRef != 'NF' ? element?.BoeRef : [{
+                                    BOENO: "NF",
+                                    BOEDATE: "NF",
+                                    REGION: "NF",
+                                    FOBVALUE: "NF",
+                                    PORTCODE: "NF",
+                                    BOEBalanceAmount: "NF",
+                                    FreightCharges: "NF"
+                                }])?.forEach(boeelement => {
+                                    boedata.push({
+                                        BOENO: boeelement['boeNumber'],
+                                        BOEDATE: moment(boeelement['boeDate']).format("DD-MM-YYYY"),
+                                        REGION: boeelement['origin'],
+                                        FOBVALUE: boeelement['invoiceAmount'],
+                                        PORTCODE: boeelement['iecCode'],
+                                        BOEBalanceAmount: boeelement['balanceAmount'] != "-1" ? boeelement['balanceAmount'] : boeelement['invoiceAmount'],
+                                        FreightCharges: boeelement['freightAmount']
+                                    })
+                                });
+                                let advice: any = [];
+                                (element?.ORM_Ref != 'NF' ? element?.ORM_Ref : [{
+                                    TTDATE: 'NF',
+                                    TTUSD: 'NF',
+                                    PaymentDate: 'NF',
+                                    Amount: "NF",
+                                    Currency: "NF",
+                                    CCYRate: "NF",
+                                    INRAmount: "NF",
+                                    ORMREFNUMBERID: "NF",
+                                    TOTALDEDUCTIONSDAMGESUSD: "NF",
+                                    FINALAMOUNTUSD: "NF",
+                                    DEBITNOTESTATUS: "NF",
+                                    STATUSOFBOESUBMISSIONINBANK: "NF",
+                                }])?.forEach(adviceelement => {
+                                    advice.push({
+                                        TTDATE: moment(adviceelement['date']).format("DD-MM-YYYY"),
+                                        TTUSD: adviceelement['amount'],
+                                        PaymentDate: adviceelement['amount'],
+                                        Amount: adviceelement['amount'],
+                                        Currency: adviceelement['currency'],
+                                        CCYRate: adviceelement['amount'],
+                                        INRAmount: adviceelement['amount'],
+                                        ORMREFNUMBERID: adviceelement['billNo'],
+                                        TOTALDEDUCTIONSDAMGESUSD: adviceelement['amount'],
+                                        FINALAMOUNTUSD: adviceelement['amount'],
+                                        DEBITNOTESTATUS: adviceelement['amount'],
+                                        STATUSOFBOESUBMISSIONINBANK: adviceelement['amount'],
+                                    })
+                                });
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
-                                    commercialDate: moment(element['commercialDate']).format("DD-MM-YYYY"),
-                                    sbNo: element['sbNo'],
-                                    type: element['type'],
+                                    commercialDate: moment(element['commercialDate']).format('DD-MM-YYYY'),
                                     commercialNumber: element['commercialNumber'],
-                                    amount: element['amount'],
+                                    AdvanceNo: element['AdvanceNo'],
+                                    AdvanceCurrency: element['currency'],
+                                    AdvanceAmount: element['amount'],
                                     buyerName: element['buyerName'],
+                                    Expansion_Items: boedata,
+                                    Expansion_Items2: advice,
                                     isExpand: false,
+                                    isExpand2: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
                                 TableFormat['Objectkeys'] = await Object.keys(TableFormat['items'][0])?.filter((item: any) => item != 'isExpand')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'isExpand2')
                                 TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'disabled')
                                 TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'RoleType')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2');
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
+                                TableFormat['ExpansionKeys'] = await Object.keys(TableFormat['items'][0]['Expansion_Items'][0])
+                                TableFormat['ExpansionKeys2'] = await TableFormat['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(TableFormat['items'][0]['Expansion_Items2'][0]) : []
                                 resolve(TableFormat);
                                 this.TABLE_CONTROLLER_DATA = res?.data;
                                 this.SHOW_TABLE_TBODY = true;
@@ -1695,139 +1865,82 @@ export class TableServiceController {
                     });
                 })
             },
-            masterrecord: async () => {
+            boerecords: async () => {
                 return new Promise((resolve, reject) => {
                     TableFormat = {
                         header: [
                             "Pipo No.",
-                            "SB DATE",
-                            "SB NUMBER",
-                            "BUYER NAME",
+                            "DATE",
+                            "CI NUMBER",
+                            "BOE NUMBER",
+                            "Beneficiary Name",
                             "CURRENCY",
-                            "SB AMOUNT",
+                            "BOE AMOUNT",
                             "AVAILABLE BALANCE",
                             "Action"],
-                        items: [],
-                        Expansion_header: [
+                          items: [],
+                          Expansion_header: [
                             "AD CODE",
                             "AD BILL NO",
-                            "Consignee NAME",
+                            "IEC CODE",
+                            "IEC NAME",
                             "ORIGIN",
-                            "DESTINATION",
-                            "FIRX NUMBER",
-                            "FIRX DATE",
-                            "FIRX CURRENCY",
-                            "FIRX AMOUNT",
-                            "FIRX COMMISION",
-                            "FIRX RECIEVED AMOUNT",
-                        ],
-                        Expansion_Items: [],
-                        Objectkeys: [],
-                        ExpansionKeys: [],
-                        TableHeaderClass: [
-                            "col-td-th-1",
-                            "col-td-th-1",
+                            "DISCHARGE PORT"
+                          ],
+                          Expansion_Items: [],
+                          Objectkeys: [],
+                          ExpansionKeys: [],
+                          TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
-                            "col-td-th-1"
-                        ],
+                            "col-td-th-1",
+                            "col-td-th-1",
+                            "col-td-th-2"
+                          ],
                         eventId: 2,
-                        Expansion_header2: [
-                            "Invoice No.",
-                            "Amount"
-                        ],
+                        Expansion_header2: [],
                         Expansion_Items2: [],
                         ExpansionKeys2: [],
                         PageSize: 0
                     }
-                    this.filteranytablepagination.PaginationfilterAnyTable(Query, PageFilter, 'masterrecord').subscribe((res: any) => {
+                    this.filteranytablepagination.PaginationfilterAnyTable(Query, PageFilter, 'boerecords').subscribe((res: any) => {
                         console.log("PaginationfilterAnyTable", res);
-                        res?.data?.forEach(element => {
-                            let totalFirxAmount: any = 0;
-                            let tp: any = {
-                                firxNumber: [],
-                                firxDate: [],
-                                firxCurrency: [],
-                                firxAmount: [],
-                                firxCommision: [],
-                                firxRecAmo: [],
-                                id: [],
-                            };
-                            for (let index = 0; index < element?.firxdetails.length; index++) {
-                                const elementfirxdetails = element?.firxdetails[index];
-                                totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
-
-                                elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
-                                    tp?.firxNumber?.push(firxelementno)
-                                });
-                                elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
-                                    tp?.firxDate?.push(firxDateelement)
-                                });
-                                elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
-                                    tp?.firxCurrency?.push(firxCurrencyelement)
-                                });
-                                elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
-                                    tp?.firxAmount?.push(firxAmountelement)
-                                });
-                                elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
-                                    tp?.firxCommision?.push(firxCommisionelement)
-                                });
-                            }
-                            element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
-                            element['FIRX_INFO'] = tp;
-                        });
                         TableFormat['PageSize'] = res?.TOTAL_PAGE
                         TableFormat['items'] = [];
                         TableFormat['Expansion_Items'] = [];
                         this.removeEmpty(res?.data).then(async (newdata: any) => {
                             await newdata?.forEach(async (element) => {
-                                let invoicedeatils: any = [];
-                                (element?.invoices != "NF" ? element?.invoices : [])?.forEach((element2: any) => {
-                                    invoicedeatils.push({
-                                        InvoiceNo: element2?.invoiceno?.value,
-                                        Amount: element2?.amount
-                                    })
-                                });
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
-                                    sbdate: moment(element['sbdate']).format('DD-MM-YYYY'),
-                                    sbno: element['sbno'],
-                                    buyerName: element['buyerName'],
-                                    fobCurrency: element['fobCurrency'],
-                                    fobValue: element['fobValue'],
-                                    balanceAvai: element['balanceAvai'] != '-1' ? element['balanceAvai'] : element['fobValue'],
+                                    date: moment(element['boeDate']).format('DD-MM-YYYY'),
+                                    CINUMBER: element['commercialNumber'],
+                                    BOENUMBER: element['boeNumber'],
+                                    buyerName: element['benneName'],
+                                    Currency: element['currency'],
+                                    BOEAMOUNT: element['invoiceAmount'],
+                                    balanceAvai: element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['invoiceAmount'],
                                     isExpand: false,
-                                    isExpand2: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox,
+                                    RoleType: this.USER_RESULT?.RoleCheckbox,
                                     Expansion_Items: [{
-                                        adCode: element['adCode'],
-                                        adBillNo: element['adBillNo'],
-                                        consigneeName: element['consigneeName'],
-                                        exporterLocationCode: element['exporterLocationCode'],
-                                        countryOfFinaldestination: element['countryOfFinaldestination'],
-                                        firxNumber: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxNumber'),
-                                        firxDate: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxDate'),
-                                        firxCurrency: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCurrency'),
-                                        firxAmount: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxAmount'),
-                                        firxCommision: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCommision'),
-                                        FIRX_TOTAL_AMOUNT: element['FIRX_TOTAL_AMOUNT']
-                                    }],
-                                    Expansion_Items2: invoicedeatils
+                                      adCode: element['adCode'],
+                                      adBillNo: element['adBillNo'],
+                                      IECCODE: element['iecCode'],
+                                      IECNAME: element['iecName'],
+                                      ORIGIN: element['origin'],
+                                      DISCHARGEPORT: element['dischargePort']
+                                    }]
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
                                 TableFormat['Objectkeys'] = await Object.keys(TableFormat['items'][0])?.filter((item: any) => item != 'isExpand')
-                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'isExpand2')
                                 TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'disabled')
                                 TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'RoleType')
                                 TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'Expansion_Items');
-                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2');
                                 TableFormat['ExpansionKeys'] = await Object.keys(TableFormat['items'][0]['Expansion_Items'][0])
-                                TableFormat['ExpansionKeys2'] = await TableFormat['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(TableFormat['items'][0]['Expansion_Items2'][0]) : []
                                 resolve(TableFormat);
                                 this.TABLE_CONTROLLER_DATA = res?.data;
                                 this.SHOW_TABLE_TBODY = true;
@@ -1845,24 +1958,21 @@ export class TableServiceController {
                     TableFormat = {
                         header: [
                             "Pipo No.",
-                            "BL/Airway No.",
                             "DATE",
-                            "SB No.",
-                            "Buyer Name",
+                            "BL/Airway No.",
+                            "Beneficiary Name",
                             "Action"],
-                        items: [],
-                        Expansion_header: [],
-                        Expansion_Items: [],
-                        Objectkeys: [],
-                        ExpansionKeys: [],
-                        TableHeaderClass: [
+                          items: [],
+                          Expansion_header: [],
+                          Expansion_Items: [],
+                          Objectkeys: [],
+                          ExpansionKeys: [],
+                          TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1",
-                            "col-td-th-1"
-                        ],
+                            "col-td-th-2"
+                          ],
                         eventId: '0',
                         PageSize: 0
                     }
@@ -1877,11 +1987,10 @@ export class TableServiceController {
                                     PipoNo: this.getPipoNumber(element['pipo']),
                                     airwayBlCopyNumber: element['airwayBlCopyNumber'],
                                     airwayBlCopydate: moment(element['date']).format("DD-MM-YYYY"),
-                                    sbNo: element['sbNo'],
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1906,23 +2015,20 @@ export class TableServiceController {
                         header: [
                             "Pipo No.",
                             "DATE",
-                            "SB No.",
                             "Packing List No.",
-                            "Buyer Name",
+                            "Beneficiary Name",
                             "Action"],
-                        items: [],
-                        Expansion_header: [],
-                        Expansion_Items: [],
-                        Objectkeys: [],
-                        ExpansionKeys: [],
-                        TableHeaderClass: [
-                            "col-td-th-1",
+                          items: [],
+                          Expansion_header: [],
+                          Expansion_Items: [],
+                          Objectkeys: [],
+                          ExpansionKeys: [],
+                          TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
-                            "col-td-th-1",
-                            "col-td-th-1"
-                        ],
+                            "col-td-th-2",
+                          ],
                         eventId: '',
                         PageSize: 0
                     }
@@ -1936,12 +2042,11 @@ export class TableServiceController {
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
                                     packingListDate: moment(element['packingListDate']).format("DD-MM-YYYY"),
-                                    sbNo: element['sbNo'],
                                     packingListNumber: element['packingListNumber'],
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -1997,7 +2102,7 @@ export class TableServiceController {
                                     CommercialNumber: element['CommercialNumber']?.value,
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2054,7 +2159,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2117,7 +2222,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2183,7 +2288,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2251,7 +2356,7 @@ export class TableServiceController {
                                     buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2320,7 +2425,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2392,7 +2497,7 @@ export class TableServiceController {
                                     buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2455,7 +2560,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2521,7 +2626,7 @@ export class TableServiceController {
                                     AgeingDays: this.SubtractDates(new Date(element['ReportDate']), new Date()),
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2592,7 +2697,7 @@ export class TableServiceController {
                                         BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
                                         isExpand: false,
                                         disabled: element['deleteflag'] != '-1' ? false : true,
-                                        RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                        RoleType: this.USER_RESULT?.RoleCheckbox
                                     })
                                 })
                                 if (TableFormat['items']?.length != 0) {
@@ -2652,7 +2757,7 @@ export class TableServiceController {
                                         BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
                                         isExpand: false,
                                         disabled: element['deleteflag'] != '-1' ? false : true,
-                                        RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                        RoleType: this.USER_RESULT?.RoleCheckbox
                                     })
                                 })
                                 if (TableFormat['items']?.length != 0) {
@@ -2717,7 +2822,7 @@ export class TableServiceController {
                                         BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
                                         isExpand: false,
                                         disabled: element['deleteflag'] != '-1' ? false : true,
-                                        RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                        RoleType: this.USER_RESULT?.RoleCheckbox
                                     })
                                 })
                                 if (TableFormat['items']?.length != 0) {
@@ -2810,7 +2915,7 @@ export class TableServiceController {
                                     }],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2869,7 +2974,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2931,7 +3036,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -2987,7 +3092,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {
@@ -3043,7 +3148,7 @@ export class TableServiceController {
                                     buyerName: element['buyerName'],
                                     isExpand: false,
                                     disabled: element['deleteflag'] != '-1' ? false : true,
-                                    RoleType: this.USER_RESULT?.result?.RoleCheckbox
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
                                 })
                             });
                             if (TableFormat['items']?.length != 0) {

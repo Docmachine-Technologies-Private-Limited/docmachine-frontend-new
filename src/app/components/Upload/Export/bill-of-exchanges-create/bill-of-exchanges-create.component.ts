@@ -136,7 +136,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
     const mergedPdf = await PDFDocument.create();
     let jpgImage: any = ''
     if (this.validator.COMPANY_INFO?.length != 0) {
-      jpgImage = await mergedPdf.embedJpg(this.validator.COMPANY_INFO[0]?.letterHead)
+      jpgImage = await mergedPdf.embedPng(this.validator.COMPANY_INFO[0]?.letterHead)
     }
     const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
     copiedPages.forEach((page) => {
@@ -310,7 +310,8 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
           label: "Select Bank",
           rules: {
             required: true,
-          }
+          },
+          ChargeLabelHide:null
         },
         sbNo: {
           type: "ShippingBill",
@@ -337,7 +338,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
             required: true,
           }
         },
-      }, 'EXPORT_BILL_OF_EXCHANGE');
+      }, 'EXPORT_BILL_OF_EXCHANGE').then((res)=>this.validator.CHECK_BOX_BANK_LIST_CHARGES=[]);
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')

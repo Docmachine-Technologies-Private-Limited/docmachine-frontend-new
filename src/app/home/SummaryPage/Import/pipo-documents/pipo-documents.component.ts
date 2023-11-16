@@ -24,17 +24,56 @@ export class PipoDocumentsComponent implements OnInit {
   PENDING_DATA: any = [];
   HOVER_DATA: any = '';
   FILTER_VALUE_LIST_NEW: any = {
-    header: [],
+    header: [
+      "DATE",
+      "INVOICE No.",
+      "INVOICE DATE",
+      "Beneficiary NAMES",
+      "CURRENCY",
+      "BRANCH",
+      "COMMODITY",
+      "Amount",
+      "Action"],
     items: [],
-    Expansion_header: [],
+    Expansion_header: [
+      "BOE NO",
+      "BOE DATE",
+      "REGION",
+      "FOB VALUE",
+      "PORT CODE",
+      "BOE Balance Amount",
+      "Freight Charges"
+    ],
+    Expansion_header2: [
+      "TT DATE",
+      "TT USD",
+      "Payment Date",
+      "Amount",
+      "Currency",
+      "CCY Rate",
+      "INR Amount",
+      "ORM REF NUMBER/ID",
+      "TOTAL DEDUCTIONS/DAMGES/USD",
+      "FINAL AMOUNT - USD",
+      "DEBIT NOTE STATUS",
+      "STATUS OF BOE SUBMISSION IN BANK"
+    ],
     Expansion_Items: [],
+    Expansion_Items2: [],
     Objectkeys: [],
     ExpansionKeys: [],
-    TableHeaderClass: [],
-    eventId: 2,
-    Expansion_header2: [],
-    Expansion_Items2: [],
     ExpansionKeys2: [],
+    TableHeaderClass: [
+      "col-td-th-0",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+    ],
+    eventId: 1,
     PageSize: 0
   };
   ALL_FILTER_DATA: any = {

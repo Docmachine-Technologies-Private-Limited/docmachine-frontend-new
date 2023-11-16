@@ -134,7 +134,7 @@ export class OpinionReportsComponent implements OnInit {
           (err) => console.log('Error adding pipo')
         );
       } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.opinionReportNumber} already exit...`);
+        this.toastr.error(`Please check this Opinion Report no. : ${e.value.opinionReportNumber} already exit...`);
       }
     });
   }

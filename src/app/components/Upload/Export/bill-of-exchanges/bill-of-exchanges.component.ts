@@ -138,7 +138,7 @@ export class BillOfExchangesComponent implements OnInit {
           (err) => console.log('Error adding pipo')
         );
       } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.billExchangeNumber} already exit...`);
+        this.toastr.error(`Please check this BillExchange no. : ${e.value.billExchangeNumber} already exit...`);
       }
     });
   }
