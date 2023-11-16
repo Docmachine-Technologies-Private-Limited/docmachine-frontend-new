@@ -19,7 +19,6 @@ import { ImportOpinionReportsComponent } from './import-opinion-reports/import-o
 import { ImportMasterServiceComponent } from './import-master-service/import-master-service.component';
 import { LetterOfCreditImportLCComponent } from './letter-of-credit-import-lc/letter-of-credit-import-lc.component';
 import { SharedHomeModule } from '../../shared-home.module';
-import { ImportEditPipoComponent } from './pipo-documents/edit-pipo/edit-pipo.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +39,6 @@ import { ImportEditPipoComponent } from './pipo-documents/edit-pipo/edit-pipo.co
     ImportCommercialComponent,
     ImportTriPartyComponent,
     ImportInsuranceComponent,
-    ImportEditPipoComponent
   ],
   imports: [
     CommonModule,

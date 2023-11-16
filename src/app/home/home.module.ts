@@ -32,7 +32,6 @@ import { InwardRemittanceComponent } from "./yesBank/inwardRemittance/inwardRemi
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ProgressBarModule } from "angular-progress-bar"
 import { PipoExportComponent } from './SummaryPage/Export/pipo-export/pipo-export.component';
-import { EditPipoComponent } from './edit-pipo/edit-pipo.component';
 import { ViewPipoComponent } from './view-pipo/view-pipo.component';
 import { AddPipoComponent } from './add-pipo/add-pipo.component';
 import { UploadBankIntimationComponent } from './upload-bank-intimation/upload-bank-intimation.component';
@@ -119,7 +118,6 @@ import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-
     AddPipoComponent,
     TermsAndConditionComponent,
     PipoExportComponent,
-    EditPipoComponent,
     ViewPipoComponent,
     FooterComponent,
     ConfirmDialogBoxComponent,
@@ -264,12 +262,6 @@ import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-
           {
             path: "add-pipo/:doc_type",
             component: AddPipoComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "edit-pipo/:doc_type/:id",
-            component: EditPipoComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
