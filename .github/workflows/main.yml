@@ -53,7 +53,7 @@ jobs:
             [ -f package-lock.json ] && git add package-lock.json
             git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION"
             git remote remove origin
-            git push origin dev
+            git push
             npm run dev --
       - name: deploy
         run: |
