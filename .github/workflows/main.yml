@@ -21,6 +21,22 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: "Read JSON"
+        uses: actions/github-script@v6
+        id: check-env
+        with:
+          result-encoding: string
+          script: |
+            try {
+              const fs = require('fs')
+              const jsonString = fs.readFileSync('package.json')
+              var apps = JSON.parse(jsonString)
+              core.error(apps)
+              core.setFailed(err)
+            } catch(err) {
+              core.error("Error while reading or parsing the JSON")
+              core.setFailed(err)
+            }
       - name: Cache node modules
         id: cache-nodemodules
         uses: actions/cache@v2
