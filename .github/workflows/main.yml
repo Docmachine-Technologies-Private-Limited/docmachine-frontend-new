@@ -35,6 +35,21 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - name: "Read JSON"
+        uses: actions/github-script@v6
+        id: check-env
+        with:
+            result-encoding: string
+            script: |
+              try {
+                const fs = require('fs')
+                const jsonString = fs.readFileSync('**/package.json')
+                var apps = JSON.parse(jsonString)
+                core.error(jsonString)
+              } catch(err) {
+                core.error("Error while reading or parsing the JSON")
+                core.setFailed(err)
+              }
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
@@ -42,10 +57,6 @@ jobs:
             npm i @angular/cli --legacy-peer-deps
       - name: DEV Build
         run: |
-            echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
-            cat package.json >> $GITHUB_ENV
-            echo 'EOF' >> $GITHUB_ENV
-            echo '${{ fromJson(env.PACKAGE_JSON).version }}'
             npm version ${{env.version}} --no-git-tag-version --allow-same-version
             npm version patch -m "[RELEASE] %s" --no-git-tag-version --allow-same-version
             npm run dev --
