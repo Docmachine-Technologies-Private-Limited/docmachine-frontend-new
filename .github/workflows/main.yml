@@ -5,7 +5,7 @@ on:
       - "*"
 jobs:
   dev-deploy:
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev' && github.event.head_commit.message != 'Updating App version'
     name: dev-deploy
     runs-on: ubuntu-latest
     strategy:
@@ -51,7 +51,7 @@ jobs:
             git add package.json
             [ -f package-lock.json ] && git add package-lock.json
             git remote set-url origin https://${{ secrets.DEPLOY_TOKEN }}${{secrets.FRONT_END_REPO}}
-            git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION"
+            git commit -m "Updating App version"
             git push origin dev
             npm run dev --
       - name: deploy
