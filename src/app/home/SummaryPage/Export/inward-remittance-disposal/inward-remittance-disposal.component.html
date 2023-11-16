@@ -5,13 +5,13 @@
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
                         <h3 class="heading_common_tag" *ngIf="this.GET_FILE_NAME_ROUTE=='PendingCaliming'">Pending
-                            Claiming Summary ({{this.Inward_Remittance?.length}})
+                            Claiming Summary ({{this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length}})
                         </h3>
                         <h3 class="heading_common_tag" *ngIf="this.GET_FILE_NAME_ROUTE=='DisposalSubmitted'">Submitted
-                            Summary ({{this.Inward_Remittance?.length}})
+                            Summary ({{this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length}})
                         </h3>
                         <h3 class="heading_common_tag" *ngIf="this.GET_FILE_NAME_ROUTE=='Processed'">Processed Summary
-                            ({{this.Inward_Remittance?.length}})
+                            ({{this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length}})
                         </h3>
                     </div>
                 </div>
@@ -38,7 +38,14 @@
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
                 [items]="this.FILTER_VALUE_LIST_NEW?.items"
                 [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
-                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
+                [PageSize]="this.FILTER_VALUE_LIST_NEW?.PageSize"
+                TableName="Inward_remittance"
+                [SHOW_TABLE_TBODY]="this.filteranytablepagination?.SHOW_TABLE_TBODY"
+                [TableFormat]="this.FILTER_VALUE_LIST_NEW"
+                [FILTER_FORM_VALUE]="this.FILTER_FORM_VALUE"
+                [EXTRA_DATA]="this.GET_FILE_NAME_ROUTE"
+                (ViewChanges)="viewpdf($event)"
                 (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
             </custom-expansion-panel>
         </div>

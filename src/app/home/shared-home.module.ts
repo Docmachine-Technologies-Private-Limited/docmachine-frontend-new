@@ -7,7 +7,7 @@ import {
 } from "ngx-dropzone-wrapper";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatBadgeModule} from '@angular/material/badge'; 
+import { MatBadgeModule } from '@angular/material/badge';
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -83,7 +83,7 @@ import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBan
 import { DirectExportPaymentComponent } from "./AllBankFormat/HDFC-Bank/direct-import-payment/direct-import-payment.component";
 import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/FederalBank/direct-import-payment/direct-import-payment.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
 import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
 import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
@@ -96,6 +96,8 @@ import { SummaryTransactionUIHeaderComponent } from "../custom/SummaryTransactio
 import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/summary-transaction-ui.component";
 import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-up-local-file/upload-pop-up-local-file.component";
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { filterAnyTablePagination } from "../service/v1/Api/filterAnyTablePagination";
+import { TableServiceController } from "../service/v1/TableServiceController";
 
 @NgModule({
   declarations: [
@@ -190,7 +192,9 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
     CanvasJSAngularChartsModule
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,ExportBillLodgementData, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
+  providers: [ConfirmDialogService, NgbModal, ExportBillLodgementData, SharedDataService, PipoDataService,
+    TableServiceController,
+    TreeViewComponent, MergePdfService, UploadServiceValidatorService, GlobalsAccessService, filterAnyTablePagination],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     FilternewPipe,

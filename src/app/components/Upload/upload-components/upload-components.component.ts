@@ -25,6 +25,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('MainStyle') MainStyle: any = '';
   @Input('id') id: any = '';
   @Input('SubmitButtonStyle') SubmitButtonStyle: any = '';
+  @Input('ButtonPanelStyle') ButtonPanelStyle: any = '';
   @Input('TypeOfValue') TypeOfValue: any = 'Normal';
   @Input('SubmitName') SubmitName: any = 'Submit';
   @Input('AddNewRequried') AddNewRequried: boolean = false;

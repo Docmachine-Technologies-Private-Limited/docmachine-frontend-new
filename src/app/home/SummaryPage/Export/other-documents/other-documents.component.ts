@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
-import * as data1 from '../../../../currency.json';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from "moment";
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'export-other-documents-summary',
@@ -38,27 +37,18 @@ export class OtherDocumentsComponent implements OnInit {
     DATE: []
   };
   FILTER_VALUE_LIST_NEW: any = {
-    header: [
-      "Pipo No.",
-      "DATE",
-      "SB No.",
-      "Packing List No.",
-      "Buyer Name",
-      "Action"],
+    header: [],
     items: [],
     Expansion_header: [],
     Expansion_Items: [],
     Objectkeys: [],
     ExpansionKeys: [],
-    TableHeaderClass: [
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-1",
-      "col-td-th-1"
-    ],
-    eventId: ''
+    TableHeaderClass: [],
+    eventId: 0,
+    Expansion_header2: [],
+    Expansion_Items2: [],
+    ExpansionKeys2: [],
+    PageSize: 0
   }
   EDIT_FORM_DATA: any = {
     packingListDate: '',
@@ -68,7 +58,8 @@ export class OtherDocumentsComponent implements OnInit {
     packingListAmount: '',
     buyerName: '',
   }
-  FILTER_FORM: any = ''
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -76,87 +67,109 @@ export class OtherDocumentsComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private userService: UserService,
-    private sharedData: SharedDataService,
+    public filteranytablepagination: TableServiceController,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-
-  ) {
-  }
+    public dialog: MatDialog,) {}
+    
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getPackingListfile("export").subscribe(
-      (res: any) => {
-        this.item = res?.data;
-        this.FILTER_VALUE_LIST = this.item;
-        for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
-          }
-          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
-            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
-          }
-          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.packingListNumber)?.length == 0) {
-            this.ALL_FILTER_DATA['NO'].push({ value: value?.packingListNumber });
-          }
-          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.packingListDate)?.length == 0) {
-            this.ALL_FILTER_DATA['DATE'].push({ value: value?.packingListDate });
-          }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTable({}, { skip: 0, limit: 10 }, 'packinglists',this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        this.FILTER_FORM = {
-          buyerName: {
-            type: "ArrayList",
-            value: "",
-            label: "Select buyerName",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['Buyer_Name'],
-            bindLabel: "value"
-          },
-          date: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Date",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['DATE'],
-            bindLabel: "value"
-          },
-          NO: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Packing List No.",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['NO'],
-            bindLabel: "value"
-          },
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
         }
-        this.PackingListTable(this.item)
-        console.log(res, 'getPackingListfile');
-      },
-      (err) => console.log(err)
-    );
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
+          bindLabel: "value"
+        },
+        todate: {
+          type: "date",
+          value: "",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
+    })
   }
   
-  onSubmit(value: any) {
+  async onSubmit(value: any) {
     let form_value: any = {
       buyerName: value?.value?.buyerName,
-      packingListDate: value?.value?.date,
-      packingListNumber: value?.value?.NO
+      pi_poNo: value?.value?.NO,
     };
 
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        packingListDate: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          packingListDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        packingListDate: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          packingListDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
     const removeEmptyValues = (object) => {
-      let newobject = {}
+      let newobject: any = {}
       for (const key in object) {
         if (object[key] != '' && object[key] != null && object[key] != undefined) {
           newobject[key] = object[key];
@@ -164,17 +177,18 @@ export class OtherDocumentsComponent implements OnInit {
       }
       return newobject;
     };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'packinglists').subscribe((resp: any) => {
-      console.log(resp, value, "packinglists")
-      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
-      this.PackingListTable(this.FILTER_VALUE_LIST)
-    });
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTable(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'packinglists',this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
   }
-
-  reset() {
-    this.FILTER_VALUE_LIST = this.item;
-    this.PackingListTable(this.FILTER_VALUE_LIST)
+  
+  reset(){
+    this.ngOnInit()
   }
 
   PackingListTable(data: any) {
@@ -264,7 +278,7 @@ export class OtherDocumentsComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['packingDoc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['packingDoc']);
     }, 200);
   }
 
@@ -300,19 +314,9 @@ export class OtherDocumentsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   packingListDate: this.SELECTED_VALUE['packingListDate'],
-    //   sbNo: this.SELECTED_VALUE['sbNo'],
-    //   packingListNumber: this.SELECTED_VALUE['packingListNumber'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   packingListAmount: this.SELECTED_VALUE['packingListAmount'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/PackingListInvoices`],navigationExtras);
@@ -327,9 +331,9 @@ export class OtherDocumentsComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -361,7 +365,7 @@ export class OtherDocumentsComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new PackingListFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new PackingListFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'packingList.xlsx');

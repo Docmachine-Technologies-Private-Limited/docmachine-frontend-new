@@ -1334,7 +1334,7 @@
                 [fieldName]="field.fieldName"></inner-dynamic-error>
         </div>
         <div [ngClass]="{'more-button-panel':BUTTON_PANEL_SHOW==true}"
-            [style]="this.BUTTON_PANEL_HIDE==true?'display:block;':'display:none'">
+            [style]="this.BUTTON_PANEL_HIDE==true?'display:block;':'display:none'" [style]="ButtonPanelStyle">
             <ng-content></ng-content>
             <button *ngIf="BUTTON_PANEL_SHOW==true" type="button" class="btn btn-primary submit-button" [id]="this.id"
                 [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block;':'display:none'" [style]="SubmitButtonStyle"

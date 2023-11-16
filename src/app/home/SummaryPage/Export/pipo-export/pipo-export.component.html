@@ -4,7 +4,7 @@
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
-                        <h3 class="heading_common_tag">PI / PO / Order Copy ({{this.dataSource?.length}})</h3>
+                        <h3 class="heading_common_tag">PI / PO / Order Copy ({{this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length}})</h3>
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-12">
@@ -30,6 +30,11 @@
                 [items]="this.FILTER_VALUE_LIST_NEW?.items" [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId"
                 [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
                 [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (event)="MouseHover($event,CustomHoverPanel)"
+                [PageSize]="this.FILTER_VALUE_LIST_NEW?.PageSize"
+                TableName="pi_po"
+                [SHOW_TABLE_TBODY]="this.filteranytablepagination?.SHOW_TABLE_TBODY"
+                [TableFormat]="this.FILTER_VALUE_LIST_NEW"
+                [FILTER_FORM_VALUE]="this.FILTER_FORM_VALUE"
                 (ViewChanges)="toView($event)" (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
             </custom-expansion-panel>
         </div>

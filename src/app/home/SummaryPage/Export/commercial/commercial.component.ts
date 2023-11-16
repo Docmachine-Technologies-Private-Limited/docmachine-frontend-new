@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from 'moment';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'app-commercial',
@@ -38,39 +39,28 @@ export class CommercialComponent implements OnInit {
     DATE: []
   };
   FILTER_VALUE_LIST_NEW: any = {
-    header: [
-      "Pipo No.",
-      "DATE",
-      "SB No.",
-      "Payments Terms",
-      "Commercial Invoice No.",
-      "Commercial Amount",
-      "Buyer Name",
-      "Action"],
+    header: [],
     items: [],
     Expansion_header: [],
     Expansion_Items: [],
     Objectkeys: [],
     ExpansionKeys: [],
-    TableHeaderClass: [
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-2",
-      "col-td-th-2",
-      "col-td-th-1",
-      "col-td-th-1"
-    ],
-    eventId: ''
-  }
+    TableHeaderClass: [],
+    eventId: 2,
+    Expansion_header2: [],
+    Expansion_Items2: [],
+    ExpansionKeys2: [],
+    PageSize: 0
+  };
   EDIT_FORM_DATA: any = {
     commercialDate: '',
     sbNo: '',
     commercialNumber: '',
     buyerName: '',
   }
-  FILTER_FORM: any = ''
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -78,155 +68,131 @@ export class CommercialComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private userService: UserService,
-    private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-  ) {
+    public dialog: MatDialog) {
   }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getCommercial().subscribe(
-      (res: any) => {
-        console.log('Res', res);
-        this.item = res?.data;
-        this.FILTER_VALUE_LIST = this.item;
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
-            }
-            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
-            }
-            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.commercialNumber)?.length == 0) {
-              this.ALL_FILTER_DATA['NO'].push({ value: value?.commercialNumber });
-            }
-            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.commercialDate)?.length == 0) {
-              this.ALL_FILTER_DATA['DATE'].push({ value: value?.commercialDate });
-            }
-          }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTable({}, { skip: 0, limit: 10 }, 'commercials',this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        this.FILTER_FORM = {
-          buyerName: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Buyer",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['Buyer_Name'],
-            bindLabel: "value"
-          },
-          date: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Date",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['DATE'],
-            bindLabel: "value"
-          },
-          NO: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Commercial Invoice No.",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['NO'],
-            bindLabel: "value"
-          },
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
         }
-        this.FILTER_VALUE_LIST = this.item;
-        this.CommercialTable(this.item)
-      },
-      (err) => console.log(err)
-    );
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
+          bindLabel: "value"
+        },
+        todate: {
+          type: "date",
+          value: "",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
+    })
+    console.log("this.USER_DATA", this.USER_DATA, this.FILTER_VALUE_LIST_NEW);
   }
-  
-  onSubmit(value: any) {
+
+  async onSubmit(value: any) {
     let form_value: any = {
       buyerName: value?.value?.buyerName,
-      commercialDate: value?.value?.date,
-      commercialNumber: value?.value?.NO
+      pi_poNo: value?.value?.NO,
     };
 
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        commercialDate: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          commercialDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        commercialDate: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          commercialDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
     const removeEmptyValues = (object) => {
-      let newobject = {}
+      let newobject: any = {}
       for (const key in object) {
+        console.log(typeof object[key], "object[key]")
         if (object[key] != '' && object[key] != null && object[key] != undefined) {
           newobject[key] = object[key];
         }
       }
       return newobject;
     };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'commercials').subscribe((resp: any) => {
-      console.log(resp, value,"commercials")
-      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
-      this.CommercialTable(this.FILTER_VALUE_LIST)
-    }); 
-  }
-  
-  reset(){
-    this.FILTER_VALUE_LIST = this.item;
-    this.CommercialTable(this.FILTER_VALUE_LIST)
-  }
-  
-  CommercialTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['pipo']),
-          commercialDate: moment(element['commercialDate']).format("DD-MM-YYYY"),
-          sbNo: element['sbNo'],
-          type: element['type'],
-          commercialNumber: element['commercialNumber'],
-          amount: element['amount'],
-          buyerName: element['buyerName'],
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTable(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'commercials',this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
       });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
-      }
-    });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
   }
 
-  async removeEmpty(data: any) {
-    await data.forEach(element => {
-      for (const key in element) {
-        if (element[key] == '' || element[key] == null || element[key] == undefined) {
-          element[key] = 'NF'
-        }
-      }
-    });
-    return await new Promise(async (resolve, reject) => { await resolve(data) });
-  }
-
-  getPipoNumber(pipo: any) {
-    let temp: any = [];
-    (pipo != 'NF' ? pipo : []).forEach(element => {
-      temp.push(element?.pi_poNo);
-    });
-    return temp.join(',')
+  reset() {
+    this.ngOnInit()
   }
 
   filter(value, key) {
@@ -235,6 +201,7 @@ export class CommercialComponent implements OnInit {
       this.FILTER_VALUE_LIST = this.item;
     }
   }
+
   resetFilter() {
     this.FILTER_VALUE_LIST = this.item;
   }
@@ -272,7 +239,7 @@ export class CommercialComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['commercialDoc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['commercialDoc']);
     }, 200);
   }
 
@@ -302,24 +269,14 @@ export class CommercialComponent implements OnInit {
   }
 
   newDest() {
-    // this.sharedData.changeretunurl('home/commercial')
-    // this.router.navigate(['home/upload', { file: 'export', document: 'commercial' }]);
     this.router.navigate(['/home/upload/Export/CommercialInvoices']);
   }
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   commercialDate: this.SELECTED_VALUE['commercialDate'],
-    //   sbNo: this.SELECTED_VALUE['sbNo'],
-    //   commercialNumber: this.SELECTED_VALUE['commercialNumber'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/CommercialInvoices`], navigationExtras);
@@ -334,9 +291,9 @@ export class CommercialComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -368,7 +325,7 @@ export class CommercialComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new CommercialFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new CommercialFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Commercial.xlsx');

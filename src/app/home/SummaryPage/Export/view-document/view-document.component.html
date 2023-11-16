@@ -4,13 +4,13 @@
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
-                        <h3 class="heading_common_tag p-0">{{doc}} Shipping ({{this.FILTER_VALUE_LIST.length}})</h3>
+                        <h3 class="heading_common_tag p-0">{{doc}} Shipping ({{this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length}})</h3>
                     </div>
                 </div>
                 <div style="margin: auto; margin-right: 0;">
                     <div class="filter_right_new padding_new_top p-0" style="display: flex;gap: 20px;">
                         <app-ng-dropdown-custom placeHolderText="Search sb no." class="PopupOpen"
-                            popup-close="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" width="300px" [items]="this.item1"
+                            popup-close="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" width="300px" [items]="this.filteranytablepagination?.TABLE_CONTROLLER_DATA"
                             bindLabel="sbno" (modelChanges)="SbSearch($event?.sbno)" (keyEvent)="SbSearch($event)"
                             [multiple]="false" #buyerNameSelection>
                         </app-ng-dropdown-custom>
@@ -50,6 +50,11 @@
             (event)="getInvoicesNew($event,SHIPPING_BILL_ALL_RELATED_DOCUMENTS_VIEW_PANEL) && getTransactionsNew($event);"
             [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId"
             (ArrowEvent)="getSbNo($event)"
+            [PageSize]="this.FILTER_VALUE_LIST_NEW?.PageSize"
+            TableName="masterrecord"
+            [SHOW_TABLE_TBODY]="this.filteranytablepagination?.SHOW_TABLE_TBODY"
+            [TableFormat]="this.FILTER_VALUE_LIST_NEW"
+            [FILTER_FORM_VALUE]="this.FILTER_FORM_VALUE"
             (DeleteChanges)="handleDelete($event)">
         </custom-expansion-panel>
            

@@ -993,6 +993,9 @@ table {
     opacity: .7;
 }
 
+.content-wrap {
+    margin: auto;
+}
 
 .import_export_sec {
     margin: auto;
@@ -1023,6 +1026,15 @@ table {
     padding: 0;
 }
 
+.filter_right_new.padding_new_top {
+    display: flex;
+    gap: 10px;
+}
+
 ::ng-deep ng-custom-filter-popup .filter_main {
     width: 540px !important;
+}
+
+::ng-deep ng-custom-filter-popup .form-container-fluid {
+   overflow: unset !important; 
 }

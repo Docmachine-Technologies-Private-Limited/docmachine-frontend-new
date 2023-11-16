@@ -5,7 +5,6 @@ import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
 import { AuthGuard } from '../../../service/authguard.service';
 import A2_JOSN from '../../../../assets/JSON/A2.json';
-import { EventEmitter } from 'stream';
 
 @Injectable({
   providedIn: 'root'
@@ -118,24 +117,7 @@ export class UploadServiceValidatorService implements OnInit {
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
             this.documentService.getPipoListNo('export', []);
           }
-          await this.userService.getBene(1).subscribe((res: any) => {
-            this.BENEFICIARY_DETAILS = [];
-            this.ConsigneeNameList = [];
-            this.BENEFICIARY_DETAILS_LIST = res.data;
-            res.data?.forEach(element => {
-              if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-                this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-              }
-              this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
-            });
-            if (this.BENEFICIARY_DETAILS.length == 0) {
-              this.BENEFICIARY_NOT_EXITS = true;
-            } else {
-              this.BENEFICIARY_NOT_EXITS = false;
-            }
-            console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
-          }, (err) => console.log('Error', err));
-
+          this.BenneLoad();
           await this.documentService.getBoe(1).subscribe((res: any) => {
             this.SHIPPING_BUNDEL = [];
             this.origin = [];
@@ -154,23 +136,7 @@ export class UploadServiceValidatorService implements OnInit {
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length == 0)) {
             this.documentService.getPipoListNo('export', this.SELECTED_PIPO?.length != 0 ? this.SELECTED_PIPO : []);
           }
-          await this.userService.getBuyer(1).subscribe((res: any) => {
-            this.BUYER_DETAILS_MASTER = res?.data;
-            this.BUYER_DETAILS = [];
-            this.ConsigneeNameList = [];
-            res.data?.forEach(element => {
-              if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-                this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-              }
-              this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-            });
-            if (this.BUYER_DETAILS.length == 0) {
-              this.BUYER_NOT_EXITS = true;
-            } else {
-              this.BUYER_NOT_EXITS = false;
-            }
-            console.log('getBuyer Details', res, this.ConsigneeNameList, this.BUYER_DETAILS);
-          }, (err) => console.log('Error', err));
+          this.getBuyerLoad()
           this.documentService.getMaster(1).subscribe((res: any) => {
             console.log('Master Data File', res);
             this.SHIPPING_BILL_MASTER_DATA = res?.data;
@@ -226,7 +192,44 @@ export class UploadServiceValidatorService implements OnInit {
     let split_text: any = text?.indexOf("\n") != -1 ? text?.split('\n') : [text];
     return split_text;
   }
-
+  async BenneLoad(){
+    await this.userService.getBene(1).subscribe((res: any) => {
+      this.BENEFICIARY_DETAILS = [];
+      this.ConsigneeNameList = [];
+      this.BENEFICIARY_DETAILS_LIST = res.data;
+      res.data?.forEach(element => {
+        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+        }
+        this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
+      });
+      if (this.BENEFICIARY_DETAILS.length == 0) {
+        this.BENEFICIARY_NOT_EXITS = true;
+      } else {
+        this.BENEFICIARY_NOT_EXITS = false;
+      }
+      console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
+    }, (err) => console.log('Error', err));
+  }
+  async getBuyerLoad() {
+    await this.userService.getBuyer(1).subscribe((res: any) => {
+      this.BUYER_DETAILS_MASTER = res?.data;
+      this.BUYER_DETAILS = [];
+      this.ConsigneeNameList = [];
+      res.data?.forEach(element => {
+        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+        }
+        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
+      });
+      if (this.BUYER_DETAILS.length == 0) {
+        this.BUYER_NOT_EXITS = true;
+      } else {
+        this.BUYER_NOT_EXITS = false;
+      }
+      console.log('getBuyer Details', res, this.ConsigneeNameList, this.BUYER_DETAILS);
+    }, (err) => console.log('Error', err));
+  }
   async getCompanyInfo() {
     await this.userService.getTeam().subscribe(async (data: any) => {
       this.COMPANY_INFO = data?.data;
