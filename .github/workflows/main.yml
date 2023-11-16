@@ -31,8 +31,10 @@ jobs:
               const fs = require('fs')
               const jsonString = fs.readFileSync('package.json')
               var apps = JSON.parse(jsonString)
+              apps['version']=parseFloat(apps['version'])+1
+              fs.writeFile('package.json', apps);
               core.error(apps)
-              core.setFailed(err)
+              core.setFailed(app)
             } catch(err) {
               core.error("Error while reading or parsing the JSON")
               core.setFailed(err)
