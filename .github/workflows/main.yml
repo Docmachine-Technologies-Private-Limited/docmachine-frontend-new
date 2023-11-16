@@ -32,7 +32,7 @@ jobs:
               const jsonString = fs.readFileSync('package.json')
               var apps = JSON.parse(jsonString)
               apps['version']=parseFloat(apps['version'])+1
-              fs.writeFile('package.json', JSON.stringify(apps));
+              fs.writeFile('package.json', JSON.stringify(apps),'utf8', ()=>{});
               core.error(apps)
               core.setFailed(jsonString)
             } catch(err) {
