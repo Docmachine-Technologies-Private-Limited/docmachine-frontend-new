@@ -32,9 +32,9 @@ jobs:
               const jsonString = fs.readFileSync('package.json')
               var apps = JSON.parse(jsonString)
               apps['version']=parseFloat(apps['version'])+1
-              fs.writeFile('package.json', apps);
+              fs.writeFile('package.json', JSON.stringify(apps));
               core.error(apps)
-              core.setFailed(app)
+              core.setFailed(jsonString)
             } catch(err) {
               core.error("Error while reading or parsing the JSON")
               core.setFailed(err)
