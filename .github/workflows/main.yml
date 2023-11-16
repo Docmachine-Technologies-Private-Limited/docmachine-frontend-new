@@ -38,17 +38,16 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
-          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
-          cat ./package.json >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          echo '${{ fromJson(env.PACKAGE_JSON).version }}'
-        
-          npm install --legacy-peer-deps
-          npm i @angular/cli --legacy-peer-deps
-          npm version ${{env.version}} --no-git-tag-version --allow-same-version
-          npm version patch -m "[RELEASE] %s" --no-git-tag-version --allow-same-version
+            npm install --legacy-peer-deps
+            npm i @angular/cli --legacy-peer-deps
       - name: DEV Build
         run: |
+            echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+            cat ./package.json >> $GITHUB_ENV
+            echo 'EOF' >> $GITHUB_ENV
+            echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+            npm version ${{env.version}} --no-git-tag-version --allow-same-version
+            npm version patch -m "[RELEASE] %s" --no-git-tag-version --allow-same-version
             npm run dev --
       - name: deploy
         run: |
