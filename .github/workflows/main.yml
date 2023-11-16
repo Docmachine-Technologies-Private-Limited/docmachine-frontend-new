@@ -43,7 +43,7 @@ jobs:
       - name: DEV Build
         run: |
             echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
-            cat ./package.json >> $GITHUB_ENV
+            cat package.json >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
             echo '${{ fromJson(env.PACKAGE_JSON).version }}'
             npm version ${{env.version}} --no-git-tag-version --allow-same-version
