@@ -26,6 +26,7 @@ jobs:
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
+          version: 0
         with:
           # caching node_modules
           path: node_modules
@@ -39,9 +40,11 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           npm i @angular/cli --legacy-peer-deps
+          npm version ${{env.version}} --no-git-tag-version --allow-same-version
+          npm version patch -m "[RELEASE] %s" --no-git-tag-version --allow-same-version
       - name: DEV Build
         run: |
-           npm run dev --
+            npm run dev --
       - name: deploy
         run: |
              git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
