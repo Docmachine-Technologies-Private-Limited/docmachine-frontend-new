@@ -90,7 +90,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   }
 
   async PAGINATION_EVENT(event: any, tableName: any, TableFormat) {
-    await this.filteranytablepagination.LoadTable(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageSize }, tableName, TableFormat,this.EXTRA_DATA)[tableName]()?.then(async (res) => {
+    await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageSize }, tableName, TableFormat,this.EXTRA_DATA)[tableName]()?.then(async (res) => {
       this.PAGINATOR_TABLE_DATA = [];
       setTimeout(() => {
         this.PAGINATOR_TABLE_DATA = res?.items;

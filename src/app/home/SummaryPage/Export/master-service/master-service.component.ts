@@ -108,7 +108,7 @@ export class MasterServiceComponent implements OnInit {
   async ngOnInit() {
     this.USER_DATA = await this.userService.getUserDetail();
     this.FILTER_FORM_VALUE = [];
-    await this.filteranytablepagination.LoadTable({}, { skip: 0, limit: 10 }, 'masterservices', this.FILTER_VALUE_LIST_NEW)?.masterservices().then((res) => {
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'masterservices', this.FILTER_VALUE_LIST_NEW)?.masterservices().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;
       for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
@@ -212,7 +212,7 @@ export class MasterServiceComponent implements OnInit {
     };
     if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
       this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTable(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'masterservices', this.FILTER_VALUE_LIST_NEW)?.masterservices().then((res) => {
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'masterservices', this.FILTER_VALUE_LIST_NEW)?.masterservices().then((res) => {
         this.FILTER_VALUE_LIST_NEW = res;
       });
     } else {

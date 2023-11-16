@@ -137,7 +137,7 @@ export class ViewDocumentComponent implements OnInit {
     this.USER_DATA = await this.userService.getUserDetail();
     this.FILTER_FORM_VALUE = [];
     this.filteranytablepagination.SHOW_TABLE_TBODY = false;
-    await this.filteranytablepagination.LoadTable({}, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;
       for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
@@ -245,7 +245,7 @@ export class ViewDocumentComponent implements OnInit {
     };
     if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
       this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTable(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
         this.FILTER_VALUE_LIST_NEW = res;
       });
     } else {
@@ -518,7 +518,7 @@ export class ViewDocumentComponent implements OnInit {
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.commercialDoc, name: 'Commercial', status: false })
     });
-    await this.filteranytablepagination.LoadTable({ sbno: value }, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
+    await this.filteranytablepagination.LoadTableExport({ sbno: value }, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;
     });
   }

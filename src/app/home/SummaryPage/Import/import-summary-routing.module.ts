@@ -19,7 +19,6 @@ import { ImportOpinionReportsComponent } from './import-opinion-reports/import-o
 import { ImportMasterServiceComponent } from './import-master-service/import-master-service.component';
 import { LetterOfCreditImportLCComponent } from './letter-of-credit-import-lc/letter-of-credit-import-lc.component';
 import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
-import { ImportEditPipoComponent } from './pipo-documents/edit-pipo/edit-pipo.component';
 
 const routes: Routes = [
   { path: "boe", component: ImportBOEComponent, pathMatch: "full", canActivate: [MemberGuard] },
@@ -41,7 +40,7 @@ const routes: Routes = [
   { path: "Master-Services", component: ImportMasterServiceComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Letter-Of-Credit-Lc", component: LetterOfCreditImportLCComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Opinion-Reports", component: ImportOpinionReportsComponent, pathMatch: "full", canActivate: [MemberGuard] },
-  { path: "edit-pipo/:doc_type/:id", component: ImportEditPipoComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  // { path: "edit-pipo/:doc_type/:id", component: ImportEditPipoComponent, pathMatch: "full", canActivate: [MemberGuard] },
 ];
 
 @NgModule({
