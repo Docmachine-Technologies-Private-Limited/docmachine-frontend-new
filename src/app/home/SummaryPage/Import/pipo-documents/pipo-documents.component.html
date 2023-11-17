@@ -18,7 +18,7 @@
                         grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
                                 *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
                         </div>
-                        <button type="button" class="btn btn-success" routerLink='/home/upload-documents/Export/PIPO'
+                        <button type="button" class="btn btn-success" routerLink='/home/upload-documents/Import/PIPO'
                             [disabled]="this.USER_DATA?.result?.Role_Type=='Approver'"><span class="add_icon"></span>ADD
                             NEW</button>
                     </div>
