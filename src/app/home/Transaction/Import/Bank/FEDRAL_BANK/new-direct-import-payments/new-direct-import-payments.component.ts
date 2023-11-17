@@ -136,7 +136,8 @@ export class NewDirectImportPaymentsComponent implements OnInit {
           fieldName2: "BankCharges",
           rules: {
             required: true,
-          }
+          },
+          ChargeLabelHide: true,
         },
         BankCharges: {
           type: "xyzzzz",
@@ -329,18 +330,18 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       benneName: value?.value,
       "paymentTerm": { $elemMatch: { type: { value: "Direct Imports(Payment Against Bill of entry)" } } }
     }, 'pi_po').subscribe((res: any) => {
-      res?.data.forEach((element:any) => {
+      res?.data.forEach((element: any) => {
         element['ischecked'] = false;
         element['isDisabled'] = false;
-        let filterDirectImports=element?.paymentTerm?.filter((item:any)=>item?.type?.value==="Direct Imports(Payment Against Bill of entry)")
-        filterDirectImports.forEach((paymentTermelement:any) => {
+        let filterDirectImports = element?.paymentTerm?.filter((item: any) => item?.type?.value === "Direct Imports(Payment Against Bill of entry)")
+        filterDirectImports.forEach((paymentTermelement: any) => {
           paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
           if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
             element['isDisabled'] = true;
             element['ischecked'] = true;
           }
         });
-        element["paymentTerm"]=filterDirectImports;
+        element["paymentTerm"] = filterDirectImports;
       });
       this.PIPO_LIST = res?.data
       console.log(value, res, this.BENEFICIARY_DETAILS, "BENEFICIARY_CALLBACK")
@@ -757,7 +758,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
         pipo_id.push(element?.PIPO_LIST?._id)
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
-      
+
       for (let index = 0; index < this.ExportBillLodgement_Form?.BOE_DETAIILS?.length; index++) {
         const element = this.ExportBillLodgement_Form?.BOE_DETAIILS[index];
         boe_id.push(element?.BOE?._id)
@@ -790,7 +791,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
               fileType: this.validator.userData?.sideMenu,
               UserDetails: approval_data?.id,
               pipo: pipo_id,
-              BOERef:boe_id
+              BOERef: boe_id
             }
             this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
               let updatedData = {
@@ -826,7 +827,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                           data: this.ExportBillLodgement_Form,
                           pipo_id: pipo_id,
                           pipo_name: pipo_name,
-                          BOERef:boe_id
+                          BOERef: boe_id
                         }
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {

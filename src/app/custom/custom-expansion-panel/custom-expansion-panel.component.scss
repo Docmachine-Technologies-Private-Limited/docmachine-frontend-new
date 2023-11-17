@@ -1,5 +1,7 @@
 .custom-expansion-panel {
     flex-direction: column;
+    height: 80vh !important;
+    border-radius: 10px;
 }
 
 .custom-expansion-panel .table-tr {
@@ -72,6 +74,7 @@
     color: black;
     background-color: white;
     position: relative;
+    transition: .8s ease-in-out;
 }
 
 .custom-expansion-panel .table thead,
