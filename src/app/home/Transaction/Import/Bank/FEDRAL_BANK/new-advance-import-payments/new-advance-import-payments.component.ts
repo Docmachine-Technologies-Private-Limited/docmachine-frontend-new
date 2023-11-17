@@ -135,6 +135,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
           TypeOfCurrency: "INR",
           Banklabel2: "To Debit Charges Account no. & Account Type*",
           fieldName2: "BankCharges",
+          ChargeLabelHide:true,
           rules: {
             required: true,
           }

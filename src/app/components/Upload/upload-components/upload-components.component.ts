@@ -508,10 +508,10 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   BANK_CHECKBOX(value: any, CHECK_BOX_BANK_LIST_CHARGES) {
-    console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, "BANK_CHECKBOX")
+    console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, CHECK_BOX_BANK_LIST_CHARGES, "BANK_CHECKBOX")
     this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.id];
     this.validator.CHECK_BOX_BANK_LIST_CHARGES = []
-    if (CHECK_BOX_BANK_LIST_CHARGES == undefined) {
+    if (CHECK_BOX_BANK_LIST_CHARGES == true) {
       this.validator.CHECK_BOX_BANK_LIST_CHARGES = this.validator?.ToCreditAccountdata[value?.id];
     }
     this.validator.CHECK_BOX_BANK_LIST.forEach(element => {

@@ -135,7 +135,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           fieldName2: "BankCharges",
           rules: {
             required: true,
-          }
+          },
+          ChargeLabelHide:true,
         },
         BankCharges: {
           type: "xyzzzz",
