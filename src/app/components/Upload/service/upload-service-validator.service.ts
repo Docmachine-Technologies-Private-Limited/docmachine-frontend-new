@@ -74,30 +74,7 @@ export class UploadServiceValidatorService implements OnInit {
     public documentService: DocumentService,
     public authGuard: AuthGuard,
     public userService: UserService) {
-    this.A2_JSON_DATA = A2_JOSN;
-    this.A2_JSON_DATA.forEach(element => {
-      for (const key in element) {
-        if (key != 'SL_No' && key != 'isActive' && key != 'isExpand' && key != '') {
-          element[key] = this.text_array(element[key])
-        }
-      }
-    });
-    this.PURPOSE_CODE_LIST_DATA = [];
-    var temp_purcode: any = [];
-    this.A2_JSON_DATA.forEach(element => {
-      if (!temp_purcode.includes(element?.RBI_Purpose_Code[0])) {
-        temp_purcode.push(element?.RBI_Purpose_Code[0])
-      }
-      for (const key in element) {
-        element['isExpand'] = false;
-        element['isActive'] = false;
-      }
-    });
-    temp_purcode.forEach(element => {
-      this.PURPOSE_CODE_LIST_DATA.push({ value: element })
-    });
-    this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
-    console.log(this.A2_JSON_DATA, this.PURPOSE_CODE_FILTER_DATA, this.PURPOSE_CODE_LIST_DATA, 'A2_JOSN')
+   
   }
 
   ngOnInit(): void {
@@ -174,6 +151,30 @@ export class UploadServiceValidatorService implements OnInit {
         } else {
           reslove(true)
         }
+        this.A2_JSON_DATA = A2_JOSN;
+        this.A2_JSON_DATA.forEach(element => {
+          for (const key in element) {
+            if (key != 'SL_No' && key != 'isActive' && key != 'isExpand' && key != '') {
+              element[key] = this.text_array(element[key])
+            }
+          }
+        });
+        this.PURPOSE_CODE_LIST_DATA = [];
+        var temp_purcode: any = [];
+        this.A2_JSON_DATA.forEach(element => {
+          if (!temp_purcode.includes(element?.RBI_Purpose_Code[0])) {
+            temp_purcode.push(element?.RBI_Purpose_Code[0])
+          }
+          for (const key in element) {
+            element['isExpand'] = false;
+            element['isActive'] = false;
+          }
+        });
+        temp_purcode.forEach(element => {
+          this.PURPOSE_CODE_LIST_DATA.push({ value: element })
+        });
+        this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
+        console.log(this.A2_JSON_DATA, this.PURPOSE_CODE_FILTER_DATA, this.PURPOSE_CODE_LIST_DATA, 'A2_JOSN')
       } else {
         reslove(true);
       }

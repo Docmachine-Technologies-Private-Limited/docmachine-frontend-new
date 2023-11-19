@@ -17,6 +17,7 @@ import { PipoDataService } from "../../../../service/homeservices/pipo.service";
 import { StorageEncryptionDecryptionService } from "../../../../Storage/storage-encryption-decryption.service";
 import { MergePdfListService } from "../../../merge-pdf-list.service";
 import $ from "jquery";
+import { ExportHomeControllerData } from "../Controller/ExportHome-Controller";
 declare var kendo: any;
 
 @Component({
@@ -209,6 +210,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public sessionstorage: StorageEncryptionDecryptionService,
+    public ExportBillLodgementData: ExportHomeControllerData,
     public pdfmerge: MergePdfListService) {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
@@ -941,148 +943,28 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     return (text.replace(repl_text, '')).trim()
   }
   PREVIWES_URL: any = '';
-
+  TIMEOUT: any = ''
   async fillForm(a) {
-    console.log(a, 'dshdsfdsfdgjsdhfgdsjf')
-    var data_temp: any = this.documentService.getSessionData('InwardSheet');
-    const formUrl = './../../assets/pdf/FedralBank/Inward_Remittance_disposal_format.pdf'
-    if (data_temp == undefined || data_temp == null || data_temp == '') {
-      const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-      const pdfDoc = await PDFDocument.load(formPdfBytes)
-      const form: any = pdfDoc.getForm()
-      const getAllFields = form?.getFields();
-      getAllFields?.forEach(element => {
-        const elementvalue: any = element?.acroField?.dict?.values();
-        if (elementvalue[0]?.encodedName == '/Tx') {
-          element?.setFontSize(8);
-          element?.enableReadOnly();
-          const [widget]: any = element?.acroField?.getWidgets();
-          widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
-        }
-      });
-      getAllFields[0].setText(this.COMPANY_INFO?.BranchName)
-      getAllFields[3].setText(this.item5.teamName)
-      getAllFields[4].setText(this.charge[0])
-      getAllFields[5].setText(this.charge[1])
-      getAllFields[6].setText(this.charge[2])
-      getAllFields[7].setText(this.charge[3])
-      getAllFields[8].setText(this.charge[4])
-      getAllFields[9].setText(this.charge[5])
-      getAllFields[10].setText(this.charge[6])
-      getAllFields[11].setText(this.charge[7])
-      getAllFields[12].setText(this.charge[8])
-      getAllFields[13].setText(this.charge[9])
-      getAllFields[14].setText(this.charge[10])
-      getAllFields[15].setText(this.charge[11])
-      getAllFields[16].setText(this.charge[12])
-      getAllFields[17].setText(this.charge[13])
-      getAllFields[18].setText('Export')
-      getAllFields[19].setText('')
-      const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      getAllFields[20].setText(updatedata?.currency)
-      getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
-      getAllFields[22].setText(updatedata?.Inward_amount_for_disposal?.toString())
-      getAllFields[23].setText(a['buyerName'])
-      getAllFields[24].setText(this.buyerAds)
-      getAllFields[25].setText('ADVANCE AGAINST EXPORT')
-      getAllFields[25].setFontSize(8);
-      getAllFields[26].setText(this.generatePurpose[0])
-
-      getAllFields[77].setText(this.credit[0])
-      getAllFields[78].setText(this.credit[1])
-      getAllFields[79].setText(this.credit[2])
-      getAllFields[80].setText(this.credit[3])
-      getAllFields[81].setText(this.credit[4])
-      getAllFields[82].setText(this.credit[5])
-      getAllFields[83].setText(this.credit[6])
-      getAllFields[84].setText(this.credit[7])
-      getAllFields[85].setText(this.credit[8])
-      getAllFields[86].setText(this.credit[9])
-      getAllFields[87].setText(this.credit[10])
-      getAllFields[88].setText(this.credit[11])
-      getAllFields[89].setText(this.credit[12])
-      getAllFields[90].setText(this.credit[13])
-
-      getAllFields[105].setText(this.charge[0])
-      getAllFields[106].setText(this.charge[1])
-      getAllFields[107].setText(this.charge[2])
-      getAllFields[108].setText(this.charge[3])
-      getAllFields[109].setText(this.charge[4])
-      getAllFields[110].setText(this.charge[5])
-      getAllFields[111].setText(this.charge[6])
-      getAllFields[112].setText(this.charge[7])
-      getAllFields[113].setText(this.charge[8])
-      getAllFields[114].setText(this.charge[9])
-      getAllFields[115].setText(this.charge[10])
-      getAllFields[116].setText(this.charge[11])
-      getAllFields[117].setText(this.charge[12])
-      getAllFields[118].setText(this.charge[13])
-
-      if (this.ToForwardContract_Selected != undefined && this.ToForwardContract_Selected?.length != 0) {
-        let bookingdatesplit = this.ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-', '')?.split('');
-        let duedatesplit = this.ToForwardContract_Selected[0]?.ToDate?.replaceAll('-', '')?.split('');
-        getAllFields[119].setText(this.ToForwardContract_Selected[0]?.ForwardRefNo)
-        getAllFields[120].setText(bookingdatesplit[6])
-        getAllFields[121].setText(bookingdatesplit[7])
-        getAllFields[122].setText(bookingdatesplit[4])
-        getAllFields[123].setText(bookingdatesplit[5])
-        getAllFields[124].setText(bookingdatesplit[0])
-        getAllFields[125].setText(bookingdatesplit[1])
-        getAllFields[126].setText(bookingdatesplit[2])
-        getAllFields[127].setText(bookingdatesplit[3])
-
-        getAllFields[128].setText(duedatesplit[6])
-        getAllFields[129].setText(duedatesplit[7])
-        getAllFields[130].setText(duedatesplit[4])
-        getAllFields[131].setText(duedatesplit[5])
-        getAllFields[132].setText(duedatesplit[0])
-        getAllFields[133].setText(duedatesplit[1])
-        getAllFields[134].setText(duedatesplit[2])
-        getAllFields[135].setText(duedatesplit[3])
-
-        getAllFields[136].setText(this.ToForwardContract_Selected[0]?.BookingAmount)
-        getAllFields[137].setText(this.ToForwardContract_Selected[0]?.UtilizedAmount)
-        getAllFields[138].setText(this.ToForwardContract_Selected[0]?.NetRate);
-      }
-
-      getAllFields[139].setText(this.jstoday)
-
-      var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
-      console.log(this.newBankArray, bankformat, 'this.newBankArray')
-      if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
-        const pdfBytes = await pdfDoc.save()
-        console.log(pdfDoc, "pdf")
-        console.log(pdfBytes, "pdfBytes")
-        console.log(form, "form")
-        var base64String = this._arrayBufferToBase64(pdfBytes)
-
-        const x = 'data:application/pdf;base64,' + base64String;
-
-        const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-        console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
-        this.formerge = x
-        this.value = base64String;
-        this.newTask[0].generateDoc1 = x
-
-        const mergedPdf = await PDFDocument.create();
-        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-        copiedPages.forEach((page) => {
-          mergedPdf.addPage(page);
-        });
-        const mergedPdfFile = await mergedPdf.save();
-        const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-        await this.disabledTextbox(pdfDoc)
-        const mergedPdfFileload = await mergedPdfload.save();
-        var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-        const x1 = 'data:application/pdf;base64,' + base64String1;
-        this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
-        console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-      } else {
-        this.newDone = false;
-        $('#ProceedPreview').click()
-      }
-    } else {
-      this.uploadingData(data_temp, a)
+    this.PREVIWES_URL = '';
+    clearTimeout(this.TIMEOUT);
+    var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
+    console.log(bankformat, "bankformat")
+    if (bankformat[0]?.BankUniqueId == "F_B_L_6") {
+      this.ExportBillLodgementData.BankFormatLoad().
+        Fedral(this.charge, this.credit, this.Inward_Remittance_MT103, this.generatePurpose, this.ToForwardContract_Selected).then((res: any) => {
+          this.TIMEOUT = setTimeout(() => {
+            this.PREVIWES_URL = res;
+            console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+          }, 200);
+        })
+    } else if (bankformat[0]?.BankUniqueId == "H_B_L_7") {
+      this.ExportBillLodgementData.BankFormatLoad().
+        HDFC(this.charge, this.credit, this.Inward_Remittance_MT103, this.generatePurpose, this.ToForwardContract_Selected).then((res: any) => {
+          this.TIMEOUT = setTimeout(() => {
+            this.PREVIWES_URL = res;
+            console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+          }, 200);
+        })
     }
   }
   sendFileDownload(fileName: any) {
@@ -3430,8 +3312,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             Amount: [],
             Number: [],
             Documents: [],
-            Id:[],
-            SB_REF:[]
+            Id: [],
+            SB_REF: []
           }
           var tempPipo: any = [];
           var P102_DATA: any = [];
@@ -3499,8 +3381,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
 
     } else {
-      if (this.value != '' && this.value != null) {
-        temp_doc[0] = { name: 'Bank format', pdf: 'data:application/pdf;base64,' + this.value };
+      if (this.PREVIWES_URL != '' && this.PREVIWES_URL != null) {
+        temp_doc[0] = { name: 'Bank format', pdf: this.PREVIWES_URL };
         temp_doc[1] = { name: 'Inward_Remittance_MT103', pdf: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file };
       } else {
         temp_doc[0] = { name: 'Inward_Remittance_MT103', pdf: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file };
@@ -3598,8 +3480,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           Amount: [],
           Number: [],
           Documents: [],
-          Id:[],
-          SB_REF:[]
+          Id: [],
+          SB_REF: []
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
@@ -3611,7 +3493,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             filterValue['Number'].push(filterItem?.blcopyrefNumber)
             filterValue['Documents'].push(filterItem?.doc)
             filterValue['Id'].push(filterItem?._id),
-            filterValue['SB_REF'].push(filterItem?.SbRef[0])
+              filterValue['SB_REF'].push(filterItem?.SbRef[0])
             tempPipo.push(filterItem?.pipo[0]?._id)
           })
         });

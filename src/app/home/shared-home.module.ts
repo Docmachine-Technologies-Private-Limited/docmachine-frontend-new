@@ -97,6 +97,7 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
 import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-up-local-file/upload-pop-up-local-file.component";
 import { filterAnyTablePagination } from "../service/v1/Api/filterAnyTablePagination";
 import { TableServiceController } from "../service/v1/TableServiceController";
+import { ExportHomeControllerData } from "./Transaction/Export/Controller/ExportHome-Controller";
 
 @NgModule({
   declarations: [
@@ -190,9 +191,20 @@ import { TableServiceController } from "../service/v1/TableServiceController";
     CustomMatStepperModule,
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal, ExportBillLodgementData, SharedDataService, PipoDataService,
+  providers: [
+    ConfirmDialogService,
+    NgbModal,
+    ExportBillLodgementData,
+    SharedDataService,
+    PipoDataService,
     TableServiceController,
-    TreeViewComponent, MergePdfService, UploadServiceValidatorService, GlobalsAccessService, filterAnyTablePagination],
+    TreeViewComponent,
+    MergePdfService,
+    UploadServiceValidatorService,
+    GlobalsAccessService,
+    filterAnyTablePagination,
+    ExportHomeControllerData
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     FilternewPipe,
