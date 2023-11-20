@@ -85,8 +85,6 @@ jobs:
               format: ${{ matrix.archive }}
               name: ${{github.event.repository.updated_at}}
               include: "**/*.(ts|js|css|html)"
-      - name: DeployZip
-      - uses: actions/checkout@v2
       - name: Upload ZIP to S3
         uses: NotCoffee418/s3-zip-upload@v1.3
         env:
