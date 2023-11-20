@@ -116,11 +116,10 @@ export class ExportBillLodgementData {
 
                 this.SHIPPING_BILL_DATA = data;
                 if (this.IS_AGAINST_ADVANCE_YES_NO == true) {
-                    this.TRANSACTION_SHIPPING_BILL = this.SHIPPING_BILL_DATA?.filter((item: any) => item?.firxdetails?.length != 0)
+                    this.TRANSACTION_SHIPPING_BILL = res?.data?.filter((item: any) => item?.firxdetails?.length != 0)
                 } else if (this.IS_AGAINST_ADVANCE_YES_NO == false) {
-                    this.TRANSACTION_SHIPPING_BILL = this.SHIPPING_BILL_DATA?.filter((item: any) => item?.firxdetails?.length == 0)
+                    this.TRANSACTION_SHIPPING_BILL = res?.data?.filter((item: any) => item?.firxdetails?.length == 0)
                 }
-                this.getbyFIRXPartyName(buyerName?.buyerName);
                 console.log(buyerName, res?.data, this.TRANSACTION_SHIPPING_BILL, this.IS_AGAINST_ADVANCE_YES_NO, "getShippingBill")
             });
         }
@@ -128,26 +127,7 @@ export class ExportBillLodgementData {
     getBuyerList() {
         this.userService.getBuyer(1).subscribe((res: any) => this.BUYER_LIST = res?.data);
     }
-    getbyFIRXPartyName(buyerName: any) {
-        // this.documentService.getbyPartyName(buyerName).subscribe((res: any) => {
-        //     let data: any = [];
-        //     res?.data?.forEach(element => {
-        //         element['BalanceAvail'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount
-        //         element['InputValue'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;
-        //         element['UsedAmount'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;;
-        //         element['ReamaingAmount'] = '0';
-        //         element['isChecked'] = false;
-        //         element['YesNo'] = '';
-        //         if (element?.BalanceAvail?.toString() != '0') {
-        //             data.push(element);
-        //         }
-        //     });
-        //     this.TOTAL_FIRX_AMOUNT = data?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
-        //     this.FIREX_DETAILS = data;
-        //     console.log(res, "getbyFIRXPartyName")
-        // });
-    }
-
+    
     getbyFIRXPartyNamebyPipo(pipoId) {
         this.documentService.filterAnyTable({
             pipo: [pipoId]
@@ -168,24 +148,6 @@ export class ExportBillLodgementData {
             this.FIREX_DETAILS = data;
             console.log(res, "getbyFIRXPartyName")
         })
-
-        // this.documentService.getbyPartyName(buyerName).subscribe((res: any) => {
-        //     let data: any = [];
-        //     res?.data?.forEach(element => {
-        //         element['BalanceAvail'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount
-        //         element['InputValue'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;
-        //         element['UsedAmount'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;;
-        //         element['ReamaingAmount'] = '0';
-        //         element['isChecked'] = false;
-        //         element['YesNo'] = '';
-        //         if (element?.BalanceAvail?.toString() != '0') {
-        //             data.push(element);
-        //         }
-        //     });
-        //     this.TOTAL_FIRX_AMOUNT = data?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
-        //     this.FIREX_DETAILS = data;
-        //     console.log(res, "getbyFIRXPartyName")
-        // });
     }
     setSelectedShippingBill($event, data: any) {
         if (data?.blCopyDoc) {

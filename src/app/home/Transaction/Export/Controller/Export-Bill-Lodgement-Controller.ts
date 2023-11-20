@@ -491,10 +491,10 @@ export class ExportBillLodgementControllerData {
                     await resolve(x1);
                 })
             },
-            HDFC: async (charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected) => {
+            HDFCExportRegularization: async (charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected) => {
                 return new Promise(async (resolve, reject) => {
                     console.log(charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected, "ToForwardContract_Selected")
-                    const formUrl = './../../../assets/pdf/FedralBank/Inward_Remittance_disposal_format.pdf'
+                    const formUrl = './../../../assets/pdf/HDFC/ExportRegularization.pdf'
                     const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
                     const pdfDoc = await PDFDocument.load(formPdfBytes)
                     const form: any = pdfDoc.getForm()
@@ -508,93 +508,30 @@ export class ExportBillLodgementControllerData {
                             widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
                         }
                     });
-                    getAllFields[0].setText(this.COMPANY_INFO?.BranchName)
-                    getAllFields[3].setText(this.COMPANY_INFO?.teamName)
-                    if (charge?.length != 0) {
-                        getAllFields[4].setText(charge[0])
-                        getAllFields[5].setText(charge[1])
-                        getAllFields[6].setText(charge[2])
-                        getAllFields[7].setText(charge[3])
-                        getAllFields[8].setText(charge[4])
-                        getAllFields[9].setText(charge[5])
-                        getAllFields[10].setText(charge[6])
-                        getAllFields[11].setText(charge[7])
-                        getAllFields[12].setText(charge[8])
-                        getAllFields[13].setText(charge[9])
-                        getAllFields[14].setText(charge[10])
-                        getAllFields[15].setText(charge[11])
-                        getAllFields[16].setText(charge[12])
-                        getAllFields[17].setText(charge[13])
-                        getAllFields[18].setText('Export')
-                        getAllFields[19].setText('')
-                        const updatedata: any = Inward_Remittance_MT103[Inward_Remittance_MT103.length - 1];
-                        getAllFields[20].setText(updatedata?.currency)
-                        getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
-                        getAllFields[22].setText(updatedata?.Inward_amount_for_disposal?.toString())
-                        getAllFields[23].setText(updatedata?.BuyerName?.value)
-                        getAllFields[24].setText(updatedata?.BuyerName?.Address)
-                        getAllFields[25].setText('ADVANCE AGAINST EXPORT')
-                        getAllFields[25].setFontSize(8);
-                        getAllFields[26].setText(generatePurpose[0])
-
-                        getAllFields[77].setText(credit[0])
-                        getAllFields[78].setText(credit[1])
-                        getAllFields[79].setText(credit[2])
-                        getAllFields[80].setText(credit[3])
-                        getAllFields[81].setText(credit[4])
-                        getAllFields[82].setText(credit[5])
-                        getAllFields[83].setText(credit[6])
-                        getAllFields[84].setText(credit[7])
-                        getAllFields[85].setText(credit[8])
-                        getAllFields[86].setText(credit[9])
-                        getAllFields[87].setText(credit[10])
-                        getAllFields[88].setText(credit[11])
-                        getAllFields[89].setText(credit[12])
-                        getAllFields[90].setText(credit[13])
-
-                        getAllFields[105].setText(charge[0])
-                        getAllFields[106].setText(charge[1])
-                        getAllFields[107].setText(charge[2])
-                        getAllFields[108].setText(charge[3])
-                        getAllFields[109].setText(charge[4])
-                        getAllFields[110].setText(charge[5])
-                        getAllFields[111].setText(charge[6])
-                        getAllFields[112].setText(charge[7])
-                        getAllFields[113].setText(charge[8])
-                        getAllFields[114].setText(charge[9])
-                        getAllFields[115].setText(charge[10])
-                        getAllFields[116].setText(charge[11])
-                        getAllFields[117].setText(charge[12])
-                        getAllFields[118].setText(charge[13])
-                    }
-                    if (ToForwardContract_Selected != undefined && ToForwardContract_Selected?.length != 0) {
-                        let bookingdatesplit = ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-', '')?.split('');
-                        let duedatesplit = ToForwardContract_Selected[0]?.ToDate?.replaceAll('-', '')?.split('');
-                        getAllFields[119].setText(ToForwardContract_Selected[0]?.ForwardRefNo)
-                        getAllFields[120].setText(bookingdatesplit[6])
-                        getAllFields[121].setText(bookingdatesplit[7])
-                        getAllFields[122].setText(bookingdatesplit[4])
-                        getAllFields[123].setText(bookingdatesplit[5])
-                        getAllFields[124].setText(bookingdatesplit[0])
-                        getAllFields[125].setText(bookingdatesplit[1])
-                        getAllFields[126].setText(bookingdatesplit[2])
-                        getAllFields[127].setText(bookingdatesplit[3])
-
-                        getAllFields[128].setText(duedatesplit[6])
-                        getAllFields[129].setText(duedatesplit[7])
-                        getAllFields[130].setText(duedatesplit[4])
-                        getAllFields[131].setText(duedatesplit[5])
-                        getAllFields[132].setText(duedatesplit[0])
-                        getAllFields[133].setText(duedatesplit[1])
-                        getAllFields[134].setText(duedatesplit[2])
-                        getAllFields[135].setText(duedatesplit[3])
-
-                        getAllFields[136].setText(ToForwardContract_Selected[0]?.BookingAmount)
-                        getAllFields[137].setText(ToForwardContract_Selected[0]?.UtilizedAmount)
-                        getAllFields[138].setText(ToForwardContract_Selected[0]?.NetRate);
-                    }
-
-                    getAllFields[139].setText(this.CURRENT_DATE)
+                    const mergedPdfFile = await pdfDoc.save();
+                    var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
+                    const x1 = 'data:application/pdf;base64,' + base64String1;
+                    console.log(x1, "base64String1")
+                    await resolve(x1);
+                })
+            },
+            HDFCExportLODGEMENT: async (charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected) => {
+                return new Promise(async (resolve, reject) => {
+                    console.log(charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected, "ToForwardContract_Selected")
+                    const formUrl = './../../../assets/pdf/HDFC/ExportLODGEMENT.pdf'
+                    const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
+                    const pdfDoc = await PDFDocument.load(formPdfBytes)
+                    const form: any = pdfDoc.getForm()
+                    const getAllFields = form?.getFields();
+                    getAllFields?.forEach(element => {
+                        const elementvalue: any = element?.acroField?.dict?.values();
+                        if (elementvalue[0]?.encodedName == '/Tx') {
+                            element?.setFontSize(8);
+                            element?.enableReadOnly();
+                            const [widget]: any = element?.acroField?.getWidgets();
+                            widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
+                        }
+                    });
                     const mergedPdfFile = await pdfDoc.save();
                     var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
                     const x1 = 'data:application/pdf;base64,' + base64String1;
