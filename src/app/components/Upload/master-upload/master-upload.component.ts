@@ -163,7 +163,7 @@ export class MasterUploadComponent implements OnInit {
     setTimeout(() => {
       this.validator.SELECTED_PIPO_ID = item?._id;
       this.validator.SELECTED_PIPO = [item?.pi_poNo];
-      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : []);
+      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : [],false);
     }, 200);
   }
   onTabToggleChanged(event:any){
@@ -175,7 +175,7 @@ export class MasterUploadComponent implements OnInit {
     this.validator.SELECTED_PIPO = [];
     setTimeout(() => {
       this.validator.SELECTED_PIPO = ['jgjhgjhg'];
-      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : []);
+      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : [],false);
     }, 200);
   }
 

@@ -50,7 +50,14 @@ export class ImportBilllodgementreferencenumberadvicecopyComponent implements On
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
     if (temp_pipo?.length != 0) {
       this.btndisabled = false;
-      await this.documentService.getPipoListNo('import', temp_pipo);
+      this.validator.documentService.PI_PO_NUMBER_LIST = {
+        PI_PO_BUYER_NAME: [],
+        PI_PO_BENNE_NAME: [],
+        PIPO_TRANSACTION: [],
+        PIPO_NO: []
+      };
+      this.validator.CommonLoad(temp_pipo);
+      this.validator.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false;
       this.UPLOAD_STATUS=this.route.snapshot.paramMap.get('upload')=='true'?true:false  
     }
     console.log(temp_pipo, this.UPLOAD_STATUS,"temp_pipo")

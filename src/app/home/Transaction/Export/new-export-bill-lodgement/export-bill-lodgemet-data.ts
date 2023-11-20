@@ -77,7 +77,7 @@ export class ExportBillLodgementData {
                     element['IRADVICE_DATA'] = []
                     element['CheckBoxEnabled'] = false
                     element['TOTAL_CI_AMOUNT'] = false
-                    if (element?.balanceAvai != '0') {
+                    if (element?.balanceAvai != '0' || (element?.TransactionStatus == false || element?.TransactionStatus != undefined)) {
                         data.push(element);
                     }
                     if (type == "MatchOff") {

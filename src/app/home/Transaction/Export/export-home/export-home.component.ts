@@ -3485,6 +3485,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
+        var SB_DATA: any = [];
         this.SELECT_bankreferencenumber.forEach(element => {
           const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
           tempfilter.forEach((filterItem) => {
@@ -3492,8 +3493,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             filterValue['Amount'].push(filterItem?.amount)
             filterValue['Number'].push(filterItem?.blcopyrefNumber)
             filterValue['Documents'].push(filterItem?.doc)
-            filterValue['Id'].push(filterItem?._id),
-              filterValue['SB_REF'].push(filterItem?.SbRef[0])
+            filterValue['Id'].push(filterItem?._id);
+            filterValue['SB_REF'].push(filterItem?.SbRef[0])
             tempPipo.push(filterItem?.pipo[0]?._id)
           })
         });
@@ -3539,7 +3540,27 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
               this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
                 console.log('king123');
                 console.log(data);
-                this.router.navigate(['/home/dashboardTask'])
+                filterValue['SB_REF']?.forEach((element, i) => {
+                  let sumfixAmount2 = parseFloat(element?.fobValue) - parseFloat(updatedata?.Inward_amount_for_disposal);
+                  this.documentService.Update_Amount_by_Table({
+                    tableName: 'masterrecord',
+                    id: element?._id,
+                    query: {
+                      balanceAvai: sumfixAmount2,
+                      TrackerRef: [updatedata?._id],
+                      TrackerData: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1],
+                      TransactionStatus: true
+                    }
+                  }).subscribe((r3: any) => {
+                    if (filterValue['SB_REF']?.length == (i + 1)) {
+                      this.router.navigate(['/home/dashboardTask'])
+                    }
+                    this.toastr.success("Update Changes...")
+                  });
+                });
+                if (filterValue['SB_REF']?.length == 0) {
+                  this.router.navigate(['/home/dashboardTask'])
+                }
               }, (error) => {
                 console.log('error');
               });

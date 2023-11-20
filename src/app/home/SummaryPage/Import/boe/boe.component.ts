@@ -42,16 +42,13 @@ export class ImportBOEComponent implements OnInit {
   USER_DATA: any = [];
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
-    BOE_NUMBER: [],
     Buyer_Name: [],
-    AD_CODE: [],
-    AD_BILL_NO: [],
-    IEC_CODE: [],
-    IEC_NAME: [],
-    ORIGIN: [],
-    DISCHARGE_PORT: [],
+    Company_Name: [],
+    Origin: [],
+    Destination: [],
     Currency: [],
-    DATE: []
+    DATE: [],
+    NO: []
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [

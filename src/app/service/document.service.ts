@@ -46,7 +46,8 @@ export class DocumentService {
   item2: any;
   item1: any;
 
-  getPipoListNo = (type, pipolist: any) => {
+  getPipoListNo = (type, pipolist: any,BoolTransaction) => {
+  console.log(BoolTransaction,"BoolTransaction")
     this.PI_PO_NUMBER_LIST = {
       PI_PO_BUYER_NAME: [],
       PI_PO_BENNE_NAME: [],
@@ -60,41 +61,45 @@ export class DocumentService {
       this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'] = [];
       this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'] = [];
       this.PI_PO_NUMBER_LIST['PIPO_NO'] = data;
-      for (let index = 0; index < data.length; index++) {
-        if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
-          this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
-            pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
-            id: [data[index].pi_poNo, data[index]?.buyerName],
-            _id: data[index]?._id
-          })
-          this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
-            pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
-            id: [data[index].pi_poNo, data[index]?.benneName],
-            _id: data[index]?._id
-          })
+      if (pipolist?.length != 0) {
+        for (let index = 0; index < pipolist?.length; index++) {
+          const element = pipolist[index];
+          var t: any = data.filter((item: any) => item?.pi_poNo.indexOf(element) != -1)
+          if (type == 'import') {
+            t.forEach(item => {
+              this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
+                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.benneName,
+                id: [item.pi_poNo, item?.benneName],
+                _id: item?._id
+              })
+            });
+          } else {
+            t.forEach(item => {
+              this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
+                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.buyerName,
+                id: [item.pi_poNo, item?.buyerName],
+                _id: item?._id
+              })
+            });
+          }
+        }
+      } else {
+        for (let index = 0; index < data.length; index++) {
+          if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
+            this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
+              pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
+              id: [data[index].pi_poNo, data[index]?.buyerName],
+              _id: data[index]?._id
+            })
+            this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
+              pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
+              id: [data[index].pi_poNo, data[index]?.benneName],
+              _id: data[index]?._id
+            })
+          }
         }
       }
-      for (let index = 0; index < pipolist?.length; index++) {
-        const element = pipolist[index];
-        var t: any = data.filter((item: any) => item?.pi_poNo.indexOf(element) != -1)
-        if (type == 'import') {
-          t.forEach(item => {
-            this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
-              pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.benneName,
-              id: [item.pi_poNo, item?.benneName],
-              _id: item?._id
-            })
-          });
-        } else {
-          t.forEach(item => {
-            this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
-              pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.buyerName,
-              id: [item.pi_poNo, item?.buyerName],
-              _id: item?._id
-            })
-          });
-        }
-      }
+
       console.log(this.PI_PO_NUMBER_LIST, type, 'getPipoListNo');
       return data;
     })
@@ -128,7 +133,7 @@ export class DocumentService {
     }
     console.log(this.PI_PO_NUMBER_LIST, 'getPipoListNo');
   }
-  
+
   // Inward inwardRemittance Advice
   setSessionData(key: any, data: any) {
     sessionStorage.setItem(key, JSON.stringify(data));
@@ -257,15 +262,15 @@ export class DocumentService {
     console.log(query, 'filterAnyTable')
     return this.http.post(`${this.api_base}/orAdvice/filterAnyTable`, { query: query, tableName: table_name }, httpOptions);
   }
-  
-  AnyUpdateTable(id,query, table_name: any) {
+
+  AnyUpdateTable(id, query, table_name: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     console.log(query, 'filterAnyTable')
-    return this.http.post(`${this.api_base}/orAdvice/UpdateAnyTable`, {id:id ,query: query, tableName: table_name }, httpOptions);
+    return this.http.post(`${this.api_base}/orAdvice/UpdateAnyTable`, { id: id, query: query, tableName: table_name }, httpOptions);
   }
 
 
@@ -412,9 +417,9 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     let url = `${this.api_base}/edpms/getEdpmsQuery`;
-    return this.http.post(url,{query:data} ,httpOptions);
+    return this.http.post(url, { query: data }, httpOptions);
   }
-  
+
   createIDPMS(payload) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -467,7 +472,7 @@ export class DocumentService {
     let url = `${this.api_base}/master/get`;
     return this.http.get(url, httpOptions);
   }
-  
+
 
   getMasterBuyer(user) {
     this.loadFromLocalStorage();
@@ -498,17 +503,17 @@ export class DocumentService {
     let url = `${this.api_base}/pipo/getPipoNo`;
     return this.http.get(url, httpOptions);
   }
-  
-  getPipoNoFilter(query:any) {
+
+  getPipoNoFilter(query: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     let url = `${this.api_base}/pipo/getPipoNoFilter`;
-    return this.http.post(url,{query:query} ,httpOptions);
+    return this.http.post(url, { query: query }, httpOptions);
   }
-  
+
   getMasterScheduler() {
     this.loadFromLocalStorage();
     console.log(this.authToken);

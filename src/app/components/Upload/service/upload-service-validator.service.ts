@@ -69,15 +69,32 @@ export class UploadServiceValidatorService implements OnInit {
   SELECTED_PURPOSE_CODE_DATA: any = [];
   SELECTED_PURPOSE_CODE_INDEX: any = [];
   SELECTED_PURPOSE_CODE_DUMP_SLEECTION: any = [];
+  UPLOAD_STATUS: boolean = false;
+  USER_DATA: any = [];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public authGuard: AuthGuard,
     public userService: UserService) {
-   
+    this.CommonLoad([]);
   }
 
   ngOnInit(): void {
+  }
+
+  async CommonLoad(SELECTED_PIPO:any) {
+    let token = this.authGuard.loadFromLocalStorage();
+    if (token != undefined) {
+      this.USER_DATA = await this.userService.getUserDetail();
+      this.getCompanyInfo();
+      if (this.USER_DATA?.result?.sideMenu == 'import') {
+        this.documentService.getPipoListNo('import', SELECTED_PIPO, this.UPLOAD_STATUS);
+        this.BenneLoad();
+      } else if (this.USER_DATA?.result?.sideMenu == 'export') {
+        this.documentService.getPipoListNo('export', SELECTED_PIPO, this.UPLOAD_STATUS);
+        this.getBuyerLoad()
+      }
+    }
   }
   BENEFICIARY_DETAILS_LIST: any = [];
   async loaddata() {
@@ -85,16 +102,11 @@ export class UploadServiceValidatorService implements OnInit {
       let token = this.authGuard.loadFromLocalStorage();
       this.LOGIN_TOEKN = token;
       if (token != undefined) {
-        this.getCompanyInfo();
         this.CURRENCY_LIST = this.documentService.getCurrencyList();
-        let USER_DATA: any = await this.userService.getUserDetail();
-
-        if (USER_DATA?.result?.sideMenu == 'import') {
+        if (this.USER_DATA?.result?.sideMenu == 'import') {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
-            this.documentService.getPipoListNo('export', []);
           }
-          this.BenneLoad();
           await this.documentService.getBoe(1).subscribe((res: any) => {
             this.SHIPPING_BUNDEL = [];
             this.origin = [];
@@ -107,13 +119,12 @@ export class UploadServiceValidatorService implements OnInit {
             });
             console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
           }, (err) => console.log(err));
+          this.CommonLoad([]);
           await reslove(true)
-        } else if (USER_DATA?.result?.sideMenu == 'export') {
+        } else if (this.USER_DATA?.result?.sideMenu == 'export') {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length == 0)) {
-            this.documentService.getPipoListNo('export', this.SELECTED_PIPO?.length != 0 ? this.SELECTED_PIPO : []);
           }
-          this.getBuyerLoad()
           this.documentService.getMaster(1).subscribe((res: any) => {
             console.log('Master Data File', res);
             this.SHIPPING_BILL_MASTER_DATA = res?.data;
@@ -147,6 +158,7 @@ export class UploadServiceValidatorService implements OnInit {
             });
             console.log(res, this.REMITTER_LIST, 'getInward_remittanceName')
           })
+          this.CommonLoad([]);
           await reslove(true)
         } else {
           reslove(true)
@@ -193,7 +205,7 @@ export class UploadServiceValidatorService implements OnInit {
     let split_text: any = text?.indexOf("\n") != -1 ? text?.split('\n') : [text];
     return split_text;
   }
-  async BenneLoad(){
+  async BenneLoad() {
     await this.userService.getBene(1).subscribe((res: any) => {
       this.BENEFICIARY_DETAILS = [];
       this.ConsigneeNameList = [];

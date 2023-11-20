@@ -52,8 +52,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.translate.setDefaultLang('en');
     this.createOnline$().subscribe(isOnline => this.isOnline = isOnline);
     this.setTimeoutNew();
-    // idleservice.callback(()=>this.logoutUser())
-    // idleservice.wake$.subscribe(s => console.log('im awake!'));
     router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         var splitUrl: any = event?.url?.split('/')
@@ -91,7 +89,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         let token = this.authGuard.loadFromLocalStorage();
         if (token != null) {
           this.validator.getPipoListNo('export', '');
-          this.doc.getPipoListNo('export', []);
+          this.doc.getPipoListNo('export', [],false);
           this.ngAfterViewInit();
         }
       }
