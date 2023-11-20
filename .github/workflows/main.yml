@@ -14,17 +14,22 @@ jobs:
       - uses: ksm2/archive-action@v1
         with:
           format: ${{ matrix.archive }}
-          name: my-bundle
+          name: ${{github.sha}}
           include: "**/*.(ts|js|css|html)"
       - name: DeployZip
         run: |
             ls
-            git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY_ADMIN}}
-            git config --global user.name ${{secrets.GIT_USERNAME_ADMIN_DEPLOY}}
-            git add package.json
-            [ -f package-lock.json ] && git add package-lock.json
-            git remote set-url origin https://${{ secrets.DEPLOY_TOKEN }}${{secrets.FRONT_END_REPO}}
-            git commit -m "added new"
+      - uses: actions/checkout@v2
+      - name: Upload ZIP to S3
+        uses: NotCoffee418/s3-zip-upload@v1.3
+        env:
+          AWS_SECRET_ID: ${{ secrets.AWS_SECRET_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          AWS_REGION: ap-south-1
+          SOURCE_MODE: ZIP
+          SOURCE_PATH: .
+          DEST_FILE: ${{github.sha}}.zip
   dev-deploy:
     if: github.ref == 'refs/heads/dev' && github.event.head_commit.message != 'Updating App version'
     name: dev-deploy
