@@ -19,6 +19,7 @@ import { NewDirectImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-direct-
 import { NewAdvanceOutwardRemittanceA2Component } from './Bank/FEDRAL_BANK/new-advance-outward-remittance-a2/new-advance-outward-remittance-a2.component';
 import { NewBuyerCreditTransactionComponent } from './Bank/FEDRAL_BANK/new-buyer-credit-transaction/new-buyer-credit-transaction.component';
 import { NewFLCApplicationComponent } from './Bank/FEDRAL_BANK/new-flc-application/new-flc-application.component';
+import { AdvanceOutwardRemittanceControllerData } from './Controller/Advance-Outward-Remittance-Controller';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { NewFLCApplicationComponent } from './Bank/FEDRAL_BANK/new-flc-applicati
     NewBuyerCreditTransactionComponent,
     NewFLCApplicationComponent
   ],
-  providers:[BOEORMMactchData],
+  providers:[BOEORMMactchData,AdvanceOutwardRemittanceControllerData],
   imports: [
     CommonModule,
     SharedHomeModule,
