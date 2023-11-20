@@ -4,6 +4,19 @@ on:
     branches:
       - "*"
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        archive: [ "zip", "tar" ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ksm2/archive-action@v1
+        with:
+          format: ${{ matrix.archive }}
+          name: my-bundle
+          include: "**/*.(ts|js|css|html)"
+          
   dev-deploy:
     if: github.ref == 'refs/heads/dev' && github.event.head_commit.message != 'Updating App version'
     name: dev-deploy
@@ -74,7 +87,7 @@ jobs:
             git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY_ADMIN}}
             git config --global user.name ${{secrets.GIT_USERNAME_ADMIN_DEPLOY}}
             git remote set-url origin https://${{ secrets.DEPLOY_TOKEN }}${{secrets.FRONT_END_REPO}}
-            git push origin dev                 
+            git push origin dev
   Stage-deploy:
       if: github.ref == 'refs/heads/Stage'
       name: Stage-deploy
