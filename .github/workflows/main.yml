@@ -76,19 +76,15 @@ jobs:
             git remote set-url origin https://${{ secrets.DEPLOY_TOKEN }}${{secrets.FRONT_END_REPO}}
             git push origin dev
   S3-Zip-Upload:
-      if: github.ref == 'refs/heads/dev' && github.event.head_commit.message != 'Updating App version'
-      name: S3-Zip-Upload
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          archive: [ "zip", "tar" ]
-      steps:
-        - uses: actions/checkout@v2
-          with:
-              persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-              fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
-              github_token: ${{ secrets.DEPLOY_TOKEN }}   
+    if: github.ref == 'refs/heads/dev' && github.event.head_commit.message != 'Updating App version'
+    name: S3-Zip-Upload
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        archive: [ "zip", "tar" ]
+    steps:
         - name: Craete New ZipFile
+        - uses: actions/checkout@v2
         - uses: ksm2/archive-action@v1
           with:
                 format: ${{ matrix.archive }}
