@@ -75,31 +75,7 @@ jobs:
             git config --global user.name ${{secrets.GIT_USERNAME_ADMIN_DEPLOY}}
             git remote set-url origin https://${{ secrets.DEPLOY_TOKEN }}${{secrets.FRONT_END_REPO}}
             git push origin dev
-  S3-Zip-Upload:
-    if: github.ref == 'refs/heads/dev' && github.event.head_commit.message != 'Updating App version'
-    name: S3-Zip-Upload
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        archive: [ "zip", "tar" ]
-    steps:
-        - name: Craete New ZipFile
-        - uses: actions/checkout@v2
-        - uses: ksm2/archive-action@v1
-          with:
-                format: ${{ matrix.archive }}
-                name: dev-${{github.event.repository.updated_at}}
-                include: "**/*.(ts|js|css|html)"
-        - name: Upload ZIP to S3
-        - uses: NotCoffee418/s3-zip-upload@v1.3
-          env:
-               AWS_SECRET_ID: ${{ secrets.AWS_SECRET_ID }}
-               AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-               BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-               AWS_REGION: ap-south-1
-               SOURCE_MODE: ZIP
-               SOURCE_PATH: .
-               DEST_FILE: dev-${{github.event.repository.updated_at}}.zip
+ 
   Stage-deploy:
       if: github.ref == 'refs/heads/Stage'
       name: Stage-deploy
