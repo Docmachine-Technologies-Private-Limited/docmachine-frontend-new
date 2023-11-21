@@ -61,45 +61,20 @@ export class DocumentService {
       this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'] = [];
       this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'] = [];
       this.PI_PO_NUMBER_LIST['PIPO_NO'] = data;
-      if (pipolist?.length != 0) {
-        for (let index = 0; index < pipolist?.length; index++) {
-          const element = pipolist[index];
-          var t: any = data.filter((item: any) => item?.pi_poNo.indexOf(element) != -1)
-          if (type == 'import') {
-            t.forEach(item => {
-              this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
-                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.benneName,
-                id: [item.pi_poNo, item?.benneName],
-                _id: item?._id
-              })
-            });
-          } else {
-            t.forEach(item => {
-              this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
-                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.buyerName,
-                id: [item.pi_poNo, item?.buyerName],
-                _id: item?._id
-              })
-            });
-          }
-        }
-      } else {
-        for (let index = 0; index < data.length; index++) {
-          if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
-            this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
-              pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
-              id: [data[index].pi_poNo, data[index]?.buyerName],
-              _id: data[index]?._id
-            })
-            this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
-              pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
-              id: [data[index].pi_poNo, data[index]?.benneName],
-              _id: data[index]?._id
-            })
-          }
+      for (let index = 0; index < data.length; index++) {
+        if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
+          this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
+            pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].buyerName,
+            id: [data[index].pi_poNo, data[index]?.buyerName],
+            _id: data[index]?._id
+          })
+          this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
+            pi_po_buyerName: 'PI-' + data[index]?.pi_poNo + '-' + data[index].benneName,
+            id: [data[index].pi_poNo, data[index]?.benneName],
+            _id: data[index]?._id
+          })
         }
       }
-
       console.log(this.PI_PO_NUMBER_LIST, type, 'getPipoListNo');
       return data;
     })

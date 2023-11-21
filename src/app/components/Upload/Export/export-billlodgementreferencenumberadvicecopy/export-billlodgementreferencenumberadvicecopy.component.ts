@@ -47,25 +47,11 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     public filteranytablepagination: filterAnyTablePagination,
     public userService: UserService) { }
 
-  TIMEOUT: any = ''
   async ngOnInit() {
-    clearTimeout(this.TIMEOUT);
-    var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
-    var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-    var Transaction_pipoid: any = this.route.snapshot.paramMap.get('pipo');
-    console.log(TransactionSbRef, Transaction_pipoid, Transaction_id)
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
-    if (temp_pipo?.length != 0) {
+    if (temp_pipo?.length != 0 && temp_pipo!=undefined) {
       this.btndisabled = false;
-      this.validator.SELECTED_PIPO = temp_pipo;
-      this.validator.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false;
       this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
-      this.validator.documentService.PI_PO_NUMBER_LIST = {
-        PI_PO_BUYER_NAME: [],
-        PI_PO_BENNE_NAME: [],
-        PIPO_TRANSACTION: [],
-        PIPO_NO: []
-      };
       this.validator.CommonLoadTransaction(temp_pipo);
     }
     console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")

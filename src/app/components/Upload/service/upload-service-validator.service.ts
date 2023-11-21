@@ -77,29 +77,22 @@ export class UploadServiceValidatorService implements OnInit {
     public documentService: DocumentService,
     public authGuard: AuthGuard,
     public userService: UserService) {
-    this.CommonLoad([]);
+      this.PIPO_LOAD();
   }
 
   ngOnInit(): void {
   }
 
-  async CommonLoad(SELECTED_PIPO: any) {
-    return new Promise(async (resolve, reject) => {
-      let token = this.authGuard.loadFromLocalStorage();
-      if (token != undefined) {
-        this.USER_DATA = await this.userService.getUserDetail();
-        this.getCompanyInfo();
-        if (this.USER_DATA?.result?.sideMenu == 'import') {
-          await this.documentService.getPipoListNo('import', SELECTED_PIPO, this.UPLOAD_STATUS);
-          this.BenneLoad();
-          resolve(true)
-        } else if (this.USER_DATA?.result?.sideMenu == 'export') {
-          await this.documentService.getPipoListNo('export', SELECTED_PIPO, this.UPLOAD_STATUS);
-          this.getBuyerLoad()
-          resolve(true)
-        }
+  async PIPO_LOAD() {
+    let token = this.authGuard.loadFromLocalStorage();
+    if (token != undefined) {
+      this.USER_DATA = await this.userService.getUserDetail();
+      if (this.USER_DATA?.result?.sideMenu == 'import') {
+        await this.documentService.getPipoListNo('import', [], this.UPLOAD_STATUS);
+      } else if (this.USER_DATA?.result?.sideMenu == 'export') {
+        await this.documentService.getPipoListNo('export', [], this.UPLOAD_STATUS);
       }
-    })
+    }
   }
 
   async CommonLoadTransaction(SELECTED_PIPO: any) {
@@ -130,11 +123,10 @@ export class UploadServiceValidatorService implements OnInit {
       let token = this.authGuard.loadFromLocalStorage();
       this.LOGIN_TOEKN = token;
       if (token != undefined) {
+        this.USER_DATA = await this.userService.getUserDetail();
+        this.getCompanyInfo();
         this.CURRENCY_LIST = this.documentService.getCurrencyList();
         if (this.USER_DATA?.result?.sideMenu == 'import') {
-          if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
-            (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
-          }
           await this.documentService.getBoe(1).subscribe((res: any) => {
             this.SHIPPING_BUNDEL = [];
             this.origin = [];
@@ -147,13 +139,9 @@ export class UploadServiceValidatorService implements OnInit {
             });
             console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
           }, (err) => console.log(err));
-          this.CommonLoad([]);
+          this.BenneLoad();
           await reslove(true)
         } else if (this.USER_DATA?.result?.sideMenu == 'export') {
-          if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length ||
-            (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length == 0)) {
-          }
-          
           this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
             this.INWARD_REMITTANCE_NAME_LIST = res?.data;
             this.NEW_INWARD_REMITTANCE_NAME_LIST = [];
@@ -171,11 +159,12 @@ export class UploadServiceValidatorService implements OnInit {
             });
             console.log(res, this.REMITTER_LIST, 'getInward_remittanceName')
           })
-          this.CommonLoad([]);
+          this.getBuyerLoad()
           await reslove(true)
         } else {
           reslove(true)
         }
+
         this.A2_JSON_DATA = A2_JOSN;
         this.A2_JSON_DATA.forEach(element => {
           for (const key in element) {
