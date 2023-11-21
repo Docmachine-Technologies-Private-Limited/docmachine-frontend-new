@@ -84,50 +84,22 @@ export class UploadServiceValidatorService implements OnInit {
   }
 
   async CommonLoad(SELECTED_PIPO: any) {
-  return new Promise(async (resolve,reject)=>{
-    let token = this.authGuard.loadFromLocalStorage();
-    if (token != undefined) {
-      this.USER_DATA = await this.userService.getUserDetail();
-      this.getCompanyInfo();
-      if (this.USER_DATA?.result?.sideMenu == 'import') {
-        await this.documentService.getPipoListNo('import', SELECTED_PIPO, this.UPLOAD_STATUS);
-        this.BenneLoad();
-        await this.documentService.getBoe(1).subscribe((res: any) => {
-          this.SHIPPING_BUNDEL = [];
-          this.origin = [];
-          console.log('Master Data File', res);
-          res.data.forEach((element, i) => {
-            element?.pipo.forEach((ele, j) => {
-              this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
-            });
-            this.origin[i] = { value: element.origin, id: element?._id };
-          });
-          console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
-        }, (err) => console.log(err));
-        resolve(true)
-      } else if (this.USER_DATA?.result?.sideMenu == 'export') {
-        await this.documentService.getPipoListNo('export', SELECTED_PIPO, this.UPLOAD_STATUS);
-        this.getBuyerLoad()
-        this.documentService.getMaster(1).subscribe((res: any) => {
-          console.log('Master Data File', res);
-          this.SHIPPING_BILL_MASTER_DATA = res?.data;
-          this.origin = [];
-          this.SHIPPING_BUNDEL = [];
-          res.data.forEach((element, i) => {
-            element?.pipo?.forEach((ele, j) => {
-              if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
-                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
-              }
-            });
-            this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
-          });
-          console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
-        }, (err) => console.log(err));
-        resolve(true)
+    return new Promise(async (resolve, reject) => {
+      let token = this.authGuard.loadFromLocalStorage();
+      if (token != undefined) {
+        this.USER_DATA = await this.userService.getUserDetail();
+        this.getCompanyInfo();
+        if (this.USER_DATA?.result?.sideMenu == 'import') {
+          await this.documentService.getPipoListNo('import', SELECTED_PIPO, this.UPLOAD_STATUS);
+          this.BenneLoad();
+          resolve(true)
+        } else if (this.USER_DATA?.result?.sideMenu == 'export') {
+          await this.documentService.getPipoListNo('export', SELECTED_PIPO, this.UPLOAD_STATUS);
+          this.getBuyerLoad()
+          resolve(true)
+        }
       }
-    }
-  })
-   
+    })
   }
 
   async CommonLoadTransaction(SELECTED_PIPO: any) {
@@ -163,14 +135,25 @@ export class UploadServiceValidatorService implements OnInit {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
           }
-
+          await this.documentService.getBoe(1).subscribe((res: any) => {
+            this.SHIPPING_BUNDEL = [];
+            this.origin = [];
+            console.log('Master Data File', res);
+            res.data.forEach((element, i) => {
+              element?.pipo.forEach((ele, j) => {
+                this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+              });
+              this.origin[i] = { value: element.origin, id: element?._id };
+            });
+            console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
+          }, (err) => console.log(err));
           this.CommonLoad([]);
           await reslove(true)
         } else if (this.USER_DATA?.result?.sideMenu == 'export') {
           if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length ||
             (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length == 0)) {
           }
-
+          
           this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
             this.INWARD_REMITTANCE_NAME_LIST = res?.data;
             this.NEW_INWARD_REMITTANCE_NAME_LIST = [];
