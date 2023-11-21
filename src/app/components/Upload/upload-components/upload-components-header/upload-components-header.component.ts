@@ -114,12 +114,12 @@ export class UploadHeaderComponent implements OnInit {
     if (event != undefined) {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
-      console.log('Array List', this.pipoArr);
-      this.UploadHeaderEvent.emit(event)
+      console.log('clickPipo', this.pipoArr);
+      this.validator.CommonLoad([]).then((res)=>this.UploadHeaderEvent.emit(event))
     } else {
       this.btndisabled = true;
     }
-    console.log(event, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(event,'sdfsdfdsfdfdsfdsfdsfdsf')
   }
 
   routechanged(text: any) {
