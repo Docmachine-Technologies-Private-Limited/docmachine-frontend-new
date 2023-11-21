@@ -64,7 +64,7 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
         PIPO_TRANSACTION: [],
         PIPO_NO: []
       };
-      this.validator.CommonLoad(temp_pipo);
+      this.validator.CommonLoadTransaction(temp_pipo);
     }
     console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
   }

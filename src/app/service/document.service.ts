@@ -46,8 +46,8 @@ export class DocumentService {
   item2: any;
   item1: any;
 
-  getPipoListNo = (type, pipolist: any,BoolTransaction) => {
-  console.log(BoolTransaction,"BoolTransaction")
+  getPipoListNo = (type, pipolist: any, BoolTransaction) => {
+    console.log(BoolTransaction, "BoolTransaction")
     this.PI_PO_NUMBER_LIST = {
       PI_PO_BUYER_NAME: [],
       PI_PO_BENNE_NAME: [],
@@ -102,6 +102,39 @@ export class DocumentService {
 
       console.log(this.PI_PO_NUMBER_LIST, type, 'getPipoListNo');
       return data;
+    })
+  }
+
+  getPipoTransactionData(type, pipolist) {
+    return new Promise(async (resolve, reject) => {
+      await this.getPipoNoList().subscribe((res: any) => {
+        var data: any = res?.data;
+        let PI_PO_NUMBER_LIST: any = [];
+        for (let index = 0; index < pipolist?.length; index++) {
+          const element = pipolist[index];
+          var t: any = data?.filter((item: any) => item?.pi_poNo.indexOf(element) != -1)
+          if (type == 'import') {
+            t.forEach(item => {
+              PI_PO_NUMBER_LIST.push({
+                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.benneName,
+                id: [item.pi_poNo, item?.benneName],
+                _id: item?._id
+              })
+            });
+          } else {
+            t.forEach(item => {
+              PI_PO_NUMBER_LIST.push({
+                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.buyerName,
+                id: [item.pi_poNo, item?.buyerName],
+                _id: item?._id
+              })
+            });
+          }
+          if ((index + 1) == pipolist?.length) {
+            resolve(PI_PO_NUMBER_LIST)
+          }
+        }
+      })
     })
   }
 

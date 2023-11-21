@@ -71,6 +71,7 @@ export class UploadServiceValidatorService implements OnInit {
   SELECTED_PURPOSE_CODE_DUMP_SLEECTION: any = [];
   UPLOAD_STATUS: boolean = false;
   USER_DATA: any = [];
+  PIPO_TRANSCTION_LIST: any = [];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -82,20 +83,43 @@ export class UploadServiceValidatorService implements OnInit {
   ngOnInit(): void {
   }
 
-  async CommonLoad(SELECTED_PIPO:any) {
+  async CommonLoad(SELECTED_PIPO: any) {
     let token = this.authGuard.loadFromLocalStorage();
     if (token != undefined) {
       this.USER_DATA = await this.userService.getUserDetail();
       this.getCompanyInfo();
       if (this.USER_DATA?.result?.sideMenu == 'import') {
-        this.documentService.getPipoListNo('import', SELECTED_PIPO, this.UPLOAD_STATUS);
+        await this.documentService.getPipoListNo('import', SELECTED_PIPO, this.UPLOAD_STATUS);
         this.BenneLoad();
       } else if (this.USER_DATA?.result?.sideMenu == 'export') {
-        this.documentService.getPipoListNo('export', SELECTED_PIPO, this.UPLOAD_STATUS);
+        await this.documentService.getPipoListNo('export', SELECTED_PIPO, this.UPLOAD_STATUS);
         this.getBuyerLoad()
       }
     }
   }
+  
+  async CommonLoadTransaction(SELECTED_PIPO: any) {
+    let token = this.authGuard.loadFromLocalStorage();
+    if (token != undefined) {
+      this.USER_DATA = await this.userService.getUserDetail();
+      if (this.USER_DATA?.result?.sideMenu == 'import') {
+        if (SELECTED_PIPO?.length != 0) {
+          await this.documentService.getPipoTransactionData('import',SELECTED_PIPO).then((Res:any)=>{
+            this.PIPO_TRANSCTION_LIST = Res;
+            console.log(Res,"PIPO_TRANSCTION_LIST")
+          });
+        }
+      } else if (this.USER_DATA?.result?.sideMenu == 'export') {
+        if (SELECTED_PIPO?.length != 0) {
+          await this.documentService.getPipoTransactionData('export',SELECTED_PIPO).then((Res:any)=>{
+            this.PIPO_TRANSCTION_LIST = Res;
+            console.log(Res,"PIPO_TRANSCTION_LIST")
+          });
+        }
+      }
+    }
+  }
+  
   BENEFICIARY_DETAILS_LIST: any = [];
   async loaddata() {
     return new Promise(async (reslove, reject) => {

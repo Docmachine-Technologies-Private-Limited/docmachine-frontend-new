@@ -56,7 +56,7 @@ export class ImportBilllodgementreferencenumberadvicecopyComponent implements On
         PIPO_TRANSACTION: [],
         PIPO_NO: []
       };
-      this.validator.CommonLoad(temp_pipo);
+      this.validator.CommonLoadTransaction(temp_pipo);;
       this.validator.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false;
       this.UPLOAD_STATUS=this.route.snapshot.paramMap.get('upload')=='true'?true:false  
     }

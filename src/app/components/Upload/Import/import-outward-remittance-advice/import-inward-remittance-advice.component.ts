@@ -65,7 +65,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           PIPO_TRANSACTION: [],
           PIPO_NO: []
         };
-        this.validator.CommonLoad(temp_pipo);
+        this.validator.CommonLoadTransaction(temp_pipo);;
         this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
       }
       console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
