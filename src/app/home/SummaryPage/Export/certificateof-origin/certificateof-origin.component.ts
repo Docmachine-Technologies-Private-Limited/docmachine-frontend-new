@@ -37,18 +37,25 @@ export class ExportCertificateofOriginComponent implements OnInit {
     DATE: []
   };
   FILTER_VALUE_LIST_NEW: any = {
-    header: [],
-    items: [],
-    Expansion_header: [],
-    Expansion_Items: [],
-    Objectkeys: [],
-    ExpansionKeys: [],
-    TableHeaderClass: [],
-    eventId: 0,
-    Expansion_header2: [],
-    Expansion_Items2: [],
-    ExpansionKeys2: [],
-    PageSize: 0
+    header: [
+      "Pipo No.",
+      "DATE",
+      "COI Ref No.",
+      "CI No.",
+      "Action"],
+  items: [],
+  Expansion_header: [],
+  Expansion_Items: [],
+  Objectkeys: [],
+  ExpansionKeys: [],
+  TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+  ],
+  eventId: '',
+  PageSize: 0
   }
   EDIT_FORM_DATA: any = {
     commercialDate: '',

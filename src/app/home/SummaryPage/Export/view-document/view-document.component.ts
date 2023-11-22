@@ -4,7 +4,6 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as xlsx from 'xlsx';
-import * as data1 from '../../../../currency.json';
 import JSZip from 'jszip/dist/jszip';
 import * as FileSaver from 'file-saver';
 import { PDFDocument } from 'pdf-lib';
@@ -23,7 +22,6 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
-import moment from 'moment';
 import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
@@ -89,15 +87,47 @@ export class ViewDocumentComponent implements OnInit {
     NO: []
   };
   FILTER_VALUE_LIST_NEW: any = {
-    header: [],
+    header: [
+      "Pipo No.",
+      "SB DATE",
+      "SB NUMBER",
+      "BUYER NAME",
+      "CURRENCY",
+      "SB AMOUNT",
+      "AVAILABLE BALANCE",
+      "Action"],
     items: [],
-    Expansion_header: [],
+    Expansion_header: [
+      "AD CODE",
+      "AD BILL NO",
+      "Consignee NAME",
+      "ORIGIN",
+      "DESTINATION",
+      "FIRX NUMBER",
+      "FIRX DATE",
+      "FIRX CURRENCY",
+      "FIRX AMOUNT",
+      "FIRX COMMISION",
+      "FIRX RECIEVED AMOUNT",
+    ],
     Expansion_Items: [],
     Objectkeys: [],
     ExpansionKeys: [],
-    TableHeaderClass: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1"
+    ],
     eventId: 2,
-    Expansion_header2: [],
+    Expansion_header2: [
+      "Invoice No.",
+      "Amount"
+    ],
     Expansion_Items2: [],
     ExpansionKeys2: [],
     PageSize: 0

@@ -26,18 +26,30 @@ export class PipoExportComponent implements OnInit {
   PENDING_DATA: any = [];
   HOVER_DATA: any = '';
   FILTER_VALUE_LIST_NEW: any = {
-    header: [],
-    items: [],
-    Expansion_header: [],
-    Expansion_Items: [],
-    Objectkeys: [],
-    ExpansionKeys: [],
-    TableHeaderClass: [],
-    eventId: 2,
-    Expansion_header2: [],
-    Expansion_Items2: [],
-    ExpansionKeys2: [],
-    PageSize: 0
+    header: [
+      "Invoice No.",
+      "Invoice Date",
+      "Consignee Name",
+      "BRANCH",
+      "Amount",
+      "Payment Term",
+      "Action"],
+  items: [],
+  Expansion_header: [],
+  Expansion_Items: [],
+  Objectkeys: [],
+  ExpansionKeys: [],
+  TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
+  ],
+  eventId: '0',
+  PageSize: 0
   };
   ALL_FILTER_DATA: any = {
     Buyer_Name: [],

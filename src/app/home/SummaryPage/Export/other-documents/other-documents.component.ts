@@ -37,17 +37,27 @@ export class OtherDocumentsComponent implements OnInit {
     DATE: []
   };
   FILTER_VALUE_LIST_NEW: any = {
-    header: [],
+    header: [
+      "Pipo No.",
+      "DATE",
+      "SB No.",
+      "Packing List No.",
+      "Buyer Name",
+      "Action"],
     items: [],
     Expansion_header: [],
     Expansion_Items: [],
     Objectkeys: [],
     ExpansionKeys: [],
-    TableHeaderClass: [],
-    eventId: 0,
-    Expansion_header2: [],
-    Expansion_Items2: [],
-    ExpansionKeys2: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: '',
     PageSize: 0
   }
   EDIT_FORM_DATA: any = {
@@ -70,12 +80,12 @@ export class OtherDocumentsComponent implements OnInit {
     public filteranytablepagination: TableServiceController,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,) {}
-    
+    public dialog: MatDialog,) { }
+
   async ngOnInit() {
     this.USER_DATA = await this.userService.getUserDetail();
     this.FILTER_FORM_VALUE = [];
-    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'packinglists',this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'packinglists', this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;
       for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
@@ -133,7 +143,7 @@ export class OtherDocumentsComponent implements OnInit {
       }
     })
   }
-  
+
   async onSubmit(value: any) {
     let form_value: any = {
       buyerName: value?.value?.buyerName,
@@ -179,15 +189,15 @@ export class OtherDocumentsComponent implements OnInit {
     };
     if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
       this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'packinglists',this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'packinglists', this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
         this.FILTER_VALUE_LIST_NEW = res;
       });
     } else {
       this.toastr.error("Please fill field...")
     }
   }
-  
-  reset(){
+
+  reset() {
     this.ngOnInit()
   }
 
@@ -198,7 +208,7 @@ export class OtherDocumentsComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          packingListDate:  moment(element['packingListDate']).format("DD-MM-YYYY"),
+          packingListDate: moment(element['packingListDate']).format("DD-MM-YYYY"),
           sbNo: element['sbNo'],
           packingListNumber: element['packingListNumber'],
           buyerName: element['buyerName'],
@@ -316,10 +326,10 @@ export class OtherDocumentsComponent implements OnInit {
   toEdit(data: any) {
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/PackingListInvoices`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/PackingListInvoices`], navigationExtras);
     this.toastr.warning('Packing List Row Is In Edit Mode');
   }
 

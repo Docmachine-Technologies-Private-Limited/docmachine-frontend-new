@@ -39,17 +39,31 @@ export class CommercialComponent implements OnInit {
     DATE: []
   };
   FILTER_VALUE_LIST_NEW: any = {
-    header: [],
+    header: [
+      "Pipo No.",
+      "DATE",
+      "SB No.",
+      "Payments Terms",
+      "Commercial Invoice No.",
+      "Commercial Amount",
+      "Buyer Name",
+      "Action"],
     items: [],
     Expansion_header: [],
     Expansion_Items: [],
     Objectkeys: [],
     ExpansionKeys: [],
-    TableHeaderClass: [],
-    eventId: 2,
-    Expansion_header2: [],
-    Expansion_Items2: [],
-    ExpansionKeys2: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-2",
+      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: '0',
     PageSize: 0
   };
   EDIT_FORM_DATA: any = {
@@ -60,7 +74,7 @@ export class CommercialComponent implements OnInit {
   }
   FILTER_FORM: any = '';
   FILTER_FORM_VALUE = [];
-  
+
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -77,7 +91,7 @@ export class CommercialComponent implements OnInit {
   async ngOnInit() {
     this.USER_DATA = await this.userService.getUserDetail();
     this.FILTER_FORM_VALUE = [];
-    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'commercials',this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'commercials', this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;
       for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
@@ -183,7 +197,7 @@ export class CommercialComponent implements OnInit {
     };
     if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
       this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'commercials',this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'commercials', this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
         this.FILTER_VALUE_LIST_NEW = res;
       });
     } else {
