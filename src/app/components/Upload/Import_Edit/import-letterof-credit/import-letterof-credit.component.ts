@@ -215,7 +215,7 @@ export class EditImportLetterofCreditComponent implements OnInit {
               e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
               this.documentService.updateLetterLC(e.value, this.data?._id).subscribe((res: any) => {
                 this.toastr.success(`Letter Of Credit Document Updated Successfully`);
-                this.router.navigate(['home/Summary/Import/letterofcredit-lc']);
+                this.router.navigate(['home/Summary/Import/Letter-Of-Credit-Lc']);
               }, (err) => console.log('Error adding pipo'));
             }else{
               this.toastr.error(`Please check this Letter Of Credit Number : ${e.value.letterOfCreditNumber} already exit...`);
@@ -226,7 +226,7 @@ export class EditImportLetterofCreditComponent implements OnInit {
     } else {
       this.documentService.updateLetterLC(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Letter Of Credit Document Updated Successfully`);
-        this.router.navigate(['home/Summary/Import/letterofcredit-lc']);
+        this.router.navigate(['home/Summary/Import/Letter-Of-Credit-Lc']);
       }, (err) => console.log('Error adding pipo'));
     }
     
