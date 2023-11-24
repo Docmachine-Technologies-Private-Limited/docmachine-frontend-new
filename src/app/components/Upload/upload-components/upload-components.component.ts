@@ -534,4 +534,35 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.setValue(value, name)
     this.YesNoCheckBoxEvent.emit(value);
   }
+
+  AddAdditionalDocuments(form, name, index, fromitems) {
+    console.log(form, name, index, fromitems, "AddAdditionalDocuments")
+    if (fromitems?.items != undefined && fromitems?.items?.length != 0) {
+      fromitems?.items.push(fromitems?.items[fromitems?.items?.length - 1] + 1)
+      form?.value[name]?.push()
+    }
+  }
+
+  removeAdditionalDocuments(form, name, index, fromitems) {
+    console.log(form, name, index, fromitems, "removeAdditionalDocuments")
+    if (fromitems?.items != undefined && fromitems?.items?.length != 0) {
+      fromitems?.items?.splice(index, 1);
+      form?.value[name]?.splice(index, 1);
+    }
+  }
+
+  PushValueAdditionalDocuments(args, form, name, index, fromitems) {
+    console.log(args, form, name, index, fromitems, "PushValueeAdditionalDocuments")
+    if (fromitems?.items != undefined && fromitems?.items?.length != 0) {
+      form.value[name][index] = args[1].publicUrl
+    }
+  }
+  AdditionalDocumentsUrl: any = ''
+  ViewAdditionalDocuments(doc: any) {
+    this.AdditionalDocumentsUrl=''
+    setTimeout(() => {
+      this.AdditionalDocumentsUrl = doc;
+    }, 200);
+  }
+
 }

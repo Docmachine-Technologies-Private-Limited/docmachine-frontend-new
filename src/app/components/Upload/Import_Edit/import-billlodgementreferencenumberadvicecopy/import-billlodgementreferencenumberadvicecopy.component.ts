@@ -7,6 +7,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-app-import-billlodgementreferencenumberadvicecopy',
@@ -41,6 +43,8 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -51,6 +55,16 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
     });
   }
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -58,7 +72,7 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
         blcopyrefNumber: {
           type: "text",
           value: args?.blcopyrefNumber,
-          label: "BlCopyRef Number*",
+          label: "BlCopyRef Number",
           rules: {
             required: true,
           }
@@ -66,27 +80,97 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
         amount: {
           type: "text",
           value: args?.amount,
-          label: "BlCopyRef Amount*",
+          label: "BlCopyRef Amount",
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'importbilllodgementreferencenumberadvicecopy');
-      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        blcopyrefNumber: {
+          type: "text",
+          value: "",
+          label: "BlCopyRef Number",
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "text",
+          value: "",
+          label: "BlCopyRef Amount",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'importbilllodgementreferencenumberadvicecopy');
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
     console.log(e.value, 'onSubmitblCopy');
-    this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
-      console.log(res, 'addBlcopyref');
-      this.toastr.success(`Blcopyref Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
-    },
-      (err) => console.log('Error adding pipo')
-    );
+    e.value.SbRef = [e?.value?.sbNo];
+    if (this.data?.blcopyrefNumber != e.value.blcopyrefNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Blcopyref`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            blcopyrefNumber: e.value.blcopyrefNumber
+          }, 'blcopyref').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
+                console.log(res, 'addBlcopyref');
+                this.toastr.success(`Blcopyref Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
+              },(err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this blcopyref Number : ${e.value.blcopyrefNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
+        console.log(res, 'addBlcopyref');
+        this.toastr.success(`Blcopyref Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Import/Bill-Lodgement-Referance-AdviceCopy']);
+      },(err) => console.log('Error adding pipo'));
+    }
   }
   
   clickPipo(event: any) {

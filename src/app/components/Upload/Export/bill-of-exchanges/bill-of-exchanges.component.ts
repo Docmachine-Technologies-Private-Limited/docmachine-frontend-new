@@ -7,8 +7,8 @@ import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'export-bill-of-exchanges',
@@ -32,7 +32,6 @@ export class BillOfExchangesComponent implements OnInit {
   };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup: FormGroup;
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
@@ -50,6 +49,7 @@ export class BillOfExchangesComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -101,6 +101,17 @@ export class BillOfExchangesComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportBillOfExchange');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -151,17 +162,32 @@ export class BillOfExchangesComponent implements OnInit {
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.BUYER_DETAILS = this.validator.BUYER_DETAILS_MASTER.filter((item: any) => item?.buyerName?.includes(event?.id[1]))[0]
-      this.pipoDataService.getShippingNo(event?._id, 'export');
       this.validator.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
-        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
-        }
-      }
+      this.LoadShippingBill(this.pipoArr);
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+  
+  LoadShippingBill(pipoArr: any) {
+    this.filteranytablepagination.PaginationfilterAnyTable({
+      pipo: pipoArr
+    }, { limit: 20 }, 'masterrecord').subscribe((res: any) => {
+      console.log(res, "LoadShippingBill")
+      this.validator.SHIPPING_BILL_MASTER_DATA = res?.data;
+      this.validator.origin = [];
+      this.validator.SHIPPING_BUNDEL = [];
+      this.validator.SHIPPING_BILL_LIST = [];
+      res?.data?.forEach((element, i) => {
+        if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
+          this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+          this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+        }
+        this.validator.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
+      });
+      console.log('Master Country', this.validator.SHIPPING_BUNDEL, this.validator.origin);
+    })
   }
   
   onChangeShippingBill(data: any) {

@@ -7,6 +7,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-export-airway-bl-copy',
@@ -41,6 +43,8 @@ export class EditAirwayBlCopyComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -50,17 +54,28 @@ export class EditAirwayBlCopyComponent implements OnInit {
       console.log(this.data, "EditAirwayBlCopyComponent")
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
+    this.LoadShippingBill([this.data?.pipo[0]?._id]);
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.blCopyDoc);
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.sbno === args?.sbNo)[0];
       this.validator.buildForm({
         sbNo: {
-          type: "text",
-          value: args?.sbNo,
+          type: "ShippingBill",
+          value: selectedShippingBill?.SB_ID,
           label: "Select Shipping Bill",
-          disabled: true,
           rules: {
             required: true,
           }
@@ -81,22 +96,104 @@ export class EditAirwayBlCopyComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'AirwayBlCopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    this.validator.SHIPPING_BILL_LIST = [];
+    this.LoadShippingBill([this.data?.pipo[0]?._id]);
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        sbNo: {
+          type: "ShippingBill",
+          value: "",
+          label: "Select Shipping Bill",
+          rules: {
+            required: true,
+          }
+        },
+        date: {
+          type: "date",
+          value: "",
+          label: "Date",
+          rules: {
+            required: true,
+          }
+        },
+        airwayBlCopyNumber: {
+          type: "text",
+          value: "",
+          label: "Airway / BlCopy Number*",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'AirwayBlCopy');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'export';
-    console.log(e.value, 'onSubmitblCopy');
-    this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Export/airway-bl-copy']);
-    },
-      (err) => console.log('Error adding pipo')
-    );
+    let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
+    e.value.sbNo = selectedShippingBill?.sbno;
+    e.value.sbRef = [selectedShippingBill?._id];
+    if (this.data?.airwayBlCopyNumber != e.value.airwayBlCopyNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your airway BlCopy Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            airwayBlCopyNumber: e.value.airwayBlCopyNumber
+          }, 'airwayblcopies').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.blCopyDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Export/airway-bl-copy']);
+              }, (err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this airway-bl-copy no. : ${e.value.airwayBlCopyNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Export/airway-bl-copy']);
+      }, (err) => console.log('Error adding pipo'));
+    }
+
   }
 
   clickPipo(event: any) {
@@ -117,5 +214,25 @@ export class EditAirwayBlCopyComponent implements OnInit {
       this.btndisabled = true;
     }
     console.log(event, this.validator.SHIPPING_BUNDEL, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+
+  LoadShippingBill(pipoArr: any) {
+    this.filteranytablepagination.PaginationfilterAnyTable({
+      pipo: pipoArr
+    }, { limit: 20 }, 'masterrecord').subscribe((res: any) => {
+      console.log(res, "LoadShippingBill")
+      this.validator.SHIPPING_BILL_MASTER_DATA = res?.data;
+      this.validator.origin = [];
+      this.validator.SHIPPING_BUNDEL = [];
+      this.validator.SHIPPING_BILL_LIST = [];
+      res?.data?.forEach((element, i) => {
+        if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
+          this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+          this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+        }
+        this.validator.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
+      });
+      console.log('Master Country', this.validator.SHIPPING_BUNDEL, this.validator.origin);
+    })
   }
 }

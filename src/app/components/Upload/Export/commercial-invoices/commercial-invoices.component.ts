@@ -61,7 +61,6 @@ export class CommercialInvoicesComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-
   }
 
   response(args: any) {
@@ -69,7 +68,6 @@ export class CommercialInvoicesComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
-
       this.validator.buildForm({
         commercialNumber: {
           type: "text",
@@ -108,6 +106,17 @@ export class CommercialInvoicesComponent implements OnInit {
             required: true,
           },
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportCommercialInvoices');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);

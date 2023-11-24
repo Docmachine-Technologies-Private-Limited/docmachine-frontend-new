@@ -87,7 +87,18 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'exportbilllodgementreferencenumberadvicecopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

@@ -564,6 +564,7 @@ export class UploadServiceValidatorService implements OnInit {
         hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
 
       buyer: rule?.required == true ? [Validators.required] : [],
+      ReUpload: rule?.required == true ? [Validators.required] : [],
       button: rule?.required == true ? [Validators.required] : [],
       checkbox: rule?.required == true ? [Validators.required] : [],
       PURPOSE_CODE: rule?.required == true ? [Validators.required] : [],

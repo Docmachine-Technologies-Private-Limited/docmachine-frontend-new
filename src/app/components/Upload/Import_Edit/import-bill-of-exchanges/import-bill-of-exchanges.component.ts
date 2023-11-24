@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-import-bill-of-exchanges',
@@ -51,6 +53,8 @@ export class EditImportBillOfExchangesComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public route: ActivatedRoute,
     public userService: UserService) { }
 
@@ -63,6 +67,16 @@ export class EditImportBillOfExchangesComponent implements OnInit {
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -74,20 +88,80 @@ export class EditImportBillOfExchangesComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       },'ImportBillOfExchange');
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        billExchangeNumber: {
+          type: "text",
+          value: args?.billExchangeNumber,
+          label: "Bill Of Exchange Number*",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      },'ImportBillOfExchange');
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    this.documentService.updateBillExchange(e.value,this.data?._id).subscribe((res: any) => {
+    if (this.data?.billExchangeNumber != e.value.billExchangeNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your bill Exchange Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            billExchangeNumber: e.value.billExchangeNumber
+          }, 'billofexchanges').subscribe((resp: any) => {
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateBillExchange(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Bill Of Exchange Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
+              }, (err) => console.log('Error adding pipo'));
+            } else {
+              this.toastr.error(`Please check this BillExchange no. : ${e.value.billExchangeNumber} already exit...`);
+            }
+          });
+        }
+      })
+    } else {
+      this.documentService.updateBillExchange(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Bill Of Exchange Document Updated Successfully`);
         this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
-      },(err) => console.log('Error adding pipo')
-    );
+      }, (err) => console.log('Error adding pipo'));
+    }
   }
 
   clickPipo(event: any) {

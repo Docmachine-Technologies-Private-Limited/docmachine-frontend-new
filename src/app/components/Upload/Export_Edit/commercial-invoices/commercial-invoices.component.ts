@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-export-commercial-invoices',
@@ -51,6 +52,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -60,8 +62,17 @@ export class EditCommercialInvoicesComponent implements OnInit {
       console.log(this.data, "EditCommercialInvoicesComponent")
     });
   }
-
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
@@ -70,7 +81,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
           type: "text",
           value: args?.sbNo,
           label: "Select Shipping Bill",
-          disabled:true,
+          disabled: true,
           rules: {
             required: true,
           }
@@ -99,6 +110,78 @@ export class EditCommercialInvoicesComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'ExportCommercialInvoices');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+      this.pipourl1 = args[1].data;
+      this.validator.buildForm({
+        commercialNumber: {
+          type: "text",
+          value: "",
+          label: "Commercial Invoice Number",
+          name: 'commercialNumber',
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.currency,
+          label: "Currency*",
+          name: 'currency',
+          disabled: true,
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "text",
+          value: "",
+          label: "Commercial Invoice Amount",
+          name: 'amount',
+          rules: {
+            required: true,
+          }
+        },
+        type: {
+          type: "PaymentTermType",
+          value: "",
+          label: "Type",
+          name: 'type',
+          rules: {
+            required: true,
+          },
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportCommercialInvoices');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -107,14 +190,30 @@ export class EditCommercialInvoicesComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'export';
-    e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
-    this.documentService.updateCommercial(e.value,this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Commercial Invoice Updated Successfully`);
-      this.router.navigate(['home/Summary/Export/commercial']);         
-    },
-      (err) => console.log('Error adding pipo')
-    );
+    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
+    if (this.data?.commercialNumber != e.value.commercialNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            commercialNumber: e.value.commercialNumber
+          }, 'commercials').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateCommercial(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Commercial Invoice Updated Successfully`);
+                this.router.navigate(['home/Summary/Export/commercial']);
+              }, (err) => console.log('Error adding pipo'));
+            }
+          })
+        } 
+      })
+    }else {
+      this.documentService.updateCommercial(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Commercial Invoice Updated Successfully`);
+        this.router.navigate(['home/Summary/Export/commercial']);
+      }, (err) => console.log('Error adding pipo'));
+    }
   }
 
   clickPipo(event: any) {

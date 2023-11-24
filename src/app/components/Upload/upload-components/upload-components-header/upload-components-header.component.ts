@@ -40,6 +40,7 @@ export class UploadHeaderComponent implements OnInit {
   @Input('PIPO_VISIBLE') PIPO_VISIBLE: boolean = false;
   @Input('UPLOAD_BUTTON') UPLOAD_BUTTON: boolean = true;
   @Input('HIDE_OPTION') HIDE_OPTION: boolean = true;
+  @Input('RE_UPLOAD') RE_UPLOAD: boolean = false;
   @Output('LoadCompleted') LoadCompleted: any = new EventEmitter();
   EXPORT_FORM: any = {
     buyer: {

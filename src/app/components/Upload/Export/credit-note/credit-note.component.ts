@@ -95,7 +95,18 @@ export class CreditNoteComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'CreditNoteExport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -135,7 +146,7 @@ export class CreditNoteComponent implements OnInit {
         },
           (err) => console.log('Error adding pipo'));
         } else {
-          this.toastr.error(`Please check this sb no. : ${e.value.creditNoteNumber} already exit...`);
+          this.toastr.error(`Please check this creditNoteNumber. : ${e.value.creditNoteNumber} already exit...`);
         }
     });
   }

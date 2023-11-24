@@ -285,6 +285,17 @@ export class EditImportPIPOSComponent implements OnInit {
           },
           formArray: [paymentTermdata]
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'PIPO_IMPORT');
     }, 200);
 

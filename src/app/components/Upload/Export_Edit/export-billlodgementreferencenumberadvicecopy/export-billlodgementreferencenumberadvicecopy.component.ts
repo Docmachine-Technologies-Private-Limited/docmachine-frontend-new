@@ -7,6 +7,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-app-export-billlodgementreferencenumberadvicecopy',
@@ -43,6 +45,8 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public route: ActivatedRoute,
     public userService: UserService) { }
 
@@ -53,17 +57,28 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
       console.log(this.data, "EditInwardUploadDocumentsComponent")
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
+    this.LoadShippingBill([this.data?.pipo[0]?._id]);
     setTimeout(() => {
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.sbno === args?.SbRef[0]?.sbno)[0];
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         sbNo: {
-          type: "text",
-          value: args?.SbRef[0]?.sbno,
+          type: "ShippingBill",
+          value: selectedShippingBill?.SB_ID,
           label: "Select Shipping Bill",
-          disabled: true,
           rules: {
             required: true,
           }
@@ -71,7 +86,7 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
         blcopyrefNumber: {
           type: "text",
           value: args?.blcopyrefNumber,
-          label: "BlCopyRef Number*",
+          label: "BlCopyRef Number",
           rules: {
             required: true,
           }
@@ -79,27 +94,107 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
         amount: {
           type: "text",
           value: args?.amount,
-          label: "BlCopyRef Amount*",
+          label: "BlCopyRef Amount",
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'exportbilllodgementreferencenumberadvicecopy');
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    this.LoadShippingBill([this.data?.pipo[0]?._id]);
+    setTimeout(() => {
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.sbno === args?.SbRef[0]?.sbno)[0];
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        sbNo: {
+          type: "ShippingBill",
+          value: selectedShippingBill?.SB_ID,
+          label: "Select Shipping Bill",
+          rules: {
+            required: true,
+          }
+        },
+        blcopyrefNumber: {
+          type: "text",
+          value: "",
+          label: "BlCopyRef Number*",
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "text",
+          value: "",
+          label: "BlCopyRef Amount*",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'exportbilllodgementreferencenumberadvicecopy');
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'export';
     console.log(e.value, 'onSubmitblCopy');
-    this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
-      console.log(res, 'addBlcopyref');
-      this.toastr.success(`Blcopyref Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Export/Bill-Lodgement-Referance-AdviceCopy']);
-    },
-      (err) => console.log('Error adding pipo')
-    );
+    e.value.SbRef = [e?.value?.sbNo];
+    if (this.data?.blcopyrefNumber != e.value.blcopyrefNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Blcopyref`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            blcopyrefNumber: e.value.blcopyrefNumber
+          }, 'blcopyref').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
+                console.log(res, 'addBlcopyref');
+                this.toastr.success(`Blcopyref Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Export/Bill-Lodgement-Referance-AdviceCopy']);
+              },(err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this blcopyref Number : ${e.value.blcopyrefNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
+        console.log(res, 'addBlcopyref');
+        this.toastr.success(`Blcopyref Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Export/Bill-Lodgement-Referance-AdviceCopy']);
+      },(err) => console.log('Error adding pipo'));
+    }
   }
 
   clickPipo(event: any) {
@@ -121,4 +216,25 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
+  
+  LoadShippingBill(pipoArr: any) {
+    this.filteranytablepagination.PaginationfilterAnyTable({
+      pipo: pipoArr
+    }, { limit: 20 }, 'masterrecord').subscribe((res: any) => {
+      console.log(res, "LoadShippingBill")
+      this.validator.SHIPPING_BILL_MASTER_DATA = res?.data;
+      this.validator.origin = [];
+      this.validator.SHIPPING_BUNDEL = [];
+      this.validator.SHIPPING_BILL_LIST = [];
+      res?.data?.forEach((element, i) => {
+        if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
+          this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+          this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+        }
+        this.validator.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
+      });
+      console.log('Master Country', this.validator.SHIPPING_BUNDEL, this.validator.origin);
+    })
+  }
+  
 }

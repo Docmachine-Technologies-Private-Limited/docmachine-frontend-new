@@ -62,47 +62,6 @@ export class ShippingBillComponent implements OnInit {
       let removeother: any = this.date_format.removeUnadvantageText(this.UPLOAD_FORM['sbdate'], '__—_—');
       this.UPLOAD_FORM['sbdate'] = this.date_format.formatDate(this.date_format.removeAllUnderscore(removeother), '-');
       this.pipourl1 = args[1].data;
-      const defaultinvoice: any = [
-        [
-          {
-            type: "text",
-            value: "1",
-            label: "Invoices Sno.",
-            name: 'sno',
-            rules: {
-              required: true,
-            },
-          },
-          {
-            type: "text",
-            value: "",
-            label: "Invoices No.",
-            name: 'invoiceno',
-            rules: {
-              required: true,
-            }
-          },
-          {
-            type: "currency",
-            value: "",
-            label: "Invoices Currency",
-            name: 'currency',
-            rules: {
-              required: true,
-            },
-            disabled: true
-          },
-          {
-            type: "text",
-            value: "",
-            label: "Invoices Amount",
-            name: 'amount',
-            rules: {
-              required: true,
-            }
-          }
-        ]
-      ]
       this.validator.buildForm({
         sbdate: {
           type: "date",
@@ -184,14 +143,6 @@ export class ShippingBillComponent implements OnInit {
             required: true,
           }
         },
-        // freightCurrency: {
-        //   type: "currency",
-        //   value: this.UPLOAD_FORM['freightCurrency'],
-        //   label: "FREIGHT CURRENCY",
-        //   rules: {
-        //     required: true,
-        //   }
-        // },
         freightValue: {
           type: "text",
           value: this.UPLOAD_FORM['freightValue'],
@@ -217,14 +168,6 @@ export class ShippingBillComponent implements OnInit {
             required: true,
           }
         },
-        // insuranceCurrency: {
-        //   type: "currency",
-        //   value: this.UPLOAD_FORM['insuranceCurrency'],
-        //   label: "Insurance Currency",
-        //   rules: {
-        //     required: true,
-        //   }
-        // },
         insuranceValue: {
           type: "text",
           value: this.UPLOAD_FORM['insuranceValue'],
@@ -318,7 +261,18 @@ export class ShippingBillComponent implements OnInit {
               },
             ]
           ]
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ShippingBill');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

@@ -165,8 +165,8 @@ export class ExportBillLodgementControllerData {
                         getAllFields[75]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
                         getAllFields[76]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
                         getAllFields[77]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
-
-                        getAllFields[78]?.setText('');
+                        getAllFields[78]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
+                        
                         getAllFields[79]?.uncheck();
                         getAllFields[80]?.uncheck();
                         getAllFields[81]?.uncheck();
@@ -409,8 +409,8 @@ export class ExportBillLodgementControllerData {
                         getAllFields[75]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
                         getAllFields[76]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
                         getAllFields[77]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
-
-                        getAllFields[78]?.setText('');
+                        getAllFields[78]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
+                        
                         getAllFields[79]?.uncheck();
                         getAllFields[80]?.uncheck();
                         getAllFields[81]?.uncheck();

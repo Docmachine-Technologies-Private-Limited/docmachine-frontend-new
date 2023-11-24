@@ -77,6 +77,17 @@ export class AirwayBlCopyComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'AirwayBlCopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -164,9 +175,9 @@ export class AirwayBlCopyComponent implements OnInit {
     } else {
       this.btndisabled = true;
     }
-    console.log(event, this.validator.SHIPPING_BUNDEL,this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(event, this.validator.SHIPPING_BUNDEL, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
+
   LoadShippingBill(pipoArr: any) {
     this.filteranytablepagination.PaginationfilterAnyTable({
       pipo: pipoArr

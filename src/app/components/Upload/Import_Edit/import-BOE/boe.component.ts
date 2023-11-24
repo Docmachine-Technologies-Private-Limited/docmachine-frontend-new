@@ -417,6 +417,17 @@ export class EditBOEComponent implements OnInit {
             },
           }]
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'BILL_OF_ENTRY').then((res)=>{
       });
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')

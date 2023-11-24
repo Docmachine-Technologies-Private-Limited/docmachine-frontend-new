@@ -101,7 +101,18 @@ export class LetterofCreditComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportLetterOfCredit');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

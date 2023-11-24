@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-import-destruction-certificates',
@@ -51,6 +53,8 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public route: ActivatedRoute,
     public userService: UserService) { }
 
@@ -63,6 +67,16 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -74,22 +88,82 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
-      },'Importdestructioncertificates');
-      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'Importdestructioncertificates');
     }, 200);
-
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        destructionNumber: {
+          type: "text",
+          value: "",
+          label: "Destruction Certificate Number",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'Importdestructioncertificates');
+    }, 200);
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
-    this.documentService.updateDestruction(e.value,this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`destruction Document Updated Successfully`);
-      console.log('destruction Document Updated Successfully');
-      this.router.navigate(['home/Summary/Import/Destruction']);
-    }, (err) => console.log('Error adding pipo'));
+    if (this.data?.destructionNumber != e.value.destructionNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Destruction Certificate Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            destructionNumber: e.value.destructionNumber
+          }, 'destructions').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateDestruction(e.value,this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`destruction Document Updated Successfully`);
+                console.log('destruction Document Updated Successfully');
+                this.router.navigate(['home/Summary/Import/destruction']);
+              }, (err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this destruction Number. : ${e.value.destructionNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updateDestruction(e.value,this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`destruction Document Updated Successfully`);
+        console.log('destruction Document Updated Successfully');
+        this.router.navigate(['home/Summary/Import/destruction']);
+      }, (err) => console.log('Error adding pipo'));
+    }
+  
   }
 
   clickPipo(event: any) {
@@ -97,12 +171,12 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
+
 }

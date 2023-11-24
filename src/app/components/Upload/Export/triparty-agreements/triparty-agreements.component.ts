@@ -166,7 +166,18 @@ export class TripartyAgreementsComponent implements OnInit {
               }
             }
           ]
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       },'ExportTryPartyAgreements');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

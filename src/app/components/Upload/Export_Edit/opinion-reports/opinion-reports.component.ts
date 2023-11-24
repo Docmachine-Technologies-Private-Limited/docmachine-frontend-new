@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'edit-export-opinion-reports',
@@ -51,6 +53,8 @@ export class EditOpinionReportsComponent implements OnInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -60,8 +64,18 @@ export class EditOpinionReportsComponent implements OnInit {
       console.log(this.data, "EditOpinionReportsComponent")
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -97,7 +111,73 @@ export class EditOpinionReportsComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'ExportOpomopnReport');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        opinionReportNumber: {
+          type: "text",
+          value: "",
+          label: "Opinion Report Number*",
+          rules: {
+            required: true,
+          }
+        },
+        ForeignPartyName: {
+          type: "buyer",
+          value: "",
+          label: "Foreign Party Name",
+          rules: {
+            required: true,
+          }
+        },
+        ReportDate: {
+          type: "date",
+          value: "",
+          label: "Report Date",
+          rules: {
+            required: true,
+          }
+        },
+        ReportRatings: {
+          type: "text",
+          value: "",
+          label: "Report Ratings",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportOpomopnReport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -109,10 +189,32 @@ export class EditOpinionReportsComponent implements OnInit {
     e.value.file = 'export';
     e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
     console.log(e.value);
-    this.documentService.updateOpinionReport(e.value,this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Opinion Report Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Export/opinion-report']);
-    }, (err) => console.log('Error adding pipo'));
+    if (this.data?.opinionReportNumber != e.value.opinionReportNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Opinion Report Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            opinionReportNumber: e.value.opinionReportNumber
+          }, 'opinionreports').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateOpinionReport(e.value,this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Opinion Report Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Export/opinion-report']);
+              }, (err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this Opinion Report Number : ${e.value.opinionReportNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updateOpinionReport(e.value,this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Opinion Report Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Export/opinion-report']);
+      }, (err) => console.log('Error adding pipo'));
+    }
+   
   }
 
   clickPipo(event: any) {

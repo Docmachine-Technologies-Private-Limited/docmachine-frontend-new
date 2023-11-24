@@ -337,7 +337,7 @@ export class ImportBillOfExchangeComponent implements OnInit {
           "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/BillOfExchanges`],navigationExtras);
+    this.router.navigate([`/home/Summary/Import/Edit/BillOfExchanges`],navigationExtras);
     this.toastr.warning('Bill Of Exchange Row Is In Edit Mode');
   }
 

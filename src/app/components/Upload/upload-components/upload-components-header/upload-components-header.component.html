@@ -18,7 +18,8 @@
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
                             (change)="clickPipo($event)">
                         </ng-select>
-                        <ng-input [disabled]="true" *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
+                        <ng-input [disabled]="true"
+                            *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
                             [item]="{value:this.validator?.PIPO_TRANSCTION_LIST[0]?.pi_po_buyerName,type:'text'}"
                             id="PIPO_TRANSACTION" disabled
                             (event)="this.clickPipo(this.validator?.PIPO_TRANSCTION_LIST[0])">
@@ -33,9 +34,8 @@
                                 [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
-                            *ngIf="this.PIPO_TARANSACTION==true"
-                            [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
-                                [attr.popup-close]="this.id"></i>
+                            *ngIf="this.PIPO_TARANSACTION==true" [attr.popup-close]="this.id"><i
+                                class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
                                 aria-hidden="true"></i>
@@ -51,7 +51,8 @@
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
                             (change)="clickPipo($event)">
                         </ng-select>
-                        <ng-input [disabled]="true" *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
+                        <ng-input [disabled]="true"
+                            *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
                             [item]="{value:this.validator?.PIPO_TRANSCTION_LIST?.pi_po_buyerName,type:'text'}"
                             id="PIPO_TRANSACTION" disabled
                             (event)="this.clickPipo(this.validator?.PIPO_TRANSCTION_LIST[0])">
@@ -76,6 +77,10 @@
                             [data]="this.IMPORT_FORM"></ng-custom-filter-popup>
                     </div>
                 </div>
+                <button *ngIf="this.RE_UPLOAD==true" class="upload-button btn btn-success col-3 PopupOpen RE_UPLOAD"
+                    [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
+                        [attr.popup-close]="this.id"></i>
+                    Re-Upload</button>
             </div>
         </div>
         <ng-content></ng-content>

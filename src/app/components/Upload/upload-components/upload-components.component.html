@@ -510,6 +510,44 @@
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
+                <div class="form-group mb-0" *ngSwitchCase="'AdditionalDocuments'">
+                    <label *ngIf="field?.label!=undefined && field?.label!=''">{{field.label}} <span style="color: red;"
+                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <div *ngFor="let item of field?.items;let AdditionalDocumentsIndex=index">
+                        <div class="col-12 row m-0 add-btn-panel p-0">
+                            <button type="button" class="btn btn-primary"
+                                *ngIf="(field?.items?.length-1)==AdditionalDocumentsIndex"
+                                (click)="AddAdditionalDocuments(this.validator.dynamicFormGroup[this.id],field?.fieldName,AdditionalDocumentsIndex,field)"><i
+                                    class='fa fa-plus'></i></button>
+                            <button type="button" class="btn btn-primary"
+                                (click)="removeAdditionalDocuments(this.validator.dynamicFormGroup[this.id],field?.fieldName,AdditionalDocumentsIndex,field)"
+                                *ngIf="AdditionalDocumentsIndex!=0"><i class="fa fa-minus"></i></button>
+                        </div>
+                        <upload-popup [name]="field?.fieldName" [id]="field?.id" [url]="field?.url"
+                            (event)="PushValueAdditionalDocuments($event,this.validator.dynamicFormGroup[this.id],field?.fieldName,AdditionalDocumentsIndex,field)"></upload-popup>
+                        <label style="font-size: 15px;">{{(AdditionalDocumentsIndex+1)}}. Documents <span
+                                *ngIf="this.validator.dynamicFormGroup[this.id]?.value[field?.fieldName][AdditionalDocumentsIndex]!=''
+                            && this.validator.dynamicFormGroup[this.id]?.value[field?.fieldName][AdditionalDocumentsIndex]!=undefined" style="color: green;">Added</span>
+                            <span
+                                *ngIf="this.validator.dynamicFormGroup[this.id]?.value[field?.fieldName][AdditionalDocumentsIndex]==''
+                        || this.validator.dynamicFormGroup[this.id]?.value[field?.fieldName][AdditionalDocumentsIndex]==undefined"
+                                style="color: red;">Not Added</span>
+                        </label>
+                        <div class="row" style="gap: 10px;padding-left: 33px;">
+                            <button style="font-size: 10px; display: flex; gap: 5px;" type="button"
+                                [attr.popup-close]="field?.id" class="btn btn-primary PopupOpen"><i
+                                    class="fa fa-upload PopupOpen" aria-hidden="true"
+                                    [attr.popup-close]="field?.id"></i></button>
+                            <button style="font-size: 10px; display: flex; gap: 5px;" type="button"
+                                popup-close="AdditionalDocumentsView" class="btn btn-primary PopupOpen"
+                                *ngIf="this.validator.dynamicFormGroup[this.id]?.value[field?.fieldName][AdditionalDocumentsIndex]!=''
+                                && this.validator.dynamicFormGroup[this.id]?.value[field?.fieldName][AdditionalDocumentsIndex]!=undefined"
+                                (click)="ViewAdditionalDocuments(this.validator.dynamicFormGroup[this.id]?.value[field?.fieldName][AdditionalDocumentsIndex])"><i
+                                    class="fa fa-eye PopupOpen" aria-hidden="true"
+                                    popup-close="AdditionalDocumentsView"></i></button>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group mb-0" *ngSwitchCase="'MultiCheckBox'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
@@ -517,8 +555,6 @@
                         [(ngModel)]="field.value"
                         (event)="HideShowInput($event,field?.HideShowInput,fieldIndex);onLabelNameChange($event,field?.LabelNameChange,fieldIndex)">
                     </custom-checkbox>
-                    <!-- <label style="color: green;"
-                        *ngIf="field?.value!=undefined && field?.value!='' && field?.NotificationShow[field.value]!=undefined">{{field?.NotificationShow[field.value]}}</label> -->
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'CheckboxMultiple'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
@@ -693,6 +729,18 @@
                                             [disabled]="Optionfield[FormOptionfield]?.disabled"
                                             (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
                                             [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
+                                    </div>
+                                    <div class="form-group mb-0" *ngSwitchCase="'ReUpload'">
+                                        <label
+                                            *ngIf="Optionfield[FormOptionfield]?.label!=undefined && Optionfield[FormOptionfield]?.label!=''">{{Optionfield[FormOptionfield]?.label}}
+                                            <span style="color: red;"
+                                                *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
+                                        <upload-popup [name]="Optionfield[FormOptionfield]?.name"
+                                            [id]="Optionfield[FormOptionfield]?.id"
+                                            [url]="Optionfield[FormOptionfield]?.url"
+                                            (event)="response($event)"></upload-popup>
+                                        <button type="button" [id]="Optionfield[FormOptionfield]?.id"
+                                            class="btn btn-primary"><i class="fa fa-minus"></i>Upload</button>
                                     </div>
                                     <div class="form-group mb-0" *ngSwitchCase="'CheckboxMultiple'">
                                         <label
@@ -1381,19 +1429,18 @@
     </div>
 </app-custom-model>
 
-<!-- <app-custom-model *ngIf="this.ADD_NEW_BUTTON_VISIBLE==true" [minimizedisabled]="false" EventButton="false"
-    [RemoveBgTop]="false" class="p-2 mt-2" id="Add_New_Bank_Name" [customstyle]="{'max-width':'40vw !important'}"
-    height="30vh" [name]="'Add New Bank Name'" #Add_New_Bank_NamePanel>
-    <div class="p-2">
-        <upload-components id="AddNewBankName"
-            (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)"></upload-components>
-    </div>
-</app-custom-model> -->
-
 <app-custom-model [minimizedisabled]="false" EventButton="false" [RemoveBgTop]="false" class="p-2 mt-2" id="IncoTerm"
     [customstyle]="{'max-width':'60vw !important','margin-top':'100px !important'}" height="40vh" [name]="'Inco Term'">
     <div class="p-2">
         <img src="../../../../assets/images/incoterm.png" alt="Inco Term" class="img-popup">
+    </div>
+</app-custom-model>
+
+<app-custom-model class="p-2 mt-2" id="AdditionalDocumentsView"
+    [customstyle]="{'max-width':'90vw !important','margin-top':'10px !important'}" name="Additional Documents View">
+    <div class="p-2">
+        <app-pdf-viewer class="pt-3" *ngIf="this.AdditionalDocumentsUrl!=''" [downloadShow]="false"
+            [src]="this.AdditionalDocumentsUrl" width="100%" Newheight="calc(100vh - 130px)"></app-pdf-viewer>
     </div>
 </app-custom-model>
 

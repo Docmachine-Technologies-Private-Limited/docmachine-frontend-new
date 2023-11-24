@@ -43,10 +43,8 @@ export class ExportSwiftCopyDocumentComponent implements OnInit {
     public route: ActivatedRoute,
     public userService: UserService) { }
 
-  async ngOnInit() {
-  
+  async ngOnInit() {  
   }
-
 
   response(args: any) {
     this.publicUrl = '';
@@ -62,6 +60,17 @@ export class ExportSwiftCopyDocumentComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'exportswiftcopydocument');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

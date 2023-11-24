@@ -7,6 +7,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'edit-import-airway-bl-copy',
@@ -41,6 +43,8 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -50,30 +54,108 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
       console.log(this.data, "EditAirwayBlCopyComponent")
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
+    this.changedCommercial([this.data?.pipo[0]?._id])
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.blCopyDoc);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        airwayBlCopyNumber: {
-          type: "text",
-          value: args?.airwayBlCopyNumber,
-          label: "Airway / BlCopy Number*",
+        CommercialNumber: {
+          type: "CommericalNo",
+          value: "",
+          label: "Select Commercial Invoice",
           rules: {
             required: true,
           }
         },
-        CommercialNumber: {
-          type: "text",
+        airwayBlCopydate: {
+          type: "date",
           value: "",
-          label: "Select Commercial Number",
+          label: "Airway / BlCopy Date",
           rules: {
             required: true,
-          },
-          disabled:true,
+          }
         },
+        airwayBlCopyNumber: {
+          type: "text",
+          value: "",
+          label: "Airway / BlCopy Number",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'ImportAirwayBlCopy');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    this.changedCommercial([this.data?.pipo[0]?._id])
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+      this.pipourl1 = args[1].data;
+      this.validator.buildForm({
+        CommercialNumber: {
+          type: "CommericalNo",
+          value: "",
+          label: "Select Commercial Invoice",
+          rules: {
+            required: true,
+          }
+        },
+        airwayBlCopydate: {
+          type: "date",
+          value: "",
+          label: "Airway / BlCopy Date",
+          rules: {
+            required: true,
+          }
+        },
+        airwayBlCopyNumber: {
+          type: "text",
+          value: "",
+          label: "Airway / BlCopy Number",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ImportAirwayBlCopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -82,12 +164,33 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
     console.log(e.value, 'onSubmitblCopy');
-    this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);
-    },(err) => console.log('Error adding pipo'));
+    if (this.data?.airwayBlCopyNumber != e.value.airwayBlCopyNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your airway BlCopy Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            airwayBlCopyNumber: e.value.airwayBlCopyNumber
+          }, 'airwayblcopies').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.blCopyDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);
+              },(err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this airway-bl-copy no. : ${e.value.airwayBlCopyNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);
+      },(err) => console.log('Error adding pipo'));
+    }
+   
   }
 
   clickPipo(event: any) {
