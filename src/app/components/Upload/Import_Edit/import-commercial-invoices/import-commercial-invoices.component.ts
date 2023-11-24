@@ -9,11 +9,13 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-import-commercial-invoices',
   templateUrl: './import-commercial-invoices.component.html',
-  styleUrls: ['./import-commercial-invoices.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-commercial-invoices.component.scss', '../../commoncss/common.component.scss']
 })
 export class EditImportCommercialInvoicesComponent implements OnInit {
   publicUrl: any = '';
@@ -43,7 +45,13 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
   data: any = '';
-  
+  CI_INFO_SUM: any = {
+    CI_SUM: 0,
+    TOTAL_CI: 0,
+    PIPO_AMOUNT: 0,
+    REMAINING_AMOUNT: 0
+  }
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -52,6 +60,8 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -63,7 +73,18 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
+    this.PIPOInfo(this.data?.pipo[0]?._id)
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
       this.validator.buildForm({
@@ -107,12 +128,11 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           rules: {
             required: true,
           },
-          disabled: true,
           formArray: [
             [
               {
                 type: "AdvanceInfo",
-                value: "",
+                value: args?.AdvanceInfo,
                 label: "Select Advance no.",
                 name: 'AdvanceInfoAny',
                 rules: {
@@ -127,7 +147,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
               },
               {
                 type: "text",
-                value: "",
+                value: args?.AdvanceNo,
                 label: "Advance No.",
                 name: 'AdvanceNo',
                 rules: {
@@ -136,7 +156,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
               },
               {
                 type: "currency",
-                value: "",
+                value: args?.AdvanceCurrency,
                 label: "Advance Currency",
                 name: 'AdvanceCurrency',
                 rules: {
@@ -145,7 +165,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
               },
               {
                 type: "number",
-                value: "",
+                value: args?.AdvanceAmount,
                 label: "Advance Amount",
                 name: 'AdvanceAmount',
                 rules: {
@@ -204,15 +224,225 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    this.PIPOInfo(this.data?.pipo[0]?._id)
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        commercialNumber: {
+          type: "text",
+          value: "",
+          label: "Commercial Invoice Number",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.PIPO_DATA?.currency,
+          label: "Currency",
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "number",
+          value: "",
+          label: "Amount",
+          rules: {
+            required: true,
+          }
+        },
+        InvoiceDate: {
+          type: "date",
+          value: "",
+          label: "Invoice Date",
+          rules: {
+            required: true,
+          }
+        },
+        IfAdvancePaid: {
+          type: "yesnocheckbox",
+          value: 'true',
+          label: "If Advance Paid?",
+          rules: {
+            required: false,
+          },
+          YesNo: 'true',
+          text1: 'No',
+          text2: 'Yes',
+          HideShowInput: ["AdvanceInfo"],
+          class: 'row-reverse'
+        },
+        AdvanceInfo: {
+          type: "formGroup",
+          label: "Advance Info",
+          GroupLabel: ['Advance Info 1'],
+          AddNewRequried: false,
+          rules: {
+            required: true,
+          },
+          disabled: true,
+          formArray: [
+            [
+              {
+                type: "AdvanceInfo",
+                value: "",
+                label: "Select Advance no.",
+                name: 'AdvanceInfoAny',
+                rules: {
+                  required: false,
+                },
+                AutoFillType: "formGroup",
+                autofillinput: [
+                  { input: 'AdvanceNo', key: 'billNo', parent: "AdvanceInfo" },
+                  { input: 'AdvanceCurrency', key: 'currency', parent: "AdvanceInfo" },
+                  { input: 'AdvanceAmount', key: 'amount', parent: "AdvanceInfo" }
+                ],
+              },
+              {
+                type: "text",
+                value: "",
+                label: "Advance No.",
+                name: 'AdvanceNo',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "currency",
+                value: "",
+                label: "Advance Currency*",
+                name: 'AdvanceCurrency',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: "",
+                label: "Advance Amount",
+                name: 'AdvanceAmount',
+                rules: {
+                  required: false,
+                },
+              }
+            ]
+          ]
+        },
+        InvoiceValue: {
+          type: "number",
+          value: "",
+          label: "Commodity Amount",
+          rules: {
+            required: false,
+          }
+        },
+        FreightValue: {
+          type: "number",
+          value: "",
+          label: "Freight Amount",
+          rules: {
+            required: false,
+          }
+        },
+        InsuranceValue: {
+          type: "number",
+          value: "",
+          label: "Insurance Amount",
+          rules: {
+            required: false,
+          }
+        },
+        MiscCharges: {
+          type: "number",
+          value: "",
+          label: "Misc Charges",
+          rules: {
+            required: false,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'EditImportCommerical');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  PIPOInfo(id) {
+    this.documentService.getPipoById(id).subscribe((res: any) => {
+      this.PIPO_DATA = res?.data[0];
+      let CI_SUM = this.PIPO_DATA?.commercialRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+      this.CI_INFO_SUM['CI_SUM'] = CI_SUM;
+      this.CI_INFO_SUM['TOTAL_CI'] = this.PIPO_DATA?.commercialRef?.length
+      this.CI_INFO_SUM['PIPO_AMOUNT'] = this.PIPO_DATA?.amount;
+      this.CI_INFO_SUM['REMAINING_AMOUNT'] = (parseFloat(this.PIPO_DATA?.amount) - parseFloat(CI_SUM)) + parseFloat(this.data?.amount);
+      console.log(res, "getPipoById", this.CI_INFO_SUM)
+      this.documentService.filterAnyTable({
+        beneficiaryName: this.PIPO_DATA?.benneName,
+        currency: this.PIPO_DATA?.currency,
+        pipo: [id]
+      }, 'iradvices').subscribe((res: any) => {
+        this.validator.ORM_BY_PARTY_NAME = res?.data;
+        console.log(res, 'ORM_BY_PARTY_NAME')
+      });
+    })
+  }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.AdvanceCurrency = e.value.AdvanceCurrency?.type != undefined ? e.value.AdvanceCurrency.type : e.value.AdvanceCurrency;
-    this.documentService.updateCommercial(e.value,this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Commercial Invoice Updated Successfully`);
-      this.router.navigate(['home/Summary/Import/Commercial']);     
-    },(err) => console.log('Error adding pipo'));
+    if (e != false) {
+      if (parseFloat(this.CI_INFO_SUM['REMAINING_AMOUNT']) >= parseFloat(e?.amount)) {
+        e.currency = e.currency?.type != undefined ? e.currency.type : e.currency;
+        e.AdvanceCurrency = e.AdvanceInfo[0]?.AdvanceCurrency?.type != undefined ? e.AdvanceInfo[0]?.AdvanceCurrency?.type : e.AdvanceCurrency;
+        e.AdvanceNo = e.AdvanceInfo[0]?.AdvanceNo != undefined ? e.AdvanceInfo[0]?.AdvanceNo : e.AdvanceNo;
+        e.AdvanceAmount = e.AdvanceInfo[0]?.AdvanceAmount != undefined ? e.AdvanceInfo[0]?.AdvanceAmount : e.AdvanceAmount;
+        e.sbNo = '';
+        e.sbRef = [];
+        e.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
+        e.BoeRef = [this.validator.ORM_SELECTION_DATA?.id];
+        e.ORM_Ref = [this.validator.ORM_SELECTION_DATA?._id];
+        if (this.data?.commercialNumber != e.commercialNumber) {
+          this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+            if (CustomConfirmDialogRes?.value == "Ok") {
+              this.documentService.getInvoice_No({
+                commercialNumber: e.commercialNumber
+              }, 'commercials').subscribe((resp: any) => {
+                console.log('creditNoteNumber Invoice_No', resp)
+                if (resp.data.length == 0) {
+                  e.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+                  this.documentService.updateCommercial(e, this.data?._id).subscribe((res: any) => {
+                    this.toastr.success(`Commercial Invoice Updated Successfully`);
+                    this.router.navigate(['home/Summary/Import/Commercial']);
+                  }, (err) => console.log('Error adding pipo'));
+                } else {
+                  this.toastr.error(`Please check this Commercial Invoice Number : ${e.commercialNumber} already exit...`);
+                }
+              });
+            }
+          });
+        } else {
+          this.documentService.updateCommercial(e, this.data?._id).subscribe((res: any) => {
+            this.toastr.success(`Commercial Invoice Updated Successfully`);
+            this.router.navigate(['home/Summary/Import/Commercial']);
+          }, (err) => console.log('Error adding pipo'));
+        }
+      } else {
+        this.toastr.error(`CI Amount should be equal to PIPO or less`);
+      }
+    }
   }
 
   clickPipo(event: any) {

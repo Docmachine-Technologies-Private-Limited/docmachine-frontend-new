@@ -70,11 +70,10 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
     this.changedCommercial([this.data?.pipo[0]?._id])
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.blCopyDoc);
-      this.pipourl1 = args[1].data;
       this.validator.buildForm({
         CommercialNumber: {
           type: "CommericalNo",
-          value: "",
+          value: args?.CommercialNumber,
           label: "Select Commercial Invoice",
           rules: {
             required: true,
@@ -82,7 +81,7 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
         },
         airwayBlCopydate: {
           type: "date",
-          value: "",
+          value: args?.airwayBlCopydate,
           label: "Airway / BlCopy Date",
           rules: {
             required: true,
@@ -90,7 +89,7 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
         },
         airwayBlCopyNumber: {
           type: "text",
-          value: "",
+          value: args?.airwayBlCopyNumber,
           label: "Airway / BlCopy Number",
           rules: {
             required: true,
@@ -209,6 +208,7 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
   }
 
   changedCommercial(pipo: any) {
+    this.validator.COMMERICAL_NO=[]
     this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0] });

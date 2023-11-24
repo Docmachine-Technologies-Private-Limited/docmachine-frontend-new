@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'edit-import-packing-list-invoices',
@@ -52,6 +54,8 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -60,17 +64,27 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
       this.response(JSON.parse(params["item"]));
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
+    this.PipoInfo(this.data?.pipo[0]?._id)
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args.packingDoc);
       this.validator.buildForm({
         boe: {
-          type: "text",
-          value: args?.packingListNumber,
+          type: "BOE",
+          value: this.data?.boeRef[0],
           label: "Select Bill Of Entry",
-          disabled:true,
           rules: {
             required: true,
           }
@@ -79,22 +93,6 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
           type: "text",
           value: args?.packingListNumber,
           label: "Packing List Number*",
-          rules: {
-            required: true,
-          }
-        },
-        currency: {
-          type: "currency",
-          value: args?.currency,
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        packingListAmount: {
-          type: "text",
-          value: args?.packingListAmount,
-          label: "Packing List Amount",
           rules: {
             required: true,
           }
@@ -116,15 +114,88 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    this.PipoInfo(this.data?.pipo[0]?._id)
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        boe: {
+          type: "BOE",
+          value: "",
+          label: "Select Bill Of Entry",
+          rules: {
+            required: true,
+          }
+        },
+        packingListNumber: {
+          type: "text",
+          value: "",
+          label: "Packing List Number*",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'Importpackinglist');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  PipoInfo(id:any){
+    this.documentService.getPipoById(id).subscribe((res: any) => {
+      this.PIPO_DATA = res?.data[0];
+      this.validator.BOE_LIST = res?.data[0]?.boeRef;
+      console.log(res, "getPipoById")
+    })
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
-    this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Packing List Added Successfully`);
-      this.router.navigate(['home/Summary/Import/Packing-List']);
-      console.log('Packing List Added Successfully');
-    });
+    let selectedBOE = e?.value?.boe;
+    e.value.boe = selectedBOE?.sbno;
+    e.value.boeRef = [selectedBOE?._id];
+    if (this.data?.packingListNumber != e.value.packingListNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Packing List Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            packingListNumber: e.value.packingListNumber
+          }, 'commercials').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.packingDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Packing List Added Successfully`);
+                this.router.navigate(['home/Summary/Import/Packing-List']);
+                console.log('Packing List Added Successfully');
+              });
+            } else {
+              this.toastr.error(`Please check this Packing List Number : ${e.packingListNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Packing List Added Successfully`);
+        this.router.navigate(['home/Summary/Import/Packing-List']);
+        console.log('Packing List Added Successfully');
+      });
+    }
+   
   }
 
   clickPipo(event: any) {

@@ -35,7 +35,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('TableFormat') TableFormat: any = [];
   @Input('ExpansionShowHide') Expansion: boolean = true;
   @Input('ActionRequired') ActionRequired: boolean = true;
-
+  
   @Output('ViewChanges') ViewChanges: any = new EventEmitter();
   @Output('EditChanges') EditChanges: any = new EventEmitter();
   @Output('DeleteChanges') DeleteChanges: any = new EventEmitter();

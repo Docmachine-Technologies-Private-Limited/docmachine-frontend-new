@@ -46,12 +46,12 @@
                                     popup-close="PDF_VIEW">
                                     <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW" aria-hidden="true"></i>
                                 </a>
-                                <a title="Edit" *ngIf="this.EditButton==true" popup-close="EditSummaryPage"
+                                <a title="Edit" [disabled]="item?.EditDisabled" *ngIf="this.EditButton==true" popup-close="EditSummaryPage"
                                     (click)="Edit(item,i)" class="savBtn bgnone PopupOpen">
                                     <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage"
                                         aria-hidden="true"></i>
                                 </a>
-                                <a title="Delete" *ngIf="this.DeleteButton==true && item?.RoleType!='Approver'"
+                                <a title="Delete" [disabled]="item?.DeleteDisabled" *ngIf="this.DeleteButton==true && item?.RoleType!='Approver'"
                                     (click)="Delete(item,i)" class="savBtn bgnone"><i class="fa fa-trash-o"
                                         aria-hidden="true"></i> </a>
                             </td>

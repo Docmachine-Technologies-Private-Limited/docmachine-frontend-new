@@ -43,7 +43,7 @@ export class EditPackingListInvoicesComponent implements OnInit {
       this.response(JSON.parse(params["item"]));
     });
   }
-  
+
   response(args: any) {
     console.log(args, args?.length, "argsShippingbill")
     if (args?.length == undefined) {
@@ -53,7 +53,7 @@ export class EditPackingListInvoicesComponent implements OnInit {
     }
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  
+
   Edit(args: any) {
     this.publicUrl = '';
     this.validator.SHIPPING_BILL_LIST = [];
@@ -63,10 +63,9 @@ export class EditPackingListInvoicesComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args.packingDoc);
       this.validator.buildForm({
         sbNo: {
-          type: "text",
+          type: "ShippingBill",
           value: selectedShippingBill?.SB_ID,
           label: "Select Shipping Bill",
-          disabled: true,
           rules: {
             required: true,
           }
@@ -74,23 +73,7 @@ export class EditPackingListInvoicesComponent implements OnInit {
         packingListNumber: {
           type: "text",
           value: args?.packingListNumber,
-          label: "Packing List Number*",
-          rules: {
-            required: true,
-          }
-        },
-        currency: {
-          type: "currency",
-          value: args?.currency,
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        packingListAmount: {
-          type: "text",
-          value: args?.packingListAmount,
-          label: "Packing List Amount",
+          label: "Packing List Number",
           rules: {
             required: true,
           }
@@ -112,19 +95,18 @@ export class EditPackingListInvoicesComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  
+
   ReUplod(args: any) {
     this.publicUrl = '';
     this.validator.SHIPPING_BILL_LIST = [];
     this.LoadShippingBill([this.data?.pipo[0]?._id]);
     setTimeout(() => {
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args.packingDoc);
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.validator.buildForm({
         sbNo: {
-          type: "text",
+          type: "ShippingBill",
           value: "",
           label: "Select Shipping Bill",
-          disabled: true,
           rules: {
             required: true,
           }
@@ -132,23 +114,7 @@ export class EditPackingListInvoicesComponent implements OnInit {
         packingListNumber: {
           type: "text",
           value: "",
-          label: "Packing List Number*",
-          rules: {
-            required: true,
-          }
-        },
-        currency: {
-          type: "currency",
-          value: "",
-          label: "Currency*",
-          rules: {
-            required: true,
-          }
-        },
-        packingListAmount: {
-          type: "text",
-          value: "",
-          label: "Packing List Amount",
+          label: "Packing List Number",
           rules: {
             required: true,
           }
@@ -170,43 +136,38 @@ export class EditPackingListInvoicesComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  
+
   onSubmit(e: any) {
     console.log(e, 'value')
-    if (e.status == 'VALID') {
-      this.SUBMIT_ERROR = false;
-      e.value.file = 'export';
-      e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
-      if (this.data?.packingListNumber != e.value.packingListNumber) {
-        this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Packing List Number`, 'Comments', (CustomConfirmDialogRes: any) => {
-          if (CustomConfirmDialogRes?.value == "Ok") {
-            this.documentService.getInvoice_No({
-              packingListNumber: e.value.packingListNumber
-            }, 'packinglists').subscribe((resp: any) => {
-              console.log('creditNoteNumber Invoice_No', resp)
-              if (resp.data.length == 0) {
-                e.value.packingDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
-                this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
-                  this.toastr.success(`Packing List Added Successfully`);
-                  console.log('Packing List Added Successfully');
-                  this.router.navigate(['home/Summary/Export/packing-list']);
-                }, (err) => console.log('Error adding pipo'));
-              }else{
-                this.toastr.error(`Please check this Packing List no. : ${e.value.packingListNumber} already exit...`);
-              }
-            });
-          }
-        });
-      } else {
-        this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
-          this.toastr.success(`Packing List Added Successfully`);
-          console.log('Packing List Added Successfully');
-          this.router.navigate(['home/Summary/Export/packing-list']);
-        }, (err) => console.log('Error adding pipo'));
-      }
-    
+    let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
+    e.value.sbNo = selectedShippingBill?.sbno;
+    e.value.sbRef = [selectedShippingBill?._id];
+    if (this.data?.packingListNumber != e.value.packingListNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Packing List Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            packingListNumber: e.value.packingListNumber
+          }, 'packinglists').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.packingDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Packing List Added Successfully`);
+                console.log('Packing List Added Successfully');
+                this.router.navigate(['home/Summary/Export/packing-list']);
+              }, (err) => console.log('Error adding pipo'));
+            } else {
+              this.toastr.error(`Please check this Packing List no. : ${e.value.packingListNumber} already exit...`);
+            }
+          });
+        }
+      });
     } else {
-      this.SUBMIT_ERROR = true
+      this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Packing List Added Successfully`);
+        console.log('Packing List Added Successfully');
+        this.router.navigate(['home/Summary/Export/packing-list']);
+      }, (err) => console.log('Error adding pipo'));
     }
   }
 
@@ -229,7 +190,7 @@ export class EditPackingListInvoicesComponent implements OnInit {
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
+
   LoadShippingBill(pipoArr: any) {
     this.filteranytablepagination.PaginationfilterAnyTable({
       pipo: pipoArr

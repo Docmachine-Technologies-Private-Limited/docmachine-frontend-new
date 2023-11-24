@@ -174,7 +174,7 @@ export class EditImportCreditNoteComponent implements OnInit {
               e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
               this.documentService.updateCredit(e.value, this.data?._id).subscribe((res: any) => {
                 this.toastr.success(`Credit Note Document Updated Successfully`);
-                this.router.navigate(['home/Summary/Import/credit-note']);
+                this.router.navigate(['home/Summary/Import/Credit']);
               }, (err) => console.log('Error adding pipo'));
             }else{
               this.toastr.error(`Please check this creditNoteNumber. : ${e.value.creditNoteNumber} already exit...`);
@@ -185,7 +185,7 @@ export class EditImportCreditNoteComponent implements OnInit {
     } else {
       this.documentService.updateCredit(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Credit Note Document Updated Successfully`);
-        this.router.navigate(['home/Summary/Import/credit-note']);
+        this.router.navigate(['home/Summary/Import/Credit']);
       }, (err) => console.log('Error adding pipo'));
     }
   }

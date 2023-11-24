@@ -176,7 +176,7 @@ export class EditImportDebitNotesComponent implements OnInit {
               e.value.DebitNote = this.publicUrl?.changingThisBreaksApplicationSecurity;
               this.documentService.updateDebit(e.value, this.data?._id).subscribe((res: any) => {
                 this.toastr.success(`debit Note Document Updated Successfully`);
-                this.router.navigate(['home/Summary/Import/debit-note']);
+                this.router.navigate(['home/Summary/Import/Debit']);
               });
             } else {
               this.toastr.error(`Please check this Debit Note Number. : ${e.value.debitNoteNumber} already exit...`);
@@ -187,7 +187,7 @@ export class EditImportDebitNotesComponent implements OnInit {
     } else {
       this.documentService.updateDebit(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`debit Note Document Updated Successfully`);
-        this.router.navigate(['home/Summary/Import/debit-note']);
+        this.router.navigate(['home/Summary/Import/Debit']);
       });
     }
 

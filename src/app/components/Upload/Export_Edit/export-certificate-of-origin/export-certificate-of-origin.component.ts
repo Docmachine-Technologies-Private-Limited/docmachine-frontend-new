@@ -76,13 +76,13 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
   Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.changedCommercial(args?.pipo[0]?._id)
+      this.changedCommercial(this.data?.pipo[0]?._id)
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         CommercialNumber: {
           type: "CommericalNo",
           value: args?.CommercialNumber,
-          label: "Commerical Number*",
+          label: "Commerical Number",
           rules: {
             required: true,
           }
@@ -90,7 +90,7 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
         CertificateOriginNumber: {
           type: "text",
           value: args?.CertificateOriginNumber,
-          label: "Certificate of Origin Number*",
+          label: "Certificate of Origin Number",
           rules: {
             required: true,
           }
@@ -115,13 +115,13 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
   ReUplod(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.changedCommercial(args?.pipo[0]?._id)
+      this.changedCommercial(this.data?.pipo[0]?._id)
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
       this.validator.buildForm({
         CommercialNumber: {
           type: "CommericalNo",
           value: "",
-          label: "Commerical Number*",
+          label: "Commerical Number",
           rules: {
             required: true,
           }
@@ -129,7 +129,7 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
         CertificateOriginNumber: {
           type: "text",
           value: "",
-          label: "Certificate of Origin Number*",
+          label: "Certificate of Origin Number",
           rules: {
             required: true,
           }
