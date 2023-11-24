@@ -45,7 +45,7 @@ const routes: Routes = [
   },
   { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },     
   { path: "Transaction-Dashboard", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },          
-  { path: "lc-isurance", component: NewLcInsuranceComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "lc-isurance", component: NewFLCApplicationComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Transaction/:file", component: NewAdvanceImportPaymentsComponent, pathMatch: "full", canActivate: [MemberGuard] },
 ];
 
