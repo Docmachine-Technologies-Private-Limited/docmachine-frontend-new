@@ -148,70 +148,7 @@ export class NewExportBillLodgementComponent implements OnInit {
       this.exportbilllodgementdata.SELECTED_SHIPPING_BILL = data;
       this.FormValue(null, formvalue, null);
     }
-    console.log(data, this.exportbilllodgementdata.SELECTED_SHIPPING_BILL, "SubmitButton")
-  }
-  TIMEOUT: any = ''
-  async fillForm(sbdata: any) {
-    console.log(sbdata, "sdfsdfsdfdsfd")
-    let formUrl: any = '';
-    this.VISIBLITY_PDF = false;
-    if (this.BankId != '') {
-      if (this.BankId == 'F_B_L_6') {
-        this.ExportBillLodgementControllerData.BankFormatLoad().
-          FedralNotANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-            this.TIMEOUT = setTimeout(() => {
-              if (sbdata != undefined && sbdata != null) {
-                sbdata["PREVIWES_URL"] = ''
-                this.exportbilllodgementdata.PREVIWES_URL = '';
-              }
-              this.PREVIWES_URL = res;
-              this.VISIBLITY_PDF = true;
-              if (sbdata != undefined && sbdata != null) {
-                this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
-                sbdata["PREVIWES_URL"] = this.PREVIWES_URL;
-              }
-              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-            }, 200);
-          })
-      } else if (this.BankId == 'H_B_L_7') {
-        this.PREVIWES_URL = ''
-        if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
-          this.ExportBillLodgementControllerData.BankFormatLoad().
-            HDFCExportRegularization(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-              this.TIMEOUT = setTimeout(() => {
-                if (sbdata != undefined && sbdata != null) {
-                  sbdata["PREVIWES_URL"] = ''
-                  this.exportbilllodgementdata.PREVIWES_URL = '';
-                }
-                this.PREVIWES_URL = res;
-                this.VISIBLITY_PDF = true;
-                if (sbdata != undefined && sbdata != null) {
-                  this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
-                  sbdata["PREVIWES_URL"] = this.PREVIWES_URL;
-                }
-                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-              }, 200);
-            })
-        } else {
-          this.ExportBillLodgementControllerData.BankFormatLoad().
-            HDFCExportLODGEMENT(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-              this.TIMEOUT = setTimeout(() => {
-                if (sbdata != undefined && sbdata != null) {
-                  sbdata["PREVIWES_URL"] = ''
-                  this.exportbilllodgementdata.PREVIWES_URL = '';
-                }
-                this.PREVIWES_URL = res;
-                this.VISIBLITY_PDF = true;
-                if (sbdata != undefined && sbdata != null) {
-                  this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
-                  sbdata["PREVIWES_URL"] = this.PREVIWES_URL;
-                }
-                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-              }, 200);
-            })
-        }
-      }
-    }
+    console.log(data, formvalue.value, this.exportbilllodgementdata.SELECTED_SHIPPING_BILL, "SubmitButton")
   }
 
   _arrayBufferToBase64(buffer) {
@@ -481,6 +418,7 @@ export class NewExportBillLodgementComponent implements OnInit {
   }
 
   AllCreateTransaction() {
+    this.OTHER_DOCUMENTS=[];
     for (let index = 0; index < this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length; index++) {
       const element = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS[index];
       if (this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.length != 0) {
@@ -493,10 +431,13 @@ export class NewExportBillLodgementComponent implements OnInit {
           name: 'blCopy',
           pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.blCopyDoc
         }
-        this.OTHER_DOCUMENTS[2] = {
-          name: 'Commercial',
-          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.commercialDoc
-        }
+        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.forEach((commercialdetailselement, j) => {
+          this.OTHER_DOCUMENTS[(2 + j)] = {
+            name: 'Commercial-' + (j + 1),
+            pdf: commercialdetailselement?.commercialDoc
+          }
+        });
+        console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, this.OTHER_DOCUMENTS, "OTHER_DOCUMENTS")
         this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]['ALL_RELATED_DOCUMENTS'] = this.OTHER_DOCUMENTS;
       } else {
         this.toastr.error("Please select atleast one commercial no.")
@@ -625,47 +566,96 @@ export class NewExportBillLodgementComponent implements OnInit {
     }
   }
 
+  TIMEOUT: any = ''
+  async fillForm(sbdata: any) {
+    console.log(sbdata, "sdfsdfsdfdsfd")
+    let formUrl: any = '';
+    this.VISIBLITY_PDF = false;
+    if (this.BankId != '') {
+      if (this.BankId == 'F_B_L_6') {
+        this.ExportBillLodgementControllerData.BankFormatLoad().
+          FedralNotANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+            this.TIMEOUT = setTimeout(() => {
+              if (sbdata != undefined && sbdata != null) {
+                this.exportbilllodgementdata.PREVIWES_URL = '';
+              }
+              this.PREVIWES_URL = res;
+              this.VISIBLITY_PDF = true;
+              if (sbdata != undefined && sbdata != null) {
+                this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+              }
+              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+            }, 200);
+          })
+      } else if (this.BankId == 'H_B_L_7') {
+        this.PREVIWES_URL = ''
+        if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
+          this.ExportBillLodgementControllerData.BankFormatLoad().
+            HDFCExportRegularization(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+              this.TIMEOUT = setTimeout(() => {
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = '';
+                }
+                this.PREVIWES_URL = res;
+                this.VISIBLITY_PDF = true;
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+                }
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              }, 200);
+            })
+        } else {
+          this.ExportBillLodgementControllerData.BankFormatLoad().
+            HDFCExportLODGEMENT(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+              this.TIMEOUT = setTimeout(() => {
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = '';
+                }
+                this.PREVIWES_URL = res;
+                this.VISIBLITY_PDF = true;
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+                }
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              }, 200);
+            })
+        }
+      }
+    }
+  }
+
+
   PREVIOUD_BTN: boolean = true;
   async FormValueSingle(event: any, fromValue: any, sbdata: any, bool: any) {
-    console.log(fromValue, sbdata, "FormValue");
     if (fromValue?.status != "INVALID") {
       this.ExportBillLodgement_Form = fromValue?.value;
       if (bool == true) {
         this.PREVIEWS_URL_LIST = ''
         this.alldocuments = [];
-        if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-          await this.fillFormSingle(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION).then(async (res: any) => {
-            await this.getS3Url2().then(async (res: any) => {
-              await res?.forEach(element => {
-                this.alldocuments.push(element)
-              });
-              if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-                this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS = [];
-                this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(element => {
-                  sbdata[element]?.ALL_RELATED_DOCUMENTS?.forEach(sbelement => {
-                    this.alldocuments.push(sbelement?.pdf)
-                    this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS.push(sbelement);
-                  });
-                });
-              } else {
-                sbdata?.ALL_RELATED_DOCUMENTS?.forEach(element => {
-                  this.alldocuments.push(element?.pdf)
-                });
-              }
-              var fitertemp: any = this.alldocuments.filter(n => n);
-              await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-                  this.PREVIEWS_URL_LIST = merge?.pdfurl;
-                  this.SELECTED_PREVIEWS_URL = ''
-                  setTimeout(() => {
-                    this.SELECTED_PREVIEWS_URL = merge?.pdfurl
-                    this.PREVIOUD_BTN = false;
-                  }, 500);
-                }
+        console.log(fromValue, sbdata, "FormValueSingle");
+        await this.fillFormSingle(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION).then(async (res: any) => {
+          await this.getS3Url2().then(async (res: any) => {
+            await res?.forEach(element => {
+              this.alldocuments.push(element)
+            });
+            this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS = [];
+            this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(element => {
+              sbdata[element]?.ALL_RELATED_DOCUMENTS?.forEach(sbelement => {
+                this.alldocuments.push(sbelement?.pdf)
+                this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS.push(sbelement);
               });
             });
+            var fitertemp: any = this.alldocuments.filter(n => n);
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+                this.PREVIEWS_URL_LIST = merge?.pdfurl;
+                this.SELECTED_PREVIEWS_URL = ''
+                setTimeout(() => {
+                  this.SELECTED_PREVIEWS_URL = merge?.pdfurl
+                  this.PREVIOUD_BTN = false;
+                }, 500);
+            });
           });
-        }
+        });
       }
       console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, this.PREVIEWS_URL_LIST, 'FormValueSinglePreviewSlideToggle')
     }
@@ -701,15 +691,14 @@ export class NewExportBillLodgementComponent implements OnInit {
             FedralWithANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
               this.TIMEOUT = setTimeout(() => {
                 if (sbdata != undefined && sbdata != null) {
-                  sbdata["PREVIWES_URL"] = ''
                   this.exportbilllodgementdata.PREVIWES_URL = '';
                 }
                 this.PREVIWES_URL = res;
                 this.VISIBLITY_PDF = true;
                 if (sbdata != undefined && sbdata != null) {
                   this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
-                  sbdata["PREVIWES_URL"] = this.PREVIWES_URL;
                 }
+                resolve(this.PREVIWES_URL)
                 console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
               }, 200);
             })
@@ -720,15 +709,14 @@ export class NewExportBillLodgementComponent implements OnInit {
               HDFCExportRegularization(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
                 this.TIMEOUT = setTimeout(() => {
                   if (sbdata != undefined && sbdata != null) {
-                    sbdata["PREVIWES_URL"] = ''
                     this.exportbilllodgementdata.PREVIWES_URL = '';
                   }
                   this.PREVIWES_URL = res;
                   this.VISIBLITY_PDF = true;
                   if (sbdata != undefined && sbdata != null) {
                     this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
-                    sbdata["PREVIWES_URL"] = this.PREVIWES_URL;
                   }
+                  resolve(this.PREVIWES_URL)
                   console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
                 }, 200);
               })
@@ -737,15 +725,14 @@ export class NewExportBillLodgementComponent implements OnInit {
               HDFCExportLODGEMENT(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
                 this.TIMEOUT = setTimeout(() => {
                   if (sbdata != undefined && sbdata != null) {
-                    sbdata["PREVIWES_URL"] = ''
                     this.exportbilllodgementdata.PREVIWES_URL = '';
                   }
                   this.PREVIWES_URL = res;
                   this.VISIBLITY_PDF = true;
                   if (sbdata != undefined && sbdata != null) {
                     this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
-                    sbdata["PREVIWES_URL"] = this.PREVIWES_URL;
                   }
+                  resolve(this.PREVIWES_URL)
                   console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
                 }, 200);
               })
@@ -756,22 +743,14 @@ export class NewExportBillLodgementComponent implements OnInit {
   }
 
   async SendApproval(Status: string, UniqueId: any, event: any) {
-    var UpdatedUrl: any = [];
     if (UniqueId != null) {
       var approval_data: any = {};
       delete this.USER_DATA?.members_list
       delete this.USER_DATA?.LoginToken
       let mergePdf_List: any = [];
-      if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-        for (let index = 0; index < this.alldocuments.length; index++) {
-          const element = this.alldocuments[index];
-          mergePdf_List.push(element)
-        }
-      } else {
-        for (let index = 0; index < this.exportbilllodgementdata.SELECTED_SHIPPING_BILL?.FORM_URL_LIST.length; index++) {
-          const element = this.exportbilllodgementdata.SELECTED_SHIPPING_BILL?.FORM_URL_LIST[index];
-          mergePdf_List.push(element)
-        }
+      for (let index = 0; index < this.alldocuments.length; index++) {
+        const element = this.alldocuments[index];
+        mergePdf_List.push(element)
       }
       let extradata2: any = [];
       if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
