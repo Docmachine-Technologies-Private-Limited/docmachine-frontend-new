@@ -327,6 +327,7 @@ export class CommercialComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.commercialDoc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',

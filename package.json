@@ -76,6 +76,7 @@
     "ngx-toastr": "14.2.1",
     "os": "^0.1.2",
     "owl.carousel": "2.3.4",
+    "pdf-img-convert": "^1.2.1",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^3.11.174",
     "pdfmake": "^0.2.7",
@@ -84,6 +85,7 @@
     "rxjs-compat": "6.6.7",
     "secure-ls": "^1.2.6",
     "socket.io-client": "^4.6.1",
+    "stream": "^0.0.2",
     "tslib": "^2.3.0",
     "webpack-sources": "^3.2.3",
     "xlsx": "^0.18.5",
@@ -115,5 +117,8 @@
     "sass-loader": "^13.1.0",
     "typescript": "~4.7.2",
     "webpack": "^5.74.0"
+  },
+  "browser": {
+    "stream": false
   }
 }

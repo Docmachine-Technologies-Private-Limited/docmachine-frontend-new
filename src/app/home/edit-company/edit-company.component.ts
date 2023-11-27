@@ -14,6 +14,7 @@ import { DocumentService } from '../../service/document.service';
 import * as pdfjsLib from 'pdfjs-dist';
 import * as PDFJSWorker from 'pdfjs-dist/build/pdf.worker';
 import { createCanvas } from 'canvas';
+import pdf2img from "pdf-img-convert";
 
 @Component({
   selector: 'app-edit-company',
@@ -118,7 +119,7 @@ export class EditCompanyComponent implements OnInit {
     Commodity: [],
     Bank_Details: []
   }
-  
+
   constructor(@Inject(PLATFORM_ID) public platformId,
     private userService: UserService,
     private toastr: ToastrService,
@@ -207,7 +208,7 @@ export class EditCompanyComponent implements OnInit {
       console.log("error")
     });
   }
-  
+
   email_validation(key, value): any {
     var validRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (value.match(validRegex)) {
@@ -216,7 +217,7 @@ export class EditCompanyComponent implements OnInit {
       return `Please check your ${key} email is invalid`;
     }
   }
-  
+
   IEC_validation(key, value) {
     var validRegex = /^[a-zA-Z0-9 _]{10}$/;
     if (value.match(validRegex)) {
@@ -225,7 +226,7 @@ export class EditCompanyComponent implements OnInit {
       return `Please check your ${key} email is invalid`;
     }
   }
-  
+
   phone_validation(key, value): any {
     var validRegex = /^[0-9 _]{10}$/;
     if (value.match(validRegex)) {
@@ -388,7 +389,7 @@ export class EditCompanyComponent implements OnInit {
       }
     }
   }
-  
+
   letterheadUrl: any = ''
   letterheadView(url: any) {
     this.letterheadUrl = url;
@@ -407,7 +408,7 @@ export class EditCompanyComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
-  
+
   add_more_Bank(i: any) {
     this.UPDATED_DETAILS.bankDetails.push({
       bank: '',
@@ -419,14 +420,14 @@ export class EditCompanyComponent implements OnInit {
     })
     this.ADD_REMOVE_OPTION.Bank_Details[i + 1] = (true);
   }
-  
+
   remove_more_Bank(index: any) {
     if (index != 0) {
       this.UPDATED_DETAILS.bankDetails.splice(index, 1);
       this.ADD_REMOVE_OPTION.Bank_Details.splice(index, 1);
     }
   }
-  
+
   add_location(i) {
     this.UPDATED_DETAILS.location.push({ loc: '' })
     this.ADD_REMOVE_OPTION.Location[i + 1] = (true);
@@ -437,12 +438,12 @@ export class EditCompanyComponent implements OnInit {
       this.ADD_REMOVE_OPTION.Location.splice(index, 1);
     }
   }
-  
+
   add_commodity(i) {
     this.UPDATED_DETAILS.commodity.push({ como: '' })
     this.ADD_REMOVE_OPTION.Commodity[i + 1] = (true);
   }
-  
+
   remove_commodity(index: any) {
     if (index != 0) {
       this.UPDATED_DETAILS.commodity.splice(index, 1);
@@ -532,10 +533,26 @@ export class EditCompanyComponent implements OnInit {
       var reader = new FileReader();
       reader.onload = async (e: any) => {
         let data = e.target.result.substr(e.target.result.indexOf(',') + 1)
-        await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) => {
-          this.LETTER_HEADE_URL = res;
-          console.log('Got here: ', this.LETTER_HEADE_URL);
-        })
+        // const options = {
+        //   density: 100,
+        //   saveFilename: "letterhead",
+        //   savePath: "./src/assets",
+        //   format: "png",
+        //   width: 600,
+        //   height: 600
+        // };
+        // const convert = fromBase64(e.target.result, options);
+        // const pageToConvertAsImage = 1;
+
+        // convert(pageToConvertAsImage, { responseType: "image" }).then((resolve) => {
+        //   console.log("Page 1 is now converted as image",resolve);
+          
+        // });
+        
+        // await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) => {
+        //   this.LETTER_HEADE_URL = res;
+        //   console.log('Got here: ', this.LETTER_HEADE_URL);
+        // })
       }
       reader.readAsDataURL(input.files[0]);
     }

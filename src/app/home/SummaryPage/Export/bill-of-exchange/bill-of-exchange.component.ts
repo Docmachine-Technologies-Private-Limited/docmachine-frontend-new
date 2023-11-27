@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import * as data1 from '../../../../currency.json';
 import { UserService } from './../../../../service/user.service';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
@@ -370,6 +368,7 @@ export class BillOfExchangeComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
