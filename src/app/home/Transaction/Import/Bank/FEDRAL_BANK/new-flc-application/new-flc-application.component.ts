@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { BlendMode, PDFDocument, rgb } from 'pdf-lib';
 import { UserService } from '../../../../../../service/user.service';
 import { DocumentService } from '../../../../../../service/document.service';
 import { DateFormatService } from '../../../../../../DateFormat/date-format.service';
@@ -89,6 +89,7 @@ export class NewFLCApplicationComponent implements OnInit {
   LCTransaction_Data: any = []
   PDF_VIEW_URL: any = ''
   CURRENT_DATE: any = moment(new Date()).format('DD-MM-YYYY')
+  SubmitButtonDisabled: boolean = true;
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -932,6 +933,7 @@ export class NewFLCApplicationComponent implements OnInit {
     });
     this.formvalue["AutoFillValue"] = this.LIST_OF_QUESTION_VALUE
     console.log(this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, "LIST_OF_QUESTION")
+    this.SubmitButtonDisabled = false;
   }
 
 
@@ -985,7 +987,7 @@ export class NewFLCApplicationComponent implements OnInit {
               {
                 type: "PIPO_LIST",
                 value: "",
-                label: "Select",
+                label: "Select PIPO",
                 name: 'PIPO_LIST',
                 rules: {
                   required: true,
@@ -1104,7 +1106,7 @@ export class NewFLCApplicationComponent implements OnInit {
       if (this.BankId == 'F_B_L_6') {
         const formUrl = './../assets/pdf/APPLICATION_LETTER_OF_CREDIT.pdf'
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-        const pdfDoc = await PDFDocument.load(formPdfBytes)
+        const pdfDoc = await PDFDocument.load(formPdfBytes);
         const form: any = pdfDoc.getForm()
         const getAllFields = form?.getFields();
         getAllFields?.forEach(element => {
@@ -1137,21 +1139,49 @@ export class NewFLCApplicationComponent implements OnInit {
           }
           // getAllFields[5]?.setText('');
         }
-
-
-        const pdfBytes = await pdfDoc.save()
-        var base64String1 = this._arrayBufferToBase64(pdfBytes)
-        const x1 = 'data:application/pdf;base64,' + base64String1;
-        this.PREVIWES_URL = ''
-        setTimeout(() => {
-          this.PREVIWES_URL = x1;
-          this.VISIBLITY_PDF = true;
+        await pdfDoc.save()
+        await this.addWaterMark(pdfDoc).then(async (Res: any) => {
+          const pdfBytes = await Res.save()
+          var base64String1 = this._arrayBufferToBase64(pdfBytes)
+          const x1 = 'data:application/pdf;base64,' + base64String1;
+          this.PREVIWES_URL = ''
           setTimeout(() => {
-            resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+            this.PREVIWES_URL = x1;
+            this.VISIBLITY_PDF = true;
+            setTimeout(() => {
+              resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
+              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+            }, 200);
           }, 200);
-        }, 200);
+        })
       }
+    })
+  }
+
+  addWaterMark(pdfDoc: any) {
+    return new Promise(async (resolve, reject) => {
+      let jpgImage: any = ''
+      const mergedPdf = await PDFDocument.create();
+      if (this.validator.COMPANY_INFO?.length != 0) {
+        jpgImage = await mergedPdf.embedPng(this.validator.COMPANY_INFO[0]?.letterHead)
+      }
+      const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+      console.log(pdfDoc, pdfDoc.getPageIndices(), copiedPages, jpgImage, this.validator.COMPANY_INFO[0]?.letterHead, "copiedPages")
+      copiedPages.forEach((page) => {
+        const { width, height } = page.getSize();
+        page.drawImage(jpgImage, {
+          x: 0,
+          y: 0,
+          width: width,
+          height: height,
+          opacity: 1,
+          blendMode: BlendMode.Multiply
+        });
+        mergedPdf.addPage(page);
+      });
+      const mergedPdfFile = await mergedPdf.save();
+      const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+      resolve(mergedPdfload)
     })
   }
 

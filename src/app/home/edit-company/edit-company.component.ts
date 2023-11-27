@@ -1,6 +1,4 @@
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router';
+import { FormGroup } from '@angular/forms'
 import { UserService } from './../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
@@ -15,7 +13,7 @@ import { takeWhile, timer } from 'rxjs';
 import { DocumentService } from '../../service/document.service';
 import * as pdfjsLib from 'pdfjs-dist';
 import * as PDFJSWorker from 'pdfjs-dist/build/pdf.worker';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas } from 'canvas';
 
 @Component({
   selector: 'app-edit-company',
@@ -120,6 +118,7 @@ export class EditCompanyComponent implements OnInit {
     Commodity: [],
     Bank_Details: []
   }
+  
   constructor(@Inject(PLATFORM_ID) public platformId,
     private userService: UserService,
     private toastr: ToastrService,
@@ -208,6 +207,7 @@ export class EditCompanyComponent implements OnInit {
       console.log("error")
     });
   }
+  
   email_validation(key, value): any {
     var validRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (value.match(validRegex)) {
@@ -216,6 +216,7 @@ export class EditCompanyComponent implements OnInit {
       return `Please check your ${key} email is invalid`;
     }
   }
+  
   IEC_validation(key, value) {
     var validRegex = /^[a-zA-Z0-9 _]{10}$/;
     if (value.match(validRegex)) {
@@ -224,6 +225,7 @@ export class EditCompanyComponent implements OnInit {
       return `Please check your ${key} email is invalid`;
     }
   }
+  
   phone_validation(key, value): any {
     var validRegex = /^[0-9 _]{10}$/;
     if (value.match(validRegex)) {
@@ -255,7 +257,6 @@ export class EditCompanyComponent implements OnInit {
   publicUrl: any = '';
 
   public onUploadError(args: any): void {
-    //this.uploading = false;
     console.log('onUploadError:', args, args[1].message);
   }
   public onUploadSuccess(args: any): void {
@@ -387,6 +388,7 @@ export class EditCompanyComponent implements OnInit {
       }
     }
   }
+  
   letterheadUrl: any = ''
   letterheadView(url: any) {
     this.letterheadUrl = url;
@@ -405,6 +407,7 @@ export class EditCompanyComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
+  
   add_more_Bank(i: any) {
     this.UPDATED_DETAILS.bankDetails.push({
       bank: '',
@@ -416,12 +419,14 @@ export class EditCompanyComponent implements OnInit {
     })
     this.ADD_REMOVE_OPTION.Bank_Details[i + 1] = (true);
   }
+  
   remove_more_Bank(index: any) {
     if (index != 0) {
       this.UPDATED_DETAILS.bankDetails.splice(index, 1);
       this.ADD_REMOVE_OPTION.Bank_Details.splice(index, 1);
     }
   }
+  
   add_location(i) {
     this.UPDATED_DETAILS.location.push({ loc: '' })
     this.ADD_REMOVE_OPTION.Location[i + 1] = (true);
@@ -432,10 +437,12 @@ export class EditCompanyComponent implements OnInit {
       this.ADD_REMOVE_OPTION.Location.splice(index, 1);
     }
   }
+  
   add_commodity(i) {
     this.UPDATED_DETAILS.commodity.push({ como: '' })
     this.ADD_REMOVE_OPTION.Commodity[i + 1] = (true);
   }
+  
   remove_commodity(index: any) {
     if (index != 0) {
       this.UPDATED_DETAILS.commodity.splice(index, 1);
@@ -525,7 +532,7 @@ export class EditCompanyComponent implements OnInit {
       var reader = new FileReader();
       reader.onload = async (e: any) => {
         let data = e.target.result.substr(e.target.result.indexOf(',') + 1)
-        await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) =>{
+        await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) => {
           this.LETTER_HEADE_URL = res;
           console.log('Got here: ', this.LETTER_HEADE_URL);
         })
@@ -549,7 +556,7 @@ export class EditCompanyComponent implements OnInit {
     try {
       const pdfDoc = await pdfjsLib.getDocument({ data: binaryData }).promise;
       const page: any = await pdfDoc.getPage(1);
-      const viewport = page.getViewport({ scale: .5 });
+      const viewport = page.getViewport({ scale: 1 });
       const canvas = createCanvas(viewport.width, viewport.height)
       const context = canvas.getContext('2d');
       await page.render({ canvasContext: context, viewport }).promise;

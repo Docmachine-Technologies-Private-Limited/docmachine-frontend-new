@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PDFDocument } from 'pdf-lib';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
@@ -13,9 +12,6 @@ import { ExportBillLodgementData } from './export-bill-lodgemet-data';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { StorageEncryptionDecryptionService } from '../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
-import $ from 'jquery'
 import { ExportBillLodgementControllerData } from '../Controller/Export-Bill-Lodgement-Controller';
 
 @Component({

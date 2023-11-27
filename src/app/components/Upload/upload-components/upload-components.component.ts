@@ -50,7 +50,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('morecontent') morecontent: boolean = false;
   @Input('BUTTON_PANEL_SHOW') BUTTON_PANEL_SHOW: boolean = false;
   @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean = true;
-
+  @Input('SubmitButtonDisabled') SubmitButtonDisabled: boolean = false;
+  
   Account_Type: any = [{
     type: 'OD-over draft'
   }, {

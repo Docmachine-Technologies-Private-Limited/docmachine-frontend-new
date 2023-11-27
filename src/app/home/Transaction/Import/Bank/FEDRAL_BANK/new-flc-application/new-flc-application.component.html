@@ -18,7 +18,7 @@
                             [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
                     </div>
                 </div>
-                <upload-components [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
+                <upload-components [SubmitButtonDisabled]="SubmitButtonDisabled" [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
                     id="IMPORT_TRANSACTION" (BankEvent)="setSelectedBankDetails($event)"
                     (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
                     (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)" #RawValueEventPanel>

@@ -8,9 +8,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import moment from 'moment';
 import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
-import {jsPDF} from 'jspdf';  
 
 @Component({
   selector: 'new-federal-bank-exportletterhead',

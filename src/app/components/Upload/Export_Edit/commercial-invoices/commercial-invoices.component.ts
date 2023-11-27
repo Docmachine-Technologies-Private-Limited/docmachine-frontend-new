@@ -191,6 +191,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
+    e.value.type = e.value?.type?.value != undefined ? e.value?.type?.value : e.value?.type;
     if (this.data?.commercialNumber != e.value.commercialNumber) {
       this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
         if (CustomConfirmDialogRes?.value == "Ok") {
