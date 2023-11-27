@@ -11,10 +11,6 @@ import $ from 'jquery'
 import { DomSanitizer } from '@angular/platform-browser';
 import { takeWhile, timer } from 'rxjs';
 import { DocumentService } from '../../service/document.service';
-import * as pdfjsLib from 'pdfjs-dist';
-import * as PDFJSWorker from 'pdfjs-dist/build/pdf.worker';
-import { createCanvas } from 'canvas';
-import pdf2img from "pdf-img-convert";
 
 @Component({
   selector: 'app-edit-company',
@@ -514,6 +510,7 @@ export class EditCompanyComponent implements OnInit {
     };
     reader.readAsDataURL(input.files[0]);
   }
+  
   Starhousecertificate_Url: any = '';
   Starhousecertificate_DetailsView(item: any) {
     this.Starhousecertificate_Url = ''
@@ -521,11 +518,13 @@ export class EditCompanyComponent implements OnInit {
       this.Starhousecertificate_Url = item?.file
     }, 200);
   }
+  
   bankClick(e, i) {
     this.bankName[i] = e;
     this.UPDATED_DETAILS.bankDetails[i]['BankUniqueId'] = e?.BankUniqueId
     console.log(this.bankName, e, 'this.loginForm.value.bankDetails.')
   }
+  
   LETTER_HEADE_URL: any = ''
   onFileSelect(input) {
     console.log(input.files);
@@ -533,55 +532,12 @@ export class EditCompanyComponent implements OnInit {
       var reader = new FileReader();
       reader.onload = async (e: any) => {
         let data = e.target.result.substr(e.target.result.indexOf(',') + 1)
-        // const options = {
-        //   density: 100,
-        //   saveFilename: "letterhead",
-        //   savePath: "./src/assets",
-        //   format: "png",
-        //   width: 600,
-        //   height: 600
-        // };
-        // const convert = fromBase64(e.target.result, options);
-        // const pageToConvertAsImage = 1;
-
-        // convert(pageToConvertAsImage, { responseType: "image" }).then((resolve) => {
-        //   console.log("Page 1 is now converted as image",resolve);
-          
-        // });
-        
-        // await this.convertBinaryDataToBase64Image(this.base64ToArrayBuffer(data)).then((res: any) => {
-        //   this.LETTER_HEADE_URL = res;
-        //   console.log('Got here: ', this.LETTER_HEADE_URL);
-        // })
+        this.userService.ConvertPdfImage(data).subscribe((res:any)=>{
+          console.log(res,"ConvertPdfImage")
+             this.LETTER_HEADE_URL = res?.pdf2imgae;
+        })
       }
       reader.readAsDataURL(input.files[0]);
     }
   }
-
-  base64ToArrayBuffer(base64) {
-    var binaryString = atob(base64);
-    var bytes = new Uint8Array(binaryString.length);
-    for (var i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-  }
-
-  // Function to convert BinaryData to an image and return the base64 representation
-  convertBinaryDataToBase64Image = async (binaryData) => {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker;
-    try {
-      const pdfDoc = await pdfjsLib.getDocument({ data: binaryData }).promise;
-      const page: any = await pdfDoc.getPage(1);
-      const viewport = page.getViewport({ scale: 1 });
-      const canvas = createCanvas(viewport.width, viewport.height)
-      const context = canvas.getContext('2d');
-      await page.render({ canvasContext: context, viewport }).promise;
-      const imageDataURL = canvas.toDataURL('image/png'); // Change 'image/png' to the desired format if needed
-      return imageDataURL;
-    } catch (error) {
-      // Handle any errors that occur during the conversion
-      throw new Error(`Error converting PDF to image: ${error}`);
-    }
-  };
 }

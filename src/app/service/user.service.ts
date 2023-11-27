@@ -276,6 +276,7 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
+
   updateTeamById(team, id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -284,6 +285,7 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/team/Team_Update`, { team: team, id: id }, httpOptions);
   }
+
   mergePdf(filename) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -299,6 +301,16 @@ export class UserService implements OnInit {
       httpOptions,
     );
   }
+
+  ConvertPdfImage(filename) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken })
+    };
+    return this.http.post(`${this.api_base}/pipo/ConvertPdfImage`, { filename: filename }, httpOptions);
+  }
+
   MultipleMergePdf(filename) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -428,7 +440,7 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/team/getUser`, { team: "team", }, httpOptions);
   }
-  
+
 
 
   public getUserById(id: any) {
@@ -501,14 +513,14 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
-  
+
   deleteBene(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/bene/delete`,{id: id},httpOptions).toPromise();
+    return this.http.post(`${this.api_base}/bene/delete`, { id: id }, httpOptions).toPromise();
   }
 
   getBeneByName(name) {
@@ -525,7 +537,7 @@ export class UserService implements OnInit {
       ).toPromise();
 
   }
-  
+
   public creatBuyer(buyer) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -587,16 +599,16 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
-  
+
   deleteBuyer(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/buyer/delete`,{id: id},httpOptions).toPromise();
+    return this.http.post(`${this.api_base}/buyer/delete`, { id: id }, httpOptions).toPromise();
   }
-  
+
   getBuyerByName(name) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -785,8 +797,8 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/companyinfo/deletealldata`, { companyId: id }, httpOptions).toPromise();
   }
-  
-  getCollectionNameData(data:any) {
+
+  getCollectionNameData(data: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -795,7 +807,7 @@ export class UserService implements OnInit {
     return this.http.post(`${this.api_base}/companyinfo/getCollectionNameData`, data, httpOptions).toPromise();
   }
 
-  AddDataTabel(data:any) {
+  AddDataTabel(data: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -803,7 +815,7 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/companyinfo/add`, data, httpOptions).toPromise();
   }
-  
+
   DeletebyCollectionName(id: any, name: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
