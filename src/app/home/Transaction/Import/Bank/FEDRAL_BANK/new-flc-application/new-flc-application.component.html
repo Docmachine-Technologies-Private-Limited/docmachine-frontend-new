@@ -18,9 +18,9 @@
                             [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
                     </div>
                 </div>
-                <upload-components [SubmitButtonDisabled]="SubmitButtonDisabled" [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
-                    id="IMPORT_TRANSACTION" (BankEvent)="setSelectedBankDetails($event)"
-                    (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
+                <upload-components [SubmitButtonDisabled]="SubmitButtonDisabled" [BUTTON_PANEL_SHOW]="true"
+                    [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF" id="IMPORT_TRANSACTION"
+                    (BankEvent)="setSelectedBankDetails($event)" (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
                     (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)" #RawValueEventPanel>
                     <button class="btn btn-primary PopupOpen" style="position: absolute;
                 bottom: 10px;
@@ -33,7 +33,7 @@
                 </upload-components>
             </div>
         </custom-mat-step>
-        <custom-mat-step MATSTEP_LABEL="FLC Application Summary" errorMessage="Please select Inward Remittance"
+        <custom-mat-step MATSTEP_LABEL="FLC Application Drafts" errorMessage="Please select Inward Remittance"
             [NextTrue]="true">
             <div class="mt-0 p-2">
                 <table class="table AcceptReject">
@@ -51,12 +51,19 @@
                         <tr class="table-tr" *ngFor="let item of this.LCTransaction_Data;let i=index">
                             <td scope="col" class="col-td-th-2">{{item?.date}}</td>
                             <td scope="col" class="col-td-th-2">{{item?.bundel[0]?.BenneName?.value}}</td>
-                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.PIPO_LIST?.pi_poNo}}</td>
-                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.PIPO_LIST?.currency}}</td>
-                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.RemittanceAmount}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.PIPO_LIST?.pi_poNo}}
+                            </td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.PIPO_LIST?.currency}}
+                            </td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.RemittanceAmount}}
+                            </td>
                             <td scope="col" class="col-td-th-3">
-                                <a title="View" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="view_pdf(item?.doc)">
+                                <a title="View" class="PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                    (click)="view_pdf(item?.doc)">
                                     <i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS" aria-hidden="true"></i>
+                                </a>
+                                <a title="View" (click)="Edit(item)">
+                                    <i class="fas fa-edit"></i>
                                 </a>
                             </td>
                         </tr>
@@ -75,8 +82,7 @@
     </div>
     <custom-model-header>
         <button type="button" class="btn btn-primary"
-            (click)="SendApproval(this.GetDownloadStatus?.status,'SendApprover');">Send for
-            Approval</button>
+            (click)="SendApproval(this.GetDownloadStatus?.status,'SendApprover');">Submit</button>
     </custom-model-header>
 </app-custom-model>
 
@@ -93,15 +99,13 @@
             <ng-container [ngSwitch]="field.type">
                 <div class="form-group mb-3 question-list" *ngSwitchCase="'checkbox'"
                     [ngClass]="{'AutofillActive':field?.Active==true}">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{(fieldIndex+1)}} .
-                        {{field.label}}</label>
+                    <label *ngIf="field?.label!=undefined && field?.label!=''">{{field?.label}}</label>
                     <custom-checkbox [items]="field?.option" [(ngModel)]="this.LIST_OF_QUESTION[field?.index].value">
                     </custom-checkbox>
                 </div>
                 <div class="form-group mb-3 question-list" *ngSwitchCase="'radio'"
                     [ngClass]="{'AutofillActive':field?.Active==true}">
-                    <label *ngIf="field.label!=undefined && field.label!=''">{{(fieldIndex+1)}} .
-                        {{field.label}}</label>
+                    <label *ngIf="field?.label!=undefined && field?.label!=''">{{field?.label}}</label>
                     <custom-radio-button [items]="field?.option"
                         [(ngModel)]="this.LIST_OF_QUESTION[field?.index].value">
                     </custom-radio-button>

@@ -109,62 +109,113 @@ export class NewFLCApplicationComponent implements OnInit {
       {
         type: "checkbox",
         value: "",
-        label: "CREDIT AVAILABLE WITH CREDIT AVAILABLE BY",
+        label: "39A:*** | PERCENTAGE CREDIT AMOUNT TOLERANCE",
+        fieldName: '3',
+        id: '39A:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "PERCENTAGE CREDIT AMOUNT TOLERANCE",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "39C:*** | ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
+        fieldName: '3',
+        id: '39C:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "41a : (A/D):*** | CREDIT AVAILABLE WITH CREDIT AVAILABLE BY",
         fieldName: '2',
         id: '41a',
         option: [
           {
             value: "By Sight Payment",
             text: "By Sight Payment",
+            type: "checkbox",
           },
           {
             value: "By Deferred Payment",
             text: "By Deferred Payment",
+            type: "checkbox",
           },
           {
             value: "By Negotiation",
             text: "By Negotiation",
+            type: "checkbox",
           },
           {
             value: "By Acceptance",
             text: "By Acceptance",
-          }
+            type: "checkbox",
+          },
         ]
-      }, {
+      },
+      {
         type: "checkbox",
-        value: "",
-        label: "DRAFTS AT",
+        value: "Drawn at ____90______ days from Shipment Date",
+        label: "42c:*** | DRAFTS AT",
         fieldName: '3',
-        id: '42c',
+        id: '42c:***',
         option: [
           {
-            value: "At Sight",
-            text: "At Sight",
+            value: `Drawn at ____90______ days from Shipment Date`,
+            type: "textarea",
+            label: "DRAFTS AT",
+            style: `height:100px !important;`
           },
-          {
-            value: "Drawn at ____90______ days from Shipment Date",
-            text: "Drawn at ____90______ days from Shipment Date",
-          }
         ]
-      }, {
-        type: "radio",
+      },
+      {
+        type: "checkbox",
         value: "",
-        label: "PARTIAL SHIPMENTS	",
+        label: "42a:*** | DRAWEE",
+        fieldName: '3',
+        id: '42a:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "DRAWEE",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "43P:*** | PARTIAL SHIPMENTS",
         fieldName: '4',
         id: '43P',
         option: [
           {
             value: "PROHIBITED",
             text: "PROHIBITED",
+            type: "checkbox",
           },
           {
             value: "PERMITTED",
             text: "PERMITTED",
+            type: "checkbox",
           }
         ]
-      }
-      , {
-        type: "radio",
+      },
+      {
+        type: "checkbox",
         value: "",
         label: "TRANSHIPMENTS",
         fieldName: '5',
@@ -173,741 +224,232 @@ export class NewFLCApplicationComponent implements OnInit {
           {
             value: "PROHIBITED",
             text: "PROHIBITED",
+            type: "checkbox",
           },
           {
             value: "PERMITTED",
             text: "PERMITTED",
+            type: "checkbox",
           }
         ]
-      }
-      , {
-        type: "radio",
+      },
+      {
+        type: "checkbox",
         value: "",
-        label: "CONFIRMATION INSTRUCTIONS",
+        label: "44A:*** | TYPE OF L/C",
+        fieldName: '3',
+        id: '44A:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "TYPE OF L/C",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "44B:*** | SHIPMENT TO",
+        fieldName: '3',
+        id: '44B:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "SHIPMENT TO",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "44C:*** | LATEST DATE OF SHIPMENT",
+        fieldName: '3',
+        id: '44C:***',
+        option: [
+          {
+            value: ``,
+            type: "date",
+            label: "LATEST DATE OF SHIPMENT",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "45A:*** | QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
+        fieldName: '3',
+        id: '45A:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "*** | IMPORT LICENCE/OGL DETAILS",
+        fieldName: '3',
+        id: '***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "IMPORT LICENCE/OGL DETAILS",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "*** | IMPORT EXPORT CODE NO.",
+        fieldName: '3',
+        id: '***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "IMPORT EXPORT CODE NO.",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "46A:*** | DOCUMENTS REQUIRED",
+        fieldName: '3',
+        id: '46A:***',
+        option: [
+          {
+            value: `SIGNED DRAFTS FOR 100% OF THE INVOICE VALUE.
+            SIGNED COMMERCIAL INVOICE (S) IN COPIES FULL SET OF SIGNED “CLEAN” "ON BOARD" OCEAN BILLS OF LADING MADE OUT TO ORDER AND BLANK ENDORSED MARKED 
+            FREIGHT PREPAID/FREIGHT PAYABLE AT DESTINATION EVIDENCING SHIPMENT OF MERCHANDISE DESCRIBED ABOVE. 
+            BILLS OF LADING MUST STATE FULL NAME AND ADDRESS OF BOTH APPLICANT AND ____________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. 
+            OR AIRWAY BILL (ORIGINAL PLUS THREE COPIES) ISSUED BY AIRLINE OR IT’S AGENT MADE IN THE NAME OF ___________________________________ BANK LIMITED 
+            FOR ACCOUNT APPLICANT EVIDENCING THE CURRENT AIRFREIGHT OF GOODS. AIRWAY BILL SHOULD BE MARKED “FREIGHT PREPAID/TO COLLECT”. AIRWAY BILLS MUST 
+            STATE FULL NAME AND ADDRESS OF APPLICANT AND __________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. AIRWAY BILL MUST INDICATE FLIGHT NUMBER AND DATE.
+            MARINE/AVIATION INSURANCE POLICY OR CERTIFICATE (ORIGINAL PLUS COPY) DATED NOT LATER THAN THE DATE OF BILLS OF LADING/ AIRWAY BILL SIGNED AND ISSUED BY INSURANCE 
+            COMPANY MADE TO ORDER AND BLANK ENDORSED IN CURRENCY OF THE CREDIT FOR 110 % OF CIF INVOICE VALUE , COVERING INSTITUTE CARGO CLAUSE (A), WITH EXTENDED COVER FOR 
+            TRANSHIPMENT RISKS, IF APPLICABLE, THEFT, PILFERAGE, BREAKAGE AND NON-DELIVERY, INSTITUTE WAR CLAUSE (CARGO) AND INSTITUTE STRIKES CLAUSE (CARGO), 
+            INSTITUTE TRANSIT CLAUSES FOR WAREHOUSE TO WAREHOUSE COVER WITH CLAIMS PAYABLE IN INDIA IRRESPECTIVE OF PERCENTAGE.
+            SIGNED PACKING LIST IN TRIPLICATE CERTIFICATE OF ORIGIN ISSUED BY CHAMBER OF COMMERCE IN TRILICATE CERTIFYING GOODS OF ORIGIN. 
+            SHIPPING COMPANY’S OR THEIR AGENT’S CERTIFICATE (IN DUPLICATE) STATING THAT THE CARRYING VESSEL NAMED IN THE BILL OF LADING IS A SEAWORTHY VESSEL, 
+            NOT MORE THAN TWENTY-FIVE YEARS OLD, HAS BEEN APPROVED UNDER INSTITUTE CLASSIFICATION CLAUSE (CLASS MAINTAINED EQUIVALENT TO LLOYDS 100 A1) AND HAS
+            BEEN REGISTERED WITH AN APPROVED CLASSIFICATION SOCIETY (CERTIFICATE TO SPECIFY THE NAME OF THE CLASSIFICATION SOCIETY). A CERTIFICATE IN DUPLICATE
+            ISSUED BY THE SHIPPING COMPANY OR THEIR AGENT STATING THAT THE VESSEL MENTIONED IN THE BILL OF LADING AND THE PORTS FROM/TO WHICH THE GOODS ARE SHIPPED 
+            ARE FREE FROM EMBARGOS AND THAT THERE ARE NO SUBSISTING SANCTIONS IMPOSED ON THE VESSEL/PORT. BENEFICIARY’S CERTIFICATE TO THE EFFECT THAT ONE ADDITIONAL
+            SET OF NON- NEGOTIABLE DOCUMENTS INCLUDING ONE COPY EACH OF INVOICE, AWB/BL, INSURANCE DOCUMENTS IF ANY, CERTIFICATE OF ORIGIN HAS BEEN FORWARDED TO THE APPLICANT
+            BY COURIER AT THE EARLIEST BUT NOT MORE THAN TWO WORKING DAYS AFTER SHIPMENT. (ANY OTHER DOCUMENTS AS MAY BE REQUIRED)`,
+            type: "textarea",
+            label: "DOCUMENTS REQUIRED",
+            style: `height:300px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "47 A:T | ADDITIONAL CONDITIONS",
+        fieldName: '3',
+        id: '47 A:T',
+        option: [
+          {
+            value: `SEPARATE DRAFT AND INVOICE FOR INTEREST AMOUNT REQUIRED INVOICE SHOULD QUOTE IMPORT LICENCE/OGL REFERENCE AND 
+            CERTIFY THAT THE GOODS SUPPLIED ARE AS PER PURCHASE ORDER OF THE APPLICANT. GROSS FOB/CIF/CFR VALUE OF THE GOODS BEFORE 
+            DEDUCTION OF AGENT’S COMMISSION, IF ANY, MUST NOT EXCEED THE MAXIMUM CREDIT AMOUNT. ALL DOCUMENTS MUST BE IN ENGLISH ALL
+            DOCUMENTS MUST MENTION OUR L/C NUMBER AND DATE AND THAT THE GOODS ARE FREELY IMPORTABLE UNDER EXIM POLICY 2009-2014 / ARE 
+            IMPORTED UNDER LICENSE NUMBER (WHICHEVER IS APPLICABLE) DOCUMENTS PRODUCED BY REPROGRAPIC PROCESS/COMPUTERISED CARBON COPIES 
+            ARE NOT ACCEPTABLE UNLESS MARKED ORIGINAL AND SIGNED. OTHERS, PLEASE SPECIFY`,
+            type: "textarea",
+            label: "ADDITIONAL CONDITIONS",
+            style: `height:300px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "71 B:*** | SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
+        fieldName: '3',
+        id: '71 B:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "48:*** | PERIOD OF PRESENTATION OF DOCUMENTS",
+        fieldName: '3',
+        id: '48:***',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "PERIOD OF PRESENTATION OF DOCUMENTS",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "49:*** | CONFIRMATION INSTRUCTIONS",
         fieldName: '6',
-        id: '49',
+        id: '49:***',
         option: [
           {
             value: "WITHOUT",
             text: "WITHOUT",
+            type: "checkbox",
           },
           {
             value: "CHARGES PAYABLE BY",
             text: "CHARGES PAYABLE BY",
+            type: "checkbox",
           }
         ]
-      }
-      , {
-        type: "radio",
+      },
+      {
+        type: "checkbox",
         value: "",
-        label: "SENDER TO RECEIVER INFORMATION",
+        label: "57a | “ADVISE THROUGH” BANK",
+        fieldName: '3',
+        id: '57a',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "“ADVISE THROUGH” BANK",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "72: | SENDER TO RECEIVER INFORMATION",
         fieldName: '7',
         id: '72',
         option: [
           {
             value: "NOT APPLICABLE",
             text: "NOT APPLICABLE",
-          }
-        ]
-      }
-    ]
-
-    this.LIST_OF_QUESTION2 = [
-      {
-        type: "checkbox",
-        value: "",
-        label: "CREDIT AVAILABLE WITH CREDIT AVAILABLE BY",
-        fieldName: '2',
-        id: '41a',
-        option: [
-          {
-            value: "sdfdsf",
-            text: "By Sight Payment",
-          },
-          {
-            value: "wedsfdsf",
-            text: "By Deferred Payment",
-          },
-          {
-            value: "dsfsdfds",
-            text: "By Negotiation",
-          },
-          {
-            value: "sdfdsfdsfdsf",
-            text: "By Acceptance",
-          }
-        ]
-      }, {
-        type: "checkbox",
-        value: "",
-        label: "DRAFTS AT",
-        fieldName: '3',
-        id: '39A',
-        option: [
-          {
-            value: "",
-            text: "At Sight",
-          },
-          {
-            value: "",
-            text: "Drawn at __________ days from Shipment Date",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }, {
-        type: "radio",
-        value: "",
-        label: "MAXIMUM CREDIT AMOUNT | 39B",
-        fieldName: '4',
-        id: '39B',
-        option: [
-          {
-            value: "test1",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "ets2",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "test333",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "test343434",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '5',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '6',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '7',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '8',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '9',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '10',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '11',
-        id: '44C',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '12',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '13',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '14',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '15',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '16',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '17',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '18',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '19',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '20',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '21',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '22',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '23',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '24',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '25',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '26',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '27',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '28',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '29',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          }
-        ]
-      }
-      , {
-        type: "radio",
-        value: "",
-        label: "Credit Note Number*",
-        fieldName: '30',
-        option: [
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
-          },
-          {
-            value: "",
-            text: "Credit Note Number*",
+            type: "checkbox",
           }
         ]
       }
@@ -924,15 +466,14 @@ export class NewFLCApplicationComponent implements OnInit {
       element['Active'] = false
     });
   }
-  LIST_OF_QUESTION_VALUE: any = [];
 
+  LIST_OF_QUESTION_VALUE: any = [];
   QuestionDoneButton() {
     this.LIST_OF_QUESTION_VALUE = [];
     this.LIST_OF_QUESTION.forEach(element => {
       this.LIST_OF_QUESTION_VALUE.push(element?.value);
     });
-    this.formvalue["AutoFillValue"] = this.LIST_OF_QUESTION_VALUE
-    console.log(this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, "LIST_OF_QUESTION")
+    console.log(this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, this.formvalue, "LIST_OF_QUESTION")
     this.SubmitButtonDisabled = false;
   }
 
@@ -962,6 +503,16 @@ export class NewFLCApplicationComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        SingleMultiple: {
+          type: "yesnocheckbox",
+          value: '',
+          label: "Do you need add Covering Letter?",
+          CoveringLetter: true,
+          rules: {
+            required: true,
+          },
+          YesNo: '',
         },
         BankDebit: {
           type: "BankCheckBox",
@@ -1123,24 +674,44 @@ export class NewFLCApplicationComponent implements OnInit {
         getAllFields[3]?.setText(this.validator.COMPANY_INFO[0]?.teamName + ' & ' + this.validator.COMPANY_INFO[0]?.adress);
 
         if (filldata != null && filldata != undefined && filldata != '') {
+          this.formvalue["AutoFillValue"] = this.LIST_OF_QUESTION_VALUE
           getAllFields[0]?.setText(filldata?.BankDebit?.bank + '\n' + filldata?.BankDebit?.bicAddress);
           // getAllFields[1]?.setText(this.CURRENT_DATE?.toString());
           getAllFields[4]?.setText(filldata?.BenneName?.value + '\n' + filldata?.BenneName?.Address);
           getAllFields[5]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
           getAllFields[7]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
-          if (filldata?.AutoFillValue) {
-            getAllFields[9]?.setText(filldata?.AutoFillValue[0]);
-            getAllFields[10]?.setText(filldata?.AutoFillValue[1]);
-            getAllFields[12]?.setText(filldata?.AutoFillValue[2]);
-            getAllFields[13]?.setText(filldata?.AutoFillValue[3]);
-            getAllFields[9]?.setText(filldata?.AutoFillValue[0]);
-            getAllFields[9]?.setText(filldata?.AutoFillValue[0]);
-            getAllFields[9]?.setText(filldata?.AutoFillValue[0]);
+          if (filldata?.AutoFillValue != undefined && filldata?.AutoFillValue?.length != 0) {
+            getAllFields[6]?.setText(filldata?.AutoFillValue[0]);
+            getAllFields[8]?.setText(filldata?.AutoFillValue[1]);
+            getAllFields[9]?.setText(filldata?.AutoFillValue[2]);
+            getAllFields[10]?.setText(filldata?.AutoFillValue[3]);
+            getAllFields[11]?.setText(filldata?.AutoFillValue[4]);
+            getAllFields[12]?.setText(filldata?.AutoFillValue[5]);
+            getAllFields[13]?.setText(filldata?.AutoFillValue[6]);
+            getAllFields[14]?.setText(filldata?.AutoFillValue[7]);
+            getAllFields[15]?.setText(filldata?.AutoFillValue[8]);
+            getAllFields[16]?.setText(filldata?.AutoFillValue[9]);
+            getAllFields[17]?.setText(filldata?.AutoFillValue[10]);
+            getAllFields[18]?.setText(filldata?.AutoFillValue[11]);
+            getAllFields[19]?.setText(filldata?.AutoFillValue[12]);
+            getAllFields[20]?.setText(filldata?.AutoFillValue[13]);
+            getAllFields[21]?.setText(filldata?.AutoFillValue[14]);
+            getAllFields[22]?.setText(filldata?.AutoFillValue[15]);
+            getAllFields[23]?.setText(filldata?.AutoFillValue[16]);
+            getAllFields[24]?.setText(filldata?.AutoFillValue[17]);
+            getAllFields[25]?.setText(filldata?.AutoFillValue[18]);
+            getAllFields[26]?.setText(filldata?.AutoFillValue[19]);
+
+
+            getAllFields[38]?.setText(this.CURRENT_DATE);
+            // getAllFields[39]?.setText(filldata?.BankDebit?.bank);
+            getAllFields[40]?.setText(filldata?.BankDebit?.accNumber);
+            getAllFields[41]?.setText(this.validator.COMPANY_INFO[0]?.adress);
           }
           // getAllFields[5]?.setText('');
         }
         await pdfDoc.save()
-        await this.addWaterMark(pdfDoc).then(async (Res: any) => {
+        await this.addWaterMark(pdfDoc, filldata != null ? filldata?.SingleMultiple?.bool : false).then(async (Res: any) => {
           const pdfBytes = await Res.save()
           var base64String1 = this._arrayBufferToBase64(pdfBytes)
           const x1 = 'data:application/pdf;base64,' + base64String1;
@@ -1158,7 +729,7 @@ export class NewFLCApplicationComponent implements OnInit {
     })
   }
 
-  addWaterMark(pdfDoc: any) {
+  addWaterMark(pdfDoc: any, condition: boolean) {
     return new Promise(async (resolve, reject) => {
       let jpgImage: any = ''
       const mergedPdf = await PDFDocument.create();
@@ -1169,14 +740,16 @@ export class NewFLCApplicationComponent implements OnInit {
       console.log(pdfDoc, pdfDoc.getPageIndices(), copiedPages, jpgImage, this.validator.COMPANY_INFO[0]?.letterHead, "copiedPages")
       copiedPages.forEach((page) => {
         const { width, height } = page.getSize();
-        page.drawImage(jpgImage, {
-          x: 0,
-          y: 0,
-          width: width,
-          height: height,
-          opacity: 1,
-          blendMode: BlendMode.Multiply
-        });
+        if (condition == true) {
+          page.drawImage(jpgImage, {
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+            opacity: 1,
+            blendMode: BlendMode.Multiply
+          });
+        }
         mergedPdf.addPage(page);
       });
       const mergedPdfFile = await mergedPdf.save();
@@ -1376,84 +949,16 @@ export class NewFLCApplicationComponent implements OnInit {
         pipo_id.push(element?.PIPO_LIST?._id)
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
-
-      var approval_data: any = {
-        id: UniqueId + '_' + this.randomId(10),
-        tableName: 'LC-Transaction',
-        deleteflag: '-1',
-        userdetails: this.validator.userData,
-        status: 'pending',
-        documents: this.alldocuments,
-        Types: 'downloadPDF',
-        TypeOfPage: 'Transaction',
-        FileType: this.validator.userData?.sideMenu
-      }
-      this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
-        console.log(approval_data, res, 'approval_data')
-        if (res?.id != approval_data?.id || res == undefined) {
-          this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.validator.userData['RoleCheckbox'], approval_data, () => {
-            var data: any = {
-              data: {
-                formdata: this.formvalue,
-                documents: this.alldocuments,
-                pipo_1: pipo_id,
-                Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
-              },
-              TypeTransaction: 'LC-Transaction',
-              fileType: this.validator.userData?.sideMenu,
-              UserDetails: approval_data?.id,
-              pipo: pipo_id,
-            }
-            this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-              let updatedData = {
-                "TransactionRef": [
-                  res1._id,
-                ]
-              }
-              this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
-                console.log('king123');
-                console.log(data);
-              }, (error) => {
-                console.log('error');
-              });
-
-              this.documentService.addLCTransaction({
-                bundel: [this.formvalue],
-                file: this.USER_DATA?.sideMenu,
-                doc: this.alldocuments[1]
-              }).subscribe((res2: any) => {
-                this.documentService.AnyUpdateTable({
-                  id: res1._id,
-                }, { LCTransactionRef: [res2?.data?._id] }, 'ExportTransaction').subscribe((res: any) => {
-                  this.router.navigate(['/home/dashboardTask'])
-                })
-              })
-              this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
-                console.log(res, 'dsdsdsdsdsdsds');
-                this.GetDownloadStatus = res[0];
-                if (res.length == 0) {
-                  this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
-                    console.log(res, 'dsdsdsdsdsdsds');
-                    this.GetDownloadStatus = res[0];
-                  })
-                }
-              })
-            });
-
-          });
-        } else {
-          this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Send for Approval',
-            `You already send for approval <br>&<br>also check ${Status} panel`)
-        }
-      });
+      this.documentService.addLCTransaction({
+        bundel: [this.formvalue],
+        file: this.USER_DATA?.sideMenu,
+        doc: this.alldocuments[1],
+        "pipo": pipo_id
+      }).subscribe((res2: any) => {
+        this.router.navigate(['/home/dashboardTask'])
+      })
     }
-    console.log(UniqueId, approval_data, this.ExportBillLodgement_Form, 'uiiiiiiiiiiiiii')
-  }
-
-  getStatusCheckerMaker(id: any) {
-    return new Promise((resolve, reject) => {
-      this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
-    })
+    console.log(UniqueId, this.ExportBillLodgement_Form, 'uiiiiiiiiiiiiii')
   }
 
   view_pdf(url: any) {
@@ -1462,5 +967,95 @@ export class NewFLCApplicationComponent implements OnInit {
       this.PDF_VIEW_URL = url;
     }, 200);
   }
-
+  
+  Edit(items:any){
+    console.log(items,"Edit")
+    setTimeout(() => {
+      this.validator.buildForm({
+        BenneName: {
+          type: "benne",
+          value: items?.bundel[0]?.BenneName,
+          label: "Select Beneficiary",
+          rules: {
+            required: true,
+          }
+        },
+        SingleMultiple: {
+          type: "yesnocheckbox",
+          value: items?.bundel[0]?.SingleMultipl,
+          label: "Do you need add Covering Letter?",
+          CoveringLetter: true,
+          rules: {
+            required: true,
+          },
+          YesNo: items?.bundel[0]?.SingleMultipl,
+        },
+        BankDebit: {
+          type: "BankCheckBox",
+          value: items?.bundel[0]?.BankDebit,
+          label: "Select Bank",
+          Banklabel: "To Debit Account no. & Account Type*",
+          TypeOfCurrency: "INR",
+          ChargeLabelHide: true,
+          rules: {
+            required: true,
+          }
+        },
+        paymentTerm: {
+          type: "formGroup",
+          label: "",
+          GroupLabel: ['PI/PO 1'],
+          AddNewRequried: false,
+          rules: {
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "PIPO_LIST",
+                value: items?.bundel[0]?.PIPO_LIST,
+                label: "Select PIPO",
+                name: 'PIPO_LIST',
+                rules: {
+                  required: true,
+                },
+                callback: (item: any) => {
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  let currentVal = item?.value;
+                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+                  myForm['touched'] = true;
+                  myForm['status'] = 'VALID';
+                  console.log(item, "callback")
+                },
+              },
+              {
+                type: "currency",
+                value: "",
+                label: "Currency",
+                name: 'currency',
+                rules: {
+                  required: true,
+                },
+                disabled: true
+              },
+              {
+                type: "TextValiadtion",
+                value: "",
+                label: "Remittance Amount",
+                name: 'RemittanceAmount',
+                EqualName: "amount",
+                rules: {
+                  required: true,
+                },
+                errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+              },
+            ]
+          ]
+        },
+      }, 'IMPORT_TRANSACTION');
+      console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
+    }, 200);
+  }
 }
