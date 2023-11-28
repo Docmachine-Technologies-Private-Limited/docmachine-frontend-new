@@ -496,7 +496,8 @@
                     <app-ng-dropdown-custom *ngIf="this.validator?.BENEFICIARY_DETAILS?.length!=0"
                         [items]="this.validator?.BENEFICIARY_DETAILS" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [value]="field?.value" (modelChanges)="this.BENEFICIARY_EVENT.emit($event)"
+                        [value]="field?.value" (modelChanges)="this.BENEFICIARY_EVENT.emit($event);field.value=$event;
+                        this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.setValue($event)"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </app-ng-dropdown-custom>
                 </div>
