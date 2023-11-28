@@ -53,22 +53,22 @@
                         </ng-select>
                         <ng-input [disabled]="true"
                             *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
-                            [item]="{value:this.validator?.PIPO_TRANSCTION_LIST?.pi_po_buyerName,type:'text'}"
+                            [item]="{value:this.validator?.PIPO_TRANSCTION_LIST[0]?.pi_po_buyerName,type:'text'}"
                             id="PIPO_TRANSACTION" disabled
                             (event)="this.clickPipo(this.validator?.PIPO_TRANSCTION_LIST[0])">
                         </ng-input>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
-                            *ngIf="this.PIPO_DISABLED==true && PIPO_TARANSACTION==false" [attr.popup-close]="this.id"><i
-                                class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
+                            *ngIf="this.PIPO_DISABLED==true && this.UPLOAD_BUTTON==true && PIPO_TARANSACTION==false"
+                            [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
+                                [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success PopupOpen" *ngIf="this.PIPO_DISABLED==false"
                             [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
                                 [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
-                            *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
-                            [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
-                                [attr.popup-close]="this.id"></i>
+                            *ngIf="this.PIPO_TARANSACTION==true" [attr.popup-close]="this.id"><i
+                                class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
                                 aria-hidden="true"></i>

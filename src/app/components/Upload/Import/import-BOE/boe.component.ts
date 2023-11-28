@@ -282,7 +282,7 @@ export class BOEComponent implements OnInit {
               console.log('updateManyPipo', data_res);
               this.toastr.success('Boe added successfully.');
               var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
-              if (Transaction_id != '') {
+              if (Transaction_id != '' && Transaction_id != null && Transaction_id != undefined) {
                 this.documentService.AnyUpdateTable(Transaction_id, { BOERef: [data?._id] }, "ExportTransaction").subscribe((res: any) => {
                   this.documentService.UpdateTransaction({
                     id: Transaction_id, data: { BOE: newform }
