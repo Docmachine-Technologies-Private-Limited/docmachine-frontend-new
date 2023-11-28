@@ -398,11 +398,19 @@
                 <div class="form-group mb-0" *ngSwitchCase="'BankCheckBox'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator.BANK_LIST_DROPDOWN?.length!=0"
-                        [items]="this.validator.BANK_LIST_DROPDOWN" bindLabel="value" [multiple]="false"
+                    <!-- <ng-select *ngIf="this.validator.BANK_LIST_DROPDOWN?.length!=0"
+                        [items]="this.validator.BANK_LIST_DROPDOWN" bindLabel="bank" [multiple]="false"
                         (change)="BANK_CHECKBOX($event,field?.ChargeLabelHide)"
-                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
-                    </ng-select>
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" [(ngModel)]="field.value">
+                    </ng-select> -->
+                    <app-ng-dropdown-custom *ngIf="this.validator.BANK_LIST_DROPDOWN?.length!=0"
+                        [items]="this.validator.BANK_LIST_DROPDOWN" 
+                        bindLabel="bank"
+                        [multiple]="false"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [value]="field?.value" (modelChanges)="BANK_CHECKBOX($event,field?.ChargeLabelHide)"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
+                    </app-ng-dropdown-custom>
                     <label class="mt-2 mb-2"
                         *ngIf="(field.Banklabel!=undefined || field.Banklabel!='') && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
                     <div *ngFor="let item of this.validator.CHECK_BOX_BANK_LIST;let in=index" class="mt-2">
@@ -485,12 +493,12 @@
                 <div class="form-group mb-0" *ngSwitchCase="'benne'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-select *ngIf="this.validator?.BENEFICIARY_DETAILS?.length!=0"
+                    <app-ng-dropdown-custom *ngIf="this.validator?.BENEFICIARY_DETAILS?.length!=0"
                         [items]="this.validator?.BENEFICIARY_DETAILS" bindLabel="value" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        (change)="this.BENEFICIARY_EVENT.emit($event)" [name]="field.fieldName"
-                        [(ngModel)]="field.value">
-                    </ng-select>
+                        [value]="field?.value" (modelChanges)="this.BENEFICIARY_EVENT.emit($event)"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
+                    </app-ng-dropdown-custom>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'RemitterName'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
@@ -1240,6 +1248,7 @@
                                             [multiple]="false"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
                                             (change)="this.setFormValue($event?.Address,(formGroupItem?.index+1),field?.fieldName,formGroupItem?.InputBindValue)"
+                                            (ngModelChange)="this.setFormValue($event?.Address,(formGroupItem?.index+1),field?.fieldName,formGroupItem?.InputBindValue)"
                                             [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value">
                                         </ng-select>
                                     </div>
@@ -1390,8 +1399,7 @@
                 (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
             <button *ngIf="BUTTON_PANEL_SHOW==false" type="button" class="btn btn-primary submit-button" [id]="this.id"
                 [ngClass]="{'button-show':this.HIDE_SUBMIT_BUTTON==true,'button-hide':this.HIDE_SUBMIT_BUTTON==false}"
-                [style]="SubmitButtonStyle"
-                [disabled]="SubmitButtonDisabled"
+                [style]="SubmitButtonStyle" [disabled]="SubmitButtonDisabled"
                 (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
         </div>
     </form>

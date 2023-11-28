@@ -509,16 +509,16 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   BANK_CHECKBOX(value: any, CHECK_BOX_BANK_LIST_CHARGES) {
-    console.log(value, this.validator?.bankDetail[value?.id], this.validator?.bankDetail, CHECK_BOX_BANK_LIST_CHARGES, "BANK_CHECKBOX")
-    this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.id];
+    console.log(value, this.validator?.bankDetail[value?.BankUniqueId], this.validator?.bankDetail, CHECK_BOX_BANK_LIST_CHARGES, "BANK_CHECKBOX")
+    this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.BankUniqueId];
     this.validator.CHECK_BOX_BANK_LIST_CHARGES = []
     if (CHECK_BOX_BANK_LIST_CHARGES == true) {
-      this.validator.CHECK_BOX_BANK_LIST_CHARGES = this.validator?.ToCreditAccountdata[value?.id];
+      this.validator.CHECK_BOX_BANK_LIST_CHARGES = this.validator?.ToCreditAccountdata[value?.BankUniqueId];
     }
-    this.validator.CHECK_BOX_BANK_LIST.forEach(element => {
+    this.validator.CHECK_BOX_BANK_LIST?.forEach(element => {
       element['checked'] = false;
     });
-    this.validator.CHECK_BOX_BANK_LIST_CHARGES.forEach(element => {
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES?.forEach(element => {
       element['checked'] = false;
     });
   }

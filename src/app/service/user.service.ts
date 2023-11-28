@@ -306,9 +306,19 @@ export class UserService implements OnInit {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions: Object = {
-      headers: new HttpHeaders({ Authorization: this.authToken })
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+
     };
     return this.http.post(`${this.api_base}/pipo/ConvertPdfImage`, { filename: filename }, httpOptions);
+  }
+
+  ConvertPdfDocx(filename) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/pipo/ConvertPdfDocx`, { filename: filename }, httpOptions);
   }
 
   MultipleMergePdf(filename) {
@@ -324,7 +334,6 @@ export class UserService implements OnInit {
     console.log(this.authToken);
     const httpOptions: Object = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
-      responseType: "blob"
     };
     return new Promise((resolve, reject) => {
       this.http.post(`${this.api_base}/pipo/mergePdf`, { filename: filename }, httpOptions).subscribe((res: any) => resolve(res))

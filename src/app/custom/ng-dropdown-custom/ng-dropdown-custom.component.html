@@ -6,11 +6,8 @@
             #dropdownShowId [placeholder]="placeHolderText">
             <span class="clear-input" *ngIf="dropdownShowId.value!=''" title="clear all" (click)="clearInput(dropdownShowId)">×</span>
             <ul class="dropdown">
-                <li *ngFor="let item of this.FILTER_DROPDOWN"  [attr.popup-close]="popup_close" [class]="class" (click)="dropdownHide($event,item,dropdownShowId)">{{item[bindLabel]}}</li>
+                <li *ngFor="let item of this.FILTER_DROPDOWN" [attr.popup-close]="popup_close" [class]="class" (click)="dropdownHide($event,item,dropdownShowId)">{{item[bindLabel]}}</li>
             </ul>
-            <!-- <ul class="dropdown" *ngIf="ArrayItems.length!=0">
-                <li *ngFor="let item of ArrayItems"  [attr.popup-close]="popup_close" [class]="class" (click)="dropdownHide(item,dropdownShowId)">{{item}}</li>
-            </ul> -->
         </div>
     </div>
 </div>

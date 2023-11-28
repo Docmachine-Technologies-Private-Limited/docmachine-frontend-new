@@ -285,9 +285,9 @@ export class UploadServiceValidatorService implements OnInit {
           text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
           org: data['data'][0]['bankDetails'][index]
         })
-        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.bank?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
           this.BANK_LIST_DROPDOWN.push({
-            value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+            bank: data['data'][0]['bankDetails'][index]?.bank, BankUniqueId: data['data'][0]['bankDetails'][index]?.BankUniqueId,
           })
         }
       }

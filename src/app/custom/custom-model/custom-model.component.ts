@@ -55,6 +55,10 @@ export class CustomModelComponent implements OnInit {
     return $('.upload-modal#' + this.id).css('display', 'none');
   }
 
+  get displayHide() {
+    return $('.upload-modal#' + this.id).css('display', 'none');
+  }
+  
   get displayShow() {
     return $('.PopupOpen#' + this.id).click()
   }

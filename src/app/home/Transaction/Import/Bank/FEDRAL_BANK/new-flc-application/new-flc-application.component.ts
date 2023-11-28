@@ -458,6 +458,7 @@ export class NewFLCApplicationComponent implements OnInit {
       element['index'] = index;
       element['Active'] = false
     });
+    this.EDIT_OPTION_ENABLED = false;
     console.log(this.LIST_OF_QUESTION, 'LIST_OF_QUESTION');
   }
 
@@ -490,6 +491,7 @@ export class NewFLCApplicationComponent implements OnInit {
         console.log(res, "getLCTransaction")
       })
     });
+    this.EDIT_OPTION_ENABLED = false;
   }
 
   response(args: any) {
@@ -589,11 +591,11 @@ export class NewFLCApplicationComponent implements OnInit {
     console.log(url, "sadsdasdasdsdas")
   }
 
-  setSelectedBankDetails(bank: any) {
+  setSelectedBankDetails(bank: any, formvalue: any) {
     this.BankId = bank?.BankUniqueId;
     this.SELECT_BUYER_DETAILS = bank;
     console.log(bank, "setSelectedBankDetails")
-    this.fillForm(null);
+    this.fillForm(formvalue);
   }
 
   BENEFICIARY_DETAILS: any = [];
@@ -940,7 +942,7 @@ export class NewFLCApplicationComponent implements OnInit {
     }
   }
 
-  SendApproval(Status: string, UniqueId: any) {
+  SaveAsDraft(Id: string, UniqueId: any) {
     if (UniqueId != null) {
       var pipo_id: any = [];
       var pipo_name: any = [];
@@ -949,16 +951,93 @@ export class NewFLCApplicationComponent implements OnInit {
         pipo_id.push(element?.PIPO_LIST?._id)
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
+      let sumnewId: any = Id + '' + this.randomId(50)?.toUpperCase()
       this.documentService.addLCTransaction({
         bundel: [this.formvalue],
         file: this.USER_DATA?.sideMenu,
         doc: this.alldocuments[1],
-        "pipo": pipo_id
+        Documents: this.alldocuments,
+        "pipo": pipo_id,
+        id: sumnewId
       }).subscribe((res2: any) => {
         this.router.navigate(['/home/dashboardTask'])
       })
     }
     console.log(UniqueId, this.ExportBillLodgement_Form, 'uiiiiiiiiiiiiii')
+  }
+
+  SEND_APPROVAL_DATA: any = [];
+  OpenSendApprovalPopUp(data: any, AutofillLCTableButton: any) {
+    this.SEND_APPROVAL_DATA = data;
+    console.log(data, AutofillLCTableButton, "OpenSendApprovalPopUp")
+  }
+
+  SendApproval(Status: string, SEND_APPROVAL_DATA: any, UniqueId: any, POPUP_CLOSE) {
+    if (UniqueId != null) {
+      var pipo_id: any = [];
+      var pipo_name: any = [];
+      for (let index = 0; index < SEND_APPROVAL_DATA?.bundel[0]?.paymentTerm?.length; index++) {
+        const element = SEND_APPROVAL_DATA?.bundel[0]?.paymentTerm[index];
+        pipo_id.push(element?.PIPO_LIST?._id)
+        pipo_name.push(element?.PIPO_LIST?.pipo_no)
+      }
+
+      var approval_data: any = {
+        id: UniqueId + '_' + this.randomId(10),
+        tableName: 'LC-Transaction',
+        deleteflag: '-1',
+        userdetails: this.validator.userData,
+        status: 'pending',
+        documents: SEND_APPROVAL_DATA?.Documents,
+        Types: 'downloadPDF',
+        TypeOfPage: 'Transaction',
+        FileType: this.validator.userData?.sideMenu
+      }
+      this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
+        console.log(approval_data, res, 'approval_data')
+        if (res?.id != approval_data?.id || res == undefined) {
+          this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.validator.userData['RoleCheckbox'], approval_data, () => {
+            var data: any = {
+              data: {
+                formdata: SEND_APPROVAL_DATA,
+                documents: SEND_APPROVAL_DATA?.Documents,
+                pipo_1: pipo_id,
+                Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
+              },
+              TypeTransaction: 'LC-Transaction',
+              fileType: this.validator.userData?.sideMenu,
+              UserDetails: approval_data?.id,
+              pipo: pipo_id,
+              LCTransactionRef: [SEND_APPROVAL_DATA?._id]
+            }
+            this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+              let updatedData = {
+                "TransactionRef": [
+                  res1._id,
+                ]
+              }
+              this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
+                console.log(data);
+                this.toastr.success("LC transaction created successfully...")
+                POPUP_CLOSE?.displayHide
+              }, (error) => {
+                console.log('error');
+              });
+            });
+          });
+        } else {
+          this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Send for Approval',
+            `You already send for approval <br>&<br>also check ${Status} panel`)
+        }
+      });
+    }
+    console.log(UniqueId, approval_data, this.ExportBillLodgement_Form, 'uiiiiiiiiiiiiii')
+  }
+
+  getStatusCheckerMaker(id: any) {
+    return new Promise((resolve, reject) => {
+      this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
+    })
   }
 
   view_pdf(url: any) {
@@ -967,9 +1046,343 @@ export class NewFLCApplicationComponent implements OnInit {
       this.PDF_VIEW_URL = url;
     }, 200);
   }
-  
-  Edit(items:any){
-    console.log(items,"Edit")
+
+  EDIT_OPTION_ENABLED: boolean = false;
+  Edit(items: any, AutofillLCTableButton: any) {
+    this.SubmitButtonDisabled = true;
+    this.EDIT_OPTION_ENABLED = false;
+    console.log(items, AutofillLCTableButton, "Edit")
+    this.LIST_OF_QUESTION = [
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[0],
+        label: "39A:*** | PERCENTAGE CREDIT AMOUNT TOLERANCE",
+        fieldName: '3',
+        id: '39A:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[0],
+            type: "textarea",
+            label: "PERCENTAGE CREDIT AMOUNT TOLERANCE",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[1],
+        label: "39C:*** | ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
+        fieldName: '3',
+        id: '39C:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[1],
+            type: "textarea",
+            label: "ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[2],
+        label: "41a : (A/D):*** | CREDIT AVAILABLE WITH CREDIT AVAILABLE BY",
+        fieldName: '2',
+        id: '41a',
+        option: [
+          {
+            value: "By Sight Payment",
+            text: "By Sight Payment",
+            type: "checkbox",
+          },
+          {
+            value: "By Deferred Payment",
+            text: "By Deferred Payment",
+            type: "checkbox",
+          },
+          {
+            value: "By Negotiation",
+            text: "By Negotiation",
+            type: "checkbox",
+          },
+          {
+            value: "By Acceptance",
+            text: "By Acceptance",
+            type: "checkbox",
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[3],
+        label: "42c:*** | DRAFTS AT",
+        fieldName: '3',
+        id: '42c:***',
+        option: [
+          {
+            value: `Drawn at ____90______ days from Shipment Date`,
+            type: "textarea",
+            label: "DRAFTS AT",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[4],
+        label: "42a:*** | DRAWEE",
+        fieldName: '3',
+        id: '42a:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[4],
+            type: "textarea",
+            label: "DRAWEE",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[5],
+        label: "43P:*** | PARTIAL SHIPMENTS",
+        fieldName: '4',
+        id: '43P',
+        option: [
+          {
+            value: "PROHIBITED",
+            text: "PROHIBITED",
+            type: "checkbox",
+          },
+          {
+            value: "PERMITTED",
+            text: "PERMITTED",
+            type: "checkbox",
+          }
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[6],
+        label: "TRANSHIPMENTS",
+        fieldName: '5',
+        id: '43T',
+        option: [
+          {
+            value: "PROHIBITED",
+            text: "PROHIBITED",
+            type: "checkbox",
+          },
+          {
+            value: "PERMITTED",
+            text: "PERMITTED",
+            type: "checkbox",
+          }
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[7],
+        label: "44A:*** | TYPE OF L/C",
+        fieldName: '3',
+        id: '44A:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[7],
+            type: "textarea",
+            label: "TYPE OF L/C",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[8],
+        label: "44B:*** | SHIPMENT TO",
+        fieldName: '3',
+        id: '44B:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[8],
+            type: "textarea",
+            label: "SHIPMENT TO",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[9],
+        label: "44C:*** | LATEST DATE OF SHIPMENT",
+        fieldName: '3',
+        id: '44C:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[9],
+            type: "date",
+            label: "LATEST DATE OF SHIPMENT",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[10],
+        label: "45A:*** | QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
+        fieldName: '3',
+        id: '45A:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[10],
+            type: "textarea",
+            label: "QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[11],
+        label: "*** | IMPORT LICENCE/OGL DETAILS",
+        fieldName: '3',
+        id: '***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[11],
+            type: "textarea",
+            label: "IMPORT LICENCE/OGL DETAILS",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[12],
+        label: "*** | IMPORT EXPORT CODE NO.",
+        fieldName: '3',
+        id: '***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[12],
+            type: "textarea",
+            label: "IMPORT EXPORT CODE NO.",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[13],
+        label: "46A:*** | DOCUMENTS REQUIRED",
+        fieldName: '3',
+        id: '46A:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[13],
+            type: "textarea",
+            label: "DOCUMENTS REQUIRED",
+            style: `height:300px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[14],
+        label: "47 A:T | ADDITIONAL CONDITIONS",
+        fieldName: '3',
+        id: '47 A:T',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[14],
+            type: "textarea",
+            label: "ADDITIONAL CONDITIONS",
+            style: `height:300px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[15],
+        label: "71 B:*** | SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
+        fieldName: '3',
+        id: '71 B:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[15],
+            type: "textarea",
+            label: "SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[16],
+        label: "48:*** | PERIOD OF PRESENTATION OF DOCUMENTS",
+        fieldName: '3',
+        id: '48:***',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[16],
+            type: "textarea",
+            label: "PERIOD OF PRESENTATION OF DOCUMENTS",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[17],
+        label: "49:*** | CONFIRMATION INSTRUCTIONS",
+        fieldName: '6',
+        id: '49:***',
+        option: [
+          {
+            value: "WITHOUT",
+            text: "WITHOUT",
+            type: "checkbox",
+          },
+          {
+            value: "CHARGES PAYABLE BY",
+            text: "CHARGES PAYABLE BY",
+            type: "checkbox",
+          }
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[18],
+        label: "57a | “ADVISE THROUGH” BANK",
+        fieldName: '3',
+        id: '57a',
+        option: [
+          {
+            value: items?.bundel[0]?.AutoFillValue[18],
+            type: "textarea",
+            label: "“ADVISE THROUGH” BANK",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: items?.bundel[0]?.AutoFillValue[19],
+        label: "72: | SENDER TO RECEIVER INFORMATION",
+        fieldName: '7',
+        id: '72',
+        option: [
+          {
+            value: "NOT APPLICABLE",
+            text: "NOT APPLICABLE",
+            type: "checkbox",
+          }
+        ]
+      }
+    ]
+    this.LIST_OF_QUESTION.forEach((element, index) => {
+      element['index'] = index;
+      element['Active'] = false
+    });
+    this.BANK_CHECKBOX(items?.bundel[0]?.BankDebit)
     setTimeout(() => {
       this.validator.buildForm({
         BenneName: {
@@ -982,21 +1395,22 @@ export class NewFLCApplicationComponent implements OnInit {
         },
         SingleMultiple: {
           type: "yesnocheckbox",
-          value: items?.bundel[0]?.SingleMultipl,
+          value: items?.bundel[0]?.SingleMultiple,
           label: "Do you need add Covering Letter?",
           CoveringLetter: true,
           rules: {
             required: true,
           },
-          YesNo: items?.bundel[0]?.SingleMultipl,
+          YesNo: items?.bundel[0]?.SingleMultiple,
         },
         BankDebit: {
           type: "BankCheckBox",
           value: items?.bundel[0]?.BankDebit,
           label: "Select Bank",
-          Banklabel: "To Debit Account no. & Account Type*",
+          Banklabel: "To Debit Account no. & Account Type",
           TypeOfCurrency: "INR",
           ChargeLabelHide: true,
+          bindLabel: 'BankUniqueId',
           rules: {
             required: true,
           }
@@ -1013,7 +1427,7 @@ export class NewFLCApplicationComponent implements OnInit {
             [
               {
                 type: "PIPO_LIST",
-                value: items?.bundel[0]?.PIPO_LIST,
+                value: items?.bundel[0]?.paymentTerm[0]?.PIPO_LIST,
                 label: "Select PIPO",
                 name: 'PIPO_LIST',
                 rules: {
@@ -1032,7 +1446,7 @@ export class NewFLCApplicationComponent implements OnInit {
               },
               {
                 type: "currency",
-                value: "",
+                value: items?.bundel[0]?.paymentTerm[0]?.PIPO_LIST?.currency,
                 label: "Currency",
                 name: 'currency',
                 rules: {
@@ -1042,7 +1456,7 @@ export class NewFLCApplicationComponent implements OnInit {
               },
               {
                 type: "TextValiadtion",
-                value: "",
+                value: items?.bundel[0]?.paymentTerm[0]?.RemittanceAmount,
                 label: "Remittance Amount",
                 name: 'RemittanceAmount',
                 EqualName: "amount",
@@ -1054,8 +1468,67 @@ export class NewFLCApplicationComponent implements OnInit {
             ]
           ]
         },
-      }, 'IMPORT_TRANSACTION');
+      }, 'IMPORT_TRANSACTION').then((res) => {
+        this.SubmitButtonDisabled = false
+        AutofillLCTableButton?.click();
+        this.BENEFICIARY_CALLBACK(items?.bundel[0]?.BenneName)
+        this.setSelectedBankDetails(items?.bundel[0]?.BankDebit, items?.bundel[0])
+        this.EDIT_OPTION_ENABLED = true;
+      });
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
+  }
+
+  BANK_CHECKBOX(value: any) {
+    console.log(value, this.validator?.bankDetail[value?.BankUniqueId], this.validator?.bankDetail, "BANK_CHECKBOX")
+    this.validator.CHECK_BOX_BANK_LIST = this.validator?.bankDetail[value?.BankUniqueId];
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES = []
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES = this.validator?.ToCreditAccountdata[value?.BankUniqueId];
+    this.validator.CHECK_BOX_BANK_LIST?.forEach(element => {
+      if (value?.accNumber == element?.accNumber) {
+        element['checked'] = true;
+      } else {
+        element['checked'] = false;
+      }
+    });
+    this.validator.CHECK_BOX_BANK_LIST_CHARGES?.forEach(element => {
+      if (value?.accNumber == element?.accNumber) {
+        element['checked'] = true;
+      } else {
+        element['checked'] = false;
+      }
+    });
+  }
+
+  DownloadPopUp(item: any) {
+    this.userService.getReadS3File({ fileName: item?.doc }).subscribe((res: any) => {
+      this.userService.ConvertPdfDocx(this._arrayBufferToBase64(res?.pdf?.data)).subscribe((res: any) => {
+        console.log(res, "ConvertPdfImage")
+        this.arrayBufferToBase64(res?.pdf2doc)
+      })
+      console.log('data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data))
+    });
+    console.log(item, "DownloadPopUp")
+  }
+
+  downloadBuffer(arrayBuffer) {
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(new Blob(
+      [arrayBuffer],
+      { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
+    ))
+    a.download = `LC_${new Date().getTime()}.docx`
+    a.click()
+  }
+
+  arrayBufferToBase64(Arraybuffer) {
+    const url = `data:application/docx;base64,` + Arraybuffer;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `LC_${new Date().getTime()}.docx`
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 }

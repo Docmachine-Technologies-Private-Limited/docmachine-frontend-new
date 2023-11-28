@@ -45,9 +45,17 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       bindValue: this.bindValue,
       GET_ARRAY_VALUES: this.GET_ARRAY_VALUES
     }
-    this.ngModelDropDown[this.bindLabel]=''
-    if (this.selectedItems != '') {
+    this.ngModelDropDown[this.bindLabel] = ''
+    if (this.selectedItems != '' && this.selectedItems != null && this.selectedItems != undefined) {
       this.ngModelDropDown = this.selectedItems;
+      this.modelChanges.emit(this.ngModelDropDown);
+      this.ngModelDropDownChanges.emit(this.ngModelDropDown);
+    }
+    if (this.value != '' && this.value != null && this.value != undefined) {
+      console.log(this.value, this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel, "ngModelDropDown")
+      this.selectedItems = this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel != '' ?
+        this.value[this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel] : this.value[this.LABLE_BIND_LIST[this.id.toString()]?.bindValue]
+      this.ngModelDropDown = this.value;
       this.modelChanges.emit(this.ngModelDropDown);
       this.ngModelDropDownChanges.emit(this.ngModelDropDown);
     }
@@ -57,6 +65,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
     this.FILTER_DROPDOWN = this.items;
     $('#' + $($event.target).parent().attr('id')).addClass('custom-dropdown-active');
   }
+
   dropdownHide($event, val, inputid) {
     var uq_id: any = $($event.target).parent().parent().attr('id')
     $('.custom-dropdown').removeClass('custom-dropdown-active');
@@ -92,7 +101,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       }
     }
   }
-  
+
   filterdropdown($event: any, val: any) {
     var uq_id: any = $($event.target).parent().attr('id')
     this.FILTER_DROPDOWN = this.items.filter((item: any) => item[this.LABLE_BIND_LIST[uq_id]?.bindLabel]?.toLowerCase()?.indexOf(val.toLowerCase()) != -1);
@@ -101,7 +110,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       this.FILTER_DROPDOWN = this.items;
     }
   }
-  
+
   filterdropdownKeyPress($event: any, val: any) {
     this.keyEvent.emit(val);
     this.modelChanges.emit(val);
@@ -109,7 +118,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       this.FILTER_DROPDOWN = this.items;
     }
   }
-  
+
   clearInput(inputid) {
     $(inputid).val('');
     this.modelChanges.emit('');
@@ -117,6 +126,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
     this.selectedItems = '';
     this.ngModelDropDownChanges.emit('');
   }
+
   onChange: (_: any) => void = (_: any) => {
     if (this.selectedItems != '') {
       this.ngModelDropDown = this.selectedItems;
@@ -161,14 +171,14 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   };
 
   get displayHidden() {
-    return  $('.custom-dropdown#'+this.id).removeClass('custom-dropdown-active');
+    return $('.custom-dropdown#' + this.id).removeClass('custom-dropdown-active');
   }
 
   get displayShow() {
-    return  $('.custom-dropdown#'+this.id).addClass('custom-dropdown-active');
+    return $('.custom-dropdown#' + this.id).addClass('custom-dropdown-active');
   }
-  
-  onClick(event:any) {
+
+  onClick(event: any) {
     if (!this.elementRef.nativeElement.contains(event.target))
       this.displayHidden;
   }

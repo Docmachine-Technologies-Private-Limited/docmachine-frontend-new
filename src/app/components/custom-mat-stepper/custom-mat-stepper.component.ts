@@ -9,16 +9,16 @@ import $ from 'jquery';
 })
 export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   @Input('data') data: any = [];
-  @Input('LAST_BUTTON_NAME') LAST_BUTTON_NAME: any ="";
+  @Input('LAST_BUTTON_NAME') LAST_BUTTON_NAME: any = "";
   @ContentChildren(CustomMatStepComponent) MatStepComponent: QueryList<CustomMatStepComponent>;
   @ViewChild('MatStepperHeaderPanel') MatStepperHeaderPanel: ElementRef;
   @ViewChild('AdditionButtonPanel') AdditionButtonPanel: ElementRef;
   @Output('event') event: any = new EventEmitter();
   @Output('TabEvent') TabEvent: any = new EventEmitter();
   @Output('lastbuttonEvent') lastbuttonEvent: any = new EventEmitter();
-  @Input('LAST_BUTTON_VISIBLE') LAST_BUTTON_VISIBLE: boolean =false;
-  @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean =true;
-  
+  @Input('LAST_BUTTON_VISIBLE') LAST_BUTTON_VISIBLE: boolean = false;
+  @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean = true;
+
   BUTTON_COUNTER: number = 0;
   BACK_BUTTON_DISABLED: boolean = false;
   NEXT_BUTTON_DISABLED: boolean = false;
@@ -26,7 +26,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
   ERROR_MESSAGE_SHOW: boolean = false;
 
   ngAfterContentInit() {
-    console.log(this.MatStepperHeaderPanel,this.MatStepComponent, this.AdditionButtonPanel,"MatStepperHeaderPanel")
+    console.log(this.MatStepperHeaderPanel, this.MatStepComponent, this.AdditionButtonPanel, "MatStepperHeaderPanel")
     if (this.MatStepComponent?.length != 0) {
       this.MatStepComponent?.get(this.BUTTON_COUNTER)?.setActivePanel(true);
       this.MatStepComponent?.forEach((element: any, index) => {
@@ -50,9 +50,9 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
   }
-  
-  
-  lastbuttonclick(){
+
+
+  lastbuttonclick() {
     this.lastbuttonEvent.emit(true);
   }
 
@@ -77,9 +77,9 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
       this.BackScrollButton;
     } else {
       this.BACK_BUTTON_DISABLED = true;
-        this.HEADER_DATA?.forEach((element: any) => {
-          element['ActiveClass'] = false;
-        });
+      this.HEADER_DATA?.forEach((element: any) => {
+        element['ActiveClass'] = false;
+      });
       this.MatStepComponent.forEach(element => {
         element?.setActivePanel(false);
       })
@@ -88,9 +88,13 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
       this.MatStepComponent?.get(0)?.setActivePanel(true);
       this.ERROR_MESSAGE_SHOW = false;
     }
-    this.TabEvent.emit( this.HEADER_DATA[this.BUTTON_COUNTER]);
+    this.TabEvent.emit(this.HEADER_DATA[this.BUTTON_COUNTER]);
   }
-  
+
+  get ClickBackButton() {
+    return $('#CustomMatStepperButton')?.click();
+  }
+
   TIMEOUT_CLEAR: any = null;
   setNext() {
     clearTimeout(this.TIMEOUT_CLEAR);
@@ -112,7 +116,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
         this.TIMEOUT_CLEAR = setTimeout(() => {
           this.HEADER_DATA[this.BUTTON_COUNTER]['ActiveClass'] = true;
           this.HEADER_DATA[this.BUTTON_COUNTER]['DisabledClass'] = false;
-        },100);
+        }, 100);
         this.MatStepComponent?.get(this.BUTTON_COUNTER)?.setActivePanel(true);
         this.NEXT_BUTTON_DISABLED = false;
         this.NextScrollButton
@@ -129,7 +133,7 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
       }
       this.ERROR_MESSAGE_SHOW = true;
     }
-    this.TabEvent.emit( this.HEADER_DATA[this.BUTTON_COUNTER]);
+    this.TabEvent.emit(this.HEADER_DATA[this.BUTTON_COUNTER]);
   }
 
   onTabChanges(value: any) {
@@ -159,13 +163,13 @@ export class CustomMatStepperComponent implements OnInit, AfterContentInit {
     $('.multiple-header-mat-panel').animate({ scrollLeft: parseInt(scrollPos?.scrollLeft) - 70 }, { duration: 100, queue: false });
     return;
   }
-  
+
   get NextScrollButton() {
     var scrollPos: any = $('.multiple-header-mat-panel')[0];
     $('.multiple-header-mat-panel').animate({ scrollLeft: parseInt(scrollPos?.scrollLeft) + 70 }, { duration: 100, queue: false });
     return;
   }
-  
+
   BackScroll($event: any) {
     var scrollPos: any = $($event)[0];
     $($event).animate({ scrollLeft: parseInt(scrollPos?.scrollLeft) - 70 }, { duration: 100, queue: false });
