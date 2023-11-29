@@ -118,7 +118,7 @@ export class ExportBillLodgementData {
                 if (this.IS_AGAINST_ADVANCE_YES_NO == true) {
                     this.TRANSACTION_SHIPPING_BILL = res?.data?.filter((item: any) => item?.firxdetails?.length != 0)
                 } else if (this.IS_AGAINST_ADVANCE_YES_NO == false) {
-                    this.TRANSACTION_SHIPPING_BILL = res?.data?.filter((item: any) => item?.firxdetails?.length == 0)
+                    this.TRANSACTION_SHIPPING_BILL = res?.data?.filter((item: any) => item?.firxdetails?.length == 0 || item?.balanceAvai != '0')
                 }
                 console.log(buyerName, res?.data, this.TRANSACTION_SHIPPING_BILL, this.IS_AGAINST_ADVANCE_YES_NO, "getShippingBill")
             });
@@ -127,7 +127,7 @@ export class ExportBillLodgementData {
     getBuyerList() {
         this.userService.getBuyer(1).subscribe((res: any) => this.BUYER_LIST = res?.data);
     }
-    
+
     getbyFIRXPartyNamebyPipo(pipoId) {
         this.documentService.filterAnyTable({
             pipo: [pipoId]
@@ -579,7 +579,7 @@ export class ExportBillLodgementData {
                                         if ((index + 1) == data?.commercialdetails?.length) {
                                             this.toastr.success("Changes Updated...")
                                             console.log(this.SELECTED_BUYER_NAME, "SELECTED_BUYER_NAME")
-                
+
                                             this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
                                         }
                                     });
