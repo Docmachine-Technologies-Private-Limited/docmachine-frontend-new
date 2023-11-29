@@ -1125,14 +1125,14 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <ng-select *ngIf="this.validator?.BANK_LIST_DROPDOWN?.length!=0"
-                        [items]="this.validator?.BANK_LIST_DROPDOWN" bindLabel="value" [multiple]="false"
+                        [items]="this.validator?.BANK_LIST_DROPDOWN" bindLabel="bank" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.ExtraValue">
                     </ng-select>
                     <div class="col-12 p-0" *ngIf="field.ExtraValue!=''">
                         <label for="exampleInputEmail1" class="form-label">
                             Select Account no. & Account Type*</label>
-                        <custom-radio-button [items]="this.validator?.ToChargesAccountdata[field?.ExtraValue?.id]"
+                        <custom-radio-button [items]="this.validator?.ToChargesAccountdata[field?.ExtraValue?.BankUniqueId]"
                             [name]="field.fieldName" (event)="field.value=$event"></custom-radio-button>
                     </div>
                 </div>
