@@ -2220,6 +2220,24 @@ export class DocumentService {
     };
     return this.http.get(`${this.api_base}/LCTransaction/get`, httpOptions);
   }
+  
+  updateLCTransaction(id,data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/LCTransaction/update`,{ LCTransaction: data ,id:id}, httpOptions);
+  }
+  
+  deleteLCTransaction(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/LCTransaction/delete`,{id:id}, httpOptions);
+  }
 
   UpdateTransaction(data) {
     this.loadFromLocalStorage();

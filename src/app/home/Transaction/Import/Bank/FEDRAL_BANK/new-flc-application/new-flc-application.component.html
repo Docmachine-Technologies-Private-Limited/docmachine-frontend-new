@@ -62,9 +62,12 @@
                                     (click)="view_pdf(item?.doc)">
                                     <i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS" aria-hidden="true"></i>
                                 </a>
-                                <a title="View"
+                                <a title="Edit"
                                     (click)="Edit(item,AutofillLCTableButton);AutofillLCTableButton?.click();CustomMatStepper?.ClickBackButton()">
                                     <i class="fas fa-edit"></i>
+                                </a>
+                                <a title="Delete" (click)="delete(item)" *ngIf="item?.SendApproval==false">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
                                 </a>
                                 <button type="button" class="btn btn-primary" title="Download"
                                     (click)="DownloadPopUp(item)">
@@ -74,6 +77,41 @@
                                     (click)="OpenSendApprovalPopUp(item,AutofillLCTableButton);SendforApproval_PANEL?.displayShow;">
                                     Send For Approval
                                 </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="FLC Application Summary" errorMessage="Please select Inward Remittance"
+            [NextTrue]="true">
+            <div class="mt-0 p-2">
+                <table class="table AcceptReject">
+                    <thead>
+                        <tr class="table-tr">
+                            <th scope="col" class="col-td-th-2">Date</th>
+                            <th scope="col" class="col-td-th-2">Party Name</th>
+                            <th scope="col" class="col-td-th-3">Pipo No.</th>
+                            <th scope="col" class="col-td-th-3">Currency</th>
+                            <th scope="col" class="col-td-th-3">Amount</th>
+                            <th scope="col" class="col-td-th-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-tr" *ngFor="let item of this.SUMMARY_LC_DATA;let i=index">
+                            <td scope="col" class="col-td-th-2">{{item?.date}}</td>
+                            <td scope="col" class="col-td-th-2">{{item?.bundel[0]?.BenneName?.value}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.PIPO_LIST?.pi_poNo}}
+                            </td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.PIPO_LIST?.currency}}
+                            </td>
+                            <td scope="col" class="col-td-th-3">{{item?.bundel[0]?.paymentTerm[0]?.RemittanceAmount}}
+                            </td>
+                            <td scope="col" class="col-td-th-3">
+                                <a title="View" class="PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                    (click)="view_pdf(item?.doc)">
+                                    <i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS" aria-hidden="true"></i>
+                                </a>
                             </td>
                         </tr>
                     </tbody>

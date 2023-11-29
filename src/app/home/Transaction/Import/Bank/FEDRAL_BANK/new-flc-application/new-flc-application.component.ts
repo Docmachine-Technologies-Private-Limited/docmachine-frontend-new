@@ -14,6 +14,9 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../../../serv
 import { StorageEncryptionDecryptionService } from '../../../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../../../merge-pdf-list.service';
 import moment from 'moment'
+import { filterAnyTablePagination } from '../../../../../../service/v1/Api/filterAnyTablePagination';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../../../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-new-flc-application',
@@ -102,6 +105,8 @@ export class NewFLCApplicationComponent implements OnInit {
     public sessionstorage: StorageEncryptionDecryptionService,
     public pdfmerge: MergePdfListService,
     private actRoute: ActivatedRoute,
+    public dialog: MatDialog,
+    public filteranytablepagination: filterAnyTablePagination,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
@@ -478,7 +483,7 @@ export class NewFLCApplicationComponent implements OnInit {
     this.SubmitButtonDisabled = false;
   }
 
-
+  SUMMARY_LC_DATA: any = [];
   ngOnInit(): void {
     this.actRoute.paramMap.subscribe(async (params) => {
       this.exportbilllodgementdata.clear();
@@ -486,14 +491,22 @@ export class NewFLCApplicationComponent implements OnInit {
       this.VISIBLITY_PDF = false;
       this.validator.PIPO_LIST = [];
       this.response(null)
-      this.documentService.getLCTransaction().subscribe((res: any) => {
-        this.LCTransaction_Data = res?.data;
-        console.log(res, "getLCTransaction")
-      })
+      this.loadData();
     });
     this.EDIT_OPTION_ENABLED = false;
   }
-
+  
+  loadData() {
+    this.filteranytablepagination.PaginationfilterAnyTable({}, { limit: 10000 }, 'LCTransaction').subscribe((res: any) => {
+      this.LCTransaction_Data = res?.data;
+      console.log(res, "SendApprovalgetLCTransaction false")
+    })
+    this.filteranytablepagination.PaginationfilterAnyTable({ SendApproval: true }, { limit: 10000 }, 'LCTransaction').subscribe((res: any) => {
+      this.SUMMARY_LC_DATA = res?.data;
+      console.log(res, "SendApprovalgetLCTransaction true")
+    })
+  }
+  
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
@@ -958,7 +971,8 @@ export class NewFLCApplicationComponent implements OnInit {
         doc: this.alldocuments[1],
         Documents: this.alldocuments,
         "pipo": pipo_id,
-        id: sumnewId
+        id: sumnewId,
+        SendApproval: false
       }).subscribe((res2: any) => {
         this.router.navigate(['/home/dashboardTask'])
       })
@@ -1020,6 +1034,11 @@ export class NewFLCApplicationComponent implements OnInit {
                 console.log(data);
                 this.toastr.success("LC transaction created successfully...")
                 POPUP_CLOSE?.displayHide
+                this.documentService.updateLCTransaction(SEND_APPROVAL_DATA?._id, {
+                  SendApproval: true
+                }).subscribe((res: any) => {
+
+                })
               }, (error) => {
                 console.log('error');
               });
@@ -1045,6 +1064,23 @@ export class NewFLCApplicationComponent implements OnInit {
     setTimeout(() => {
       this.PDF_VIEW_URL = url;
     }, 200);
+  }
+
+  delete(items: any) {
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.documentService.deleteLCTransaction(items?._id).subscribe((res: any) => {
+          this.toastr.success("Sucessfully delete data...")
+          this.loadData();
+        })
+      }
+    });
   }
 
   EDIT_OPTION_ENABLED: boolean = false;
