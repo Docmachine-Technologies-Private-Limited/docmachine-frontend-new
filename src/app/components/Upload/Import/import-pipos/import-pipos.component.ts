@@ -95,11 +95,11 @@ export class ImportPIPOSComponent implements OnInit {
           value: "",
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Raw Material", value: 'Raw Material' },
-            { text: 'Capital Goods', value: 'Capital Goods' },
-            { text: 'Services', value: 'Services' },
+            { text: "Raw Material",type:"checkbox", value: 'Raw Material' },
+            { text: 'Capital Goods',type:"checkbox", value: 'Capital Goods' },
+            { text: 'Services',type:"checkbox", value: 'Services' },
             { text: 'Samples', value: 'Samples' },
-            { text: 'Repairs and returns', value: 'Repairs and returns' }
+            { text: 'Repairs and returns',type:"checkbox", value: 'Repairs and returns' }
           ],
           NotificationShow: {
             "Raw Material": "",
@@ -205,7 +205,7 @@ export class ImportPIPOSComponent implements OnInit {
           type: "OptionMultiCheckBox",
           value: "",
           label: "Mode of Transport",
-          checkboxlabel: [{ text: "Sea", value: 'Sea' }, { text: 'Air', value: 'Air' }],
+          checkboxlabel: [{ text: "Yes", type:"checkbox",value: 'Yes' }, { text: 'No',type:"checkbox", value: 'No' }],
           rules: {
             required: true,
           },
