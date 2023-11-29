@@ -418,7 +418,7 @@ export class NewExportBillLodgementComponent implements OnInit {
   }
 
   AllCreateTransaction() {
-    this.OTHER_DOCUMENTS=[];
+    this.OTHER_DOCUMENTS = [];
     for (let index = 0; index < this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length; index++) {
       const element = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS[index];
       if (this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.length != 0) {
@@ -647,12 +647,12 @@ export class NewExportBillLodgementComponent implements OnInit {
             });
             var fitertemp: any = this.alldocuments.filter(n => n);
             await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                this.PREVIEWS_URL_LIST = merge?.pdfurl;
-                this.SELECTED_PREVIEWS_URL = ''
-                setTimeout(() => {
-                  this.SELECTED_PREVIEWS_URL = merge?.pdfurl
-                  this.PREVIOUD_BTN = false;
-                }, 500);
+              this.PREVIEWS_URL_LIST = merge?.pdfurl;
+              this.SELECTED_PREVIEWS_URL = ''
+              setTimeout(() => {
+                this.SELECTED_PREVIEWS_URL = merge?.pdfurl
+                this.PREVIOUD_BTN = false;
+              }, 500);
             });
           });
         });
@@ -753,16 +753,19 @@ export class NewExportBillLodgementComponent implements OnInit {
         mergePdf_List.push(element)
       }
       let extradata2: any = [];
+      let SB_ID: any = [];
       if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
         this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(element => {
           this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.forEach(commercialelement => {
             extradata2.push(commercialelement?._id)
           });
+          SB_ID?.push({ id: element?._id, status: element?.balanceAvai == '0' ? 'Cleared' : 'Pending' })
         });
       } else {
         this.SELECTED_SB_DATA?.COMMERICAIL_DATA?.forEach(commercialelement => {
           extradata2.push(commercialelement?._id)
         });
+        SB_ID?.push({ id: this.SELECTED_SB_DATA?._id, status: this.SELECTED_SB_DATA?.balanceAvai == '0' ? 'Cleared' : 'Pending' })
       }
       if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
         approval_data = {
@@ -873,11 +876,15 @@ export class NewExportBillLodgementComponent implements OnInit {
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
                           this.router.navigate(['/home/dashboardTask']);
-                          this.toastr.success(`SB No. ${extradata?.join(',')} sent for for regularisation approval`);
+                          this.toastr.success(`SB No. ${extradata?.join(',')} sent for for lodgement approval`);
                         } else {
                           this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.filter((item: any) => item == this.BUTTON_INDEX)
-                          this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for regularisation approval`);
+                          this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for lodgement approval`);
                         }
+                        SB_ID?.forEach(SBElement => {
+                          this.documentService.updateMaster({ AMOUNT_STATUS: SBElement?.status }, SBElement?.id).subscribe((Res: any) => {
+                          })
+                        });
                         event?.displayHidden;
                       });
                     });
@@ -924,6 +931,10 @@ export class NewExportBillLodgementComponent implements OnInit {
                           this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.filter((item: any) => item == this.BUTTON_INDEX)
                           this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for regularisation approval`);
                         }
+                        SB_ID?.forEach(SBElement => {
+                          this.documentService.updateMaster({ AMOUNT_STATUS: SBElement?.status }, SBElement?.id).subscribe((Res: any) => {
+                          })
+                        });
                         event?.displayHidden;
                       });
                     });
