@@ -250,6 +250,17 @@ export class ExportBillLodgementData {
     }
 
     setSelectCommercialDataTransaction($event, SB_Index, CI_Index, sbdata: any, commercialdata: any) {
+        if (this.IS_AGAINST_ADVANCE_YES_NO == true) {
+            if (commercialdata?.MatchOffData?.length == 0 || commercialdata?.MatchOffData?.length == undefined) {
+                this.toastr.error("Firx not found..")
+                $event.target.checked = false
+                commercialdata['Firxbutton'] = true;
+                commercialdata['CheckBoxEnabled'] = false;
+                commercialdata['SB_Amout_Realized'] = '0';
+                this.SELECTED_SHIPPING_BILL_TRANSACTION[SB_Index]["COMMERICAIL_DATA"]?.splice(CI_Index, 1);
+                return;
+            }
+        }
         if ($event?.target?.checked == true) {
             commercialdata['CheckBoxEnabled'] = true;
             commercialdata['Firxbutton'] = false;

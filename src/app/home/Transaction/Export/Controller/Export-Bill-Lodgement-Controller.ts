@@ -119,11 +119,11 @@ export class ExportBillLodgementControllerData {
 
 
                         getAllFields[39]?.setText('');
-
+                        let BillAmount: any = parseFloat(sbdata?.fobValue) - parseFloat(TOTAL_SUM_FIREX)
                         getAllFields[31]?.setText(!isNaN(TOTAL_SUM_FIREX) ? TOTAL_SUM_FIREX.toString() : '0');
                         getAllFields[32]?.setText(sbdata?.fobCurrency);
-                        getAllFields[33]?.setText(sbdata?.fobValue != undefined ? this.ConvertNumberToWords(sbdata?.fobValue).toUpperCase() : '0');
-                        getAllFields[34]?.setText(sbdata?.fobValue?.toString());
+                        getAllFields[33]?.setText(BillAmount != undefined ? this.ConvertNumberToWords(BillAmount).toUpperCase() : '0');
+                        getAllFields[34]?.setText(BillAmount?.toString());
 
                         getAllFields[40]?.setText(sbdata?.pipo[0]?.HSCODE);
                         getAllFields[41]?.setText('');
@@ -166,7 +166,7 @@ export class ExportBillLodgementControllerData {
                         getAllFields[76]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
                         getAllFields[77]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
                         getAllFields[78]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
-                        
+
                         getAllFields[79]?.uncheck();
                         getAllFields[80]?.uncheck();
                         getAllFields[81]?.uncheck();
@@ -231,12 +231,11 @@ export class ExportBillLodgementControllerData {
                             mergedPdf.addPage(page);
                         }
                     });
-                    if (exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
-                        const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
-                        copiedPages3.forEach((page) => {
-                            mergedPdf.addPage(page);
-                        });
-                    }
+                    
+                    const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
+                    copiedPages3.forEach((page) => {
+                        mergedPdf.addPage(page);
+                    });
                     const mergedPdfFile = await mergedPdf.save();
                     const mergedPdfload = await PDFDocument.load(mergedPdfFile);
                     const mergedPdfFileload = await mergedPdfload.save();
@@ -337,8 +336,6 @@ export class ExportBillLodgementControllerData {
                             SbdataTable.push([sbdata[sbelement]?.sbdate, sbdata[sbelement]?.sbno, sbdata[sbelement]?.fobValue])
                         });
 
-                        let TOTAL_SUM_FIREX: any = FIRX_DATE_NO?.AMOUNT?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-                        let TOTAL_SB_SUM: any = FIRX_DATE_NO?.TOTAL_SB_AMOUNT?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
                         exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(sbelement => {
                             sbdata[sbelement]?.COMMERICAIL_DATA?.forEach(element => {
                                 CommercialNumberList.push(element?.commercialNumber)
@@ -410,7 +407,7 @@ export class ExportBillLodgementControllerData {
                         getAllFields[76]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
                         getAllFields[77]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
                         getAllFields[78]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
-                        
+
                         getAllFields[79]?.uncheck();
                         getAllFields[80]?.uncheck();
                         getAllFields[81]?.uncheck();
@@ -472,17 +469,16 @@ export class ExportBillLodgementControllerData {
                         }
                     });
 
+                    const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
+                    copiedPages3.forEach((page) => {
+                        mergedPdf.addPage(page);
+                    });
+                    
                     const copiedPages2 = await mergedPdf.copyPages(SBloadmergedPdf, SBloadmergedPdf.getPageIndices());
                     copiedPages2.forEach((page) => {
                         mergedPdf.addPage(page);
                     });
 
-                    if (exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
-                        const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
-                        copiedPages3.forEach((page) => {
-                            mergedPdf.addPage(page);
-                        });
-                    }
                     const mergedPdfFile = await mergedPdf.save();
                     const mergedPdfload = await PDFDocument.load(mergedPdfFile);
                     const mergedPdfFileload = await mergedPdfload.save();

@@ -70,7 +70,7 @@
                                             </mat-expansion-panel-header>
                                             <div class="d-flex flex-column">
                                                 <mat-expansion-panel expanded="true"
-                                                    *ngFor='let commercialdata of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.commercialdetails;let i = index'>
+                                                    *ngFor='let commercialdata of this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.COMMERICAIL_DATA;let i = index'>
                                                     <mat-expansion-panel-header>
                                                         <mat-panel-description>
                                                             <div class="d-flex flex-column">
@@ -312,7 +312,7 @@
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
                             <table class="table mb-0"
-                                *ngIf="this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO== true">
+                                *ngIf="commercialdata?.MatchOffData?.length!=undefiend && commercialdata?.MatchOffData?.length!=0">
                                 <thead>
                                     <tr class="table-tr">
                                         <th scope="col" class="col-td-th-1">FIRX Number/ID</th>
