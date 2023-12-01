@@ -102,14 +102,12 @@
                                             <tr class="table-tr">
                                                 <th class="col-td-th-2">Party Name</th>
                                                 <th class="col-td-th-1">Doc generated</th>
-                                                <!-- <th class="col-td-th-2">Ref no.</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="table-tr" *ngFor="let row of shipmentSubmit; let i = index">
                                                 <td class="col-td-th-2">{{row?._id}}</td>
                                                 <td class="col-td-th-1">{{row?.toTalcount}}</td>
-                                                <!-- <td class="col-td-th-2 d-flex flex-column"><p *ngFor="let item of row?.blcopyrefNumber;let j=index">{{(j+1)}}. {{item}}</p></td> -->
                                             </tr>
                                         </tbody>
                                     </table>
@@ -176,10 +174,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="isImport==false ">
                             <div class="submission_sec map_height Pending_realisation">
                                 <b class="bold_titles_common">
-                                    {{ isImport === false ? 'Pending realisation ' : 'BOE Pending for Payment'}}
+                                    {{ 'Pending realisation'}}
                                 </b>
                                 <ul>
                                     <li class="Partial_icon">Partial</li>
@@ -197,7 +195,8 @@
                                         <tbody>
                                             <tr class="table-tr"
                                                 *ngFor="let row of this.billLoedgmentPartial; let i = index">
-                                                <td scope="col" class="col-td-th-2">{{row?.blcopyRef?.blcopyrefNumber}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row?.blcopyRef?.blcopyrefNumber}}
+                                                </td>
                                                 <td scope="col" class="col-td-th-1">{{row?.blcopyRef?.amount}}</td>
                                                 <td scope="col" class="col-td-th-1">{{row?.SBRef?.sbno}}</td>
                                                 <td scope="col" class="col-td-th-1">{{row?.SBRef?.fobValue}}</td>
@@ -207,13 +206,12 @@
                                 </div>
                                 <span class="nodata_table">{{this.billLoedgmentPartial?.length === 0 ? 'No Data'
                                     :''}}</span>
-                                <!-- <div id="PartialPendingRealisationChart" class="chart"></div> -->
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="isImport === false">
                             <div class="submission_sec map_height Pending_realisation">
                                 <b class="bold_titles_common">
-                                    {{ isImport === false ? 'Pending realisation ' : 'BOE Pending for Payment'}}
+                                    {{ 'Pending realisation'}}
                                 </b>
                                 <ul>
                                     <li class="Full_icon">Full</li>
@@ -231,7 +229,8 @@
                                         <tbody>
                                             <tr class="table-tr"
                                                 *ngFor="let row of this.billLoedgmentFull; let i = index">
-                                                <td scope="col" class="col-td-th-2">{{row?.blcopyRef?.blcopyrefNumber}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row?.blcopyRef?.blcopyrefNumber}}
+                                                </td>
                                                 <td scope="col" class="col-td-th-1">{{row?.blcopyRef?.amount}}</td>
                                                 <td scope="col" class="col-td-th-1">{{row?.SBRef?.sbno}}</td>
                                                 <td scope="col" class="col-td-th-1">{{row?.SBRef?.fobValue}}</td>
@@ -241,28 +240,8 @@
                                 </div>
                                 <span class="nodata_table">{{this.billLoedgmentFull?.length === 0 ? 'No Data'
                                     :''}}</span>
-                                <!-- <div id="FullPendingRealisationChart" class="chart"></div> -->
                             </div>
                         </div>
-                        <!-- <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="submission_secs map_height Pending_realisation">
-                                <div class="row">
-                                    <div class="col-md-8 col-8"><strong class="bold_titles_common">
-                                            {{ isImport === false ? ' Order pending for shipment ' : 'Order pending for
-                                            Dispatch'}}
-                                        </strong></div>
-                                    <div class="col-md-4 col-4">
-                                        <div>
-                                            <select class="form-select" [(ngModel)]="ospType"
-                                                (ngModelChange)="ospTypeChange(ospType)">
-                                                <option *ngFor="let data of ospData">{{ data }} </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="orderShipmentChart" class="chart"></div>
-                            </div>
-                        </div> -->
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_secs map_height Pending_realisation">
                                 <b class="bold_titles_common">{{this.documentService.EXPORT_IMPORT['import']==true?'Buyer’s
@@ -272,13 +251,6 @@
 
                             </div>
                         </div>
-                        <!-- <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="submission_sec map_height Pending_realisation">
-                                <b class="bold_titles_common">Total bill lodged</b>
-                                <h2>Maturity : 580</h2>
-                                <div id="TotalBillLodgedChart" class="chart"></div>
-                            </div>
-                        </div> -->
                         <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="this.ORDER_PENDING_SHIPMENT_SHOW_CHART==true">
                             <div class="submission_sec map_height Pending_realisation">
                                 <div class="row">
@@ -295,7 +267,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                    <div id="ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS" class="chart"></div>
+                                <div id="ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS" class="chart"></div>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="this.TOTAL_BILL_LODGEMENT_SHOW_CHART==true">
@@ -311,7 +283,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                    <div id="TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS" class="chart"></div>
+                                <div id="TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS" class="chart"></div>
                             </div>
                         </div>
                     </div>
