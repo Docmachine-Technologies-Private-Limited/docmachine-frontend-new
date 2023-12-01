@@ -834,13 +834,13 @@ export class NewFLCApplicationComponent implements OnInit {
               {
                 type: "TextValiadtion",
                 value: "",
-                label: "Remittance Amount",
+                label: "LC Amount",
                 name: 'RemittanceAmount',
                 EqualName: "amount",
                 rules: {
                   required: true,
                 },
-                errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+                errormsg: 'LC amount should be lesser than  or equal to the available amount.',
               },
             ]
           ]
@@ -936,14 +936,9 @@ export class NewFLCApplicationComponent implements OnInit {
             widget?.getOrCreateBorderStyle()?.setWidth(0);
           }
         });
-
-        // getAllFields[2]?.setText(this.CURRENT_DATE?.toString());
-        // getAllFields[3]?.setText(this.validator.COMPANY_INFO[0]?.teamName + ' & ' + this.validator.COMPANY_INFO[0]?.adress);
-
         if (filldata != null && filldata != undefined && filldata != '') {
           this.formvalue["AutoFillValue"] = this.LIST_OF_QUESTION_VALUE
           getAllFields[0]?.setText(filldata?.BankDebit?.bank + '\n' + filldata?.BankDebit?.bicAddress);
-          // getAllFields[4]?.setText(filldata?.BenneName?.value + '\n' + filldata?.BenneName?.Address);
           if (filldata?.AutoFillValue != undefined && filldata?.AutoFillValue?.length != 0) {
             getAllFields[2]?.setText(filldata?.AutoFillValue?.SequenceofTotal);
             getAllFields[3]?.setText(filldata?.AutoFillValue?.FormofDocumentaryCredit);
@@ -956,7 +951,7 @@ export class NewFLCApplicationComponent implements OnInit {
             getAllFields[10]?.setText(filldata?.AutoFillValue?.Applicant);
             getAllFields[11]?.setText(filldata?.AutoFillValue?.Beneficiary);
             getAllFields[12]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
-            getAllFields[13]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
+            getAllFields[13]?.setText(filldata?.AutoFillValue?.PercentageCreditAmountTolerance+'%');
             getAllFields[14]?.setText(filldata?.AutoFillValue?.AdditionalAmountsCovered);
             getAllFields[15]?.setText(filldata?.AutoFillValue?.AvailableWithBy);
             getAllFields[16]?.setText(filldata?.AutoFillValue?.DraftsAt);
@@ -976,7 +971,7 @@ export class NewFLCApplicationComponent implements OnInit {
             getAllFields[30]?.setText(filldata?.AutoFillValue?.AdditionalConditions);
             getAllFields[31]?.setText(filldata?.AutoFillValue?.SpecialPaymentConditionsforBeneficiary);
             getAllFields[32]?.setText(filldata?.AutoFillValue?.SpecialPaymentConditionsforBankOnly);
-            getAllFields[33]?.setText(filldata?.AutoFillValue?.Charge);
+            getAllFields[33]?.setText(filldata?.AutoFillValue?.Charges);
 
             getAllFields[46]?.setText(this.CURRENT_DATE);
             getAllFields[47]?.setText(filldata?.BankDebit?.bank);
@@ -1939,13 +1934,13 @@ export class NewFLCApplicationComponent implements OnInit {
               {
                 type: "TextValiadtion",
                 value: items?.bundel[0]?.paymentTerm[0]?.RemittanceAmount,
-                label: "Remittance Amount",
+                label: "LC Amount",
                 name: 'RemittanceAmount',
                 EqualName: "amount",
                 rules: {
                   required: true,
                 },
-                errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+                errormsg: 'LC amount should be lesser than  or equal to the available amount.',
               },
             ]
           ]
@@ -2005,24 +2000,10 @@ export class NewFLCApplicationComponent implements OnInit {
             },
             option: [
               {
-                value: "By Sight Payment",
-                text: "By Sight Payment",
-                type: "checkbox",
-              },
-              {
-                value: "By Deferred Payment",
-                text: "By Deferred Payment",
-                type: "checkbox",
-              },
-              {
-                value: "By Negotiation",
-                text: "By Negotiation",
-                type: "checkbox",
-              },
-              {
-                value: "By Acceptance",
-                text: "By Acceptance",
-                type: "checkbox",
+                value: items?.bundel[0]?.AutoFillValue?.DocumentaryCreditNumber,
+                type: "textarea",
+                label: "Reference to Pre-Advice",
+                style: `height:100px !important;`
               },
             ]
           },
@@ -2092,7 +2073,7 @@ export class NewFLCApplicationComponent implements OnInit {
             option: [
               {
                 value: items?.bundel[0]?.AutoFillValue?.DateandPlaceofExpiry,
-                type: "date",
+                type: "textarea",
                 label: "Date and Place of Expiry",
                 style: `height:100px !important;`
               },
