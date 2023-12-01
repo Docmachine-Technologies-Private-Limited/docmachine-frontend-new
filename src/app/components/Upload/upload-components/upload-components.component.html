@@ -450,14 +450,16 @@
                         [multiple]="false" (change)="REMITTER_CHECKBOX($event)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">
                     </ng-select>
-                    <label class="mt-2 mb-2"
-                        *ngIf="field.RemitterLabel!=undefined && field.RemitterLabel!='' && this.validator.CHECK_BOX_REMITTER_LIST?.length!=0">{{field.RemitterLabel}}</label>
-                    <div *ngFor="let item of this.validator.CHECK_BOX_REMITTER_LIST;let in=index" class="mt-2">
-                        <mat-checkbox *ngIf="field.TypeOfCurrency=='' || field.TypeOfCurrency==undefined"
-                            [checked]="item?.checked" (change)="onRemitterCheckBox($event,field.fieldName,item,item)"
-                            [name]="field.fieldName"
-                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.Inward_reference_number}}
-                            | {{item?.currency}} | {{item?.Inward_amount_for_disposal}}</mat-checkbox>
+                    <div class="col-12" *ngIf="field?.Show==true">
+                        <label class="mt-2 mb-2"
+                            *ngIf="field.RemitterLabel!=undefined && field.RemitterLabel!='' && this.validator.CHECK_BOX_REMITTER_LIST?.length!=0">{{field.RemitterLabel}}</label>
+                        <div *ngFor="let item of this.validator.CHECK_BOX_REMITTER_LIST;let in=index" class="mt-2">
+                            <mat-checkbox *ngIf="field.TypeOfCurrency=='' || field.TypeOfCurrency==undefined"
+                                [checked]="item?.checked"
+                                (change)="onRemitterCheckBox($event,field.fieldName,item,item)" [name]="field.fieldName"
+                                [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.Inward_reference_number}}
+                                | {{item?.currency}} | {{item?.Inward_amount_for_disposal}}</mat-checkbox>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'CommericalListCheckBox'">

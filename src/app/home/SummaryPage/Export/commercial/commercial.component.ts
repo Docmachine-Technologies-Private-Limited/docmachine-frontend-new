@@ -263,7 +263,7 @@ export class CommercialComponent implements OnInit {
     this.documentService.updateCommercial(data, data._id).subscribe(
       (data) => {
         console.log('king123');
-        this.toastr.success('Commercial invoie updated successfully.');
+        this.toastr.success('Commercial Invoice updated successfully.');
       }, (error) => {
         console.log('error');
       }
@@ -274,7 +274,7 @@ export class CommercialComponent implements OnInit {
     console.log(data);
     this.documentService.updateCommercial(data, id).subscribe((data) => {
       console.log(data);
-      this.toastr.success('Commercial Invoie Row Is Updated Successfully.');
+      this.toastr.success('Commercial Invoice Row Is Updated Successfully.');
       this.ngOnInit();
       EditSummaryPagePanel?.displayHidden
     }, (error) => {
@@ -294,7 +294,7 @@ export class CommercialComponent implements OnInit {
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/CommercialInvoices`], navigationExtras);
-    this.toastr.warning('Commercial Invoie Row Is In Edit Mode');
+    this.toastr.warning('Commercial Invoice Row Is In Edit Mode');
   }
 
   handleDelete(data: any) {

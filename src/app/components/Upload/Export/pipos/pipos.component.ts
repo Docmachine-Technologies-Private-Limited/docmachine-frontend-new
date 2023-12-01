@@ -59,8 +59,8 @@ export class PIPOSComponent implements OnInit {
           value: "",
           label: "Select the type of document",
           checkboxlabel: [
-            { text: "Proforma Inovice",type:"checkbox", value: 'PI' },
-            { text: 'Purchase Order',type:"checkbox", value: 'PO' }
+            { text: "Proforma Inovice", type: "checkbox", value: 'PI' },
+            { text: 'Purchase Order', type: "checkbox", value: 'PO' }
           ],
           rules: {
             required: true,
@@ -125,10 +125,10 @@ export class PIPOSComponent implements OnInit {
           value: "",
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Finished Goods", type:"checkbox",value: 'Finished Goods' },
-            { text: 'Services',type:"checkbox", value: 'Services' },
-            { text: 'Samples',type:"checkbox", value: 'Samples' },
-            { text: 'Repairs and returns',type:"checkbox", value: 'Repairs and returns' }
+            { text: "Finished Goods", type: "checkbox", value: 'Finished Goods' },
+            { text: 'Services', type: "checkbox", value: 'Services' },
+            { text: 'Samples', type: "checkbox", value: 'Samples' },
+            { text: 'Repairs and returns', type: "checkbox", value: 'Repairs and returns' }
           ],
           NotificationShow: {
             "Finished Goods": "",
@@ -174,6 +174,7 @@ export class PIPOSComponent implements OnInit {
           rules: {
             required: false,
           },
+          Show: false,
           RemitterLabel: "Select Inward Remitter Ref No.",
         },
         incoterm: {
@@ -196,7 +197,7 @@ export class PIPOSComponent implements OnInit {
           type: "OptionMultiCheckBox",
           value: "",
           label: "PC reference number",
-          checkboxlabel: [{ text: "Yes", type:"checkbox",value: 'Yes' }, { text: 'No',type:"checkbox", value: 'No' }],
+          checkboxlabel: [{ text: "Yes", type: "checkbox", value: 'Yes' }, { text: 'No', type: "checkbox", value: 'No' }],
           Yes: "Yes",
           rules: {
             required: true,
@@ -241,7 +242,7 @@ export class PIPOSComponent implements OnInit {
           type: "OptionMultiCheckBox",
           value: "",
           label: "Mode of Transport",
-          checkboxlabel: [{ text: "Sea", type:"checkbox",value: 'Sea' }, { text: 'Air',type:"checkbox", value: 'Air' }],
+          checkboxlabel: [{ text: "Sea", type: "checkbox", value: 'Sea' }, { text: 'Air', type: "checkbox", value: 'Air' }],
           rules: {
             required: true,
           },

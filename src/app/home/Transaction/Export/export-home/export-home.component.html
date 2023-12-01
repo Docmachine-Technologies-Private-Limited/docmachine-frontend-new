@@ -1033,14 +1033,14 @@
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
                         value="value.bank" name="BankToCredit" (click)="creditTo(value)">
                       <label style="flex-direction:row;" class="label1"
-                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value.accNumber}}</label>
+                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value?.currency}}-{{value.accNumber}}</label>
                     </div>
                     <br><span>Charges A/C No.*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input *ngIf="value?.currency=='INR'" style="flex-direction:row;" type="radio" id="options1"
                         class="circular_input" value="value.bank" name="BankToCharge" (click)="chargesTo(value)">
                       <label *ngIf="value?.currency=='INR'" style="flex-direction:row;" class="label1"
-                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value.accNumber}}</label>
+                        for="male">{{value.bank}}-{{value.accType?.split("-")[0]}}-{{value?.currency}}-{{value.accNumber}}</label>
                     </div>
                     <br>
                   </div>

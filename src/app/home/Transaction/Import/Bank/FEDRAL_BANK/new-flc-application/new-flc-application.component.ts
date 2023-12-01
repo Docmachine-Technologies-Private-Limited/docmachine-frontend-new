@@ -190,24 +190,10 @@ export class NewFLCApplicationComponent implements OnInit {
             },
             option: [
               {
-                value: "By Sight Payment",
-                text: "By Sight Payment",
-                type: "checkbox",
-              },
-              {
-                value: "By Deferred Payment",
-                text: "By Deferred Payment",
-                type: "checkbox",
-              },
-              {
-                value: "By Negotiation",
-                text: "By Negotiation",
-                type: "checkbox",
-              },
-              {
-                value: "By Acceptance",
-                text: "By Acceptance",
-                type: "checkbox",
+                value: ``,
+                type: "textarea",
+                label: "Documentary Credit Number",
+                style: `height:100px !important;`
               },
             ]
           },
@@ -277,7 +263,7 @@ export class NewFLCApplicationComponent implements OnInit {
             option: [
               {
                 value: ``,
-                type: "date",
+                type: "textarea",
                 label: "Date and Place of Expiry",
                 style: `height:100px !important;`
               },
