@@ -205,7 +205,7 @@ export class ImportPIPOSComponent implements OnInit {
           type: "OptionMultiCheckBox",
           value: "",
           label: "Mode of Transport",
-          checkboxlabel: [{ text: "Yes", type:"checkbox",value: 'Yes' }, { text: 'No',type:"checkbox", value: 'No' }],
+          checkboxlabel: [{ text: "Sea", type:"checkbox",value: 'Sea' }, { text: 'Air',type:"checkbox", value: 'Air' }],
           rules: {
             required: true,
           },

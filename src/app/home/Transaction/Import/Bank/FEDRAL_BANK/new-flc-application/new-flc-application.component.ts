@@ -110,359 +110,6 @@ export class NewFLCApplicationComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
-    this.LIST_OF_QUESTION = [
-      {
-        type: "checkbox",
-        value: "",
-        label: "39A:*** | PERCENTAGE CREDIT AMOUNT TOLERANCE",
-        fieldName: '3',
-        id: '39A:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "PERCENTAGE CREDIT AMOUNT TOLERANCE",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "39C:*** | ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
-        fieldName: '3',
-        id: '39C:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "41a : (A/D):*** | CREDIT AVAILABLE WITH CREDIT AVAILABLE BY",
-        fieldName: '2',
-        id: '41a',
-        option: [
-          {
-            value: "By Sight Payment",
-            text: "By Sight Payment",
-            type: "checkbox",
-          },
-          {
-            value: "By Deferred Payment",
-            text: "By Deferred Payment",
-            type: "checkbox",
-          },
-          {
-            value: "By Negotiation",
-            text: "By Negotiation",
-            type: "checkbox",
-          },
-          {
-            value: "By Acceptance",
-            text: "By Acceptance",
-            type: "checkbox",
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "Drawn at ____90______ days from Shipment Date",
-        label: "42c:*** | DRAFTS AT",
-        fieldName: '3',
-        id: '42c:***',
-        option: [
-          {
-            value: `Drawn at ____90______ days from Shipment Date`,
-            type: "textarea",
-            label: "DRAFTS AT",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "42a:*** | DRAWEE",
-        fieldName: '3',
-        id: '42a:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "DRAWEE",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "43P:*** | PARTIAL SHIPMENTS",
-        fieldName: '4',
-        id: '43P',
-        option: [
-          {
-            value: "PROHIBITED",
-            text: "PROHIBITED",
-            type: "checkbox",
-          },
-          {
-            value: "PERMITTED",
-            text: "PERMITTED",
-            type: "checkbox",
-          }
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "TRANSHIPMENTS",
-        fieldName: '5',
-        id: '43T',
-        option: [
-          {
-            value: "PROHIBITED",
-            text: "PROHIBITED",
-            type: "checkbox",
-          },
-          {
-            value: "PERMITTED",
-            text: "PERMITTED",
-            type: "checkbox",
-          }
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "44A:*** | TYPE OF L/C",
-        fieldName: '3',
-        id: '44A:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "TYPE OF L/C",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "44B:*** | SHIPMENT TO",
-        fieldName: '3',
-        id: '44B:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "SHIPMENT TO",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "44C:*** | LATEST DATE OF SHIPMENT",
-        fieldName: '3',
-        id: '44C:***',
-        option: [
-          {
-            value: ``,
-            type: "date",
-            label: "LATEST DATE OF SHIPMENT",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "45A:*** | QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
-        fieldName: '3',
-        id: '45A:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "*** | IMPORT LICENCE/OGL DETAILS",
-        fieldName: '3',
-        id: '***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "IMPORT LICENCE/OGL DETAILS",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "*** | IMPORT EXPORT CODE NO.",
-        fieldName: '3',
-        id: '***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "IMPORT EXPORT CODE NO.",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "46A:*** | DOCUMENTS REQUIRED",
-        fieldName: '3',
-        id: '46A:***',
-        option: [
-          {
-            value: `SIGNED DRAFTS FOR 100% OF THE INVOICE VALUE.
-            SIGNED COMMERCIAL INVOICE (S) IN COPIES FULL SET OF SIGNED “CLEAN” "ON BOARD" OCEAN BILLS OF LADING MADE OUT TO ORDER AND BLANK ENDORSED MARKED 
-            FREIGHT PREPAID/FREIGHT PAYABLE AT DESTINATION EVIDENCING SHIPMENT OF MERCHANDISE DESCRIBED ABOVE. 
-            BILLS OF LADING MUST STATE FULL NAME AND ADDRESS OF BOTH APPLICANT AND ____________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. 
-            OR AIRWAY BILL (ORIGINAL PLUS THREE COPIES) ISSUED BY AIRLINE OR IT’S AGENT MADE IN THE NAME OF ___________________________________ BANK LIMITED 
-            FOR ACCOUNT APPLICANT EVIDENCING THE CURRENT AIRFREIGHT OF GOODS. AIRWAY BILL SHOULD BE MARKED “FREIGHT PREPAID/TO COLLECT”. AIRWAY BILLS MUST 
-            STATE FULL NAME AND ADDRESS OF APPLICANT AND __________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. AIRWAY BILL MUST INDICATE FLIGHT NUMBER AND DATE.
-            MARINE/AVIATION INSURANCE POLICY OR CERTIFICATE (ORIGINAL PLUS COPY) DATED NOT LATER THAN THE DATE OF BILLS OF LADING/ AIRWAY BILL SIGNED AND ISSUED BY INSURANCE 
-            COMPANY MADE TO ORDER AND BLANK ENDORSED IN CURRENCY OF THE CREDIT FOR 110 % OF CIF INVOICE VALUE , COVERING INSTITUTE CARGO CLAUSE (A), WITH EXTENDED COVER FOR 
-            TRANSHIPMENT RISKS, IF APPLICABLE, THEFT, PILFERAGE, BREAKAGE AND NON-DELIVERY, INSTITUTE WAR CLAUSE (CARGO) AND INSTITUTE STRIKES CLAUSE (CARGO), 
-            INSTITUTE TRANSIT CLAUSES FOR WAREHOUSE TO WAREHOUSE COVER WITH CLAIMS PAYABLE IN INDIA IRRESPECTIVE OF PERCENTAGE.
-            SIGNED PACKING LIST IN TRIPLICATE CERTIFICATE OF ORIGIN ISSUED BY CHAMBER OF COMMERCE IN TRILICATE CERTIFYING GOODS OF ORIGIN. 
-            SHIPPING COMPANY’S OR THEIR AGENT’S CERTIFICATE (IN DUPLICATE) STATING THAT THE CARRYING VESSEL NAMED IN THE BILL OF LADING IS A SEAWORTHY VESSEL, 
-            NOT MORE THAN TWENTY-FIVE YEARS OLD, HAS BEEN APPROVED UNDER INSTITUTE CLASSIFICATION CLAUSE (CLASS MAINTAINED EQUIVALENT TO LLOYDS 100 A1) AND HAS
-            BEEN REGISTERED WITH AN APPROVED CLASSIFICATION SOCIETY (CERTIFICATE TO SPECIFY THE NAME OF THE CLASSIFICATION SOCIETY). A CERTIFICATE IN DUPLICATE
-            ISSUED BY THE SHIPPING COMPANY OR THEIR AGENT STATING THAT THE VESSEL MENTIONED IN THE BILL OF LADING AND THE PORTS FROM/TO WHICH THE GOODS ARE SHIPPED 
-            ARE FREE FROM EMBARGOS AND THAT THERE ARE NO SUBSISTING SANCTIONS IMPOSED ON THE VESSEL/PORT. BENEFICIARY’S CERTIFICATE TO THE EFFECT THAT ONE ADDITIONAL
-            SET OF NON- NEGOTIABLE DOCUMENTS INCLUDING ONE COPY EACH OF INVOICE, AWB/BL, INSURANCE DOCUMENTS IF ANY, CERTIFICATE OF ORIGIN HAS BEEN FORWARDED TO THE APPLICANT
-            BY COURIER AT THE EARLIEST BUT NOT MORE THAN TWO WORKING DAYS AFTER SHIPMENT. (ANY OTHER DOCUMENTS AS MAY BE REQUIRED)`,
-            type: "textarea",
-            label: "DOCUMENTS REQUIRED",
-            style: `height:300px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "47 A:T | ADDITIONAL CONDITIONS",
-        fieldName: '3',
-        id: '47 A:T',
-        option: [
-          {
-            value: `SEPARATE DRAFT AND INVOICE FOR INTEREST AMOUNT REQUIRED INVOICE SHOULD QUOTE IMPORT LICENCE/OGL REFERENCE AND 
-            CERTIFY THAT THE GOODS SUPPLIED ARE AS PER PURCHASE ORDER OF THE APPLICANT. GROSS FOB/CIF/CFR VALUE OF THE GOODS BEFORE 
-            DEDUCTION OF AGENT’S COMMISSION, IF ANY, MUST NOT EXCEED THE MAXIMUM CREDIT AMOUNT. ALL DOCUMENTS MUST BE IN ENGLISH ALL
-            DOCUMENTS MUST MENTION OUR L/C NUMBER AND DATE AND THAT THE GOODS ARE FREELY IMPORTABLE UNDER EXIM POLICY 2009-2014 / ARE 
-            IMPORTED UNDER LICENSE NUMBER (WHICHEVER IS APPLICABLE) DOCUMENTS PRODUCED BY REPROGRAPIC PROCESS/COMPUTERISED CARBON COPIES 
-            ARE NOT ACCEPTABLE UNLESS MARKED ORIGINAL AND SIGNED. OTHERS, PLEASE SPECIFY`,
-            type: "textarea",
-            label: "ADDITIONAL CONDITIONS",
-            style: `height:300px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "71 B:*** | SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
-        fieldName: '3',
-        id: '71 B:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "48:*** | PERIOD OF PRESENTATION OF DOCUMENTS",
-        fieldName: '3',
-        id: '48:***',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "PERIOD OF PRESENTATION OF DOCUMENTS",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "49:*** | CONFIRMATION INSTRUCTIONS",
-        fieldName: '6',
-        id: '49:***',
-        option: [
-          {
-            value: "WITHOUT",
-            text: "WITHOUT",
-            type: "checkbox",
-          },
-          {
-            value: "CHARGES PAYABLE BY",
-            text: "CHARGES PAYABLE BY",
-            type: "checkbox",
-          }
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "57a | “ADVISE THROUGH” BANK",
-        fieldName: '3',
-        id: '57a',
-        option: [
-          {
-            value: ``,
-            type: "textarea",
-            label: "“ADVISE THROUGH” BANK",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: "",
-        label: "72: | SENDER TO RECEIVER INFORMATION",
-        fieldName: '7',
-        id: '72',
-        option: [
-          {
-            value: "NOT APPLICABLE",
-            text: "NOT APPLICABLE",
-            type: "checkbox",
-          }
-        ]
-      }
-    ]
-    this.LIST_OF_QUESTION.forEach((element, index) => {
-      element['index'] = index;
-      element['Active'] = false
-    });
     this.EDIT_OPTION_ENABLED = false;
     console.log(this.LIST_OF_QUESTION, 'LIST_OF_QUESTION');
   }
@@ -474,13 +121,16 @@ export class NewFLCApplicationComponent implements OnInit {
   }
 
   LIST_OF_QUESTION_VALUE: any = [];
-  QuestionDoneButton() {
-    this.LIST_OF_QUESTION_VALUE = [];
-    this.LIST_OF_QUESTION.forEach(element => {
-      this.LIST_OF_QUESTION_VALUE.push(element?.value);
-    });
-    console.log(this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, this.formvalue, "LIST_OF_QUESTION")
-    this.SubmitButtonDisabled = false;
+  QuestionDoneButton(value: any,AutofillLCTablePanel) {
+    this.SubmitButtonDisabled = true;
+    if (value?.status != "INVALID") {
+      this.LIST_OF_QUESTION_VALUE = value?.value;
+      this.SubmitButtonDisabled = false;
+      AutofillLCTablePanel?.displayHidden
+    } else {
+      this.toastr.error("Fill All mandorty field...")
+    }
+    console.log(value, this.LIST_OF_QUESTION, this.LIST_OF_QUESTION_VALUE, this.formvalue, "LIST_OF_QUESTION")
   }
 
   SUMMARY_LC_DATA: any = [];
@@ -492,10 +142,626 @@ export class NewFLCApplicationComponent implements OnInit {
       this.validator.PIPO_LIST = [];
       this.response(null)
       this.loadData();
+      setTimeout(() => {
+        this.validator.buildForm({
+          SequenceofTotal: {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "27 | Sequence of Total",
+            id: '27',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Sequence of Total",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "FormofDocumentaryCredit": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "40A | Form of Documentary Credit",
+            fieldName: '3',
+            id: '40A',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Form of Documentary Credit",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DocumentaryCreditNumber": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "20 | Documentary Credit Number",
+            fieldName: '2',
+            id: '20',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: "By Sight Payment",
+                text: "By Sight Payment",
+                type: "checkbox",
+              },
+              {
+                value: "By Deferred Payment",
+                text: "By Deferred Payment",
+                type: "checkbox",
+              },
+              {
+                value: "By Negotiation",
+                text: "By Negotiation",
+                type: "checkbox",
+              },
+              {
+                value: "By Acceptance",
+                text: "By Acceptance",
+                type: "checkbox",
+              },
+            ]
+          },
+          "ReferencetoPreAdvice": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "23 | Reference to Pre-Advice",
+            fieldName: '3',
+            id: '23',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Reference to Pre-Advice",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DateofIssue": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "31C | Date of Issue",
+            fieldName: '3',
+            id: '31C',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "date",
+                label: "Date of Issue",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "ApplicableRules": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "40E | Applicable Rules",
+            fieldName: '4',
+            id: '40E',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Applicable Rules",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DateandPlaceofExpiry": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "31D | Date and Place of Expiry",
+            fieldName: '5',
+            id: '31D',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "date",
+                label: "Date and Place of Expiry",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "ApplicantBank": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "51a | Applicant Bank",
+            fieldName: '3',
+            id: '51a',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Applicant Bank",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Applicant": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "50 | Applicant",
+            fieldName: '3',
+            id: '50',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Applicant",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Beneficiary": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "59 | Beneficiary",
+            fieldName: '3',
+            id: '59',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Beneficiary",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "CurrencyCodeAmount": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "32B | Currency Code, Amount",
+            fieldName: '3',
+            id: '32B',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Currency Code, Amount",
+              },
+            ]
+          },
+          "PercentageCreditAmountTolerance": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "39A | Percentage Credit Amount Tolerance",
+            fieldName: '3',
+            id: '39A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Percentage Credit Amount Tolerance",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "AdditionalAmountsCovered": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "39C | Additional Amounts Covered",
+            fieldName: '3',
+            id: '39C',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Additional Amounts Covered",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "AvailableWithBy": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "41a | Available With ... By ...",
+            fieldName: '3',
+            id: '41a',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Available With ... By ...",
+                style: `height:300px !important;`
+              },
+            ]
+          },
+          "DraftsAt": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "42C | Drafts at ...",
+            fieldName: '3',
+            id: '42C',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Drafts at ...",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Drawee": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "42a | Drawee",
+            fieldName: '3',
+            id: '42a',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Drawee",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "MixedPaymentDetails": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "42M | Mixed Payment Details",
+            fieldName: '6',
+            id: '42M',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Mixed Payment Details",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "NegotiationDeferredPaymentDetails": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "42P | Negotiation/Deferred Payment Details",
+            fieldName: '3',
+            id: '42P',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Negotiation/Deferred Payment Details",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PartialShipments": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "43P | Partial Shipments",
+            fieldName: '7',
+            id: '43P',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Partial Shipments",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Transhipment": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "43T | Transhipment",
+            fieldName: '7',
+            id: '43T',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Transhipment",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PlaceofTakinginChargeDispatchfromPlaceofReceipt": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "44A | Place of Taking in Charge/Dispatch from .../Place of Receipt",
+            fieldName: '7',
+            id: '44A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Place of Taking in Charge/Dispatch from .../Place of Receipt",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PortofLoadingAirportofDeparture": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "44E | Port of Loading/Airport of Departure",
+            fieldName: '7',
+            id: '44E',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Port of Loading/Airport of Departure",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PortofDischargeAirportofDestination": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "44F | Port of Discharge/Airport of Destination",
+            fieldName: '7',
+            id: '44F',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Port of Discharge/Airport of Destination",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PlaceofFinalDestinationTransportationPlaceofDelivery": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "44B | Place of Final Destination/For Transportation to .../Place of Delivery",
+            fieldName: '7',
+            id: '44B',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Place of Final Destination/For Transportation to .../Place of Delivery",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "LatestDateofShipment": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "44C | Latest Date of Shipment",
+            fieldName: '7',
+            id: '44C',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Latest Date of Shipment",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "ShipmentPeriod": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "44D | Shipment Period",
+            fieldName: '7',
+            id: '44D',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Shipment Period",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DescriptionofGoodsServices": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "45A | Description of Goods and/or Services",
+            fieldName: '7',
+            id: '45A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Description of Goods and/or Services",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DocumentsRequired": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "46A | Documents Required",
+            fieldName: '7',
+            id: '46A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: `SIGNED DRAFTS FOR 100% OF THE INVOICE VALUE.
+                SIGNED COMMERCIAL INVOICE (S) IN COPIES FULL SET OF SIGNED “CLEAN” "ON BOARD" OCEAN BILLS OF LADING MADE OUT TO ORDER AND BLANK ENDORSED MARKED 
+                FREIGHT PREPAID/FREIGHT PAYABLE AT DESTINATION EVIDENCING SHIPMENT OF MERCHANDISE DESCRIBED ABOVE. 
+                BILLS OF LADING MUST STATE FULL NAME AND ADDRESS OF BOTH APPLICANT AND ____________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. 
+                OR AIRWAY BILL (ORIGINAL PLUS THREE COPIES) ISSUED BY AIRLINE OR IT’S AGENT MADE IN THE NAME OF ___________________________________ BANK LIMITED 
+                FOR ACCOUNT APPLICANT EVIDENCING THE CURRENT AIRFREIGHT OF GOODS. AIRWAY BILL SHOULD BE MARKED “FREIGHT PREPAID/TO COLLECT”. AIRWAY BILLS MUST 
+                STATE FULL NAME AND ADDRESS OF APPLICANT AND __________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. AIRWAY BILL MUST INDICATE FLIGHT NUMBER AND DATE.
+                MARINE/AVIATION INSURANCE POLICY OR CERTIFICATE (ORIGINAL PLUS COPY) DATED NOT LATER THAN THE DATE OF BILLS OF LADING/ AIRWAY BILL SIGNED AND ISSUED BY INSURANCE 
+                COMPANY MADE TO ORDER AND BLANK ENDORSED IN CURRENCY OF THE CREDIT FOR 110 % OF CIF INVOICE VALUE , COVERING INSTITUTE CARGO CLAUSE (A), WITH EXTENDED COVER FOR 
+                TRANSHIPMENT RISKS, IF APPLICABLE, THEFT, PILFERAGE, BREAKAGE AND NON-DELIVERY, INSTITUTE WAR CLAUSE (CARGO) AND INSTITUTE STRIKES CLAUSE (CARGO), 
+                INSTITUTE TRANSIT CLAUSES FOR WAREHOUSE TO WAREHOUSE COVER WITH CLAIMS PAYABLE IN INDIA IRRESPECTIVE OF PERCENTAGE.
+                SIGNED PACKING LIST IN TRIPLICATE CERTIFICATE OF ORIGIN ISSUED BY CHAMBER OF COMMERCE IN TRILICATE CERTIFYING GOODS OF ORIGIN. 
+                SHIPPING COMPANY’S OR THEIR AGENT’S CERTIFICATE (IN DUPLICATE) STATING THAT THE CARRYING VESSEL NAMED IN THE BILL OF LADING IS A SEAWORTHY VESSEL, 
+                NOT MORE THAN TWENTY-FIVE YEARS OLD, HAS BEEN APPROVED UNDER INSTITUTE CLASSIFICATION CLAUSE (CLASS MAINTAINED EQUIVALENT TO LLOYDS 100 A1) AND HAS
+                BEEN REGISTERED WITH AN APPROVED CLASSIFICATION SOCIETY (CERTIFICATE TO SPECIFY THE NAME OF THE CLASSIFICATION SOCIETY). A CERTIFICATE IN DUPLICATE
+                ISSUED BY THE SHIPPING COMPANY OR THEIR AGENT STATING THAT THE VESSEL MENTIONED IN THE BILL OF LADING AND THE PORTS FROM/TO WHICH THE GOODS ARE SHIPPED 
+                ARE FREE FROM EMBARGOS AND THAT THERE ARE NO SUBSISTING SANCTIONS IMPOSED ON THE VESSEL/PORT. BENEFICIARY’S CERTIFICATE TO THE EFFECT THAT ONE ADDITIONAL
+                SET OF NON- NEGOTIABLE DOCUMENTS INCLUDING ONE COPY EACH OF INVOICE, AWB/BL, INSURANCE DOCUMENTS IF ANY, CERTIFICATE OF ORIGIN HAS BEEN FORWARDED TO THE APPLICANT
+                BY COURIER AT THE EARLIEST BUT NOT MORE THAN TWO WORKING DAYS AFTER SHIPMENT. (ANY OTHER DOCUMENTS AS MAY BE REQUIRED)`,
+                type: "textarea",
+                label: "Documents Required",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "AdditionalConditions": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "47A | Additional Conditions",
+            fieldName: '7',
+            id: '47A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: `SEPARATE DRAFT AND INVOICE FOR INTEREST AMOUNT REQUIRED INVOICE SHOULD QUOTE IMPORT LICENCE/OGL REFERENCE AND 
+                CERTIFY THAT THE GOODS SUPPLIED ARE AS PER PURCHASE ORDER OF THE APPLICANT. GROSS FOB/CIF/CFR VALUE OF THE GOODS BEFORE 
+                DEDUCTION OF AGENT’S COMMISSION, IF ANY, MUST NOT EXCEED THE MAXIMUM CREDIT AMOUNT. ALL DOCUMENTS MUST BE IN ENGLISH ALL
+                DOCUMENTS MUST MENTION OUR L/C NUMBER AND DATE AND THAT THE GOODS ARE FREELY IMPORTABLE UNDER EXIM POLICY 2009-2014 / ARE 
+                IMPORTED UNDER LICENSE NUMBER (WHICHEVER IS APPLICABLE) DOCUMENTS PRODUCED BY REPROGRAPIC PROCESS/COMPUTERISED CARBON COPIES 
+                ARE NOT ACCEPTABLE UNLESS MARKED ORIGINAL AND SIGNED. OTHERS, PLEASE SPECIFY`,
+                type: "textarea",
+                label: "Additional Conditions",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "SpecialPaymentConditionsforBeneficiary": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "49G | Special Payment Conditions for Beneficiary",
+            fieldName: '7',
+            id: '49G',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Special Payment Conditions for Beneficiary",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "SpecialPaymentConditionsforBankOnly": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "49H | Special Payment Conditions for Bank Only",
+            fieldName: '7',
+            id: '49H',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Special Payment Conditions for Bank Only",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Charges": {
+            type: "LABLE_CHECKBOX",
+            value: "",
+            label: "71D | Charges",
+            fieldName: '7',
+            id: '71D',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: ``,
+                type: "textarea",
+                label: "Charges",
+                style: `height:100px !important;`
+              },
+            ]
+          }
+        }, 'AutofillLCTableForm');
+        console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
+      }, 200);
     });
     this.EDIT_OPTION_ENABLED = false;
   }
-  
+
   loadData() {
     this.filteranytablepagination.PaginationfilterAnyTable({}, { limit: 10000 }, 'LCTransaction').subscribe((res: any) => {
       this.LCTransaction_Data = res?.data;
@@ -506,7 +772,7 @@ export class NewFLCApplicationComponent implements OnInit {
       console.log(res, "SendApprovalgetLCTransaction true")
     })
   }
-  
+
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
@@ -535,7 +801,7 @@ export class NewFLCApplicationComponent implements OnInit {
           label: "Select Bank",
           Banklabel: "To Debit Account no. & Account Type*",
           TypeOfCurrency: "INR",
-          ChargeLabelHide: true,
+          ChargeLabelHide: false,
           rules: {
             required: true,
           }
@@ -685,45 +951,52 @@ export class NewFLCApplicationComponent implements OnInit {
           }
         });
 
-        getAllFields[2]?.setText(this.CURRENT_DATE?.toString());
-        getAllFields[3]?.setText(this.validator.COMPANY_INFO[0]?.teamName + ' & ' + this.validator.COMPANY_INFO[0]?.adress);
+        // getAllFields[2]?.setText(this.CURRENT_DATE?.toString());
+        // getAllFields[3]?.setText(this.validator.COMPANY_INFO[0]?.teamName + ' & ' + this.validator.COMPANY_INFO[0]?.adress);
 
         if (filldata != null && filldata != undefined && filldata != '') {
           this.formvalue["AutoFillValue"] = this.LIST_OF_QUESTION_VALUE
           getAllFields[0]?.setText(filldata?.BankDebit?.bank + '\n' + filldata?.BankDebit?.bicAddress);
-          // getAllFields[1]?.setText(this.CURRENT_DATE?.toString());
-          getAllFields[4]?.setText(filldata?.BenneName?.value + '\n' + filldata?.BenneName?.Address);
-          getAllFields[5]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
-          getAllFields[7]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
+          // getAllFields[4]?.setText(filldata?.BenneName?.value + '\n' + filldata?.BenneName?.Address);
           if (filldata?.AutoFillValue != undefined && filldata?.AutoFillValue?.length != 0) {
-            getAllFields[6]?.setText(filldata?.AutoFillValue[0]);
-            getAllFields[8]?.setText(filldata?.AutoFillValue[1]);
-            getAllFields[9]?.setText(filldata?.AutoFillValue[2]);
-            getAllFields[10]?.setText(filldata?.AutoFillValue[3]);
-            getAllFields[11]?.setText(filldata?.AutoFillValue[4]);
-            getAllFields[12]?.setText(filldata?.AutoFillValue[5]);
-            getAllFields[13]?.setText(filldata?.AutoFillValue[6]);
-            getAllFields[14]?.setText(filldata?.AutoFillValue[7]);
-            getAllFields[15]?.setText(filldata?.AutoFillValue[8]);
-            getAllFields[16]?.setText(filldata?.AutoFillValue[9]);
-            getAllFields[17]?.setText(filldata?.AutoFillValue[10]);
-            getAllFields[18]?.setText(filldata?.AutoFillValue[11]);
-            getAllFields[19]?.setText(filldata?.AutoFillValue[12]);
-            getAllFields[20]?.setText(filldata?.AutoFillValue[13]);
-            getAllFields[21]?.setText(filldata?.AutoFillValue[14]);
-            getAllFields[22]?.setText(filldata?.AutoFillValue[15]);
-            getAllFields[23]?.setText(filldata?.AutoFillValue[16]);
-            getAllFields[24]?.setText(filldata?.AutoFillValue[17]);
-            getAllFields[25]?.setText(filldata?.AutoFillValue[18]);
-            getAllFields[26]?.setText(filldata?.AutoFillValue[19]);
+            getAllFields[2]?.setText(filldata?.AutoFillValue?.SequenceofTotal);
+            getAllFields[3]?.setText(filldata?.AutoFillValue?.FormofDocumentaryCredit);
+            getAllFields[4]?.setText(filldata?.AutoFillValue?.DocumentaryCreditNumber);
+            getAllFields[5]?.setText(filldata?.AutoFillValue?.ReferencetoPreAdvice);
+            getAllFields[6]?.setText(filldata?.AutoFillValue?.DateofIssue);
+            getAllFields[7]?.setText(filldata?.AutoFillValue?.ApplicableRules);
+            getAllFields[8]?.setText(filldata?.AutoFillValue?.DateandPlaceofExpiry);
+            getAllFields[9]?.setText(filldata?.AutoFillValue?.ApplicantBank);
+            getAllFields[10]?.setText(filldata?.AutoFillValue?.Applicant);
+            getAllFields[11]?.setText(filldata?.AutoFillValue?.Beneficiary);
+            getAllFields[12]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
+            getAllFields[13]?.setText(this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount, filldata?.paymentTerm[0]?.PIPO_LIST?.currency));
+            getAllFields[14]?.setText(filldata?.AutoFillValue?.AdditionalAmountsCovered);
+            getAllFields[15]?.setText(filldata?.AutoFillValue?.AvailableWithBy);
+            getAllFields[16]?.setText(filldata?.AutoFillValue?.DraftsAt);
+            getAllFields[17]?.setText(filldata?.AutoFillValue?.Drawee);
+            getAllFields[18]?.setText(filldata?.AutoFillValue?.MixedPaymentDetails);
+            getAllFields[19]?.setText(filldata?.AutoFillValue?.NegotiationDeferredPaymentDetails);
+            getAllFields[20]?.setText(filldata?.AutoFillValue?.PartialShipments);
+            getAllFields[21]?.setText(filldata?.AutoFillValue?.Transhipment);
+            getAllFields[22]?.setText(filldata?.AutoFillValue?.PlaceofTakinginChargeDispatchfromPlaceofReceipt);
+            getAllFields[23]?.setText(filldata?.AutoFillValue?.PortofLoadingAirportofDeparture);
+            getAllFields[24]?.setText(filldata?.AutoFillValue?.PortofDischargeAirportofDestination);
+            getAllFields[25]?.setText(filldata?.AutoFillValue?.PlaceofFinalDestinationTransportationPlaceofDelivery);
+            getAllFields[26]?.setText(filldata?.AutoFillValue?.LatestDateofShipment);
+            getAllFields[27]?.setText(filldata?.AutoFillValue?.ShipmentPeriod);
+            getAllFields[28]?.setText(filldata?.AutoFillValue?.DescriptionofGoodsServices);
+            getAllFields[29]?.setText(filldata?.AutoFillValue?.DocumentsRequired);
+            getAllFields[30]?.setText(filldata?.AutoFillValue?.AdditionalConditions);
+            getAllFields[31]?.setText(filldata?.AutoFillValue?.SpecialPaymentConditionsforBeneficiary);
+            getAllFields[32]?.setText(filldata?.AutoFillValue?.SpecialPaymentConditionsforBankOnly);
+            getAllFields[33]?.setText(filldata?.AutoFillValue?.Charge);
 
-
-            getAllFields[38]?.setText(this.CURRENT_DATE);
-            // getAllFields[39]?.setText(filldata?.BankDebit?.bank);
-            getAllFields[40]?.setText(filldata?.BankDebit?.accNumber);
-            getAllFields[41]?.setText(this.validator.COMPANY_INFO[0]?.adress);
+            getAllFields[46]?.setText(this.CURRENT_DATE);
+            getAllFields[47]?.setText(filldata?.BankDebit?.bank);
+            getAllFields[48]?.setText(filldata?.BankDebit?.accNumber);
+            getAllFields[49]?.setText(this.validator.COMPANY_INFO[0]?.adress);
           }
-          // getAllFields[5]?.setText('');
         }
         await pdfDoc.save()
         await this.addWaterMark(pdfDoc, filldata != null ? filldata?.SingleMultiple?.bool : false).then(async (Res: any) => {
@@ -1091,40 +1364,40 @@ export class NewFLCApplicationComponent implements OnInit {
     this.LIST_OF_QUESTION = [
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[0],
-        label: "39A:*** | PERCENTAGE CREDIT AMOUNT TOLERANCE",
+        value: "",
+        label: "27 | Sequence of Total",
         fieldName: '3',
-        id: '39A:***',
+        id: '27',
         option: [
           {
-            value: items?.bundel[0]?.AutoFillValue[0],
+            value: ``,
             type: "textarea",
-            label: "PERCENTAGE CREDIT AMOUNT TOLERANCE",
+            label: "Sequence of Total",
             style: `height:100px !important;`
           },
         ]
       },
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[1],
-        label: "39C:*** | ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
+        value: "",
+        label: "40A | Form of Documentary Credit",
         fieldName: '3',
-        id: '39C:***',
+        id: '40A',
         option: [
           {
-            value: items?.bundel[0]?.AutoFillValue[1],
+            value: ``,
             type: "textarea",
-            label: "ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)",
+            label: "Form of Documentary Credit",
             style: `height:100px !important;`
           },
         ]
       },
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[2],
-        label: "41a : (A/D):*** | CREDIT AVAILABLE WITH CREDIT AVAILABLE BY",
+        value: "",
+        label: "20 | Documentary Credit Number",
         fieldName: '2',
-        id: '41a',
+        id: '20',
         option: [
           {
             value: "By Sight Payment",
@@ -1150,267 +1423,454 @@ export class NewFLCApplicationComponent implements OnInit {
       },
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[3],
-        label: "42c:*** | DRAFTS AT",
+        value: "Drawn at ____90______ days from Shipment Date",
+        label: "23 | Reference to Pre-Advice",
         fieldName: '3',
-        id: '42c:***',
+        id: '23',
         option: [
           {
             value: `Drawn at ____90______ days from Shipment Date`,
             type: "textarea",
-            label: "DRAFTS AT",
+            label: "Reference to Pre-Advice",
             style: `height:100px !important;`
           },
         ]
       },
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[4],
-        label: "42a:*** | DRAWEE",
+        value: "",
+        label: "31C | Date of Issue",
         fieldName: '3',
-        id: '42a:***',
+        id: '31C',
         option: [
           {
-            value: items?.bundel[0]?.AutoFillValue[4],
-            type: "textarea",
-            label: "DRAWEE",
+            value: ``,
+            type: "date",
+            label: "Date of Issue",
             style: `height:100px !important;`
           },
         ]
       },
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[5],
-        label: "43P:*** | PARTIAL SHIPMENTS",
+        value: "",
+        label: "40E | Applicable Rules",
         fieldName: '4',
+        id: '40E',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Applicable Rules",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "31D | Date and Place of Expiry",
+        fieldName: '5',
+        id: '31D',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Date and Place of Expiry",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "51a | Applicant Bank",
+        fieldName: '3',
+        id: '51a',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Applicant Bank",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "50 | Applicant",
+        fieldName: '3',
+        id: '50',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Applicant",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "59 | Beneficiary",
+        fieldName: '3',
+        id: '59',
+        option: [
+          {
+            value: ``,
+            type: "date",
+            label: "Beneficiary",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "32B | Currency Code, Amount",
+        fieldName: '3',
+        id: '32B',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Currency Code, Amount",
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "39A | Percentage Credit Amount Tolerance",
+        fieldName: '3',
+        id: '39A',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Percentage Credit Amount Tolerance",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "39C | Additional Amounts Covered",
+        fieldName: '3',
+        id: '39C',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Additional Amounts Covered",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "41a | Available With ... By ...",
+        fieldName: '3',
+        id: '41a',
+        option: [
+          {
+            value: `SIGNED DRAFTS FOR 100% OF THE INVOICE VALUE.
+            SIGNED COMMERCIAL INVOICE (S) IN COPIES FULL SET OF SIGNED “CLEAN” "ON BOARD" OCEAN BILLS OF LADING MADE OUT TO ORDER AND BLANK ENDORSED MARKED 
+            FREIGHT PREPAID/FREIGHT PAYABLE AT DESTINATION EVIDENCING SHIPMENT OF MERCHANDISE DESCRIBED ABOVE. 
+            BILLS OF LADING MUST STATE FULL NAME AND ADDRESS OF BOTH APPLICANT AND ____________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. 
+            OR AIRWAY BILL (ORIGINAL PLUS THREE COPIES) ISSUED BY AIRLINE OR IT’S AGENT MADE IN THE NAME OF ___________________________________ BANK LIMITED 
+            FOR ACCOUNT APPLICANT EVIDENCING THE CURRENT AIRFREIGHT OF GOODS. AIRWAY BILL SHOULD BE MARKED “FREIGHT PREPAID/TO COLLECT”. AIRWAY BILLS MUST 
+            STATE FULL NAME AND ADDRESS OF APPLICANT AND __________________________ BANK LIMITED AS PARTIES TO BE NOTIFIED. AIRWAY BILL MUST INDICATE FLIGHT NUMBER AND DATE.
+            MARINE/AVIATION INSURANCE POLICY OR CERTIFICATE (ORIGINAL PLUS COPY) DATED NOT LATER THAN THE DATE OF BILLS OF LADING/ AIRWAY BILL SIGNED AND ISSUED BY INSURANCE 
+            COMPANY MADE TO ORDER AND BLANK ENDORSED IN CURRENCY OF THE CREDIT FOR 110 % OF CIF INVOICE VALUE , COVERING INSTITUTE CARGO CLAUSE (A), WITH EXTENDED COVER FOR 
+            TRANSHIPMENT RISKS, IF APPLICABLE, THEFT, PILFERAGE, BREAKAGE AND NON-DELIVERY, INSTITUTE WAR CLAUSE (CARGO) AND INSTITUTE STRIKES CLAUSE (CARGO), 
+            INSTITUTE TRANSIT CLAUSES FOR WAREHOUSE TO WAREHOUSE COVER WITH CLAIMS PAYABLE IN INDIA IRRESPECTIVE OF PERCENTAGE.
+            SIGNED PACKING LIST IN TRIPLICATE CERTIFICATE OF ORIGIN ISSUED BY CHAMBER OF COMMERCE IN TRILICATE CERTIFYING GOODS OF ORIGIN. 
+            SHIPPING COMPANY’S OR THEIR AGENT’S CERTIFICATE (IN DUPLICATE) STATING THAT THE CARRYING VESSEL NAMED IN THE BILL OF LADING IS A SEAWORTHY VESSEL, 
+            NOT MORE THAN TWENTY-FIVE YEARS OLD, HAS BEEN APPROVED UNDER INSTITUTE CLASSIFICATION CLAUSE (CLASS MAINTAINED EQUIVALENT TO LLOYDS 100 A1) AND HAS
+            BEEN REGISTERED WITH AN APPROVED CLASSIFICATION SOCIETY (CERTIFICATE TO SPECIFY THE NAME OF THE CLASSIFICATION SOCIETY). A CERTIFICATE IN DUPLICATE
+            ISSUED BY THE SHIPPING COMPANY OR THEIR AGENT STATING THAT THE VESSEL MENTIONED IN THE BILL OF LADING AND THE PORTS FROM/TO WHICH THE GOODS ARE SHIPPED 
+            ARE FREE FROM EMBARGOS AND THAT THERE ARE NO SUBSISTING SANCTIONS IMPOSED ON THE VESSEL/PORT. BENEFICIARY’S CERTIFICATE TO THE EFFECT THAT ONE ADDITIONAL
+            SET OF NON- NEGOTIABLE DOCUMENTS INCLUDING ONE COPY EACH OF INVOICE, AWB/BL, INSURANCE DOCUMENTS IF ANY, CERTIFICATE OF ORIGIN HAS BEEN FORWARDED TO THE APPLICANT
+            BY COURIER AT THE EARLIEST BUT NOT MORE THAN TWO WORKING DAYS AFTER SHIPMENT. (ANY OTHER DOCUMENTS AS MAY BE REQUIRED)`,
+            type: "textarea",
+            label: "Available With ... By ...",
+            style: `height:300px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "42C | Drafts at ...",
+        fieldName: '3',
+        id: '42C',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Drafts at ...",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "42a | Drawee",
+        fieldName: '3',
+        id: '42a',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Drawee",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "42M | Mixed Payment Details",
+        fieldName: '6',
+        id: '42M',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Mixed Payment Details",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "42P | Negotiation/Deferred Payment Details",
+        fieldName: '3',
+        id: '42P',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Negotiation/Deferred Payment Details",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "43P | Partial Shipments",
+        fieldName: '7',
         id: '43P',
         option: [
           {
-            value: "PROHIBITED",
-            text: "PROHIBITED",
-            type: "checkbox",
+            value: ``,
+            type: "textarea",
+            label: "Partial Shipments",
+            style: `height:100px !important;`
           },
-          {
-            value: "PERMITTED",
-            text: "PERMITTED",
-            type: "checkbox",
-          }
         ]
       },
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[6],
-        label: "TRANSHIPMENTS",
-        fieldName: '5',
+        value: "",
+        label: "43T | Transhipment",
+        fieldName: '7',
         id: '43T',
         option: [
           {
-            value: "PROHIBITED",
-            text: "PROHIBITED",
-            type: "checkbox",
-          },
-          {
-            value: "PERMITTED",
-            text: "PERMITTED",
-            type: "checkbox",
-          }
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[7],
-        label: "44A:*** | TYPE OF L/C",
-        fieldName: '3',
-        id: '44A:***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[7],
+            value: ``,
             type: "textarea",
-            label: "TYPE OF L/C",
+            label: "Transhipment",
             style: `height:100px !important;`
           },
         ]
       },
       {
         type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[8],
-        label: "44B:*** | SHIPMENT TO",
-        fieldName: '3',
-        id: '44B:***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[8],
-            type: "textarea",
-            label: "SHIPMENT TO",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[9],
-        label: "44C:*** | LATEST DATE OF SHIPMENT",
-        fieldName: '3',
-        id: '44C:***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[9],
-            type: "date",
-            label: "LATEST DATE OF SHIPMENT",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[10],
-        label: "45A:*** | QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
-        fieldName: '3',
-        id: '45A:***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[10],
-            type: "textarea",
-            label: "QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS)",
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[11],
-        label: "*** | IMPORT LICENCE/OGL DETAILS",
-        fieldName: '3',
-        id: '***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[11],
-            type: "textarea",
-            label: "IMPORT LICENCE/OGL DETAILS",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[12],
-        label: "*** | IMPORT EXPORT CODE NO.",
-        fieldName: '3',
-        id: '***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[12],
-            type: "textarea",
-            label: "IMPORT EXPORT CODE NO.",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[13],
-        label: "46A:*** | DOCUMENTS REQUIRED",
-        fieldName: '3',
-        id: '46A:***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[13],
-            type: "textarea",
-            label: "DOCUMENTS REQUIRED",
-            style: `height:300px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[14],
-        label: "47 A:T | ADDITIONAL CONDITIONS",
-        fieldName: '3',
-        id: '47 A:T',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[14],
-            type: "textarea",
-            label: "ADDITIONAL CONDITIONS",
-            style: `height:300px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[15],
-        label: "71 B:*** | SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
-        fieldName: '3',
-        id: '71 B:***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[15],
-            type: "textarea",
-            label: "SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[16],
-        label: "48:*** | PERIOD OF PRESENTATION OF DOCUMENTS",
-        fieldName: '3',
-        id: '48:***',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[16],
-            type: "textarea",
-            label: "PERIOD OF PRESENTATION OF DOCUMENTS",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[17],
-        label: "49:*** | CONFIRMATION INSTRUCTIONS",
-        fieldName: '6',
-        id: '49:***',
-        option: [
-          {
-            value: "WITHOUT",
-            text: "WITHOUT",
-            type: "checkbox",
-          },
-          {
-            value: "CHARGES PAYABLE BY",
-            text: "CHARGES PAYABLE BY",
-            type: "checkbox",
-          }
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[18],
-        label: "57a | “ADVISE THROUGH” BANK",
-        fieldName: '3',
-        id: '57a',
-        option: [
-          {
-            value: items?.bundel[0]?.AutoFillValue[18],
-            type: "textarea",
-            label: "“ADVISE THROUGH” BANK",
-            style: `height:100px !important;`
-          },
-        ]
-      },
-      {
-        type: "checkbox",
-        value: items?.bundel[0]?.AutoFillValue[19],
-        label: "72: | SENDER TO RECEIVER INFORMATION",
+        value: "",
+        label: "44A | Place of Taking in Charge/Dispatch from .../Place of Receipt",
         fieldName: '7',
-        id: '72',
+        id: '44A',
         option: [
           {
-            value: "NOT APPLICABLE",
-            text: "NOT APPLICABLE",
-            type: "checkbox",
-          }
+            value: ``,
+            type: "textarea",
+            label: "Place of Taking in Charge/Dispatch from .../Place of Receipt",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "44E | Port of Loading/Airport of Departure",
+        fieldName: '7',
+        id: '44E',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Port of Loading/Airport of Departure",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "44F | Port of Discharge/Airport of Destination",
+        fieldName: '7',
+        id: '44F',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Port of Discharge/Airport of Destination",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "44B | Place of Final Destination/For Transportation to .../Place of Delivery",
+        fieldName: '7',
+        id: '44B',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Place of Final Destination/For Transportation to .../Place of Delivery",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "44C | Latest Date of Shipment",
+        fieldName: '7',
+        id: '44C',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Latest Date of Shipment",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "44D | Shipment Period",
+        fieldName: '7',
+        id: '44D',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Shipment Period",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "45A | Description of Goods and/or Services",
+        fieldName: '7',
+        id: '45A',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Description of Goods and/or Services",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "46A | Documents Required",
+        fieldName: '7',
+        id: '46A',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Documents Required",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "47A | Additional Conditions",
+        fieldName: '7',
+        id: '47A',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Additional Conditions",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "49G | Special Payment Conditions for Beneficiary",
+        fieldName: '7',
+        id: '49G',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Special Payment Conditions for Beneficiary",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "49H | Special Payment Conditions for Bank Only",
+        fieldName: '7',
+        id: '49H',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Special Payment Conditions for Bank Only",
+            style: `height:100px !important;`
+          },
+        ]
+      },
+      {
+        type: "checkbox",
+        value: "",
+        label: "71D | Charges",
+        fieldName: '7',
+        id: '71D',
+        option: [
+          {
+            value: ``,
+            type: "textarea",
+            label: "Charges",
+            style: `height:100px !important;`
+          },
         ]
       }
     ]
@@ -1511,6 +1971,599 @@ export class NewFLCApplicationComponent implements OnInit {
         this.setSelectedBankDetails(items?.bundel[0]?.BankDebit, items?.bundel[0])
         this.EDIT_OPTION_ENABLED = true;
       });
+      setTimeout(() => {
+        this.validator.buildForm({
+          SequenceofTotal: {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.SequenceofTotal,
+            label: "27 | Sequence of Total",
+            id: '27',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.SequenceofTotal,
+                type: "textarea",
+                label: "Sequence of Total",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "FormofDocumentaryCredit": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.FormofDocumentaryCredit,
+            label: "40A | Form of Documentary Credit",
+            fieldName: '3',
+            id: '40A',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.FormofDocumentaryCredit,
+                type: "textarea",
+                label: "Form of Documentary Credit",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DocumentaryCreditNumber": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.DocumentaryCreditNumber,
+            label: "20 | Documentary Credit Number",
+            fieldName: '2',
+            id: '20',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: "By Sight Payment",
+                text: "By Sight Payment",
+                type: "checkbox",
+              },
+              {
+                value: "By Deferred Payment",
+                text: "By Deferred Payment",
+                type: "checkbox",
+              },
+              {
+                value: "By Negotiation",
+                text: "By Negotiation",
+                type: "checkbox",
+              },
+              {
+                value: "By Acceptance",
+                text: "By Acceptance",
+                type: "checkbox",
+              },
+            ]
+          },
+          "ReferencetoPreAdvice": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.ReferencetoPreAdvice,
+            label: "23 | Reference to Pre-Advice",
+            fieldName: '3',
+            id: '23',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.ReferencetoPreAdvice,
+                type: "textarea",
+                label: "Reference to Pre-Advice",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DateofIssue": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.DateofIssue,
+            label: "31C | Date of Issue",
+            fieldName: '3',
+            id: '31C',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.DateofIssue,
+                type: "date",
+                label: "Date of Issue",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "ApplicableRules": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.ApplicableRules,
+            label: "40E | Applicable Rules",
+            fieldName: '4',
+            id: '40E',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.ApplicableRules,
+                type: "textarea",
+                label: "Applicable Rules",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DateandPlaceofExpiry": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.DateandPlaceofExpiry,
+            label: "31D | Date and Place of Expiry",
+            fieldName: '5',
+            id: '31D',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.DateandPlaceofExpiry,
+                type: "date",
+                label: "Date and Place of Expiry",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "ApplicantBank": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.ApplicantBank,
+            label: "51a | Applicant Bank",
+            fieldName: '3',
+            id: '51a',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.ApplicantBank,
+                type: "textarea",
+                label: "Applicant Bank",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Applicant": {
+            type: "LABLE_CHECKBOX",
+            value:items?.bundel[0]?.AutoFillValue?.Applicant,
+            label: "50 | Applicant",
+            fieldName: '3',
+            id: '50',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.Applicant,
+                type: "textarea",
+                label: "Applicant",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Beneficiary": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.Beneficiary,
+            label: "59 | Beneficiary",
+            fieldName: '3',
+            id: '59',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.Beneficiary,
+                type: "textarea",
+                label: "Beneficiary",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "CurrencyCodeAmount": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.CurrencyCodeAmount,
+            label: "32B | Currency Code, Amount",
+            fieldName: '3',
+            id: '32B',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.CurrencyCodeAmount,
+                type: "textarea",
+                label: "Currency Code, Amount",
+              },
+            ]
+          },
+          "PercentageCreditAmountTolerance": {
+            type: "LABLE_CHECKBOX",
+            value:items?.bundel[0]?.AutoFillValue?.PercentageCreditAmountTolerance,
+            label: "39A | Percentage Credit Amount Tolerance",
+            fieldName: '3',
+            id: '39A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.PercentageCreditAmountTolerance,
+                type: "textarea",
+                label: "Percentage Credit Amount Tolerance",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "AdditionalAmountsCovered": {
+            type: "LABLE_CHECKBOX",
+            value:items?.bundel[0]?.AutoFillValue?.AdditionalAmountsCovered,
+            label: "39C | Additional Amounts Covered",
+            fieldName: '3',
+            id: '39C',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.AdditionalAmountsCovered,
+                type: "textarea",
+                label: "Additional Amounts Covered",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "AvailableWithBy": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.AvailableWithBy,
+            label: "41a | Available With ... By ...",
+            fieldName: '3',
+            id: '41a',
+            rules: {
+              required: true,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.AvailableWithBy,
+                type: "textarea",
+                label: "Available With ... By ...",
+                style: `height:300px !important;`
+              },
+            ]
+          },
+          "DraftsAt": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.DraftsAt,
+            label: "42C | Drafts at ...",
+            fieldName: '3',
+            id: '42C',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.DraftsAt,
+                type: "textarea",
+                label: "Drafts at ...",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Drawee": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.Drawee,
+            label: "42a | Drawee",
+            fieldName: '3',
+            id: '42a',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.Drawee,
+                type: "textarea",
+                label: "Drawee",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "MixedPaymentDetails": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.MixedPaymentDetails,
+            label: "42M | Mixed Payment Details",
+            fieldName: '6',
+            id: '42M',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.MixedPaymentDetails,
+                type: "textarea",
+                label: "Mixed Payment Details",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "NegotiationDeferredPaymentDetails": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.NegotiationDeferredPaymentDetails,
+            label: "42P | Negotiation/Deferred Payment Details",
+            fieldName: '3',
+            id: '42P',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.NegotiationDeferredPaymentDetails,
+                type: "textarea",
+                label: "Negotiation/Deferred Payment Details",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PartialShipments": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.PartialShipments,
+            label: "43P | Partial Shipments",
+            fieldName: '7',
+            id: '43P',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.PartialShipments,
+                type: "textarea",
+                label: "Partial Shipments",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Transhipment": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.Transhipment,
+            label: "43T | Transhipment",
+            fieldName: '7',
+            id: '43T',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.Transhipment,
+                type: "textarea",
+                label: "Transhipment",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PlaceofTakinginChargeDispatchfromPlaceofReceipt": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.PlaceofTakinginChargeDispatchfromPlaceofReceipt,
+            label: "44A | Place of Taking in Charge/Dispatch from .../Place of Receipt",
+            fieldName: '7',
+            id: '44A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.PlaceofTakinginChargeDispatchfromPlaceofReceipt,
+                type: "textarea",
+                label: "Place of Taking in Charge/Dispatch from .../Place of Receipt",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PortofLoadingAirportofDeparture": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.PortofLoadingAirportofDeparture,
+            label: "44E | Port of Loading/Airport of Departure",
+            fieldName: '7',
+            id: '44E',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.PortofLoadingAirportofDeparture,
+                type: "textarea",
+                label: "Port of Loading/Airport of Departure",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PortofDischargeAirportofDestination": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.PortofDischargeAirportofDestination,
+            label: "44F | Port of Discharge/Airport of Destination",
+            fieldName: '7',
+            id: '44F',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.PortofDischargeAirportofDestination,
+                type: "textarea",
+                label: "Port of Discharge/Airport of Destination",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "PlaceofFinalDestinationTransportationPlaceofDelivery": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.PlaceofFinalDestinationTransportationPlaceofDelivery,
+            label: "44B | Place of Final Destination/For Transportation to .../Place of Delivery",
+            fieldName: '7',
+            id: '44B',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.PlaceofFinalDestinationTransportationPlaceofDelivery,
+                type: "textarea",
+                label: "Place of Final Destination/For Transportation to .../Place of Delivery",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "LatestDateofShipment": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.LatestDateofShipment,
+            label: "44C | Latest Date of Shipment",
+            fieldName: '7',
+            id: '44C',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.LatestDateofShipment,
+                type: "textarea",
+                label: "Latest Date of Shipment",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "ShipmentPeriod": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.ShipmentPeriod,
+            label: "44D | Shipment Period",
+            fieldName: '7',
+            id: '44D',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.ShipmentPeriod,
+                type: "textarea",
+                label: "Shipment Period",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DescriptionofGoodsServices": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.DescriptionofGoodsServices,
+            label: "45A | Description of Goods and/or Services",
+            fieldName: '7',
+            id: '45A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.DescriptionofGoodsServices,
+                type: "textarea",
+                label: "Description of Goods and/or Services",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "DocumentsRequired": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.DocumentsRequired,
+            label: "46A | Documents Required",
+            fieldName: '7',
+            id: '46A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.DocumentsRequired,
+                type: "textarea",
+                label: "Documents Required",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "AdditionalConditions": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.AdditionalConditions,
+            label: "47A | Additional Conditions",
+            fieldName: '7',
+            id: '47A',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.AdditionalConditions,
+                type: "textarea",
+                label: "Additional Conditions",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "SpecialPaymentConditionsforBeneficiary": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.SpecialPaymentConditionsforBeneficiary,
+            label: "49G | Special Payment Conditions for Beneficiary",
+            fieldName: '7',
+            id: '49G',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.SpecialPaymentConditionsforBeneficiary,
+                type: "textarea",
+                label: "Special Payment Conditions for Beneficiary",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "SpecialPaymentConditionsforBankOnly": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.SpecialPaymentConditionsforBankOnly,
+            label: "49H | Special Payment Conditions for Bank Only",
+            fieldName: '7',
+            id: '49H',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.SpecialPaymentConditionsforBankOnly,
+                type: "textarea",
+                label: "Special Payment Conditions for Bank Only",
+                style: `height:100px !important;`
+              },
+            ]
+          },
+          "Charges": {
+            type: "LABLE_CHECKBOX",
+            value: items?.bundel[0]?.AutoFillValue?.Charges,
+            label: "71D | Charges",
+            fieldName: '7',
+            id: '71D',
+            rules: {
+              required: false,
+            },
+            option: [
+              {
+                value: items?.bundel[0]?.AutoFillValue?.Charges,
+                type: "textarea",
+                label: "Charges",
+                style: `height:100px !important;`
+              },
+            ]
+          }
+        }, 'AutofillLCTableForm');
+        console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
+      }, 200);
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
   }

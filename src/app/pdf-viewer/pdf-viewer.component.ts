@@ -97,6 +97,11 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
         this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
         console.log(this.URL_IFRAME, 'home/Transaction/Export/new-direct-dispatch/ExportBillRegularization');
         this.Sppinloader = false
+      } else if (this.src == 'https://eportal.incometax.gov.in/iec/foservices/#/login') {
+        this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+        this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+        console.log(this.URL_IFRAME, 'https://eportal.incometax.gov.in/iec/foservices/#/login');
+        this.Sppinloader = false
       } else if (this.src?.toString()?.indexOf('.pdf') != -1) {
         let url_replace: any = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
         this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {

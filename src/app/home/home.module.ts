@@ -100,6 +100,7 @@ import { ContactusProductOptionComponent } from "./contactuspanel/contactus-prod
 import { AddBuyerNameAdminMemberComponent } from "./manage-customer/add-buyer-name-admin-member/add-buyer-name-admin-member.component";
 import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-beneficiary-name-admin-member/add-beneficiary-name-admin-member.component";
 import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-db/back-up-panel-mongo-db.component";
+import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-
     ContactusProductOptionComponent,
     AddBuyerNameAdminMemberComponent,
     AddBeneficiaryNameAdminMemberComponent,
-    BackUpPanelMongoDBComponent
+    BackUpPanelMongoDBComponent,
+    CAFormComponent
   ],
   imports: [
     SharedHomeModule,
@@ -220,6 +222,12 @@ import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-
           {
             path: "edit-remittance",
             component: EditRemittanceComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "eportal.incometax.gov.in",
+            component: CAFormComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },

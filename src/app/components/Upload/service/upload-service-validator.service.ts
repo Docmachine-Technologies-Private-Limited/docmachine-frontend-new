@@ -77,7 +77,7 @@ export class UploadServiceValidatorService implements OnInit {
     public documentService: DocumentService,
     public authGuard: AuthGuard,
     public userService: UserService) {
-      this.PIPO_LOAD();
+    this.PIPO_LOAD();
   }
 
   ngOnInit(): void {
@@ -287,7 +287,11 @@ export class UploadServiceValidatorService implements OnInit {
         })
         if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.bank?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
           this.BANK_LIST_DROPDOWN.push({
-            bank: data['data'][0]['bankDetails'][index]?.bank, BankUniqueId: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+            bank: data['data'][0]['bankDetails'][index]?.bank,
+            BankUniqueId: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+            accNumber: data['data'][0]['bankDetails'][index]?.accNumber,
+            accType: data['data'][0]['bankDetails'][index]?.accType,
+            bicAddress: data['data'][0]['bankDetails'][index]?.bicAddress,
           })
         }
       }
@@ -601,6 +605,7 @@ export class UploadServiceValidatorService implements OnInit {
       yesnocheckbox: rule?.required == true ? [Validators.required] : [],
       ArrayList: rule?.required == true ? [Validators.required] : [],
       BOE: rule?.required == true ? [Validators.required] : [],
+      LABLE_CHECKBOX: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       LabelShow: [],

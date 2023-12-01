@@ -395,6 +395,17 @@
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.value}}</mat-checkbox>
                     </div>
                 </div>
+                <div class="form-group mb-0" *ngSwitchCase="'LABLE_CHECKBOX'">
+                    <ng-container [ngSwitch]="field.type">
+                        <div class="form-group mb-3 question-list" *ngSwitchCase="'LABLE_CHECKBOX'"
+                            [ngClass]="{'AutofillActive':field?.Active==true}">
+                            <label *ngIf="field?.label!=undefined && field?.label!=''">{{field?.label}}</label>
+                            <custom-checkbox [items]="field?.option" [name]="field?.fieldName" [value]="field?.value"
+                                [(ngModel)]="field.value">
+                            </custom-checkbox>
+                        </div>
+                    </ng-container>
+                </div>
                 <div class="form-group mb-0" *ngSwitchCase="'BankCheckBox'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
@@ -404,12 +415,9 @@
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" [(ngModel)]="field.value">
                     </ng-select> -->
                     <app-ng-dropdown-custom *ngIf="this.validator.BANK_LIST_DROPDOWN?.length!=0"
-                        [items]="this.validator.BANK_LIST_DROPDOWN" 
-                        bindLabel="bank"
-                        [multiple]="false"
+                        [items]="this.validator.BANK_LIST_DROPDOWN" bindLabel="bank" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [value]="field?.value" (modelChanges)="BANK_CHECKBOX($event,field?.ChargeLabelHide)"
-                        [name]="field.fieldName" [(ngModel)]="field.value">
+                        [value]="field?.value" (modelChanges)="BANK_CHECKBOX($event,field?.ChargeLabelHide)">
                     </app-ng-dropdown-custom>
                     <label class="mt-2 mb-2"
                         *ngIf="(field.Banklabel!=undefined || field.Banklabel!='') && this.validator.CHECK_BOX_BANK_LIST?.length!=0">{{field.Banklabel}}</label>
@@ -422,7 +430,7 @@
                             [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''">{{item?.text}}</mat-checkbox>
                     </div>
-                    <div *ngIf="field?.ChargeLabelHide==true" class="mt-2" style="display: flex;
+                    <div *ngIf="field?.ChargeLabelHide!=undefined && field?.ChargeLabelHide==true" class="mt-2" style="display: flex;
                     flex-direction: column;">
                         <label class="mt-2 mb-2"
                             *ngIf="field.Banklabel2!=undefined && field.Banklabel2!=''">{{field.Banklabel2}}</label>
@@ -1132,7 +1140,8 @@
                     <div class="col-12 p-0" *ngIf="field.ExtraValue!=''">
                         <label for="exampleInputEmail1" class="form-label">
                             Select Account no. & Account Type*</label>
-                        <custom-radio-button [items]="this.validator?.ToChargesAccountdata[field?.ExtraValue?.BankUniqueId]"
+                        <custom-radio-button
+                            [items]="this.validator?.ToChargesAccountdata[field?.ExtraValue?.BankUniqueId]"
                             [name]="field.fieldName" (event)="field.value=$event"></custom-radio-button>
                     </div>
                 </div>
