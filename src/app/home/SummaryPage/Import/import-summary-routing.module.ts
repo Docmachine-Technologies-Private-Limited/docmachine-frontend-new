@@ -19,6 +19,7 @@ import { ImportOpinionReportsComponent } from './import-opinion-reports/import-o
 import { ImportMasterServiceComponent } from './import-master-service/import-master-service.component';
 import { LetterOfCreditImportLCComponent } from './import-letter-of-credit/letter-of-credit-import-lc.component';
 import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
+import { OutwardRemittanceDisposalComponent } from './Outward-remittance-disposal/outward-remittance-disposal.component';
 
 const routes: Routes = [
   { path: "boe", component: ImportBOEComponent, pathMatch: "full", canActivate: [MemberGuard] },
@@ -39,7 +40,7 @@ const routes: Routes = [
   { path: "Opinion-Report", component: ImportOpinionReportsComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Master-Services", component: ImportMasterServiceComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Letter-Of-Credit-Lc", component: LetterOfCreditImportLCComponent, pathMatch: "full", canActivate: [MemberGuard] },
-  { path: "Opinion-Reports", component: ImportOpinionReportsComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "Outward-Remittance-Disposal", component: OutwardRemittanceDisposalComponent, pathMatch: "full", canActivate: [MemberGuard] },
   // { path: "edit-pipo/:doc_type/:id", component: ImportEditPipoComponent, pathMatch: "full", canActivate: [MemberGuard] },
 ];
 

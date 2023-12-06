@@ -21,6 +21,7 @@ import { ImportRealisationCertificateComponent } from './import-realisation-cert
 import { ImportSwiftCopyDocumentComponent } from './import-swift-copy-document/import-swift-copy-document.component';
 import { SharedHomeModule } from '../../../home/shared-home.module';
 import { IdpmsReconComponent } from '../../../home/idpms-recon/idpms-recon.component';
+import { OutwardUploadDocumentsComponent } from './outward-Remittance-Disposal/Outward-upload-doc.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { IdpmsReconComponent } from '../../../home/idpms-recon/idpms-recon.compo
     ImportRealisationCertificateComponent,
     ImportSwiftCopyDocumentComponent,
     IdpmsReconComponent,
+    OutwardUploadDocumentsComponent
   ],
   imports: [
     CommonModule,

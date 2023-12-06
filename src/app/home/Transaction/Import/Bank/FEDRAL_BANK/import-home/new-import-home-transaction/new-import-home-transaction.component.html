@@ -1,0 +1,104 @@
+<div class="col-12 mt-2">
+    <custom-mat-stepper LAST_BUTTON_NAME="Next" [LAST_BUTTON_VISIBLE]="lastbutton?.proceedtrue"
+        (lastbuttonEvent)="lastbutton?.proceedClick">
+        <custom-mat-step MATSTEP_LABEL="Select Outward Remittance" errorMessage="Please select Outward Remittance"
+            [NextTrue]="this.Inward_Remittance_MT103?.length!=0 && this.Inward_Remittance_MT103?.length!=undefined?true:false">
+            <form>
+                <div class="col-12 pt-3">
+                    <table class="table mb-0 mt-2">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Beneficiary Name</th>
+                                <th scope="col" class="col-td-th-3">Bank Name</th>
+                                <th scope="col" class="col-td-th-3">Ref. Number</th>
+                                <th scope="col" class="col-td-th-3">Currency</th>
+                                <th scope="col" class="col-td-th-3">Amount</th>
+                                <!-- <th scope="col" class="col-td-th-3">Party Name</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr" *ngFor='let item of this.Inward_Remittance_MT103_DATA; let i = index'>
+                                <td class="col-td-th-1"><input type="checkbox" [checked]="item?.Checked"
+                                        (change)="Remittancedata(item,i,stepper)" />
+                                </td>
+                                <td class="col-td-th-2">{{item?.BuyerName}}</td>
+                                <td class="col-td-th-3">{{item?.BankName}}</td>
+                                <td class="col-td-th-3">{{item?.Inward_reference_number}}</td>
+                                <td class="col-td-th-3">{{item?.currency}}</td>
+                                <td class="col-td-th-3">{{item?.amount}}</td>
+                                <!-- <td class="col-td-th-3">{{item?.Remitter_Name}}</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Fill Disposal Instruction" errorMessage="Please fill all field value..."
+            [NextTrue]="this.InwardDisposalNext" (FormSubmit)="InwardRemittanceDisposal?.onClickButton"
+            [Form]="InwardRemittanceDisposal?.geForm" [FormTrue]="true">
+            <div class="col-12 pt-3">
+                <form>
+                    <upload-components FormStyle="display: grid;
+                    grid-template-columns: repeat(2,1fr);" id="NewInwardRemittanceDisposal"
+                        (RawValueEvent)="InwardDisposalFormValue($event)" [HIDE_SUBMIT_BUTTON]="false"
+                        #InwardRemittanceDisposal>
+                    </upload-components>
+                </form>
+            </div>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Select Forward Contract" [NextTrue]="true">
+            <div class="col-12 pt-3">
+                <table class="table mb-0 mt-2">
+                    <thead>
+                        <tr class="table-tr pr-3">
+                            <th scope="col" class="col-td-th-1">#</th>
+                            <th scope="col" class="col-td-th-2">Forward Ref No</th>
+                            <th scope="col" class="col-td-th-3">Booking Date</th>
+                            <th scope="col" class="col-td-th-3">Currency</th>
+                            <th scope="col" class="col-td-th-2">Forward Contract Amount</th>
+                            <th scope="col" class="col-td-th-3">Due Date</th>
+                            <th scope="col" class="col-td-th-3">Amount to be utilised</th>
+                            <th scope="col" class="col-td-th-3">Exchange rate as per FWC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-tr mt-2 pr-3" *ngFor="let item of this.ForwardContractFilterDATA;let i=index">
+                            <td scope="col" class="col-td-th-1"><input type="checkbox"
+                                    (change)="ToForwardContract($event,item,i)"></td>
+                            <td scope="col" class="col-td-th-2">{{item?.ForwardRefNo}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.BookingDate}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
+                            <td scope="col" class="col-td-th-2">{{item?.BookingAmount}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.ToDate}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.AvailableAmount}}</td>
+                            <td scope="col" class="col-td-th-3">{{item?.NetRate}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Fill Forward Contract" errorMessage="Please fill all field value..."
+            [NextTrue]="true" (FormSubmit)="ForwardRefPanel?.onClickButton" [Form]="ForwardRefPanel?.geForm"
+            [FormTrue]="true">
+            <div class="col-12 pt-3">
+                <form>
+                    <upload-components FormStyle="display: grid;
+                    grid-template-columns: repeat(3,1fr);" id="ForwardRef"
+                        (RawValueEvent)="ForwardRefFormValue($event)" [HIDE_SUBMIT_BUTTON]="false" #ForwardRefPanel>
+                    </upload-components>
+                </form>
+            </div>
+        </custom-mat-step>
+        <custom-mat-step MATSTEP_LABEL="Select Purpose Code" errorMessage="Please select Purpose code value..."
+            [NextTrue]="this.InwardDisposalNext">
+            <div class="col-12 pt-3">
+                <form>
+                    <app-import-home #lastbutton [data]="[this.INWARD_DISPOSAL_VALUE_FORM,this.FORWARD_REF_VALUE_FORM]"
+                        [InwardDisposalData]="this.INWARD_DISPOSAL_VALUE_FORM"
+                        [ForwardNo]="this.FORWARD_REF_VALUE_FORM"></app-import-home>
+                </form>
+            </div>
+        </custom-mat-step>
+    </custom-mat-stepper>
+</div>

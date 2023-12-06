@@ -3150,6 +3150,74 @@ export class TableServiceController {
                     });
                 })
             },
+            Outward_remittance: async () => {
+                return new Promise((resolve, reject) => {
+                    this.filteranytablepagination.PaginationfilterAnyTable(Query, PageFilter, 'Inward_remittance').subscribe((res: any) => {
+                        TableFormat = {
+                            header: [
+                                "Bank Name",
+                                "PI/PO No.",
+                                "Ref_Number",
+                                "Currency",
+                                "Amount",
+                                "Party Name",
+                                // "Amount Claimed",
+                                // "Balance Amount",
+                                "Action"],
+                            items: [],
+                            Expansion_header: [],
+                            Expansion_Items: [],
+                            Objectkeys: [],
+                            ExpansionKeys: [],
+                            TableHeaderClass: [
+                                "col-td-th-1",
+                                "col-td-th-1",
+                                "col-td-th-2",
+                                "col-td-th-1",
+                                "col-td-th-1",
+                                "col-td-th-2",
+                                // "col-td-th-1",
+                                // "col-td-th-1",
+                            ],
+                            eventId: '',
+                            PageSize: 0
+                        }
+                        TableFormat['PageSize'] = res?.TOTAL_PAGE
+                        TableFormat['items'] = [];
+                        TableFormat['Expansion_Items'] = [];
+                        this.removeEmpty(res?.data).then(async (newdata: any) => {
+                            await newdata?.forEach(async (element) => {
+                                await TableFormat['items'].push({
+                                    BankName: element['BankName'],
+                                    Pipo: this.getPipoNumber(element['pipoRef']),
+                                    Inward_reference_number: element['Inward_reference_number'],
+                                    currency: element['currency'],
+                                    amount: element['amount'],
+                                    Remitter_Name: element['Remitter_Name'],
+                                    // Inward_amount_for_disposal: element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0,
+                                    // BalanceAmount: parseFloat(element['amount']) - parseFloat(element['Inward_amount_for_disposal'] != undefined ? element['Inward_amount_for_disposal'] : 0),
+                                    isExpand: false,
+                                    disabled: element['deleteflag'] != '-1' ? false : true,
+                                    RoleType: this.USER_RESULT?.RoleCheckbox
+                                })
+                            })
+                            if (TableFormat['items']?.length != 0) {
+                                TableFormat['Objectkeys'] = await Object.keys(TableFormat['items'][0])?.filter((item: any) => item != 'isExpand')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'disabled')
+                                TableFormat['Objectkeys'] = await TableFormat['Objectkeys']?.filter((item: any) => item != 'RoleType')
+                                resolve(TableFormat);
+                                this.TABLE_CONTROLLER_DATA = res?.data;
+                                this.SHOW_TABLE_TBODY = true;
+                            } else {
+                                resolve(TableFormat);
+                                this.TABLE_CONTROLLER_DATA = res?.data;
+                                this.SHOW_TABLE_TBODY = true;
+                            }
+                        });
+                        console.log("PaginationfilterAnyTable", res, ExtraData);
+                    });
+                })
+            },
         }
     }
 

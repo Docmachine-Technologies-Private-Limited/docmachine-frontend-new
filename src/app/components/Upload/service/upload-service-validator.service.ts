@@ -569,6 +569,7 @@ export class UploadServiceValidatorService implements OnInit {
 
       buyer: rule?.required == true ? [Validators.required] : [],
       ReUpload: rule?.required == true ? [Validators.required] : [],
+      DropDown: rule?.required == true ? [Validators.required] : [],
       button: rule?.required == true ? [Validators.required] : [],
       checkbox: rule?.required == true ? [Validators.required] : [],
       PURPOSE_CODE: rule?.required == true ? [Validators.required] : [],

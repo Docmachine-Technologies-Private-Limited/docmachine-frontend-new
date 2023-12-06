@@ -190,7 +190,28 @@ export class DirectPaymentsControllerData {
                             widget?.getOrCreateBorderStyle()?.setWidth(0);
                         }
                     });
-                  
+                    getAllFields[1]?.check();
+                    getAllFields[2]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress);
+                    getAllFields[5]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+                    getAllFields[6]?.setText(validator.COMPANY_INFO[0]?.iec);
+                    getAllFields[10]?.setText(`on us a/c no  ${BENEFICIARY_DETAILS[0]?.beneAccNo}`);
+                    getAllFields[11]?.setText(`Net off i.e. On beneficiary`);
+                    getAllFields[14]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
+                    getAllFields[15]?.setText(`Swift Code: ${BENEFICIARY_DETAILS[0]?.beneBankSwiftCode} \nABA: \nRouting No: \nSort Code: ${BENEFICIARY_DETAILS[0]?.sortCode}`);
+                    getAllFields[48]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+                    
+                    if (filldata != undefined && filldata != null && filldata != '') {
+                        getAllFields[7]?.setText(`INR A/C No : NIL \n For: (CCY & AMT) NIL\n FCY A/C No : ${BENEFICIARY_DETAILS[0]?.beneAccNo}\n For: (CCY & AMT) ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount}/-\n (Remittance by SEZ units from INR accounts to beneficiaries within India not allowed)`);
+                        getAllFields[12]?.setText(`${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount} /- (${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount)}) - 30% ADVANCE PAYMENT.`);
+                        getAllFields[19]?.setText(`Expected Date of Despatch / Download (software) – MID OF NOV 2022\n Name of the shipping company / airlines – (BY SEA)\n Port of Despatch - ANY PORT IN COLOMBIA\n Destination Port – CHENNAI, INDIA \nProforma Invoice details (In case the invoice is older than 6 months then a declaration\n to be provided stating the reason for delay)\n PROFORMA Invoice no - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} CO Dated ${filldata?.paymentTerm[0]?.PIPO_LIST?.date}, Amount - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} ${filldata?.paymentTerm[0]?.RemittanceAmount}/-`);
+                        getAllFields[20]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
+                        
+                        getAllFields[25]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.boeNumber+' & '+filldata?.BOE_DETAIILS[0]?.BOE?.boeDate);
+                        getAllFields[26]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.currency+' & '+filldata?.BOE_DETAIILS[0]?.BOE?.invoiceAmount);
+                        getAllFields[27]?.setText(filldata?.BOE_DETAIILS[0]?.BOEAmount?.toString());
+                        getAllFields[29]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.adCode);
+                        getAllFields[30]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.dischargePort);
+                    }
                     const mergedPdfFile = await pdfDoc.save();
                     var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
                     const x1 = 'data:application/pdf;base64,' + base64String1;

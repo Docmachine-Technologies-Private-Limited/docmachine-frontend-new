@@ -160,6 +160,10 @@
                   </h6>
                 </li>
                 <li class="nav-item">
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Import/Outward-Remittance-Disposal')">Outward-Remittance-Disposal Tracker</h6>
+                </li>
+                <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/TripartyAgreements')">Tri
                     party
                     agreements</h6>
@@ -222,19 +226,11 @@
               <a href="#Transactions" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="Transactions">
-                <!-- <h6 class="nav-link p-0"
-                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction','ADVANCE')">
-                  ADVANCE OUTWARD REMITTANCE
-                </h6>
-                <h6 class="nav-link p-0"
-                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction','DIRECTBILL')">
-                  DIRECT BILL
-                </h6>
-                <h6 class="nav-link p-0"
-                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction',' OutwardRemittanceA2')">
-                  Outward Remittance (A2)
-                </h6> -->
-
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Transaction/Import/import-home')">Outward
+                    Remittance Disposal
+                  </h6>
+                </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance')">ADVANCE
@@ -244,6 +240,7 @@
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/Import-Direct-Payment')">DIRECT BILL</h6>
                 </li>
+               
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance-a2')">
@@ -251,14 +248,9 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
-                    (click)="navigationByUrl($event,'/Transaction/Import/import-direct-dispatch')">Import Bill
+                    (click)="navigationByUrl($event,'/Transaction/Import/Import-Bill-Lodgement')">Import Bill
                     Lodgement</h6>
                 </li>
-                <!-- <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/a2cum-application-yesbank')">A2cum
-                    Application
-                  </h6>
-                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/fbg-waiver')">FBG Waiver</h6>
                 </li>

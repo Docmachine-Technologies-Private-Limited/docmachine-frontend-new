@@ -19,6 +19,7 @@ import { ImportOpinionReportsComponent } from './import-opinion-reports/import-o
 import { ImportMasterServiceComponent } from './import-master-service/import-master-service.component';
 import { LetterOfCreditImportLCComponent } from './import-letter-of-credit/letter-of-credit-import-lc.component';
 import { SharedHomeModule } from '../../shared-home.module';
+import { OutwardRemittanceDisposalComponent } from './Outward-remittance-disposal/outward-remittance-disposal.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { SharedHomeModule } from '../../shared-home.module';
     ImportCommercialComponent,
     ImportTriPartyComponent,
     ImportInsuranceComponent,
+    OutwardRemittanceDisposalComponent
   ],
   imports: [
     CommonModule,

@@ -59,12 +59,31 @@
                             class="form-control" [style]="field?.style" />
                     </div>
                 </div>
+                <div class="form-group mb-0" *ngSwitchCase="'ReUpload'">
+                    <label *ngIf="field?.label!=undefined && field?.label!=''">{{field?.label}}
+                        <span style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
+                    <upload-popup [name]="field?.fieldName" [id]="field?.id" [url]="field?.url"
+                        (event)="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.setValue($event[1])"></upload-popup>
+                    <button type="button" [id]="field?.id" class="btn btn-primary PopupOpen" [attr.popup-close]="field?.id">
+                    <i class="fa fa-upload" aria-hidden="true"></i> Upload</button>
+                    <button type="button" class="btn btn-primary PopupOpen" [disabled]="this.validator.dynamicFormGroup[this.id]?.value[field.fieldName]==''?true:false"
+                    (click)="UploadedViewPdf(this.validator.dynamicFormGroup[this.id]?.value[field.fieldName]?.publicUrl)" popup-close="UploadPdfOpen">View</button>
+                </div>
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined">
                     <div class="form-group mb-0" *ngSwitchCase="'LabelShow'">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <label for="" class="form-label-control" [innerHTML]="field?.value"></label>
                     </div>
+                </div>
+                <div class="form-group mb-0" *ngSwitchCase="'DropDown'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
+                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <ng-select [items]="field?.items" [bindLabel]="field?.bindLabel" [multiple]="false"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [disabled]="field?.Inputdisabled" (change)="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.setValue($event)"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
+                    </ng-select>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'number'">
                     <div class="form-group mb-0" *ngIf="field.visible==true || field.visible==undefined">
@@ -362,6 +381,7 @@
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
+                
                 <div class="form-group mb-0" *ngSwitchCase="'Underlying'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
@@ -1463,6 +1483,14 @@
     <div class="p-2">
         <app-pdf-viewer class="pt-3" *ngIf="this.AdditionalDocumentsUrl!=''" [downloadShow]="false"
             [src]="this.AdditionalDocumentsUrl" width="100%" Newheight="calc(100vh - 130px)"></app-pdf-viewer>
+    </div>
+</app-custom-model>
+
+<app-custom-model class="p-2 mt-2" id="UploadPdfOpen"
+    [customstyle]="{'max-width':'90vw !important','margin-top':'10px !important'}" name="Uploaded Documents View">
+    <div class="p-2">
+        <app-pdf-viewer class="pt-3" *ngIf="this.UploadedViewPdfUrl!=''" [downloadShow]="false"
+            [src]="this.UploadedViewPdfUrl" width="100%" Newheight="calc(100vh - 130px)"></app-pdf-viewer>
     </div>
 </app-custom-model>
 

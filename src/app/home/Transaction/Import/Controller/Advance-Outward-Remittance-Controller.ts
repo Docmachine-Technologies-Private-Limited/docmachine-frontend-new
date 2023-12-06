@@ -184,128 +184,23 @@ export class AdvanceOutwardRemittanceControllerData {
                             widget?.getOrCreateBorderStyle()?.setWidth(0);
                         }
                     });
-                    // getAllFields[17]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-                    // getAllFields[18]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
-                    // getAllFields[19]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress);
-                    // getAllFields[20]?.setText('');
-                    // getAllFields[21]?.setText(BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban);
-                    // getAllFields[22]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-                    // getAllFields[23]?.setText(BENEFICIARY_DETAILS[0]?.sortCode);
-                    // getAllFields[24]?.setText('');
-                    // getAllFields[25]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-
-                    // if (filldata != undefined && filldata != null && filldata != '') {
-                    //     getAllFields[0]?.setText('');
-                    //     getAllFields[1]?.setText('');
-                    //     getAllFields[2]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount);
-
-                    //     var today: any = new Date();
-                    //     var dd = String(today.getDate()).padStart(2, '0');
-                    //     var mm = String(today.getMonth() + 1).padStart(2, '0');
-                    //     var yyyy = today.getFullYear();
-                    //     today = yyyy + "-" + mm + "-" + dd;
-                    //     today = today?.split("-")
-                    //     getAllFields[3]?.setText(today[2]?.split('')[0]);
-                    //     getAllFields[4]?.setText(today[2]?.split('')[1]);
-                    //     getAllFields[5]?.setText(today[1]?.split('')[0]);
-                    //     getAllFields[6]?.setText(today[1]?.split('')[1]);
-                    //     getAllFields[7]?.setText(today[0]?.split('')[2]);
-                    //     getAllFields[8]?.setText(today[0]?.split('')[3]);
-
-                    //     getAllFields[9]?.setText(filldata?.paymentTerm[0]?.RemittanceAmount != undefined ? filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount) : '-');
-                    //     getAllFields[10]?.setText('');
-                    //     getAllFields[11]?.uncheck()
-                    //     getAllFields[12]?.uncheck()
-                    //     getAllFields[13]?.setText('-');
-                    //     getAllFields[14]?.setText('-');
-                    //     getAllFields[15]?.uncheck();
-                    //     getAllFields[16]?.uncheck();
-
-                    //     getAllFields[26]?.uncheck();
-                    //     getAllFields[27]?.uncheck();
-                    //     getAllFields[28]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.commodity?.join(','));
-                    //     getAllFields[29]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
-
-                    //     getAllFields[30]?.setText(filldata?.BankDebit?.accNumber?.split('')[0]);
-                    //     getAllFields[31]?.setText(filldata?.BankDebit?.accNumber?.split('')[1]);
-                    //     getAllFields[32]?.setText(filldata?.BankDebit?.accNumber?.split('')[2]);
-                    //     getAllFields[33]?.setText(filldata?.BankDebit?.accNumber?.split('')[3]);
-                    //     getAllFields[34]?.setText(filldata?.BankDebit?.accNumber?.split('')[4]);
-                    //     getAllFields[35]?.setText(filldata?.BankDebit?.accNumber?.split('')[5]);
-                    //     getAllFields[36]?.setText(filldata?.BankDebit?.accNumber?.split('')[6]);
-                    //     getAllFields[37]?.setText(filldata?.BankDebit?.accNumber?.split('')[7]);
-                    //     getAllFields[38]?.setText(filldata?.BankDebit?.accNumber?.split('')[8]);
-                    //     getAllFields[39]?.setText(filldata?.BankDebit?.accNumber?.split('')[9]);
-                    //     getAllFields[40]?.setText(filldata?.BankDebit?.accNumber?.split('')[10]);
-                    //     getAllFields[41]?.setText(filldata?.BankDebit?.accNumber?.split('')[11]);
-                    //     getAllFields[42]?.setText(filldata?.BankDebit?.accNumber?.split('')[12]);
-                    //     getAllFields[43]?.setText(filldata?.BankDebit?.accNumber?.split('')[13]);
-
-                    //     getAllFields[44]?.setText(filldata?.BankCharges?.accNumber?.split('')[0]);
-                    //     getAllFields[45]?.setText(filldata?.BankCharges?.accNumber?.split('')[1]);
-                    //     getAllFields[46]?.setText(filldata?.BankCharges?.accNumber?.split('')[2]);
-                    //     getAllFields[47]?.setText(filldata?.BankCharges?.accNumber?.split('')[3]);
-                    //     getAllFields[48]?.setText(filldata?.BankCharges?.accNumber?.split('')[4]);
-                    //     getAllFields[49]?.setText(filldata?.BankCharges?.accNumber?.split('')[5]);
-                    //     getAllFields[50]?.setText(filldata?.BankCharges?.accNumber?.split('')[6]);
-                    //     getAllFields[51]?.setText(filldata?.BankCharges?.accNumber?.split('')[7]);
-                    //     getAllFields[52]?.setText(filldata?.BankCharges?.accNumber?.split('')[8]);
-                    //     getAllFields[53]?.setText(filldata?.BankCharges?.accNumber?.split('')[9]);
-                    //     getAllFields[54]?.setText(filldata?.BankCharges?.accNumber?.split('')[10]);
-                    //     getAllFields[55]?.setText(filldata?.BankCharges?.accNumber?.split('')[11]);
-                    //     getAllFields[56]?.setText(filldata?.BankCharges?.accNumber?.split('')[12]);
-                    //     getAllFields[57]?.setText(filldata?.BankCharges?.accNumber?.split('')[13]);
-
-                    //     if (ToForwardContract_Selected?.length != 0 && ToForwardContract_Selected != undefined) {
-                    //         let booking_date: any = ToForwardContract_Selected[0]?.BookingDate?.split('-');
-                    //         let due_date: any = ToForwardContract_Selected[0]?.ToDate?.split('-');
-                    //         getAllFields[58]?.setText(ToForwardContract_Selected[0]?.ForwardRefNo);
-
-                    //         if (booking_date != undefined) {
-                    //             getAllFields[59]?.setText(booking_date[2]?.split('')[0]);
-                    //             getAllFields[60]?.setText(booking_date[2]?.split('')[1]);
-                    //             getAllFields[61]?.setText(booking_date[1]?.split('')[0]);
-                    //             getAllFields[62]?.setText(booking_date[1]?.split('')[1]);
-                    //             getAllFields[63]?.setText(booking_date[0]?.split('')[0]);
-                    //             getAllFields[64]?.setText(booking_date[0]?.split('')[1]);
-                    //             getAllFields[65]?.setText(booking_date[0]?.split('')[2]);
-                    //             getAllFields[66]?.setText(booking_date[0]?.split('')[3]);
-                    //         }
-
-                    //         getAllFields[67]?.setText(ToForwardContract_Selected[0]?.BookingAmount);
-
-                    //         if (due_date != undefined) {
-                    //             getAllFields[68]?.setText(due_date[2]?.split('')[0]);
-                    //             getAllFields[69]?.setText(due_date[2]?.split('')[1]);
-                    //             getAllFields[70]?.setText(due_date[1]?.split('')[0]);
-                    //             getAllFields[71]?.setText(due_date[1]?.split('')[1]);
-                    //             getAllFields[72]?.setText(due_date[0]?.split('')[0]);
-                    //             getAllFields[73]?.setText(due_date[0]?.split('')[1]);
-                    //             getAllFields[74]?.setText(due_date[0]?.split('')[2]);
-                    //             getAllFields[75]?.setText(due_date[0]?.split('')[3]);
-                    //         }
-
-                    //         getAllFields[76]?.setText(ToForwardContract_Selected[0]?.UtilizedAmount);
-                    //         getAllFields[77]?.setText(ToForwardContract_Selected[0]?.NetRate);
-                    //     }
-                    //     getAllFields[80]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
-                    //     getAllFields[81]?.setText('');
-                    //     getAllFields[82]?.setText('');
-                    //     getAllFields[83]?.setText('');
-                    //     getAllFields[84]?.setText('');
-                    //     getAllFields[85]?.setText(moment(new Date()).format('DD-MM-YYYY'));
-                    //     getAllFields[86]?.setText('');
-                    //     getAllFields[87]?.uncheck();
-                    //     getAllFields[88]?.uncheck()
-                    //     getAllFields[89]?.uncheck();
-                    //     getAllFields[90]?.uncheck();
-                    //     getAllFields[91]?.uncheck();
-                    //     getAllFields[92]?.uncheck();
-                    //     getAllFields[93]?.setText(moment(new Date()).format('DD-MM-YYYY'));
-                    //     getAllFields[94]?.setText('');
-                    //     getAllFields[95]?.setText('');
-                    //     getAllFields[96]?.setText('');
-                    // }
+                    getAllFields[0]?.check();
+                    getAllFields[2]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress);
+                    getAllFields[5]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+                    getAllFields[6]?.setText(validator.COMPANY_INFO[0]?.iec);
+                    getAllFields[10]?.setText(`on us a/c no  ${BENEFICIARY_DETAILS[0]?.beneAccNo}`);
+                    getAllFields[11]?.setText(`Net off i.e. On beneficiary`);
+                    getAllFields[14]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
+                    getAllFields[15]?.setText(`Swift Code: ${BENEFICIARY_DETAILS[0]?.beneBankSwiftCode} \nABA: \nRouting No: \nSort Code: ${BENEFICIARY_DETAILS[0]?.sortCode}`);
+                    getAllFields[48]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+                    
+                    if (filldata != undefined && filldata != null && filldata != '') {
+                        getAllFields[7]?.setText(`INR A/C No : NIL \n For: (CCY & AMT) NIL\n FCY A/C No : ${BENEFICIARY_DETAILS[0]?.beneAccNo}\n For: (CCY & AMT) ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount}/-\n (Remittance by SEZ units from INR accounts to beneficiaries within India not allowed)`);
+                        getAllFields[12]?.setText(`${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount} /- (${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount)}) - 30% ADVANCE PAYMENT.`);
+                        getAllFields[19]?.setText(`Expected Date of Despatch / Download (software) – MID OF NOV 2022\n Name of the shipping company / airlines – (BY SEA)\n Port of Despatch - ANY PORT IN COLOMBIA\n Destination Port – CHENNAI, INDIA \nProforma Invoice details (In case the invoice is older than 6 months then a declaration\n to be provided stating the reason for delay)\n PROFORMA Invoice no - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} CO Dated ${filldata?.paymentTerm[0]?.PIPO_LIST?.date}, Amount - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} ${filldata?.paymentTerm[0]?.RemittanceAmount}/-`);
+                        getAllFields[20]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
+                        
+                    }
                     const mergedPdfFile = await pdfDoc.save();
                     var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
                     const x1 = 'data:application/pdf;base64,' + base64String1;

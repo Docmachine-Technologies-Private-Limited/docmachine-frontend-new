@@ -565,5 +565,12 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.AdditionalDocumentsUrl = doc;
     }, 200);
   }
+  UploadedViewPdfUrl:any=''
+  UploadedViewPdf(pdf:any){
+    this.UploadedViewPdfUrl='';
+  setTimeout(() => {
+    this.UploadedViewPdfUrl=pdf;    
+  }, 200);
+  }
 
 }
