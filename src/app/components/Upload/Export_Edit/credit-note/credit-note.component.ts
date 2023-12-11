@@ -119,7 +119,7 @@ export class EditCreditNoteComponent implements OnInit {
       this.validator.buildForm({
         creditNoteNumber: {
           type: "text",
-          value: "",
+          value: this.data?.creditNoteNumber,
           label: "Credit Note Number",
           rules: {
             required: true,
@@ -127,7 +127,7 @@ export class EditCreditNoteComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: this.data?.currency,
           label: "Currency",
           rules: {
             required: true,
@@ -135,7 +135,7 @@ export class EditCreditNoteComponent implements OnInit {
         },
         creditNoteAmount: {
           type: "text",
-          value: "",
+          value: this.data?.creditNoteAmount,
           label: "Credit Note Amount",
           rules: {
             required: true,
@@ -182,6 +182,7 @@ export class EditCreditNoteComponent implements OnInit {
         }
       })
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateCredit(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Credit Note Document Updated Successfully`);
         this.router.navigate(['home/Summary/Export/credit-note']);

@@ -120,7 +120,7 @@ export class EditImportCreditNoteComponent implements OnInit {
       this.validator.buildForm({
         creditNoteNumber: {
           type: "text",
-          value: "",
+          value: this.data?.creditNoteNumber,
           label: "Credit Note Number",
           rules: {
             required: true,
@@ -128,7 +128,7 @@ export class EditImportCreditNoteComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: this.data?.currency,
           label: "Currency",
           rules: {
             required: true,
@@ -136,7 +136,7 @@ export class EditImportCreditNoteComponent implements OnInit {
         },
         creditNoteAmount: {
           type: "text",
-          value: "",
+          value: this.data?.creditNoteAmount,
           label: "Credit Note Amount",
           rules: {
             required: true,

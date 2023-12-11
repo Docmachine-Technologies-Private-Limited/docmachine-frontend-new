@@ -113,7 +113,7 @@ export class EditImportBillOfExchangesComponent implements OnInit {
       this.validator.buildForm({
         billExchangeNumber: {
           type: "text",
-          value: args?.billExchangeNumber,
+          value: this.data?.billExchangeNumber,
           label: "Bill Of Exchange Number*",
           rules: {
             required: true,
@@ -133,7 +133,7 @@ export class EditImportBillOfExchangesComponent implements OnInit {
       },'ImportBillOfExchange');
     }, 200);
 
-    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+    console.log(this.data, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
   
   onSubmit(e: any) {
@@ -157,6 +157,7 @@ export class EditImportBillOfExchangesComponent implements OnInit {
         }
       })
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateBillExchange(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Bill Of Exchange Document Updated Successfully`);
         this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);

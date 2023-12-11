@@ -109,7 +109,7 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
       this.validator.buildForm({
         blcopyrefNumber: {
           type: "text",
-          value: "",
+          value: this.data?.blcopyrefNumber,
           label: "BlCopyRef Number",
           rules: {
             required: true,
@@ -117,7 +117,7 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
         },
         amount: {
           type: "text",
-          value: "",
+          value: this.data?.amount,
           label: "BlCopyRef Amount",
           rules: {
             required: true,
@@ -165,6 +165,7 @@ export class EditImportBilllodgementreferencenumberadvicecopyComponent implement
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
         console.log(res, 'addBlcopyref');
         this.toastr.success(`Blcopyref Document Updated Successfully`);

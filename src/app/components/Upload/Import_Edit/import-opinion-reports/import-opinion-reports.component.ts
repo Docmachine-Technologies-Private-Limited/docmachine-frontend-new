@@ -138,7 +138,7 @@ export class EditImportOpinionReportComponent implements OnInit {
       this.validator.buildForm({
         opinionReportNumber: {
           type: "text",
-          value: "",
+          value: this.data?.opinionReportNumber,
           label: "Opinion Report Number*",
           rules: {
             required: true,
@@ -146,7 +146,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         ForeignPartyName: {
           type: "buyer",
-          value: "",
+          value: this.data?.ForeignPartyName,
           label: "Foreign Party Name",
           rules: {
             required: true,
@@ -154,7 +154,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         ReportDate: {
           type: "date",
-          value: "",
+          value: this.data?.ReportDate,
           label: "Report Date",
           rules: {
             required: true,
@@ -162,7 +162,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         },
         ReportRatings: {
           type: "text",
-          value: "",
+          value: this.data?.ReportRatings,
           label: "Report Ratings",
           rules: {
             required: true,
@@ -210,6 +210,7 @@ export class EditImportOpinionReportComponent implements OnInit {
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateOpinionReport(e.value,this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Opinion Report Document Updated Successfully`);
         this.router.navigate(['home/Summary/Import/opinion-report']);

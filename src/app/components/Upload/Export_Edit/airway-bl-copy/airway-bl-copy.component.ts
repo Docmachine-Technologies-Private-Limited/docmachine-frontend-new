@@ -120,10 +120,11 @@ export class EditAirwayBlCopyComponent implements OnInit {
     this.LoadShippingBill([this.data?.pipo[0]?._id]);
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.sbno === this.data?.sbNo)[0];
       this.validator.buildForm({
         sbNo: {
           type: "ShippingBill",
-          value: "",
+          value: selectedShippingBill?.SB_ID,
           label: "Select Shipping Bill",
           rules: {
             required: true,
@@ -131,7 +132,7 @@ export class EditAirwayBlCopyComponent implements OnInit {
         },
         date: {
           type: "date",
-          value: "",
+          value: this.data?.date,
           label: "Date",
           rules: {
             required: true,
@@ -139,7 +140,7 @@ export class EditAirwayBlCopyComponent implements OnInit {
         },
         airwayBlCopyNumber: {
           type: "text",
-          value: "",
+          value: this.data?.airwayBlCopyNumber,
           label: "Airway / BlCopy Number*",
           rules: {
             required: true,
@@ -188,12 +189,12 @@ export class EditAirwayBlCopyComponent implements OnInit {
         }
       });
     } else {
+      e.value.blCopyDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
         this.router.navigate(['home/Summary/Export/airway-bl-copy']);
       }, (err) => console.log('Error adding pipo'));
     }
-
   }
 
   clickPipo(event: any) {

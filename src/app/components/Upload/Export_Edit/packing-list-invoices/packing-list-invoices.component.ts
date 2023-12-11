@@ -102,10 +102,11 @@ export class EditPackingListInvoicesComponent implements OnInit {
     this.LoadShippingBill([this.data?.pipo[0]?._id]);
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.sbno === this.data?.sbNo)[0];
       this.validator.buildForm({
         sbNo: {
           type: "ShippingBill",
-          value: "",
+          value: selectedShippingBill?.SB_ID,
           label: "Select Shipping Bill",
           rules: {
             required: true,
@@ -113,7 +114,7 @@ export class EditPackingListInvoicesComponent implements OnInit {
         },
         packingListNumber: {
           type: "text",
-          value: "",
+          value: this.data?.packingListNumber,
           label: "Packing List Number",
           rules: {
             required: true,
@@ -163,6 +164,7 @@ export class EditPackingListInvoicesComponent implements OnInit {
         }
       });
     } else {
+      e.value.packingDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Packing List Added Successfully`);
         console.log('Packing List Added Successfully');

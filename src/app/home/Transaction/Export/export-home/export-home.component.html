@@ -1278,11 +1278,6 @@
     class="p-2" id="BillLodgementNumber" [modalbodystyle]="{'height': '500px'}"
     name="Bill Lodgement Number Selection Panel">
     <div class="col-12 pt-3">
-      <div class="col-5" *ngIf="this.PARTY_NAME.length!=0">
-        <ng-select [items]="this.PARTY_NAME" placeholder="Search party name"
-          (change)="SearchSelectValue(PARTY_NAMEselection)" [(ngModel)]="PARTY_NAMEselection" name="commodity"
-          #ngSelect> </ng-select>
-      </div>
       <table class="table mb-0 mt-2">
         <thead>
           <tr class="table-tr">
@@ -1303,10 +1298,10 @@
             <td class="col-td-th-3">{{item?.pipo[0]?.buyerName}}</td>
             <td class="col-td-th-3">{{item?.SbRef[0]?.sbno}}</td>
             <td class="col-td-th-3">{{item?.blcopyrefNumber}}</td>
-            <td class="col-td-th-3">{{item?.SbRef[0]?.currency}}</td>
+            <td class="col-td-th-3">{{item?.SbRef[0]?.fobCurrency}}</td>
             <td class="col-td-th-3">{{item?.amount}}</td>
-            <td class="col-td-th-3">{{item?.LodgementData?.data?.amount}}</td>
-            <td class="col-td-th-3">{{this.calculateAmount(item?.amount,item?.LodgementData?.data?.amount)}}</td>
+            <td class="col-td-th-3">{{item?.SbRef[0]?.fobValue}}</td>
+            <td class="col-td-th-3">{{this.calculateAmount(item?.amount,item?.SbRef[0]?.fobValue)}}</td>
           </tr>
         </tbody>
       </table>

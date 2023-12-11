@@ -136,7 +136,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
       this.validator.buildForm({
         commercialNumber: {
           type: "text",
-          value: "",
+          value: this.data?.commercialNumber,
           label: "Commercial Invoice Number",
           name: 'commercialNumber',
           rules: {
@@ -155,7 +155,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
         },
         amount: {
           type: "text",
-          value: "",
+          value: this.data?.amount,
           label: "Commercial Invoice Amount",
           name: 'amount',
           rules: {
@@ -164,7 +164,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
         },
         type: {
           type: "PaymentTermType",
-          value: "",
+          value: this.data?.type,
           label: "Type",
           name: 'type',
           rules: {
@@ -207,9 +207,10 @@ export class EditCommercialInvoicesComponent implements OnInit {
               }, (err) => console.log('Error adding pipo'));
             }
           })
-        } 
+        }
       })
-    }else {
+    } else {
+      e.value.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateCommercial(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Commercial Invoice Updated Successfully`);
         this.router.navigate(['home/Summary/Export/commercial']);

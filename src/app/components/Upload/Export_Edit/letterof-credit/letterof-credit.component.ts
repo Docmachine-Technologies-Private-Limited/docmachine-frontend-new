@@ -144,7 +144,7 @@ export class EditLetterofCreditComponent implements OnInit {
       this.validator.buildForm({
         letterOfCreditNumber: {
           type: "text",
-          value: "",
+          value: this.data?.letterOfCreditNumber,
           label: "Letter Of Credit Number*",
           rules: {
             required: true,
@@ -152,7 +152,7 @@ export class EditLetterofCreditComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: this.data?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -160,7 +160,7 @@ export class EditLetterofCreditComponent implements OnInit {
         },
         letterOfCreditAmount: {
           type: "text",
-          value: "",
+          value: this.data?.letterOfCreditAmount,
           label: "Letter Of Credit Amount",
           rules: {
             required: true,
@@ -168,7 +168,7 @@ export class EditLetterofCreditComponent implements OnInit {
         },
         Expirydate: {
           type: "date",
-          value: "",
+          value: this.data?.Expirydate,
           label: "Expiry Date",
           rules: {
             required: true,
@@ -176,7 +176,7 @@ export class EditLetterofCreditComponent implements OnInit {
         },
         LastDateofShipment: {
           type: "date",
-          value: "",
+          value: this.data?.LastDateofShipment,
           label: "Last Date of Shipment",
           rules: {
             required: true,
@@ -223,6 +223,7 @@ export class EditLetterofCreditComponent implements OnInit {
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateLetterLC(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Letter Of Credit Document Updated Successfully`);
         this.router.navigate(['home/Summary/Export/letterofcredit-lc']);

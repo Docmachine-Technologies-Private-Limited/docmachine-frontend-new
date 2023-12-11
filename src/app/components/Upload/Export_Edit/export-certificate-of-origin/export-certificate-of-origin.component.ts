@@ -120,7 +120,7 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
       this.validator.buildForm({
         CommercialNumber: {
           type: "CommericalNo",
-          value: "",
+          value: this.data?.CommercialNumber,
           label: "Commerical Number",
           rules: {
             required: true,
@@ -128,7 +128,7 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
         },
         CertificateOriginNumber: {
           type: "text",
-          value: "",
+          value: this.data?.CertificateOriginNumber,
           label: "Certificate of Origin Number",
           rules: {
             required: true,
@@ -175,6 +175,7 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateCertificateofOrigin(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Certificate of Origin Updated Successfully`);
         console.log('CertificateofOrigin Added Successfully');

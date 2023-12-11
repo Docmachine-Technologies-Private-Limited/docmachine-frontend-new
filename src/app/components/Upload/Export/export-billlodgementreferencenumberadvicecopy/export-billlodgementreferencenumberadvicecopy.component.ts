@@ -49,7 +49,7 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
 
   async ngOnInit() {
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
-    if (temp_pipo?.length != 0 && temp_pipo!=undefined) {
+    if (temp_pipo?.length != 0 && temp_pipo != undefined) {
       this.btndisabled = false;
       this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
       this.validator.CommonLoadTransaction(temp_pipo);
@@ -65,12 +65,26 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
       this.pipourl1 = args[1].publicUrl;
       this.validator.buildForm({
         sbNo: {
-          type: "ShippingBill",
-          value: "",
-          label: "Select Shipping Bill",
+          type: "formGroup",
+          label: "",
+          GroupLabel: ['Shipping Bill 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
-          }
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "ShippingBill",
+                value: "",
+                label: "Select Shipping Bill",
+                rules: {
+                  required: true,
+                },
+                name: 'SBData',
+              }
+            ]
+          ]
         },
         blcopyrefNumber: {
           type: "text",
@@ -110,11 +124,15 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
+    let temp: any = [];
+    e?.value?.sbNo?.forEach(element => {
+      temp.push(element?.SBData)
+    });
     var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
     if (TransactionSbRef != '' && TransactionSbRef != undefined && TransactionSbRef != null) {
-      e.value.SbRef = [TransactionSbRef];
+      e.value.SbRef = temp;
     } else {
-      e.value.SbRef = [e?.value?.sbNo];
+      e.value.SbRef = temp;
     }
     e.value.file = 'export';
     console.log(e.value, 'onSubmitblCopy');

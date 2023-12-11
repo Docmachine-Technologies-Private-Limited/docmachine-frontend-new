@@ -4,7 +4,7 @@ import { UploadServiceValidatorService } from '../service/upload-service-validat
 import { UserService } from '../../../service/user.service';
 import { ShippingBillComponent } from '../../../components/Upload/Export/shipping-bill/shipping-bill.component';
 import { InsurancedocumentsComponent } from '../../../components/Upload/Export/insurancedocuments/insurancedocuments.component';
-import { LetterofCreditComponent } from '../../../components/Upload/Export/letterof-credit/letterof-credit.component';
+import { UploadLetterofCreditComponent } from '../../../components/Upload/Export/letterof-credit/letterof-credit.component';
 import { MasterServiceAgreementsComponent } from '../../../components/Upload/Export/master-service-agreements/master-service-agreements.component';
 import { TripartyAgreementsComponent } from '../../../components/Upload/Export/triparty-agreements/triparty-agreements.component';
 import { AirwayBlCopyComponent } from '../../../components/Upload/Export/airway-bl-copy/airway-bl-copy.component';
@@ -71,7 +71,7 @@ export class MasterUploadComponent implements OnInit {
       CreditNoteComponent,
       DebitNotesComponent,
       InsurancedocumentsComponent,
-      LetterofCreditComponent,
+      UploadLetterofCreditComponent,
       MasterServiceAgreementsComponent,
       TripartyAgreementsComponent,
       OpinionReportsComponent,

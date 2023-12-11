@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ShippingBillComponent } from './shipping-bill/shipping-bill.component';
 import { MemberGuard } from '../../../service/RolePermission/Member/member.guard';
 import { InsurancedocumentsComponent } from './insurancedocuments/insurancedocuments.component';
-import { LetterofCreditComponent } from './letterof-credit/letterof-credit.component';
+import { UploadLetterofCreditComponent } from './letterof-credit/letterof-credit.component';
 import { MasterServiceAgreementsComponent } from './master-service-agreements/master-service-agreements.component';
 import { TripartyAgreementsComponent } from './triparty-agreements/triparty-agreements.component';
 import { AirwayBlCopyComponent } from './airway-bl-copy/airway-bl-copy.component';
@@ -27,7 +27,7 @@ const routes: Routes = [
   // Export Upload
   { path: "Shippingbill", component: ShippingBillComponent, canActivate: [MemberGuard] },
   { path: "Insurancedocuments", component: InsurancedocumentsComponent, canActivate: [MemberGuard] },
-  { path: "LetterofCredit", component: LetterofCreditComponent, canActivate: [MemberGuard] },
+  { path: "LetterofCredit", component: UploadLetterofCreditComponent, canActivate: [MemberGuard] },
   { path: "MasterServiceAgreements", component: MasterServiceAgreementsComponent, canActivate: [MemberGuard] },
   { path: "TripartyAgreements", component: TripartyAgreementsComponent, canActivate: [MemberGuard] },
   { path: "AirwayBlCopy", component: AirwayBlCopyComponent, canActivate: [MemberGuard] },

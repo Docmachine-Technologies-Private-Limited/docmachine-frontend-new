@@ -103,7 +103,7 @@ export class EditImportSwiftCopyDocumentComponent implements OnInit {
       this.validator.buildForm({
         swiftCopyNumber: {
           type: "text",
-          value: "",
+          value: this.data?.swiftCopyNumber,
           label: "Swift Copy Number",
           rules: {
             required: true,
@@ -149,6 +149,7 @@ export class EditImportSwiftCopyDocumentComponent implements OnInit {
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateSwift(e.value,this.data?._id).subscribe((res: any) => {
         this.toastr.success(`swiftcopies Added Successfully`);
         this.router.navigate(['home/Summary/Import/Swift-Copy-Documents']);        

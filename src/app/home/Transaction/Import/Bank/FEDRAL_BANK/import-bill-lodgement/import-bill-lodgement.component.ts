@@ -156,7 +156,13 @@ export class ImportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["PAYMENTINSTRUCTION"]
+          HideShowInput: ["PAYMENTINSTRUCTION"],
+          YesButton: [
+            { name: 'PAYMENTINSTRUCTION', status: true }
+          ],
+          NoButton: [
+            { name: 'PAYMENTINSTRUCTION', status: false }
+          ]
         },
         PAYMENTINSTRUCTION: {
           type: "yesnocheckbox",
@@ -166,7 +172,12 @@ export class ImportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["ACCEPTANCEADVISE"]
+          YesButton: [
+            { name: 'ACCEPTANCEADVISE', status: true }
+          ],
+          NoButton: [
+            { name: 'ACCEPTANCEADVISE', status: false }
+          ]
         },
         forwardCall: {
           type: "button",
@@ -184,7 +195,16 @@ export class ImportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Usance", "Usancedays", "Usancefrom"]
+          YesButton: [
+            { name: 'Usance', status: true },
+            { name: 'Usancedays', status: true },
+            { name: 'Usancefrom', status: true }
+          ],
+          NoButton: [
+            { name: 'Usance', status: false },
+            { name: 'Usancedays', status: false },
+            { name: 'Usancefrom', status: false }
+          ]
         },
         Usance: {
           type: "yesnocheckbox",
@@ -194,7 +214,13 @@ export class ImportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Sight"]
+          HideShowInput: ["Sight"],
+          YesButton: [
+            { name: 'Sight', status: true }
+          ],
+          NoButton: [
+            { name: 'Sight', status: false }
+          ]
         },
         Usancedays: {
           type: "text",

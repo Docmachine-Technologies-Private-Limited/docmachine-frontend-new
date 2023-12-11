@@ -122,7 +122,7 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
       this.validator.buildForm({
         CommercialNumber: {
           type: "CommericalNo",
-          value: "",
+          value: this.data?.CommercialNumber,
           label: "Select Commercial Invoice",
           rules: {
             required: true,
@@ -130,7 +130,7 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
         },
         airwayBlCopydate: {
           type: "date",
-          value: "",
+          value: this.data?.airwayBlCopydate,
           label: "Airway / BlCopy Date",
           rules: {
             required: true,
@@ -138,7 +138,7 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
         },
         airwayBlCopyNumber: {
           type: "text",
-          value: "",
+          value: this.data?.airwayBlCopyNumber,
           label: "Airway / BlCopy Number",
           rules: {
             required: true,
@@ -184,6 +184,7 @@ export class EditImportAirwayBlCopyComponent implements OnInit {
         }
       });
     } else {
+      e.value.blCopyDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
         this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);

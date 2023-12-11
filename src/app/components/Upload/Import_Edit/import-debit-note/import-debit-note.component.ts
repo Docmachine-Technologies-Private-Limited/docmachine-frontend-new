@@ -122,7 +122,7 @@ export class EditImportDebitNotesComponent implements OnInit {
       this.validator.buildForm({
         debitNoteNumber: {
           type: "text",
-          value: "",
+          value: this.data?.debitNoteNumber,
           label: "Debit Note Number",
           rules: {
             required: true,
@@ -130,7 +130,7 @@ export class EditImportDebitNotesComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: this.data?.currency,
           label: "Currency",
           rules: {
             required: true,
@@ -138,7 +138,7 @@ export class EditImportDebitNotesComponent implements OnInit {
         },
         totalDebitAmount: {
           type: "text",
-          value: "",
+          value: this.data?.totalDebitAmount,
           label: "Debit Note Amount",
           rules: {
             required: true,
@@ -185,6 +185,7 @@ export class EditImportDebitNotesComponent implements OnInit {
         }
       })
     } else {
+      e.value.DebitNote = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateDebit(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`debit Note Document Updated Successfully`);
         this.router.navigate(['home/Summary/Import/Debit']);

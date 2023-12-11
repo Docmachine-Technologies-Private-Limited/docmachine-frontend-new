@@ -13,6 +13,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { StorageEncryptionDecryptionService } from '../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
 import { ExportBillLodgementControllerData } from '../Controller/Export-Bill-Lodgement-Controller';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'new-export-bill-lodgement',
@@ -97,6 +98,7 @@ export class NewExportBillLodgementComponent implements OnInit {
     private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public ExportBillLodgementControllerData: ExportBillLodgementControllerData,
+    public filteranytablepagination: filterAnyTablePagination,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -302,7 +304,32 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["AgainstAdvanceReceipt", "UnderLC", "Sight", "Usancedays", "Usancefrom", "Usance", "WithScrutiny", "BuyerRemitterDifferent", "InvoiceReduction", "WithDiscount"]
+          YesButton: [
+            { name: 'AgainstAdvanceReceipt', status: true },
+            { name: 'UnderLC', status: false },
+            { name: 'Sight', status: true },
+            { name: 'Usancedays', status: true },
+            { name: 'Usancefrom', status: true },
+            { name: 'Usance', status: true },
+            { name: 'WithScrutiny', status: true },
+            { name: 'BuyerRemitterDifferent', status: true },
+            { name: 'InvoiceReduction', status: true },
+            { name: 'WithDiscount', status: true },
+            { name: 'UnderLCData', status: false },
+          ],
+          NoButton: [
+            { name: 'AgainstAdvanceReceipt', status: true },
+            { name: 'UnderLC', status: true },
+            { name: 'Sight', status: true },
+            { name: 'Usancedays', status: true },
+            { name: 'Usancefrom', status: true },
+            { name: 'Usance', status: true },
+            { name: 'WithScrutiny', status: true },
+            { name: 'BuyerRemitterDifferent', status: true },
+            { name: 'InvoiceReduction', status: true },
+            { name: 'WithDiscount', status: true },
+            { name: 'UnderLCData', status: true },
+          ],
         },
         Sight: {
           type: "yesnocheckbox",
@@ -312,7 +339,16 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Usance", "Usancedays", "Usancefrom"]
+          YesButton: [
+            { name: 'Usance', status: true },
+            { name: 'Usancedays', status: true },
+            { name: 'Usancefrom', status: true },
+          ],
+          NoButton: [
+            { name: 'Usance', status: false },
+            { name: 'Usancedays', status: false },
+            { name: 'Usancefrom', status: false },
+          ]
         },
         Usance: {
           type: "yesnocheckbox",
@@ -322,7 +358,12 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Sight"]
+          YesButton: [
+            { name: 'Sight', status: true }
+          ],
+          NoButton: [
+            { name: 'Sight', status: false }
+          ]
         },
         Usancedays: {
           type: "text",
@@ -358,9 +399,39 @@ export class NewExportBillLodgementComponent implements OnInit {
           },
           YesNo: ''
         },
+        YesNoUnderLCAsk: {
+          type: "yesnocheckbox",
+          value: '',
+          label: "Under LC?",
+          rules: {
+            required: true,
+          },
+          YesNo: '',
+          YesButton: [
+            { name: 'UnderLCData', status: true }
+          ],
+          NoButton: [
+            { name: 'UnderLCData', status: false }
+          ]
+        },
+        UnderLCData: {
+          type: "DropDown",
+          value: '',
+          items: [],
+          bindLabel: "letterOfCreditNumber",
+          label: "Select LC No.",
+          rules: {
+            required: true,
+          },
+          ButtonId: "UPLOAD_LC",
+          Show: true,
+          innerHTML: `<i class="fa fa-upload" aria-hidden="true"></i>`,
+          style: ``
+        },
       }, 'EXPORT_BILL_OF_EXCHANGE');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
+
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
 
@@ -392,6 +463,17 @@ export class NewExportBillLodgementComponent implements OnInit {
       } else {
         this.SINGLE_TAB_MULITIPLE_TAB = "2";
       }
+    } else if (value?.id == "YesNoUnderLCAsk") {
+      if (value?.bool == true) {
+        this.filteranytablepagination.PaginationfilterAnyTable({
+          buyerName: this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.BuyerName
+        }, { skip: 0, limit: 1000 }, 'LC').subscribe((res: any) => {
+          console.log(res, 'Beneficiary');
+          this.validator.DROP_DOWN_DATA = res?.data;
+        });
+      } else {
+        this.validator.DROP_DOWN_DATA = [];
+      }
     }
     console.log(value, "YesNoCheckBox")
   }
@@ -417,7 +499,7 @@ export class NewExportBillLodgementComponent implements OnInit {
     }
   }
 
-  AllCreateTransaction() {
+  AllCreateTransaction(panel: any) {
     this.OTHER_DOCUMENTS = [];
     for (let index = 0; index < this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length; index++) {
       const element = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS[index];
@@ -437,10 +519,14 @@ export class NewExportBillLodgementComponent implements OnInit {
             pdf: commercialdetailselement?.commercialDoc
           }
         });
-        console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, this.OTHER_DOCUMENTS, "OTHER_DOCUMENTS")
-        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]['ALL_RELATED_DOCUMENTS'] = this.OTHER_DOCUMENTS;
+        if ((index + 1) == this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length) {
+          console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, this.OTHER_DOCUMENTS, "OTHER_DOCUMENTS")
+          this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]['ALL_RELATED_DOCUMENTS'] = this.OTHER_DOCUMENTS;
+          panel?.displayHidden
+        }
       } else {
         this.toastr.error("Please select atleast one commercial no.")
+        break;
       }
     }
   }

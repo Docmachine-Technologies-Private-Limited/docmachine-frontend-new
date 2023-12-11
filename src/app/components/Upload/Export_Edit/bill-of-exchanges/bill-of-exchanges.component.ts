@@ -138,10 +138,11 @@ export class EditBillOfExchangesComponent implements OnInit {
     this.LoadShippingBill([this.data?.pipo[0]?._id]);
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?._id === this.data?.sbNo)[0];
       this.validator.buildForm({
         billExchangeNumber: {
           type: "text",
-          value: "",
+          value: this.data?.billExchangeNumber,
           label: "Bill Of Exchange Number",
           rules: {
             required: true,
@@ -149,7 +150,7 @@ export class EditBillOfExchangesComponent implements OnInit {
         },
         sbNo: {
           type: "ShippingBill",
-          value: "",
+          value: selectedShippingBill?.SB_ID,
           label: "Select Shipping Bill",
           rules: {
             required: true,
@@ -166,7 +167,7 @@ export class EditBillOfExchangesComponent implements OnInit {
         },
         BLCopy: {
           type: "BLCopy",
-          value: "",
+          value: this.data?.BLCopy,
           label: "BLCopy Number",
           rules: {
             required: true,
@@ -213,6 +214,7 @@ export class EditBillOfExchangesComponent implements OnInit {
         }
       })
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateBillExchange(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Bill Of Exchange Document Updated Successfully`);
         this.router.navigate(['home/Summary/Export/bill-of-exchange']);

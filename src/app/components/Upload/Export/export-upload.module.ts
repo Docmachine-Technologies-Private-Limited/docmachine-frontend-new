@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ExportUploadRoutingModule } from './export-upload-routing.module';
 import { ShippingBillComponent } from './shipping-bill/shipping-bill.component';
 import { InsurancedocumentsComponent } from './insurancedocuments/insurancedocuments.component';
-import { LetterofCreditComponent } from './letterof-credit/letterof-credit.component';
+import { UploadLetterofCreditComponent } from './letterof-credit/letterof-credit.component';
 import { MasterServiceAgreementsComponent } from './master-service-agreements/master-service-agreements.component';
 import { TripartyAgreementsComponent } from './triparty-agreements/triparty-agreements.component';
 import { AirwayBlCopyComponent } from './airway-bl-copy/airway-bl-copy.component';
@@ -31,7 +31,7 @@ import { FormatBillOfExchangesComponent } from './bill-of-exchanges-create/bill-
     ShippingBillComponent,
     CreditNoteComponent,
     InsurancedocumentsComponent,
-    LetterofCreditComponent,
+    UploadLetterofCreditComponent,
     MasterServiceAgreementsComponent,
     TripartyAgreementsComponent,
     OpinionReportsComponent,

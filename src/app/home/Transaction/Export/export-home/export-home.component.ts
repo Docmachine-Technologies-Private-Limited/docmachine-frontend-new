@@ -18,6 +18,7 @@ import { StorageEncryptionDecryptionService } from "../../../../Storage/storage-
 import { MergePdfListService } from "../../../merge-pdf-list.service";
 import $ from "jquery";
 import { ExportHomeControllerData } from "../Controller/ExportHome-Controller";
+import { filterAnyTablePagination } from "../../../../service/v1/Api/filterAnyTablePagination";
 declare var kendo: any;
 
 @Component({
@@ -211,6 +212,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public sessionstorage: StorageEncryptionDecryptionService,
     public ExportBillLodgementData: ExportHomeControllerData,
+    public filteranytablepagination: filterAnyTablePagination,
     public pdfmerge: MergePdfListService) {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
@@ -274,6 +276,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.PIPONumbersBuyerName = this.InwardDisposalData[0]?.BuyerName?.value
     this.PIPOFilter(this.InwardDisposalData[0])
     console.log(this.bank, 'sallBankallBankallBankallBankallBank')
+    this.Blcopyref = [];
+    this.filteranytablepagination.PaginationfilterAnyTable({
+      buyerName: [this.Inward_Remittance_MT103[0]?.BuyerName?.value]
+    }, { skip: 0, limit: 1000 }, 'blCopy').subscribe((res: any) => {
+      this.Blcopyref = res?.data;
+      this.Blcopyrefoldata = res?.data;
+      this.Export_Direct_Dispatch = res?.data;
+      console.log(res, this.Export_Direct_Dispatch, 'getBlcopyref')
+    });
   }
   async ngOnInit() {
     this.wininfo.set_controller_of_width(250, '.content_top_common')
@@ -308,26 +319,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     console.log(this.GROUP_NAME_LIST, "GROUP_NAME_LIST")
-    this.documentService.getBlcopyrefPromies().then((res: any) => {
-      this.Blcopyref = res;
-      this.Blcopyrefoldata = res;
-      this.Export_Direct_Dispatch = res;
-      console.log(res, this.Export_Direct_Dispatch, 'getBlcopyref')
-
-    }).catch((error) => {
-      this.Blcopyref = [];
-    });
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
-        console.log(res, 'res.data')
-        res.data.forEach((element, i) => {
-          if (element.buyerName != '' && element.buyerName != undefined) {
-            this.PARTY_NAME.push(element.buyerName);
-          }
-        });
-      },
-      (err) => console.log(err)
-    );
+   
+    this.documentService.getMaster(1).subscribe((res: any) => {
+      console.log(res, 'res.data')
+      res.data.forEach((element, i) => {
+        if (element.buyerName != '' && element.buyerName != undefined) {
+          this.PARTY_NAME.push(element.buyerName);
+        }
+      });
+    }, (err) => console.log(err));
     this.Inward_Remittancefilter = this.Inward_Remittance;
     this.old_data = this.default_value;
 
@@ -3123,28 +3123,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   ArrayToString(array: any) {
     return array.length != 0 ? array.toString() : '';
   }
+  
   loadPopup(inputid, hidden_props) {
-    var oldata: any = [];
-    this.documentService.getBlcopyrefPromies().then((res: any) => {
-      this.Blcopyref = res;
-      oldata = res;
-      console.log(res, 'getBlcopyref')
-    }).catch((error) => {
-      this.Blcopyref = [];
-    });
-    var timer: any = null;
-    $(inputid).keyup((e: any) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        var value = $(inputid).val();
-        if (value) {
-          this.Blcopyref = this.filterBlcopyref(oldata, value)
-        } else {
-          this.Blcopyref = oldata;
-        }
-      }, 200);
-    });
+   
   }
+  
   loadPopupThirdParty(event, dropdownid) {
     var timer: any = null;
     clearTimeout(timer);

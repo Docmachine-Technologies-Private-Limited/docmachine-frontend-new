@@ -112,8 +112,8 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
       this.validator.buildForm({
         destructionNumber: {
           type: "text",
-          value: "",
-          label: "Destruction Certificate Number",
+          value: args?.destructionNumber,
+          label: "Destruction Certificate Number*",
           rules: {
             required: true,
           }
@@ -157,6 +157,7 @@ export class EditImportDestructionCertificatesComponent implements OnInit {
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateDestruction(e.value,this.data?._id).subscribe((res: any) => {
         this.toastr.success(`destruction Document Updated Successfully`);
         console.log('destruction Document Updated Successfully');

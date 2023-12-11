@@ -51,7 +51,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('BUTTON_PANEL_SHOW') BUTTON_PANEL_SHOW: boolean = false;
   @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean = true;
   @Input('SubmitButtonDisabled') SubmitButtonDisabled: boolean = false;
-  
+
   Account_Type: any = [{
     type: 'OD-over draft'
   }, {
@@ -348,6 +348,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.IMAGE_UPLOAD_LIST.splice(index, 1);
     this.validator.dynamicFormGroup[this.id]?.controls[autofill?.key]?.setValue(this.IMAGE_UPLOAD_LIST);
   }
+  
   HideShowInput(event: any, item: any) {
     if (item[event] != undefined) {
       item[event]?.forEach(element => {
@@ -377,25 +378,37 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  HideShowInputCheckBox(bool: any, item: any) {
+  HideInputCheckBox(bool: any, item: any) {
     if (item != undefined) {
-      if (bool == true) {
-        item.forEach(element => {
-          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element));
-          if (index != -1) {
-            this.validator.FIELDS_DATA[this.id][index]['disabled'] = true;
-            this.validator.dynamicFormGroup[this.id]?.controls[element]?.disable();
-          }
-        });
-      } else {
-        item.forEach(element => {
-          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element));
-          if (index != -1) {
+      item.forEach(element => {
+        const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element?.name));
+        if (index != -1) {
+          if (element?.status == true) {
             this.validator.FIELDS_DATA[this.id][index]['disabled'] = false;
-            this.validator.dynamicFormGroup[this.id]?.controls[element]?.enable();
+            this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.enable();
+          } else {
+            this.validator.FIELDS_DATA[this.id][index]['disabled'] = true;
+            this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.disable();
           }
-        });
-      }
+        }
+      });
+    }
+  }
+
+  ShowInputCheckBox(bool: any, item: any) {
+    if (item != undefined) {
+      item.forEach(element => {
+        const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element?.name));
+        if (index != -1) {
+          if (element?.status == true) {
+            this.validator.FIELDS_DATA[this.id][index]['disabled'] = false;
+            this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.enable();
+          } else {
+            this.validator.FIELDS_DATA[this.id][index]['disabled'] = true;
+            this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.disable();
+          }
+        }
+      });
     }
   }
 
@@ -560,17 +573,17 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
   AdditionalDocumentsUrl: any = ''
   ViewAdditionalDocuments(doc: any) {
-    this.AdditionalDocumentsUrl=''
+    this.AdditionalDocumentsUrl = ''
     setTimeout(() => {
       this.AdditionalDocumentsUrl = doc;
     }, 200);
   }
-  UploadedViewPdfUrl:any=''
-  UploadedViewPdf(pdf:any){
-    this.UploadedViewPdfUrl='';
-  setTimeout(() => {
-    this.UploadedViewPdfUrl=pdf;    
-  }, 200);
+  UploadedViewPdfUrl: any = ''
+  UploadedViewPdf(pdf: any) {
+    this.UploadedViewPdfUrl = '';
+    setTimeout(() => {
+      this.UploadedViewPdfUrl = pdf;
+    }, 200);
   }
 
 }

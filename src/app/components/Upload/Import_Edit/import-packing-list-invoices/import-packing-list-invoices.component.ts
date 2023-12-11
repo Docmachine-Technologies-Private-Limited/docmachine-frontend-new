@@ -123,7 +123,7 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
       this.validator.buildForm({
         boe: {
           type: "BOE",
-          value: "",
+          value: this.data?.boeRef[0],
           label: "Select Bill Of Entry",
           rules: {
             required: true,
@@ -131,7 +131,7 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
         },
         packingListNumber: {
           type: "text",
-          value: "",
+          value: this.data?.packingListNumber,
           label: "Packing List Number*",
           rules: {
             required: true,
@@ -189,6 +189,7 @@ export class EditImportPackingListInvoicesComponent implements OnInit {
         }
       });
     } else {
+      e.value.packingDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Packing List Added Successfully`);
         this.router.navigate(['home/Summary/Import/Packing-List']);

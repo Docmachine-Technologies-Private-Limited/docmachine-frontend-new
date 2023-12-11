@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -15,7 +13,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
   templateUrl: './letterof-credit.component.html',
   styleUrls: ['./letterof-credit.component.scss', '../../commoncss/common.component.scss']
 })
-export class LetterofCreditComponent implements OnInit {
+export class UploadLetterofCreditComponent implements OnInit {
   publicUrl: any = '';
   UPLOAD_FORM: any = [];
   CURRENCY_LIST: any = [];
@@ -32,7 +30,6 @@ export class LetterofCreditComponent implements OnInit {
   };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup: FormGroup;
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
@@ -42,6 +39,8 @@ export class LetterofCreditComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
+  @Input('upload') upload:Boolean=false;
+  @Input('PopupUpload') PopupUpload:any='';
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -144,7 +143,11 @@ export class LetterofCreditComponent implements OnInit {
               (data) => {
                 console.log('king123');
                 console.log(data);
-                this.router.navigate(['home/Summary/Export/letterofcredit-lc']);
+                if (this.upload==false) {
+                  this.router.navigate(['home/Summary/Export/letterofcredit-lc']);
+                }else{
+                  this.PopupUpload?.displayHidden
+                }
               }, (error) => {
                 console.log('error');
               }

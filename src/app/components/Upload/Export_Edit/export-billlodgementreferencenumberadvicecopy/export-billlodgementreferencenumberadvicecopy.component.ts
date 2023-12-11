@@ -133,16 +133,16 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
         },
         blcopyrefNumber: {
           type: "text",
-          value: "",
-          label: "BlCopyRef Number*",
+          value: this.data?.blcopyrefNumber,
+          label: "BlCopyRef Number",
           rules: {
             required: true,
           }
         },
         amount: {
           type: "text",
-          value: "",
-          label: "BlCopyRef Amount*",
+          value: this.data?.amount,
+          label: "BlCopyRef Amount",
           rules: {
             required: true,
           }
@@ -189,6 +189,7 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateBlcopyref(e.value, this.data?._id).subscribe((res: any) => {
         console.log(res, 'addBlcopyref');
         this.toastr.success(`Blcopyref Document Updated Successfully`);

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup} from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
@@ -233,7 +232,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
       this.validator.buildForm({
         commercialNumber: {
           type: "text",
-          value: "",
+          value: this.data?.commercialNumber,
           label: "Commercial Invoice Number",
           rules: {
             required: true,
@@ -241,7 +240,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: this.PIPO_DATA?.currency,
+          value: this.data?.currency,
           label: "Currency",
           rules: {
             required: true,
@@ -249,7 +248,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         amount: {
           type: "number",
-          value: "",
+          value: this.data?.amount,
           label: "Amount",
           rules: {
             required: true,
@@ -257,24 +256,11 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         InvoiceDate: {
           type: "date",
-          value: "",
+          value: this.data?.InvoiceDate,
           label: "Invoice Date",
           rules: {
             required: true,
           }
-        },
-        IfAdvancePaid: {
-          type: "yesnocheckbox",
-          value: 'true',
-          label: "If Advance Paid?",
-          rules: {
-            required: false,
-          },
-          YesNo: 'true',
-          text1: 'No',
-          text2: 'Yes',
-          HideShowInput: ["AdvanceInfo"],
-          class: 'row-reverse'
         },
         AdvanceInfo: {
           type: "formGroup",
@@ -284,16 +270,15 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           rules: {
             required: true,
           },
-          disabled: true,
           formArray: [
             [
               {
                 type: "AdvanceInfo",
-                value: "",
+                value: this.data?.AdvanceInfo,
                 label: "Select Advance no.",
                 name: 'AdvanceInfoAny',
                 rules: {
-                  required: false,
+                  required: true,
                 },
                 AutoFillType: "formGroup",
                 autofillinput: [
@@ -304,29 +289,29 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
               },
               {
                 type: "text",
-                value: "",
+                value: this.data?.AdvanceNo,
                 label: "Advance No.",
                 name: 'AdvanceNo',
                 rules: {
-                  required: false,
+                  required: true,
                 },
               },
               {
                 type: "currency",
-                value: "",
-                label: "Advance Currency*",
+                value: this.data?.AdvanceCurrency,
+                label: "Advance Currency",
                 name: 'AdvanceCurrency',
                 rules: {
-                  required: false,
+                  required: true,
                 },
               },
               {
                 type: "number",
-                value: "",
+                value: this.data?.AdvanceAmount,
                 label: "Advance Amount",
                 name: 'AdvanceAmount',
                 rules: {
-                  required: false,
+                  required: true,
                 },
               }
             ]
@@ -334,34 +319,34 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         },
         InvoiceValue: {
           type: "number",
-          value: "",
+          value: this.data?.InvoiceValue,
           label: "Commodity Amount",
           rules: {
-            required: false,
+            required: true,
           }
         },
         FreightValue: {
           type: "number",
-          value: "",
+          value: this.data?.FreightValue,
           label: "Freight Amount",
           rules: {
-            required: false,
+            required: true,
           }
         },
         InsuranceValue: {
           type: "number",
-          value: "",
+          value: this.data?.InsuranceValue,
           label: "Insurance Amount",
           rules: {
-            required: false,
+            required: true,
           }
         },
         MiscCharges: {
           type: "number",
-          value: "",
+          value: this.data?.MiscCharges,
           label: "Misc Charges",
           rules: {
-            required: false,
+            required: true,
           }
         },
         // AdditionalDocuments: {
@@ -434,6 +419,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
             }
           });
         } else {
+          e.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
           this.documentService.updateCommercial(e, this.data?._id).subscribe((res: any) => {
             this.toastr.success(`Commercial Invoice Updated Successfully`);
             this.router.navigate(['home/Summary/Import/Commercial']);

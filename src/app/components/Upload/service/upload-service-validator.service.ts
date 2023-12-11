@@ -72,6 +72,7 @@ export class UploadServiceValidatorService implements OnInit {
   UPLOAD_STATUS: boolean = false;
   USER_DATA: any = [];
   PIPO_TRANSCTION_LIST: any = [];
+  DROP_DOWN_DATA: any = [];
 
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
@@ -315,6 +316,22 @@ export class UploadServiceValidatorService implements OnInit {
           console.log(this.dynamicFormGroup, formGroupFields, model, 'dynamicFormGroup');
           await this.dynamicFormGroup;
           await resolve(this.dynamicFormGroup);
+          await this.FIELDS_DATA[id]?.forEach(element => {
+            if (element?.type === "yesnocheckbox") {
+              element?.HideShowInput?.forEach(HideShowInputElement => {
+                const index = this.FIELDS_DATA[id]?.findIndex(val => val?.fieldName?.includes(HideShowInputElement?.name));
+                if (index != -1) {
+                  if (HideShowInputElement?.status == true) {
+                    this.FIELDS_DATA[id][index]['disabled'] = false;
+                    this.dynamicFormGroup[id]?.controls[HideShowInputElement?.name]?.enable();
+                  } else {
+                    this.FIELDS_DATA[id][index]['disabled'] = true;
+                    this.dynamicFormGroup[id]?.controls[HideShowInputElement?.name]?.disable();
+                  }
+                }
+              });
+            }
+          });
         }
       })
     })

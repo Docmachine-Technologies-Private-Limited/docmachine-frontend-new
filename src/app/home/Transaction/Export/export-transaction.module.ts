@@ -24,7 +24,7 @@ import { ExportBillLodgementControllerData } from './Controller/Export-Bill-Lodg
     TransactionDashboardComponent,
     PackingCreditRequestComponent,
     NewExportHomeTransactionComponent,
-    NewExportBillLodgementComponent
+    NewExportBillLodgementComponent,
   ],
   providers:[ExportBillLodgementControllerData],
   imports: [

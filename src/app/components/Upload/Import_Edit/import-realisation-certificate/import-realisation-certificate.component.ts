@@ -103,7 +103,7 @@ export class EditImportRealisationCertificateComponent implements OnInit {
       this.validator.buildForm({
         EbrcNumber: {
           type: "text",
-          value: "",
+          value: this.data?.EbrcNumber,
           label: "EBRC Number*",
           rules: {
             required: true,
@@ -149,6 +149,7 @@ export class EditImportRealisationCertificateComponent implements OnInit {
         }
       });
     } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateEbrc(e.value,this.data?._id).subscribe((res: any) => {
         this.toastr.success(`ebrcs Added Successfully`);
         this.router.navigate(['home/Summary/Import/Realisation-Cretificate']);

@@ -81,6 +81,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           rules: {
             required: true,
           },
+          Show: true,
           RemitterLabel: "Select Remitter Ref No.",
         },
         date: {
@@ -203,7 +204,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
     e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
     e.value.origin = e.value.origin?.value != undefined ? e.value.origin.value : e.value.origin;
-
     console.log('doc', temp, this.pipourl1);
     console.log('onSubmitIrAdvice', e.value);
     this.documentService.getInvoice_No({
@@ -213,8 +213,8 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       if (resp.data.length == 0) {
         this.CustomConfirmDialogModel.YesDialogModel(`You are updating remitter info in pipo no.</br>
         </br>
-        <p>PIPO Remitter info. : </br> ${this.PIPO_DATA?.RemitterName?.Remitter_Name}</p>
-        <p>New Remitter info. : </br> ${e?.value?.TrackerRef?.Remitter_Name}</p>
+        <p>PIPO Remitter info. : </br> ${this.PIPO_DATA?.RemitterName}</p>
+        <p>New Remitter info. : </br> ${e?.value?.TrackerRef?.RemitterName}</p>
         `, 'Comments', (CustomConfirmDialogRes: any) => {
           this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
             console.log('addIrAdvice', data);
