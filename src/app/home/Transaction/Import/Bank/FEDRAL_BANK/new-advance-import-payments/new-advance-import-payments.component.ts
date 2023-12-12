@@ -129,20 +129,20 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     this.publicUrl = '';
     setTimeout(() => {
       this.validator.buildForm({
-        BankDebit: {
+        BankCharges: {
           type: "BankCheckBox",
           value: "",
           label: "Select Bank",
           Banklabel: "To Debit Charges Account no. & Account Type*",
           TypeOfCurrency: "INR",
           Banklabel2: "To Debit Account no. & Account Type*",
-          fieldName2: "BankCharges",
+          fieldName2: "BankDebit",
           ChargeLabelHide: true,
           rules: {
             required: true,
           }
         },
-        BankCharges: {
+        BankDebit: {
           type: "xyzzzz",
           value: "",
           label: "",

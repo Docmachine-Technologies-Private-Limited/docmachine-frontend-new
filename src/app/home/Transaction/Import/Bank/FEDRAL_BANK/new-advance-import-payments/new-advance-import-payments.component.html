@@ -23,9 +23,9 @@
                         <tr class="table-tr mt-2 pr-3" [ngClass]="{'isDisabled':item?.isDisabled==true}"
                             *ngFor="let item of this.PIPO_LIST;let i=index">
                             <td scope="col" class="col-td-th-1">
-                                <input [disabled]="item?.isDisabled" *ngIf="item?.ischecked==false || item?.ischecked==undefined"
+                                <input [disabled]="item?.isDisabled" *ngIf="item?.paymentTerm[0]?.BalanceAmount!=0 || item?.paymentTerm[0]?.BalanceAmount==undefined"
                                     [checked]="item?.ischecked" type="checkbox" (change)="PIPO_LIST_CHECKED(item,i)">
-                                <label *ngIf="item?.ischecked==true">Completed</label>
+                                <label *ngIf="item?.paymentTerm[0]?.BalanceAmount==0">Completed</label>
                             </td>
                             <td scope="col" class="col-td-th-1">{{item?.pi_poNo}}</td>
                             <td scope="col" class="col-td-th-1">{{item?.currency}}</td>
