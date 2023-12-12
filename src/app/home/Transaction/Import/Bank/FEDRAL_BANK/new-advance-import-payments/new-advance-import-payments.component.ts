@@ -133,9 +133,9 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
           type: "BankCheckBox",
           value: "",
           label: "Select Bank",
-          Banklabel: "To Debit Account no. & Account Type*",
+          Banklabel: "To Debit Charges Account no. & Account Type*",
           TypeOfCurrency: "INR",
-          Banklabel2: "To Debit Charges Account no. & Account Type*",
+          Banklabel2: "To Debit Account no. & Account Type*",
           fieldName2: "BankCharges",
           ChargeLabelHide: true,
           rules: {
