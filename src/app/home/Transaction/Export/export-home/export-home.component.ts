@@ -3458,7 +3458,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           Number: [],
           Documents: [],
           Id: [],
-          SB_REF: []
+          SB_REF: [],
+          SBDATA:[]
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
