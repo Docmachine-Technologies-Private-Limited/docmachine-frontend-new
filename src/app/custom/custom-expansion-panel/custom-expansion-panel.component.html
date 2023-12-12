@@ -58,9 +58,6 @@
                             <td scope="col" class="col-td-th-1" *ngIf="item?.disabled==true">
                                 <p class="error-p">Check Status Panel...</p>
                             </td>
-                            <!-- <td scope="col" class="col-td-th-1" *ngIf="item?.RoleType=='Approver'">
-                                <p class="error-p">Access Denied...</p>
-                            </td> -->
                         </tr>
                         <tr class="table-tr table-tr-1 tr-box-shadow" *ngIf="this.Expansion==true"
                             [ngClass]="{'Table-Show':item?.isExpand==true,'Table-Hide':item?.isExpand==false}">
@@ -136,11 +133,9 @@
                 </custom-table-expansion-panel>
             </div>
         </tbody>
-        <!-- <h5 style="padding: 20px;
-        color: #939393;" *ngIf="this.PAGINATOR_TABLE_DATA?.length==0">Data Not Found...</h5> -->
     </table>
     <div class="pagination">
-        <mat-paginator *ngIf="this.PAGINATOR_DATA.length!=0" [length]="this.items.length" [pageSize]="10" [pageSizeOptions]="this.PAGINATOR_DATA"
+        <mat-paginator *ngIf="this.PAGINATOR_DATA.length!=0" [length]="this.PageSize" [pageSize]="10" [pageSizeOptions]="this.PAGINATOR_DATA"
             (page)="this.PAGINATION_EVENT($event,this.TableName,this.TableFormat)" aria-label="Select page">
         </mat-paginator>
     </div>

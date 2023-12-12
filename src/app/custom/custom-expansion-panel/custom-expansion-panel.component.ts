@@ -35,7 +35,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('TableFormat') TableFormat: any = [];
   @Input('ExpansionShowHide') Expansion: boolean = true;
   @Input('ActionRequired') ActionRequired: boolean = true;
-  
+
   @Output('ViewChanges') ViewChanges: any = new EventEmitter();
   @Output('EditChanges') EditChanges: any = new EventEmitter();
   @Output('DeleteChanges') DeleteChanges: any = new EventEmitter();
@@ -91,7 +91,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
 
   async PAGINATION_EVENT(event: any, tableName: any, TableFormat) {
     if (this.filteranytablepagination.USER_RESULT?.sideMenu == "export") {
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageSize }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex+1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
         this.PAGINATOR_TABLE_DATA = [];
         setTimeout(() => {
           this.PAGINATOR_TABLE_DATA = res?.items;
@@ -99,7 +99,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
         console.log(event, this.ORIGNAL_DATA, this.items, tableName, res, this.PAGINATOR_TABLE_DATA, res?.items, 'PAGINATION_EVENT');
       })
     } else if (this.filteranytablepagination.USER_RESULT?.sideMenu == "import") {
-      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageSize }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex+1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
         this.PAGINATOR_TABLE_DATA = [];
         setTimeout(() => {
           this.PAGINATOR_TABLE_DATA = res?.items;

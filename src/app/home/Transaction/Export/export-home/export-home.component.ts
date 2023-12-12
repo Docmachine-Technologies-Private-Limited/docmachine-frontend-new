@@ -282,6 +282,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     }, { skip: 0, limit: 1000 }, 'blCopy').subscribe((res: any) => {
       this.Blcopyref = res?.data;
       this.Blcopyrefoldata = res?.data;
+      res?.data?.forEach(element => {
+        element['CheckBoxEnabled'] = false;
+        element['SBDATA'] = [];
+      });
       this.Export_Direct_Dispatch = res?.data;
       console.log(res, this.Export_Direct_Dispatch, 'getBlcopyref')
     });
@@ -319,7 +323,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     console.log(this.GROUP_NAME_LIST, "GROUP_NAME_LIST")
-   
+
     this.documentService.getMaster(1).subscribe((res: any) => {
       console.log(res, 'res.data')
       res.data.forEach((element, i) => {
@@ -3086,16 +3090,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     console.log(this.ShippingbillNumberfilter, this.item1, 'ShippingbillNumberfilter');
 
   }
-  ClickbankNumber(name: any, inputsetvalue: any, hiddenprops) {
-    let indexof = this.SELECT_bankreferencenumber.indexOf(name);
-    if (indexof == -1) {
-      this.SELECT_bankreferencenumber.push(name);
-    } else {
-      this.SELECT_bankreferencenumber.splice(indexof, 1);
-    }
-    console.log(name, this.SELECT_bankreferencenumber, inputsetvalue, 'bnk_reff')
-    this.bankRef = name;
-  }
 
   REMITTANCE_DATA: any = ''
   Remittancedata(data: any, i: any) {
@@ -3123,11 +3117,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   ArrayToString(array: any) {
     return array.length != 0 ? array.toString() : '';
   }
-  
+
   loadPopup(inputid, hidden_props) {
-   
+
   }
-  
+
   loadPopupThirdParty(event, dropdownid) {
     var timer: any = null;
     clearTimeout(timer);
@@ -3468,7 +3462,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
-        var SB_DATA: any = [];
         this.SELECT_bankreferencenumber.forEach(element => {
           const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
           tempfilter.forEach((filterItem) => {
@@ -3477,7 +3470,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             filterValue['Number'].push(filterItem?.blcopyrefNumber)
             filterValue['Documents'].push(filterItem?.doc)
             filterValue['Id'].push(filterItem?._id);
-            filterValue['SB_REF'].push(filterItem?.SbRef[0])
+            filterItem?.SBDATA?.forEach(SBDATAElement => {
+              filterValue['SB_REF'].push(SBDATAElement?._id)
+              filterValue['SBDATA'].push(filterItem?.SBDATAElement);
+            });
             tempPipo.push(filterItem?.pipo[0]?._id)
           })
         });
@@ -3523,7 +3519,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
               this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
                 console.log('king123');
                 console.log(data);
-                filterValue['SB_REF']?.forEach((element, i) => {
+                filterValue['SBDATA']?.forEach((element, i) => {
                   let sumfixAmount2 = parseFloat(element?.fobValue) - parseFloat(updatedata?.Inward_amount_for_disposal);
                   this.documentService.Update_Amount_by_Table({
                     tableName: 'masterrecord',
@@ -3532,16 +3528,17 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                       balanceAvai: sumfixAmount2,
                       TrackerRef: [updatedata?._id],
                       TrackerData: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1],
-                      TransactionStatus: true
+                      TransactionStatus: true,
+                      AMOUNT_STATUS: "Use"
                     }
                   }).subscribe((r3: any) => {
-                    if (filterValue['SB_REF']?.length == (i + 1)) {
+                    if (filterValue['SBDATA']?.length == (i + 1)) {
                       this.router.navigate(['/home/dashboardTask'])
                     }
                     this.toastr.success("Update Changes...")
                   });
                 });
-                if (filterValue['SB_REF']?.length == 0) {
+                if (filterValue['SBDATA']?.length == 0) {
                   this.router.navigate(['/home/dashboardTask'])
                 }
               }, (error) => {
@@ -3553,6 +3550,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
   checkapproval(name: any) {
     return new Promise((resolve, reject) => {
       this.documentService.getApprovedData(name + '_' + this.randomId(5)).subscribe((res: any) => {
@@ -3588,6 +3586,26 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     };
     let pipoValue = this.itemArray[0];
     this.fillForm(pipoValue);
+  }
+
+  ClickbankNumber(name: any, inputsetvalue: any, hiddenprops) {
+    let indexof = this.SELECT_bankreferencenumber.indexOf(name);
+    if (indexof == -1) {
+      this.SELECT_bankreferencenumber.push(name);
+    } else {
+      this.SELECT_bankreferencenumber.splice(indexof, 1);
+    }
+    console.log(name, this.SELECT_bankreferencenumber, inputsetvalue, 'bnk_reff')
+    this.bankRef = name;
+  }
+
+  SBAdd($event, data, BLIndex, SBIndex) {
+    if ($event?.target?.checked == true) {
+      this.Blcopyref[BLIndex]['SBDATA'].push(data);
+    } else {
+      this.Blcopyref[BLIndex]['SBDATA'].splice(SBIndex, 1);
+    }
+    console.log(this.Blcopyref, "SELECT_bankreferencenumber")
   }
 
 }

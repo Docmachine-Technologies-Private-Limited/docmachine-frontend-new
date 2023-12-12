@@ -1052,7 +1052,8 @@
                 </div>
                 <div *ngIf='code === c && generatePurpose[j] == code'>
                   <div>
-                    <div id="mainId" class="bc" *ngIf="donePurpose[j] != code && this.PREVIWES_URL!='' && this.PREVIWES_URL!=undefined">
+                    <div id="mainId" class="bc"
+                      *ngIf="donePurpose[j] != code && this.PREVIWES_URL!='' && this.PREVIWES_URL!=undefined">
                       <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
                         name="Disposal Instruction" [src]="this.PREVIWES_URL" width="700px"
                         height="500px"></app-pdf-viewer>
@@ -1277,34 +1278,60 @@
     [customstyle]="{'margin':'90px auto auto !important','max-width': '55vw !important','margin-right': '0px !important'}"
     class="p-2" id="BillLodgementNumber" [modalbodystyle]="{'height': '500px'}"
     name="Bill Lodgement Number Selection Panel">
-    <div class="col-12 pt-3">
-      <table class="table mb-0 mt-2">
-        <thead>
-          <tr class="table-tr">
-            <th scope="col" class="col-td-th-1">#</th>
-            <th scope="col" class="col-td-th-3">Party Name</th>
-            <th scope="col" class="col-td-th-3">SB NUMBER</th>
-            <th scope="col" class="col-td-th-3">Lodgement no</th>
-            <th scope="col" class="col-td-th-3">Currency</th>
-            <th scope="col" class="col-td-th-3">Amount</th>
-            <th scope="col" class="col-td-th-3">SB AMOUNT</th>
-            <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-tr" *ngFor='let item of this.Export_Direct_Dispatch let i = index'>
-            <td class="col-td-th-1"><input type="checkbox"
-                (change)="ClickbankNumber(item?.blcopyrefNumber,'.bnk_reff','')" /></td>
-            <td class="col-td-th-3">{{item?.pipo[0]?.buyerName}}</td>
-            <td class="col-td-th-3">{{item?.SbRef[0]?.sbno}}</td>
-            <td class="col-td-th-3">{{item?.blcopyrefNumber}}</td>
-            <td class="col-td-th-3">{{item?.SbRef[0]?.fobCurrency}}</td>
-            <td class="col-td-th-3">{{item?.amount}}</td>
-            <td class="col-td-th-3">{{item?.SbRef[0]?.fobValue}}</td>
-            <td class="col-td-th-3">{{this.calculateAmount(item?.amount,item?.SbRef[0]?.fobValue)}}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-12 pt-3 BillLodgementNumber">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="data?.CheckBoxEnabled"
+          *ngFor='let data of this.Export_Direct_Dispatch;let i = index'>
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              <div class="d-flex flex-column" (click)="$event.stopPropagation();">
+                <mat-panel-title>
+                  Bill Lodgement DETAILS
+                </mat-panel-title>
+                <table class="table mb-0">
+                  <tbody>
+                    <tr class="table-tr">
+                      <td class="col-td-th-1">
+                        <input [checked]="data?.CheckBoxEnabled" type="checkbox"
+                          (click)="data.CheckBoxEnabled=!data?.CheckBoxEnabled" ngModel (click)="ClickbankNumber(data?.blcopyrefNumber,'.bnk_reff','')"/>
+                      </td>
+                      <td scope="col" class="col-td-th-3">Party Name : {{data?.buyerName}}</td>
+                      <td scope="col" class="col-td-th-3">Lodgement no. : {{data?.blcopyrefNumber}}</td>
+                      <td scope="col" class="col-td-th-3">Amount {{data?.amount}}</td>
+                      <td scope="col" class="col-td-th-3">AVAILABLE AMOUNT :
+                        {{this.calculateAmount(data?.amount,data?.SbRef[0]?.fobValue)}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="d-flex flex-column">
+            <table class="table mb-0">
+              <thead>
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-3">#</th>
+                  <th scope="col" class="col-td-th-3">Party Name</th>
+                  <th scope="col" class="col-td-th-3">SB NUMBER</th>
+                  <th scope="col" class="col-td-th-3">Currency</th>
+                  <th scope="col" class="col-td-th-3">SB AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-tr" *ngFor='let SbData of data?.SbRef;let j = index'>
+                  <td class="col-td-th-1">
+                    <input type="checkbox" (click)="SBAdd($event,SbData,i,j)" ngModel/>
+                  </td>
+                  <td class="col-td-th-3">{{SbData?.buyerName}}</td>
+                  <td class="col-td-th-3">{{SbData?.sbno}}</td>
+                  <td class="col-td-th-3">{{SbData?.fobCurrency}}</td>
+                  <td class="col-td-th-3">{{SbData?.fobValue}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   </app-custom-model>
 </div>
@@ -1314,7 +1341,8 @@
     #ShippingBill>
     <div class="DDDD p-3" *ngIf="this.documentService.MT102_SUBJECT!=''">
       <app-pdf-viewer [htmlload]="true" class="pt-3" [downloadShow]="false"
-        src="home/Transaction/Export/new-direct-dispatch/ExportBillRegularization" width="100%" height="500px"></app-pdf-viewer>
+        src="home/Transaction/Export/new-direct-dispatch/ExportBillRegularization" width="100%"
+        height="500px"></app-pdf-viewer>
     </div>
   </app-custom-model>
 </div>
