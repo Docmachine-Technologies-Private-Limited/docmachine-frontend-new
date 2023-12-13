@@ -3347,6 +3347,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                 this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
                   console.log('king123');
                   console.log(data);
+                  this.toastr.success("Transaction created successfully...")
                   this.router.navigate(['/home/dashboardTask'])
                 }, (error) => {
                   console.log('error');
@@ -3432,6 +3433,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                       id: this.ToForwardContract_Selected[0]?._id, data:
                         { AvailableAmount: (parseInt(this.ToForwardContract_Selected[0]?.BookingAmount) - parseInt(this.ToForwardContract_Selected[0]?.UtilizedAmount)) }
                     }).subscribe((res) => {
+                      this.toastr.success("Transaction created successfully...")
                       this.router.navigate(['/home/dashboardTask'])
                     })
                   })
@@ -3459,7 +3461,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           Documents: [],
           Id: [],
           SB_REF: [],
-          SBDATA:[]
+          SBDATA: []
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
@@ -3518,7 +3520,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                 ]
               }
               this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
-                console.log('king123');
                 console.log(data);
                 filterValue['SBDATA']?.forEach((element, i) => {
                   let sumfixAmount2 = parseFloat(element?.fobValue) - parseFloat(updatedata?.Inward_amount_for_disposal);
@@ -3536,11 +3537,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                     if (filterValue['SBDATA']?.length == (i + 1)) {
                       this.router.navigate(['/home/dashboardTask'])
                     }
-                    this.toastr.success("Update Changes...")
+                    this.toastr.success("Transaction created successfully...")
                   });
                 });
                 if (filterValue['SBDATA']?.length == 0) {
                   this.router.navigate(['/home/dashboardTask'])
+                  this.toastr.success("Transaction created successfully...")
                 }
               }, (error) => {
                 console.log('error');
@@ -3589,12 +3591,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.fillForm(pipoValue);
   }
 
-  ClickbankNumber(name: any, inputsetvalue: any, hiddenprops) {
+  ClickbankNumber(name: any, inputsetvalue: any, data: any) {
     let indexof = this.SELECT_bankreferencenumber.indexOf(name);
     if (indexof == -1) {
+      data['CheckBoxEnabled'] = true
       this.SELECT_bankreferencenumber.push(name);
     } else {
       this.SELECT_bankreferencenumber.splice(indexof, 1);
+      data['CheckBoxEnabled'] = false
     }
     console.log(name, this.SELECT_bankreferencenumber, inputsetvalue, 'bnk_reff')
     this.bankRef = name;

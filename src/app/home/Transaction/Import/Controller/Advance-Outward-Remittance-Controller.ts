@@ -50,7 +50,25 @@ export class AdvanceOutwardRemittanceControllerData {
 
                     if (filldata != undefined && filldata != null && filldata != '') {
                         getAllFields[1]?.setText('');
-                        getAllFields[2]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount);
+                        let PIPO_DATA: any = {
+                            Currency: [],
+                            Amount: [],
+                            Commodity: [],
+                            HSCODE: [],
+                            DATE_NO: [],
+                            CurrencyAmount: []
+                        }
+
+                        filldata?.paymentTerm?.forEach(element => {
+                            PIPO_DATA["Currency"].push(element?.PIPO_LIST?.currency)
+                            PIPO_DATA["Amount"].push(element?.RemittanceAmount)
+                            PIPO_DATA["Commodity"].push(element?.PIPO_LIST?.commodity)
+                            PIPO_DATA["HSCODE"].push(element?.PIPO_LIST?.HSCODE)
+                            PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.date+' | '+element?.PIPO_LIST?.pi_poNo)
+                            PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency+' | ' +element?.PIPO_LIST?.amount)
+                        });
+                        let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+                        getAllFields[2]?.setText(PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
 
                         var today: any = new Date();
                         var dd = String(today.getDate()).padStart(2, '0');
@@ -65,19 +83,37 @@ export class AdvanceOutwardRemittanceControllerData {
                         getAllFields[7]?.setText(today[0]?.split('')[2]);
                         getAllFields[8]?.setText(today[0]?.split('')[3]);
 
-                        getAllFields[9]?.setText(filldata?.paymentTerm[0]?.RemittanceAmount != undefined ? filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount) : '-');
+                        getAllFields[9]?.setText(RemittanceAmount != undefined ? PIPO_DATA?.Currency[0] + ' ' + this.ConvertNumberToWords(RemittanceAmount) : '-');
                         getAllFields[10]?.setText('');
-                        getAllFields[11]?.uncheck()
-                        getAllFields[12]?.uncheck()
                         getAllFields[13]?.setText('-');
                         getAllFields[14]?.setText('-');
-                        getAllFields[15]?.uncheck();
-                        getAllFields[16]?.uncheck();
 
-                        getAllFields[26]?.uncheck();
-                        getAllFields[27]?.uncheck();
-                        getAllFields[28]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.commodity?.join(','));
-                        getAllFields[29]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
+                        if (filldata?.Remittance == "Full/Final") {
+                            getAllFields[11]?.uncheck()
+                            getAllFields[12]?.check()
+                        } else if (filldata?.Remittance == "Part") {
+                            getAllFields[11]?.check()
+                            getAllFields[12]?.uncheck()
+                        }
+
+                        if (filldata?.ForeignBankCharges == "ForeignBankCharges") {
+                            getAllFields[15]?.uncheck();
+                            getAllFields[16]?.check();
+                        } else if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
+                            getAllFields[15]?.check();
+                            getAllFields[16]?.uncheck();
+                        }
+
+                        if (filldata?.TypeofGoods == "Capital") {
+                            getAllFields[26]?.check();
+                            getAllFields[27]?.uncheck();
+                        } else if (filldata?.TypeofGoods == "NonCapital") {
+                            getAllFields[26]?.uncheck();
+                            getAllFields[27]?.check();
+                        }
+
+                        getAllFields[28]?.setText(PIPO_DATA?.Commodity?.join('\n'));
+                        getAllFields[29]?.setText(PIPO_DATA?.HSCODE?.join('\n'));
 
                         getAllFields[30]?.setText(filldata?.BankCharges?.accNumber?.split('')[0]);
                         getAllFields[31]?.setText(filldata?.BankCharges?.accNumber?.split('')[1]);
@@ -141,23 +177,25 @@ export class AdvanceOutwardRemittanceControllerData {
                             getAllFields[76]?.setText(ToForwardContract_Selected[0]?.UtilizedAmount);
                             getAllFields[77]?.setText(ToForwardContract_Selected[0]?.NetRate);
                         }
-                        getAllFields[80]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
+                        getAllFields[78]?.setText(PIPO_DATA?.DATE_NO?.join('\n'));
+                        getAllFields[79]?.setText(PIPO_DATA?.CurrencyAmount?.join('\n'));
+                        getAllFields[80]?.setText(PIPO_DATA?.HSCODE?.join('\n'));
                         getAllFields[81]?.setText('');
                         getAllFields[82]?.setText('');
                         getAllFields[83]?.setText('');
                         getAllFields[84]?.setText('');
                         getAllFields[85]?.setText(moment(new Date()).format('DD-MM-YYYY'));
                         getAllFields[86]?.setText('');
-                        getAllFields[87]?.uncheck();
-                        getAllFields[88]?.uncheck()
-                        getAllFields[89]?.uncheck();
-                        getAllFields[90]?.uncheck();
-                        getAllFields[91]?.uncheck();
-                        getAllFields[92]?.uncheck();
-                        getAllFields[93]?.setText(moment(new Date()).format('DD-MM-YYYY'));
-                        getAllFields[94]?.setText('');
-                        getAllFields[95]?.setText('');
-                        getAllFields[96]?.setText('');
+                        // getAllFields[87]?.uncheck();
+                        // getAllFields[88]?.uncheck()
+                        // getAllFields[89]?.uncheck();
+                        // getAllFields[90]?.uncheck();
+                        // getAllFields[91]?.uncheck();
+                        // getAllFields[92]?.uncheck();
+                        getAllFields[94]?.setText(moment(new Date()).format('DD-MM-YYYY'));
+                        // getAllFields[94]?.setText('');
+                        // getAllFields[95]?.setText('');
+                        // getAllFields[96]?.setText('');
                     }
                     const mergedPdfFile = await pdfDoc.save();
                     var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
@@ -193,13 +231,13 @@ export class AdvanceOutwardRemittanceControllerData {
                     getAllFields[14]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
                     getAllFields[15]?.setText(`Swift Code: ${BENEFICIARY_DETAILS[0]?.beneBankSwiftCode} \nABA: \nRouting No: \nSort Code: ${BENEFICIARY_DETAILS[0]?.sortCode}`);
                     getAllFields[48]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-                    
+
                     if (filldata != undefined && filldata != null && filldata != '') {
                         getAllFields[7]?.setText(`INR A/C No : NIL \n For: (CCY & AMT) NIL\n FCY A/C No : ${BENEFICIARY_DETAILS[0]?.beneAccNo}\n For: (CCY & AMT) ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount}/-\n (Remittance by SEZ units from INR accounts to beneficiaries within India not allowed)`);
                         getAllFields[12]?.setText(`${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount} /- (${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount)}) - 30% ADVANCE PAYMENT.`);
                         getAllFields[19]?.setText(`Expected Date of Despatch / Download (software) – MID OF NOV 2022\n Name of the shipping company / airlines – (BY SEA)\n Port of Despatch - ANY PORT IN COLOMBIA\n Destination Port – CHENNAI, INDIA \nProforma Invoice details (In case the invoice is older than 6 months then a declaration\n to be provided stating the reason for delay)\n PROFORMA Invoice no - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} CO Dated ${filldata?.paymentTerm[0]?.PIPO_LIST?.date}, Amount - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} ${filldata?.paymentTerm[0]?.RemittanceAmount}/-`);
                         getAllFields[20]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
-                        
+
                     }
                     const mergedPdfFile = await pdfDoc.save();
                     var base64String1 = this._arrayBufferToBase64(mergedPdfFile)

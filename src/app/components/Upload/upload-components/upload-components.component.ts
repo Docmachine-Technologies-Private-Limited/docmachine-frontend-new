@@ -348,32 +348,34 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.IMAGE_UPLOAD_LIST.splice(index, 1);
     this.validator.dynamicFormGroup[this.id]?.controls[autofill?.key]?.setValue(this.IMAGE_UPLOAD_LIST);
   }
-  
+
   HideShowInput(event: any, item: any) {
-    if (item[event] != undefined) {
-      item[event]?.forEach(element => {
-        const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element));
-        if (index != -1 && item[event] != undefined) {
-          this.validator.FIELDS_DATA[this.id][index]['disabled'] = true;
-          this.validator.dynamicFormGroup[this.id]?.controls[element]?.disable();
-        } else {
-          this.validator.FIELDS_DATA[this.id][index]['disabled'] = false;
-          this.validator.dynamicFormGroup[this.id]?.controls[element]?.enable();
-        }
-      });
-    } else {
-      for (const key in item) {
-        const element = item[key];
-        element.forEach(fieldNameelement => {
-          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(fieldNameelement));
+    if (item != undefined) {
+      if (item[event] != undefined) {
+        item[event]?.forEach(element => {
+          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(element));
           if (index != -1 && item[event] != undefined) {
             this.validator.FIELDS_DATA[this.id][index]['disabled'] = true;
-            this.validator.dynamicFormGroup[this.id]?.controls[fieldNameelement]?.disable();
+            this.validator.dynamicFormGroup[this.id]?.controls[element]?.disable();
           } else {
             this.validator.FIELDS_DATA[this.id][index]['disabled'] = false;
-            this.validator.dynamicFormGroup[this.id]?.controls[fieldNameelement]?.enable();
+            this.validator.dynamicFormGroup[this.id]?.controls[element]?.enable();
           }
         });
+      } else {
+        for (const key in item) {
+          const element = item[key];
+          element.forEach(fieldNameelement => {
+            const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(fieldNameelement));
+            if (index != -1 && item[event] != undefined) {
+              this.validator.FIELDS_DATA[this.id][index]['disabled'] = true;
+              this.validator.dynamicFormGroup[this.id]?.controls[fieldNameelement]?.disable();
+            } else {
+              this.validator.FIELDS_DATA[this.id][index]['disabled'] = false;
+              this.validator.dynamicFormGroup[this.id]?.controls[fieldNameelement]?.enable();
+            }
+          });
+        }
       }
     }
   }
@@ -413,36 +415,38 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   }
 
   onLabelNameChange(event: any, item: any) {
-    console.log(item, item[event], event, "onLabelNameChange if")
-    if (item[event] != undefined) {
-      for (const key in item[event]) {
-        const element = item[event][key];
-        const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(key));
-        if (index != -1) {
-          if (element['type'] = "formGroup") {
-            this.validator.FIELDS_DATA[this.id][index]["NewformArray"]?.forEach(NewformArrayelement => {
-              let ObjectKEYS: any = Object.keys(NewformArrayelement);
-              const formGroupindex = ObjectKEYS?.findIndex(val => val.includes(element?.name));
-              if (formGroupindex != -1) {
-                NewformArrayelement[element?.name]["label"] = element?.labelChange
-              }
-            });
+    if (item != undefined) {
+      console.log(item, item[event], event, "onLabelNameChange if")
+      if (item[event] != undefined) {
+        for (const key in item[event]) {
+          const element = item[event][key];
+          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(key));
+          if (index != -1) {
+            if (element['type'] = "formGroup") {
+              this.validator.FIELDS_DATA[this.id][index]["NewformArray"]?.forEach(NewformArrayelement => {
+                let ObjectKEYS: any = Object.keys(NewformArrayelement);
+                const formGroupindex = ObjectKEYS?.findIndex(val => val.includes(element?.name));
+                if (formGroupindex != -1) {
+                  NewformArrayelement[element?.name]["label"] = element?.labelChange
+                }
+              });
+            }
           }
         }
-      }
-    } else {
-      for (const key in item["default"]) {
-        const element = item["default"][key];
-        const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(key));
-        if (index != -1) {
-          if (element['type'] = "formGroup") {
-            this.validator.FIELDS_DATA[this.id][index]["NewformArray"]?.forEach(NewformArrayelement => {
-              let ObjectKEYS: any = Object.keys(NewformArrayelement);
-              const formGroupindex = ObjectKEYS?.findIndex(val => val.includes(element?.name));
-              if (formGroupindex != -1) {
-                NewformArrayelement[element?.name]["label"] = element?.labelChange
-              }
-            });
+      } else {
+        for (const key in item["default"]) {
+          const element = item["default"][key];
+          const index = this.validator.FIELDS_DATA[this.id]?.findIndex(val => val?.fieldName?.includes(key));
+          if (index != -1) {
+            if (element['type'] = "formGroup") {
+              this.validator.FIELDS_DATA[this.id][index]["NewformArray"]?.forEach(NewformArrayelement => {
+                let ObjectKEYS: any = Object.keys(NewformArrayelement);
+                const formGroupindex = ObjectKEYS?.findIndex(val => val.includes(element?.name));
+                if (formGroupindex != -1) {
+                  NewformArrayelement[element?.name]["label"] = element?.labelChange
+                }
+              });
+            }
           }
         }
       }
