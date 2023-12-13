@@ -16,7 +16,10 @@
                             <th scope="col" class="col-td-th-1">CURRENCY</th>
                             <th scope="col" class="col-td-th-1">AMOUNT</th>
                             <th scope="col" class="col-td-th-2">UTILISED ORM REF NO.</th>
-                            <th scope="col" class="col-td-th-1">BALANCE</th>
+                            <th scope="col" class="col-td-th-2">ORM Amount</th>
+                            <th scope="col" class="col-td-th-2">BOE Amount</th>
+                            <th scope="col" class="col-td-th-2">BOE Balance</th>
+                            <th scope="col" class="col-td-th-2">Balance INV</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -24,14 +27,17 @@
                             *ngFor="let item of this.PIPO_LIST;let i=index">
                             <td scope="col" class="col-td-th-1">
                                 <input [disabled]="item?.isDisabled" *ngIf="item?.paymentTerm[0]?.BalanceAmount!=0 || item?.paymentTerm[0]?.BalanceAmount==undefined"
-                                    [checked]="item?.ischecked" type="checkbox" (change)="PIPO_LIST_CHECKED(item,i)">
+                                    [checked]="item?.ischecked" type="checkbox" (click)="PIPO_LIST_CHECKED($event,item,i)">
                                 <label *ngIf="item?.paymentTerm[0]?.BalanceAmount==0">Completed</label>
                             </td>
                             <td scope="col" class="col-td-th-1">{{item?.pi_poNo}}</td>
                             <td scope="col" class="col-td-th-1">{{item?.currency}}</td>
                             <td scope="col" class="col-td-th-1">{{item?.paymentTerm[0]?.amount}}</td>
                             <td scope="col" class="col-td-th-2">{{this.getORMRef(item?.AdviceRef)}}</td>
-                            <td scope="col" class="col-td-th-1">{{item?.paymentTerm[0]?.BalanceAmount}}</td>
+                            <td scope="col" class="col-td-th-2">{{this.getORMAmount(item?.AdviceRef)}}</td>
+                            <td scope="col" class="col-td-th-2">{{this.getBOEAmount(item?.boeRef)}}</td>
+                            <td scope="col" class="col-td-th-2">{{this.getBOEBalanceAmount(item?.boeRef)}}</td>
+                            <td scope="col" class="col-td-th-2">{{item?.paymentTerm[0]?.BalanceAmount}}</td>
                         </tr>
                     </tbody>
                 </table>

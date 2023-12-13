@@ -1292,8 +1292,7 @@
                   <tbody>
                     <tr class="table-tr">
                       <td class="col-td-th-1">
-                        <input [checked]="data?.CheckBoxEnabled" type="checkbox"
-                          (click)="data.CheckBoxEnabled=!data?.CheckBoxEnabled" ngModel (click)="ClickbankNumber(data?.blcopyrefNumber,'.bnk_reff','')"/>
+                        <input [checked]="data?.CheckBoxEnabled" type="checkbox" ngModel (click)="ClickbankNumber(data?.blcopyrefNumber,'.bnk_reff',data)"/>
                       </td>
                       <td scope="col" class="col-td-th-3">Party Name : {{data?.buyerName}}</td>
                       <td scope="col" class="col-td-th-3">Lodgement no. : {{data?.blcopyrefNumber}}</td>
