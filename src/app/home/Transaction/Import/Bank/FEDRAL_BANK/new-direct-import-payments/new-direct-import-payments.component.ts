@@ -98,7 +98,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     public pdfmerge: MergePdfListService,
     private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public DirectPaymentsControllerData:DirectPaymentsControllerData,
+    public DirectPaymentsControllerData: DirectPaymentsControllerData,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -127,6 +127,64 @@ export class NewDirectImportPaymentsComponent implements OnInit {
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
+      let PIPO_FORM: any = []
+      this.validator?.PIPO_LIST?.forEach(element => {
+        let form: any = [
+          {
+            type: "PIPO_LIST",
+            value: element,
+            label: "PIPO DETAILS",
+            name: 'PIPO_LIST',
+            rules: {
+              required: true,
+            },
+            Inputdisabled: true,
+            callback: (item: any) => {
+              const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+              let currentVal = item?.value;
+              item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.paymentTerm[0]?.BalanceAmount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+              myForm['touched'] = true;
+              myForm['status'] = 'VALID';
+              console.log(item, "callback")
+            },
+          },
+          {
+            type: "text",
+            value: element?.paymentTerm[0]?.BalanceAmount,
+            label: "Available Amount",
+            name: 'amount',
+            rules: {
+              required: true,
+            },
+            disabled: true,
+          },
+          {
+            type: "currency",
+            value: element?.currency,
+            label: "Currency",
+            name: 'currency',
+            rules: {
+              required: true,
+            },
+            disabled: true
+          },
+          {
+            type: "TextValiadtion",
+            value: element?.paymentTerm[0]?.BalanceAmount,
+            label: "Remittance amount",
+            name: 'RemittanceAmount',
+            EqualName: "amount",
+            rules: {
+              required: true,
+            },
+            errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+          }
+        ]
+        PIPO_FORM.push(form)
+      });
       this.validator.buildForm({
         BankDebit: {
           type: "BankCheckBox",
@@ -165,61 +223,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: [
-            [
-              {
-                type: "PIPO_LIST",
-                value: this.validator.PIPO_LIST[0],
-                label: "Select",
-                name: 'PIPO_LIST',
-                rules: {
-                  required: true,
-                },
-                callback: (item: any) => {
-                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                  let currentVal = item?.value;
-                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.paymentTerm[0]?.BalanceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
-                  myForm['touched'] = true;
-                  myForm['status'] = 'VALID';
-                  console.log(item, "callback")
-                },
-              },
-              {
-                type: "text",
-                value: this.validator.PIPO_LIST[0]?.paymentTerm[0]?.BalanceAmount,
-                label: "Available Amount",
-                name: 'amount',
-                rules: {
-                  required: true,
-                },
-                disabled: true,
-              },
-              {
-                type: "currency",
-                value: this.validator.PIPO_LIST[0]?.currency,
-                label: "Currency",
-                name: 'currency',
-                rules: {
-                  required: true,
-                },
-                disabled: true
-              },
-              {
-                type: "TextValiadtion",
-                value: this.validator.PIPO_LIST[0]?.paymentTerm[0]?.BalanceAmount,
-                label: "Remittance amount",
-                name: 'RemittanceAmount',
-                EqualName: "amount",
-                rules: {
-                  required: true,
-                },
-                errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
-              },
-            ]
-          ]
+          formArray: PIPO_FORM
         },
         BOE_DETAIILS: {
           type: "formGroup",
@@ -350,24 +354,39 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     });
   }
 
-  PIPO_LIST_CHECKED(value: any, index: any) {
-    this.validator.PIPO_LIST = [value]
-    this.validator.BOE_LIST = value?.boeRef?.filter((item: any) => item?.currency == value?.currency);
-    this.documentService.filterAnyTable({
-      Currency: value?.currency,
-    }, 'ForwardContract').subscribe((res: any) => {
-      this.ForwardContractDATA = res?.data;
-      console.log(res, 'ForwardContractDATA')
-    });
-    this.response(null);
-    this.PIPO_LIST.forEach((element, i) => {
-      if (i != index) {
-        element['ischecked'] = false;
-      } else {
-        element['ischecked'] = true;
-      }
-    });
+  PIPO_LIST_CHECKED($event, value: any, index: any) {
+    if ($event?.target?.checked == true) {
+      this.validator.PIPO_LIST.push(value)
+      let boeRef: any = []
+      this.validator.PIPO_LIST?.forEach(element => {
+        element?.boeRef?.filter((item: any) => item?.currency == element?.currency)?.forEach(boeelement => {
+          boeRef?.push(boeelement)
+        });
+      });
+      this.validator.BOE_LIST = boeRef;
+      console.log(boeRef, "boeRef")
+      this.documentService.filterAnyTable({
+        Currency: value?.currency,
+      }, 'ForwardContract').subscribe((res: any) => {
+        this.ForwardContractDATA = res?.data;
+        console.log(res, 'ForwardContractDATA')
+      });
+      this.response(null);
+      value['ischecked'] = true;
+    } else {
+      this.validator.PIPO_LIST.splice(index, 1);
+      let boeRef: any = []
+      this.validator.PIPO_LIST?.forEach(element => {
+        element?.boeRef?.filter((item: any) => item?.currency == element?.currency)?.forEach(boeelement => {
+          boeRef?.push(boeelement)
+        });
+      });
+      this.validator.BOE_LIST = boeRef;
+      value['ischecked'] = false;
+      this.response(null);
+    }
   }
+
 
   getORMRef(advice: any) {
     let advicelist: any = [];
@@ -375,6 +394,38 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       advicelist.push(element?.billNo)
     });
     return advicelist?.join(',')
+  }
+
+  getORMAmount(advice: any) {
+    let advicelist: any = [];
+    advice?.forEach(element => {
+      advicelist.push(element?.amount)
+    });
+    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+  }
+
+  getBOERef(advice: any) {
+    let advicelist: any = [];
+    advice?.forEach(element => {
+      advicelist.push(element?.billNo)
+    });
+    return advicelist?.join(',')
+  }
+
+  getBOEAmount(advice: any) {
+    let advicelist: any = [];
+    advice?.forEach(element => {
+      advicelist.push(element?.invoiceAmount)
+    });
+    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.invoiceAmount), 0);
+  }
+
+  getBOEBalanceAmount(advice: any) {
+    let advicelist: any = [];
+    advice?.forEach(element => {
+      advicelist.push(element?.balanceAmount)
+    });
+    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.balanceAmount), 0);
   }
 
   SELECTED_PIPO_ORM_DETAILS: any = [];
@@ -390,7 +441,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     this.formvalue = formvalue?.value
     console.log(formvalue, "SubmitButton")
   }
-  
+
   TIMEOUT: any = ''
   async fillForm(filldata: any) {
     console.log(filldata, "sdfsdfsdfdsfd")
@@ -410,19 +461,19 @@ export class NewDirectImportPaymentsComponent implements OnInit {
               console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
             }, 200);
           })
-      }else if (this.BankId == "H_B_L_7") {
+      } else if (this.BankId == "H_B_L_7") {
         this.DirectPaymentsControllerData.BankFormatLoad().
-        HDFC(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
-          this.VISIBLITY_PDF = false;
-          this.PREVIWES_URL = ''
-          this.TIMEOUT = setTimeout(async () => {
-            this.PREVIWES_URL = res;
-            this.VISIBLITY_PDF = true;
-            await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-            console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-          }, 200);
-        })
+          HDFC(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
+            this.VISIBLITY_PDF = false;
+            this.PREVIWES_URL = ''
+            this.TIMEOUT = setTimeout(async () => {
+              this.PREVIWES_URL = res;
+              this.VISIBLITY_PDF = true;
+              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
+              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+            }, 200);
+          })
       }
     })
   }

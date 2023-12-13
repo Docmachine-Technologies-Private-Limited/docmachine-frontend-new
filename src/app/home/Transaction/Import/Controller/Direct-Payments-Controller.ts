@@ -37,6 +37,7 @@ export class DirectPaymentsControllerData {
                             widget?.getOrCreateBorderStyle()?.setWidth(0);
                         }
                     });
+                    getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.BranchName);
                     getAllFields[16]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
                     getAllFields[23]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
                     getAllFields[24]?.setText(BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban);
@@ -47,8 +48,25 @@ export class DirectPaymentsControllerData {
                     getAllFields[29]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
 
                     if (filldata != undefined && filldata != null && filldata != '') {
-                        getAllFields[0]?.setText('');
                         getAllFields[1]?.setText('');
+                        let PIPO_DATA: any = {
+                            Currency: [],
+                            Amount: [],
+                            Commodity: [],
+                            HSCODE: [],
+                            DATE_NO: [],
+                            CurrencyAmount: []
+                        }
+
+                        filldata?.paymentTerm?.forEach(element => {
+                            PIPO_DATA["Currency"].push(element?.PIPO_LIST?.currency)
+                            PIPO_DATA["Amount"].push(element?.RemittanceAmount)
+                            PIPO_DATA["Commodity"].push(element?.PIPO_LIST?.commodity)
+                            PIPO_DATA["HSCODE"].push(element?.PIPO_LIST?.HSCODE)
+                            PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.date+' | '+element?.PIPO_LIST?.pi_poNo)
+                            PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency+' | ' +element?.PIPO_LIST?.amount)
+                        });
+                        let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
                         let paymentTermSum: any = filldata?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0)
                         getAllFields[2]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + paymentTermSum?.toString());
 
@@ -64,7 +82,7 @@ export class DirectPaymentsControllerData {
                         getAllFields[6]?.setText(today[1]?.split('')[1]);
                         getAllFields[7]?.setText(today[0]?.split('')[2]);
                         getAllFields[8]?.setText(today[0]?.split('')[3]);
-                        getAllFields[9]?.setText(paymentTermSum?.toString() != undefined ? filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(paymentTermSum?.toString()) : '-');
+                        getAllFields[9]?.setText(RemittanceAmount?.toString() != undefined ? PIPO_DATA?.Currency[0] + ' ' + this.ConvertNumberToWords(RemittanceAmount?.toString()) : '-');
 
                         let BOE_DETAIILSSum: any = filldata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
                         let BOE_DETAIILS_FILTER: any = {
@@ -144,7 +162,7 @@ export class DirectPaymentsControllerData {
                             getAllFields[76]?.setText(ToForwardContract_Selected[0]?.UtilizedAmount);
                             getAllFields[77]?.setText(ToForwardContract_Selected[0]?.NetRate);
                         }
-                        getAllFields[80]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
+                        getAllFields[80]?.setText(PIPO_DATA?.HSCODE?.join('\n'));
                         getAllFields[81]?.setText('');
                         getAllFields[82]?.setText('');
                         getAllFields[83]?.setText('');
@@ -157,9 +175,7 @@ export class DirectPaymentsControllerData {
                         getAllFields[96]?.setText('');
                         getAllFields[97]?.setText('');
                     }
-                    const pdfBytes = await pdfDoc.save()
-                    var base64String = this._arrayBufferToBase64(pdfBytes)
-                    const x = 'data:application/pdf;base64,' + base64String;
+                    await pdfDoc.save()
                     const mergedPdf = await PDFDocument.create();
                     const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
                     copiedPages.forEach((page) => {
