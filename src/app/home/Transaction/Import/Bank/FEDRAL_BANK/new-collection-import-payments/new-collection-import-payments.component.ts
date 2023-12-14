@@ -14,11 +14,12 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../../../serv
 import { StorageEncryptionDecryptionService } from '../../../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../../../merge-pdf-list.service';
 import moment from 'moment';
+import { ImportLetterHeadService } from '../../../../../AllBankFormat/FederalBank/import-letter-head/import-letter-head.component';
 
 @Component({
   selector: 'app-new-collection-import-payments',
   templateUrl: './new-collection-import-payments.component.html',
-  styleUrls: ['./new-collection-import-payments.component.scss','../../../../commoncss/common.component.scss']
+  styleUrls: ['./new-collection-import-payments.component.scss', '../../../../commoncss/common.component.scss']
 })
 export class NewCollectionImportPaymentsComponent implements OnInit {
   @Input('data') data: any = [];
@@ -97,6 +98,7 @@ export class NewCollectionImportPaymentsComponent implements OnInit {
     public pdfmerge: MergePdfListService,
     private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
+    public ImportLetterHeadService: ImportLetterHeadService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -110,7 +112,7 @@ export class NewCollectionImportPaymentsComponent implements OnInit {
         this.ForwardContractDATA = res?.data;
         console.log(res, 'daasdasdasdasdasdadsd')
       });
-      this.validator.PIPO_LIST=[];
+      this.validator.PIPO_LIST = [];
       this.response(null);
     });
   }
@@ -448,9 +450,13 @@ export class NewCollectionImportPaymentsComponent implements OnInit {
         setTimeout(() => {
           this.PREVIWES_URL = x1;
           this.VISIBLITY_PDF = true;
-          setTimeout(() => {
-            resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+          setTimeout(async () => {
+            await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+              this.LETTER_HEAD_URL = letterhead;
+              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+            })
           }, 200);
         }, 200);
       }

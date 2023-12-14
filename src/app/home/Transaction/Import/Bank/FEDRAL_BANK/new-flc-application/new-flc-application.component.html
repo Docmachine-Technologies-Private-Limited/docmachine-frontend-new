@@ -8,11 +8,9 @@
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                         *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
                         [src]="PREVIWES_URL"></app-pdf-viewer>
-                    <div id="federal-bank-letter-head">
-                        <federal-bank-import-letter-head *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                            [data]="[this.ExportBillLodgement_Form,this.BENEFICIARY_DETAILS[0]]"
-                            (url)="urlletterhead($event)"></federal-bank-import-letter-head>
-                    </div>
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.LETTER_HEAD_URL!='' && this.VISIBLITY_PDF==true" name="Letter Head"
+                        [src]="this.LETTER_HEAD_URL"></app-pdf-viewer>
                     <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
                         <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                             [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
@@ -156,8 +154,8 @@
             <button type="submit" class="btn btn-primary" style="height: 35px;margin: auto;margin-top: 12px;"
                 (click)="ResetQuestion()">Reset</button>
         </div>
-        <upload-components SubmitName="AutoFill" id="AutofillLCTableForm" [BUTTON_PANEL_SHOW]="false" [BUTTON_PANEL_HIDE]="false"
-            #AutofillLCTableFormPanel></upload-components>
+        <upload-components SubmitName="AutoFill" id="AutofillLCTableForm" [BUTTON_PANEL_SHOW]="false"
+            [BUTTON_PANEL_HIDE]="false" #AutofillLCTableFormPanel></upload-components>
         <div class="modal-footer" style="position: fixed;
         bottom: 40px;
         right: 20px;

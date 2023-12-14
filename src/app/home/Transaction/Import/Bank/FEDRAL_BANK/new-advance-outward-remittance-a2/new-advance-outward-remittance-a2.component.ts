@@ -15,6 +15,7 @@ import { StorageEncryptionDecryptionService } from '../../../../../../Storage/st
 import { MergePdfListService } from '../../../../../merge-pdf-list.service';
 import moment from 'moment';
 import { A2AdvanceOutwardRemittanceControllerData } from '../../../Controller/A2-Advance-Outward-Remittance-Controller';
+import { ImportLetterHeadService } from '../../../../../AllBankFormat/FederalBank/import-letter-head/import-letter-head.component';
 
 @Component({
   selector: 'app-new-advance-outward-remittance-a2',
@@ -99,6 +100,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public A2AdvanceOutwardRemittanceControllerData:A2AdvanceOutwardRemittanceControllerData,
+    public ImportLetterHeadService: ImportLetterHeadService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -899,9 +901,13 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             this.TIMEOUT = setTimeout(async () => {
               this.PREVIWES_URL = res;
               this.VISIBLITY_PDF = true;
-              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+                this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
+            
             }, 200);
           })
       }else if (this.BankId == "H_B_L_7") {
@@ -912,9 +918,12 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           this.TIMEOUT = setTimeout(async () => {
             this.PREVIWES_URL = res;
             this.VISIBLITY_PDF = true;
-            await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-            console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+            this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+              this.LETTER_HEAD_URL = letterhead;
+              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+            })
           }, 200);
         })
       }

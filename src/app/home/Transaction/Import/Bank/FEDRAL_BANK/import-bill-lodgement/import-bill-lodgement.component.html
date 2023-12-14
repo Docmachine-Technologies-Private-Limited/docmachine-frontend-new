@@ -42,11 +42,9 @@
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                         *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
                         [src]="PREVIWES_URL"></app-pdf-viewer>
-                    <div id="federal-bank-letter-head">
-                        <federal-bank-import-letter-head *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                            [data]="[this.ExportBillLodgement_Form,this.BENEFICIARY_DETAILS[0]]"
-                            (url)="urlletterhead($event)"></federal-bank-import-letter-head>
-                    </div>
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.LETTER_HEAD_URL!='' && this.VISIBLITY_PDF==true" name="Letter Head"
+                        [src]="this.LETTER_HEAD_URL"></app-pdf-viewer>
                     <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
                         <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                             [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
@@ -123,8 +121,7 @@
         </table>
     </div>
     <custom-model-header>
-        <button type="button" class="btn btn-primary"
-            [disabled]="ToForwardContract_Selected?.length!=0?false:true"
+        <button type="button" class="btn btn-primary" [disabled]="ToForwardContract_Selected?.length!=0?false:true"
             (click)="DoneButton();FORWARD_CONTRACTPANEL?.displayHidden">Done</button>
     </custom-model-header>
 </app-custom-model>

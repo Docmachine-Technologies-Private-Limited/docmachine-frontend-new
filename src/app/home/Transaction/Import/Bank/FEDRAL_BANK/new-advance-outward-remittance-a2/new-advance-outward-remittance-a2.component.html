@@ -8,11 +8,9 @@
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                         *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
                         [src]="PREVIWES_URL"></app-pdf-viewer>
-                    <div id="federal-bank-letter-head">
-                        <federal-bank-import-letter-head *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                            [data]="[this.ExportBillLodgement_Form,this.BENEFICIARY_DETAILS[0]]"
-                            (url)="urlletterhead($event)"></federal-bank-import-letter-head>
-                    </div>
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.LETTER_HEAD_URL!='' && this.VISIBLITY_PDF==true" name="Letter Head"
+                        [src]="this.LETTER_HEAD_URL"></app-pdf-viewer>
                     <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
                         <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                             [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
@@ -20,10 +18,11 @@
                 </div>
                 <upload-components [BUTTON_PANEL_SHOW]="true" [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF"
                     id="IMPORT_TRANSACTION" (BankEvent)="setSelectedBankDetails($event)"
-                    (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)" (AddButton)="AddButton($event,CA_DATA_PANEL,CB_DATA_PANEL)"
+                    (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
+                    (AddButton)="AddButton($event,CA_DATA_PANEL,CB_DATA_PANEL)"
                     (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)" #RawValueEventPanel>
                     <button class="btn btn-primary" *ngIf="this.Send_for_Approval_button==true"
-                    (click)="PREVIEWS_PANEL?.displayShow" style="position: absolute;
+                        (click)="PREVIEWS_PANEL?.displayShow" style="position: absolute;
                     bottom: 10px;
                     right: 100px;
                     height: 50px;">Previews</button>
@@ -49,9 +48,8 @@
             grid-template-columns: repeat(3,1fr);
             box-shadow: unset;
             background-color: #f0f0f0;
-            " 
-            (SubmitEvent)="this.RequestforCBSubmit(From_Client_Generate_15_CBEventPanel?.geForm,From_Client_Generate_15_CBEventPanel)"
-            (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK_CB_15($event)" id="From_Client_Generate_15_CB"
+            " (SubmitEvent)="this.RequestforCBSubmit(From_Client_Generate_15_CBEventPanel?.geForm,From_Client_Generate_15_CBEventPanel)"
+                (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK_CB_15($event)" id="From_Client_Generate_15_CB"
                 #From_Client_Generate_15_CBEventPanel>
             </upload-components>
         </custom-mat-step>
@@ -75,8 +73,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="table-tr"
-                            *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                        <tr class="table-tr" *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
                             <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
                             <td scope="col" class="col-td-th-2">{{item?.LCNoBOENo}}</td>
                             <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
@@ -111,8 +108,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table-tr"
-                        *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                    <tr class="table-tr" *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
                         <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
                         <td scope="col" class="col-td-th-2">{{item?.LCNoBOENo}}</td>
                         <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
@@ -133,8 +129,7 @@
 <app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="CA_DATA"
     name="CA SELECTION" #CA_DATA_PANEL>
     <custom-model-header>
-        <button type="button" class="btn btn-primary"
-        (click)="addCA();CA_DATA_PANEL?.displayHidden">Done</button>
+        <button type="button" class="btn btn-primary" (click)="addCA();CA_DATA_PANEL?.displayHidden">Done</button>
     </custom-model-header>
     <div class="p-2" style="position: relative;">
         <div class="row p-2 modal-bg">
@@ -158,8 +153,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-tr"
-                                *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                            <tr class="table-tr" *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
                                 <td scope="col" class="col-td-th-1">
                                     <input type="checkbox" (click)="CA_SELECTION($event,i)" />
                                 </td>
@@ -185,8 +179,7 @@
 <app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="CB_DATA"
     name="CB SELECTION" #CB_DATA_PANEL>
     <custom-model-header>
-        <button type="button" class="btn btn-primary"
-        (click)="addCB();CB_DATA_PANEL?.displayHidden">Done</button>
+        <button type="button" class="btn btn-primary" (click)="addCB();CB_DATA_PANEL?.displayHidden">Done</button>
     </custom-model-header>
     <div class="p-2" style="position: relative;">
         <div class="row p-2 modal-bg">
@@ -210,8 +203,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-tr"
-                                *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                            <tr class="table-tr" *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
                                 <td scope="col" class="col-td-th-1">
                                     <input type="checkbox" (click)="CB_SELECTION($event,i)" />
                                 </td>

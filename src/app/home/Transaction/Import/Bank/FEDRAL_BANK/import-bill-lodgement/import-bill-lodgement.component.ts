@@ -14,6 +14,7 @@ import { StorageEncryptionDecryptionService } from '../../../../../../Storage/st
 import { MergePdfListService } from '../../../../../merge-pdf-list.service';
 import { CustomConfirmDialogModelComponent } from '../../../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 import { ImportBillLodgementControllerData } from '../../../Controller/Import-BillLodgement-Controller';
+import { ImportLetterHeadService } from '../../../../../AllBankFormat/FederalBank/import-letter-head/import-letter-head.component';
 
 @Component({
   selector: 'app-import-bill-lodgement',
@@ -97,7 +98,8 @@ export class ImportBillLodgementComponent implements OnInit {
     public pdfmerge: MergePdfListService,
     private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public ImportBillLodgementControllerData:ImportBillLodgementControllerData,
+    public ImportBillLodgementControllerData: ImportBillLodgementControllerData,
+    public ImportLetterHeadService: ImportLetterHeadService,
     public userService: UserService) {
     ImportBillLodgementData.clear();
   }
@@ -329,7 +331,7 @@ export class ImportBillLodgementComponent implements OnInit {
     this.formvalue = formvalue?.value
     console.log(formvalue, "SubmitButton")
   }
-  
+
   TIMEOUT: any = ''
   async fillForm(filldata: any) {
     console.log(filldata, "sdfsdfsdfdsfd")
@@ -344,24 +346,30 @@ export class ImportBillLodgementComponent implements OnInit {
             this.TIMEOUT = setTimeout(async () => {
               this.PREVIWES_URL = res;
               this.VISIBLITY_PDF = true;
-              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+                this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
             }, 200);
           })
-      }else if (this.BankId == "H_B_L_7") {
+      } else if (this.BankId == "H_B_L_7") {
         this.ImportBillLodgementControllerData.BankFormatLoad().
-        HDFC(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
-          this.VISIBLITY_PDF = false;
-          this.PREVIWES_URL = ''
-          this.TIMEOUT = setTimeout(async () => {
-            this.PREVIWES_URL = res;
-            this.VISIBLITY_PDF = true;
-            await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-            console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-          }, 200);
-        })
+          HDFC(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
+            this.VISIBLITY_PDF = false;
+            this.PREVIWES_URL = ''
+            this.TIMEOUT = setTimeout(async () => {
+              this.PREVIWES_URL = res;
+              this.VISIBLITY_PDF = true;
+              await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+                this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
+            }, 200);
+          })
       }
     })
   }

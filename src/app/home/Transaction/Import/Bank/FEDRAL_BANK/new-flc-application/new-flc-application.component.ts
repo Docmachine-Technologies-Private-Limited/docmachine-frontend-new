@@ -17,6 +17,7 @@ import moment from 'moment'
 import { filterAnyTablePagination } from '../../../../../../service/v1/Api/filterAnyTablePagination';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../../../confirm-dialog-box/confirm-dialog-box.component';
+import { ImportLetterHeadService } from '../../../../../AllBankFormat/FederalBank/import-letter-head/import-letter-head.component';
 
 @Component({
   selector: 'app-new-flc-application',
@@ -108,6 +109,7 @@ export class NewFLCApplicationComponent implements OnInit {
     public dialog: MatDialog,
     public filteranytablepagination: filterAnyTablePagination,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
+    public ImportLetterHeadService: ImportLetterHeadService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
     this.EDIT_OPTION_ENABLED = false;
@@ -988,9 +990,13 @@ export class NewFLCApplicationComponent implements OnInit {
           setTimeout(() => {
             this.PREVIWES_URL = x1;
             this.VISIBLITY_PDF = true;
-            setTimeout(() => {
-              resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
+            setTimeout(async () => {
+              await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+                this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
             }, 200);
           }, 200);
         })
