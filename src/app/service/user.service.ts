@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AppConfig } from '../../environments/environment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { Router } from "@angular/router";
 import { BehaviorSubjectListService } from "../home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
 
@@ -684,6 +684,20 @@ export class UserService implements OnInit {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(`${this.api_base}/documents/uploadFiletoS3Bucket`, data, httpOptions);
+  }
+  
+  public UploadListS3Buket(UrlList: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let API_CREATE:any=[];
+    for (let index = 0; index < UrlList.length; index++) {
+      const element = UrlList[index];
+      API_CREATE.push(this.http.post(`${this.api_base}/documents/uploadFiletoS3Bucket`, element, httpOptions))
+    }
+    return forkJoin(API_CREATE);
   }
 
   public getReadS3File(data: any) {

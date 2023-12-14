@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PDFDocument } from 'pdf-lib';
 import { UserService } from '../../../../../../service/user.service';
 import { DocumentService } from '../../../../../../service/document.service';
 import { DateFormatService } from '../../../../../../DateFormat/date-format.service';
@@ -13,8 +12,9 @@ import { ExportBillLodgementData } from '../../../../Export/new-export-bill-lodg
 import { AprrovalPendingRejectTransactionsService } from '../../../../../../service/aprroval-pending-reject-transactions.service';
 import { StorageEncryptionDecryptionService } from '../../../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../../../merge-pdf-list.service';
-import moment from 'moment';
 import { AdvanceOutwardRemittanceControllerData } from '../../../Controller/Advance-Outward-Remittance-Controller';
+import { A1WIthFEMAControllerData } from '../../../Controller/A1-Form-with-FEMA';
+import { ImportLetterHeadService } from '../../../../../AllBankFormat/FederalBank/import-letter-head/import-letter-head.component';
 
 @Component({
   selector: 'app-new-advance-import-payments',
@@ -99,6 +99,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     private actRoute: ActivatedRoute,
     public AdvanceOutwardRemittanceControllerData: AdvanceOutwardRemittanceControllerData,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
+    public ImportLetterHeadService: ImportLetterHeadService,
+    public A1WIthFEMAControllerData: A1WIthFEMAControllerData,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -128,65 +130,65 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-    let PIPO_FORM:any=[]
-    this.validator?.PIPO_LIST?.forEach(element => {
-     let form:any=[
-      {
-        type: "PIPO_LIST",
-        value: element,
-        label: "PIPO DETAILS",
-        name: 'PIPO_LIST',
-        rules: {
-          required: true,
-        },
-        Inputdisabled: true,
-        callback: (item: any) => {
-          const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-          let currentVal = item?.value;
-          item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.paymentTerm[0]?.BalanceAmount);
-          myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
-          myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
-          myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
-          myForm['touched'] = true;
-          myForm['status'] = 'VALID';
-          console.log(item, "callback")
-        },
-      },
-      {
-        type: "text",
-        value: element?.paymentTerm[0]?.BalanceAmount,
-        label: "Available Amount",
-        name: 'amount',
-        rules: {
-          required: true,
-        },
-        disabled: true,
-      },
-      {
-        type: "currency",
-        value: element?.currency,
-        label: "Currency",
-        name: 'currency',
-        rules: {
-          required: true,
-        },
-        disabled: true
-      },
-      {
-        type: "TextValiadtion",
-        value: element?.paymentTerm[0]?.BalanceAmount,
-        label: "Remittance amount",
-        name: 'RemittanceAmount',
-        EqualName: "amount",
-        rules: {
-          required: true,
-        },
-        errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
-      }
-     ]
-      PIPO_FORM.push(form)
-    });
-    console.log(PIPO_FORM,this.validator.PIPO_LIST,"PIPO_FORM")
+      let PIPO_FORM: any = []
+      this.validator?.PIPO_LIST?.forEach(element => {
+        let form: any = [
+          {
+            type: "PIPO_LIST",
+            value: element,
+            label: "PIPO DETAILS",
+            name: 'PIPO_LIST',
+            rules: {
+              required: true,
+            },
+            Inputdisabled: true,
+            callback: (item: any) => {
+              const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+              let currentVal = item?.value;
+              item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.paymentTerm[0]?.BalanceAmount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+              myForm['touched'] = true;
+              myForm['status'] = 'VALID';
+              console.log(item, "callback")
+            },
+          },
+          {
+            type: "text",
+            value: element?.paymentTerm[0]?.BalanceAmount,
+            label: "Available Amount",
+            name: 'amount',
+            rules: {
+              required: true,
+            },
+            disabled: true,
+          },
+          {
+            type: "currency",
+            value: element?.currency,
+            label: "Currency",
+            name: 'currency',
+            rules: {
+              required: true,
+            },
+            disabled: true
+          },
+          {
+            type: "TextValiadtion",
+            value: element?.paymentTerm[0]?.BalanceAmount,
+            label: "Remittance amount",
+            name: 'RemittanceAmount',
+            EqualName: "amount",
+            rules: {
+              required: true,
+            },
+            errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+          }
+        ]
+        PIPO_FORM.push(form)
+      });
+      console.log(PIPO_FORM, this.validator.PIPO_LIST, "PIPO_FORM")
       this.validator.buildForm({
         BankCharges: {
           type: "BankCheckBox",
@@ -208,6 +210,24 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        A1Form: {
+          type: "yesnocheckbox",
+          value: '',
+          label: "Do you want A1 Form?",
+          rules: {
+            required: true,
+          },
+          YesNo: '',
+        },
+        FEMAForm: {
+          type: "yesnocheckbox",
+          value: '',
+          label: "Do you want FEMA Form?",
+          rules: {
+            required: true,
+          },
+          YesNo: '',
         },
         forwardCall: {
           type: "button",
@@ -332,20 +352,28 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
 
   PIPO_LIST_CHECKED($event, value: any, index: any) {
     if ($event?.target?.checked == true) {
-      this.validator.PIPO_LIST.push(value)
-      this.documentService.filterAnyTable({
-        Currency: value?.currency,
-      }, 'ForwardContract').subscribe((res: any) => {
-        this.ForwardContractDATA = res?.data;
-        console.log(res, 'ForwardContractDATA')
-      });
-      this.response(null);
-      value['ischecked'] = true;
-    }else{
-      this.validator.PIPO_LIST.splice(index,1);
+      let currecnyvalidator = this.validator.PIPO_LIST?.filter((item) => item?.currency == value?.currency);
+      if (currecnyvalidator?.length != 0 || this.validator.PIPO_LIST?.length == 0) {
+        this.validator.PIPO_LIST.push(value)
+        this.documentService.filterAnyTable({
+          Currency: value?.currency,
+        }, 'ForwardContract').subscribe((res: any) => {
+          this.ForwardContractDATA = res?.data;
+          console.log(res, 'ForwardContractDATA')
+        });
+        this.response(null);
+        value['ischecked'] = true;
+      } else {
+        this.toastr.error("Please same currecny type...")
+        value['ischecked'] = false;
+        $event.target.checked = false
+      }
+    } else {
+      this.validator.PIPO_LIST.splice(index, 1);
       this.validator.BOE_LIST = value?.boeRef
       value['ischecked'] = false;
       this.response(null);
+      $event.target.checked = false
     }
   }
 
@@ -403,7 +431,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     console.log(formvalue, "SubmitButton")
   }
 
+  A1_FORM_VISIBLE: boolean = false;
+  A1_FORM_PDF_URL: any = ''
+  FEMA_FORM_VISIBLE: boolean = false;
+  FEMA_FORM_PDF_URL: any = ''
   TIMEOUT: any = ''
+
   async fillForm(filldata: any) {
     console.log(filldata, "sdfsdfsdfdsfd")
     this.VISIBLITY_PDF = false;
@@ -415,10 +448,43 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
             this.PREVIWES_URL = ''
             this.TIMEOUT = setTimeout(async () => {
               this.PREVIWES_URL = res;
-              this.VISIBLITY_PDF = true;
-              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              this.VISIBLITY_PDF = true
+              if (filldata?.A1Form?.id == "A1Form") {
+                if (filldata?.A1Form?.bool == true) {
+                  this.A1_FORM_PDF_URL = ''
+                  this.A1_FORM_VISIBLE = false;
+                  this.A1WIthFEMAControllerData.BankFormatLoad()?.Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata,
+                    this.ToForwardContract_Selected)?.A1FORM()?.then((A1PDFres) => {
+                      console.log(A1PDFres, "A1PDFres")
+                      this.A1_FORM_VISIBLE = true;
+                      this.A1_FORM_PDF_URL = A1PDFres;
+                    })
+                } else {
+                  this.A1_FORM_PDF_URL = ''
+                  this.A1_FORM_VISIBLE = false;
+                }
+              }
+              if (filldata?.FEMAForm?.id == "FEMAForm") {
+                if (filldata?.FEMAForm?.bool == true) {
+                  this.FEMA_FORM_VISIBLE = false;
+                  this.FEMA_FORM_PDF_URL = ''
+                  this.A1WIthFEMAControllerData.BankFormatLoad()?.Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata,
+                    this.ToForwardContract_Selected)?.FEMAPDF()?.then((A1PDFres) => {
+                      console.log(A1PDFres, "FEMAPDF")
+                      this.FEMA_FORM_VISIBLE = true;
+                      this.FEMA_FORM_PDF_URL = A1PDFres;
+                    })
+                } else {
+                  this.FEMA_FORM_VISIBLE = false;
+                  this.FEMA_FORM_PDF_URL = ''
+                }
+              };
+              await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+                this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
             }, 200);
           })
       } else if (this.BankId == "H_B_L_7") {
@@ -429,9 +495,41 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
             this.TIMEOUT = setTimeout(async () => {
               this.PREVIWES_URL = res;
               this.VISIBLITY_PDF = true;
-              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              if (filldata?.A1Form?.id == "A1Form") {
+                if (filldata?.A1Form?.bool == true) {
+                  this.A1_FORM_PDF_URL = ''
+                  this.A1_FORM_VISIBLE = false;
+                  this.A1WIthFEMAControllerData.BankFormatLoad()?.Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata,
+                    this.ToForwardContract_Selected)?.A1FORM()?.then((A1PDFres) => {
+                      console.log(A1PDFres, "A1PDFres")
+                      this.A1_FORM_VISIBLE = true;
+                      this.A1_FORM_PDF_URL = A1PDFres;
+                    })
+                } else {
+                  this.A1_FORM_PDF_URL = ''
+                  this.A1_FORM_VISIBLE = false;
+                }
+              } else if (filldata?.FEMAForm?.id == "FEMAForm") {
+                if (filldata?.FEMAForm?.bool == true) {
+                  this.FEMA_FORM_VISIBLE = false;
+                  this.FEMA_FORM_PDF_URL = ''
+                  this.A1WIthFEMAControllerData.BankFormatLoad()?.Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata,
+                    this.ToForwardContract_Selected)?.FEMAPDF()?.then((A1PDFres) => {
+                      console.log(A1PDFres, "A1PDFres")
+                      this.FEMA_FORM_VISIBLE = true;
+                      this.FEMA_FORM_PDF_URL = A1PDFres;
+                    })
+                } else {
+                  this.FEMA_FORM_VISIBLE = false;
+                  this.FEMA_FORM_PDF_URL = ''
+                }
+              };
+              this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+                this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
             }, 200);
           })
       }
@@ -477,8 +575,30 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
           type: 'application/pdf'
         }).subscribe(async (pdfresponse2: any) => {
           temp[0] = pdfresponse2?.url;
-          reslove(temp);
+          await reslove(temp);
         });
+      });
+    })
+  }
+
+  async getS3Url2() {
+    return new Promise(async (reslove, reject) => {
+      let temp: any = [];
+      let url: any = [{
+        fileName: this.guid() + '.pdf', buffer: this.A1_FORM_PDF_URL,
+        type: 'application/pdf'
+      }, {
+        fileName: this.guid() + '.pdf', buffer: this.FEMA_FORM_PDF_URL,
+        type: 'application/pdf'
+      }]
+      var fitertemp: any = url?.filter(n => n);
+      if (fitertemp?.length == 0) {
+        reslove([])
+      }
+      console.log(fitertemp, "fitertemp")
+      await this.userService?.UploadListS3Buket(url).subscribe(async (pdfresponse1: any) => {
+        console.log(pdfresponse1, "UploadListS3Buket")
+        reslove(pdfresponse1)
       });
     })
   }
@@ -515,6 +635,11 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
           await res?.forEach(element => {
             this.alldocuments.push(element)
           });
+          await this.getS3Url2().then(async (res1: any) => {
+            await res1?.forEach(element => {
+              this.alldocuments.push(element?.url)
+            });
+          })
           await this.OTHER_DOCUMENTS?.forEach(element => {
             this.alldocuments.push(element?.pdf)
           });
@@ -643,5 +768,10 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
     })
+  }
+
+  YesNoCheckBox(value: any, filldata = null) {
+
+    console.log(value, "YesNoCheckBox")
   }
 }

@@ -79,7 +79,6 @@ import { hdfcbankRevisedFormA2BANKFormatComponent } from "./AllBankFormat/HDFC-B
 import { CommonOpenPopUpDirective } from "../custom/custom-model/CustomPopupOpen/open-pop-up.directive";
 import { PopupOpenDirective } from "../custom/PopupOpen/popup-open.directive";
 import { FederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterhead/exportletterhead.component";
-import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBank/import-letter-head/import-letter-head.component";
 import { DirectExportPaymentComponent } from "./AllBankFormat/HDFC-Bank/direct-import-payment/direct-import-payment.component";
 import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/FederalBank/direct-import-payment/direct-import-payment.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -153,7 +152,6 @@ import { ExportHomeControllerData } from "./Transaction/Export/Controller/Export
     hdfcbankInwardRemittanceDisposalFormatComponent,
     hdfcbankRevisedFormA2BANKFormatComponent,
     FederalBankExportletterheadComponent,
-    FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
     CustomModelHeaderComponent,
@@ -273,7 +271,6 @@ import { ExportHomeControllerData } from "./Transaction/Export/Controller/Export
     CommonOpenPopUpDirective,
     PopupOpenDirective,
     FederalBankExportletterheadComponent,
-    FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
     MatBadgeModule,

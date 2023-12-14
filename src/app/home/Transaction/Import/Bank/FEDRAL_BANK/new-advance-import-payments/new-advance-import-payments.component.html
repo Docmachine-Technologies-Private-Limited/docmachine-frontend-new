@@ -26,8 +26,10 @@
                         <tr class="table-tr mt-2 pr-3" [ngClass]="{'isDisabled':item?.isDisabled==true}"
                             *ngFor="let item of this.PIPO_LIST;let i=index">
                             <td scope="col" class="col-td-th-1">
-                                <input [disabled]="item?.isDisabled" *ngIf="item?.paymentTerm[0]?.BalanceAmount!=0 || item?.paymentTerm[0]?.BalanceAmount==undefined"
-                                    [checked]="item?.ischecked" type="checkbox" (click)="PIPO_LIST_CHECKED($event,item,i)">
+                                <input [disabled]="item?.isDisabled"
+                                    *ngIf="item?.paymentTerm[0]?.BalanceAmount!=0 || item?.paymentTerm[0]?.BalanceAmount==undefined"
+                                    [checked]="item?.ischecked" type="checkbox"
+                                    (click)="PIPO_LIST_CHECKED($event,item,i)">
                                 <label *ngIf="item?.paymentTerm[0]?.BalanceAmount==0">Completed</label>
                             </td>
                             <td scope="col" class="col-td-th-1">{{item?.pi_poNo}}</td>
@@ -50,11 +52,13 @@
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                         *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
                         [src]="PREVIWES_URL"></app-pdf-viewer>
-                    <div id="federal-bank-letter-head">
-                        <federal-bank-import-letter-head *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                            [data]="[this.ExportBillLodgement_Form,this.BENEFICIARY_DETAILS[0]]"
-                            (url)="urlletterhead($event)"></federal-bank-import-letter-head>
-                    </div>
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.LETTER_HEAD_URL!='' && this.VISIBLITY_PDF==true" name="Letter Head"
+                        [src]="this.LETTER_HEAD_URL"></app-pdf-viewer>
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.A1_FORM_VISIBLE==true" name="A1_FORM" [src]="A1_FORM_PDF_URL"></app-pdf-viewer>
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.FEMA_FORM_VISIBLE==true" name="FEMA_FORM" [src]="FEMA_FORM_PDF_URL"></app-pdf-viewer>
                     <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
                         <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                             [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>
@@ -64,6 +68,7 @@
                     (BankEvent)="setSelectedBankDetails($event)" id="IMPORT_TRANSACTION"
                     (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
                     (PIPO_EVENT)="PIPO_CALLBACK($event,ORM_POPUP_PANEL)"
+                    (YesNoCheckBoxEvent)="YesNoCheckBox($event,null)"
                     (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)"
                     (AddButton)="FORWARD_CONTRACTPANEL?.displayShow" #RawValueEventPanel>
                     <button class="btn btn-primary" style="position: absolute;
