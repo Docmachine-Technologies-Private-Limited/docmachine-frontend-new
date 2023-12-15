@@ -36,9 +36,10 @@ export class A1WIthFEMAControllerData {
                                 }
                             });
                             getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-                            getAllFields[1]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
 
                             if (filldata != undefined && filldata != null && filldata != '') {
+                                getAllFields[1]?.setText(filldata?.BankCharges?.bank + '\n' + filldata?.BankCharges?.bicAddress);
+
                                 let PIPO_DATA: any = {
                                     Currency: [],
                                     Amount: [],
@@ -58,13 +59,13 @@ export class A1WIthFEMAControllerData {
                                 });
                                 let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
                                 getAllFields[2]?.setText(PIPO_DATA?.Currency[0]);
-                                getAllFields[3]?.setText(RemittanceAmount?.toString());
+                                getAllFields[3]?.setText(RemittanceAmount?.toString()+' '+this.ConvertNumberToWords(RemittanceAmount));
                             }
                             getAllFields[4]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs + '\n' + BENEFICIARY_DETAILS[0]?.beneAccNo);
-                            getAllFields[5]?.setText(BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban + '\n'+BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
+                            getAllFields[5]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress + '\n' + BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban + '\n' + BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
                             getAllFields[8]?.setText(this.CURRENT_DATE);
                             getAllFields[9]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-                            
+
                             const mergedPdfFile = await pdfDoc.save();
                             var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
                             const x1 = 'data:application/pdf;base64,' + base64String1;
