@@ -182,11 +182,18 @@ export class BOEComponent implements OnInit {
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
-                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["amount"] = (currentVal?.data?.amount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.data?.amount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.data?.currency);
-                  myForm['touched'] = true;
-                  myForm['status'] = 'VALID';
+                  if (currentVal?.data?.BalanceAmount != '0' || currentVal?.data?.BalanceAmount != 0) {
+                    item.form['value'][item?.fieldName][item?.OptionfieldIndex]["amount"] = (currentVal?.data?.amount);
+                    myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.data?.amount);
+                    myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.data?.currency);
+                    myForm['touched'] = true;
+                    myForm['status'] = 'VALID';
+                    myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.enable();
+                  } else {
+                    item.form['value'][item?.fieldName] = null
+                    myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.disable();
+                    this.toastr.error("Please select other CI,\nthis CI already used another BOE...")
+                  }
                   console.log(item, "callback")
                 },
               },
@@ -238,6 +245,7 @@ export class BOEComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
   onSubmit(e: any) {
     let newform: any = e.value;
     console.log(e, newform, this.Percentage(parseInt(newform.invoiceAmount)), 'formJSON_To_Array')
@@ -273,9 +281,11 @@ export class BOEComponent implements OnInit {
             let updatedData2 = {
               "BoeRef": [
                 data?._id,
-              ]
+              ],
             }
             newform.CI_DETAILS?.forEach(element => {
+              let BalanceAmount: any = parseFloat(element?.invoiceno?.data?.amount) - parseFloat(element?.amount);
+              updatedData2['BalanceAmount'] = BalanceAmount
               this.documentService.updateCommercial(updatedData2, element?.invoiceno?.id).subscribe((res: any) => { })
             });
             this.userService.updateManyPipo(this.pipoArr, 'import', '', updatedData1).subscribe((data_res) => {
@@ -316,6 +326,7 @@ export class BOEComponent implements OnInit {
   paymentTermSum(value: any) {
     return value?.reduce((a, b) => a + parseFloat(b?.amount), 0)
   }
+
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
@@ -339,7 +350,8 @@ export class BOEComponent implements OnInit {
     this.documentService.filterAnyTable({
       buyerName: this.BUYER_LIST,
       currency: this.PIPO_DATA?.currency,
-      pipo: this.pipoArr
+      pipo: this.pipoArr,
+      BalanceAmount: { $ne: "0" }
     }, 'commercials').subscribe((res: any) => {
       console.log(res, 'commercials')
       this.validator.COMMERICAL_NO = [];

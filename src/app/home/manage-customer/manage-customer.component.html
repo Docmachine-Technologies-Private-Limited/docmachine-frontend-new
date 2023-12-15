@@ -147,6 +147,12 @@
                     class="form-control" name="interBankSwiftCode">
             </div>
             <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s Branch Name</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneBankbranchName"
+                    placeholder="Beneficiary’s bank’s Branch Name" required=""
+                    class="form-control" name="beneBankbranchName">
+            </div>
+            <div class="form-group mb-3">
                 <label>Intermediary Bank Name (if any)</label>
                 <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.interBankName" id="inputEmail" type="text"
                     placeholder="Ex: Western union" required="" class="form-control" name="interBankName">

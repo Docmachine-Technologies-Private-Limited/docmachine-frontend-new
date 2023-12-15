@@ -61,7 +61,7 @@ export class ImportLetterHeadService {
           }
           getAllFields[6]?.setText(BENEFICIARY_DETAILS[0]?.benneName);
           getAllFields[7]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName);
-          getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.branchName);
+          getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
           getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.iban);
           getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
           getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress)

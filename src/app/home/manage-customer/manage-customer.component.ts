@@ -154,6 +154,16 @@ export class ManageCustomerComponent implements OnInit {
               required: true,
             }
           },
+          beneBankbranchName: {
+            type: "text",
+            value: "",
+            label: "Beneficiary’s bank’s Branch Name",
+            placeholderText: '',
+            maxLength: 300,
+            rules: {
+              required: true,
+            }
+          },
           sortCode: {
             type: "text",
             value: "",
@@ -251,6 +261,16 @@ export class ManageCustomerComponent implements OnInit {
             value: "",
             label: "Beneficiary’s bank’s (any one) SWIFT code*",
             placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          beneBankbranchName: {
+            type: "text",
+            value: "",
+            label: "Beneficiary’s bank’s Branch Name",
+            placeholderText: '',
+            maxLength: 300,
             rules: {
               required: true,
             }

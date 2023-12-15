@@ -214,7 +214,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         A1Form: {
           type: "yesnocheckbox",
           value: '',
-          label: "Do you want A1 Form?",
+          label: "Do you want Form A1?",
           rules: {
             required: true,
           },
@@ -223,7 +223,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         FEMAForm: {
           type: "yesnocheckbox",
           value: '',
-          label: "Do you want FEMA Form?",
+          label: "Do you want FEMA DECLARATION?",
           rules: {
             required: true,
           },
@@ -364,7 +364,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         this.response(null);
         value['ischecked'] = true;
       } else {
-        this.toastr.error("Please same currecny type...")
+        this.toastr.error("Please select same currency...")
         value['ischecked'] = false;
         $event.target.checked = false
       }

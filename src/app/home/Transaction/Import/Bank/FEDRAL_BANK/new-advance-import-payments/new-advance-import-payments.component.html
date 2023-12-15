@@ -56,9 +56,9 @@
                         *ngIf="this.LETTER_HEAD_URL!='' && this.VISIBLITY_PDF==true" name="Letter Head"
                         [src]="this.LETTER_HEAD_URL"></app-pdf-viewer>
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                        *ngIf="this.A1_FORM_VISIBLE==true" name="A1_FORM" [src]="A1_FORM_PDF_URL"></app-pdf-viewer>
+                        *ngIf="this.A1_FORM_VISIBLE==true" name="FORM A1" [src]="A1_FORM_PDF_URL"></app-pdf-viewer>
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
-                        *ngIf="this.FEMA_FORM_VISIBLE==true" name="FEMA_FORM" [src]="FEMA_FORM_PDF_URL"></app-pdf-viewer>
+                        *ngIf="this.FEMA_FORM_VISIBLE==true" name="FEMA DECLARATION" [src]="FEMA_FORM_PDF_URL"></app-pdf-viewer>
                     <div class="col-12 p-2" *ngFor="let item of this.SELECTED_PIPO_URL_LIST;let i=index">
                         <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                             [name]="item?.name" [src]="item?.pdf"></app-pdf-viewer>

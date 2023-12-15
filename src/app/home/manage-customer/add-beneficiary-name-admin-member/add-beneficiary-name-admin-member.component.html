@@ -6,19 +6,19 @@
                     <div class="import_export_sec">
                         <h3 class="heading_common_tag mb-0">Beneficiary details</h3>
                     </div>
-
                 </div>
                 <div class="col-md-8 col-sm-8 col-12">
                     <div class="filter_right_new padding_new_top p-0">
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="float_right_page">
                                 <div *ngIf="this.USER_DATA?.role!='member'">
-                                    <button class="btn btn-primary PopupOpen" popup-close="CreateNewBeneficiary" (click)="loadForm()">Add
+                                    <button class="btn btn-primary PopupOpen" popup-close="CreateNewBeneficiary"
+                                        (click)="loadForm()">Add
                                         Beneficiary<span>+</span></button>
                                 </div>
                                 <div *ngIf="this.USER_DATA?.role=='member'">
-                                    <button class="btn btn-primary PopupOpen"
-                                        popup-close="CreateNewBeneficiaryMember" (click)="loadForm()">Add Beneficiary<span>+</span></button>
+                                    <button class="btn btn-primary PopupOpen" popup-close="CreateNewBeneficiaryMember"
+                                        (click)="loadForm()">Add Beneficiary<span>+</span></button>
                                 </div>
                             </div>
                         </div>
@@ -27,9 +27,8 @@
             </div>
         </div>
         <div class="analytics" #epltable>
-            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header"
-                [ExpansionShowHide]="false" [items]="this.FILTER_VALUE_LIST_NEW?.items"
-                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
+                [items]="this.FILTER_VALUE_LIST_NEW?.items" [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
                 (EditChanges)="clickbenetable($event,EditBeneSubmitPanel)" [ViewButton]="false"
                 (DeleteChanges)="clickdeletebenetable($event,EditBeneSubmitPanel)"
                 [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass">
@@ -118,12 +117,17 @@
                     required="" class="form-control" name="beneBankSwiftCode">
             </div>
             <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s Branch Name</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneBankbranchName"
+                    placeholder="Beneficiary’s bank’s Branch Name" required="" class="form-control"
+                    name="beneBankbranchName">
+            </div>
+            <div class="form-group mb-3">
                 <label>Beneficiary’s bank’s address including country</label>
                 <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneBankAdress" id="inputEmail" type="text"
                     placeholder="Ex: street address, City. PIN" required="" class="form-control email"
                     name="beneBankAdress">
             </div>
-
             <div class="form-group mb-3">
                 <label>Intermediary Bank details (if applicable) SWIFT code**</label>
                 <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.interBankSwiftCode"
@@ -135,7 +139,6 @@
                 <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.interBankName" id="inputEmail" type="text"
                     placeholder="Ex: Western union" required="" class="form-control" name="interBankName">
             </div>
-
             <div class="form-group mb-3">
                 <label>Sort Code</label>
                 <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.sortCode" placeholder="Ex: ESEIEC." required=""
@@ -168,11 +171,11 @@
     </div>
 </app-custom-model>
 
-<app-custom-model [minimizedisabled]="false" EventButton="false"
-    [RemoveBgTop]="false" class="p-2 mt-2" id="Add_New_Bank_Name" [customstyle]="{'max-width':'40vw !important'}"
-    height="30vh" [name]="'Add New Bank Name'" #Add_New_Bank_NamePanel>
+<app-custom-model [minimizedisabled]="false" EventButton="false" [RemoveBgTop]="false" class="p-2 mt-2"
+    id="Add_New_Bank_Name" [customstyle]="{'max-width':'40vw !important'}" height="30vh" [name]="'Add New Bank Name'"
+    #Add_New_Bank_NamePanel>
     <div class="p-2">
-        <upload-components id="AddNewBankName"
-            (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)" (AddNewBank)="CreateFormBank()"></upload-components>
+        <upload-components id="AddNewBankName" (SubmitEvent)="addNewBank($event,Add_New_Bank_NamePanel)"
+            (AddNewBank)="CreateFormBank()"></upload-components>
     </div>
 </app-custom-model>
