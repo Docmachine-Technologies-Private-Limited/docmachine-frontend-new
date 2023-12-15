@@ -71,9 +71,9 @@ export class AdvanceOutwardRemittanceControllerData {
                             PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
                             PIPO_DATA["ORIGIN"].push(element?.PIPO_LIST?.location)
                             if (element?.PIPO_LIST?.ModeofTransport[1]?.AirportCustoms == true) {
-                                PIPO_DATA["TRANSPORTER"].push("Airport Customs")
+                                PIPO_DATA["TRANSPORTER"].push("Air")
                             } else {
-                                PIPO_DATA["TRANSPORTER"].push("Courier")
+                                PIPO_DATA["TRANSPORTER"].push("Sea")
                             }
                             element?.PIPO_LIST?.paymentTerm?.forEach(PaymentTermElement => {
                                 PIPO_DATA["LASTDATE"].push(PaymentTermElement?.date)
@@ -192,7 +192,7 @@ export class AdvanceOutwardRemittanceControllerData {
                         getAllFields[78]?.setText(PIPO_DATA?.DATE_NO?.join('\n'));
                         getAllFields[79]?.setText(PIPO_DATA?.CurrencyAmount?.join('\n'));
                         getAllFields[80]?.setText(PIPO_DATA?.HSCODE?.join('\n'));
-                        getAllFields[81]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
+                        // getAllFields[81]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
                         getAllFields[82]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
                         getAllFields[83]?.setText(PIPO_DATA?.TRANSPORTER?.join('\n'));
                         getAllFields[84]?.setText(PIPO_DATA?.LASTDATE?.join('\n'));

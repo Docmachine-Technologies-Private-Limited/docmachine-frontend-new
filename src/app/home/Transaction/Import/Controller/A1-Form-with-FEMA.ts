@@ -62,7 +62,7 @@ export class A1WIthFEMAControllerData {
                                 getAllFields[3]?.setText(RemittanceAmount?.toString()+' '+this.ConvertNumberToWords(RemittanceAmount));
                             }
                             getAllFields[4]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs + '\n' + BENEFICIARY_DETAILS[0]?.beneAccNo);
-                            getAllFields[5]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress + '\n' + BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban + '\n' + BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
+                            getAllFields[5]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress + '\n' + BENEFICIARY_DETAILS[0]?.iban + '\n' + BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
                             getAllFields[8]?.setText(this.CURRENT_DATE);
                             getAllFields[9]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
 
