@@ -45,7 +45,6 @@ export class AdvanceOutwardRemittanceControllerData {
                     getAllFields[21]?.setText(BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban);
                     getAllFields[22]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
                     getAllFields[23]?.setText(BENEFICIARY_DETAILS[0]?.sortCode);
-                    getAllFields[24]?.setText('');
                     getAllFields[25]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
 
                     if (filldata != undefined && filldata != null && filldata != '') {
@@ -59,7 +58,8 @@ export class AdvanceOutwardRemittanceControllerData {
                             CurrencyAmount: [],
                             ORIGIN: [],
                             TRANSPORTER: [],
-                            LASTDATE: []
+                            LASTDATE: [],
+                            PurposeRemittance:[]
                         }
 
                         filldata?.paymentTerm?.forEach(element => {
@@ -70,6 +70,7 @@ export class AdvanceOutwardRemittanceControllerData {
                             PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.pi_poNo + ' | ' + element?.PIPO_LIST?.date)
                             PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
                             PIPO_DATA["ORIGIN"].push(element?.PIPO_LIST?.location)
+                            PIPO_DATA["PurposeRemittance"].push('Import '+element?.PIPO_LIST?.MaterialTypes)
                             if (element?.PIPO_LIST?.ModeofTransport[1]?.AirportCustoms == true) {
                                 PIPO_DATA["TRANSPORTER"].push("Air")
                             } else {
@@ -81,6 +82,7 @@ export class AdvanceOutwardRemittanceControllerData {
                         });
                         let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
                         getAllFields[2]?.setText(PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
+                        getAllFields[24]?.setText(PIPO_DATA["PurposeRemittance"]?.join('\n'));
 
                         var today: any = new Date();
                         var dd = String(today.getDate()).padStart(2, '0');
@@ -193,7 +195,7 @@ export class AdvanceOutwardRemittanceControllerData {
                         getAllFields[79]?.setText(PIPO_DATA?.CurrencyAmount?.join('\n'));
                         getAllFields[80]?.setText(PIPO_DATA?.HSCODE?.join('\n'));
                         // getAllFields[81]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
-                        getAllFields[82]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
+                        // getAllFields[82]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
                         getAllFields[83]?.setText(PIPO_DATA?.TRANSPORTER?.join('\n'));
                         getAllFields[84]?.setText(PIPO_DATA?.LASTDATE?.join('\n'));
                         getAllFields[85]?.setText(moment(new Date()).format('DD-MM-YYYY'));
