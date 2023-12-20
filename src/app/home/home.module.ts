@@ -101,6 +101,7 @@ import { AddBuyerNameAdminMemberComponent } from "./manage-customer/add-buyer-na
 import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-beneficiary-name-admin-member/add-beneficiary-name-admin-member.component";
 import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-db/back-up-panel-mongo-db.component";
 import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
+import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.component";
 
 @NgModule({
   declarations: [
@@ -148,7 +149,8 @@ import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
     AddBuyerNameAdminMemberComponent,
     AddBeneficiaryNameAdminMemberComponent,
     BackUpPanelMongoDBComponent,
-    CAFormComponent
+    CAFormComponent,
+    LiveTradeAppComponent
   ],
   imports: [
     SharedHomeModule,
@@ -505,6 +507,7 @@ import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
           { path: "SuperAdminPanel", pathMatch: "full", component: SuperAdminPanelComponent, canActivate: [SuperGuard] },
           { path: "AdminPanel", pathMatch: "full", component: AdminPanelComponent, canActivate: [AdminGuard] },
           { path: "RoleBase", component: RoleBasedSingUpComponent, pathMatch: "full", canActivate: [SuperGuard] },
+          { path: "LiveTradeApp", component: LiveTradeAppComponent, pathMatch: "full", canActivate: [SuperGuard] },
         ],
       },
     ]),
