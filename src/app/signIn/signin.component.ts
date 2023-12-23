@@ -79,7 +79,7 @@ export class SigninComponent implements OnInit {
         rules: {
           required: false,
         },
-        style: {
+        InputStyle: {
           'border-radius': '30px',
           'padding': '20px'
         }

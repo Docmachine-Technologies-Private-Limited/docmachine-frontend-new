@@ -1,4 +1,4 @@
-import { Component, Directive, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges } from '@angular/core';
 import $ from 'jquery'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -13,7 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   }],
   host: { '(document:click)': 'onClick($event)' },
 })
-export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
+export class NgDropdownCustomComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input('placeHolderText') placeHolderText: any = ''
   @Input('items') items: any = [];
   @Output('ngModelDropDownChange') ngModelDropDownChanges: any = new EventEmitter<any>();
@@ -22,7 +22,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   @Input('bindValue') bindValue: any = '';
   @Input('multiple') multiple: any = [];
   @Input('width') width: any = '';
-  @Input('class') class: any = ''
+  @Input('class') class: any = 'li-dropdown'
   @Input('popup-close') popup_close: any = ''
   @Input('height') height: any = [];
   @Input('value') value: any = '';
@@ -59,6 +59,13 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       this.modelChanges.emit(this.ngModelDropDown);
       this.ngModelDropDownChanges.emit(this.ngModelDropDown);
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes, "NgDropdownCustomComponent")
+    this.selectedItems = changes?.value?.currentValue != null ? this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel != '' ?
+      changes?.value?.currentValue[this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel] :
+      changes?.value?.currentValue[this.LABLE_BIND_LIST[this.id.toString()]?.bindValue] : ''
   }
 
   dropdownShow($event) {
@@ -103,12 +110,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   }
 
   filterdropdown($event: any, val: any) {
-    var uq_id: any = $($event.target).parent().attr('id')
-    this.FILTER_DROPDOWN = this.items.filter((item: any) => item[this.LABLE_BIND_LIST[uq_id]?.bindLabel]?.toLowerCase()?.indexOf(val.toLowerCase()) != -1);
     this.keyEvent.emit(val);
-    if (this.FILTER_DROPDOWN.length == 0) {
-      this.FILTER_DROPDOWN = this.items;
-    }
   }
 
   filterdropdownKeyPress($event: any, val: any) {

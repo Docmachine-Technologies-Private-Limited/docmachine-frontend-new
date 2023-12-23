@@ -147,7 +147,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   AUTOFILL_INPUT_NAME_LIST: any = [];
   ORM_SELECTION(event: any, index: any, data: any, AUTOFILL_INPUT_NAME_LIST: any, type: any = 'Normal') {
     if (event.target.checked) {
-      this.validator.ORM_SELECTION_DATA = data;
+      this.validator.ORM_SELECTION_DATA.push(data);
       if (type == "Normal") {
         AUTOFILL_INPUT_NAME_LIST.forEach(element => {
           this.validator.dynamicFormGroup[this.id]?.controls[element?.input]?.setValue(this.validator.ORM_SELECTION_DATA[element?.key]);
@@ -164,7 +164,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
         this.CALLBACK({ form: this.validator.dynamicFormGroup[this.id], AUTOFILL_INPUT_NAME_LIST: AUTOFILL_INPUT_NAME_LIST, FIELDS_DATA: this.field })
       }
     } else {
-      this.validator.ORM_SELECTION_DATA = []
+      this.validator.ORM_SELECTION_DATA.splice(index,1)
       event.target.checked = false;
     }
   }

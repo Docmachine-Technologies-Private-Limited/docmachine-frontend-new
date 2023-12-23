@@ -185,3 +185,38 @@
     border: none;
     box-shadow: unset;
 }
+
+.filter_right_new ::ng-deep ng-custom-filter-popup upload-components .form-container-fluid {
+    overflow: hidden !important;
+}
+
+.filter_right_new ::ng-deep ng-custom-filter-popup .filter_main {
+    width: 630px !important;
+    height: 53vh;
+    overflow: auto;
+}
+
+.filter-popup-panel table tbody {
+    height: 272px;
+    overflow: auto;
+    display: block;
+}
+
+.filter_right_new ::ng-deep ng-custom-filter-popup upload-components .form-container-fluid form {
+    width: 250px !important;
+}
+
+.hide-show{
+    margin-top: -20px;
+    padding: 0;
+    margin-left: -40px;
+}
+
+.hide-show .row-1 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 40px;
+    gap: 10px;
+    margin-top: -20px;
+}

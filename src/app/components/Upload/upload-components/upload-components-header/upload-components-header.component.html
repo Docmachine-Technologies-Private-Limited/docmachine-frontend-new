@@ -11,6 +11,9 @@
                 <div class="col-12" *ngIf="this.HIDE_OPTION==true">
                     <div class="filter_right_new padding_new_top p-0"
                         *ngIf="this.validator?.BUYER_NOT_EXITS==false && this.validator?.userData?.sideMenu=='export'">
+                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
+                                aria-hidden="true"></i>
+                           PIPO Filter</button>
                         <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && 
                             PIPO_TARANSACTION==false && 
                             this.PIPO_DISABLED==true"
@@ -37,14 +40,46 @@
                             *ngIf="this.PIPO_TARANSACTION==true" [attr.popup-close]="this.id"><i
                                 class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
                             Upload</button>
-                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
-                                aria-hidden="true"></i>
-                            Filter</button>
-                        <ng-custom-filter-popup (FilterEvent)="onSubmit($event)"
-                            [data]="this.EXPORT_FORM"></ng-custom-filter-popup>
+                            <ng-custom-filter-popup [SHOW_HIDE]="false" #CustomFilterPopup>
+                                <div class="col-12 pt-3 filter-popup-panel" style="display: flex;">
+                                    <button type="button" (click)="CustomFilterPopup?.ClosePopUp" class="btn btn-primary"
+                                    style="background: transparent;border: none;outline: none;color: white;position: absolute;right: 0px;top: 0px;">OK
+                                </button>
+                                    <div class="hide-show">
+                                        <upload-components [HIDE_BACKGROUND]="false"
+                                            ButtonPanelStyle="display:none !important;" id="EXPORT_FILTER"
+                                            (SubmitEvent)="onSubmit($event)" #EXPORT_FILTER_PANEL></upload-components>
+                                        <div class="row-1">
+                                            <button class="btn btn-primary"
+                                                (click)="Reset();EXPORT_FILTER_PANEL?.resetForm">Reset</button>
+                                            <button class="btn btn-primary"
+                                                (click)="EXPORT_FILTER_PANEL?.onClickButton">Submit</button>
+                                        </div>
+                                    </div>
+                                    <table class="table mb-0 mt-2">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-3">PIPO No.</th>
+                                                <th scope="col" class="col-td-th-3">PIPO Amount</th>
+                                                <th scope="col" class="col-td-th-3">Buyer Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr" *ngFor='let item of this.PIPODATA; let i = index'>
+                                                <td class="col-td-th-3">{{item?.pi_poNo}}</td>
+                                                <td class="col-td-th-3">{{item?.amount}}</td>
+                                                <td class="col-td-th-3">{{item?.buyerName}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-custom-filter-popup>
                     </div>
                     <div class="filter_right_new padding_new_top p-0"
                         *ngIf="this.validator?.BENEFICIARY_NOT_EXITS==false && this.validator?.userData?.sideMenu=='import'">
+                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
+                                aria-hidden="true"></i>
+                            PIPO Filter</button>
                         <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0 && 
                         PIPO_TARANSACTION==false && 
                         this.PIPO_DISABLED==true" [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
@@ -70,11 +105,40 @@
                             *ngIf="this.PIPO_TARANSACTION==true" [attr.popup-close]="this.id"><i
                                 class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
                             Upload</button>
-                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
-                                aria-hidden="true"></i>
-                            Filter</button>
-                        <ng-custom-filter-popup (FilterEvent)="onSubmit($event)"
-                            [data]="this.IMPORT_FORM"></ng-custom-filter-popup>
+                        <ng-custom-filter-popup [SHOW_HIDE]="false" #CustomFilterPopup>
+                            <div class="col-12 pt-3 filter-popup-panel" style="display: flex;">
+                                <button type="button" (click)="CustomFilterPopup?.ClosePopUp" class="btn btn-primary"
+                                style="background: transparent;border: none;outline: none;color: white;position: absolute;right: 0px;top: 0px;">OK
+                            </button>
+                                <div class="hide-show">
+                                    <upload-components [HIDE_BACKGROUND]="false"
+                                        ButtonPanelStyle="display:none !important;" id="IMPORT_FILTER"
+                                        (SubmitEvent)="onSubmit($event)" #IMPORT_FILTER_PANEL></upload-components>
+                                    <div class="row-1">
+                                        <button class="btn btn-primary"
+                                            (click)="Reset();IMPORT_FILTER_PANEL?.resetForm">Reset</button>
+                                        <button class="btn btn-primary"
+                                            (click)="IMPORT_FILTER_PANEL?.onClickButton">Submit</button>
+                                    </div>
+                                </div>
+                                <table class="table mb-0 mt-2">
+                                    <thead>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-3">PIPO No.</th>
+                                            <th scope="col" class="col-td-th-3">PIPO Amount</th>
+                                            <th scope="col" class="col-td-th-3">Beneficiary Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor='let item of this.PIPODATA; let i = index'>
+                                            <td class="col-td-th-3">{{item?.pi_poNo}}</td>
+                                            <td class="col-td-th-3">{{item?.amount}}</td>
+                                            <td class="col-td-th-3">{{item?.benneName}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ng-custom-filter-popup>
                     </div>
                 </div>
                 <button *ngIf="this.RE_UPLOAD==true" class="upload-button btn btn-success col-3 PopupOpen RE_UPLOAD"

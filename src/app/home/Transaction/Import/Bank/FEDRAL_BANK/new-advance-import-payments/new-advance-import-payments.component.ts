@@ -254,8 +254,9 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
           value: "",
           label: "Select Foreign Bank Charges",
           checkboxlabel: [
-            { text: "Beneficiary Account", type: "checkbox", value: 'BeneficiaryAccount' },
-            { text: 'Own Account', type: "checkbox", value: 'OwnAccount' }
+            { text: "Beneficiary", type: "checkbox", value: 'BeneficiaryAccount' },
+            { text: 'Own', type: "checkbox", value: 'OwnAccount' },
+            { text: 'Sharing', type: "checkbox", value: 'SharingAccount' }
           ],
           rules: {
             required: true,
@@ -282,6 +283,14 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
             required: false,
           },
           formArray: PIPO_FORM
+        },
+        FBG_WAVIER: {
+          type: "OnlyLabelShow",
+          value: false,
+          label: "",
+          rules: {
+            required: false,
+          }
         },
       }, 'IMPORT_TRANSACTION');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
@@ -350,6 +359,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     });
   }
 
+  PIPO_AMOUNT_VALIDATION: any = 0;
+  PIPO_REMITTANCE_AMOUNT: any = 0;
   PIPO_LIST_CHECKED($event, value: any, index: any) {
     if ($event?.target?.checked == true) {
       let currecnyvalidator = this.validator.PIPO_LIST?.filter((item) => item?.currency == value?.currency);
@@ -363,18 +374,23 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         });
         this.response(null);
         value['ischecked'] = true;
+        this.PIPO_AMOUNT_VALIDATION = this.validator.PIPO_LIST?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+        console.log(this.PIPO_AMOUNT_VALIDATION, "PIPO_AMOUNT_VALIDATION")
       } else {
         this.toastr.error("Please select same currency...")
         value['ischecked'] = false;
         $event.target.checked = false
       }
     } else {
-      this.validator.PIPO_LIST.splice(index, 1);
-      this.validator.BOE_LIST = value?.boeRef
+      let PIPO_INDEX: any = this.validator.PIPO_LIST?.findIndex((item: any) => item?.pi_poNo == value?.pi_poNo)
+      this.validator.PIPO_LIST.splice(PIPO_INDEX, 1);
       value['ischecked'] = false;
       this.response(null);
       $event.target.checked = false
+      this.PIPO_AMOUNT_VALIDATION = this.validator.PIPO_LIST?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+      console.log(this.PIPO_AMOUNT_VALIDATION, PIPO_INDEX, this.validator.PIPO_LIST, "PIPO_AMOUNT_VALIDATION")
     }
+
   }
 
   getORMRef(advice: any) {
@@ -423,8 +439,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     this.validator.BOE_LIST = value?.boeRef
     panel?.displayShow
   }
-  formvalue: any = [];
 
+  formvalue: any = [];
   SubmitButton(formvalue: any) {
     this.FormValue(formvalue);
     this.formvalue = formvalue?.value
@@ -435,7 +451,10 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
   A1_FORM_PDF_URL: any = ''
   FEMA_FORM_VISIBLE: boolean = false;
   FEMA_FORM_PDF_URL: any = ''
+  FBG_FORM_VISIBLE: boolean = false;
+  FBG_FORM_PDF_URL: any = ''
   TIMEOUT: any = ''
+  PIPO_REMITTANCE_AMOUNT_TRUE_FALSE: boolean = false;
 
   async fillForm(filldata: any) {
     console.log(filldata, "sdfsdfsdfdsfd")
@@ -464,6 +483,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                   this.A1_FORM_VISIBLE = false;
                 }
               }
+
               if (filldata?.FEMAForm?.id == "FEMAForm") {
                 if (filldata?.FEMAForm?.bool == true) {
                   this.FEMA_FORM_VISIBLE = false;
@@ -479,6 +499,26 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                   this.FEMA_FORM_PDF_URL = ''
                 }
               };
+              this.PIPO_REMITTANCE_AMOUNT = this.ExportBillLodgement_Form?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount));
+              console.log(this.validator.FIELDS_DATA['IMPORT_TRANSACTION'],"IMPORT_TRANSACTION")
+              if (this.PIPO_AMOUNT_VALIDATION > 300000 || this.PIPO_REMITTANCE_AMOUNT > 300000) {
+                this.PIPO_REMITTANCE_AMOUNT_TRUE_FALSE = true
+                this.FBG_FORM_VISIBLE = false;
+                this.FBG_FORM_PDF_URL = ''
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['label']='FBG Waiver added...'
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['visible']=true
+                this.AdvanceOutwardRemittanceControllerData.BankFormatLoad()?.FBG(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
+                  this.FBG_FORM_VISIBLE = true;
+                  this.FBG_FORM_PDF_URL = res
+                });
+              } else {
+                this.PIPO_REMITTANCE_AMOUNT_TRUE_FALSE = false
+                this.FBG_FORM_VISIBLE = false;
+                this.FBG_FORM_PDF_URL = ''
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['label']=''
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['visible']=false;
+              }
+
               await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
@@ -589,6 +629,10 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         type: 'application/pdf'
       }, {
         fileName: this.guid() + '.pdf', buffer: this.FEMA_FORM_PDF_URL,
+        type: 'application/pdf'
+      },
+      {
+        fileName: this.guid() + '.pdf', buffer: this.FBG_FORM_PDF_URL,
         type: 'application/pdf'
       }]
       var fitertemp: any = url?.filter(n => n);

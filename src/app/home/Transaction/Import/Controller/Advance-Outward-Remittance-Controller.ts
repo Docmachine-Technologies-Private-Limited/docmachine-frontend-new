@@ -2,14 +2,14 @@ import { Injectable } from "@angular/core";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
 import { DocumentService } from "../../../../service/document.service";
-import { PDFDocument } from "pdf-lib";
+import { BlendMode, PDFDocument } from "pdf-lib";
 import { Router } from "@angular/router";
 import moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
 export class AdvanceOutwardRemittanceControllerData {
     COMPANY_INFO: any = {};
-    CURRENT_DATE: any = moment(new Date).format('DD-MM-YYYY')
+    CURRENT_DATE: any = moment(new Date()).format('DD-MM-YYYY')
     constructor(public documentService: DocumentService,
         private router: Router,
         private toastr: ToastrService,
@@ -59,7 +59,7 @@ export class AdvanceOutwardRemittanceControllerData {
                             ORIGIN: [],
                             TRANSPORTER: [],
                             LASTDATE: [],
-                            PurposeRemittance:[]
+                            PurposeRemittance: []
                         }
 
                         filldata?.paymentTerm?.forEach(element => {
@@ -70,7 +70,7 @@ export class AdvanceOutwardRemittanceControllerData {
                             PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.pi_poNo + ' | ' + element?.PIPO_LIST?.date)
                             PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
                             PIPO_DATA["ORIGIN"].push(element?.PIPO_LIST?.location)
-                            PIPO_DATA["PurposeRemittance"].push('Import '+element?.PIPO_LIST?.MaterialTypes)
+                            PIPO_DATA["PurposeRemittance"].push('Import ' + element?.PIPO_LIST?.MaterialTypes)
                             if (element?.PIPO_LIST?.ModeofTransport[1]?.AirportCustoms == true) {
                                 PIPO_DATA["TRANSPORTER"].push("Air")
                             } else {
@@ -218,6 +218,81 @@ export class AdvanceOutwardRemittanceControllerData {
                     await resolve(x1);
                 })
             },
+            FBG: async (validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected) => {
+                return new Promise(async (resolve, reject) => {
+                    console.log(validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected, "ToForwardContract_Selected")
+                    let formUrl = './../../../assets/pdf/FedralBank/FBG_Waiver_Format.pdf'
+                    console.log(filldata, 'filldata')
+                    const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
+                    const pdfDoc = await PDFDocument.load(formPdfBytes)
+                    const form: any = pdfDoc.getForm()
+                    const getAllFields = form?.getFields();
+                    getAllFields?.forEach(element => {
+                        const elementvalue: any = element?.acroField?.dict?.values();
+                        if (elementvalue[0]?.encodedName == '/Tx') {
+                            element?.setFontSize(9);
+                            element?.enableReadOnly();
+                            const [widget]: any = element?.acroField?.getWidgets();
+                            widget?.getOrCreateBorderStyle()?.setWidth(0);
+                        }
+                    });
+                    getAllFields[0]?.setText(this.CURRENT_DATE);
+                    getAllFields[1]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress);
+                    getAllFields[2]?.setText(this.CURRENT_DATE);
+                    getAllFields[4]?.setText(BENEFICIARY_DETAILS[0]?.benneName);
+                    getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+
+                    if (filldata != undefined && filldata != null && filldata != '') {
+                        let PIPO_DATA: any = {
+                            NO:[],
+                            Currency: [],
+                            Amount: [],
+                            Commodity: [],
+                            HSCODE: [],
+                            DATE_NO: [],
+                            CurrencyAmount: [],
+                            ORIGIN: [],
+                            DATE:[],
+                            TRANSPORTER: [],
+                            LASTDATE: [],
+                            PurposeRemittance:[]
+                        }
+
+                        filldata?.paymentTerm?.forEach(element => {
+                            PIPO_DATA["Currency"].push(element?.PIPO_LIST?.currency)
+                            PIPO_DATA["NO"].push(element?.PIPO_LIST?.pi_poNo)
+                            PIPO_DATA["Amount"].push(element?.RemittanceAmount)
+                            PIPO_DATA["Commodity"].push(element?.PIPO_LIST?.commodity)
+                            PIPO_DATA["HSCODE"].push(element?.PIPO_LIST?.HSCODE)
+                            PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.pi_poNo + ' | ' + element?.PIPO_LIST?.date)
+                            PIPO_DATA["DATE"].push(element?.PIPO_LIST?.date)
+                            PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
+                            PIPO_DATA["ORIGIN"].push(element?.PIPO_LIST?.location)
+                            PIPO_DATA["PurposeRemittance"].push('Import '+element?.PIPO_LIST?.MaterialTypes)
+                            if (element?.PIPO_LIST?.ModeofTransport[1]?.AirportCustoms == true) {
+                                PIPO_DATA["TRANSPORTER"].push("Air")
+                            } else {
+                                PIPO_DATA["TRANSPORTER"].push("Sea")
+                            }
+                            element?.PIPO_LIST?.paymentTerm?.forEach(PaymentTermElement => {
+                                PIPO_DATA["LASTDATE"].push(PaymentTermElement?.date)
+                            });
+                        });
+                        let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+                        getAllFields[3]?.setText(PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
+                        getAllFields[5]?.setText(PIPO_DATA["Commodity"]?.join(','));
+                        getAllFields[6]?.setText(PIPO_DATA["NO"]?.join(','));
+                        getAllFields[7]?.setText(PIPO_DATA["DATE"]?.join(','));
+                    }
+                    await pdfDoc.save()
+                    await this.addWaterMark(pdfDoc, validator).then(async (Res: any) => {
+                        const pdfBytes = await Res.save()
+                        var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                        const x1 = 'data:application/pdf;base64,' + base64String1;
+                        await resolve(x1);
+                    });
+                })
+            },
             HDFC: async (validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected) => {
                 return new Promise(async (resolve, reject) => {
                     console.log(validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected, "ToForwardContract_Selected")
@@ -353,5 +428,32 @@ export class AdvanceOutwardRemittanceControllerData {
             words_string = words_string.split("  ").join(" ");
         }
         return words_string;
+    }
+
+    addWaterMark(pdfDoc: any, validator) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.letterHead)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            console.log(pdfDoc, pdfDoc.getPageIndices(), copiedPages, jpgImage, validator.COMPANY_INFO[0]?.letterHead, "copiedPages")
+            copiedPages.forEach((page) => {
+                const { width, height } = page.getSize();
+                page.drawImage(jpgImage, {
+                    x: 0,
+                    y: 0,
+                    width: width,
+                    height: height,
+                    opacity: 1,
+                    blendMode: BlendMode.Multiply
+                });
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
     }
 }

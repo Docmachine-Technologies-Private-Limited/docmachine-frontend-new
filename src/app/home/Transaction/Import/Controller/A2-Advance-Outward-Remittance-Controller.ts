@@ -29,137 +29,147 @@ export class A2AdvanceOutwardRemittanceControllerData {
                     const form: any = pdfDoc.getForm()
                     const getAllFields = form?.getFields();
                     getAllFields?.forEach(element => {
-                      const elementvalue: any = element?.acroField?.dict?.values();
-                      if (elementvalue[0]?.encodedName == '/Tx') {
-                        element?.setFontSize(11);
-                        element?.enableReadOnly();
-                        const [widget]: any = element?.acroField?.getWidgets();
-                        widget?.getOrCreateBorderStyle()?.setWidth(0);
-                      }
+                        const elementvalue: any = element?.acroField?.dict?.values();
+                        if (elementvalue[0]?.encodedName == '/Tx') {
+                            element?.setFontSize(11);
+                            element?.enableReadOnly();
+                            const [widget]: any = element?.acroField?.getWidgets();
+                            widget?.getOrCreateBorderStyle()?.setWidth(0);
+                        }
                     });
                     getAllFields[8]?.setText(validator.COMPANY_INFO[0]?.teamName);
                     getAllFields[14]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-            
+
                     if (BENEFICIARY_DETAILS?.length != 0) {
-                      getAllFields[70]?.setText(BENEFICIARY_DETAILS[0]?.benneName);
-                      getAllFields[71]?.setText(BENEFICIARY_DETAILS[0]?.beneAdrs);
-                      getAllFields[72]?.setText(BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban);
-                      getAllFields[73]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '' + BENEFICIARY_DETAILS[0]?.beneBankAdress);
-            
-                      let spliSwiftCode: any = BENEFICIARY_DETAILS[0]?.beneBankSwiftCode?.split('');
-                      if (spliSwiftCode != undefined) {
-                        getAllFields[74]?.setText(spliSwiftCode[0]);
-                        getAllFields[75]?.setText(spliSwiftCode[1]);
-                        getAllFields[76]?.setText(spliSwiftCode[2]);
-                        getAllFields[77]?.setText(spliSwiftCode[3]);
-                        getAllFields[78]?.setText(spliSwiftCode[4]);
-                        getAllFields[79]?.setText(spliSwiftCode[5]);
-                        getAllFields[80]?.setText(spliSwiftCode[6]);
-                        getAllFields[81]?.setText(spliSwiftCode[7]);
-                        getAllFields[82]?.setText(spliSwiftCode[8]);
-                        getAllFields[83]?.setText(spliSwiftCode[9]);
-                        getAllFields[84]?.setText(spliSwiftCode[10]);
-                      }
-                      getAllFields[85]?.setText(BENEFICIARY_DETAILS[0]?.sortCode);
-                      getAllFields[86]?.setText(BENEFICIARY_DETAILS[0]?.interBankName);
-            
-                      let spliIntermediarySwiftCode: any = BENEFICIARY_DETAILS[0]?.interBankSwiftCode?.split('')
-                      if (spliIntermediarySwiftCode != undefined) {
-                        getAllFields[87]?.setText(spliIntermediarySwiftCode[0]);
-                        getAllFields[88]?.setText(spliIntermediarySwiftCode[1]);
-                        getAllFields[89]?.setText(spliIntermediarySwiftCode[2]);
-                        getAllFields[90]?.setText(spliIntermediarySwiftCode[3]);
-                        getAllFields[91]?.setText(spliIntermediarySwiftCode[4]);
-                        getAllFields[92]?.setText(spliIntermediarySwiftCode[5]);
-                        getAllFields[93]?.setText(spliIntermediarySwiftCode[6]);
-                        getAllFields[94]?.setText(spliIntermediarySwiftCode[7]);
-                        getAllFields[95]?.setText(spliIntermediarySwiftCode[8]);
-                        getAllFields[96]?.setText(spliIntermediarySwiftCode[9]);
-                        getAllFields[97]?.setText(spliIntermediarySwiftCode[10]);
-                      }
+                        getAllFields[70]?.setText(BENEFICIARY_DETAILS[0]?.benneName);
+                        getAllFields[71]?.setText(BENEFICIARY_DETAILS[0]?.beneAdrs);
+                        getAllFields[72]?.setText(BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban);
+                        getAllFields[73]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '' + BENEFICIARY_DETAILS[0]?.beneBankAdress);
+
+                        let spliSwiftCode: any = BENEFICIARY_DETAILS[0]?.beneBankSwiftCode?.split('');
+                        if (spliSwiftCode != undefined) {
+                            getAllFields[74]?.setText(spliSwiftCode[0]);
+                            getAllFields[75]?.setText(spliSwiftCode[1]);
+                            getAllFields[76]?.setText(spliSwiftCode[2]);
+                            getAllFields[77]?.setText(spliSwiftCode[3]);
+                            getAllFields[78]?.setText(spliSwiftCode[4]);
+                            getAllFields[79]?.setText(spliSwiftCode[5]);
+                            getAllFields[80]?.setText(spliSwiftCode[6]);
+                            getAllFields[81]?.setText(spliSwiftCode[7]);
+                            getAllFields[82]?.setText(spliSwiftCode[8]);
+                            getAllFields[83]?.setText(spliSwiftCode[9]);
+                            getAllFields[84]?.setText(spliSwiftCode[10]);
+                        }
+                        getAllFields[85]?.setText(BENEFICIARY_DETAILS[0]?.sortCode);
+                        getAllFields[86]?.setText(BENEFICIARY_DETAILS[0]?.interBankName);
+
+                        let spliIntermediarySwiftCode: any = BENEFICIARY_DETAILS[0]?.interBankSwiftCode?.split('')
+                        if (spliIntermediarySwiftCode != undefined) {
+                            getAllFields[87]?.setText(spliIntermediarySwiftCode[0]);
+                            getAllFields[88]?.setText(spliIntermediarySwiftCode[1]);
+                            getAllFields[89]?.setText(spliIntermediarySwiftCode[2]);
+                            getAllFields[90]?.setText(spliIntermediarySwiftCode[3]);
+                            getAllFields[91]?.setText(spliIntermediarySwiftCode[4]);
+                            getAllFields[92]?.setText(spliIntermediarySwiftCode[5]);
+                            getAllFields[93]?.setText(spliIntermediarySwiftCode[6]);
+                            getAllFields[94]?.setText(spliIntermediarySwiftCode[7]);
+                            getAllFields[95]?.setText(spliIntermediarySwiftCode[8]);
+                            getAllFields[96]?.setText(spliIntermediarySwiftCode[9]);
+                            getAllFields[97]?.setText(spliIntermediarySwiftCode[10]);
+                        }
                     }
-            
+
                     if (filldata != undefined && filldata != null && filldata != '') {
-                      getAllFields[9]?.setText(filldata?.ADBranch);
-                      let remitancedata: any = {
-                        Currency: filldata?.paymentTerm[0]?.PIPO_LIST?.currency,
-                        CurrencyAmount: [],
-                        ExchangeRate: [],
-                        INREquivalentAmount: []
-                      }
-                      filldata?.paymentTerm?.forEach(element => {
-                        remitancedata?.CurrencyAmount.push(element?.RemittanceAmount);
-                      });
-                      getAllFields[10]?.setText(remitancedata?.Currency);
-                      getAllFields[11]?.setText(remitancedata?.CurrencyAmount?.join(','))
-            
-                      let splitDebitAccount: any = filldata?.BankDebit?.accNumber?.split('');
-                      if (splitDebitAccount != undefined) {
-                        getAllFields[40]?.setText(splitDebitAccount[0]);
-                        getAllFields[41]?.setText(splitDebitAccount[1]);
-                        getAllFields[42]?.setText(splitDebitAccount[2]);
-                        getAllFields[43]?.setText(splitDebitAccount[3]);
-                        getAllFields[44]?.setText(splitDebitAccount[4]);
-                        getAllFields[45]?.setText(splitDebitAccount[5]);
-                        getAllFields[46]?.setText(splitDebitAccount[6]);
-                        getAllFields[47]?.setText(splitDebitAccount[7]);
-                        getAllFields[48]?.setText(splitDebitAccount[8]);
-                        getAllFields[49]?.setText(splitDebitAccount[9]);
-                        getAllFields[50]?.setText(splitDebitAccount[10]);
-                        getAllFields[51]?.setText(splitDebitAccount[11]);
-                        getAllFields[52]?.setText(splitDebitAccount[12]);
-                        getAllFields[53]?.setText(splitDebitAccount[13]);
-                      }
-            
-                      let splitcustomerid: any = filldata?.CustomerID?.split('')
-                      getAllFields[15]?.setText(splitcustomerid[0]);
-                      getAllFields[16]?.setText(splitcustomerid[1]);
-                      getAllFields[17]?.setText(splitcustomerid[2]);
-                      getAllFields[18]?.setText(splitcustomerid[3]);
-                      getAllFields[19]?.setText(splitcustomerid[4]);
-                      getAllFields[20]?.setText(splitcustomerid[5]);
-                      getAllFields[21]?.setText(splitcustomerid[6]);
-                      getAllFields[22]?.setText(splitcustomerid[7]);
-                      getAllFields[23]?.setText(splitcustomerid[8]);
-                      getAllFields[24]?.setText(splitcustomerid[9]);
-            
-                      let splitPANNo: any = filldata?.PANNo?.split('')
-                      getAllFields[25]?.setText(splitPANNo[0]);
-                      getAllFields[26]?.setText(splitPANNo[1]);
-                      getAllFields[27]?.setText(splitPANNo[2]);
-                      getAllFields[28]?.setText(splitPANNo[3]);
-                      getAllFields[29]?.setText(splitPANNo[4]);
-                      getAllFields[30]?.setText(splitPANNo[5]);
-                      getAllFields[31]?.setText(splitPANNo[6]);
-                      getAllFields[32]?.setText(splitPANNo[7]);
-                      getAllFields[33]?.setText(splitPANNo[8]);
-                      getAllFields[34]?.setText(splitPANNo[9]);
-            
-                      let splitDebitChargesAccount: any = filldata?.BankCharges?.accNumber?.split('')
-                      if (splitDebitChargesAccount != undefined) {
-                        getAllFields[54]?.setText(splitDebitChargesAccount[0]);
-                        getAllFields[55]?.setText(splitDebitChargesAccount[1]);
-                        getAllFields[56]?.setText(splitDebitChargesAccount[2]);
-                        getAllFields[57]?.setText(splitDebitChargesAccount[3]);
-                        getAllFields[58]?.setText(splitDebitChargesAccount[4]);
-                        getAllFields[59]?.setText(splitDebitChargesAccount[5]);
-                        getAllFields[60]?.setText(splitDebitChargesAccount[6]);
-                        getAllFields[61]?.setText(splitDebitChargesAccount[7]);
-                        getAllFields[62]?.setText(splitDebitChargesAccount[8]);
-                        getAllFields[63]?.setText(splitDebitChargesAccount[9]);
-                        getAllFields[64]?.setText(splitDebitChargesAccount[10]);
-                        getAllFields[65]?.setText(splitDebitChargesAccount[11]);
-                        getAllFields[66]?.setText(splitDebitChargesAccount[12]);
-                        getAllFields[67]?.setText(splitDebitChargesAccount[13]);
-                      }
-            
-                      let purppose: any = { Code: [], Description: [] }
-                      validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION?.forEach(element => {
-                        purppose?.Code?.push(element?.PurposeCode)
-                        purppose?.Description?.push(element?.Description?.join(','))
-                      });
-                      getAllFields[106]?.setText(purppose?.Code?.join(','));
-                      getAllFields[107]?.setText(purppose?.Description?.join(','));
+                        if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
+                            getAllFields[98]?.uncheck()
+                            getAllFields[99]?.check()
+                        } else if (filldata?.ForeignBankCharges == "OwnAccount") {
+                            getAllFields[98]?.check()
+                            getAllFields[99]?.uncheck()
+                        }
+
+                        getAllFields[9]?.setText(filldata?.ADBranch);
+                        let remitancedata: any = {
+                            Currency: filldata?.paymentTerm[0]?.PIPO_LIST?.currency,
+                            CurrencyAmount: [],
+                            ExchangeRate: [],
+                            INREquivalentAmount: []
+                        }
+                        filldata?.paymentTerm?.forEach(element => {
+                            remitancedata?.CurrencyAmount.push(element?.RemittanceAmount);
+                        });
+                        getAllFields[10]?.setText(remitancedata?.Currency);
+                        getAllFields[11]?.setText(remitancedata?.CurrencyAmount?.join(','))
+
+                        let splitDebitAccount: any = filldata?.BankDebit?.accNumber?.split('');
+                        if (splitDebitAccount != undefined) {
+                            getAllFields[40]?.setText(splitDebitAccount[0]);
+                            getAllFields[41]?.setText(splitDebitAccount[1]);
+                            getAllFields[42]?.setText(splitDebitAccount[2]);
+                            getAllFields[43]?.setText(splitDebitAccount[3]);
+                            getAllFields[44]?.setText(splitDebitAccount[4]);
+                            getAllFields[45]?.setText(splitDebitAccount[5]);
+                            getAllFields[46]?.setText(splitDebitAccount[6]);
+                            getAllFields[47]?.setText(splitDebitAccount[7]);
+                            getAllFields[48]?.setText(splitDebitAccount[8]);
+                            getAllFields[49]?.setText(splitDebitAccount[9]);
+                            getAllFields[50]?.setText(splitDebitAccount[10]);
+                            getAllFields[51]?.setText(splitDebitAccount[11]);
+                            getAllFields[52]?.setText(splitDebitAccount[12]);
+                            getAllFields[53]?.setText(splitDebitAccount[13]);
+                        }
+
+                        let splitcustomerid: any = filldata?.CustomerID?.split('')
+                        getAllFields[15]?.setText(splitcustomerid[0]);
+                        getAllFields[16]?.setText(splitcustomerid[1]);
+                        getAllFields[17]?.setText(splitcustomerid[2]);
+                        getAllFields[18]?.setText(splitcustomerid[3]);
+                        getAllFields[19]?.setText(splitcustomerid[4]);
+                        getAllFields[20]?.setText(splitcustomerid[5]);
+                        getAllFields[21]?.setText(splitcustomerid[6]);
+                        getAllFields[22]?.setText(splitcustomerid[7]);
+                        getAllFields[23]?.setText(splitcustomerid[8]);
+                        getAllFields[24]?.setText(splitcustomerid[9]);
+
+                        let splitPANNo: any = filldata?.PANNo?.split('')
+                        getAllFields[25]?.setText(splitPANNo[0]);
+                        getAllFields[26]?.setText(splitPANNo[1]);
+                        getAllFields[27]?.setText(splitPANNo[2]);
+                        getAllFields[28]?.setText(splitPANNo[3]);
+                        getAllFields[29]?.setText(splitPANNo[4]);
+                        getAllFields[30]?.setText(splitPANNo[5]);
+                        getAllFields[31]?.setText(splitPANNo[6]);
+                        getAllFields[32]?.setText(splitPANNo[7]);
+                        getAllFields[33]?.setText(splitPANNo[8]);
+                        getAllFields[34]?.setText(splitPANNo[9]);
+
+
+
+                        let splitDebitChargesAccount: any = filldata?.BankCharges?.accNumber?.split('')
+                        if (splitDebitChargesAccount != undefined) {
+                            getAllFields[54]?.setText(splitDebitChargesAccount[0]);
+                            getAllFields[55]?.setText(splitDebitChargesAccount[1]);
+                            getAllFields[56]?.setText(splitDebitChargesAccount[2]);
+                            getAllFields[57]?.setText(splitDebitChargesAccount[3]);
+                            getAllFields[58]?.setText(splitDebitChargesAccount[4]);
+                            getAllFields[59]?.setText(splitDebitChargesAccount[5]);
+                            getAllFields[60]?.setText(splitDebitChargesAccount[6]);
+                            getAllFields[61]?.setText(splitDebitChargesAccount[7]);
+                            getAllFields[62]?.setText(splitDebitChargesAccount[8]);
+                            getAllFields[63]?.setText(splitDebitChargesAccount[9]);
+                            getAllFields[64]?.setText(splitDebitChargesAccount[10]);
+                            getAllFields[65]?.setText(splitDebitChargesAccount[11]);
+                            getAllFields[66]?.setText(splitDebitChargesAccount[12]);
+                            getAllFields[67]?.setText(splitDebitChargesAccount[13]);
+                        }
+
+                        let purppose: any = { Code: [], Description: [] }
+                        validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION?.forEach(element => {
+                            purppose?.Code?.push(element?.PurposeCode)
+                            purppose?.Description?.push(element?.Description?.join(','))
+                        });
+                        getAllFields[106]?.setText(purppose?.Code?.join(','));
+                        getAllFields[107]?.setText(purppose?.Description?.join(','));
                     }
                     const mergedPdfFile = await pdfDoc.save();
                     var base64String1 = this._arrayBufferToBase64(mergedPdfFile)

@@ -150,7 +150,6 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: true,
           }
         },
-
         ADBranch: {
           type: "text",
           value: "",
@@ -176,6 +175,19 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: true,
           },
           maxLength: 10
+        },
+        ForeignBankCharges: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Select Foreign Bank Charges",
+          checkboxlabel: [
+            { text: "Beneficiary", type: "checkbox", value: 'BeneficiaryAccount' },
+            { text: 'Own', type: "checkbox", value: 'OwnAccount' },
+            { text: 'Sharing', type: "checkbox", value: 'SharingAccount' }
+          ],
+          rules: {
+            required: true,
+          }
         },
         paymentTerm: {
           type: "formGroup",

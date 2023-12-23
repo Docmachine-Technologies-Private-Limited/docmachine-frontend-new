@@ -248,12 +248,16 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
-                  item['field']['NewformArray'][item?.OptionfieldIndex]["BOEAmount"]['value'] = currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount;
-                  myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["BOEAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
-                  myForm['touched'] = true;
-                  myForm['status'] = 'VALID';
+                  if (currentVal?.CI_REF[0]?.AirwayBillRef?.length != 0) {
+                    item['field']['NewformArray'][item?.OptionfieldIndex]["BOEAmount"]['value'] = currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount;
+                    myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
+                    myForm.controls[item?.OptionfieldIndex]?.controls["BOEAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
+                    myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+                    myForm['touched'] = true;
+                    myForm['status'] = 'VALID';
+                  } else {
+                    this.toastr.error("You don't have any airway bill copy....")
+                  }
                   console.log(item, this.validator.FIELDS_DATA, "callback")
                 },
               },
@@ -333,6 +337,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
   BENEFICIARY_DETAILS: any = [];
   PIPO_LIST: any = [];
   BENEFICIARY_CALLBACK(value: any) {
+    this.validator.PIPO_LIST=[];
     this.BENEFICIARY_DETAILS = this.validator.BENEFICIARY_DETAILS_LIST.filter((item: any) => item?._id == value?.id);
     this.documentService.filterAnyTable({
       benneName: value?.value,
@@ -376,7 +381,8 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       this.response(null);
       value['ischecked'] = true;
     } else {
-      this.validator.PIPO_LIST.splice(index, 1);
+      let PIPO_INDEX: any = this.validator.PIPO_LIST?.findIndex((item: any) => item?.pi_poNo == value?.pi_poNo)
+      this.validator.PIPO_LIST.splice(PIPO_INDEX, 1);
       let boeRef: any = []
       this.validator.PIPO_LIST?.forEach(element => {
         element?.boeRef?.filter((item: any) => item?.currency == element?.currency)?.forEach(boeelement => {
@@ -658,10 +664,18 @@ export class NewDirectImportPaymentsComponent implements OnInit {
               this.SELECTED_PIPO_URL_LIST.push({ name: 'pipo-' + (index + 1), pdf: paymentTermelement?.PIPO_LIST?.doc })
               this.alldocuments.push(paymentTermelement?.PIPO_LIST?.doc);
             });
+
             this.ExportBillLodgement_Form?.BOE_DETAIILS?.forEach((paymentTermelement, index) => {
               this.SELECTED_PIPO_URL_LIST.push({ name: 'BOE-' + (index + 1), pdf: paymentTermelement?.BOE?.doc })
               this.alldocuments.push(paymentTermelement?.BOE?.doc);
+              paymentTermelement?.BOE?.CI_REF?.forEach((CI_REFElement, j) => {
+                CI_REFElement?.AirwayBillRef?.forEach((AirwayBillRefElement, k) => {
+                  this.SELECTED_PIPO_URL_LIST.push({ name: 'AirwayBill Copy-' + (k + 1), pdf: AirwayBillRefElement?.blCopyDoc })
+                  this.alldocuments.push(AirwayBillRefElement?.blCopyDoc);
+                })
+              });
             });
+            
             var fitertemp: any = this.alldocuments.filter(n => n);
             this.SELECTED_PREVIEWS_URL = '';
             await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {

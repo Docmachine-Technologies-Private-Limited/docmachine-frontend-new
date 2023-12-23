@@ -49,7 +49,7 @@ export class SignupComponent implements OnInit {
         rules: {
           required: true,
         },
-        style: {
+        InputStyle: {
           'border-radius': '30px',
           'padding': '20px'
         },

@@ -107,65 +107,65 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           rules: {
             required: false,
           },
-          YesNo: 'true',
-          text1: 'No',
-          text2: 'Yes',
-          HideShowInput: ["AdvanceInfo"],
-          class: 'row-reverse'
+          YesNo: 'false',
+          YesButton: [
+            { name: 'AdvanceInfo', status: true }
+          ],
+          NoButton: [
+            { name: 'AdvanceInfo', status: false },
+          ],
         },
         AdvanceInfo: {
           type: "formGroup",
-          label: "Advance Info",
-          GroupLabel: ['Advance Info 1'],
-          AddNewRequried: false,
+          label: "",
+          GroupLabel: ['ORM SELECTION 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
+            required: false,
           },
-          disabled: true,
           formArray: [
             [
               {
-                type: "AdvanceInfo",
+                type: "ORM_SELECTION",
                 value: "",
-                label: "Select Advance no.",
-                name: 'AdvanceInfoAny',
+                label: "Select Advance No.",
+                name: 'ORM_SELECTION',
                 rules: {
-                  required: false,
+                  required: true,
                 },
-                AutoFillType: "formGroup",
-                autofillinput: [
-                  { input: 'AdvanceNo', key: 'billNo', parent: "AdvanceInfo" },
-                  { input: 'AdvanceCurrency', key: 'currency', parent: "AdvanceInfo" },
-                  { input: 'AdvanceAmount', key: 'amount', parent: "AdvanceInfo" }
-                ],
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Advance No.",
-                name: 'AdvanceNo',
-                rules: {
-                  required: false,
+                callback: (item: any) => {
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  let currentVal = item?.value;
+                  item['field']['NewformArray'][item?.OptionfieldIndex]["ORMAmount"]['value'] = currentVal?.amount
+                  myForm.controls[item?.OptionfieldIndex]?.controls["ORMAmount"]?.setValue(currentVal?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+                  myForm['touched'] = true;
+                  myForm['status'] = 'VALID';
+                  console.log(item, this.validator.FIELDS_DATA, "callback")
                 },
               },
               {
                 type: "currency",
                 value: "",
-                label: "Advance Currency*",
-                name: 'AdvanceCurrency',
+                label: "Advance Currency",
+                name: 'currency',
                 rules: {
-                  required: false,
+                  required: true,
                 },
+                disabled: true
               },
               {
-                type: "number",
+                type: "TextValiadtion",
                 value: "",
                 label: "Advance Amount",
-                name: 'AdvanceAmount',
+                name: 'ORMAmount',
+                EqualName: "AvailableAmount",
                 rules: {
-                  required: false,
+                  required: true,
                 },
-              }
+                disabled: true,
+                errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+              },
             ]
           ]
         },
@@ -228,14 +228,26 @@ export class ImportCommercialInvoicesComponent implements OnInit {
         e.commercialDoc = this.pipourl1;
         e.buyerName = this.BUYER_LIST;
         e.currency = e.currency?.type != undefined ? e.currency.type : e.currency;
-        e.AdvanceCurrency = e.AdvanceInfo[0]?.AdvanceCurrency?.type != undefined ? e.AdvanceInfo[0]?.AdvanceCurrency?.type : e.AdvanceCurrency;
-        e.AdvanceNo = e.AdvanceInfo[0]?.AdvanceNo != undefined ? e.AdvanceInfo[0]?.AdvanceNo : e.AdvanceNo;
-        e.AdvanceAmount = e.AdvanceInfo[0]?.AdvanceAmount != undefined ? e.AdvanceInfo[0]?.AdvanceAmount : e.AdvanceAmount;
+        let AdvanceInfo: any = {
+          ID: [],
+          AdvanceCurrency: [],
+          AdvanceNo: [],
+          AdvanceAmount: []
+        };
+        e?.AdvanceInfo?.forEach(element => {
+          AdvanceInfo?.ID?.push(element?.ORM_SELECTION?._id)
+          AdvanceInfo?.AdvanceCurrency?.push(element?.ORM_SELECTION?.currency)
+          AdvanceInfo?.AdvanceNo?.push(element?.ORM_SELECTION?.billNo)
+          AdvanceInfo?.AdvanceAmount?.push(element?.ORM_SELECTION?.amount)
+        });
+        e.AdvanceCurrency = AdvanceInfo?.AdvanceCurrency?.join(',');
+        e.AdvanceNo = AdvanceInfo?.AdvanceNo?.join(',');
+        e.AdvanceAmount = AdvanceInfo?.AdvanceAmount?.join(',');
         e.sbNo = '';
         e.sbRef = [];
         e.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
-        e.BoeRef = [this.validator.ORM_SELECTION_DATA?.id];
-        e.ORM_Ref = [this.validator.ORM_SELECTION_DATA?._id];
+        e.BoeRef = AdvanceInfo?.ID
+        e.ORM_Ref = AdvanceInfo?.ID
         this.documentService.getInvoice_No({
           commercialNumber: e.commercialNumber
         }, 'commercials').subscribe((resp: any) => {

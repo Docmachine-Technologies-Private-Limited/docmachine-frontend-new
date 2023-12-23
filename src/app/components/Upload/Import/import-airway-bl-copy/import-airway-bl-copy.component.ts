@@ -99,8 +99,8 @@ export class ImportAirwayBlCopyComponent implements OnInit {
     e.value.pipo = this.pipoArr;
     e.value.blCopyDoc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
-    e.value.CommercialNumber = this.CommercialNumber
     e.value.sbNo = '';
+    e.value.commercialRef=[e.value.CommercialNumber?.id]
     e.value.sbRef = [];
     console.log(e.value, 'onSubmitblCopy');
     this.documentService.getInvoice_No({
@@ -117,6 +117,14 @@ export class ImportAirwayBlCopyComponent implements OnInit {
               res.data._id,
             ],
           }
+
+          let updatedData2 = {
+            "AirwayBillRef": [
+              res.data._id,
+            ],
+          }
+          this.documentService.updateCommercial(updatedData2, e.value.CommercialNumber?.id).subscribe((reas) => { })
+          
           this.userService.updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData).subscribe((data) => {
             console.log(data);
             this.router.navigate(['home/Summary/Import/Airway-bl-Copy']);
@@ -151,7 +159,7 @@ export class ImportAirwayBlCopyComponent implements OnInit {
 
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
-      this.validator.COMMERICAL_NO=[];
+      this.validator.COMMERICAL_NO = [];
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0] });
       });

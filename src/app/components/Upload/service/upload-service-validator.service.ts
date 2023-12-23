@@ -198,7 +198,7 @@ export class UploadServiceValidatorService implements OnInit {
 
   filterData(data: any) {
     this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA.filter((item: any) => item?.RBI_Purpose_Code.includes(data));
-    console.log(data, this.PURPOSE_CODE_FILTER_DATA, 'asdhasdkasdsads')
+    console.log(data, this.PURPOSE_CODE_FILTER_DATA,this.A2_JSON_DATA, 'asdhasdkasdsads')
     if (this.PURPOSE_CODE_FILTER_DATA.length == 0 || data == '') {
       this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
     }
@@ -585,6 +585,7 @@ export class UploadServiceValidatorService implements OnInit {
         hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
 
       buyer: rule?.required == true ? [Validators.required] : [],
+      Newbuyer: rule?.required == true ? [Validators.required] : [],
       ReUpload: rule?.required == true ? [Validators.required] : [],
       DropDown: rule?.required == true ? [Validators.required] : [],
       button: rule?.required == true ? [Validators.required] : [],
@@ -623,10 +624,13 @@ export class UploadServiceValidatorService implements OnInit {
       yesnocheckbox: rule?.required == true ? [Validators.required] : [],
       ArrayList: rule?.required == true ? [Validators.required] : [],
       BOE: rule?.required == true ? [Validators.required] : [],
+      ORM_SELECTION: rule?.required == true ? [Validators.required] : [],
       LABLE_CHECKBOX: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
+      CallbackButton: [],
       LabelShow: [],
+      OnlyLabelShow: [],
       SB_DETAILS_SHOW: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50), alphaNumericValidator],
