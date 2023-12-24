@@ -239,9 +239,6 @@ export class UploadHeaderComponent implements OnInit {
                 newobject[key][key1] = object[key][key1];
               }
             }
-            if (newobject[key]=undefined || newobject[key]==null) {
-                delete newobject[key];
-            }
           } else {
             newobject[key] = object[key];
           }
@@ -249,9 +246,63 @@ export class UploadHeaderComponent implements OnInit {
       }
       return newobject;
     };
-    let removeBlackObject = removeEmptyValues(query)
-    removeBlackObject = removeEmptyValues(removeBlackObject)
-
+    function isEmpty(obj:any) {
+      if (obj === '' || obj === null || JSON.stringify(obj) === '{}' || JSON.stringify(obj) === '[]' || (obj) === undefined || (obj) === '{}') {
+          return true
+      } else {
+          return false
+      }
+  }
+  function removeEmpty(o) {
+      if (typeof o !== "object") {
+          return o;
+      }
+      let oKeys = Object.keys(o)
+      for (let j = 0; j < oKeys.length; j++) {
+          let p = oKeys[j]
+          switch (typeof (o[p])) {
+              case 'object':
+                  if (Array.isArray(o[p])) {
+                      for (let i = 0; i < o[p].length; i++) {
+                          o[p][i] = removeEmpty(o[p][i])
+                          if (isEmpty(o[p][i])) {
+                              o[p].splice(i, 1)
+                              i--
+                          }
+                      }
+                      if (o[p].length === 0) {
+                          if (Array.isArray(o)) {
+                              o.splice(parseInt(p), 1)
+                              j--
+                          } else {
+                              delete o[p]
+                          }
+                      }
+                  } else {
+                      if (isEmpty(o[p])) {
+                          delete o[p]
+                      } else {
+                          o[p] = removeEmpty(o[p])
+                          if (isEmpty(o[p])) {
+                              delete o[p]
+                          }
+                      }
+                  }
+                  break
+              default:
+                  if (isEmpty(o[p])) {
+                      delete o[p]
+                  }
+                  break
+          }
+  
+      }
+      if (Object.keys(o).length === 0) {
+          return
+      }
+      return o
+  }
+    let removeBlackObject = removeEmpty(query)
     console.log(removeBlackObject, 'removeBlackObject')
     this.filteranytablepagination.PaginationfilterAnyTable(removeBlackObject, { limit: 10000 }, 'pi_po').subscribe((res: any) => {
       this.documentService.PI_PO_NUMBER_LIST=[];

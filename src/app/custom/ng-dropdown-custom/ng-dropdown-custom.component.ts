@@ -63,9 +63,13 @@ export class NgDropdownCustomComponent implements OnInit, OnChanges, ControlValu
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes, "NgDropdownCustomComponent")
-    this.selectedItems = changes?.value?.currentValue != null ? this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel != '' ?
+    this.selectedItems = changes?.value?.currentValue != null ? this.NotUndefined(changes) != undefined ? this.NotUndefined(changes) : '' : ''
+  }
+
+  NotUndefined(changes: any) {
+    return this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel != '' ?
       changes?.value?.currentValue[this.LABLE_BIND_LIST[this.id.toString()]?.bindLabel] :
-      changes?.value?.currentValue[this.LABLE_BIND_LIST[this.id.toString()]?.bindValue] : ''
+      changes?.value?.currentValue[this.LABLE_BIND_LIST[this.id.toString()]?.bindValue]
   }
 
   dropdownShow($event) {
