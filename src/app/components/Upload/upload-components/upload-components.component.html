@@ -99,20 +99,21 @@
                     <div class="form-group mb-0" *ngSwitchCase="'DropDown'">
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
-                        <div class="row">
+                        <div class="row" style="width: 100%!important;">
                             <ng-select class="col-10"
                                 [items]="field?.items?.length!=0 && field?.items!=undefiend?field?.items:this.validator.DROP_DOWN_DATA"
                                 [bindLabel]="field?.bindLabel" [multiple]="false"
                                 [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                                 [disabled]="field?.Inputdisabled"
-                                (change)="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.setValue($event)"
+                                (change)="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.setValue($event);
+                                this.DropDownEvent?.emit($event);field?.callback!=undefined?
+                                field?.callback({id:this.id,value:$event?.value,FormGroup:this.validator.dynamicFormGroup[this.id],FIELDS_DATA:this.field}):''"
                                 [name]="field.fieldName" [(ngModel)]="field.value">
                             </ng-select>
                             <button type="button" class="btn btn-primary PopupOpen col-2" *ngIf="field?.Show==true"
                                 [attr.popup-close]="field?.ButtonId" [style]="field?.style"
                                 [innerHTML]="field?.innerHTML">{{field?.buttonName}}</button>
                         </div>
-
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'number'">

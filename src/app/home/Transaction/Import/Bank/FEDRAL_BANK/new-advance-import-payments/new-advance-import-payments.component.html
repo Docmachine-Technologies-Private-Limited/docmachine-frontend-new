@@ -39,7 +39,7 @@
                             <td scope="col" class="col-td-th-2">{{this.getORMAmount(item?.AdviceRef)}}</td>
                             <td scope="col" class="col-td-th-2">{{this.getBOEAmount(item?.boeRef)}}</td>
                             <td scope="col" class="col-td-th-2">{{this.getBOEBalanceAmount(item?.boeRef)}}</td>
-                            <td scope="col" class="col-td-th-2">{{item?.paymentTerm[0]?.BalanceAmount}}</td>
+                            <td scope="col" class="col-td-th-2">{{this.BalanceINV(item)}}</td>
                         </tr>
                     </tbody>
                 </table>

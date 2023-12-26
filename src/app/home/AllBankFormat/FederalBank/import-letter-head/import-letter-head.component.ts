@@ -53,10 +53,12 @@ export class ImportLetterHeadService {
               PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.date + ' | ' + element?.PIPO_LIST?.pi_poNo)
               PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
             });
+            let BOE_DETAIILSSumRemittance: any = filldata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
+         
             let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
-            getAllFields[2]?.setText(`SubForeign: Outward remittance of ` + PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
+            getAllFields[2]?.setText(`SubForeign: Outward remittance of ` + PIPO_DATA?.Currency[0] + ' ' + BOE_DETAIILSSumRemittance);
             getAllFields[3]?.setText(filldata?.BankCharges?.accNumber);
-            getAllFields[4]?.setText(PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
+            getAllFields[4]?.setText(PIPO_DATA?.Currency[0] + ' ' + BOE_DETAIILSSumRemittance);
             getAllFields[5]?.setText(filldata?.BankDebit?.accNumber);
           }
           getAllFields[6]?.setText(BENEFICIARY_DETAILS[0]?.benneName);

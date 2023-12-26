@@ -406,7 +406,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     advice?.forEach(element => {
       advicelist.push(element?.amount)
     });
-    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+    return advice?.length != 0 ? advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0) : '';
   }
 
   getBOERef(advice: any) {
@@ -422,15 +422,23 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     advice?.forEach(element => {
       advicelist.push(element?.invoiceAmount)
     });
-    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.invoiceAmount), 0);
+    return advice?.length != 0 ? advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.invoiceAmount), 0) : '';
   }
 
   getBOEBalanceAmount(advice: any) {
-    let advicelist: any = [];
     advice?.forEach(element => {
-      advicelist.push(element?.balanceAmount)
+      element['balanceAmount'] = element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['invoiceAmount']
     });
-    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.balanceAmount), 0);
+    return advice?.length != 0 ? advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.balanceAmount), 0) : '';
+  }
+
+  BalanceINV(advice: any) {
+    let ORMAmount = this.getORMAmount(advice?.AdviceRef);
+    advice?.boeRef?.forEach(element => {
+      element['balanceAmount'] = element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['invoiceAmount']
+    });
+    let BOEBalanceAmount = this.getBOEBalanceAmount(advice?.boeRef)
+    return parseFloat(advice?.paymentTerm[0]?.BalanceAmount) - parseFloat(ORMAmount) - parseFloat(BOEBalanceAmount);
   }
 
   SELECTED_PIPO_ORM_DETAILS: any = [];
@@ -500,13 +508,13 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                 }
               };
               this.PIPO_REMITTANCE_AMOUNT = this.ExportBillLodgement_Form?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount));
-              console.log(this.validator.FIELDS_DATA['IMPORT_TRANSACTION'],"IMPORT_TRANSACTION")
+              console.log(this.validator.FIELDS_DATA['IMPORT_TRANSACTION'], "IMPORT_TRANSACTION")
               if (this.PIPO_AMOUNT_VALIDATION > 300000 || this.PIPO_REMITTANCE_AMOUNT > 300000) {
                 this.PIPO_REMITTANCE_AMOUNT_TRUE_FALSE = true
                 this.FBG_FORM_VISIBLE = false;
                 this.FBG_FORM_PDF_URL = ''
-                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['label']='FBG Waiver added...'
-                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['visible']=true
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length - 1]['label'] = 'FBG Waiver added...'
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length - 1]['visible'] = true
                 this.AdvanceOutwardRemittanceControllerData.BankFormatLoad()?.FBG(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
                   this.FBG_FORM_VISIBLE = true;
                   this.FBG_FORM_PDF_URL = res
@@ -515,8 +523,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                 this.PIPO_REMITTANCE_AMOUNT_TRUE_FALSE = false
                 this.FBG_FORM_VISIBLE = false;
                 this.FBG_FORM_PDF_URL = ''
-                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['label']=''
-                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length-1]['visible']=false;
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length - 1]['label'] = ''
+                this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length - 1]['visible'] = false;
               }
 
               await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
@@ -759,7 +767,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                   this.documentService.AnyUpdateTable({
                     _id: element?.PIPO_LIST?._id,
                     "paymentTerm.type.value": "Advance Payment"
-                  }, { "paymentTerm.$.BalanceAmount": sum }, 'pi_po').subscribe((res: any) => { })
+                  }, {
+                    "paymentTerm.$.BalanceAmount": sum, 'TransActionType': [{
+                      TransactionId: res1._id,
+                      Type: 'Advance Payment'
+                    }]
+                  }, 'pi_po').subscribe((res: any) => { })
 
                   this.userService.updatePipo({ balanceAmount: sum }, element?.PIPO_LIST?._id).subscribe((data) => {
                     console.log('king123');

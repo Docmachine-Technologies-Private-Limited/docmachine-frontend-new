@@ -201,17 +201,6 @@ export class ImportCommercialInvoicesComponent implements OnInit {
             required: false,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'ImportCommerical');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -253,7 +242,6 @@ export class ImportCommercialInvoicesComponent implements OnInit {
         }, 'commercials').subscribe((resp: any) => {
           console.log('creditNoteNumber Invoice_No', resp)
           if (resp.data.length == 0) {
-            delete e.AdvanceInfo
             this.documentService.addCommercial(e).subscribe((res: any) => {
               this.toastr.success(`Commercial Invoice Added Successfully`);
               let updatedData = {

@@ -8,6 +8,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -39,7 +40,8 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
     CI_SUM: 0,
     TOTAL_CI: 0,
     PIPO_AMOUNT: 0,
-    REMAINING_AMOUNT: 0
+    REMAINING_AMOUNT: 0,
+    PAYMENTS_TERMS_AMOUNT: 0
   }
   UPLOAD_STATUS: boolean = false;
   constructor(public sanitizer: DomSanitizer,
@@ -83,7 +85,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
       console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
     }, 200);
   }
-
+  AdvanceDirectPayment: any = ''
   response(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
@@ -99,6 +101,93 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           rules: {
             required: true,
           }
+        },
+        AdvanceDirectPayment: {
+          type: "DropDown",
+          value: '',
+          items: [{ value: 'Advance Payment' }, { value: 'Direct Imports(Payment Against Bill of entry)' }],
+          bindLabel: 'value',
+          Show: false,
+          label: "Select Transaction Type",
+          rules: {
+            required: true,
+          },
+          callback: (items: any) => {
+            let FILTER_DIRECT_PAYMENTS: any = this.PIPO_DATA?.paymentTerm?.filter((val: any) => val?.type?.value == items?.value);
+            console.log(items, FILTER_DIRECT_PAYMENTS, this.PIPO_DATA, "FILTER_DIRECT_PAYMENTS")
+            let CI_SUM = FILTER_DIRECT_PAYMENTS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+            this.CI_INFO_SUM['PAYMENTS_TERMS_AMOUNT'] = CI_SUM;
+            if (items?.value == "Direct Imports(Payment Against Bill of entry)") {
+              let boeRef: any = []
+              this.PIPO_DATA?.boeRef?.filter((item: any) => item?.currency == this.PIPO_DATA?.currency)?.forEach(boeelement => {
+                boeRef?.push(boeelement)
+              });
+              boeRef?.forEach(element => {
+                element['balanceAmount'] = element?.balanceAmount != '-1' ? element?.balanceAmount : element?.invoiceAmount
+              });
+              this.validator.BOE_LIST = boeRef;
+              this.validator.FIELDS_DATA[items?.id][2]['disabled'] = false;
+              items?.FormGroup?.controls['BOE_DETAIILS']?.enable();
+              console.log(boeRef, "boeRef")
+            } else {
+              this.validator.FIELDS_DATA[items?.id][2]['disabled'] = true;
+              items?.FormGroup?.controls['BOE_DETAIILS']?.disable();
+              this.validator.BOE_LIST = [];
+            }
+            this.AdvanceDirectPayment = items?.value
+            console.log(items, "AdvanceDirectPayment")
+          }
+        },
+        BOE_DETAIILS: {
+          type: "formGroup",
+          label: "",
+          GroupLabel: ['BOE 1'],
+          AddNewRequried: true,
+          rules: {
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "BOE",
+                value: "",
+                label: "Select BOE No.",
+                name: 'BOE',
+                rules: {
+                  required: true,
+                },
+                callback: (item: any) => {
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  let currentVal = item?.value;
+                  myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+                  myForm['touched'] = true;
+                  myForm['status'] = 'VALID';
+                  console.log(item, this.validator.FIELDS_DATA, "callback")
+                },
+              },
+              {
+                type: "currency",
+                value: "",
+                label: "Currency",
+                name: 'currency',
+                rules: {
+                  required: true,
+                },
+                disabled: true
+              },
+              {
+                type: "text",
+                value: "",
+                label: "Amount",
+                name: 'AvailableAmount',
+                rules: {
+                  required: true,
+                },
+                disabled: true,
+              },
+            ]
+          ]
         },
         billNo: {
           type: "text",
@@ -168,73 +257,101 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
         //   url: "member/uploadImage",
         //   items: [0]
         // },
-      }, 'OutwardRemittanceAdvice');
+      }, 'OutwardRemittanceAdvice').then((res) => {
+        this.validator.FIELDS_DATA['OutwardRemittanceAdvice'][2]['disabled'] = true;
+        this.validator.dynamicFormGroup['OutwardRemittanceAdvice']?.controls['BOE_DETAIILS']?.disable();
+        this.validator.BOE_LIST = [];
+      });
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
-
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
   onSubmit(e: any) {
     console.log(e, 'value')
     var temp: any = [];
     if (parseFloat(this.CI_INFO_SUM['REMAINING_AMOUNT']) >= parseFloat(e.value?.amount)) {
-      e.value.file = 'import';
-      e.value.pipo = this.pipoArr;
-      e.value.doc = this.pipourl1;
-      e.value.beneficiaryName = this.BUYER_LIST;
-      e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
-      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-      e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
-      e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
-
-      console.log('doc', temp, this.pipourl1);
-      console.log('onSubmitIrAdvice', e.value);
-      this.documentService.getInvoice_No({
-        billNo: e.value.billNo
-      }, 'iradvices').subscribe((resp: any) => {
-        console.log('creditNoteNumber Invoice_No', resp)
-        if (resp.data.length == 0) {
-          this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
-            console.log('addIrAdvice', data);
-            let updatedData = {
-              "MasterServiceRef": [
-                data?.data._id,
-              ],
-              "AdviceRef": [
-                data?.data._id,
-              ]
-            }
-            this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data1) => {
-              this.toastr.success('Remittance Advice Successfully added...');
-              this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
-              var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
-              if (Transaction_id != '') {
-                this.documentService.AnyUpdateTable(Transaction_id, { ORMRef: [data?.data._id] }, "ExportTransaction").subscribe((res: any) => {
-                  this.documentService.UpdateTransaction({ id: Transaction_id, data: { ORMRefData: e.value } }).subscribe((res: any) => {
-                    this.toastr.success('Remittance Advice Successfully added...');
-                    this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
-                  });
-                });
-              } else {
-                this.toastr.success('Remittance Advice Successfully added...');
-                this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
+      let TOTAL_BOE_AMOUNT: any = e.value.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOE?.balanceAmount), 0)
+      if ((parseFloat(e?.value?.amount) <= parseFloat(TOTAL_BOE_AMOUNT) && parseFloat(TOTAL_BOE_AMOUNT) != 0) || this.AdvanceDirectPayment == "Advance Payment") {
+        e.value.file = 'import';
+        e.value.pipo = this.pipoArr;
+        e.value.doc = this.pipourl1;
+        e.value.beneficiaryName = this.BUYER_LIST;
+        e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
+        e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+        e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
+        e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+        if (this.AdvanceDirectPayment == "Direct Imports(Payment Against Bill of entry)") {
+          let BOE_Ref: any = [];
+          e?.value?.BOE_DETAIILS?.forEach(element => {
+            BOE_Ref.push(element?.BOE?._id)
+          });
+          e.value.BOE_Ref = BOE_Ref;
+        }else{
+          e.value.BOE_Ref = [];
+        }
+        console.log('doc', temp, this.pipourl1);
+        console.log('onSubmitIrAdvice', e.value);
+        this.documentService.getInvoice_No({
+          billNo: e.value.billNo
+        }, 'iradvices').subscribe((resp: any) => {
+          console.log('creditNoteNumber Invoice_No', resp)
+          if (resp.data.length == 0) {
+            this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
+              console.log('addIrAdvice', data);
+              let updatedData = {
+                "MasterServiceRef": [
+                  data?.data._id,
+                ],
+                "AdviceRef": [
+                  data?.data._id,
+                ]
               }
+              if (this.AdvanceDirectPayment == "Direct Imports(Payment Against Bill of entry)") {
+                this.SaveChanges(data?.data)
+              }
+              this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data1) => {
+                var Transaction_id: any = [];
+                if (this.PIPO_DATA?.TransActionType?.length != 0) {
+                  this.PIPO_DATA?.TransActionType?.forEach(element => {
+                    if (element?.Type == this.AdvanceDirectPayment) {
+                      Transaction_id.push(element?.TransactionId)
+                    }
+                  });
+                } else {
+                  Transaction_id = this.route.snapshot.paramMap.get('transaction_id')?.split(',');
+                }
+                if (Transaction_id?.length != 0 && Transaction_id?.length != undefined) {
+                  Transaction_id?.forEach((element, index) => {
+                    this.documentService.AnyUpdateTable(element, { ORMRef: [data?.data._id] }, "ExportTransaction").subscribe((res: any) => {
+                      this.documentService.UpdateTransaction({ id: element, data: { ORMRefData: e.value } }).subscribe((res: any) => {
+                        if ((index + 1) == Transaction_id?.length) {
+                          this.toastr.success('Remittance Advice Successfully added...');
+                          this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
+                        }
+                      });
+                    });
+                  });
+                } else {
+                  this.toastr.success('Remittance Advice Successfully added...');
+                  this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
+                }
+              }, (error) => {
+                console.log('error');
+              });
             }, (error) => {
               console.log('error');
             });
-          },
-            (error) => {
-              console.log('error');
-            }
-          );
-        } else {
-          this.toastr.error(`Please check this Firex Document no. : ${e.value.billNo} already exit...`);
-        }
-      });
+          } else {
+            this.toastr.error(`Please check this Firex Document no. : ${e.value.billNo} already exit...`);
+          }
+        });
+      } else {
+        this.toastr.error(`Total BOE amount is exceeding PI amount by.... Plz check`);
+      }
     } else {
       this.toastr.error(`Total ORM amount is exceeding PI amount by.... Plz check`);
     }
-
   }
 
   clickPipo(event: any) {
@@ -257,5 +374,79 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+
+  tp: any = {
+    firxNumber: [],
+    firxDate: [],
+    firxCurrency: [],
+    firxAmount: [],
+    firxCommision: [],
+    firxRecAmo: [],
+    FirxUsed_Balance: [],
+    id: [],
+  };
+
+  SaveChanges(data: any) {
+    if (data != undefined) {
+      this.tp = {
+        firxNumber: [],
+        firxDate: [],
+        firxCurrency: [],
+        firxAmount: [],
+        firxCommision: [],
+        firxRecAmo: [],
+        FirxUsed_Balance: [],
+        id: [],
+      };
+      this.tp['firxNumber'].push(data?.billNo)
+      this.tp['firxDate'].push(data?.date)
+      this.tp['firxCurrency'].push(data?.currency)
+      this.tp['firxAmount'].push(data?.amount)
+      this.tp['firxCommision'].push(data?.commision)
+
+      this.tp['FirxUsed_Balance'].push(data?.amount)
+      this.tp['firxRecAmo'].push(0);
+      this.tp['id'].push(data?._id);
+
+      this.documentService.Update_Amount_by_Table({
+        tableName: 'iradvices',
+        id: data._id,
+        query: {
+          BalanceAvail: 0,
+          CommissionUsed: true,
+          MatchOffData: data,
+          UsedAmount: data?.amount
+        }
+      }).subscribe((list: any) => {
+
+      })
+      data?.BOE_DETAIILS.forEach(element => {
+        let Createquery = {
+          ORMNumber: this.tp?.firxNumber.join(','),
+          ORMDate: this.tp?.firxDate.join(','),
+          ORMCurrency: this.tp?.firxCurrency.join(','),
+          ORMAmount: this.tp?.firxAmount.join(','),
+          ORMCommision: this.tp?.firxCommision.join(','),
+          ORMRecAmo: '0',
+          FirxUsed_Balance: this.tp?.FirxUsed_Balance.join(','),
+          MatchOffData: data,
+          balanceAmount: 0
+        }
+        this.documentService.Update_Amount_by_Table({
+          tableName: 'boerecords',
+          id: element?.BOE?._id,
+          query: Createquery
+        }).subscribe((r2: any) => {
+        });
+      });
+    } else {
+      this.toastr.error("No Changes Found...")
+    }
+    console.log(data, "SaveChanges")
+  }
+
+  FIRX_AMOUNT(amountarray: any): any {
+    return parseFloat(amountarray?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
   }
 }

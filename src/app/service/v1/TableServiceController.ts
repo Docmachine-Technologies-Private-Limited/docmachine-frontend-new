@@ -2188,12 +2188,12 @@ export class TableServiceController {
                             "CURRENCY",
                             "Beneficiary Name",
                             "Action"],
-                          items: [],
-                          Expansion_header: [],
-                          Expansion_Items: [],
-                          Objectkeys: [],
-                          ExpansionKeys: [],
-                          TableHeaderClass: [
+                        items: [],
+                        Expansion_header: [],
+                        Expansion_Items: [],
+                        Objectkeys: [],
+                        ExpansionKeys: [],
+                        TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-1",
@@ -2201,7 +2201,7 @@ export class TableServiceController {
                             "col-td-th-1",
                             "col-td-th-2",
                             "col-td-th-1"
-                          ],
+                        ],
                         eventId: '',
                         PageSize: 0
                     }
@@ -2878,12 +2878,19 @@ export class TableServiceController {
                         TableFormat['PageSize'] = res?.TOTAL_PAGE
                         TableFormat['items'] = [];
                         TableFormat['Expansion_Items'] = [];
+                        res?.data?.forEach(element => {
+                            let BOE_NO: any = [];
+                            element?.BOE_Ref?.forEach(BOE_Element => {
+                                BOE_NO.push(BOE_Element?.boeNumber)
+                            });
+                            element['BOENO'] = BOE_NO?.join(',')
+                        });
                         this.removeEmpty(res?.data).then(async (newdata: any) => {
                             await newdata?.forEach(async (element) => {
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
                                     date: moment(element['date']).format("DD-MM-YYYY"),
-                                    boeno: element['sbno'],
+                                    boeno: element['BOENO'],
                                     beneficiaryName: element['beneficiaryName'],
                                     currency: element['currency'],
                                     amount: element['amount'],
@@ -2922,6 +2929,8 @@ export class TableServiceController {
                         });
                     });
                 })
+
+
             },
             destructions: async () => {
                 return new Promise((resolve, reject) => {
@@ -3103,17 +3112,17 @@ export class TableServiceController {
                             "Swift-Copy No.",
                             "Beneficiary Name",
                             "Action"],
-                          items: [],
-                          Expansion_header: [],
-                          Expansion_Items: [],
-                          Objectkeys: [],
-                          ExpansionKeys: [],
-                          TableHeaderClass: [
+                        items: [],
+                        Expansion_header: [],
+                        Expansion_Items: [],
+                        Objectkeys: [],
+                        ExpansionKeys: [],
+                        TableHeaderClass: [
                             "col-td-th-1",
                             "col-td-th-1",
                             "col-td-th-2",
                             "col-td-th-2",
-                          ],
+                        ],
                         eventId: '',
                         PageSize: 0
                     }
@@ -3219,6 +3228,14 @@ export class TableServiceController {
                 })
             },
         }
+    }
+
+    BOE_DETAIILS(element: any) {
+        let BOE_DATA: any = [];
+        (element?.BOE_Ref != 'NF' ? element?.BOE_Ref : [])?.forEach(BOE_Element => {
+            BOE_DATA.puhs(BOE_Element?.boeNumber)
+        });
+        return BOE_DATA?.join(',')
     }
 
     async removeEmpty(data: any) {

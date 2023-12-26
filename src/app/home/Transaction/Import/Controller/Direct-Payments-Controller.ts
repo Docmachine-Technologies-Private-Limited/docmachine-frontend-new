@@ -68,7 +68,6 @@ export class DirectPaymentsControllerData {
                         });
                         let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
                         let paymentTermSum: any = filldata?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0)
-                        getAllFields[2]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + paymentTermSum?.toString());
 
                         var today: any = new Date();
                         var dd = String(today.getDate()).padStart(2, '0');
@@ -76,15 +75,17 @@ export class DirectPaymentsControllerData {
                         var yyyy = today.getFullYear();
                         today = yyyy + "-" + mm + "-" + dd;
                         today = today?.split("-")
+                        let BOE_DETAIILSSum: any = filldata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOE?.invoiceAmount), 0)
+                        let BOE_DETAIILSSumRemittance: any = filldata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
+                        getAllFields[2]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + BOE_DETAIILSSumRemittance?.toString());
                         getAllFields[3]?.setText(today[2]?.split('')[0]);
                         getAllFields[4]?.setText(today[2]?.split('')[1]);
                         getAllFields[5]?.setText(today[1]?.split('')[0]);
                         getAllFields[6]?.setText(today[1]?.split('')[1]);
                         getAllFields[7]?.setText(today[0]?.split('')[2]);
                         getAllFields[8]?.setText(today[0]?.split('')[3]);
-                        getAllFields[9]?.setText(RemittanceAmount?.toString() != undefined ? PIPO_DATA?.Currency[0] + ' ' + this.ConvertNumberToWords(RemittanceAmount?.toString()) : '-');
+                        getAllFields[9]?.setText(BOE_DETAIILSSumRemittance?.toString() != undefined ? PIPO_DATA?.Currency[0] + ' ' + this.ConvertNumberToWords(BOE_DETAIILSSumRemittance?.toString()) : '-');
 
-                        let BOE_DETAIILSSum: any = filldata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
                         let BOE_DETAIILS_FILTER: any = {
                             boeNumber: [],
                             boeDate: [],
@@ -93,8 +94,33 @@ export class DirectPaymentsControllerData {
                         filldata?.BOE_DETAIILS?.forEach(element => {
                             BOE_DETAIILS_FILTER['boeNumber'].push(element?.BOE?.boeNumber)
                             BOE_DETAIILS_FILTER['boeDate'].push(element?.BOE?.boeDate)
-                            BOE_DETAIILS_FILTER['BOEAmount'].push(element?.BOEAmount)
+                            BOE_DETAIILS_FILTER['BOEAmount'].push(element?.BOE?.invoiceAmount)
                         });
+                        
+                        if (filldata?.Remittance == "PartRemittance") {
+                            getAllFields[11]?.uncheck()
+                            getAllFields[12]?.check()
+                        } else if (filldata?.Remittance == "FullFinalRemittance") {
+                            getAllFields[11]?.check()
+                            getAllFields[12]?.uncheck()
+                        }
+
+                        if (filldata?.ForeignBankCharges == "OwnAccount") {
+                            getAllFields[13]?.uncheck();
+                            getAllFields[14]?.check();
+                        } else if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
+                            getAllFields[13]?.check();
+                            getAllFields[14]?.uncheck();
+                        }
+
+                        if (filldata?.TypeofGoods == "Capital") {
+                            getAllFields[17]?.check();
+                            getAllFields[18]?.uncheck();
+                        } else if (filldata?.TypeofGoods == "NonCapital") {
+                            getAllFields[17]?.uncheck();
+                            getAllFields[18]?.check();
+                        }
+                        
                         getAllFields[19]?.setText(BOE_DETAIILS_FILTER['boeNumber']?.join(','));
                         getAllFields[20]?.setText(BOE_DETAIILS_FILTER['boeDate']?.join(','));
                         getAllFields[21]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.dischargePort);

@@ -19,7 +19,7 @@
                             this.PIPO_DISABLED==true"
                             [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                            (change)="clickPipo($event)">
+                            (change)="clickPipo($event)" [(ngModel)]="this.AutoFillPIPO" #PI_PO_BUYER_NAME_NG_SELECT>
                         </ng-select>
                         <ng-input [disabled]="true"
                             *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
@@ -59,6 +59,7 @@
                                     <table class="table mb-0 mt-2">
                                         <thead>
                                             <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-1">#</th>
                                                 <th scope="col" class="col-td-th-3">PIPO No.</th>
                                                 <th scope="col" class="col-td-th-3">PIPO Amount</th>
                                                 <th scope="col" class="col-td-th-3">Buyer Name</th>
@@ -66,6 +67,7 @@
                                         </thead>
                                         <tbody>
                                             <tr class="table-tr" *ngFor='let item of this.PIPODATA; let i = index'>
+                                                <td class="col-td-th-3"><input class="checkbox" [checked]="item?.Checked" type="checkbox" (click)="clickPipoNext($event,i,item,PI_PO_BUYER_NAME_NG_SELECT)"></td>
                                                 <td class="col-td-th-3">{{item?.pi_poNo}}</td>
                                                 <td class="col-td-th-3">{{item?.amount}}</td>
                                                 <td class="col-td-th-3">{{item?.buyerName}}</td>
@@ -84,7 +86,7 @@
                         PIPO_TARANSACTION==false && 
                         this.PIPO_DISABLED==true" [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                            (change)="clickPipo($event)">
+                            (change)="clickPipo($event)" [(ngModel)]="this.AutoFillPIPO" #PI_PO_BENNE_NAME_NG_SELECT>
                         </ng-select>
                         <ng-input [disabled]="true"
                             *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
@@ -124,16 +126,18 @@
                                 <table class="table mb-0 mt-2">
                                     <thead>
                                         <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-1">#</th>
                                             <th scope="col" class="col-td-th-3">PIPO No.</th>
                                             <th scope="col" class="col-td-th-3">PIPO Amount</th>
-                                            <th scope="col" class="col-td-th-3">Beneficiary Name</th>
+                                            <th scope="col" class="col-td-th-2">Beneficiary Name</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="table-tr" *ngFor='let item of this.PIPODATA; let i = index'>
+                                        <tr class="table-tr" *ngFor='let item of this.PIPODATA; let i = index' >
+                                            <td class="col-td-th-3"><input class="checkbox" [checked]="item?.Checked" type="checkbox" (click)="clickPipoNext($event,i,item,PI_PO_BENNE_NAME_NG_SELECT)"></td>
                                             <td class="col-td-th-3">{{item?.pi_poNo}}</td>
                                             <td class="col-td-th-3">{{item?.amount}}</td>
-                                            <td class="col-td-th-3">{{item?.benneName}}</td>
+                                            <td class="col-td-th-2">{{item?.benneName}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -109,7 +109,7 @@ export class UploadHeaderComponent implements OnInit {
   PIPODATA: any = [];
 
   ngOnInit(): void {
-    this.filteranytablepagination.PaginationfilterAnyTable({}, { limit: 10000 }, 'pi_po').subscribe((res: any) => {
+    this.filteranytablepagination.PaginationfilterAnyTable({}, { limit: 10 }, 'pi_po').subscribe((res: any) => {
       res?.data?.forEach(element => {
         element['Checked'] = false;
       });
@@ -119,8 +119,8 @@ export class UploadHeaderComponent implements OnInit {
     })
     this.validator.loaddata().then((res) => {
       this.LoadCompleted.emit(res);
-      console.log(this.validator?.USER_DATA?.result?.sideMenu,"this.validator?.userData?.sideMenu")
-      if (this.validator?.USER_DATA?.result?.sideMenu=='export') {
+      console.log(this.validator?.USER_DATA?.result?.sideMenu, "this.validator?.userData?.sideMenu")
+      if (this.validator?.USER_DATA?.result?.sideMenu == 'export') {
         setTimeout(() => {
           this.validator.buildForm({
             buyer: {
@@ -150,7 +150,7 @@ export class UploadHeaderComponent implements OnInit {
           }, 'EXPORT_FILTER');
           console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
         }, 200);
-      }else{
+      } else {
         setTimeout(() => {
           this.validator.buildForm({
             benneName: {
@@ -182,8 +182,6 @@ export class UploadHeaderComponent implements OnInit {
         }, 200);
       }
     });
-   
-   
   }
 
   clickPipo(event: any) {
@@ -197,24 +195,42 @@ export class UploadHeaderComponent implements OnInit {
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
-  NEXT_BUTTON:boolean=false;
-  clickPipoNext(event: any, index, data) {
+
+  NEXT_BUTTON: boolean = false;
+  AutoFillPIPO: any = [];
+  clickPipoNext(event: any, index, data, PI_PO_BENNE_NAME_NG_SELECT) {
     if (event?.target.checked == true) {
       this.btndisabled = false;
-      this.UploadHeaderEvent.emit(data);
-      this.NEXT_BUTTON=true;
+      if (this.validator?.USER_DATA?.result?.sideMenu == 'export') {
+        this.AutoFillPIPO = {
+          pi_po_buyerName: 'PI-' + data?.pi_poNo + '-' + data?.buyerName,
+          id: [data?.pi_poNo, data?.buyerName],
+          _id: data?._id
+        }
+      } else if (this.validator?.USER_DATA?.result?.sideMenu == 'import') {
+        this.AutoFillPIPO = {
+          pi_po_buyerName: 'PI-' + data?.pi_poNo + '-' + data?.benneName,
+          id: [data?.pi_poNo, data?.benneName],
+          _id: data?._id
+        }
+      }
+      this.NEXT_BUTTON = true;
+      PI_PO_BENNE_NAME_NG_SELECT?.open();
+      this.UploadHeaderEvent.emit(this.AutoFillPIPO)
+
     } else {
       event.target.checked = false
       this.btndisabled = true;
-      this.NEXT_BUTTON=false
+      this.NEXT_BUTTON = false
     }
-    this.PIPO_DATA.forEach((element, i) => {
-      if (i != index) {
+    this.PIPODATA.forEach((element, i) => {
+      if (i == index) {
+        element['Checked'] = true;
+      } else {
         element['Checked'] = false;
       }
     });
-    console.log(event, data, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(event, index, data, this.PIPODATA, 'clickPipoNext')
   }
 
   routechanged(text: any) {
@@ -228,84 +244,66 @@ export class UploadHeaderComponent implements OnInit {
     } else if (value?.value?.benneName != null && value?.value?.benneName != undefined) {
       query["benneName"] = value?.value?.benneName?.value
     }
-    const removeEmptyValues = (object) => {
-      let newobject: any = {}
-      for (const key in object) {
-        if (object[key] != '' && object[key] != null && object[key] != undefined && object[key] != false ) {
-          if (typeof object[key] == "object") {
-            newobject[key]={}
-            for (const key1 in object[key]) {
-              if (object[key][key1] != '' && object[key][key1] != null && object[key][key1] != undefined) {
-                newobject[key][key1] = object[key][key1];
-              }
-            }
-          } else {
-            newobject[key] = object[key];
-          }
-        }
-      }
-      return newobject;
-    };
-    function isEmpty(obj:any) {
+    function isEmpty(obj: any) {
       if (obj === '' || obj === null || JSON.stringify(obj) === '{}' || JSON.stringify(obj) === '[]' || (obj) === undefined || (obj) === '{}') {
-          return true
+        return true
       } else {
-          return false
+        return false
       }
-  }
-  function removeEmpty(o) {
+    }
+    function removeEmpty(o) {
       if (typeof o !== "object") {
-          return o;
+        return o;
       }
       let oKeys = Object.keys(o)
       for (let j = 0; j < oKeys.length; j++) {
-          let p = oKeys[j]
-          switch (typeof (o[p])) {
-              case 'object':
-                  if (Array.isArray(o[p])) {
-                      for (let i = 0; i < o[p].length; i++) {
-                          o[p][i] = removeEmpty(o[p][i])
-                          if (isEmpty(o[p][i])) {
-                              o[p].splice(i, 1)
-                              i--
-                          }
-                      }
-                      if (o[p].length === 0) {
-                          if (Array.isArray(o)) {
-                              o.splice(parseInt(p), 1)
-                              j--
-                          } else {
-                              delete o[p]
-                          }
-                      }
-                  } else {
-                      if (isEmpty(o[p])) {
-                          delete o[p]
-                      } else {
-                          o[p] = removeEmpty(o[p])
-                          if (isEmpty(o[p])) {
-                              delete o[p]
-                          }
-                      }
-                  }
-                  break
-              default:
-                  if (isEmpty(o[p])) {
-                      delete o[p]
-                  }
-                  break
-          }
-  
+        let p = oKeys[j]
+        switch (typeof (o[p])) {
+          case 'object':
+            if (Array.isArray(o[p])) {
+              for (let i = 0; i < o[p].length; i++) {
+                o[p][i] = removeEmpty(o[p][i])
+                if (isEmpty(o[p][i])) {
+                  o[p].splice(i, 1)
+                  i--
+                }
+              }
+              if (o[p].length === 0) {
+                if (Array.isArray(o)) {
+                  o.splice(parseInt(p), 1)
+                  j--
+                } else {
+                  delete o[p]
+                }
+              }
+            } else {
+              if (isEmpty(o[p])) {
+                delete o[p]
+              } else {
+                o[p] = removeEmpty(o[p])
+                if (isEmpty(o[p])) {
+                  delete o[p]
+                }
+              }
+            }
+            break
+          default:
+            if (isEmpty(o[p])) {
+              delete o[p]
+            }
+            break
+        }
+
       }
       if (Object.keys(o).length === 0) {
-          return
+        return
       }
       return o
-  }
+    }
     let removeBlackObject = removeEmpty(query)
     console.log(removeBlackObject, 'removeBlackObject')
     this.filteranytablepagination.PaginationfilterAnyTable(removeBlackObject, { limit: 10000 }, 'pi_po').subscribe((res: any) => {
-      this.documentService.PI_PO_NUMBER_LIST=[];
+      this.documentService.PI_PO_NUMBER_LIST = [];
       res?.data?.forEach(element => {
         element['Checked'] = false;
       });
@@ -315,9 +313,9 @@ export class UploadHeaderComponent implements OnInit {
     })
     console.log(value, "NgCustomFilterPopup")
   }
-  
-  Reset(){
-    this.filteranytablepagination.PaginationfilterAnyTable({}, { limit: 10000 }, 'pi_po').subscribe((res: any) => {
+
+  Reset() {
+    this.filteranytablepagination.PaginationfilterAnyTable({}, { limit: 10 }, 'pi_po').subscribe((res: any) => {
       res?.data?.forEach(element => {
         element['Checked'] = false;
       });
@@ -326,5 +324,5 @@ export class UploadHeaderComponent implements OnInit {
       console.log(this.PIPO_TARANSACTION, res, "PIPO_TARANSACTION")
     })
   }
-  
+
 }

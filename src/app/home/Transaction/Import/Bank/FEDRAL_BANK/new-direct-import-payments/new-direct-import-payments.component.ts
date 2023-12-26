@@ -144,24 +144,11 @@ export class NewDirectImportPaymentsComponent implements OnInit {
             callback: (item: any) => {
               const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
               let currentVal = item?.value;
-              item.form['value'][item?.fieldName][item?.OptionfieldIndex]["RemittanceAmount"] = (currentVal?.paymentTerm[0]?.BalanceAmount);
-              myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
-              myForm.controls[item?.OptionfieldIndex]?.controls["RemittanceAmount"]?.setValue(currentVal?.paymentTerm[0]?.BalanceAmount);
               myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
               myForm['touched'] = true;
               myForm['status'] = 'VALID';
               console.log(item, "callback")
             },
-          },
-          {
-            type: "text",
-            value: element?.paymentTerm[0]?.BalanceAmount,
-            label: "Available Amount",
-            name: 'amount',
-            rules: {
-              required: true,
-            },
-            disabled: true,
           },
           {
             type: "currency",
@@ -173,17 +160,6 @@ export class NewDirectImportPaymentsComponent implements OnInit {
             },
             disabled: true
           },
-          {
-            type: "TextValiadtion",
-            value: element?.paymentTerm[0]?.BalanceAmount,
-            label: "Remittance amount",
-            name: 'RemittanceAmount',
-            EqualName: "amount",
-            rules: {
-              required: true,
-            },
-            errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
-          }
         ]
         PIPO_FORM.push(form)
       });
@@ -205,6 +181,43 @@ export class NewDirectImportPaymentsComponent implements OnInit {
           type: "xyzzzz",
           value: "",
           label: "",
+          rules: {
+            required: true,
+          }
+        },
+        Remittance: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Select Import Remittance",
+          checkboxlabel: [
+            { text: "Part Remittance", type: "checkbox", value: 'PartRemittance' },
+            { text: 'Full/Final Remittance', type: "checkbox", value: 'FullFinalRemittance' }
+          ],
+          rules: {
+            required: true,
+          }
+        },
+        ForeignBankCharges: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Select Foreign Bank Charges",
+          checkboxlabel: [
+            { text: "Beneficiary", type: "checkbox", value: 'BeneficiaryAccount' },
+            { text: 'Own', type: "checkbox", value: 'OwnAccount' },
+            { text: 'Sharing', type: "checkbox", value: 'SharingAccount' }
+          ],
+          rules: {
+            required: true,
+          }
+        },
+        TypeofGoods: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Select Type of Goods",
+          checkboxlabel: [
+            { text: "Capital", type: "checkbox", value: 'Capital' },
+            { text: 'Non-Capital', type: "checkbox", value: 'NonCapital' }
+          ],
           rules: {
             required: true,
           }
@@ -253,6 +266,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                     myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
                     myForm.controls[item?.OptionfieldIndex]?.controls["BOEAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
                     myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+                    myForm.controls[item?.OptionfieldIndex]?.controls["ActualBOEAmount"]?.setValue(currentVal?.invoiceAmount);
                     myForm['touched'] = true;
                     myForm['status'] = 'VALID';
                   } else {
@@ -260,16 +274,6 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                   }
                   console.log(item, this.validator.FIELDS_DATA, "callback")
                 },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Available Amount",
-                name: 'AvailableAmount',
-                rules: {
-                  required: true,
-                },
-                disabled: true,
               },
               {
                 type: "currency",
@@ -282,15 +286,35 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                 disabled: true
               },
               {
+                type: "text",
+                value: "",
+                label: "Actual BOE Amount",
+                name: 'ActualBOEAmount',
+                rules: {
+                  required: true,
+                },
+                disabled: true,
+              },
+              {
+                type: "text",
+                value: "",
+                label: "Available Amount",
+                name: 'AvailableAmount',
+                rules: {
+                  required: true,
+                },
+                disabled: true,
+              },
+              {
                 type: "TextValiadtion",
                 value: "",
-                label: "BOE Amount",
+                label: "Remittance Amount",
                 name: 'BOEAmount',
                 EqualName: "AvailableAmount",
                 rules: {
                   required: true,
                 },
-                errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+                errormsg: 'Remittance amount should be lesser than or equal to the available amount.',
               },
             ]
           ]
@@ -337,7 +361,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
   BENEFICIARY_DETAILS: any = [];
   PIPO_LIST: any = [];
   BENEFICIARY_CALLBACK(value: any) {
-    this.validator.PIPO_LIST=[];
+    this.validator.PIPO_LIST = [];
     this.BENEFICIARY_DETAILS = this.validator.BENEFICIARY_DETAILS_LIST.filter((item: any) => item?._id == value?.id);
     this.documentService.filterAnyTable({
       benneName: value?.value,
@@ -366,7 +390,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       this.validator.PIPO_LIST.push(value)
       let boeRef: any = []
       this.validator.PIPO_LIST?.forEach(element => {
-        element?.boeRef?.filter((item: any) => item?.currency == element?.currency)?.forEach(boeelement => {
+        element?.boeRef?.filter((item: any) => item?.currency == element?.currency && parseFloat(item?.balanceAmount) != 0)?.forEach(boeelement => {
           boeRef?.push(boeelement)
         });
       });
@@ -385,7 +409,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       this.validator.PIPO_LIST.splice(PIPO_INDEX, 1);
       let boeRef: any = []
       this.validator.PIPO_LIST?.forEach(element => {
-        element?.boeRef?.filter((item: any) => item?.currency == element?.currency)?.forEach(boeelement => {
+        element?.boeRef?.filter((item: any) => item?.currency == element?.currency && parseFloat(item?.balanceAmount) != 0)?.forEach(boeelement => {
           boeRef?.push(boeelement)
         });
       });
@@ -409,7 +433,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     advice?.forEach(element => {
       advicelist.push(element?.amount)
     });
-    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+    return advice?.length != 0 ? advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0) : '';
   }
 
   getBOERef(advice: any) {
@@ -425,15 +449,14 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     advice?.forEach(element => {
       advicelist.push(element?.invoiceAmount)
     });
-    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.invoiceAmount), 0);
+    return advice?.length != 0 ? advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.invoiceAmount), 0) : '';
   }
 
   getBOEBalanceAmount(advice: any) {
-    let advicelist: any = [];
     advice?.forEach(element => {
-      advicelist.push(element?.balanceAmount)
+      element['balanceAmount'] = element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['invoiceAmount']
     });
-    return advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.balanceAmount), 0);
+    return advice?.length != 0 ? advice?.reduce((a, b) => parseFloat(a) + parseFloat(b?.balanceAmount), 0) : '';
   }
 
   SELECTED_PIPO_ORM_DETAILS: any = [];
@@ -464,6 +487,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
             this.TIMEOUT = setTimeout(async () => {
               this.PREVIWES_URL = res;
               this.VISIBLITY_PDF = true;
+              this.LETTER_HEAD_URL = ''
               await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
@@ -480,6 +504,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
             this.TIMEOUT = setTimeout(async () => {
               this.PREVIWES_URL = res;
               this.VISIBLITY_PDF = true;
+              this.LETTER_HEAD_URL = '';
               await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
@@ -646,49 +671,47 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       fromValue.value['BenneName'] = this.BENEFICIARY_DETAILS
       this.ExportBillLodgement_Form = fromValue?.value;
       let BOE_SUM: any = this.ExportBillLodgement_Form?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
-      let PIPO_SUM: any = this.ExportBillLodgement_Form?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0)
-      if (PIPO_SUM <= BOE_SUM) {
-        this.PREVIEWS_URL_LIST = ''
-        this.alldocuments = [];
-        this.SELECTED_PIPO_URL_LIST = []
-        this.Send_for_Approval_button = false;
-        this.fillForm(fromValue?.value).then(async (res: any) => {
-          await this.getS3Url().then(async (res: any) => {
-            await res?.forEach(element => {
-              this.alldocuments.push(element)
-            });
-            await this.OTHER_DOCUMENTS?.forEach(element => {
-              this.alldocuments.push(element?.pdf)
-            });
-            this.ExportBillLodgement_Form?.paymentTerm?.forEach((paymentTermelement, index) => {
-              this.SELECTED_PIPO_URL_LIST.push({ name: 'pipo-' + (index + 1), pdf: paymentTermelement?.PIPO_LIST?.doc })
-              this.alldocuments.push(paymentTermelement?.PIPO_LIST?.doc);
-            });
+      // let PIPO_SUM: any = this.ExportBillLodgement_Form?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0)
+      this.PREVIEWS_URL_LIST = ''
+      this.alldocuments = [];
+      this.SELECTED_PIPO_URL_LIST = []
+      this.Send_for_Approval_button = false;
+      this.fillForm(fromValue?.value).then(async (res: any) => {
+        await this.getS3Url().then(async (res: any) => {
+          await res?.forEach(element => {
+            this.alldocuments.push(element)
+          });
+          await this.OTHER_DOCUMENTS?.forEach(element => {
+            this.alldocuments.push(element?.pdf)
+          });
+          // this.ExportBillLodgement_Form?.paymentTerm?.forEach((paymentTermelement, index) => {
+          //   this.SELECTED_PIPO_URL_LIST.push({ name: 'pipo-' + (index + 1), pdf: paymentTermelement?.PIPO_LIST?.doc })
+          //   this.alldocuments.push(paymentTermelement?.PIPO_LIST?.doc);
+          // });
 
-            this.ExportBillLodgement_Form?.BOE_DETAIILS?.forEach((paymentTermelement, index) => {
-              this.SELECTED_PIPO_URL_LIST.push({ name: 'BOE-' + (index + 1), pdf: paymentTermelement?.BOE?.doc })
-              this.alldocuments.push(paymentTermelement?.BOE?.doc);
-              paymentTermelement?.BOE?.CI_REF?.forEach((CI_REFElement, j) => {
-                CI_REFElement?.AirwayBillRef?.forEach((AirwayBillRefElement, k) => {
-                  this.SELECTED_PIPO_URL_LIST.push({ name: 'AirwayBill Copy-' + (k + 1), pdf: AirwayBillRefElement?.blCopyDoc })
-                  this.alldocuments.push(AirwayBillRefElement?.blCopyDoc);
-                })
-              });
-            });
-            
-            var fitertemp: any = this.alldocuments.filter(n => n);
-            this.SELECTED_PREVIEWS_URL = '';
-            await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-              this.PREVIEWS_URL_LIST = merge?.pdfurl;
-              this.SELECTED_PREVIEWS_URL = merge?.pdfurl
-              this.Send_for_Approval_button = true;
-              console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'FormValuePreviewSlideToggle')
+          this.ExportBillLodgement_Form?.BOE_DETAIILS?.forEach((paymentTermelement, index) => {
+            this.SELECTED_PIPO_URL_LIST.push({ name: 'BOE-' + (index + 1), pdf: paymentTermelement?.BOE?.doc })
+            this.alldocuments.push(paymentTermelement?.BOE?.doc);
+            paymentTermelement?.BOE?.CI_REF?.forEach((CI_REFElement, j) => {
+              this.SELECTED_PIPO_URL_LIST.push({ name: 'Commercial-' + (j + 1), pdf: CI_REFElement?.commercialDoc })
+              this.alldocuments.push(CI_REFElement?.commercialDoc);
+              CI_REFElement?.AirwayBillRef?.forEach((AirwayBillRefElement, k) => {
+                this.SELECTED_PIPO_URL_LIST.push({ name: 'AirwayBill Copy-' + (k + 1), pdf: AirwayBillRefElement?.blCopyDoc })
+                this.alldocuments.push(AirwayBillRefElement?.blCopyDoc);
+              })
             });
           });
-        })
-      } else {
-        this.toastr.error("Remittance amount should not exceed BOE amount")
-      }
+
+          var fitertemp: any = this.alldocuments.filter(n => n);
+          this.SELECTED_PREVIEWS_URL = '';
+          await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+            this.PREVIEWS_URL_LIST = merge?.pdfurl;
+            this.SELECTED_PREVIEWS_URL = merge?.pdfurl
+            this.Send_for_Approval_button = true;
+            console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'FormValuePreviewSlideToggle')
+          });
+        });
+      })
     }
   }
 
@@ -758,7 +781,13 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                   this.documentService.AnyUpdateTable({
                     _id: element?.PIPO_LIST?._id,
                     "paymentTerm.type.value": "Direct Imports(Payment Against Bill of entry)"
-                  }, { "paymentTerm.$.BalanceAmount": sum }, 'pi_po').subscribe((res: any) => { })
+                  }, {
+                    // "paymentTerm.$.BalanceAmount": sum,
+                    'TransActionType': [{
+                      TransactionId: res1._id,
+                      Type: 'Direct Imports(Payment Against Bill of entry)'
+                    }]
+                  }, 'pi_po').subscribe((res: any) => { })
                   this.userService.updatePipo({ balanceAmount: sum }, element?.PIPO_LIST?._id).subscribe((data) => {
                     console.log('king123');
                     console.log(data);

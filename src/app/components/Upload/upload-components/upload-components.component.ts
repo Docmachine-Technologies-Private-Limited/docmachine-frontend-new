@@ -51,6 +51,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('BUTTON_PANEL_SHOW') BUTTON_PANEL_SHOW: boolean = false;
   @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean = true;
   @Input('SubmitButtonDisabled') SubmitButtonDisabled: boolean = false;
+  @Output('DropDownEvent') DropDownEvent: any = new EventEmitter();
 
   Account_Type: any = [{
     type: 'OD-over draft'

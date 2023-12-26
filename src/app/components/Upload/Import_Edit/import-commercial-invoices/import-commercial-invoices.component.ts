@@ -86,6 +86,50 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
     this.PIPOInfo(this.data?.pipo[0]?._id)
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
+      let AdvanceInfo:any=[];
+      args?.AdvanceInfo.forEach(element => {
+        AdvanceInfo.push([{
+          type: "ORM_SELECTION",
+          value:element?.ORM_SELECTION,
+          label: "Select Advance No.",
+          name: 'ORM_SELECTION',
+          rules: {
+            required: true,
+          },
+          callback: (item: any) => {
+            const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+            let currentVal = item?.value;
+            item['field']['NewformArray'][item?.OptionfieldIndex]["ORMAmount"]['value'] = currentVal?.amount
+            myForm.controls[item?.OptionfieldIndex]?.controls["ORMAmount"]?.setValue(currentVal?.amount);
+            myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+            myForm['touched'] = true;
+            myForm['status'] = 'VALID';
+            console.log(item, this.validator.FIELDS_DATA, "callback")
+          },
+        },
+        {
+          type: "currency",
+          value: element?.currency,
+          label: "Advance Currency",
+          name: 'currency',
+          rules: {
+            required: true,
+          },
+          disabled: true
+        },
+        {
+          type: "TextValiadtion",
+          value: element?.ORMAmount,
+          label: "Advance Amount",
+          name: 'ORMAmount',
+          EqualName: "AvailableAmount",
+          rules: {
+            required: true,
+          },
+          disabled: true,
+          errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+        }])
+      });
       this.validator.buildForm({
         commercialNumber: {
           type: "text",
@@ -119,67 +163,37 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
             required: true,
           }
         },
+        IfAdvancePaid: {
+          type: "yesnocheckbox",
+          value: 'true',
+          label: "If Advance Paid?",
+          rules: {
+            required: false,
+          },
+          YesNo: 'false',
+          YesButton: [
+            { name: 'AdvanceInfo', status: true }
+          ],
+          NoButton: [
+            { name: 'AdvanceInfo', status: false },
+          ],
+        },
         AdvanceInfo: {
           type: "formGroup",
-          label: "Advance Info",
-          GroupLabel: ['Advance Info 1'],
-          AddNewRequried: false,
+          label: "",
+          GroupLabel: ['ORM SELECTION 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
+            required: false,
           },
-          formArray: [
-            [
-              {
-                type: "AdvanceInfo",
-                value: args?.AdvanceInfo,
-                label: "Select Advance no.",
-                name: 'AdvanceInfoAny',
-                rules: {
-                  required: true,
-                },
-                AutoFillType: "formGroup",
-                autofillinput: [
-                  { input: 'AdvanceNo', key: 'billNo', parent: "AdvanceInfo" },
-                  { input: 'AdvanceCurrency', key: 'currency', parent: "AdvanceInfo" },
-                  { input: 'AdvanceAmount', key: 'amount', parent: "AdvanceInfo" }
-                ],
-              },
-              {
-                type: "text",
-                value: args?.AdvanceNo,
-                label: "Advance No.",
-                name: 'AdvanceNo',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "currency",
-                value: args?.AdvanceCurrency,
-                label: "Advance Currency",
-                name: 'AdvanceCurrency',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "number",
-                value: args?.AdvanceAmount,
-                label: "Advance Amount",
-                name: 'AdvanceAmount',
-                rules: {
-                  required: true,
-                },
-              }
-            ]
-          ]
+          formArray:AdvanceInfo
         },
         InvoiceValue: {
           type: "number",
           value: args?.InvoiceValue,
           label: "Commodity Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         FreightValue: {
@@ -187,7 +201,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: args?.FreightValue,
           label: "Freight Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         InsuranceValue: {
@@ -195,7 +209,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: args?.InsuranceValue,
           label: "Insurance Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         MiscCharges: {
@@ -203,20 +217,9 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: args?.MiscCharges,
           label: "Misc Charges",
           rules: {
-            required: true,
+            required: false,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'EditImportCommerical');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -229,6 +232,50 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
     this.PIPOInfo(this.data?.pipo[0]?._id)
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      let AdvanceInfo:any=[];
+      this.data?.AdvanceInfo.forEach(element => {
+        AdvanceInfo.push([{
+          type: "ORM_SELECTION",
+          value:element?.ORM_SELECTION,
+          label: "Select Advance No.",
+          name: 'ORM_SELECTION',
+          rules: {
+            required: true,
+          },
+          callback: (item: any) => {
+            const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+            let currentVal = item?.value;
+            item['field']['NewformArray'][item?.OptionfieldIndex]["ORMAmount"]['value'] = currentVal?.amount
+            myForm.controls[item?.OptionfieldIndex]?.controls["ORMAmount"]?.setValue(currentVal?.amount);
+            myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+            myForm['touched'] = true;
+            myForm['status'] = 'VALID';
+            console.log(item, this.validator.FIELDS_DATA, "callback")
+          },
+        },
+        {
+          type: "currency",
+          value: element?.currency,
+          label: "Advance Currency",
+          name: 'currency',
+          rules: {
+            required: true,
+          },
+          disabled: true
+        },
+        {
+          type: "TextValiadtion",
+          value: element?.ORMAmount,
+          label: "Advance Amount",
+          name: 'ORMAmount',
+          EqualName: "AvailableAmount",
+          rules: {
+            required: true,
+          },
+          disabled: true,
+          errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+        }])
+      });
       this.validator.buildForm({
         commercialNumber: {
           type: "text",
@@ -262,67 +309,37 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
             required: true,
           }
         },
+        IfAdvancePaid: {
+          type: "yesnocheckbox",
+          value: 'true',
+          label: "If Advance Paid?",
+          rules: {
+            required: false,
+          },
+          YesNo: 'false',
+          YesButton: [
+            { name: 'AdvanceInfo', status: true }
+          ],
+          NoButton: [
+            { name: 'AdvanceInfo', status: false },
+          ],
+        },
         AdvanceInfo: {
           type: "formGroup",
-          label: "Advance Info",
-          GroupLabel: ['Advance Info 1'],
-          AddNewRequried: false,
+          label: "",
+          GroupLabel: ['ORM SELECTION 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
+            required: false,
           },
-          formArray: [
-            [
-              {
-                type: "AdvanceInfo",
-                value: this.data?.AdvanceInfo,
-                label: "Select Advance no.",
-                name: 'AdvanceInfoAny',
-                rules: {
-                  required: true,
-                },
-                AutoFillType: "formGroup",
-                autofillinput: [
-                  { input: 'AdvanceNo', key: 'billNo', parent: "AdvanceInfo" },
-                  { input: 'AdvanceCurrency', key: 'currency', parent: "AdvanceInfo" },
-                  { input: 'AdvanceAmount', key: 'amount', parent: "AdvanceInfo" }
-                ],
-              },
-              {
-                type: "text",
-                value: this.data?.AdvanceNo,
-                label: "Advance No.",
-                name: 'AdvanceNo',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "currency",
-                value: this.data?.AdvanceCurrency,
-                label: "Advance Currency",
-                name: 'AdvanceCurrency',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "number",
-                value: this.data?.AdvanceAmount,
-                label: "Advance Amount",
-                name: 'AdvanceAmount',
-                rules: {
-                  required: true,
-                },
-              }
-            ]
-          ]
+          formArray: AdvanceInfo
         },
         InvoiceValue: {
           type: "number",
           value: this.data?.InvoiceValue,
           label: "Commodity Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         FreightValue: {
@@ -330,7 +347,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: this.data?.FreightValue,
           label: "Freight Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         InsuranceValue: {
@@ -338,7 +355,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: this.data?.InsuranceValue,
           label: "Insurance Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         MiscCharges: {
@@ -346,20 +363,9 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: this.data?.MiscCharges,
           label: "Misc Charges",
           rules: {
-            required: true,
+            required: false,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'EditImportCommerical');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -391,14 +397,26 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
     if (e != false) {
       if (parseFloat(this.CI_INFO_SUM['REMAINING_AMOUNT']) >= parseFloat(e?.amount)) {
         e.currency = e.currency?.type != undefined ? e.currency.type : e.currency;
-        e.AdvanceCurrency = e.AdvanceInfo[0]?.AdvanceCurrency?.type != undefined ? e.AdvanceInfo[0]?.AdvanceCurrency?.type : e.AdvanceCurrency;
-        e.AdvanceNo = e.AdvanceInfo[0]?.AdvanceNo != undefined ? e.AdvanceInfo[0]?.AdvanceNo : e.AdvanceNo;
-        e.AdvanceAmount = e.AdvanceInfo[0]?.AdvanceAmount != undefined ? e.AdvanceInfo[0]?.AdvanceAmount : e.AdvanceAmount;
+        let AdvanceInfo: any = {
+          ID: [],
+          AdvanceCurrency: [],
+          AdvanceNo: [],
+          AdvanceAmount: []
+        };
+        e?.AdvanceInfo?.forEach(element => {
+          AdvanceInfo?.ID?.push(element?.ORM_SELECTION?._id)
+          AdvanceInfo?.AdvanceCurrency?.push(element?.ORM_SELECTION?.currency)
+          AdvanceInfo?.AdvanceNo?.push(element?.ORM_SELECTION?.billNo)
+          AdvanceInfo?.AdvanceAmount?.push(element?.ORM_SELECTION?.amount)
+        });
+        e.AdvanceCurrency = AdvanceInfo?.AdvanceCurrency?.join(',');
+        e.AdvanceNo = AdvanceInfo?.AdvanceNo?.join(',');
+        e.AdvanceAmount = AdvanceInfo?.AdvanceAmount?.join(',');
         e.sbNo = '';
         e.sbRef = [];
         e.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
-        e.BoeRef = [this.validator.ORM_SELECTION_DATA?.id];
-        e.ORM_Ref = [this.validator.ORM_SELECTION_DATA?._id];
+        e.BoeRef = AdvanceInfo?.ID
+        e.ORM_Ref = AdvanceInfo?.ID
         if (this.data?.commercialNumber != e.commercialNumber) {
           this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
             if (CustomConfirmDialogRes?.value == "Ok") {
