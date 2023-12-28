@@ -526,8 +526,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                 this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length - 1]['label'] = ''
                 this.validator.FIELDS_DATA['IMPORT_TRANSACTION'][this.validator.FIELDS_DATA['IMPORT_TRANSACTION']?.length - 1]['visible'] = false;
               }
-
-              await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+              this.LETTER_HEAD_URL=''
+              await this.ImportLetterHeadService.createLetterHead().FedralAdvance(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
                 this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
@@ -572,7 +572,8 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                   this.FEMA_FORM_PDF_URL = ''
                 }
               };
-              this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+              this.LETTER_HEAD_URL=''
+              this.ImportLetterHeadService.createLetterHead().FedralAdvance(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
                 this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });

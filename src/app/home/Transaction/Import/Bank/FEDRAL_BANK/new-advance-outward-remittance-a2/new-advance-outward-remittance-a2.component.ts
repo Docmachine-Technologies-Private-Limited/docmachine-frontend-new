@@ -913,7 +913,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             this.TIMEOUT = setTimeout(async () => {
               this.PREVIWES_URL = res;
               this.VISIBLITY_PDF = true;
-              this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+              this.LETTER_HEAD_URL=''
+              this.ImportLetterHeadService.createLetterHead().FedralAdvance(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
                 this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
@@ -930,7 +931,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           this.TIMEOUT = setTimeout(async () => {
             this.PREVIWES_URL = res;
             this.VISIBLITY_PDF = true;
-            this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+            this.LETTER_HEAD_URL=''
+            this.ImportLetterHeadService.createLetterHead().FedralAdvance(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
               this.LETTER_HEAD_URL = letterhead;
               await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
               this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });

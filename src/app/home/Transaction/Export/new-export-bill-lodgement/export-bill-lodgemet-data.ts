@@ -3,6 +3,7 @@ import { DocumentService } from "../../../../service/document.service";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
 import { CustomConfirmDialogModelComponent } from "../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
+import { filterAnyTablePagination } from "../../../../service/v1/Api/filterAnyTablePagination";
 
 @Injectable({ providedIn: 'root' })
 export class ExportBillLodgementData {
@@ -28,6 +29,7 @@ export class ExportBillLodgementData {
     constructor(public documentService: DocumentService,
         private toastr: ToastrService,
         public confrimModel: CustomConfirmDialogModelComponent,
+        public filteranytablepagination: filterAnyTablePagination,
         private userService: UserService) {
         this.getBuyerList();
         this.SHIPPING_BILL_DATA = []
@@ -76,8 +78,11 @@ export class ExportBillLodgementData {
                     element['IRADVICE_SUM'] = '0'
                     element['IRADVICE_DATA'] = []
                     element['CheckBoxEnabled'] = false
-                    element['TOTAL_CI_AMOUNT'] = false
-                    if (element?.balanceAvai != '0' || (element?.TransactionStatus == false || element?.TransactionStatus != undefined)) {
+                    element['TOTAL_CI_AMOUNT'] = false;
+                    let FIRX_TOTAL_SUM: any = element?.firxdetails?.reduce((a, b) => parseFloat(a) + parseFloat(b?.FirxUsed_Balance), 0);
+                    let FIRX_TOTAL_COMMISION_SUM: any = element?.firxdetails?.reduce((a, b) => parseFloat(a) + parseFloat(b?.firxCommision), 0);
+                    let GRAND_TOTAL: any = parseFloat(FIRX_TOTAL_SUM) + parseFloat(FIRX_TOTAL_COMMISION_SUM);
+                    if (element?.balanceAvai != '0' || (GRAND_TOTAL != parseFloat(element?.fobValue))) {
                         data.push(element);
                     }
                     if (type == "MatchOff") {
@@ -452,13 +457,12 @@ export class ExportBillLodgementData {
                 this.tp['firxDate'].push(element?.recievedDate)
                 this.tp['firxCurrency'].push(element?.currency)
                 this.tp['firxAmount'].push(element?.InputValue)
-                if (element?.CommissionUsed == false) {
-                    if (element?.YesNo == "true") {
-                        this.tp['firxCommision'].push(element?.commision)
-                    }
+                if (element?.YesNo == "true") {
+                    this.tp['firxCommision'].push(element?.commision)
                 } else {
                     this.tp['firxCommision'].push(0);
                 }
+
                 this.tp['FirxUsed_Balance'].push(element?.InputValue)
                 this.tp['firxRecAmo'].push(0);
                 this.tp['id'].push(element?._id);
@@ -486,7 +490,7 @@ export class ExportBillLodgementData {
                 if (element?.IRADVICE_DATA?.length != 0 && element?.IRADVICE_DATA != undefined) {
                     let FIRX_ID: any = [];
                     let FIRX_DATA: any = [];
-                    await element?.IRADVICE_DATA?.forEach(async (element1) => {
+                    await element?.IRADVICE_DATA?.forEach(async (element1, k) => {
                         await FIRX_ID.push(element1?._id);
                         element1["BalanceAvail"] = parseInt(element1?.BalanceAvail) == parseInt(element1?.InputValue) ? 0 : parseInt(element1?.BalanceAvail) - parseInt(element1?.InputValue);
                         element1["UsedAmount"] = element1?.InputValue
@@ -497,17 +501,20 @@ export class ExportBillLodgementData {
                             query: {
                                 CI_REF: [element?._id],
                             }
-                        }).subscribe((list: any) => { })
+                        }).subscribe(async (list: any) => {
+                            if ((k + 1) == element?.IRADVICE_DATA?.length) {
+                                await this.documentService.Update_Amount_by_Table({
+                                    tableName: 'commercials',
+                                    id: element?._id,
+                                    query: {
+                                        IRM_REF: FIRX_ID,
+                                        TransctionEnabled: true,
+                                        MatchOffData: FIRX_DATA,
+                                    }
+                                }).subscribe((r2: any) => { });
+                            }
+                        })
                     });
-                    await this.documentService.Update_Amount_by_Table({
-                        tableName: 'commercials',
-                        id: element?._id,
-                        query: {
-                            IRM_REF: FIRX_ID,
-                            TransctionEnabled: true,
-                            MatchOffData: FIRX_DATA,
-                        }
-                    }).subscribe((r2: any) => { });
                 }
             });
 
@@ -566,47 +573,57 @@ export class ExportBillLodgementData {
                         balanceAvai: data?.fobValue
                     }
                 }).subscribe(async (r3: any) => {
-                    for (let index = 0; index < data?.commercialdetails?.length; index++) {
-                        const element = data?.commercialdetails?.[index];
-                        if (element?.IRM_REF?.length != 0) {
-                            element?.IRM_REF?.forEach(IRM_REF_element => {
-                                let BalanceAvail = 0;
-                                if (IRM_REF_element?.MatchOffData?.YesNo == "true") {
-                                    BalanceAvail = parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue) + parseFloat(IRM_REF_element?.MatchOffData?.commision);
-                                } else {
-                                    BalanceAvail = parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue);
-                                }
-                                this.documentService.Update_Amount_by_Table({
+                    let IRM_AMOUNT_LIST: any = []
+                    data?.commercialdetails?.forEach(async (element, index) => {
+                        await element?.MatchOffData?.forEach(async (IRM_REF_element) => {
+                            IRM_AMOUNT_LIST[IRM_REF_element?._id] = 0
+                        })
+                        await this.documentService.Update_Amount_by_Table({
+                            tableName: 'commercials',
+                            id: element?._id,
+                            query: { IRM_REF: [], TransctionEnabled: false, MatchOffData: [] }
+                        }).subscribe((r2: any) => {
+                            if ((index + 1) == data?.commercialdetails?.length) {
+                                this.toastr.success("Changes Updated...")
+                                console.log(this.SELECTED_BUYER_NAME, "SELECTED_BUYER_NAME")
+                                this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
+                            }
+                        });
+                    });
+                    data?.commercialdetails?.forEach(async (element) => {
+                        await element?.MatchOffData?.forEach(async (IRM_REF_element) => {
+                            IRM_AMOUNT_LIST[IRM_REF_element?._id] += parseFloat(IRM_REF_element?.InputValue)
+                        })
+                    });
+                    for (const key in IRM_AMOUNT_LIST) {
+                        const element = IRM_AMOUNT_LIST[key];
+                        if (element != '' && element != null && element != undefined) {
+                            await this.filteranytablepagination.PaginationfilterAnyTable({ id: key }, { limit: 100000 }, 'iradvices').subscribe(async (res: any) => {
+                                console.log("PaginationfilterAnyTable_DESELECT", res, element, key);
+                                await this.documentService.Update_Amount_by_Table({
                                     tableName: 'iradvices',
-                                    id: IRM_REF_element?._id,
+                                    id: key,
                                     query: {
                                         sbno: [],
-                                        BalanceAvail: BalanceAvail,
+                                        BalanceAvail: parseFloat(res?.data[0]?.BalanceAvail) + parseFloat(element),
                                         CommissionUsed: false,
                                         MatchOffData: {},
-                                        UsedAmount: BalanceAvail,
+                                        UsedAmount: 0,
                                         CI_REF: []
                                     }
                                 }).subscribe(async (list: any) => {
-                                    await this.documentService.Update_Amount_by_Table({
-                                        tableName: 'commercials',
-                                        id: element?._id,
-                                        query: { IRM_REF: [], TransctionEnabled: false, MatchOffData: [] }
-                                    }).subscribe((r2: any) => {
-                                        if ((index + 1) == data?.commercialdetails?.length) {
-                                            this.toastr.success("Changes Updated...")
-                                            console.log(this.SELECTED_BUYER_NAME, "SELECTED_BUYER_NAME")
-                                            this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
-                                        }
-                                    });
                                 })
                             });
                         }
                     }
+                    console.log(IRM_AMOUNT_LIST, "IRM_AMOUNT_LIST")
                 });
             }
             console.log(value, "jhsdjkfhgdkfsdfdfsdfd")
         })
     }
 
+    recursionFunctionCall(callback) {
+        callback(callback);
+    }
 }
