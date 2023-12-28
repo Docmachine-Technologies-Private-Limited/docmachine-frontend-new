@@ -149,16 +149,17 @@ export class PackingListInvoicesComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
-      console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
-      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
-        this.PIPO_DATA=res?.data[0];
-        console.log(res, "getPipoById")
-      })
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
       
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
+      console.log('Array List', this.pipoArr);
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
+      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.LoadShippingBill(this.pipoArr);
     } else {
       this.btndisabled = true;

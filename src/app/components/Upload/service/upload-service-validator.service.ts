@@ -198,7 +198,7 @@ export class UploadServiceValidatorService implements OnInit {
 
   filterData(data: any) {
     this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA.filter((item: any) => item?.RBI_Purpose_Code.includes(data));
-    console.log(data, this.PURPOSE_CODE_FILTER_DATA,this.A2_JSON_DATA, 'asdhasdkasdsads')
+    console.log(data, this.PURPOSE_CODE_FILTER_DATA, this.A2_JSON_DATA, 'asdhasdkasdsads')
     if (this.PURPOSE_CODE_FILTER_DATA.length == 0 || data == '') {
       this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
     }
@@ -209,23 +209,26 @@ export class UploadServiceValidatorService implements OnInit {
     return split_text;
   }
   async BenneLoad() {
-    await this.userService.getBene(1).subscribe((res: any) => {
-      this.BENEFICIARY_DETAILS = [];
-      this.ConsigneeNameList = [];
-      this.BENEFICIARY_DETAILS_LIST = res.data;
-      res.data?.forEach(element => {
-        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+    return new Promise(async (resolve, reject) => {
+      await this.userService.getBene(1).subscribe((res: any) => {
+        this.BENEFICIARY_DETAILS = [];
+        this.ConsigneeNameList = [];
+        this.BENEFICIARY_DETAILS_LIST = res.data;
+        res.data?.forEach(element => {
+          if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+            this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+          }
+          this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
+        });
+        if (this.BENEFICIARY_DETAILS.length == 0) {
+          this.BENEFICIARY_NOT_EXITS = true;
+        } else {
+          this.BENEFICIARY_NOT_EXITS = false;
         }
-        this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
-      });
-      if (this.BENEFICIARY_DETAILS.length == 0) {
-        this.BENEFICIARY_NOT_EXITS = true;
-      } else {
-        this.BENEFICIARY_NOT_EXITS = false;
-      }
-      console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
-    }, (err) => console.log('Error', err));
+        resolve(this.BENEFICIARY_DETAILS)
+        console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
+      }, (err) => console.log('Error', err));
+    })
   }
   async getBuyerLoad() {
     await this.userService.getBuyer(1).subscribe((res: any) => {

@@ -187,8 +187,6 @@ export class UploadHeaderComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
-      console.log('clickPipo', this.pipoArr);
       this.UploadHeaderEvent.emit(event)
     } else {
       this.btndisabled = true;

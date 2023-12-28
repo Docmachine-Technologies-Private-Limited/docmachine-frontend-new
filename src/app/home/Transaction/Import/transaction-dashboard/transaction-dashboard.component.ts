@@ -146,7 +146,15 @@ export class TransactionDashboardComponent implements OnInit {
   getPipoAmountSum(pipo: any) {
     return pipo?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
   }
+  
+  getPipoPaymentTermsAmountSum(pipo: any) {
+    return pipo?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0);
+  }
 
+  getAdviceAmountSum(pipo: any) {
+    return pipo?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0);
+  }
+  
   getPipoId(pipo: any) {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {

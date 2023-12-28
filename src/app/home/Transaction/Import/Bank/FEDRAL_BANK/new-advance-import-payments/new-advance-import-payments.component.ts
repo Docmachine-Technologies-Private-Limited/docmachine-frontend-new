@@ -438,7 +438,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       element['balanceAmount'] = element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['invoiceAmount']
     });
     let BOEBalanceAmount = this.getBOEBalanceAmount(advice?.boeRef)
-    return parseFloat(advice?.paymentTerm[0]?.BalanceAmount) - parseFloat(ORMAmount) - parseFloat(BOEBalanceAmount);
+    return parseFloat(advice?.amount) - parseFloat(ORMAmount) - parseFloat(BOEBalanceAmount);
   }
 
   SELECTED_PIPO_ORM_DETAILS: any = [];

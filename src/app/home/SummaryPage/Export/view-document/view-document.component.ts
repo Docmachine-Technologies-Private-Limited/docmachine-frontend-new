@@ -545,9 +545,19 @@ export class ViewDocumentComponent implements OnInit {
     }
     this.SHIPPING_BILL = value;
     doclist.forEach(element => {
+      element?.pipo?.forEach((PIPOElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: PIPOElement?.doc, name: 'PIPO'+(i+1), status: false })
+      });
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.doc, name: 'Shipping Bill', status: false })
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.commercialDoc, name: 'Commercial', status: false })
+      element?.blcopydetails?.forEach((blcopydetailsElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: blcopydetailsElement?.blCopyDoc, name: 'Bl Copy'+(i+1), status: false })
+      });
+      element?.commercialdetails?.forEach((CI_DETAILSElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: CI_DETAILSElement?.commercialDoc, name: 'Commercial'+(i+1), status: false })
+      });
+      element?.packingdetails?.forEach((packingdetailsElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: packingdetailsElement?.packingDoc, name: 'Packing'+(i+1), status: false })
+      });
     });
     await this.filteranytablepagination.LoadTableExport({ sbno: value }, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;

@@ -146,49 +146,51 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
         }
       }
-      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
-      this.FILTER_FORM = {
-        buyerName: {
-          type: "ArrayList",
-          value: "",
-          label: "Select buyerName",
-          rules: {
-            required: false,
+      this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+        console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select BENEFICIARY Name",
+            rules: {
+              required: false,
+            },
+            item: BENEFICIARY_DETAILS,
+            bindLabel: "value"
           },
-          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
-          bindLabel: "value"
-        },
-        todate: {
-          type: "date",
-          value: "",
-          label: "Select Start Date",
-          rules: {
-            required: false,
+          todate: {
+            type: "date",
+            value: "",
+            label: "Select Start Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
           },
-          item: this.ALL_FILTER_DATA['DATE'],
-          bindLabel: "value"
-        },
-        fromdate: {
-          type: "date",
-          value: "",
-          label: "Select End Date",
-          rules: {
-            required: false,
+          fromdate: {
+            type: "date",
+            value: "",
+            label: "Select End Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
           },
-          item: this.ALL_FILTER_DATA['DATE'],
-          bindLabel: "value"
-        },
-        NO: {
-          type: "ArrayList",
-          value: "",
-          label: "Select Pipo No",
-          rules: {
-            required: false,
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Pipo No",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
           },
-          item: this.ALL_FILTER_DATA['NO'],
-          bindLabel: "value"
-        },
-      }
+        }
+      })
     })
   }
   

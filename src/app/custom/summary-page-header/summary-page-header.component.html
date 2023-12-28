@@ -1,0 +1,30 @@
+<div class="filter_section_top p-2">
+    <div class="row m-0">
+        <div style="margin: auto;margin-left: 0;">
+            <div class="import_export_sec">
+                <h3 class="heading_common_tag" *ngIf="ngcontent==false">{{this.TITLE}} ({{this.Length}})</h3>
+                <ng-content select="child-summary-header" *ngIf="ngcontent==true"></ng-content>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-8 col-12">
+            <div class="filter_right_new padding_new_top p-0">
+               <ng-content></ng-content>
+                <button type="button" class="btn btn-primary" (click)="exportToExcelClick()"><span
+                        class="ex_icon"></span>Export</button>
+                <div class="filter_posit">
+                    <button type="button" class="filter-popup btn btn-secondary"><span
+                            class="fi_icon filter-popup"></span>Filter</button>
+                    <ng-custom-filter-popup (ResetEvent)="ResetClick()" FormStyle="display: grid;
+                    grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmitClick($event)"
+                        *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
+                </div>
+                <button class="upload-button btn btn-success" (click)="navigate(this.RouterLink)">
+                    <span class="add_icon"></span> ADD NEW
+                </button>
+                <button class="upload-button btn btn-success" *ngIf="OTHER_BUTTON_NAME!=''" (click)="navigate(this.OtherRouterLink)">
+                    <span class="add_icon"></span>{{this.OTHER_BUTTON_NAME}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -18,6 +18,7 @@
                             PIPO_TARANSACTION==false && 
                             this.PIPO_DISABLED==true"
                             [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                            [multiple]="true"
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
                             (change)="clickPipo($event)" [(ngModel)]="this.AutoFillPIPO" #PI_PO_BUYER_NAME_NG_SELECT>
                         </ng-select>
@@ -86,13 +87,14 @@
                         PIPO_TARANSACTION==false && 
                         this.PIPO_DISABLED==true" [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
+                            [multiple]="true"
                             (change)="clickPipo($event)" [(ngModel)]="this.AutoFillPIPO" #PI_PO_BENNE_NAME_NG_SELECT>
                         </ng-select>
                         <ng-input [disabled]="true"
                             *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
                             [item]="{value:this.validator?.PIPO_TRANSCTION_LIST[0]?.pi_po_buyerName,type:'text'}"
                             id="PIPO_TRANSACTION" disabled
-                            (event)="this.clickPipo(this.validator?.PIPO_TRANSCTION_LIST[0])">
+                            (event)="this.clickPipo(this.validator?.PIPO_TRANSCTION_LIST)">
                         </ng-input>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
                             *ngIf="this.PIPO_DISABLED==true && this.UPLOAD_BUTTON==true && PIPO_TARANSACTION==false"

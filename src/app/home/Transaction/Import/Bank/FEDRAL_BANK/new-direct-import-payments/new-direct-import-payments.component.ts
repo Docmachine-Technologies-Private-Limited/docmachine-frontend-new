@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PDFDocument } from 'pdf-lib';
 import { UserService } from '../../../../../../service/user.service';
 import { DocumentService } from '../../../../../../service/document.service';
 import { DateFormatService } from '../../../../../../DateFormat/date-format.service';
@@ -13,9 +12,9 @@ import { ExportBillLodgementData } from '../../../../Export/new-export-bill-lodg
 import { AprrovalPendingRejectTransactionsService } from '../../../../../../service/aprroval-pending-reject-transactions.service';
 import { StorageEncryptionDecryptionService } from '../../../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../../../merge-pdf-list.service';
-import moment from 'moment';
 import { DirectPaymentsControllerData } from '../../../Controller/Direct-Payments-Controller';
 import { ImportLetterHeadService } from '../../../../../AllBankFormat/FederalBank/import-letter-head/import-letter-head.component';
+import moment from 'moment';
 
 @Component({
   selector: 'app-new-direct-import-payments',
@@ -75,10 +74,11 @@ export class NewDirectImportPaymentsComponent implements OnInit {
   cicreate: any = [];
   GroupLabel: any = [];
   CI_INFO_SUM: any = {
-    CI_SUM: 0,
-    TOTAL_CI: 0,
-    PIPO_AMOUNT: 0,
-    REMAINING_AMOUNT: 0
+    TOTAL_TRANSACTION_COUNT: 0,
+    TOTAL_AMOUNT_CREATED_DATE: 0,
+    CREATED_DATE: 0,
+    REMAINING_AMOUNT: 0,
+    PAYMENTS_TERMS_AMOUNT: 0
   }
   USER_DATA: any = [];
   FORM_VALUE: any = null;
@@ -404,6 +404,17 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       });
       this.response(null);
       value['ischecked'] = true;
+      let COUNT_TRANSACTION: any = 0;
+      let TOTAL_AMOUNT_CREATED_DATE: any = []
+      this.validator.PIPO_LIST?.forEach(element => {
+        COUNT_TRANSACTION += this.getTransactionCount(element?.TransactionRef, 'Direct-Bills')
+        element?.TransactionRef?.filter((item) => item?.TypeTransaction == 'Direct-Bills')?.forEach(TransactionRefElement => {
+          let SUM_OF_TRANSCTION: any = TransactionRefElement?.data?.formdata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
+          TOTAL_AMOUNT_CREATED_DATE.push(SUM_OF_TRANSCTION + ' & ' + moment(TransactionRefElement?.createdAt).format('DD-MM-YYYY'))
+        });
+      });
+      this.CI_INFO_SUM['TOTAL_TRANSACTION_COUNT'] = COUNT_TRANSACTION
+      this.CI_INFO_SUM['TOTAL_AMOUNT_CREATED_DATE'] = TOTAL_AMOUNT_CREATED_DATE?.join(',')
     } else {
       let PIPO_INDEX: any = this.validator.PIPO_LIST?.findIndex((item: any) => item?.pi_poNo == value?.pi_poNo)
       this.validator.PIPO_LIST.splice(PIPO_INDEX, 1);
@@ -414,9 +425,21 @@ export class NewDirectImportPaymentsComponent implements OnInit {
         });
       });
       this.validator.BOE_LIST = boeRef;
+      let COUNT_TRANSACTION: any = 0;
+      let TOTAL_AMOUNT_CREATED_DATE: any = []
+      this.validator.PIPO_LIST?.forEach(element => {
+        COUNT_TRANSACTION += this.getTransactionCount(element?.TransactionRef, 'Direct-Bills')
+        element?.TransactionRef?.filter((item) => item?.TypeTransaction == 'Direct-Bills')?.forEach(TransactionRefElement => {
+          let SUM_OF_TRANSCTION: any = TransactionRefElement?.data?.formdata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
+          TOTAL_AMOUNT_CREATED_DATE.push(SUM_OF_TRANSCTION + ' & ' + moment(TransactionRefElement?.createdAt).format('DD-MM-YYYY'))
+        });
+      });
+      this.CI_INFO_SUM['TOTAL_TRANSACTION_COUNT'] = COUNT_TRANSACTION
+      this.CI_INFO_SUM['TOTAL_AMOUNT_CREATED_DATE'] = TOTAL_AMOUNT_CREATED_DATE?.join(',')
       value['ischecked'] = false;
       this.response(null);
     }
+  
   }
 
 
@@ -769,11 +792,11 @@ export class NewDirectImportPaymentsComponent implements OnInit {
               this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
                 console.log('king123');
                 console.log(data, this.ExportBillLodgement_Form?.paymentTerm);
-                for (let index = 0; index < this.ExportBillLodgement_Form?.BOE_DETAIILS?.length; index++) {
-                  const element: any = this.ExportBillLodgement_Form?.BOE_DETAIILS[index];
-                  const sum = parseFloat(element?.BOE?.balanceAmount != "-1" ? element?.BOE?.balanceAmount : element?.BOE?.invoiceAmount) - parseFloat(element?.BOEAmount);
-                  this.documentService.updateBoe({ balanceAmount: sum }, element?.BOE?._id).subscribe((data) => { })
-                }
+                // for (let index = 0; index < this.ExportBillLodgement_Form?.BOE_DETAIILS?.length; index++) {
+                //   const element: any = this.ExportBillLodgement_Form?.BOE_DETAIILS[index];
+                //   const sum = parseFloat(element?.BOE?.balanceAmount != "-1" ? element?.BOE?.balanceAmount : element?.BOE?.invoiceAmount) - parseFloat(element?.BOEAmount);
+                //   this.documentService.updateBoe({ balanceAmount: sum }, element?.BOE?._id).subscribe((data) => { })
+                // }
                 for (let index = 0; index < this.ExportBillLodgement_Form?.paymentTerm?.length; index++) {
                   const element: any = this.ExportBillLodgement_Form?.paymentTerm[index];
                   const sum = parseFloat(element?.PIPO_LIST?.paymentTerm[0].BalanceAmount) - parseFloat(element?.RemittanceAmount);
@@ -841,5 +864,9 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
     })
+  }
+
+  getTransactionCount(data: any, filterValue: any) {
+    return data?.filter((item) => item?.TypeTransaction == filterValue)?.length;
   }
 }

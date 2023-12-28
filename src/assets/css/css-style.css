@@ -11669,7 +11669,7 @@ a[data-toggle=collapse] {
 
 #content {
     width: 100%;
-    padding: 0;
+    padding: 5px;
     min-height: 100vh;
     -webkit-transition: all .3s;
     -o-transition: all .3s;

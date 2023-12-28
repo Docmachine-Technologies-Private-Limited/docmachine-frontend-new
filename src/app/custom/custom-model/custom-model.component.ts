@@ -41,6 +41,7 @@ export class CustomModelComponent implements OnInit {
   @Input('RemoveBgTop') RemoveBgTop: boolean = true;
   @Input('HIDDEN_SHOW') HIDDEN_SHOW: boolean = false;
   @Input('ModalTitleStyle') ModalTitleStyle: any = '';
+  @Input('CloseIconColor') CloseIconColor: any = 'black';
   
   toggleminimize: boolean = false;
   footerbuttontext: any = [];

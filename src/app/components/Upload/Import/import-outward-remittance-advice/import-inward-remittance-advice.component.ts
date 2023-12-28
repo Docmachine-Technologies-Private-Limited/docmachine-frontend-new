@@ -113,15 +113,22 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
             required: true,
           },
           callback: (items: any) => {
-            let FILTER_DIRECT_PAYMENTS: any = this.PIPO_DATA?.paymentTerm?.filter((val: any) => val?.type?.value == items?.value);
+            let FILTER_DIRECT_PAYMENTS: any = []
+            this.PIPO_DATA?.forEach(element => {
+              element?.paymentTerm?.filter((val: any) => val?.type?.value == items?.value)?.forEach(FilterElement => {
+                FILTER_DIRECT_PAYMENTS.push(FilterElement);
+              })
+            });
             console.log(items, FILTER_DIRECT_PAYMENTS, this.PIPO_DATA, "FILTER_DIRECT_PAYMENTS")
             let CI_SUM = FILTER_DIRECT_PAYMENTS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
             this.CI_INFO_SUM['PAYMENTS_TERMS_AMOUNT'] = CI_SUM;
             if (items?.value == "Direct Imports(Payment Against Bill of entry)") {
               let boeRef: any = []
-              this.PIPO_DATA?.boeRef?.filter((item: any) => item?.currency == this.PIPO_DATA?.currency)?.forEach(boeelement => {
-                boeRef?.push(boeelement)
-              });
+              this.PIPO_DATA?.forEach(element => {
+                element?.boeRef?.filter((item: any) => item?.currency == element?.currency)?.forEach(boeelement => {
+                  boeRef?.push(boeelement)
+                });
+              })
               boeRef?.forEach(element => {
                 element['balanceAmount'] = element?.balanceAmount != '-1' ? element?.balanceAmount : element?.invoiceAmount
               });
@@ -199,7 +206,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: this.PIPO_DATA?.currency,
+          value: this.PIPO_DATA[0]?.currency,
           label: "Currency",
           Inputdisabled: true,
           rules: {
@@ -246,17 +253,6 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
             required: false,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'OutwardRemittanceAdvice').then((res) => {
         this.validator.FIELDS_DATA['OutwardRemittanceAdvice'][2]['disabled'] = true;
         this.validator.dynamicFormGroup['OutwardRemittanceAdvice']?.controls['BOE_DETAIILS']?.disable();
@@ -287,7 +283,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
             BOE_Ref.push(element?.BOE?._id)
           });
           e.value.BOE_Ref = BOE_Ref;
-        }else{
+        } else {
           e.value.BOE_Ref = [];
         }
         console.log('doc', temp, this.pipourl1);
@@ -312,8 +308,14 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
               }
               this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe((data1) => {
                 var Transaction_id: any = [];
-                if (this.PIPO_DATA?.TransActionType?.length != 0) {
-                  this.PIPO_DATA?.TransActionType?.forEach(element => {
+                let TransActionType: any = []
+                this.PIPO_DATA?.forEach(element => {
+                  element?.TransActionType?.forEach(TransActionTypeElement => {
+                    TransActionType.push(TransActionTypeElement)
+                  });
+                });
+                if (TransActionType?.length != 0) {
+                  TransActionType?.forEach(element => {
                     if (element?.Type == this.AdvanceDirectPayment) {
                       Transaction_id.push(element?.TransactionId)
                     }
@@ -321,19 +323,20 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
                 } else {
                   Transaction_id = this.route.snapshot.paramMap.get('transaction_id')?.split(',');
                 }
+                console.log(TransActionType, Transaction_id, "Transaction_id");
                 if (Transaction_id?.length != 0 && Transaction_id?.length != undefined) {
                   Transaction_id?.forEach((element, index) => {
                     this.documentService.AnyUpdateTable(element, { ORMRef: [data?.data._id] }, "ExportTransaction").subscribe((res: any) => {
                       this.documentService.UpdateTransaction({ id: element, data: { ORMRefData: e.value } }).subscribe((res: any) => {
                         if ((index + 1) == Transaction_id?.length) {
-                          this.toastr.success('Remittance Advice Successfully added...');
+                          this.toastr.success('Remittance Advice Successfully added...1');
                           this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
                         }
                       });
                     });
                   });
                 } else {
-                  this.toastr.success('Remittance Advice Successfully added...');
+                  this.toastr.success('Remittance Advice Successfully added...2');
                   this.router.navigate(['home/Summary/Import/Outward-Remittance-Advice']);
                 }
               }, (error) => {
@@ -347,7 +350,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           }
         });
       } else {
-        this.toastr.error(`Total BOE amount is exceeding PI amount by.... Plz check`);
+        this.toastr.error(`Total BOE amount is exceeding TT(Advice) amount by.... Plz check`);
       }
     } else {
       this.toastr.error(`Total ORM amount is exceeding PI amount by.... Plz check`);
@@ -357,19 +360,43 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
-        this.PIPO_DATA = res?.data[0];
-        let CI_SUM = this.PIPO_DATA?.AdviceRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
-        this.CI_INFO_SUM['CI_SUM'] = CI_SUM;
-        this.CI_INFO_SUM['TOTAL_CI'] = this.PIPO_DATA?.AdviceRef?.length
-        this.CI_INFO_SUM['PIPO_AMOUNT'] = this.PIPO_DATA?.amount;
-        this.CI_INFO_SUM['REMAINING_AMOUNT'] = parseFloat(this.PIPO_DATA?.amount) - parseFloat(CI_SUM);
+      let PIPODATA: any = [];
+      this.documentService.getPipoByIdList(this.pipoArr).subscribe((res: any) => {
+        console.log(res, 'getPipoByIdList')
+        res?.forEach(element => {
+          let DATA: any = element?.data[0];
+          let CI_SUM = DATA?.AdviceRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+          this.CI_INFO_SUM['CI_SUM'] += CI_SUM;
+          this.CI_INFO_SUM['TOTAL_CI'] += DATA?.AdviceRef?.length
+          this.CI_INFO_SUM['PIPO_AMOUNT'] += DATA?.amount;
+          PIPODATA.push(DATA)
+        });
+        this.PIPO_DATA = PIPODATA;
+        this.CI_INFO_SUM['REMAINING_AMOUNT'] = parseFloat(this.CI_INFO_SUM['PIPO_AMOUNT']) - parseFloat(this.CI_INFO_SUM['CI_SUM']);
         console.log(res, "getPipoById", this.CI_INFO_SUM)
       })
+
+      // this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
+      // this.documentService.getPipoById(event?._id).subscribe((res: any) => {
+      //   this.PIPO_DATA = res?.data[0];
+      //   let CI_SUM = this.PIPO_DATA?.AdviceRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+      //   this.CI_INFO_SUM['CI_SUM'] = CI_SUM;
+      //   this.CI_INFO_SUM['TOTAL_CI'] = this.PIPO_DATA?.AdviceRef?.length
+      //   this.CI_INFO_SUM['PIPO_AMOUNT'] = this.PIPO_DATA?.amount;
+      //   this.CI_INFO_SUM['REMAINING_AMOUNT'] = parseFloat(this.PIPO_DATA?.amount) - parseFloat(CI_SUM);
+      //   console.log(res, "getPipoById", this.CI_INFO_SUM)
+      // })
     } else {
       this.btndisabled = true;
     }

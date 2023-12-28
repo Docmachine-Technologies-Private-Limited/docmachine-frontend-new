@@ -570,15 +570,21 @@ export class ExportBillLodgementData {
                         const element = data?.commercialdetails?.[index];
                         if (element?.IRM_REF?.length != 0) {
                             element?.IRM_REF?.forEach(IRM_REF_element => {
+                                let BalanceAvail = 0;
+                                if (IRM_REF_element?.MatchOffData?.YesNo == "true") {
+                                    BalanceAvail = parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue) + parseFloat(IRM_REF_element?.MatchOffData?.commision);
+                                } else {
+                                    BalanceAvail = parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue);
+                                }
                                 this.documentService.Update_Amount_by_Table({
                                     tableName: 'iradvices',
                                     id: IRM_REF_element?._id,
                                     query: {
                                         sbno: [],
-                                        BalanceAvail: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                        BalanceAvail: BalanceAvail,
                                         CommissionUsed: false,
                                         MatchOffData: {},
-                                        UsedAmount: parseFloat(IRM_REF_element?.BalanceAvail) + parseFloat(IRM_REF_element?.MatchOffData?.InputValue),
+                                        UsedAmount: BalanceAvail,
                                         CI_REF: []
                                     }
                                 }).subscribe(async (list: any) => {
@@ -590,7 +596,6 @@ export class ExportBillLodgementData {
                                         if ((index + 1) == data?.commercialdetails?.length) {
                                             this.toastr.success("Changes Updated...")
                                             console.log(this.SELECTED_BUYER_NAME, "SELECTED_BUYER_NAME")
-
                                             this.getShippingBill(this.SELECTED_BUYER_NAME, "MatchOff");
                                         }
                                     });

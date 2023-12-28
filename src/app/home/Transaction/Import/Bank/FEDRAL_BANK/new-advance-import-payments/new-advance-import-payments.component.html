@@ -15,7 +15,7 @@
                             <th scope="col" class="col-td-th-1">INV NO.</th>
                             <th scope="col" class="col-td-th-1">CURRENCY</th>
                             <th scope="col" class="col-td-th-1">AMOUNT</th>
-                            <th scope="col" class="col-td-th-2">UTILISED ORM REF NO.</th>
+                            <th scope="col" class="col-td-th-2">UTILISED ORM REF NO.(Adavnce+Direct)</th>
                             <th scope="col" class="col-td-th-2">ORM Amount</th>
                             <th scope="col" class="col-td-th-2">BOE Amount</th>
                             <th scope="col" class="col-td-th-2">BOE Balance</th>
@@ -34,7 +34,7 @@
                             </td>
                             <td scope="col" class="col-td-th-1">{{item?.pi_poNo}}</td>
                             <td scope="col" class="col-td-th-1">{{item?.currency}}</td>
-                            <td scope="col" class="col-td-th-1">{{item?.paymentTerm[0]?.amount}}</td>
+                            <td scope="col" class="col-td-th-1">{{item?.amount}}</td>
                             <td scope="col" class="col-td-th-2">{{this.getORMRef(item?.AdviceRef)}}</td>
                             <td scope="col" class="col-td-th-2">{{this.getORMAmount(item?.AdviceRef)}}</td>
                             <td scope="col" class="col-td-th-2">{{this.getBOEAmount(item?.boeRef)}}</td>

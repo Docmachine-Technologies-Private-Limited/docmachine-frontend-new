@@ -39,6 +39,7 @@ export class ShippingBillComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   @Input('PipoId') Pipoid: any = '';
+  SELECTED_COMMERCIAL_VALUE: any = ''
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -122,7 +123,7 @@ export class ShippingBillComponent implements OnInit {
         },
         fobCurrency: {
           type: "currency",
-          value: this.PIPO_DATA?.currency,
+          value: this.PIPO_DATA[0]?.currency,
           label: "SB CURRENCY",
           rules: {
             required: true,
@@ -218,7 +219,7 @@ export class ShippingBillComponent implements OnInit {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.amount);
                   myForm.controls[item?.OptionfieldIndex]?.controls["type"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.type);
-                  if (this.SELECTED_COMMERCIAL_VALUE?.currency == this.PIPO_DATA?.currency) {
+                  if (this.SELECTED_COMMERCIAL_VALUE?.currency == this.PIPO_DATA[0]?.currency) {
                     myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(this.SELECTED_COMMERCIAL_VALUE?.currency);
                     myForm['touched'] = true;
                     myForm['status'] = 'VALID';
@@ -369,13 +370,26 @@ export class ShippingBillComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.changedCommercial(this.pipoArr)
-      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
-        this.PIPO_DATA = res?.data[0];
+      let PIPODATA: any = [];
+      this.documentService.getPipoByIdList(this.pipoArr).subscribe((res: any) => {
+        console.log(res, 'getPipoByIdList')
+        res?.forEach(element => {
+          let DATA: any = element?.data[0];
+          PIPODATA.push(DATA)
+        });
+        this.PIPO_DATA = PIPODATA;
         console.log(res, "getPipoById")
       })
     } else {
@@ -392,20 +406,11 @@ export class ShippingBillComponent implements OnInit {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
       });
       console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
-    },
-      (err) => {
-        console.log(err)
-      }
-    );
+    },(err) => {console.log(err)});
   }
 
   CommercialFilter(id: any) {
     return this.COMMERCIAL_LIST.filter((item: any) => item?._id?.includes(id) == true)
-  }
-
-  SELECTED_COMMERCIAL_VALUE: any = ''
-  CommericalNo(value: any) {
-
   }
 
 }

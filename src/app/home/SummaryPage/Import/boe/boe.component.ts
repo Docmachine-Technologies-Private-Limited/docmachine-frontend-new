@@ -8,7 +8,6 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { UserService } from './../../../../service/user.service';
-import * as data1 from '../../../../currency.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
@@ -135,49 +134,51 @@ export class ImportBOEComponent implements OnInit {
             this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
           }
         }
-        console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
-        this.FILTER_FORM = {
-          buyerName: {
-            type: "ArrayList",
-            value: "",
-            label: "Select buyerName",
-            rules: {
-              required: false,
+        this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+          console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+          this.FILTER_FORM = {
+            buyerName: {
+              type: "ArrayList",
+              value: "",
+              label: "Select BENEFICIARY Name",
+              rules: {
+                required: false,
+              },
+              item: BENEFICIARY_DETAILS,
+              bindLabel: "value"
             },
-            item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
-            bindLabel: "value"
-          },
-          todate: {
-            type: "date",
-            value: "",
-            label: "Select Start Date",
-            rules: {
-              required: false,
+            todate: {
+              type: "date",
+              value: "",
+              label: "Select Start Date",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['DATE'],
+              bindLabel: "value"
             },
-            item: this.ALL_FILTER_DATA['DATE'],
-            bindLabel: "value"
-          },
-          fromdate: {
-            type: "date",
-            value: "",
-            label: "Select End Date",
-            rules: {
-              required: false,
+            fromdate: {
+              type: "date",
+              value: "",
+              label: "Select End Date",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['DATE'],
+              bindLabel: "value"
             },
-            item: this.ALL_FILTER_DATA['DATE'],
-            bindLabel: "value"
-          },
-          NO: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Pipo No",
-            rules: {
-              required: false,
+            NO: {
+              type: "ArrayList",
+              value: "",
+              label: "Select Pipo No",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['NO'],
+              bindLabel: "value"
             },
-            item: this.ALL_FILTER_DATA['NO'],
-            bindLabel: "value"
-          },
-        }
+          }
+        })
       })
       console.log("this.USER_DATA", this.USER_DATA, this.FILTER_VALUE_LIST_NEW);
     }
@@ -409,20 +410,27 @@ export class ImportBOEComponent implements OnInit {
   
   SHIPPING_BILL_ALL_RELATED_DOCUMENTS: any = [];
   SHIPPING_BILL: any = [];
-  SbSearch(value: any) {
+ async SbSearch(value: any) {
     this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS = [];
-    var doclist: any = this.item1.filter((item: any) => item?.boeNumber == value);
+    var doclist: any = this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.filter((item: any) => item?.boeNumber == value);
     this.FILTER_VALUE_LIST = doclist;
     if (doclist.length == 0) {
-      this.resetFilter();
+      this.ngOnInit();
     }
     this.SHIPPING_BILL = value;
     doclist.forEach(element => {
+      element?.pipo?.forEach((PIPOElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: PIPOElement?.doc, name: 'PIPO'+(i+1), status: false })
+      });
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.doc, name: 'BOE', status: false })
+      element?.CI_DETAILS?.forEach((CI_DETAILSElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: CI_DETAILSElement?.invoiceno?.data?.commercialDoc, name: 'Commercial'+(i+1), status: false })
+      });
       // this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.CI_DETAILS?.commercialDoc, name: 'Commercial', status: false })
     });
-    this.BILL_OF_ENTRY_Table(this.FILTER_VALUE_LIST);
+    await this.filteranytablepagination.LoadTableImport({boeNumber:value}, { skip: 0, limit: 10 }, 'boerecords',this.FILTER_VALUE_LIST_NEW)?.boerecords().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
   }
 
   tickdoc(event: any, index: any) {

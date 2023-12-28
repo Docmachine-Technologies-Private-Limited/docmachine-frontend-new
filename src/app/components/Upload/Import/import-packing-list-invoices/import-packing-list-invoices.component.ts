@@ -13,7 +13,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'import-packing-list-invoices',
   templateUrl: './import-packing-list-invoices.component.html',
-  styleUrls: ['./import-packing-list-invoices.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-packing-list-invoices.component.scss', '../../commoncss/common.component.scss']
 })
 export class ImportPackingListInvoicesComponent implements OnInit {
   publicUrl: any = '';
@@ -193,20 +193,38 @@ export class ImportPackingListInvoicesComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
-      if (this.BUYER_LIST.includes(event?.id[1]) == false) {
-        this.BUYER_LIST.push(event?.id[1])
-      }
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'import');
-      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
-        this.PIPO_DATA = res?.data[0];
-        this.validator.BOE_LIST = res?.data[0]?.boeRef;
-        console.log(res, "getPipoById")
-      })
+      this.documentService.getPipoByIdList(this.pipoArr).subscribe((res: any) => {
+        console.log(res, 'getPipoByIdList')
+        let PIPODATA: any = [];
+        let boeRef: any = []
+        res?.forEach(element => {
+          let DATA: any = element?.data[0];
+          PIPODATA.push(DATA)
+        });
+        this.PIPO_DATA = PIPODATA;
 
+        this.PIPO_DATA?.forEach(element => {
+          element?.boeRef?.filter((item: any) => item?.currency == element?.currency)?.forEach(boeelement => {
+            boeRef?.push(boeelement)
+          });
+        })
+        boeRef?.forEach(element => {
+          element['balanceAmount'] = element?.balanceAmount != '-1' ? element?.balanceAmount : element?.invoiceAmount
+        });
+        this.validator.BOE_LIST = boeRef;
+      });
     } else {
       this.btndisabled = true;
     }

@@ -3,6 +3,7 @@ import { filterAnyTablePagination } from "./Api/filterAnyTablePagination";
 import moment from "moment";
 import { UserService } from "../user.service";
 import { UploadServiceValidatorService } from "../../components/Upload/service/upload-service-validator.service";
+import { ALLExportSummaryPageTitle } from "../../home/SummaryPage/Export/All-Export-Summary-Page-Title";
 
 @Injectable({ providedIn: "root" })
 export class TableServiceController {
@@ -25,10 +26,18 @@ export class TableServiceController {
         ExpansionKeys2: [],
         PageSize: 0
     }
-    constructor(public filteranytablepagination: filterAnyTablePagination, private userService: UserService, public UploadServiceValidatorService: UploadServiceValidatorService) {
-        this.userService.getUserDetail().then((res: any) => this.USER_RESULT = res?.result);
-        console.log("this.USER_DATA", this.USER_RESULT);
-        UploadServiceValidatorService.getBuyerLoad()
+    constructor(public filteranytablepagination: filterAnyTablePagination, private userService: UserService,
+        public UploadServiceValidatorService: UploadServiceValidatorService,
+        public ALLExportSummaryPageTitle: ALLExportSummaryPageTitle) {
+        this.userService.getUserDetail().then((res: any) => {
+            this.USER_RESULT = res?.result;
+            console.log("this.USER_DATA", this.USER_RESULT);
+            if (this.USER_RESULT?.sideMenu == 'export') {
+                UploadServiceValidatorService.getBuyerLoad()
+            } else {
+                UploadServiceValidatorService.BenneLoad().then((res: any) => { })
+            }
+        });
     }
 
     LoadTableExport(Query: any = {}, PageFilter: any, TableName: any, TableFormat: any, ExtraData: any = {}) {

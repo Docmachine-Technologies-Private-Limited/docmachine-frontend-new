@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
-import { observable, Observable, of, Subject } from 'rxjs';
+import { forkJoin, observable, Observable, of, Subject } from 'rxjs';
 // import { AppConfig } from '../../app/app.config';
 import * as data1 from './../currency.json';
 import { Router } from '@angular/router';
@@ -759,7 +759,18 @@ export class DocumentService {
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.post(`${this.api_base}/pipo/getPipoById`, { id: id }, httpOptions);
   }
-
+   
+  getPipoByIdList(ID_List:any){
+    let API_CREATE:any=[];
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    for (let index = 0; index < ID_List.length; index++) {
+      const element = ID_List[index];
+      API_CREATE.push(this.http.post(`${this.api_base}/pipo/getPipoById`, { id: element }, httpOptions))
+    }
+    return forkJoin(API_CREATE);
+  }
   getInward_remittance() {
     this.loadFromLocalStorage();
     console.log(this.authToken);

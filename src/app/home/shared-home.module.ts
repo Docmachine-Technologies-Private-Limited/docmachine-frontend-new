@@ -97,6 +97,8 @@ import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-u
 import { filterAnyTablePagination } from "../service/v1/Api/filterAnyTablePagination";
 import { TableServiceController } from "../service/v1/TableServiceController";
 import { ExportHomeControllerData } from "./Transaction/Export/Controller/ExportHome-Controller";
+import { SummaryPageHeaderComponent } from "../custom/summary-page-header/summary-page-header.component";
+import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child-summary-header/child-summary-header.component";
 
 @NgModule({
   declarations: [
@@ -162,7 +164,9 @@ import { ExportHomeControllerData } from "./Transaction/Export/Controller/Export
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
     SummaryTransactionUIComponent,
-    UploadPopUpLocalFileComponent
+    UploadPopUpLocalFileComponent,
+    SummaryPageHeaderComponent,
+    ChildSummaryHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -289,6 +293,8 @@ import { ExportHomeControllerData } from "./Transaction/Export/Controller/Export
     SummaryTransactionUIHeaderComponent,
     SummaryTransactionUIComponent,
     UploadPopUpLocalFileComponent,
+    SummaryPageHeaderComponent,
+    ChildSummaryHeaderComponent
   ],
 })
 export class SharedHomeModule { }

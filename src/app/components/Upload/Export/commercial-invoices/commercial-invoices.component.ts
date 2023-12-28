@@ -77,7 +77,7 @@ export class CommercialInvoicesComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: this.PIPO_DATA?.currency,
+          value: this.PIPO_DATA[0]?.currency,
           label: "Currency*",
           name: 'currency',
           disabled: true,
@@ -121,16 +121,15 @@ export class CommercialInvoicesComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    let selectedShippingBill = this.PIPO_DATA?.amount;
+    let selectedShippingBill = this.PIPO_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
     console.log(selectedShippingBill, e.amount, "selectedShippingBill")
     if (parseFloat(this.CI_INFO_SUM['CI_SUM']) <= parseFloat(selectedShippingBill)) {
       if (parseFloat(selectedShippingBill) >= parseFloat(e.amount)) {
         e.file = 'export';
         e.pipo = this.pipoArr;
-        console.log('pipoarrya', this.pipoArr);
         e.commercialDoc = this.pipourl1;
         e.buyerName = this.BUYER_LIST;
-        e.currency = e?.currency?.type!=undefined?e?.currency?.type:e?.currency;
+        e.currency = e?.currency?.type != undefined ? e?.currency?.type : e?.currency;
         e.type = e?.type?.value;
         this.documentService.getInvoice_No({
           commercialNumber: e.commercialNumber
@@ -197,17 +196,30 @@ export class CommercialInvoicesComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
-        this.PIPO_DATA = res?.data[0];
-        let CI_SUM = this.PIPO_DATA?.commercialRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
-        this.CI_INFO_SUM['CI_SUM'] = CI_SUM;
-        this.CI_INFO_SUM['TOTAL_CI'] = this.PIPO_DATA?.commercialRef?.length
-        this.CI_INFO_SUM['PIPO_AMOUNT'] = this.PIPO_DATA?.amount;
-        this.CI_INFO_SUM['REMAINING_AMOUNT'] = parseFloat(this.PIPO_DATA?.amount) - parseFloat(CI_SUM);
+      let PIPODATA: any = [];
+      this.documentService.getPipoByIdList(this.pipoArr).subscribe((res: any) => {
+        console.log(res, 'getPipoByIdList')
+        res?.forEach(element => {
+          let DATA: any = element?.data[0];
+          let CI_SUM = DATA?.commercialRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+          this.CI_INFO_SUM['CI_SUM'] += CI_SUM;
+          this.CI_INFO_SUM['TOTAL_CI'] += DATA?.AdviceRef?.length
+          this.CI_INFO_SUM['PIPO_AMOUNT'] += DATA?.amount;
+          PIPODATA.push(DATA)
+        });
+        this.PIPO_DATA = PIPODATA;
+        this.CI_INFO_SUM['REMAINING_AMOUNT'] = parseFloat(this.CI_INFO_SUM['PIPO_AMOUNT']) - parseFloat(this.CI_INFO_SUM['CI_SUM']);
         console.log(res, "getPipoById", this.CI_INFO_SUM)
       })
       this.COMMERCIAL_LIST = [];
