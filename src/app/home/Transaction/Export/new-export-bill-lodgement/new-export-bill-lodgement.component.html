@@ -9,11 +9,9 @@
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                         *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
                         [src]="PREVIWES_URL"></app-pdf-viewer>
-                    <div id="federal-bank-letter-head">
-                        <federal-bank-exportletterhead *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                            (url)="urlletterhead($event)"
-                            [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
-                    </div>
+                        <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                        *ngIf="this.LETTER_HEAD_URL!='' && this.VISIBLITY_PDF==true" name="Letter Head"
+                        [src]="this.LETTER_HEAD_URL"></app-pdf-viewer>
                     <button type="button"
                         *ngIf="PREVIWES_URL!='' && RawValueEventPanel?.geForm?.value?.SingleMultiple?.bool==true" style="
                     background-color: white;
@@ -189,12 +187,9 @@
                 <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
                     *ngIf="PREVIWES_URL!='' && this.VISIBLITY_PDF==true" name="Covering Schedule"
                     [src]="PREVIWES_URL"></app-pdf-viewer>
-                <div id="federal-bank-letter-head">
-                    <federal-bank-exportletterhead
-                        *ngIf="this.exportbilllodgementdata?.PREVIWES_URL!='' && this.VISIBLITY_PDF==true"
-                        (url)="urlletterhead($event)"
-                        [data]="['','',this.SELECT_BUYER_DETAILS]"></federal-bank-exportletterhead>
-                </div>
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+                    *ngIf="this.LETTER_HEAD_URL!='' && this.VISIBLITY_PDF==true" name="Letter Head"
+                    [src]="this.LETTER_HEAD_URL"></app-pdf-viewer>
             </mat-tab>
             <mat-tab [label]="'SB No. : '+this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION[item]?.sbno"
                 [id]="item"

@@ -119,7 +119,7 @@ export class ExportBillLodgementControllerData {
 
 
                         getAllFields[39]?.setText('');
-                        let BillAmount: any = parseFloat(sbdata?.fobValue) - parseFloat(TOTAL_SUM_FIREX)
+                        let BillAmount: any = parseFloat(sbdata?.fobValue)
                         getAllFields[31]?.setText(!isNaN(TOTAL_SUM_FIREX) ? TOTAL_SUM_FIREX.toString() : '0');
                         getAllFields[32]?.setText(sbdata?.fobCurrency);
                         getAllFields[33]?.setText(BillAmount != undefined ? this.ConvertNumberToWords(BillAmount).toUpperCase() : '0');
@@ -133,7 +133,7 @@ export class ExportBillLodgementControllerData {
                         getAllFields[45]?.setText(sbdata?.portCode);
                         getAllFields[46]?.setText(sbdata?.sbdate);
                         getAllFields[47]?.setText('');
-                        getAllFields[48]?.setText('');
+                        getAllFields[48]?.setText(CommercialNumberList?.join(","));
                         getAllFields[49]?.setText('');
                         getAllFields[50]?.setText('');
                         getAllFields[51]?.setText('');

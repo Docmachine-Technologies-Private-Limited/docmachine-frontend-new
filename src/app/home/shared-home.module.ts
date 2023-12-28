@@ -88,7 +88,6 @@ import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-
 import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
 import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data";
 import { NgCustomFilterPopupComponent } from "../custom/ng-custom-filter-popup/ng-custom-filter-popup.component";
-import { OldFederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterheadold/exportoldletterhead.component";
 import { CustomNgContentHeaderComponent } from "../components/Upload/upload-components/upload-components-header/custom-ng-content-header/custom-ng-content-header.component";
 import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips-custom-ng.component";
 import { SummaryTransactionUIHeaderComponent } from "../custom/SummaryTransactionUI/summary-transaction-uiheader/summary-transaction-uiheader.component";
@@ -159,7 +158,6 @@ import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child
     CustomModelHeaderComponent,
     MoreContentComponent,
     NgCustomFilterPopupComponent,
-    OldFederalBankExportletterheadComponent,
     CustomNgContentHeaderComponent,
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
@@ -287,7 +285,6 @@ import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child
     CustomModelHeaderComponent,
     MoreContentComponent,
     NgCustomFilterPopupComponent,
-    OldFederalBankExportletterheadComponent,
     CustomNgContentHeaderComponent,
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
