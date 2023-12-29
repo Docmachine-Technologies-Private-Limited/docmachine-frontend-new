@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { NavigationExtras, Router } from '@angular/router';
-import moment from 'moment';
 import { TableServiceController } from '../../../../service/v1/TableServiceController';
 import { ToastrService } from 'ngx-toastr';
 

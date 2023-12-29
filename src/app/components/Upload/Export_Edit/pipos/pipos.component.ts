@@ -50,6 +50,7 @@ export class EditPIPOSComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.data = JSON.parse(params["item"]);
       this.response(JSON.parse(params["item"]));
+      console.log(this.data,"PIPO_EDIT")
     });
   }
 
@@ -92,7 +93,7 @@ export class EditPIPOSComponent implements OnInit {
           },
           {
             type: "currency",
-            value: element?.currency?.type,
+            value:args?.currency,
             label: "Currency",
             name: 'currency',
             rules: {

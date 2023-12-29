@@ -50,7 +50,7 @@ export class EditInwardUploadDocumentsComponent implements OnInit {
     public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) {
   }
-  
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.data = JSON.parse(params["item"]);
@@ -58,7 +58,7 @@ export class EditInwardUploadDocumentsComponent implements OnInit {
       console.log(this.data, "EditInwardUploadDocumentsComponent")
     });
   }
-  
+
   response(args: any) {
     console.log(args, args?.length, "argsShippingbill")
     if (args?.length == undefined) {
@@ -68,7 +68,7 @@ export class EditInwardUploadDocumentsComponent implements OnInit {
     }
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  
+
   Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
@@ -148,7 +148,7 @@ export class EditInwardUploadDocumentsComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  
+
   ReUplod(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
@@ -236,12 +236,37 @@ export class EditInwardUploadDocumentsComponent implements OnInit {
     if (e?.value?.BuyerName?.Address == undefined) {
       e.value.BuyerName = this.data?.BuyerName;
     }
-    // this.documentService.addInward_remittance(e.value).subscribe((res: any) => {
-    //   console.log(res, 'addInward_remittance')
-    //   if (res.data.length != 0) {
-    //     this.router.navigate(['home/Summary/Export/Inward-Remittance-Disposal'])
-    //   }
-    // })
+    if (this.data?.Inward_reference_number != e.value.Inward_reference_number) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Inward Reference Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            Inward_reference_number: e.value.Inward_reference_number
+          }, 'Inward_remittance').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.file = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.UpdateInward_Remittance(this.data?._id, e.value).subscribe((res: any) => {
+                console.log(res, 'addInward_remittance')
+                if (res.data.length != 0) {
+                  this.router.navigate(['home/Summary/Export/Inward-Remittance-Disposal', 'PendingCaliming'])
+                }
+              })
+            } else {
+              this.toastr.error(`Please check this Inward Reference no. : ${e?.value?.Inward_reference_number} already exit...`);
+            }
+          })
+        }
+      })
+    } else {
+      e.value.file = this.publicUrl?.changingThisBreaksApplicationSecurity;
+      this.documentService.UpdateInward_Remittance(this.data?._id, e.value).subscribe((res: any) => {
+        console.log(res, 'addInward_remittance')
+        if (res.data.length != 0) {
+          this.router.navigate(['home/Summary/Export/Inward-Remittance-Disposal', 'PendingCaliming'])
+        }
+      })
+    }
+
   }
   replaceText(text: any, repl_text: any) {
     return text != undefined ? (text.replace(repl_text, '')).trim() : ''

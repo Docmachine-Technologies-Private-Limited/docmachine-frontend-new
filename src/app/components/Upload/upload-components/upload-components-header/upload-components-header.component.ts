@@ -200,22 +200,21 @@ export class UploadHeaderComponent implements OnInit {
     if (event?.target.checked == true) {
       this.btndisabled = false;
       if (this.validator?.USER_DATA?.result?.sideMenu == 'export') {
-        this.AutoFillPIPO = {
+        this.AutoFillPIPO = [{
           pi_po_buyerName: 'PI-' + data?.pi_poNo + '-' + data?.buyerName,
           id: [data?.pi_poNo, data?.buyerName],
           _id: data?._id
-        }
+        }]
       } else if (this.validator?.USER_DATA?.result?.sideMenu == 'import') {
-        this.AutoFillPIPO = {
+        this.AutoFillPIPO = [{
           pi_po_buyerName: 'PI-' + data?.pi_poNo + '-' + data?.benneName,
           id: [data?.pi_poNo, data?.benneName],
           _id: data?._id
-        }
+        }]
       }
       this.NEXT_BUTTON = true;
       PI_PO_BENNE_NAME_NG_SELECT?.open();
       this.UploadHeaderEvent.emit(this.AutoFillPIPO)
-
     } else {
       event.target.checked = false
       this.btndisabled = true;
@@ -291,7 +290,6 @@ export class UploadHeaderComponent implements OnInit {
             }
             break
         }
-
       }
       if (Object.keys(o).length === 0) {
         return

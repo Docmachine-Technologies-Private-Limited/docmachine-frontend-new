@@ -76,7 +76,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       this.validator.buildForm({
         TrackerRef: {
           type: "RemitterCheckBox",
-          value: res?.partyName,
+          value: {Remitter_Name:res?.partyName},
           label: "Select Remitter Name",
           rules: {
             required: true,
@@ -198,12 +198,11 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
-    e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
     e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
     e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
     e.value.origin = e.value.origin?.value != undefined ? e.value.origin.value : e.value.origin;
+    let Remitter_Name=e?.value?.TrackerRef?.Remitter_Name
     console.log('doc', temp, this.pipourl1);
     console.log('onSubmitIrAdvice', e.value);
     this.documentService.getInvoice_No({
@@ -213,8 +212,8 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       if (resp.data.length == 0) {
         this.CustomConfirmDialogModel.YesDialogModel(`You are updating remitter info in pipo no.</br>
         </br>
-        <p>PIPO Remitter info. : </br> ${this.PIPO_DATA[0]?.RemitterName}</p>
-        <p>New Remitter info. : </br> ${e?.value?.TrackerRef?.RemitterName}</p>
+        <p>PIPO Remitter info. : </br> ${this.PIPO_DATA[0]?.RemitterName?.Remitter_Name}</p>
+        <p>New Remitter info. : </br> ${Remitter_Name}</p>
         `, 'Comments', (CustomConfirmDialogRes: any) => {
           this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
             console.log('addIrAdvice', data);
@@ -225,7 +224,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
               "AdviceRef": [
                 data?.data._id,
               ],
-
             }
             this.documentService.UpdateInward_Remittance(e.value?.TrackerRef?._id, {
               "AdviceRef": [
@@ -257,13 +255,13 @@ export class InwardRemittanceAdviceComponent implements OnInit {
                     this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
                   }
                 }, (error) => {
-                  console.log('error');
+                  console.log('error2');
                 });
               })
             }
           },
             (error) => {
-              console.log('error');
+              console.log('error1');
             }
           );
         });

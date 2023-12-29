@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from "moment";
 import { TableServiceController } from '../../../../service/v1/TableServiceController';
+import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 
 @Component({
   selector: 'export-master-service-summary',
@@ -98,6 +99,7 @@ export class MasterServiceComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
+    private pipodataservice: PipoDataService,
     public wininfo: WindowInformationService,
     public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
@@ -164,6 +166,26 @@ export class MasterServiceComponent implements OnInit {
           bindLabel: "value"
         },
       }
+      this.pipodataservice.getPipoList("export").then((res: any) => {
+        this.PIPO_DROP_DOWN_DATA = [];
+        this.PIPO_SELECTED_DROP_DOWN_DATA = [];
+        res?.pipoModelList?.forEach(element => {
+          this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
+            pi_poNo: element?.pi_poNo,
+            amount: element?.amount,
+            UtilizationAmount: 0,
+            buyerName: element?.buyerName,
+          }
+          this.PIPO_DROP_DOWN_DATA.push({
+            pi_poNo: element?.pi_poNo,
+            amount: element?.amount,
+            UtilizationAmount: 0,
+            id: element?._id,
+            buyerName: element?.buyerName,
+          });
+        });
+        console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
+      })
     })
   }
 

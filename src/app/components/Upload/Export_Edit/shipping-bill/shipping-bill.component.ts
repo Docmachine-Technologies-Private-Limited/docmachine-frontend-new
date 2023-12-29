@@ -79,7 +79,7 @@ export class EditShippingBillComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args.doc);
       let defaultValue: any = [];
       this.data?.invoices?.forEach(element => {
-        defaultValue.push(
+        defaultValue.push([
           {
             type: "CommericalNo",
             value: element?.invoiceno,
@@ -137,7 +137,7 @@ export class EditShippingBillComponent implements OnInit {
               required: true,
             },
           },
-        )
+        ])
       });
 
       this.validator.buildForm({
@@ -201,7 +201,7 @@ export class EditShippingBillComponent implements OnInit {
         fobCurrency: {
           type: "currency",
           value: args?.fobCurrency,
-          label: "FOB CURRENCY",
+          label: "SB CURRENCY",
           rules: {
             required: true,
           },
@@ -215,15 +215,7 @@ export class EditShippingBillComponent implements OnInit {
         fobValue: {
           type: "text",
           value: args?.fobValue,
-          label: "FOB VALUE",
-          rules: {
-            required: true,
-          }
-        },
-        freightCurrency: {
-          type: "currency",
-          value: args?.freightCurrency,
-          label: "FREIGHT CURRENCY",
+          label: "SB VALUE",
           rules: {
             required: true,
           }
@@ -249,14 +241,6 @@ export class EditShippingBillComponent implements OnInit {
           type: "text",
           value: args?.ieccode,
           label: "IEC CODE",
-          rules: {
-            required: true,
-          }
-        },
-        insuranceCurrency: {
-          type: "currency",
-          value: args?.insuranceCurrency,
-          label: "Insurance Currency",
           rules: {
             required: true,
           }
@@ -293,19 +277,8 @@ export class EditShippingBillComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: [defaultValue]
+          formArray: defaultValue
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'ShippingBill');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -326,7 +299,7 @@ export class EditShippingBillComponent implements OnInit {
       this.pipourl1 = args[1].data;
       let defaultValue: any = [];
       this.data?.invoices?.forEach(element => {
-        defaultValue.push(
+        defaultValue.push([
           {
             type: "CommericalNo",
             value: element?.invoiceno,
@@ -384,7 +357,7 @@ export class EditShippingBillComponent implements OnInit {
               required: true,
             },
           },
-        )
+        ])
       });
 
       this.validator.buildForm({
@@ -525,21 +498,8 @@ export class EditShippingBillComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: [
-            defaultValue
-          ]
+          formArray: defaultValue
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'ShippingBill');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

@@ -510,7 +510,7 @@ export class ViewDocumentComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
-        documents:[index?.doc],
+        documents: [index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -542,26 +542,30 @@ export class ViewDocumentComponent implements OnInit {
     this.FILTER_VALUE_LIST = doclist;
     if (doclist.length == 0) {
       this.ngOnInit();
+    } else {
+      this.SHIPPING_BILL = value;
+      doclist.forEach(element => {
+        element?.pipo?.forEach((PIPOElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: PIPOElement?.doc, name: 'PIPO' + (i + 1), status: false })
+        });
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: element?.doc, name: 'Shipping Bill', status: false })
+        element?.blcopydetails?.forEach((blcopydetailsElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: blcopydetailsElement?.blCopyDoc, name: 'Bl Copy' + (i + 1), status: false })
+        });
+        element?.commercialdetails?.forEach((CI_DETAILSElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: CI_DETAILSElement?.commercialDoc, name: 'Commercial' + (i + 1), status: false })
+        });
+        element?.packingdetails?.forEach((packingdetailsElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: packingdetailsElement?.packingDoc, name: 'Packing' + (i + 1), status: false })
+        });
+        element?.debitnotedetails?.forEach((debitnotedetailsElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: debitnotedetailsElement?.doc, name: 'DebitNote' + (i + 1), status: false })
+        });
+      });
+      await this.filteranytablepagination.LoadTableExport({ sbno: value }, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
     }
-    this.SHIPPING_BILL = value;
-    doclist.forEach(element => {
-      element?.pipo?.forEach((PIPOElement,i) => {
-        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: PIPOElement?.doc, name: 'PIPO'+(i+1), status: false })
-      });
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.doc, name: 'Shipping Bill', status: false })
-      element?.blcopydetails?.forEach((blcopydetailsElement,i) => {
-        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: blcopydetailsElement?.blCopyDoc, name: 'Bl Copy'+(i+1), status: false })
-      });
-      element?.commercialdetails?.forEach((CI_DETAILSElement,i) => {
-        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: CI_DETAILSElement?.commercialDoc, name: 'Commercial'+(i+1), status: false })
-      });
-      element?.packingdetails?.forEach((packingdetailsElement,i) => {
-        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: packingdetailsElement?.packingDoc, name: 'Packing'+(i+1), status: false })
-      });
-    });
-    await this.filteranytablepagination.LoadTableExport({ sbno: value }, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
-      this.FILTER_VALUE_LIST_NEW = res;
-    });
   }
 
   tickdoc(event: any, index: any) {

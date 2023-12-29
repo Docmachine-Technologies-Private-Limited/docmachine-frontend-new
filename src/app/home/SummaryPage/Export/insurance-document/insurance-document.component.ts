@@ -165,6 +165,26 @@ export class InsuranceDocumentComponent implements OnInit {
           bindLabel: "value"
         },
       }
+      this.pipodataservice.getPipoList("export").then((res: any) => {
+        this.PIPO_DROP_DOWN_DATA = [];
+        this.PIPO_SELECTED_DROP_DOWN_DATA = [];
+        res?.pipoModelList?.forEach(element => {
+          this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
+            pi_poNo: element?.pi_poNo,
+            amount: element?.amount,
+            UtilizationAmount: 0,
+            buyerName: element?.buyerName,
+          }
+          this.PIPO_DROP_DOWN_DATA.push({
+            pi_poNo: element?.pi_poNo,
+            amount: element?.amount,
+            UtilizationAmount: 0,
+            id: element?._id,
+            buyerName: element?.buyerName,
+          });
+        });
+        console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
+      })
     })
   }
 
@@ -223,35 +243,6 @@ export class InsuranceDocumentComponent implements OnInit {
   
   reset(){
     this.ngOnInit()
-  }
-
-  InsuranceNoTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['UtilizationAddition']),
-          date: moment(element['date']).format("DD-MM-YYYY"),
-          insuranceNumber: element['insuranceNumber'],
-          StartDate: moment(element['StartDate']).format("DD-MM-YYYY"),
-          Expirydate: moment(element['Expirydate']).format("DD-MM-YYYY"),
-          insuranceAmount: element['insuranceAmount'],
-          currency: element['currency'],
-          buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
-      });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
-      }
-    });
   }
 
   async removeEmpty(data: any) {

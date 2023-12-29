@@ -3250,7 +3250,7 @@ export class TableServiceController {
     async removeEmpty(data: any) {
         await data.forEach(element => {
             for (const key in element) {
-                if (element[key] == '' || element[key] == null || element[key] == undefined) {
+                if ((element[key] == '' || element[key] == null || element[key] == undefined) && element[key] != 'object') {
                     element[key] = 'NF'
                 }
             }
@@ -3302,4 +3302,60 @@ export class TableServiceController {
         var Minutes = Math.floor(60 * (Remainder - Hours));
         return ({ "Days": Days, "Hours": Hours, "Minutes": Minutes })
     }
+    
+    removeNullOrEmpty(o) {
+        if (typeof o !== "object") {
+          return o;
+        }
+        let oKeys = Object.keys(o)
+        for (let j = 0; j < oKeys.length; j++) {
+          let p = oKeys[j]
+          switch (typeof (o[p])) {
+            case 'object':
+              if (Array.isArray(o[p])) {
+                for (let i = 0; i < o[p].length; i++) {
+                  o[p][i] = this.removeNullOrEmpty(o[p][i])
+                  if (this.isEmpty(o[p][i])) {
+                    o[p].splice(i, 1)
+                    i--
+                  }
+                }
+                if (o[p].length === 0) {
+                  if (Array.isArray(o)) {
+                    o.splice(parseInt(p), 1)
+                    j--
+                  } else {
+                    delete o[p]
+                  }
+                }
+              } else {
+                if (this.isEmpty(o[p])) {
+                  delete o[p]
+                } else {
+                  o[p] = this.removeNullOrEmpty(o[p])
+                  if (this.isEmpty(o[p])) {
+                    delete o[p]
+                  }
+                }
+              }
+              break
+            default:
+              if (this.isEmpty(o[p])) {
+                delete o[p]
+              }
+              break
+          }
+        }
+        if (Object.keys(o).length === 0) {
+          return
+        }
+        return o
+      }
+      isEmpty(obj: any) {
+        if (obj === '' || obj === null || JSON.stringify(obj) === '{}' || JSON.stringify(obj) === '[]' || (obj) === undefined || (obj) === '{}') {
+          return true
+        } else {
+          return false
+        }
+      }
 }

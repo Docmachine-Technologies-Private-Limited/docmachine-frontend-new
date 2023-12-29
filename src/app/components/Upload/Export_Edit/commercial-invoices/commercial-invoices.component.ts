@@ -43,6 +43,12 @@ export class EditCommercialInvoicesComponent implements OnInit {
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
   data: any = '';
+  CI_INFO_SUM: any = {
+    CI_SUM: 0,
+    TOTAL_CI: 0,
+    PIPO_AMOUNT: 0,
+    REMAINING_AMOUNT: 0
+  }
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -74,6 +80,11 @@ export class EditCommercialInvoicesComponent implements OnInit {
 
   Edit(args: any) {
     this.publicUrl = '';
+    let PIPO_ID: any = []
+    args?.pipo?.forEach(element => {
+      PIPO_ID.push(element?._id)
+    });
+    this.PIPO_LOAD(PIPO_ID, args?.amount);
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
       this.validator.buildForm({
@@ -89,7 +100,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
         commercialNumber: {
           type: "text",
           value: args?.commercialNumber,
-          label: "Commercial Invoice Number*",
+          label: "Commercial Invoice Number",
           rules: {
             required: true,
           }
@@ -97,7 +108,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
         currency: {
           type: "currency",
           value: args?.currency,
-          label: "Currency*",
+          label: "Currency",
           rules: {
             required: true,
           }
@@ -110,17 +121,6 @@ export class EditCommercialInvoicesComponent implements OnInit {
             required: true,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'ExportCommercialInvoices');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -129,6 +129,11 @@ export class EditCommercialInvoicesComponent implements OnInit {
   }
 
   ReUplod(args: any) {
+    let PIPO_ID: any = []
+    this.data?.pipo?.forEach(element => {
+      PIPO_ID.push(element?._id)
+    });
+    this.PIPO_LOAD(PIPO_ID, this.data?.amount);
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
@@ -146,7 +151,7 @@ export class EditCommercialInvoicesComponent implements OnInit {
         currency: {
           type: "currency",
           value: this.data?.currency,
-          label: "Currency*",
+          label: "Currency",
           name: 'currency',
           disabled: true,
           rules: {
@@ -171,50 +176,52 @@ export class EditCommercialInvoicesComponent implements OnInit {
             required: true,
           },
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'ExportCommercialInvoices');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
-
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
     e.value.type = e.value?.type?.value != undefined ? e.value?.type?.value : e.value?.type;
-    if (this.data?.commercialNumber != e.value.commercialNumber) {
-      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
-        if (CustomConfirmDialogRes?.value == "Ok") {
-          this.documentService.getInvoice_No({
-            commercialNumber: e.value.commercialNumber
-          }, 'commercials').subscribe((resp: any) => {
-            console.log('creditNoteNumber Invoice_No', resp)
-            if (resp.data.length == 0) {
-              e.value.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
-              this.documentService.updateCommercial(e.value, this.data?._id).subscribe((res: any) => {
-                this.toastr.success(`Commercial Invoice Updated Successfully`);
-                this.router.navigate(['home/Summary/Export/commercial']);
-              }, (err) => console.log('Error adding pipo'));
+    console.log(e, 'value')
+    let selectedShippingBill = this.PIPO_DATA?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+    console.log(selectedShippingBill, e?.value.amount, "selectedShippingBill")
+    if (parseFloat(this.CI_INFO_SUM['REMAINING_AMOUNT']) <= parseFloat(selectedShippingBill)) {
+      if (parseFloat(selectedShippingBill) >= parseFloat(e?.value.amount)) {
+        if (this.data?.commercialNumber != e.value.commercialNumber) {
+          this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+            if (CustomConfirmDialogRes?.value == "Ok") {
+              this.documentService.getInvoice_No({
+                commercialNumber: e.value.commercialNumber
+              }, 'commercials').subscribe((resp: any) => {
+                console.log('creditNoteNumber Invoice_No', resp)
+                if (resp.data.length == 0) {
+                  e.value.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+                  this.documentService.updateCommercial(e.value, this.data?._id).subscribe((res: any) => {
+                    this.toastr.success(`Commercial Invoice Updated Successfully`);
+                    this.router.navigate(['home/Summary/Export/commercial']);
+                  }, (err) => console.log('Error adding pipo'));
+                } else {
+                  this.toastr.error(`Please check this commercial no. : ${e?.value?.commercialNumber} already exit...`);
+                }
+              })
             }
           })
+        } else {
+          e.value.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+          this.documentService.updateCommercial(e.value, this.data?._id).subscribe((res: any) => {
+            this.toastr.success(`Commercial Invoice Updated Successfully`);
+            this.router.navigate(['home/Summary/Export/commercial']);
+          }, (err) => console.log('Error adding pipo'));
         }
-      })
+      } else {
+        this.toastr.error(`Sorry your PIPO amount and Invoices amount not equal...`);
+      }
     } else {
-      e.value.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
-      this.documentService.updateCommercial(e.value, this.data?._id).subscribe((res: any) => {
-        this.toastr.success(`Commercial Invoice Updated Successfully`);
-        this.router.navigate(['home/Summary/Export/commercial']);
-      }, (err) => console.log('Error adding pipo'));
+      this.toastr.error(`Total CI amount is exceeding PI amount by.... Plz check`);
     }
   }
 
@@ -239,4 +246,24 @@ export class EditCommercialInvoicesComponent implements OnInit {
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
+
+  PIPO_LOAD(pipoArr, CI_AMOUNT) {
+    let PIPODATA: any = [];
+    this.documentService.getPipoByIdList(pipoArr).subscribe((res: any) => {
+      console.log(res, 'getPipoByIdList')
+      res?.forEach(element => {
+        let DATA: any = element?.data[0];
+        let CI_SUM = DATA?.commercialRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+        this.CI_INFO_SUM['CI_SUM'] += CI_SUM;
+        this.CI_INFO_SUM['TOTAL_CI'] += DATA?.AdviceRef?.length
+        this.CI_INFO_SUM['PIPO_AMOUNT'] += DATA?.amount;
+        PIPODATA.push(DATA)
+      });
+      this.PIPO_DATA = PIPODATA;
+      this.CI_INFO_SUM['CI_SUM'] = this.CI_INFO_SUM['CI_SUM'] - parseFloat(CI_AMOUNT);
+      this.CI_INFO_SUM['REMAINING_AMOUNT'] = (parseFloat(this.CI_INFO_SUM['PIPO_AMOUNT']) - parseFloat(this.CI_INFO_SUM['CI_SUM']));
+      console.log(res, CI_AMOUNT, "getPipoById", this.CI_INFO_SUM)
+    })
+  }
+
 }

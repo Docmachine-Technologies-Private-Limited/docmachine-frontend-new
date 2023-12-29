@@ -49,6 +49,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
     $('#' + $($event.target).parent().attr('id')).addClass('custom-dropdown-active');
     console.log(this.items,"selectedItems")
   }
+  
   dropdownHide($event, val, inputid) {
     var uq_id: any = $($event.target).parent().parent().attr('id')
     $('.custom-dropdown').removeClass('custom-dropdown-active');

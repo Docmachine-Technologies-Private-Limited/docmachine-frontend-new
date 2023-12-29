@@ -577,11 +577,11 @@
                 <div class="form-group mb-0" *ngSwitchCase="'RemitterName'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
-                    <ng-custom-dropdown *ngIf="this.validator?.INWARD_REMITTANCE_NAME_LIST?.length!=0"
+                    <app-ng-dropdown-custom *ngIf="this.validator?.INWARD_REMITTANCE_NAME_LIST?.length!=0"
                         [items]="this.validator?.INWARD_REMITTANCE_NAME_LIST" bindLabel="Remitter_Name"
                         [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                        [name]="field.fieldName" [selectedItems]="field.value"
-                        [(ngModel)]="field.value"></ng-custom-dropdown>
+                        [name]="field.fieldName" [value]="field?.value"
+                        [(ngModel)]="field.value"></app-ng-dropdown-custom>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'consignee'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"

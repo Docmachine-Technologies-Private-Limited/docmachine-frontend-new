@@ -91,7 +91,7 @@ export class ExportOpinionReportsComponent implements OnInit {
   async ngOnInit() {
     this.USER_DATA = await this.userService.getUserDetail();
     this.FILTER_FORM_VALUE = [];
-    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'opinionreports',this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'opinionreports', this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;
       for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
@@ -150,64 +150,51 @@ export class ExportOpinionReportsComponent implements OnInit {
     })
   }
 
- async onSubmit(value: any) {
+  async onSubmit(value: any) {
     let form_value: any = {
-      buyerName: value?.value?.buyerName,
+      "ForeignPartyName.value": value?.value?.buyerName,
       pi_poNo: value?.value?.NO,
     };
 
     if (value?.value?.todate != '' && value?.value?.todate != undefined) {
       form_value = {
-        buyerName: value?.value?.buyerName,
+        "ForeignPartyName.value": value?.value?.buyerName,
         pi_poNo: value?.value?.NO,
         date: { $gte: value?.value?.todate }
       };
       if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
         form_value = {
-          buyerName: value?.value?.buyerName,
+          "ForeignPartyName.value": value?.value?.buyerName,
           pi_poNo: value?.value?.NO,
           date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
         };
       }
     } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
       form_value = {
-        buyerName: value?.value?.buyerName,
+        "ForeignPartyName.value": value?.value?.buyerName,
         pi_poNo: value?.value?.NO,
         date: { $lt: value?.value?.fromdate }
       };
       if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
         form_value = {
-          buyerName: value?.value?.buyerName,
+          "ForeignPartyName.value": value?.value?.buyerName,
           pi_poNo: value?.value?.NO,
           date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
         };
       }
     }
 
-    const removeEmptyValues = (object) => {
-      let newobject: any = {}
-      for (const key in object) {
-        if (object[key] != '' && object[key] != null && object[key] != undefined) {
-          newobject[key] = object[key];
-        }
-      }
-      return newobject;
-    };
-    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
-      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'opinionreports',this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
-        this.FILTER_VALUE_LIST_NEW = res;
-      });
-    } else {
-      this.toastr.error("Please fill field...")
-    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+    await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'opinionreports', this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
   }
-  
-  reset(){
+
+  reset() {
     this.ngOnInit()
   }
 
-  
+
   OpinionReportTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -220,7 +207,7 @@ export class ExportOpinionReportsComponent implements OnInit {
           ReportDate: moment(element['ReportDate']).format("DD-MM-YYYY"),
           ReportRatings: element['ReportRatings'],
           buyerName: element['buyerName'],
-          AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
+          AgeingDays: this.SubtractDates(new Date(element['ReportDate']), new Date()),
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
@@ -238,7 +225,7 @@ export class ExportOpinionReportsComponent implements OnInit {
   public SubtractDates(startDate: Date, endDate: Date): any {
     let dateDiff = (endDate.getTime() - startDate.getTime()) / 1000;
     var h: any = Math.floor(dateDiff / 3600);
-    return (h > 24 ? this.SplitTime(h)?.Days + 'days' :startDate.toDateString());
+    return (h > 24 ? this.SplitTime(h)?.Days + 'days' : startDate.toDateString());
   }
   SplitTime(numberOfHours) {
     var Days = Math.floor(numberOfHours / 24);
@@ -359,10 +346,10 @@ export class ExportOpinionReportsComponent implements OnInit {
     }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/OpinionReports`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/OpinionReports`], navigationExtras);
     this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
 
@@ -396,7 +383,7 @@ export class ExportOpinionReportsComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
-        documents:[index?.doc],
+        documents: [index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -449,7 +436,7 @@ class OpinionReportFormat {
 
   getBuyerName(buyerName: any) {
     let temp: any = [];
-    (buyerName!="NF"?buyerName:[])?.forEach(element => {
+    (buyerName != "NF" ? buyerName : [])?.forEach(element => {
       temp.push(element);
     });
     return temp.join(',')

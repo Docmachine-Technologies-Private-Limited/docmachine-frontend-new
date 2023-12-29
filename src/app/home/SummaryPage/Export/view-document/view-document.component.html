@@ -3,6 +3,11 @@
         <summary-page-header [Length]="this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length"
             TITLE="Shipping Bill" (exportToExcel)="exportToExcel()" (reset)="reset()" (onSubmit)="onSubmit($event)"
             [RouterLink]="['/home/upload-documents/Export/Shippingbill']" [FILTER_FORM]="this.FILTER_FORM">
+            <app-ng-dropdown-custom placeHolderText="Search sb no." class="PopupOpen"
+                popup-close="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" width="300px" [items]="this.filteranytablepagination?.TABLE_CONTROLLER_DATA" bindLabel="sbno"
+                (modelChanges)="SbSearch($event?.sbno)" (keyEvent)="SbSearch($event)" [multiple]="false"
+                #buyerNameSelection>
+            </app-ng-dropdown-custom>
         </summary-page-header>
         <div class="analytics" #epltable>
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="true"
