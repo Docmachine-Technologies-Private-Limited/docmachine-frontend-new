@@ -120,7 +120,7 @@ export class EditExportBilllodgementreferencenumberadvicecopyComponent implement
     this.publicUrl = '';
     this.LoadShippingBill([this.data?.pipo[0]?._id]);
     setTimeout(() => {
-      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.sbno === args?.SbRef[0]?.sbno)[0];
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.sbno === this.data?.SbRef[0]?.sbno)[0];
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
       this.validator.buildForm({
         sbNo: {

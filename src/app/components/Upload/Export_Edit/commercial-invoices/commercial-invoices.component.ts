@@ -251,6 +251,12 @@ export class EditCommercialInvoicesComponent implements OnInit {
     let PIPODATA: any = [];
     this.documentService.getPipoByIdList(pipoArr).subscribe((res: any) => {
       console.log(res, 'getPipoByIdList')
+      this.CI_INFO_SUM = {
+        CI_SUM: 0,
+        TOTAL_CI: 0,
+        PIPO_AMOUNT: 0,
+        REMAINING_AMOUNT: 0
+      }
       res?.forEach(element => {
         let DATA: any = element?.data[0];
         let CI_SUM = DATA?.commercialRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);

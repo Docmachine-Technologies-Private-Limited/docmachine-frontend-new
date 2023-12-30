@@ -370,13 +370,13 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       res?.data.forEach((element: any) => {
         element['ischecked'] = false;
         element['isDisabled'] = false;
+        if (this.getBOEBalanceAmount(element?.boeRef) == 0) {
+          element['ischecked'] = true;
+          element['isDisabled'] = true;
+        }
         let filterDirectImports = element?.paymentTerm?.filter((item: any) => item?.type?.value === "Direct Imports(Payment Against Bill of entry)")
         filterDirectImports.forEach((paymentTermelement: any) => {
           paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
-          if (paymentTermelement['BalanceAmount'] == '0' && paymentTermelement['BalanceAmount'] == 0) {
-            element['isDisabled'] = true;
-            element['ischecked'] = true;
-          }
         });
         element["paymentTerm"] = filterDirectImports;
       });
@@ -387,34 +387,41 @@ export class NewDirectImportPaymentsComponent implements OnInit {
 
   PIPO_LIST_CHECKED($event, value: any, index: any) {
     if ($event?.target?.checked == true) {
-      this.validator.PIPO_LIST.push(value)
-      let boeRef: any = []
-      this.validator.PIPO_LIST?.forEach(element => {
-        element?.boeRef?.filter((item: any) => item?.currency == element?.currency && parseFloat(item?.balanceAmount) != 0)?.forEach(boeelement => {
-          boeRef?.push(boeelement)
+      let currecnyvalidator = this.validator.PIPO_LIST?.filter((item) => item?.currency == value?.currency);
+      if (currecnyvalidator?.length != 0 || this.validator.PIPO_LIST?.length == 0) {
+        this.validator.PIPO_LIST.push(value)
+        let boeRef: any = []
+        this.validator.PIPO_LIST?.forEach(element => {
+          element?.boeRef?.filter((item: any) => item?.currency == element?.currency && parseFloat(item?.balanceAmount) != 0)?.forEach(boeelement => {
+            boeRef?.push(boeelement)
+          });
         });
-      });
-      this.validator.BOE_LIST = boeRef;
-      console.log(boeRef, "boeRef")
-      this.documentService.filterAnyTable({
-        Currency: value?.currency,
-      }, 'ForwardContract').subscribe((res: any) => {
-        this.ForwardContractDATA = res?.data;
-        console.log(res, 'ForwardContractDATA')
-      });
-      this.response(null);
-      value['ischecked'] = true;
-      let COUNT_TRANSACTION: any = 0;
-      let TOTAL_AMOUNT_CREATED_DATE: any = []
-      this.validator.PIPO_LIST?.forEach(element => {
-        COUNT_TRANSACTION += this.getTransactionCount(element?.TransactionRef, 'Direct-Bills')
-        element?.TransactionRef?.filter((item) => item?.TypeTransaction == 'Direct-Bills')?.forEach(TransactionRefElement => {
-          let SUM_OF_TRANSCTION: any = TransactionRefElement?.data?.formdata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
-          TOTAL_AMOUNT_CREATED_DATE.push(SUM_OF_TRANSCTION + ' & ' + moment(TransactionRefElement?.createdAt).format('DD-MM-YYYY'))
+        this.validator.BOE_LIST = boeRef;
+        console.log(boeRef, "boeRef")
+        this.documentService.filterAnyTable({
+          Currency: value?.currency,
+        }, 'ForwardContract').subscribe((res: any) => {
+          this.ForwardContractDATA = res?.data;
+          console.log(res, 'ForwardContractDATA')
         });
-      });
-      this.CI_INFO_SUM['TOTAL_TRANSACTION_COUNT'] = COUNT_TRANSACTION
-      this.CI_INFO_SUM['TOTAL_AMOUNT_CREATED_DATE'] = TOTAL_AMOUNT_CREATED_DATE?.join(',')
+        this.response(null);
+        value['ischecked'] = true;
+        let COUNT_TRANSACTION: any = 0;
+        let TOTAL_AMOUNT_CREATED_DATE: any = []
+        this.validator.PIPO_LIST?.forEach(element => {
+          COUNT_TRANSACTION += this.getTransactionCount(element?.TransactionRef, 'Direct-Bills')
+          element?.TransactionRef?.filter((item) => item?.TypeTransaction == 'Direct-Bills')?.forEach(TransactionRefElement => {
+            let SUM_OF_TRANSCTION: any = TransactionRefElement?.data?.formdata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
+            TOTAL_AMOUNT_CREATED_DATE.push(SUM_OF_TRANSCTION + ' & ' + moment(TransactionRefElement?.createdAt).format('DD-MM-YYYY'))
+          });
+        });
+        this.CI_INFO_SUM['TOTAL_TRANSACTION_COUNT'] = COUNT_TRANSACTION
+        this.CI_INFO_SUM['TOTAL_AMOUNT_CREATED_DATE'] = TOTAL_AMOUNT_CREATED_DATE?.join(',')
+      } else {
+        this.toastr.error("Please select same currency...")
+        value['ischecked'] = false;
+        $event.target.checked = false
+      }
     } else {
       let PIPO_INDEX: any = this.validator.PIPO_LIST?.findIndex((item: any) => item?.pi_poNo == value?.pi_poNo)
       this.validator.PIPO_LIST.splice(PIPO_INDEX, 1);
@@ -439,7 +446,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
       value['ischecked'] = false;
       this.response(null);
     }
-  
+
   }
 
 

@@ -216,15 +216,26 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
   }
 
   LoadShippingBill(pipoArr: any) {
-    this.filteranytablepagination.PaginationfilterAnyTable({
-      pipo: pipoArr
-    }, { limit: 20 }, 'masterrecord').subscribe((res: any) => {
+    let API_DATA: any = [];
+    pipoArr?.forEach(element => {
+      API_DATA.push({
+        query: { pipo: [element] }, tableName: "masterrecord", filterPage: { limit: 20 }
+      })
+    });
+    console.log(API_DATA, "API_DATA");
+    this.filteranytablepagination.PaginationfilterAnyTableList(API_DATA).subscribe((res: any) => {
       console.log(res, "LoadShippingBill")
-      this.validator.SHIPPING_BILL_MASTER_DATA = res?.data;
+      let DATA_WRAP: any = []
+      res?.forEach(element => {
+        element?.data?.forEach(SBElement => {
+          DATA_WRAP.push(SBElement);
+        });
+      });
+      this.validator.SHIPPING_BILL_MASTER_DATA = DATA_WRAP;
       this.validator.origin = [];
       this.validator.SHIPPING_BUNDEL = [];
       this.validator.SHIPPING_BILL_LIST = [];
-      res?.data?.forEach((element, i) => {
+      DATA_WRAP?.forEach((element, i) => {
         if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
           this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
           this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });

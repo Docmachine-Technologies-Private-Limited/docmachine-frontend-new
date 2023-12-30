@@ -134,11 +134,24 @@ export class ExportBillLodgementData {
     }
 
     getbyFIRXPartyNamebyPipo(pipoId) {
-        this.documentService.filterAnyTable({
-            pipo: [pipoId]
-        }, 'iradvices').subscribe((res: any) => {
+        let API_DATA: any = [];
+        pipoId?.forEach(element => {
+            API_DATA.push({
+                query: { pipo: { $eq: element } }, tableName: "iradvices", filterPage: { limit: 20 }
+            })
+        });
+        console.log(pipoId,API_DATA, "API_DATA");
+        this.filteranytablepagination.PaginationfilterAnyTableList(API_DATA).subscribe((res: any) => {
+            let DATA_WRAP: any = []
+            res?.forEach(element => {
+                element?.data?.forEach(WrapElement => {
+                    if (DATA_WRAP?.filter((item:any)=>item?._id==WrapElement?._id)?.length==0) {
+                        DATA_WRAP.push(WrapElement);
+                    }
+                });
+            });
             let data: any = [];
-            res?.data?.forEach(element => {
+            DATA_WRAP?.forEach(element => {
                 element['BalanceAvail'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount
                 element['InputValue'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;
                 element['UsedAmount'] = element['BalanceAvail'] != "-1" ? element['BalanceAvail'] : element?.amount;;
@@ -152,9 +165,9 @@ export class ExportBillLodgementData {
             this.TOTAL_FIRX_AMOUNT = data?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
             this.FIREX_DETAILS = data;
             console.log(res, "getbyFIRXPartyName")
-        })
+        });
     }
-    setSelectedShippingBill($event, data: any) {
+ async setSelectedShippingBill($event, data: any) {
         if (data?.blCopyDoc) {
             if (data.commercialDoc) {
                 if ($event?.target?.checked == true) {
@@ -201,7 +214,11 @@ export class ExportBillLodgementData {
                     }
                     this.SELECTED_COMMERICAIL_DATA = [];
                     data['CheckBoxEnabled'] = true;
-                    this.getbyFIRXPartyNamebyPipo(data?.pipo[0]?._id)
+                    let PIPO_ID:any=[];
+                    data?.pipo?.forEach(element => {
+                        PIPO_ID?.push(element?._id)
+                    });
+                   await this.getbyFIRXPartyNamebyPipo(PIPO_ID)
                 } else {
                     this.FIREX_DETAILS?.forEach(element => {
                         element['isChecked'] = false;

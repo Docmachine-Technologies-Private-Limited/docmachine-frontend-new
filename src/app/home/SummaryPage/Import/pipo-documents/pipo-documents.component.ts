@@ -114,105 +114,92 @@ export class PipoDocumentsComponent implements OnInit {
           this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
         }
       }
-
-      this.FILTER_FORM = {
-        buyerName: {
-          type: "ArrayList",
-          value: "",
-          label: "Select buyerName",
-          rules: {
-            required: false,
+      this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+        console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select BENEFICIARY Name",
+            rules: {
+              required: false,
+            },
+            item: BENEFICIARY_DETAILS,
+            bindLabel: "value"
           },
-          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
-          bindLabel: "value"
-        },
-        todate: {
-          type: "date",
-          value: "",
-          label: "Select Start Date",
-          rules: {
-            required: false,
+          todate: {
+            type: "date",
+            value: "",
+            label: "Select Start Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
           },
-          item: this.ALL_FILTER_DATA['DATE'],
-          bindLabel: "value"
-        },
-        fromdate: {
-          type: "date",
-          value: "",
-          label: "Select End Date",
-          rules: {
-            required: false,
+          fromdate: {
+            type: "date",
+            value: "",
+            label: "Select End Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
           },
-          item: this.ALL_FILTER_DATA['DATE'],
-          bindLabel: "value"
-        },
-        NO: {
-          type: "ArrayList",
-          value: "",
-          label: "Select Pipo No",
-          rules: {
-            required: false,
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Pipo No",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
           },
-          item: this.ALL_FILTER_DATA['NO'],
-          bindLabel: "value"
-        },
-      }
+        }
+      })
     })
     console.log("this.USER_DATA", this.USER_DATA, this.FILTER_VALUE_LIST_NEW);
   }
 
   async onSubmit(value: any) {
     let form_value: any = {
-      buyerName: value?.value?.buyerName,
+      benneName: value?.value?.buyerName,
       pi_poNo: value?.value?.NO,
     };
 
     if (value?.value?.todate != '' && value?.value?.todate != undefined) {
       form_value = {
-        buyerName: value?.value?.buyerName,
+        benneName: value?.value?.buyerName,
         pi_poNo: value?.value?.NO,
         date: { $gte: value?.value?.todate }
       };
       if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
         form_value = {
-          buyerName: value?.value?.buyerName,
+          benneName: value?.value?.buyerName,
           pi_poNo: value?.value?.NO,
           date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
         };
       }
     } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
       form_value = {
-        buyerName: value?.value?.buyerName,
+        benneName: value?.value?.buyerName,
         pi_poNo: value?.value?.NO,
         date: { $lt: value?.value?.fromdate }
       };
       if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
         form_value = {
-          buyerName: value?.value?.buyerName,
+          benneName: value?.value?.buyerName,
           pi_poNo: value?.value?.NO,
           date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
         };
       }
     }
-
-    const removeEmptyValues = (object) => {
-      let newobject: any = {}
-      for (const key in object) {
-        console.log(typeof object[key], "object[key]")
-        if (object[key] != '' && object[key] != null && object[key] != undefined) {
-          newobject[key] = object[key];
-        }
-      }
-      return newobject;
-    };
-    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
-      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'pi_po',this.FILTER_VALUE_LIST_NEW)?.pi_po().then((res) => {
-        this.FILTER_VALUE_LIST_NEW = res;
-      });
-    } else {
-      this.toastr.error("Please fill field...")
-    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'pi_po',this.FILTER_VALUE_LIST_NEW)?.pi_po().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
   }
 
   reset() {

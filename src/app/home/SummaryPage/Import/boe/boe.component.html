@@ -1,7 +1,7 @@
 <div class="content-wrap pb-2 scroll-bar-main">
   <main id="content" class="content table-padding" role="main">
     <summary-page-header [Length]="this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length" TITLE="BOE Documents"
-      (exportToExcel)="exportToExcel()" (reset)="reset" (onSubmit)="onSubmit($event)"
+      (exportToExcel)="exportToExcel()" (reset)="reset()" (onSubmit)="onSubmit($event)"
       [RouterLink]="['/home/upload-documents/Import/Boe']" [FILTER_FORM]="this.FILTER_FORM">
       <app-ng-dropdown-custom placeHolderText="Search BOE no." class="PopupOpen"
       popup-close="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" width="300px"

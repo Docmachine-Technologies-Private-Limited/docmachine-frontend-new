@@ -54,12 +54,26 @@ export class AirwayBlCopyComponent implements OnInit {
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
         sbNo: {
-          type: "ShippingBill",
-          value: "",
-          label: "Select Shipping Bill",
+          type: "formGroup",
+          label: "",
+          GroupLabel: ['Shipping Bill 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
-          }
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "ShippingBill",
+                value: "",
+                label: "Select Shipping Bill",
+                rules: {
+                  required: true,
+                },
+                name: 'SBData',
+              }
+            ]
+          ]
         },
         date: {
           type: "date",
@@ -77,17 +91,6 @@ export class AirwayBlCopyComponent implements OnInit {
             required: true,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'AirwayBlCopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -97,7 +100,15 @@ export class AirwayBlCopyComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
-    let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
+    let SB_NO:any=[];
+    let SB_ID:any=[];
+    let SB_ID_NO:any=[];
+    e?.value?.sbNo?.forEach(element => {
+      SB_ID.push(element?.SBData)
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === element?.SBData)[0];
+      SB_NO.push(selectedShippingBill?.sbno)
+      SB_ID_NO.push({id:element?.SBData,no:selectedShippingBill?.sbno})
+    });
     console.log('this is console of blcopy', e.value);
     e.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
@@ -105,9 +116,9 @@ export class AirwayBlCopyComponent implements OnInit {
     console.log('pipodoc', this.pipourl1);
     e.value.buyerName = this.BUYER_LIST;
     e.value.CommercialNumber = this.CommercialNumber
-    e.value.sbNo = selectedShippingBill?.sbno;
-    e.value.sbRef = [selectedShippingBill?._id];
-    console.log(e.value, selectedShippingBill, 'onSubmitblCopy');
+    e.value.sbNo = SB_NO?.join(',');
+    e.value.sbRef = SB_ID;
+    console.log(e.value, SB_ID, 'onSubmitblCopy');
     this.documentService.getInvoice_No({
       airwayBlCopyNumber: e.value.airwayBlCopyNumber
     }, 'airwayblcopies').subscribe((resp: any) => {
@@ -120,16 +131,16 @@ export class AirwayBlCopyComponent implements OnInit {
               res.data._id,
             ],
           }
-          this.documentService.updateMasterBySb(
-            updatedDataSB,
-            selectedShippingBill?.sbno,
-            selectedShippingBill?._id
-          ).subscribe((data) => {
-            console.log('updateMasterBySbupdateMasterBySb', data);
-          }, (error) => {
-            console.log('error');
-          }
-          );
+          SB_ID_NO?.forEach(element => {
+            this.documentService.updateMasterBySb(
+              updatedDataSB,
+              element?.no,
+              element?.id
+            ).subscribe((data) => {
+              console.log('updateMasterBySbupdateMasterBySb', data);
+            }, (error) => console.log('error'));
+          });
+         
           let updatedData = {
             "airwayBlCopyRef": [
               res.data._id,
@@ -137,26 +148,18 @@ export class AirwayBlCopyComponent implements OnInit {
           }
           this.userService.updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData).subscribe((data) => {
             console.log(data);
+            SB_ID_NO?.forEach(element => {
             this.documentService.updateMasterBySb(
               e.value,
-              selectedShippingBill?.sbno,
-              selectedShippingBill?._id
+              element?.no,
+              element?.id
             ).subscribe((data) => {
               console.log('DATA', data);
               this.router.navigate(['home/Summary/Export/airway-bl-copy']);
-            },
-              (error) => {
-                console.log('error');
-              }
-            );
-          },
-            (error) => {
-              console.log('error');
-            }
-          );
-        },
-          (err) => console.log('Error adding pipo')
-        );
+            },(error) => console.log('error'));
+            })
+          },(error) => console.log('error'));
+        },(err) => console.log('Error adding pipo'));
       } else {
         this.toastr.error(`Please check this airway-bl-copy no. : ${e.value.airwayBlCopyNumber} already exit...`);
       }
@@ -172,8 +175,8 @@ export class AirwayBlCopyComponent implements OnInit {
         PIPO_ID_ARRAY.push(element?._id)
         PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
       });
-      
-      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
+
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
@@ -185,15 +188,26 @@ export class AirwayBlCopyComponent implements OnInit {
   }
 
   LoadShippingBill(pipoArr: any) {
-    this.filteranytablepagination.PaginationfilterAnyTable({
-      pipo: pipoArr
-    }, { limit: 20 }, 'masterrecord').subscribe((res: any) => {
+    let API_DATA: any = [];
+    pipoArr?.forEach(element => {
+      API_DATA.push({
+        query: { pipo: [element] }, tableName: "masterrecord", filterPage: { limit: 20 }
+      })
+    });
+    console.log(API_DATA, "API_DATA");
+    this.filteranytablepagination.PaginationfilterAnyTableList(API_DATA).subscribe((res: any) => {
       console.log(res, "LoadShippingBill")
-      this.validator.SHIPPING_BILL_MASTER_DATA = res?.data;
+      let DATA_WRAP: any = []
+      res?.forEach(element => {
+        element?.data?.forEach(SBElement => {
+          DATA_WRAP.push(SBElement);
+        });
+      });
+      this.validator.SHIPPING_BILL_MASTER_DATA = DATA_WRAP;
       this.validator.origin = [];
       this.validator.SHIPPING_BUNDEL = [];
       this.validator.SHIPPING_BILL_LIST = [];
-      res?.data?.forEach((element, i) => {
+      DATA_WRAP?.forEach((element, i) => {
         if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
           this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
           this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
