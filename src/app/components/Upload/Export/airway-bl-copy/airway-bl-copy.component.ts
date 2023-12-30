@@ -191,7 +191,7 @@ export class AirwayBlCopyComponent implements OnInit {
     let API_DATA: any = [];
     pipoArr?.forEach(element => {
       API_DATA.push({
-        query: { pipo: [element] }, tableName: "masterrecord", filterPage: { limit: 20 }
+        query: { pipo: {pipo: { $eq: element } } }, tableName: "masterrecord", filterPage: { limit: 20 }
       })
     });
     console.log(API_DATA, "API_DATA");

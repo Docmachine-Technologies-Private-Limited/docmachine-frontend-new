@@ -64,7 +64,7 @@ export class EditPIPOSComponent implements OnInit {
       let ModeofTransportData2: any = [];
 
       args?.paymentTerm?.forEach(element => {
-        paymentTermdata.push({
+        paymentTermdata.push([{
           type: "PaymentTermType",
           value: element?.type,
           label: "Type",
@@ -100,7 +100,7 @@ export class EditPIPOSComponent implements OnInit {
               required: true,
             },
             disabled: true
-          })
+          }])
       });
       ModeofTransportData1 = [{
         type: "checkbox",
@@ -139,7 +139,7 @@ export class EditPIPOSComponent implements OnInit {
       }];
 
       args?.PCReferanceDetails?.forEach(element => {
-        PCReferanceDetailsData.push({
+        PCReferanceDetailsData.push([{
           type: "text",
           value: element?.amount,
           label: "Amount of PC",
@@ -171,7 +171,7 @@ export class EditPIPOSComponent implements OnInit {
           rules: {
             required: false,
           }
-        })
+        }])
       });
       this.validator.buildForm({
         document: {
@@ -320,7 +320,7 @@ export class EditPIPOSComponent implements OnInit {
           rules: {
             required: true,
           },
-          option: [PCReferanceDetailsData]
+          option: PCReferanceDetailsData
         },
         ModeofTransport: {
           type: "OptionMultiCheckBox",
@@ -343,19 +343,8 @@ export class EditPIPOSComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: [paymentTermdata]
+          formArray: paymentTermdata
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'PIPO_EXPORT');
     }, 200);
   }
