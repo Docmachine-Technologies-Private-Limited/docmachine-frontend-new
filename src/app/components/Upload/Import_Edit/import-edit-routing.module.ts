@@ -19,6 +19,7 @@ import { EditImportPIPOSComponent } from './import-pipos/import-pipos.component'
 import { EditImportBilllodgementreferencenumberadvicecopyComponent } from './import-billlodgementreferencenumberadvicecopy/import-billlodgementreferencenumberadvicecopy.component';
 import { EditImportRealisationCertificateComponent } from './import-realisation-certificate/import-realisation-certificate.component';
 import { EditImportSwiftCopyDocumentComponent } from './import-swift-copy-document/import-swift-copy-document.component';
+import { EditImportCertificateOfOriginComponent } from './import-certificate-of-origin/import-certificate-of-origin.component';
 
 const routes: Routes = [
  // Import Upload
@@ -28,6 +29,7 @@ const routes: Routes = [
  { path: "MasterServiceAgreements", component: EditImportMasterServiceAgreementsComponent, canActivate: [MemberGuard] },
  { path: "TripartyAgreements", component: EditImportTripartyAgreementsComponent, canActivate: [MemberGuard] },
  { path: "AirwayBlCopy", component: EditImportAirwayBlCopyComponent, canActivate: [MemberGuard] },
+ { path: "Certificate-of-Origin", component: EditImportCertificateOfOriginComponent, canActivate: [MemberGuard] },
  { path: "BillOfExchanges", component: EditImportBillOfExchangesComponent, canActivate: [MemberGuard] },
  { path: "DestructionCertificates", component: EditImportDestructionCertificatesComponent, canActivate: [MemberGuard] },
  { path: "PackingListInvoices", component: EditImportPackingListInvoicesComponent, canActivate: [MemberGuard] },

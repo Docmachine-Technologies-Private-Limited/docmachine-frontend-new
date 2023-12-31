@@ -34,7 +34,7 @@
                                 [ngClass]="this.TableHeaderClass[j]" *ngFor="let objectitem of this.Keys;let j=index"
                                 [innerHTML]="item[objectitem]"></td>
 
-                            <td title="Data Show and Hide" scope="col" class="col-td-th-0"
+                            <td title="Data Show and Hide" scope="col" class="col-td-th-1" [ngClass]="buttonitem?.TdClassName"
                                 *ngFor="let buttonitem of item?.OTHER_BUTTON">
                                 <p type="button" class="OTHER_BUTTON PopupOpen" [attr.popup-close]="buttonitem?.popupid"
                                     (click)="buttonitem?.callback(i,{data:item,index:i})"

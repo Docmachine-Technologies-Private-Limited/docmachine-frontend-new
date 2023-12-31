@@ -20,6 +20,7 @@ import { EditImportBilllodgementreferencenumberadvicecopyComponent } from './imp
 import { EditImportRealisationCertificateComponent } from './import-realisation-certificate/import-realisation-certificate.component';
 import { EditImportSwiftCopyDocumentComponent } from './import-swift-copy-document/import-swift-copy-document.component';
 import { SharedHomeModule } from '../../../home/shared-home.module';
+import { EditImportCertificateOfOriginComponent } from './import-certificate-of-origin/import-certificate-of-origin.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { SharedHomeModule } from '../../../home/shared-home.module';
     EditImportBilllodgementreferencenumberadvicecopyComponent,
     EditImportRealisationCertificateComponent,
     EditImportSwiftCopyDocumentComponent,
+    EditImportCertificateOfOriginComponent
   ],
   imports: [
     CommonModule,

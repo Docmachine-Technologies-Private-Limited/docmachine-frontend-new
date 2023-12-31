@@ -1925,7 +1925,7 @@ export class TableServiceController {
                                 await TableFormat['items'].push({
                                     PipoNo: this.getPipoNumber(element['pipo']),
                                     date: moment(element['boeDate']).format('DD-MM-YYYY'),
-                                    CINUMBER: element['commercialNumber'],
+                                    CINUMBER: this.getCINumber(element?.CI_REF),
                                     BOENUMBER: element['boeNumber'],
                                     buyerName: element['benneName'],
                                     Currency: element['currency'],
@@ -3262,6 +3262,14 @@ export class TableServiceController {
         let temp: any = [];
         (pipo != 'NF' ? pipo : []).forEach(element => {
             temp.push(element?.pi_poNo);
+        });
+        return temp.join(',')
+    }
+    
+    getCINumber(pipo: any) {
+        let temp: any = [];
+        (pipo != 'NF' ? pipo : []).forEach(element => {
+            temp.push(element?.commercialNumber);
         });
         return temp.join(',')
     }

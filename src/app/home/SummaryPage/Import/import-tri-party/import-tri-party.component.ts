@@ -12,6 +12,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from "moment";
 import { TableServiceController } from '../../../../service/v1/TableServiceController';
+import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 
 @Component({
   selector: 'import-tri-party-summary',
@@ -71,6 +72,8 @@ export class ImportTriPartyComponent implements OnInit {
   }
   FILTER_FORM: any = '';
   FILTER_FORM_VALUE = [];
+  PIPO_DROP_DOWN_DATA: any = [];
+  PIPO_SELECTED_DROP_DOWN_DATA: any = {};
   
   constructor(
     private documentService: DocumentService,
@@ -80,6 +83,7 @@ export class ImportTriPartyComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     public filteranytablepagination: TableServiceController,
+    private pipodataservice: PipoDataService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog) {}
@@ -146,6 +150,26 @@ export class ImportTriPartyComponent implements OnInit {
           }
         })
       })
+      // this.pipodataservice.getPipoList("import").then((res: any) => {
+      //   this.PIPO_DROP_DOWN_DATA = [];
+      //   this.PIPO_SELECTED_DROP_DOWN_DATA = [];
+      //   res?.pipoModelList?.forEach(element => {
+      //     this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
+      //       pi_poNo: element?.pi_poNo,
+      //       amount: element?.amount,
+      //       UtilizationAmount: 0,
+      //       buyerName: element?.buyerName,
+      //     }
+      //     this.PIPO_DROP_DOWN_DATA.push({
+      //       pi_poNo: element?.pi_poNo,
+      //       amount: element?.amount,
+      //       UtilizationAmount: 0,
+      //       id: element?._id,
+      //       buyerName: element?.buyerName,
+      //     });
+      //   });
+      //   console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
+      // })
     }
   
    async onSubmit(value: any) {
@@ -181,24 +205,10 @@ export class ImportTriPartyComponent implements OnInit {
           };
         }
       }
-  
-      const removeEmptyValues = (object) => {
-        let newobject: any = {}
-        for (const key in object) {
-          if (object[key] != '' && object[key] != null && object[key] != undefined) {
-            newobject[key] = object[key];
-          }
-        }
-        return newobject;
-      };
-      if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
-        this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-        await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'thirdparties',this.FILTER_VALUE_LIST_NEW)?.thirdparties().then((res) => {
-          this.FILTER_VALUE_LIST_NEW = res;
-        });
-      } else {
-        this.toastr.error("Please fill field...")
-      }
+      this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'thirdparties',this.FILTER_VALUE_LIST_NEW)?.thirdparties().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
     }
     
     reset(){

@@ -177,24 +177,10 @@ export class ImportOtherDocumentsComponent implements OnInit {
         };
       }
     }
-
-    const removeEmptyValues = (object) => {
-      let newobject: any = {}
-      for (const key in object) {
-        if (object[key] != '' && object[key] != null && object[key] != undefined) {
-          newobject[key] = object[key];
-        }
-      }
-      return newobject;
-    };
-    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
-      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'packinglists',this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
-        this.FILTER_VALUE_LIST_NEW = res;
-      });
-    } else {
-      this.toastr.error("Please fill field...")
-    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'packinglists',this.FILTER_VALUE_LIST_NEW)?.packinglists().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
   }
   
   reset(){
@@ -287,7 +273,7 @@ export class ImportOtherDocumentsComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['packingDoc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['packingDoc']);
     }, 200);
   }
 
@@ -322,15 +308,6 @@ export class ImportOtherDocumentsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   packingListDate: this.SELECTED_VALUE['packingListDate'],
-    //   packingListNumber: this.SELECTED_VALUE['packingListNumber'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   packingListAmount: this.SELECTED_VALUE['packingListAmount'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
           "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])

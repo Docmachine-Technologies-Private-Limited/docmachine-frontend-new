@@ -411,6 +411,10 @@ export class ImportBOEComponent implements OnInit {
       element?.CI_DETAILS?.forEach((CI_DETAILSElement,i) => {
         this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: CI_DETAILSElement?.invoiceno?.data?.commercialDoc, name: 'Commercial'+(i+1), status: false })
       });
+      
+      element?.packingdetails?.forEach((packingdetailsElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: packingdetailsElement?.packingDoc, name: 'PackingList'+(i+1), status: false })
+      });
       // this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
     });
     await this.filteranytablepagination.LoadTableImport({boeNumber:value}, { skip: 0, limit: 10 }, 'boerecords',this.FILTER_VALUE_LIST_NEW)?.boerecords().then((res) => {

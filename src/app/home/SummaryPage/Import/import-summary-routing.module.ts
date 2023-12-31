@@ -20,6 +20,7 @@ import { ImportMasterServiceComponent } from './import-master-service/import-mas
 import { LetterOfCreditImportLCComponent } from './import-letter-of-credit/letter-of-credit-import-lc.component';
 import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
 import { OutwardRemittanceDisposalComponent } from './Outward-remittance-disposal/outward-remittance-disposal.component';
+import { ImportCertificateofOriginComponent } from './certificateof-origin/certificateof-origin.component';
 
 const routes: Routes = [
   { path: "boe", component: ImportBOEComponent, pathMatch: "full", canActivate: [MemberGuard] },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: "Debit", component: ImportDebitNoteComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Insurance-Document", component: ImportInsuranceComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "TripartyAgreements", component: ImportTriPartyComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "Import-certificate-of-origin", component: ImportCertificateofOriginComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Bill-Lodgement-Referance-AdviceCopy", component: ImportBilllodgementreferencenumberadvicecopySummaryComponent, canActivate: [MemberGuard] },
   { path: "Realisation-Cretificate", component: ImportRealisationCertificateSummaryComponent, canActivate: [MemberGuard] },
   { path: "Swift-Copy-Documents", component: ImportSwiftCopyDocumentSummaryComponent, canActivate: [MemberGuard] },

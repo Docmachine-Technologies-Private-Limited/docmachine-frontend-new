@@ -145,6 +145,8 @@ export class ImportPackingListInvoicesComponent implements OnInit {
                 res.data._id,
               ],
             }
+            this.documentService.updateBoe(updatedDataSB, selectedBOE?._id).subscribe((Res:any)=>{})
+            
             this.documentService.updateMasterBySb(
               updatedDataSB,
               selectedBOE?.boeNumber,

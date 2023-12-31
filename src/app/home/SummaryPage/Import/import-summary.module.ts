@@ -20,6 +20,7 @@ import { ImportMasterServiceComponent } from './import-master-service/import-mas
 import { LetterOfCreditImportLCComponent } from './import-letter-of-credit/letter-of-credit-import-lc.component';
 import { SharedHomeModule } from '../../shared-home.module';
 import { OutwardRemittanceDisposalComponent } from './Outward-remittance-disposal/outward-remittance-disposal.component';
+import { ImportCertificateofOriginComponent } from './certificateof-origin/certificateof-origin.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { OutwardRemittanceDisposalComponent } from './Outward-remittance-disposa
     ImportCommercialComponent,
     ImportTriPartyComponent,
     ImportInsuranceComponent,
-    OutwardRemittanceDisposalComponent
+    OutwardRemittanceDisposalComponent,
+    ImportCertificateofOriginComponent
   ],
   imports: [
     CommonModule,

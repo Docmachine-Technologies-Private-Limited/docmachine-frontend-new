@@ -194,24 +194,10 @@ export class ImportDebitNoteComponent implements OnInit {
         };
       }
     }
-
-    const removeEmptyValues = (object) => {
-      let newobject: any = {}
-      for (const key in object) {
-        if (object[key] != '' && object[key] != null && object[key] != undefined) {
-          newobject[key] = object[key];
-        }
-      }
-      return newobject;
-    };
-    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
-      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
-      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'debitnotes',this.FILTER_VALUE_LIST_NEW)?.debitnotes().then((res) => {
-        this.FILTER_VALUE_LIST_NEW = res;
-      });
-    } else {
-      this.toastr.error("Please fill field...")
-    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'debitnotes',this.FILTER_VALUE_LIST_NEW)?.debitnotes().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
   }
   
   reset(){

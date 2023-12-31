@@ -97,18 +97,18 @@ export class DirectPaymentsControllerData {
                             BOE_DETAIILS_FILTER['BOEAmount'].push(element?.BOE?.invoiceAmount)
                         });
                         
-                        if (filldata?.Remittance == "PartRemittance") {
+                        if (filldata?.Remittance == "FullFinalRemittance") {
                             getAllFields[11]?.uncheck()
                             getAllFields[12]?.check()
-                        } else if (filldata?.Remittance == "FullFinalRemittance") {
+                        } else if (filldata?.Remittance == "PartRemittance") {
                             getAllFields[11]?.check()
                             getAllFields[12]?.uncheck()
                         }
 
-                        if (filldata?.ForeignBankCharges == "OwnAccount") {
+                        if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
                             getAllFields[13]?.uncheck();
                             getAllFields[14]?.check();
-                        } else if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
+                        } else if (filldata?.ForeignBankCharges == "OwnAccount") {
                             getAllFields[13]?.check();
                             getAllFields[14]?.uncheck();
                         }

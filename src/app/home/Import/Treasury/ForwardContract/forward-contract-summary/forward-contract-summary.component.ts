@@ -136,7 +136,7 @@ export class ForwardContractSummaryComponent implements OnInit {
           }],
           OTHER_BUTTON: [
             {
-              type: 'button', popupid: 'EDIT_DOCUMENTS', className: 'fa fa-pencil-square-o', callback: (i, item: any) => {
+              type: 'button', popupid: 'EDIT_DOCUMENTS',TdClassName:"col-td-th-1", className: 'fa fa-pencil-square-o', callback: (i, item: any) => {
                 this.upload(i, item);
                 this.validator.buildForm({
                   CancellationDate: {
@@ -191,8 +191,8 @@ export class ForwardContractSummaryComponent implements OnInit {
                   UtilizedRefereance: {
                     type: "OptionMultiCheckBox",
                     value: "",
-                    label: "Utilized Refereance",
-                    checkboxlabel: [{ text: "Inward", value: 'Inward' }, { text: 'Export', value: 'Export' }],
+                    label: "Utilisation Reference no",
+                    checkboxlabel: [{ text: "Inward", type:'checkbox', value: 'Inward' }, { text: 'Export',type:'checkbox', value: 'Export' }],
                     rules: {
                       required: true,
                     },

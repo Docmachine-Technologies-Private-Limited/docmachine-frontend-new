@@ -1,29 +1,26 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import * as xlsx from 'xlsx';
+import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../../../service/user.service'
-import * as xlsx from 'xlsx';
-import { NavigationExtras, Router } from '@angular/router';
+import { UserService } from './../../../../service/user.service';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import moment from "moment";
+import moment from 'moment';
 import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
-
 @Component({
-  selector: 'import-opinion-reports-summary',
-  templateUrl: './import-opinion-reports.component.html',
-  styleUrls: ['./import-opinion-reports.component.scss']
+  selector: 'import-certificate-of-origin',
+  templateUrl: './certificateof-origin.component.html',
+  styleUrls: ['./certificateof-origin.component.scss']
 })
-export class ImportOpinionReportsComponent implements OnInit {
-
-  @ViewChild('epltable', { static: false }) epltable: ElementRef;
-  public item: any;
-  public item1 = [];
+export class ImportCertificateofOriginComponent implements OnInit {
+  @ViewChild('commercial', { static: false }) commercial: ElementRef;
+  public item: any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
@@ -41,56 +38,51 @@ export class ImportOpinionReportsComponent implements OnInit {
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
+      "Pipo No.",
       "DATE",
-      "O R No.",
-      "Foreign Party Name",
-      "Report Date",
-      "Report Ratings",
-      "Beneficiary Name",
-      "Ageing Days",
+      "COI Ref No.",
+      "CI No.",
       "Action"],
-    items: [],
-    Expansion_header: [],
-    Expansion_Items: [],
-    Objectkeys: [],
-    ExpansionKeys: [],
-    TableHeaderClass: [
+  items: [],
+  Expansion_header: [],
+  Expansion_Items: [],
+  Objectkeys: [],
+  ExpansionKeys: [],
+  TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
-      "col-td-th-2",
-      "col-td-th-2",
-      "col-td-th-2",
-      "col-td-th-2",
-    ],
-    eventId: ''
+      "col-td-th-1",
+      "col-td-th-1",
+  ],
+  eventId: '',
+  PageSize: 0
   }
   EDIT_FORM_DATA: any = {
-    date: '',
-    opinionReportNumber: '',
-    opinionReportAmount: '',
-    currency: '',
+    commercialDate: '',
+    sbNo: '',
+    commercialNumber: '',
     buyerName: '',
   }
   FILTER_FORM: any = '';
   FILTER_FORM_VALUE = [];
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private userService: UserService,
     private router: Router,
-    public wininfo: WindowInformationService,
+    private userService: UserService,
     public filteranytablepagination: TableServiceController,
+    public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-  ) {
+    public dialog: MatDialog) {
   }
 
   async ngOnInit() {
     this.USER_DATA = await this.userService.getUserDetail();
     this.FILTER_FORM_VALUE = [];
-    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'opinionreports',this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
+    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'CertificateOfOrigin',this.FILTER_VALUE_LIST_NEW)?.CertificateOfOrigin().then((res) => {
       this.FILTER_VALUE_LIST_NEW = res;
       for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
@@ -151,63 +143,16 @@ export class ImportOpinionReportsComponent implements OnInit {
     })
   }
 
- async onSubmit(value: any) {
-    let form_value: any = {
-      buyerName: value?.value?.buyerName,
-      pi_poNo: value?.value?.NO,
-    };
-
-    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
-      form_value = {
-        buyerName: value?.value?.buyerName,
-        pi_poNo: value?.value?.NO,
-        date: { $gte: value?.value?.todate }
-      };
-      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
-        form_value = {
-          buyerName: value?.value?.buyerName,
-          pi_poNo: value?.value?.NO,
-          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
-        };
-      }
-    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
-      form_value = {
-        buyerName: value?.value?.buyerName,
-        pi_poNo: value?.value?.NO,
-        date: { $lt: value?.value?.fromdate }
-      };
-      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
-        form_value = {
-          buyerName: value?.value?.buyerName,
-          pi_poNo: value?.value?.NO,
-          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
-        };
-      }
-    }
-    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
-    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'opinionreports',this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
-      this.FILTER_VALUE_LIST_NEW = res;
-    });
-  }
-  
-  reset(){
-    this.ngOnInit()
-  }
-
-  
-  OpinionReportTable(data: any) {
+  CommercialTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
     this.removeEmpty(data).then(async (newdata: any) => {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
-          date: moment(element['date']).format("DD-MM-YYYY"),
-          opinionReportNumber: element['opinionReportNumber'],
-          ForeignPartyName: element['ForeignPartyName']?.value,
-          ReportDate: moment(element['ReportDate']).format("DD-MM-YYYY"),
-          ReportRatings: element['ReportRatings'],
-          buyerName: element['buyerName'],
-          AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
+          PipoNo: this.getPipoNumber(element['pipo']),
+          date:  moment(element['date']).format("DD-MM-YYYY"),
+          COIREF: element['CertificateOriginNumber'],
+          CommercialNumber: element['CommercialNumber']?.value,
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
@@ -222,18 +167,7 @@ export class ImportOpinionReportsComponent implements OnInit {
       }
     });
   }
-  public SubtractDates(startDate: Date, endDate: Date): any {
-    let dateDiff = (endDate.getTime() - startDate.getTime()) / 1000;
-    var h: any = Math.floor(dateDiff / 3600);
-    return (h > 24 ? this.SplitTime(h)?.Days + 'days' :startDate.toDateString());
-  }
-  SplitTime(numberOfHours) {
-    var Days = Math.floor(numberOfHours / 24);
-    var Remainder = numberOfHours % 24;
-    var Hours = Math.floor(Remainder);
-    var Minutes = Math.floor(60 * (Remainder - Hours));
-    return ({ "Days": Days, "Hours": Hours, "Minutes": Minutes })
-  }
+
   async removeEmpty(data: any) {
     await data.forEach(element => {
       for (const key in element) {
@@ -244,6 +178,64 @@ export class ImportOpinionReportsComponent implements OnInit {
     });
     return await new Promise(async (resolve, reject) => { await resolve(data) });
   }
+  
+  
+ async onSubmit(value: any) {
+  let form_value: any = {
+    buyerName: value?.value?.buyerName,
+    pi_poNo: value?.value?.NO,
+  };
+
+  if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+    form_value = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+      date: { $gte: value?.value?.todate }
+    };
+    if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+      };
+    }
+  } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+    form_value = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+      date: { $lt: value?.value?.fromdate }
+    };
+    if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+      };
+    }
+  }
+
+  const removeEmptyValues = (object) => {
+    let newobject: any = {}
+    for (const key in object) {
+      if (object[key] != '' && object[key] != null && object[key] != undefined) {
+        newobject[key] = object[key];
+      }
+    }
+    return newobject;
+  };
+  if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+    this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'CertificateOfOrigin',this.FILTER_VALUE_LIST_NEW)?.CertificateOfOrigin().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
+  } else {
+    this.toastr.error("Please fill field...")
+  }
+}
+
+reset(){
+  this.ngOnInit()
+}
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
@@ -263,13 +255,7 @@ export class ImportOpinionReportsComponent implements OnInit {
     this.FILTER_VALUE_LIST = this.item;
   }
 
-  getPipoNumbers(data) {
-    return data.pipo.map((x) => {
-      return x.pi_poNo;
-    });
-  }
-
-  openLetterOfCredit(content) {
+  openCreditNote(content) {
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
       .result.then(
@@ -293,6 +279,12 @@ export class ImportOpinionReportsComponent implements OnInit {
     }
   }
 
+  getPipoNumbers(data) {
+    return data.pipo.map((x) => {
+      return x.pi_poNo;
+    });
+  }
+
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
@@ -300,22 +292,14 @@ export class ImportOpinionReportsComponent implements OnInit {
     }, 200);
   }
 
-  newOpinion() {
-    console.log('upload');
-    // this.sharedData.changeretunurl('home/opinion-report')
-    // this.router.navigate(['home/upload', { file: 'export', document: 'opinionReport' }]);
-    this.router.navigate(['/home/upload/Export/OpinionReports']);
-  }
-
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log(data);
-    this.documentService.updateOpinionReport(data, data._id).subscribe(
+    this.documentService.updateCommercial(data, data._id).subscribe(
       (data) => {
         console.log('king123');
-        this.toastr.success('Opinion Report Row Is Updated Successfully.');
-      },
-      (error) => {
+        this.toastr.success('Commercial invoie updated successfully.');
+      }, (error) => {
         console.log('error');
       }
     );
@@ -323,9 +307,9 @@ export class ImportOpinionReportsComponent implements OnInit {
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
-    this.documentService.updateOpinionReport(data, id).subscribe((data) => {
+    this.documentService.updateCommercial(data, id).subscribe((data) => {
       console.log(data);
-      this.toastr.success('Opinion Report Row Is Updated Successfully.');
+      this.toastr.success('Commercial Invoie Row Is Updated Successfully.');
       this.ngOnInit();
       EditSummaryPagePanel?.displayHidden
     }, (error) => {
@@ -333,24 +317,19 @@ export class ImportOpinionReportsComponent implements OnInit {
     });
   }
 
+  newDest() {
+    this.router.navigate(['/home/upload/Export/CommercialInvoices']);
+  }
+
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      opinionReportNumber: this.SELECTED_VALUE['opinionReportNumber'],
-      opinionReportAmount: this.SELECTED_VALUE['opinionReportAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: {
-    //       "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
-    //   }
-    // };
-    // this.router.navigate([`/home/Summary/Import/Edit/OpinionReports`],navigationExtras);
-    this.toastr.warning('Opinion Report Row Is In Edit Mode');
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/Certificate-of-Origin`], navigationExtras);
+    this.toastr.warning('Certificate-of-Origin Invoie Row Is In Edit Mode');
   }
 
   handleDelete(data: any) {
@@ -370,7 +349,7 @@ export class ImportOpinionReportsComponent implements OnInit {
 
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
     if (RoleCheckbox == '') {
-      this.documentService.deleteById({ id: id, tableName: 'opinionreports' }).subscribe((res) => {
+      this.documentService.deleteById({ id: id, tableName: 'CertificateofOrigin' }).subscribe((res) => {
         console.log(res)
         if (res) {
           this.ngOnInit()
@@ -379,7 +358,7 @@ export class ImportOpinionReportsComponent implements OnInit {
     } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
       var approval_data: any = {
         id: id,
-        tableName: 'opinionreports',
+        tableName: 'CertificateofOrigin',
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
@@ -396,15 +375,14 @@ export class ImportOpinionReportsComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new OpinionReportFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new CommercialFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'OpinionReport.xlsx');
+    xlsx.writeFile(wb, 'CertificateofOrigin.xlsx');
   }
 }
 
-
-class OpinionReportFormat {
+class CommercialFormat {
   data: any = [];
   constructor(data: any) {
     this.data = data;
@@ -414,14 +392,11 @@ class OpinionReportFormat {
     var temp: any = [];
     this.data?.forEach(element => {
       temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
-        opinionReportNumber: element['opinionReportNumber'],
-        opinionReportAmount: element['opinionReportAmount'],
-        currency: element['currency'],
-        ForeignPartyName: element['ForeignPartyName']?.value,
-        ReportDate: element['ReportDate'],
-        ReportRatings: element['ReportRatings'],
-        buyerName: this.getBuyerName(element['buyerName']),
+        COIREF: element['CertificateOriginNumber'],
+        CommercialNumber: element['CommercialNumber']?.value,
+        buyerName: element['buyerName'][0],
       })
     });
     return temp;
@@ -436,7 +411,7 @@ class OpinionReportFormat {
 
   getBuyerName(buyerName: any) {
     let temp: any = [];
-    (buyerName!="NF"?buyerName:[])?.forEach(element => {
+    buyerName != 'NF' ? buyerName : []?.forEach(element => {
       temp.push(element);
     });
     return temp.join(',')

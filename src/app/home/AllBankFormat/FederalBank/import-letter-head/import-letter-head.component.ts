@@ -135,6 +135,65 @@ export class ImportLetterHeadService {
           })
         })
       },
+      FedralFLC: async (validator, BENEFICIARY_DETAILS, filldata) => {
+        return new Promise(async (resolve, reject) => {
+          let formUrl = './../../../assets/pdf/FedralBank/CME_Letterhead_GREY.pdf'
+          console.log(filldata, 'filldata')
+          const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
+          const pdfDoc = await PDFDocument.load(formPdfBytes)
+          const form: any = pdfDoc.getForm()
+          const getAllFields = form?.getFields();
+          getAllFields?.forEach(element => {
+            const elementvalue: any = element?.acroField?.dict?.values();
+            if (elementvalue[0]?.encodedName == '/Tx') {
+              element?.setFontSize(11);
+              element?.enableReadOnly();
+              const [widget]: any = element?.acroField?.getWidgets();
+              widget?.getOrCreateBorderStyle()?.setWidth(0);
+            }
+          });
+          getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+          getAllFields[1]?.setText(this.CURRENT_DATE);
+          if (filldata != undefined && filldata != null && filldata != '') {
+            let PIPO_DATA: any = {
+              Currency: [],
+              Amount: [],
+              Commodity: [],
+              HSCODE: [],
+              DATE_NO: [],
+              CurrencyAmount: []
+            }
+            console.log(validator, BENEFICIARY_DETAILS, filldata, "createLetterHead")
+
+            filldata?.paymentTerm?.forEach(element => {
+              PIPO_DATA["Currency"].push(element?.PIPO_LIST?.currency)
+              PIPO_DATA["Amount"].push(element?.RemittanceAmount)
+              PIPO_DATA["Commodity"].push(element?.PIPO_LIST?.commodity)
+              PIPO_DATA["HSCODE"].push(element?.PIPO_LIST?.HSCODE)
+              PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.date + ' | ' + element?.PIPO_LIST?.pi_poNo)
+              PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
+            });         
+            let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+            getAllFields[2]?.setText(`SubForeign: Issuance of Letter Of Credit ` + PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
+            getAllFields[3]?.setText(filldata?.BankCharges?.accNumber);
+            getAllFields[4]?.setText(PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
+            getAllFields[5]?.setText(filldata?.BankDebit?.accNumber);
+          }
+          getAllFields[6]?.setText(BENEFICIARY_DETAILS[0]?.benneName);
+          getAllFields[7]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName);
+          getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
+          getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.iban);
+          getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
+          getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress)
+          await pdfDoc.save()
+          await this.addWaterMark(pdfDoc, validator).then(async (Res: any) => {
+            const pdfBytes = await Res.save()
+            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+            const x1 = 'data:application/pdf;base64,' + base64String1;
+            await resolve(x1);
+          })
+        })
+      },
       // HDFC: async (validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected) => {
       //     return new Promise(async (resolve, reject) => {
       //         console.log(validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected, "ToForwardContract_Selected")

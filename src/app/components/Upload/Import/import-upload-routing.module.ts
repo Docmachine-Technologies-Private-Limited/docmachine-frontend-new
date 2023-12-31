@@ -20,6 +20,7 @@ import { ImportBilllodgementreferencenumberadvicecopyComponent } from './import-
 import { ImportRealisationCertificateComponent } from './import-realisation-certificate/import-realisation-certificate.component';
 import { ImportSwiftCopyDocumentComponent } from './import-swift-copy-document/import-swift-copy-document.component';
 import { OutwardUploadDocumentsComponent } from './outward-Remittance-Disposal/Outward-upload-doc.component';
+import { ImportCertificateOfOriginComponent } from './import-certificate-of-origin/import-certificate-of-origin.component';
 
 const routes: Routes = [
  // Import Upload
@@ -31,6 +32,7 @@ const routes: Routes = [
  { path: "AirwayBlCopy", component: ImportAirwayBlCopyComponent, canActivate: [MemberGuard] },
  { path: "BillOfExchanges", component: ImportBillOfExchangesComponent, canActivate: [MemberGuard] },
  { path: "DestructionCertificates", component: ImportDestructionCertificatesComponent, canActivate: [MemberGuard] },
+ { path: "Certificate-of-Origin", component: ImportCertificateOfOriginComponent, canActivate: [MemberGuard] },
  { path: "PackingListInvoices", component: ImportPackingListInvoicesComponent, canActivate: [MemberGuard] },
  { path: "CommercialInvoices", component: ImportCommercialInvoicesComponent, canActivate: [MemberGuard] },
  { path: "OpinionReports", component: ImportOpinionReportComponent, canActivate: [MemberGuard] },

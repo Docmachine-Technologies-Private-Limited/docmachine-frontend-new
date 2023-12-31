@@ -208,27 +208,10 @@ export class ImportCommercialComponent implements OnInit {
         };
       }
     }
-
-    const removeEmptyValues = (object) => {
-      let newobject: any = {}
-      for (const key in object) {
-        console.log(typeof object[key], "object[key]")
-        if (object[key] != '' && object[key] != null && object[key] != undefined) {
-          newobject[key] = object[key];
-        }
-      }
-      return newobject;
-    };
-    let removeEmptyValuesData:any=removeEmptyValues(form_value);
-    console.log(removeEmptyValuesData,"removeEmptyValuesData")
-    if (Object.keys(removeEmptyValuesData)?.length != 0) {
-      this.FILTER_FORM_VALUE = removeEmptyValuesData
-      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'commercials',this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
-        this.FILTER_VALUE_LIST_NEW = res;
-      });
-    } else {
-      this.toastr.error("Please fill field...")
-    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'commercials',this.FILTER_VALUE_LIST_NEW)?.commercials().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
   }
 
   reset() {

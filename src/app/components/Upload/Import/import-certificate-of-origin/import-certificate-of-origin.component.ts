@@ -11,11 +11,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
-  selector: 'app-opinion-reports',
-  templateUrl: './import-opinion-reports.component.html',
-  styleUrls: ['./import-opinion-reports.component.scss','../../commoncss/common.component.scss']
+  selector: 'upload-import-certificate-of-origin',
+  templateUrl: './import-certificate-of-origin.component.html',
+  styleUrls: ['./import-certificate-of-origin.component.scss', '../../commoncss/common.component.scss']
 })
-export class ImportOpinionReportComponent implements OnInit {
+export class ImportCertificateOfOriginComponent implements OnInit {
   publicUrl: any = '';
   UPLOAD_FORM: any = [];
   CURRENCY_LIST: any = [];
@@ -53,6 +53,7 @@ export class ImportOpinionReportComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
+
   }
 
   response(args: any) {
@@ -61,42 +62,18 @@ export class ImportOpinionReportComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        date: {
-          type: "date",
+        CommercialNumber: {
+          type: "CommericalNo",
           value: "",
-          label: "Opinion Report Date*",
+          label: "Commerical Number*",
           rules: {
             required: true,
           }
         },
-        opinionReportNumber: {
+        CertificateOriginNumber: {
           type: "text",
           value: "",
-          label: "Opinion Report Number*",
-          rules: {
-            required: true,
-          }
-        },
-        ForeignPartyName: {
-          type: "benne",
-          value: "",
-          label: "Foreign benne Name",
-          rules: {
-            required: true,
-          }
-        },
-        ReportDate: {
-          type: "date",
-          value: "",
-          label: "Report Date",
-          rules: {
-            required: true,
-          }
-        },
-        ReportRatings: {
-          type: "text",
-          value: "",
-          label: "Report Ratings",
+          label: "Certificate of Origin Number*",
           rules: {
             required: true,
           }
@@ -112,45 +89,42 @@ export class ImportOpinionReportComponent implements OnInit {
         //   url: "member/uploadImage",
         //   items: [0]
         // },
-      },'ImportOpinionreport');
+      }, 'ExportCertificateofOrigin');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
+
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
-    console.log(e.value);
+    e.value.buyerName = this.BUYER_LIST;
+    e.value.CIRef = [this.CommercialFilter(e.value.CommercialNumber?.id)[0]?._id];
     this.documentService.getInvoice_No({
-      opinionReportNumber: e.value.opinionReportNumber
-    }, 'opinionreports').subscribe((resp: any) => {
-      console.log('creditNoteNumber Invoice_No', resp)
+      CertificateOriginNumber: e.value.CertificateOriginNumber
+    }, 'CertificateofOrigin').subscribe((resp: any) => {
+      console.log('CertificateofOrigin Invoice_No', resp)
       if (resp.data.length == 0) {
-        this.documentService.addOpinionReport(e.value).subscribe(
-          (res: any) => {
-            this.toastr.success(`Opinion Report Document Added Successfully`);
-            let updatedData = {
-              "opinionReportRef": [
-                res.data._id,
-              ],
-            }
-            this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData).subscribe(
-              (data) => {
-                console.log(data);
-                this.router.navigate(['home/Summary/Import/Opinion-Report']);
-              },
-              (error) => {
-                console.log('error');
-              }
-            );
-          },
-          (err) => console.log('Error adding pipo')
+        this.documentService.addCertificateofOrigin(e.value).subscribe((res: any) => {
+          this.toastr.success(`Certificate of Origin Added Successfully`);
+          console.log('CertificateofOrigin Added Successfully');
+          let updatedData = {
+            "CertificateofOriginRef": [
+              res.data._id,
+            ],
+          }
+          this.userService.updateManyPipo(this.pipoArr, 'CertificateofOriginRef', this.pipourl1, updatedData).subscribe((data) => {
+            console.log(data);
+            this.router.navigate(['home/Summary/Import/Import-certificate-of-origin']);
+          }, (error) => {
+            console.log('error');
+          });
+        }, (err) => console.log('Error adding pipo')
         );
       } else {
-        this.toastr.error(`Please check this opinion-report no. : ${e.value.opinionReportNumber} already exit...`);
+        this.toastr.error(`Please check this sb no. : ${e.value.CertificateOriginNumber} already exit...`);
       }
     });
   }
@@ -169,9 +143,31 @@ export class ImportOpinionReportComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
+      this.changedCommercial(this.pipoArr)
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
+
+  changedCommercial(pipo: any) {
+    this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
+      this.COMMERCIAL_LIST = res?.data;
+      res?.data.forEach(element => {
+        let checkexit = this.validator.COMMERICAL_NO.filter((item: any) => item?.value?.includes(element?.commercialNumber))
+        if (checkexit?.length == 0) {
+          this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
+        }
+      });
+      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
+    },
+      (err) => {
+        console.log(err)
+      }
+    );
+  }
+  CommercialFilter(id: any) {
+    return this.COMMERCIAL_LIST.filter((item: any) => item?._id?.includes(id) == true)
+  }
+
 }

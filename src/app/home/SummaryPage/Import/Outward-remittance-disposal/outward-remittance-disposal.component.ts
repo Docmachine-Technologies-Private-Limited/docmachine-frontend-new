@@ -221,7 +221,7 @@ export class OutwardRemittanceDisposalComponent implements OnInit {
       } else if (this.GET_FILE_NAME_ROUTE == "Processed") {
         this.FILTER_FORM_VALUE["AdviceRef"] = { $exists: true, $ne: [] }
       }
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'Inward_remittance', this.FILTER_VALUE_LIST_NEW, this.GET_FILE_NAME_ROUTE)?.Inward_remittance().then((res) => {
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'Inward_remittance', this.FILTER_VALUE_LIST_NEW, this.GET_FILE_NAME_ROUTE)?.Inward_remittance().then((res) => {
         this.FILTER_VALUE_LIST_NEW = res;
       });
     } else {

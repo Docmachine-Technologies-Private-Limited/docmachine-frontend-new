@@ -932,7 +932,7 @@ export class NewFLCApplicationComponent implements OnInit {
         getAllFields?.forEach(element => {
           const elementvalue: any = element?.acroField?.dict?.values();
           if (elementvalue[0]?.encodedName == '/Tx') {
-            element?.setFontSize(11);
+            element?.setFontSize(9);
             element?.enableReadOnly();
             const [widget]: any = element?.acroField?.getWidgets();
             widget?.getOrCreateBorderStyle()?.setWidth(0);
@@ -991,7 +991,7 @@ export class NewFLCApplicationComponent implements OnInit {
             this.PREVIWES_URL = x1;
             this.VISIBLITY_PDF = true;
             setTimeout(async () => {
-              await this.ImportLetterHeadService.createLetterHead().Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+              await this.ImportLetterHeadService.createLetterHead().FedralFLC(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
                 this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
