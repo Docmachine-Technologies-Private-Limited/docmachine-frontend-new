@@ -626,6 +626,7 @@ export class UploadServiceValidatorService implements OnInit {
       BLCopy: rule?.required == true ? [Validators.required] : [],
       yesnocheckbox: rule?.required == true ? [Validators.required] : [],
       ArrayList: rule?.required == true ? [Validators.required] : [],
+      ArrayList_Object: rule?.required == true ? [Validators.required] : [],
       BOE: rule?.required == true ? [Validators.required] : [],
       ORM_SELECTION: rule?.required == true ? [Validators.required] : [],
       LABLE_CHECKBOX: rule?.required == true ? [Validators.required] : [],

@@ -1232,6 +1232,26 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/blcopy/updateSB`, { data: data, id: id }, httpOptions);
   }
 
+//get airway blcopy and advice copy api
+addCouponCode(pipo) {
+  this.loadFromLocalStorage();
+  console.log(this.authToken);
+  const httpOptions = {
+    headers: new HttpHeaders({ Authorization: this.authToken }),
+  };
+  return this.http.post(`${this.api_base}/product/Add`,{ data: pipo },httpOptions);
+}
+
+//get airway blcopy and advice copy api
+GetCouponCodeDetails() {
+  this.loadFromLocalStorage();
+  console.log(this.authToken);
+  const httpOptions = {
+    headers: new HttpHeaders({ Authorization: this.authToken }),
+  };
+  return this.http.get(`${this.api_base}/product/getProduct`,httpOptions);
+}
+
   //get airway blcopy and advice copy api
   addAirwayBlcopyFile(pipo) {
     this.loadFromLocalStorage();

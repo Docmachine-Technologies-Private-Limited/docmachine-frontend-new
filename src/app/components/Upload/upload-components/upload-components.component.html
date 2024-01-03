@@ -357,6 +357,15 @@
                         [name]="field?.fieldName" [selectedItems]="field?.value"
                         [(ngModel)]="field.value"></ng-custom-dropdown>
                 </div>
+                <div class="form-group mb-0" *ngSwitchCase="'ArrayList_Object'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
+                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <ng-custom-dropdown [items]="field?.item" [bindLabel]="field?.bindLabel" [multiple]="false"
+                        [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [name]="field?.fieldName" [selectedItems]="field?.value"
+                        (modelObjectChanges)="this.validator.dynamicFormGroup[this.id]?.controls[field?.fieldName]?.setValue($event);field.value=$event"
+                        ></ng-custom-dropdown>
+                </div>
                 <div class="form-group mb-0" *ngSwitchCase="'PIPO_LIST'">
                     <label *ngIf="field.label!=undefined">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>

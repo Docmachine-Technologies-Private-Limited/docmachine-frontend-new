@@ -181,6 +181,7 @@ import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.co
         component: SidenavComponent,
         children: [
           { path: "dashboardTask", loadChildren: () => import('./dashboard-task/dashboard-task.module').then(mod => mod.DashboardTaskModule) },
+          { path: "Prodcut", loadChildren: () => import('./SuperAdminPanel/ProductCoupon/generator-coupon.module').then(mod => mod.GeneratorCouponModule) },
           { path: "upload", loadChildren: () => import('./upload/upload.module').then(mod => mod.UploadModule), canActivate: [MemberGuard] },
           { path: "manage-customer", loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule), canActivate: [AdminMemberGuard] },
           { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule), canActivate: [MemberGuard] },
