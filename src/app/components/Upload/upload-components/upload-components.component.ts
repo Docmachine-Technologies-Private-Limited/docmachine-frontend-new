@@ -52,6 +52,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
   @Input('BUTTON_PANEL_HIDE') BUTTON_PANEL_HIDE: boolean = true;
   @Input('SubmitButtonDisabled') SubmitButtonDisabled: boolean = false;
   @Output('DropDownEvent') DropDownEvent: any = new EventEmitter();
+  @Output('ArrayList_ObjectEvent') ArrayList_ObjectEvent: any = new EventEmitter();
 
   Account_Type: any = [{
     type: 'OD-over draft'
@@ -121,6 +122,11 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     return this.validator.dynamicFormGroup[this.id]?.getRawValue()
   }
 
+  dumpFunc(value:any,callback:any){
+    if (callback!=undefined) {
+      callback(value)
+    }
+  }
   get geForm() {
     return this.validator.dynamicFormGroup[this.id];
   }
@@ -131,6 +137,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
 
   setValue(value: any, name1: any) {
     this.validator.dynamicFormGroup[this.id]?.controls[name1]?.setValue(value)
+    this.validator.dynamicFormGroup[this.id].value[name1]=(value)
   }
 
   addFormArray(key1: any, index: any, data: any, GroupLabel: any) {

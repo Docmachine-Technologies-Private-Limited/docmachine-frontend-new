@@ -102,6 +102,7 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
 import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-db/back-up-panel-mongo-db.component";
 import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
 import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.component";
+import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/generator-coupon-product/generator-coupon-product.component";
 
 @NgModule({
   declarations: [
@@ -150,7 +151,8 @@ import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.co
     AddBeneficiaryNameAdminMemberComponent,
     BackUpPanelMongoDBComponent,
     CAFormComponent,
-    LiveTradeAppComponent
+    LiveTradeAppComponent,
+    GeneratorCouponProductComponent
   ],
   imports: [
     SharedHomeModule,
@@ -181,7 +183,6 @@ import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.co
         component: SidenavComponent,
         children: [
           { path: "dashboardTask", loadChildren: () => import('./dashboard-task/dashboard-task.module').then(mod => mod.DashboardTaskModule) },
-          { path: "Prodcut", loadChildren: () => import('./SuperAdminPanel/ProductCoupon/generator-coupon.module').then(mod => mod.GeneratorCouponModule) },
           { path: "upload", loadChildren: () => import('./upload/upload.module').then(mod => mod.UploadModule), canActivate: [MemberGuard] },
           { path: "manage-customer", loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule), canActivate: [AdminMemberGuard] },
           { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule), canActivate: [MemberGuard] },

@@ -802,6 +802,24 @@ export class UserService implements OnInit {
     };
     return this.http.get(`${this.api_base}/user/getAllUserMember`, httpOptions).toPromise();
   }
+  
+  getTradeAppUserData() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/LiveTradeApp/getUserDetails`, httpOptions);
+  }
+  
+  UpdateTradeAppUserData(id,data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/LiveTradeApp/update`,{id:id,data:data}, httpOptions);
+  }
 
   getAllCompanyId() {
     this.loadFromLocalStorage();

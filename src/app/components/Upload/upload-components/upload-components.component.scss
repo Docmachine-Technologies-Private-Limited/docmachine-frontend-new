@@ -805,3 +805,20 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 10px;
 }
+
+.grid{
+    display: grid;
+    grid-template-columns: 90% auto;
+}
+
+.grid input{
+    border-radius: 0;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.grid button{
+    border-radius: 0;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}

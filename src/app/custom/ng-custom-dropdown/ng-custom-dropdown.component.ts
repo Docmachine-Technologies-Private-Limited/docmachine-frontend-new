@@ -65,7 +65,6 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
         this.value = this.LABLE_BIND_LIST[uq_id]?.bindValue != '' ? val[this.LABLE_BIND_LIST[uq_id]?.bindValue] : val;
         this.modelChanges.emit(this.value);
         this.onChange(this.value);
-        this.modelObjectChanges.emit(val)
       }
     } else if (this.LABLE_BIND_LIST[uq_id]?.bindValue == '') {
       this.selectedItems = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
@@ -80,6 +79,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
         this.onChange(this.value);
       }
     }
+    this.modelObjectChanges.emit(val)
   }
 
   filterdropdown($event: any, val: any) {

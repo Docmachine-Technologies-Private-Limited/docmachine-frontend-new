@@ -19,13 +19,15 @@
                             class="form-control" [style]="field?.InputStyle" />
                     </div>
                 </div>
-                <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined" [style]="field?.style">
+                <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined"
+                    [style]="field?.style">
                     <div class="form-group mb-0" *ngSwitchCase="'button'">
                         <button type="button" class="btn btn-primary"
                             (click)="this.AddButton?.emit({text:field?.text})">{{field?.text}}</button>
                     </div>
                 </div>
-                <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined" [style]="field?.style">
+                <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined"
+                    [style]="field?.style">
                     <div class="form-group mb-0" *ngSwitchCase="'CallbackButton'">
                         <button type="button" class="btn btn-primary"
                             (click)="this.field?.Callback({text:field?.text})">{{field?.text}}</button>
@@ -92,7 +94,8 @@
                         border-radius: 5px;
                         margin-left: 10px;
                         color: white;
-                        width: calc(100% - 20px);" *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
+                        width: calc(100% - 20px);"
+                            *ngIf="field.label!=undefined && field.label!=''">{{field.label}}</label>
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined">
@@ -357,14 +360,27 @@
                         [name]="field?.fieldName" [selectedItems]="field?.value"
                         [(ngModel)]="field.value"></ng-custom-dropdown>
                 </div>
+                <div class="form-group mb-0" *ngSwitchCase="'InputButton'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
+                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <div class="grid">
+                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            [type]="field.type" [name]="field.fieldName"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            class="form-control" [style]="field?.InputStyle" />
+                        <button class="btn btn-primary"
+                            (click)="dumpFunc({value:field.value,form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
+                    </div>
+                </div>
                 <div class="form-group mb-0" *ngSwitchCase="'ArrayList_Object'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <ng-custom-dropdown [items]="field?.item" [bindLabel]="field?.bindLabel" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field?.fieldName" [selectedItems]="field?.value"
-                        (modelObjectChanges)="this.validator.dynamicFormGroup[this.id]?.controls[field?.fieldName]?.setValue($event);field.value=$event"
-                        ></ng-custom-dropdown>
+                        (modelObjectChanges)="setValue($event,field?.fieldName);field?.callback!=undefined?field?.callback({item:$event,form:this.validator.dynamicFormGroup[this.id]}):''"
+                        ngModel></ng-custom-dropdown>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'PIPO_LIST'">
                     <label *ngIf="field.label!=undefined">{{field.label}} <span style="color: red;"
@@ -827,14 +843,13 @@
                                             <span style="color: red;"
                                                 *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
                                         <ng-select *ngIf="this.validator?.SHIPPING_BILL_LIST?.length!=0"
-                                            [items]="this.validator?.SHIPPING_BILL_LIST" bindLabel="sbno"
-                                            bindValue="id" [multiple]="false"
+                                            [items]="this.validator?.SHIPPING_BILL_LIST" bindLabel="sbno" bindValue="id"
+                                            [multiple]="false"
                                             [required]="Optionfield[FormOptionfield]?.rules?.required"
                                             [name]="Optionfield[FormOptionfield]?.name"
                                             [disabled]="Optionfield[FormOptionfield]?.disabled"
                                             [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
-                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event?.SB_ID)"
-                                            >
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event?.SB_ID)">
                                         </ng-select>
                                     </div>
                                     <div class="form-group mb-0" *ngSwitchCase="'ReUpload'">
@@ -1095,7 +1110,8 @@
                                             <span style="color: red;"
                                                 *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
                                         <ng-select *ngIf="this.validator.ORM_BY_PARTY_NAME?.length!=0"
-                                            [items]="this.validator.ORM_BY_PARTY_NAME" bindLabel="billNo" [multiple]="false"
+                                            [items]="this.validator.ORM_BY_PARTY_NAME" bindLabel="billNo"
+                                            [multiple]="false"
                                             (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback,field)"
                                             [placeholder]="Optionfield[FormOptionfield]?.placeholderText!=undefined?Optionfield[FormOptionfield].placeholderText:''"
                                             [name]="Optionfield[FormOptionfield].fieldName"
@@ -1616,7 +1632,7 @@
                 <div class="header-dropdown d-flex" style="gap: 10px;">
                     <app-ng-dropdown-custom style="width: 300px;margin-left: 20px;"
                         placeHolderText="Search Purpose Code" [items]="this.validator.PURPOSE_CODE_LIST_DATA"
-                        bindLabel="value" (keyEvent)="this.validator.filterData($event)" 
+                        bindLabel="value" (keyEvent)="this.validator.filterData($event)"
                         (modelChanges)="this.validator.filterData($event?.value)">
                     </app-ng-dropdown-custom>
                 </div>

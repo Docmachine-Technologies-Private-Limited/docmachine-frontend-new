@@ -759,9 +759,9 @@ export class DocumentService {
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.post(`${this.api_base}/pipo/getPipoById`, { id: id }, httpOptions);
   }
-   
-  getPipoByIdList(ID_List:any){
-    let API_CREATE:any=[];
+
+  getPipoByIdList(ID_List: any) {
+    let API_CREATE: any = [];
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
@@ -1232,25 +1232,36 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/blcopy/updateSB`, { data: data, id: id }, httpOptions);
   }
 
-//get airway blcopy and advice copy api
-addCouponCode(pipo) {
-  this.loadFromLocalStorage();
-  console.log(this.authToken);
-  const httpOptions = {
-    headers: new HttpHeaders({ Authorization: this.authToken }),
-  };
-  return this.http.post(`${this.api_base}/product/Add`,{ data: pipo },httpOptions);
-}
+  //get airway blcopy and advice copy api
+  addCouponCode(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/product/Add`, { data: pipo }, httpOptions);
+  }
 
-//get airway blcopy and advice copy api
-GetCouponCodeDetails() {
-  this.loadFromLocalStorage();
-  console.log(this.authToken);
-  const httpOptions = {
-    headers: new HttpHeaders({ Authorization: this.authToken }),
-  };
-  return this.http.get(`${this.api_base}/product/getProduct`,httpOptions);
-}
+
+  //get airway blcopy and advice copy api
+  addCouponCode2(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/product/AddCoupon`, { data: pipo }, httpOptions);
+  }
+
+  //get airway blcopy and advice copy api
+  GetCouponCodeDetails() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/product/getProduct`, httpOptions);
+  }
 
   //get airway blcopy and advice copy api
   addAirwayBlcopyFile(pipo) {
@@ -2251,23 +2262,23 @@ GetCouponCodeDetails() {
     };
     return this.http.get(`${this.api_base}/LCTransaction/get`, httpOptions);
   }
-  
-  updateLCTransaction(id,data) {
+
+  updateLCTransaction(id, data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/LCTransaction/update`,{ LCTransaction: data ,id:id}, httpOptions);
+    return this.http.post(`${this.api_base}/LCTransaction/update`, { LCTransaction: data, id: id }, httpOptions);
   }
-  
+
   deleteLCTransaction(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/LCTransaction/delete`,{id:id}, httpOptions);
+    return this.http.post(`${this.api_base}/LCTransaction/delete`, { id: id }, httpOptions);
   }
 
   UpdateTransaction(data) {
