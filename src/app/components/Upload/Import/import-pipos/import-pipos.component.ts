@@ -369,7 +369,7 @@ export class ImportPIPOSComponent implements OnInit {
   }
 
   paymentTermSum(value: any) {
-    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+    return value.reduce((a, b) => a + parseInt(b?.amount), 0)
   }
 
   clickPipo(event: any) {
