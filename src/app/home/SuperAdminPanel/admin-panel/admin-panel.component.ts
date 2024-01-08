@@ -161,6 +161,7 @@ export class SuperAdminPanelComponent implements OnInit {
     if (event?.status == true) {
       panel?.displayHidden
       event?.REST_FORM?.resetForm
+      this.LoadTradedata()
     }
   }
 

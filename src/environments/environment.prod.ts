@@ -7,5 +7,6 @@ export const AppConfig = {
   FRONT_END_URL:'https://www.bharathexim.com/',
   S3_BUCKET_URL:'https://www.bharathexim.com/',
   TALLY_API:"http://192.168.29.126:8083/",
+  COUPON_API:"https://forexappapi.bharathexim.com/v1",
   appVersion: require('../../package.json').version,
 };

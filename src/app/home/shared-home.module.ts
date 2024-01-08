@@ -98,6 +98,7 @@ import { TableServiceController } from "../service/v1/TableServiceController";
 import { ExportHomeControllerData } from "./Transaction/Export/Controller/ExportHome-Controller";
 import { SummaryPageHeaderComponent } from "../custom/summary-page-header/summary-page-header.component";
 import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child-summary-header/child-summary-header.component";
+import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/generator-coupon-product/generator-coupon-product.component";
 
 @NgModule({
   declarations: [
@@ -164,7 +165,8 @@ import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child
     SummaryTransactionUIComponent,
     UploadPopUpLocalFileComponent,
     SummaryPageHeaderComponent,
-    ChildSummaryHeaderComponent
+    ChildSummaryHeaderComponent,
+    GeneratorCouponProductComponent
   ],
   imports: [
     CommonModule,
@@ -291,7 +293,8 @@ import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child
     SummaryTransactionUIComponent,
     UploadPopUpLocalFileComponent,
     SummaryPageHeaderComponent,
-    ChildSummaryHeaderComponent
+    ChildSummaryHeaderComponent,
+    GeneratorCouponProductComponent
   ],
 })
 export class SharedHomeModule { }

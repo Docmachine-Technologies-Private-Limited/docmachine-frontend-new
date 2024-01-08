@@ -23,11 +23,11 @@ export class GeneratorCouponProductComponent implements OnInit {
 
   CouponCodeDetails: any = []
   ngOnInit(): void {
-    this.documentService.GetCouponCodeDetails().subscribe((res: any) => {
-      console.log(res, "GetCouponCodeDetails")
-      this.CouponCodeDetails = res?.data;
-      this.response(null)
-    })
+    // this.documentService.GetCouponCodeDetails().subscribe((res: any) => {
+    //   console.log(res, "GetCouponCodeDetails")
+    //   this.CouponCodeDetails = res?.data;
+    // })
+          this.response(null)
   }
 
   response(args: any) {

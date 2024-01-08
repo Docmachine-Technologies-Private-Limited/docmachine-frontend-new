@@ -1239,7 +1239,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/product/Add`, { data: pipo }, httpOptions);
+    return this.http.post(`${AppConfig.COUPON_API}/product/Add`, { data: pipo }, httpOptions);
   }
 
 
@@ -1250,7 +1250,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/product/AddCoupon`, { data: pipo }, httpOptions);
+    return this.http.post(`${AppConfig.COUPON_API}/product/AddCoupon`, { data: pipo }, httpOptions);
   }
 
   //get airway blcopy and advice copy api
@@ -1260,7 +1260,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/product/getProduct`, httpOptions);
+    return this.http.get(`${AppConfig.COUPON_API}/product/getProduct`, httpOptions);
   }
 
   //get airway blcopy and advice copy api

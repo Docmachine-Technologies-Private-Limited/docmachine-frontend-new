@@ -809,7 +809,7 @@ export class UserService implements OnInit {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/LiveTradeApp/getUserDetails`, httpOptions);
+    return this.http.get(`${AppConfig.COUPON_API}/LiveTradeApp/getUserDetails`, httpOptions);
   }
   
   UpdateTradeAppUserData(id,data) {
@@ -818,7 +818,7 @@ export class UserService implements OnInit {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/LiveTradeApp/update`,{id:id,data:data}, httpOptions);
+    return this.http.post(`${AppConfig.COUPON_API}/LiveTradeApp/update`,{id:id,data:data}, httpOptions);
   }
 
   getAllCompanyId() {

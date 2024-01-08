@@ -102,7 +102,6 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
 import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-db/back-up-panel-mongo-db.component";
 import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
 import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.component";
-import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/generator-coupon-product/generator-coupon-product.component";
 
 @NgModule({
   declarations: [
@@ -152,7 +151,6 @@ import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon
     BackUpPanelMongoDBComponent,
     CAFormComponent,
     LiveTradeAppComponent,
-    GeneratorCouponProductComponent
   ],
   imports: [
     SharedHomeModule,
