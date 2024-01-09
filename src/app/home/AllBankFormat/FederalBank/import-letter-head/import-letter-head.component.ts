@@ -32,7 +32,6 @@ export class ImportLetterHeadService {
               widget?.getOrCreateBorderStyle()?.setWidth(0);
             }
           });
-          getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
           getAllFields[1]?.setText(this.CURRENT_DATE);
           if (filldata != undefined && filldata != null && filldata != '') {
             let PIPO_DATA: any = {
@@ -56,6 +55,7 @@ export class ImportLetterHeadService {
             let BOE_DETAIILSSumRemittance: any = filldata?.BOE_DETAIILS?.reduce((a, b) => parseFloat(a) + parseFloat(b?.BOEAmount), 0)
          
             let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+            getAllFields[0]?.setText(filldata?.BankCharges?.bank + '\n' + filldata?.BankCharges?.bicAddress);
             getAllFields[2]?.setText(`SubForeign: Outward remittance of ` + PIPO_DATA?.Currency[0] + ' ' + BOE_DETAIILSSumRemittance);
             getAllFields[3]?.setText(filldata?.BankCharges?.accNumber);
             getAllFields[4]?.setText(PIPO_DATA?.Currency[0] + ' ' + BOE_DETAIILSSumRemittance);
@@ -66,7 +66,7 @@ export class ImportLetterHeadService {
           getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
           getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.iban);
           getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-          getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress)
+          getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName)
           await pdfDoc.save()
           await this.addWaterMark(pdfDoc, validator).then(async (Res: any) => {
             const pdfBytes = await Res.save()
@@ -78,7 +78,7 @@ export class ImportLetterHeadService {
       },
       FedralAdvance: async (validator, BENEFICIARY_DETAILS, filldata) => {
         return new Promise(async (resolve, reject) => {
-          let formUrl = './../../../assets/pdf/FedralBank/CME_Letterhead_GREY.pdf'
+          let formUrl = './../../../assets/pdf/FedralBank/CME_Letterhead_GREY_Advance.pdf'
           console.log(filldata, 'filldata')
           const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
           const pdfDoc = await PDFDocument.load(formPdfBytes)
@@ -93,8 +93,7 @@ export class ImportLetterHeadService {
               widget?.getOrCreateBorderStyle()?.setWidth(0);
             }
           });
-          getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-          getAllFields[1]?.setText(this.CURRENT_DATE);
+          getAllFields[0]?.setText(this.CURRENT_DATE);
           if (filldata != undefined && filldata != null && filldata != '') {
             let PIPO_DATA: any = {
               Currency: [],
@@ -115,17 +114,19 @@ export class ImportLetterHeadService {
               PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
             });         
             let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+            getAllFields[1]?.setText(filldata?.BankCharges?.bank + '\n' + filldata?.BankCharges?.bicAddress);
             getAllFields[2]?.setText(`SubForeign: Outward remittance of ` + PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
             getAllFields[3]?.setText(filldata?.BankCharges?.accNumber);
             getAllFields[4]?.setText(PIPO_DATA?.Currency[0] + ' ' + RemittanceAmount);
-            getAllFields[5]?.setText(filldata?.BankDebit?.accNumber);
+            getAllFields[6]?.setText(filldata?.BankDebit?.accNumber);
           }
-          getAllFields[6]?.setText(BENEFICIARY_DETAILS[0]?.benneName);
-          getAllFields[7]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName);
-          getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
-          getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.iban);
-          getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-          getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress)
+          getAllFields[5]?.setText("payment of import of Raw material");
+          getAllFields[7]?.setText(BENEFICIARY_DETAILS[0]?.benneName);
+          getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName);
+          getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
+          getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.iban);
+          getAllFields[11]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
+          getAllFields[12]?.setText(validator.COMPANY_INFO[0]?.teamName)
           await pdfDoc.save()
           await this.addWaterMark(pdfDoc, validator).then(async (Res: any) => {
             const pdfBytes = await Res.save()
