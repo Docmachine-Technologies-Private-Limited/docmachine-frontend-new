@@ -57,7 +57,7 @@ export class ImportHomeControllerData {
                         getAllFields[19].setText('')
                         const updatedata: any = Inward_Remittance_MT103[Inward_Remittance_MT103.length - 1];
                         getAllFields[20].setText(updatedata?.currency)
-                        getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
+                        getAllFields[21].setText(this.documentService.toWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
                         getAllFields[22].setText(updatedata?.Inward_amount_for_disposal?.toString())
                         getAllFields[23].setText(updatedata?.BuyerName?.value)
                         getAllFields[24].setText(updatedata?.BuyerName?.Address)
@@ -168,7 +168,7 @@ export class ImportHomeControllerData {
                         getAllFields[19].setText('')
                         const updatedata: any = Inward_Remittance_MT103[Inward_Remittance_MT103.length - 1];
                         getAllFields[20].setText(updatedata?.currency)
-                        getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
+                        getAllFields[21].setText(this.documentService.toWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
                         getAllFields[22].setText(updatedata?.Inward_amount_for_disposal?.toString())
                         getAllFields[23].setText(updatedata?.BuyerName?.value)
                         getAllFields[24].setText(updatedata?.BuyerName?.Address)

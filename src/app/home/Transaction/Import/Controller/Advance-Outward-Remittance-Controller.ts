@@ -38,9 +38,9 @@ export class AdvanceOutwardRemittanceControllerData {
                         }
                     });
                     getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.BranchName);
-                    getAllFields[17]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-                    getAllFields[18]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
-                    getAllFields[19]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress);
+                    getAllFields[17]?.setText(validator.COMPANY_INFO[0]?.teamName?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n') + '\n' + validator.COMPANY_INFO[0]?.adress?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
+                    getAllFields[18]?.setText(BENEFICIARY_DETAILS[0]?.benneName?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n') + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
+                    getAllFields[19]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n') + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
                     getAllFields[20]?.setText('');
                     getAllFields[21]?.setText(BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + BENEFICIARY_DETAILS[0]?.iban);
                     getAllFields[22]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
@@ -96,8 +96,8 @@ export class AdvanceOutwardRemittanceControllerData {
                         getAllFields[6]?.setText(today[1]?.split('')[1]);
                         getAllFields[7]?.setText(today[0]?.split('')[2]);
                         getAllFields[8]?.setText(today[0]?.split('')[3]);
-
-                        getAllFields[9]?.setText(RemittanceAmount != undefined ? PIPO_DATA?.Currency[0] + ' ' + this.ConvertNumberToWords(RemittanceAmount) : '-');
+                        console.log(validator?.toWords(RemittanceAmount),"RemittanceAmount")
+                        getAllFields[9]?.setText(RemittanceAmount != undefined ? PIPO_DATA?.Currency[0] + ' ' + validator?.toWords(RemittanceAmount) : '-');
                         getAllFields[10]?.setText('');
                         getAllFields[13]?.setText('-');
                         getAllFields[14]?.setText('-');
@@ -191,13 +191,13 @@ export class AdvanceOutwardRemittanceControllerData {
                             getAllFields[76]?.setText(ToForwardContract_Selected[0]?.UtilizedAmount);
                             getAllFields[77]?.setText(ToForwardContract_Selected[0]?.NetRate);
                         }
-                        getAllFields[78]?.setText(PIPO_DATA?.DATE_NO?.join('\n'));
-                        getAllFields[79]?.setText(PIPO_DATA?.CurrencyAmount?.join('\n'));
-                        getAllFields[80]?.setText(PIPO_DATA?.HSCODE?.join('\n'));
+                        getAllFields[78]?.setText(PIPO_DATA?.DATE_NO?.join('')?.match(/.{1,10}/g)?.join('\n'));
+                        getAllFields[79]?.setText(PIPO_DATA?.CurrencyAmount?.join('')?.match(/.{1,10}/g)?.join('\n'));
+                        getAllFields[80]?.setText(PIPO_DATA?.HSCODE?.join('')?.match(/.{1,15}/g)?.join('\n'));
                         // getAllFields[81]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
                         // getAllFields[82]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
                         getAllFields[83]?.setText(PIPO_DATA?.TRANSPORTER?.join('\n'));
-                        getAllFields[84]?.setText(PIPO_DATA?.LASTDATE?.join('\n'));
+                        getAllFields[84]?.setText(PIPO_DATA?.LASTDATE?.join('')?.match(/.{1,10}/g)?.join('\n'));
                         getAllFields[85]?.setText(moment(new Date()).format('DD-MM-YYYY'));
                         getAllFields[86]?.setText('');
                         // getAllFields[87]?.uncheck();
@@ -244,7 +244,7 @@ export class AdvanceOutwardRemittanceControllerData {
 
                     if (filldata != undefined && filldata != null && filldata != '') {
                         let PIPO_DATA: any = {
-                            NO:[],
+                            NO: [],
                             Currency: [],
                             Amount: [],
                             Commodity: [],
@@ -252,10 +252,10 @@ export class AdvanceOutwardRemittanceControllerData {
                             DATE_NO: [],
                             CurrencyAmount: [],
                             ORIGIN: [],
-                            DATE:[],
+                            DATE: [],
                             TRANSPORTER: [],
                             LASTDATE: [],
-                            PurposeRemittance:[]
+                            PurposeRemittance: []
                         }
 
                         filldata?.paymentTerm?.forEach(element => {
@@ -268,7 +268,7 @@ export class AdvanceOutwardRemittanceControllerData {
                             PIPO_DATA["DATE"].push(element?.PIPO_LIST?.date)
                             PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
                             PIPO_DATA["ORIGIN"].push(element?.PIPO_LIST?.location)
-                            PIPO_DATA["PurposeRemittance"].push('Import '+element?.PIPO_LIST?.MaterialTypes)
+                            PIPO_DATA["PurposeRemittance"].push('Import ' + element?.PIPO_LIST?.MaterialTypes)
                             if (element?.PIPO_LIST?.ModeofTransport[1]?.AirportCustoms == true) {
                                 PIPO_DATA["TRANSPORTER"].push("Air")
                             } else {
@@ -323,7 +323,7 @@ export class AdvanceOutwardRemittanceControllerData {
 
                     if (filldata != undefined && filldata != null && filldata != '') {
                         getAllFields[7]?.setText(`INR A/C No : NIL \n For: (CCY & AMT) NIL\n FCY A/C No : ${BENEFICIARY_DETAILS[0]?.beneAccNo}\n For: (CCY & AMT) ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount}/-\n (Remittance by SEZ units from INR accounts to beneficiaries within India not allowed)`);
-                        getAllFields[12]?.setText(`${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount} /- (${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount)}) - 30% ADVANCE PAYMENT.`);
+                        getAllFields[12]?.setText(`${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount} /- (${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + validator?.toWords(filldata?.paymentTerm[0]?.RemittanceAmount)}) - 30% ADVANCE PAYMENT.`);
                         getAllFields[19]?.setText(`Expected Date of Despatch / Download (software) – MID OF NOV 2022\n Name of the shipping company / airlines – (BY SEA)\n Port of Despatch - ANY PORT IN COLOMBIA\n Destination Port – CHENNAI, INDIA \nProforma Invoice details (In case the invoice is older than 6 months then a declaration\n to be provided stating the reason for delay)\n PROFORMA Invoice no - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} CO Dated ${filldata?.paymentTerm[0]?.PIPO_LIST?.date}, Amount - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} ${filldata?.paymentTerm[0]?.RemittanceAmount}/-`);
                         getAllFields[20]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
 
@@ -456,4 +456,5 @@ export class AdvanceOutwardRemittanceControllerData {
             resolve(mergedPdfload)
         })
     }
+
 }
