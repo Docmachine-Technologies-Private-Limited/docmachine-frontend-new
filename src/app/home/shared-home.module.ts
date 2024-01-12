@@ -99,6 +99,7 @@ import { ExportHomeControllerData } from "./Transaction/Export/Controller/Export
 import { SummaryPageHeaderComponent } from "../custom/summary-page-header/summary-page-header.component";
 import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child-summary-header/child-summary-header.component";
 import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/generator-coupon-product/generator-coupon-product.component";
+import { CreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/create-plan/create-plan.component";
 
 @NgModule({
   declarations: [
@@ -166,7 +167,8 @@ import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon
     UploadPopUpLocalFileComponent,
     SummaryPageHeaderComponent,
     ChildSummaryHeaderComponent,
-    GeneratorCouponProductComponent
+    GeneratorCouponProductComponent,
+    CreatePlanComponent
   ],
   imports: [
     CommonModule,
@@ -205,7 +207,7 @@ import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon
     UploadServiceValidatorService,
     GlobalsAccessService,
     filterAnyTablePagination,
-    ExportHomeControllerData
+    ExportHomeControllerData,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
@@ -294,7 +296,8 @@ import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon
     UploadPopUpLocalFileComponent,
     SummaryPageHeaderComponent,
     ChildSummaryHeaderComponent,
-    GeneratorCouponProductComponent
+    GeneratorCouponProductComponent,
+    CreatePlanComponent
   ],
 })
 export class SharedHomeModule { }

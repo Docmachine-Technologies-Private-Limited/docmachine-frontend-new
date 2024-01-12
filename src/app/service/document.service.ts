@@ -1290,7 +1290,6 @@ export class DocumentService {
     return this.http.post(`${AppConfig.COUPON_API}/product/Add`, { data: pipo }, httpOptions);
   }
 
-
   //get airway blcopy and advice copy api
   addCouponCode2(pipo) {
     this.loadFromLocalStorage();
@@ -1300,7 +1299,36 @@ export class DocumentService {
     };
     return this.http.post(`${AppConfig.COUPON_API}/product/AddCoupon`, { data: pipo }, httpOptions);
   }
-
+  
+  //get airway blcopy and advice copy api
+  addSubscriptionPlan(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/SubscriptionPlan/add`, { data: pipo }, httpOptions);
+  }
+  
+   //get airway blcopy and advice copy api
+   updateSubscriptionPlan(id,pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/SubscriptionPlan/update`, { id:id,data: pipo }, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  getSubscriptionPlan() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${AppConfig.COUPON_API}/SubscriptionPlan/get`, httpOptions);
+  }
   //get airway blcopy and advice copy api
   GetCouponCodeDetails() {
     this.loadFromLocalStorage();

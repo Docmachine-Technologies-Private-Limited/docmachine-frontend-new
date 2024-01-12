@@ -36,7 +36,8 @@ export class SuperAdminPanelComponent implements OnInit {
   OrgAllCompanyId: any = [];
   AlldeletebyCollectionName: any = [];
   OrgAlldeletebyCollectionName: any = [];
-
+  VIEW_SUBSCRIPTION_PLAN_DATA:any=[];
+  
   constructor(public route?: ActivatedRoute, public formBuilder?: FormBuilder,
     public userService?: UserService,
     public sanitizer?: DomSanitizer, public toastr?: ToastrService,
@@ -102,6 +103,11 @@ export class SuperAdminPanelComponent implements OnInit {
   EditTradeApp(data) {
     this.TRADE_APP_DATA = data;
   }
+  
+  EditSubsciptionPlan_DATA
+  EditSubsciptionPlan(data) {
+    this.EditSubsciptionPlan_DATA= data;
+  }
 
   LoadTradedata() {
     this.userService?.getTradeAppUserData().subscribe((res: any) => {
@@ -120,10 +126,19 @@ export class SuperAdminPanelComponent implements OnInit {
       this.TradeAppUserData = res
       console.log(res, "getTradeAppUserData")
     })
-
+  }
+  
+  onclickCouponDetails(){
     this.docserivce?.GetCouponCodeDetails().subscribe((res: any) => {
       this.COUPON_CODE_DATA = res?.data;
       console.log(res, "GetCouponCodeDetails")
+    })
+  }
+  
+  onclickSubscriptionPlan(){
+    this.docserivce?.getSubscriptionPlan().subscribe((res: any) => {
+      this.VIEW_SUBSCRIPTION_PLAN_DATA = res?.data;
+      console.log(res, "getSubscriptionPlan")
     })
   }
 
