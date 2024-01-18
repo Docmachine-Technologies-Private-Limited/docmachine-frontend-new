@@ -1,14 +1,14 @@
-import { UserService } from './../service/user.service';
+import { UserService } from '../../service/user.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DocumentService } from '../service/document.service';
-import { AuthGuard } from '../service/authguard.service';
-import { AppConfig } from '../../environments/environment';
-import { StorageEncryptionDecryptionService } from '../Storage/storage-encryption-decryption.service';
-import { UploadServiceValidatorService } from '../components/Upload/service/upload-service-validator.service';
+import { DocumentService } from '../../service/document.service';
+import { AuthGuard } from '../../service/authguard.service';
+import { AppConfig } from '../../../environments/environment';
+import { StorageEncryptionDecryptionService } from '../../Storage/storage-encryption-decryption.service';
+import { UploadServiceValidatorService } from '../../components/Upload/service/upload-service-validator.service';
 import moment from 'moment';
 
 @Component({

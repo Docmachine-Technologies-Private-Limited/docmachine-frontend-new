@@ -595,13 +595,12 @@ iframe {
 }
 
 .wrap-login100 {
-    width: 500px;
+    min-width: 500px;
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
     display: block;
-    min-height: 550px;
-    max-height: 80vh;
+    min-height: 350px;
     padding-top: 35px;
     box-shadow: 0 0 13px 4px #847f7f7d;
     margin: auto;

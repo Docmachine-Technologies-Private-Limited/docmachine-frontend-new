@@ -100,6 +100,12 @@ import { SummaryPageHeaderComponent } from "../custom/summary-page-header/summar
 import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child-summary-header/child-summary-header.component";
 import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/generator-coupon-product/generator-coupon-product.component";
 import { CreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/create-plan/create-plan.component";
+import { BusinessEmailValidatorDirective } from "../RegistrationPage/Controller/business-email-validator.directive";
+import { MaxMinValidationDirective } from "../RegistrationPage/Controller/MaxMinValidationService";
+import { PasswordValidationDirective } from "../RegistrationPage/Controller/PasswordValidation.directive";
+import { BharatheximCreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/create-plan/bharathexim-create-plan.component";
+import { BharatheximGeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/generator-coupon-product/bharathexim-generator-coupon-product.component";
+import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-panel/bharathexim-subscription-module/bharathexim-subscription-module.component";
 
 @NgModule({
   declarations: [
@@ -168,7 +174,13 @@ import { CreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/create-plan
     SummaryPageHeaderComponent,
     ChildSummaryHeaderComponent,
     GeneratorCouponProductComponent,
-    CreatePlanComponent
+    CreatePlanComponent,
+    BusinessEmailValidatorDirective,
+    MaxMinValidationDirective,
+    PasswordValidationDirective,
+    BharatheximCreatePlanComponent,
+    BharatheximGeneratorCouponProductComponent,
+    BharatheximSubscriptionModuleComponent
   ],
   imports: [
     CommonModule,
@@ -297,7 +309,13 @@ import { CreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/create-plan
     SummaryPageHeaderComponent,
     ChildSummaryHeaderComponent,
     GeneratorCouponProductComponent,
-    CreatePlanComponent
+    CreatePlanComponent,
+    BharatheximCreatePlanComponent,
+    BharatheximGeneratorCouponProductComponent,
+    BharatheximSubscriptionModuleComponent,
+    BusinessEmailValidatorDirective,
+    MaxMinValidationDirective,
+    PasswordValidationDirective
   ],
 })
 export class SharedHomeModule { }

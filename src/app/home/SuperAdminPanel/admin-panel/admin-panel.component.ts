@@ -67,15 +67,6 @@ export class SuperAdminPanelComponent implements OnInit {
   COUPON_CODE_DATA: any = [];
 
   async ngOnInit() {
-    let token = this.authGuard?.loadFromLocalStorage();
-    if (token != null) {
-      // interval(2 * 60 * 1000).subscribe(async () => {
-      //   this.ORIGNAL_DATA = await this.userService?.getAllUserMember();
-      //   this.USER_DEATILS = this.ORIGNAL_DATA;
-      //   this.loaddata()
-      // })
-    }
-
     this.ORIGNAL_DATA = await this.userService?.getAllUserMember();
     this.USER_DEATILS = this.ORIGNAL_DATA;
     this.loaddata();
@@ -104,7 +95,7 @@ export class SuperAdminPanelComponent implements OnInit {
     this.TRADE_APP_DATA = data;
   }
   
-  EditSubsciptionPlan_DATA
+  EditSubsciptionPlan_DATA:any=[]
   EditSubsciptionPlan(data) {
     this.EditSubsciptionPlan_DATA= data;
   }

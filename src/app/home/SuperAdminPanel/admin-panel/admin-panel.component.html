@@ -467,6 +467,9 @@
                     </div>
                 </div>
             </mat-tab>
+            <mat-tab label="Bharathexim Subscription">
+                <app-bharathexim-subscription-module></app-bharathexim-subscription-module>
+            </mat-tab>
         </mat-tab-group>
         <div class="footer-panel"></div>
     </div>
@@ -579,6 +582,7 @@
     </div>
 </app-custom-model>
 
+<!-- TradeGlobal -->
 <app-custom-model
     [customstyle]="{'margin':'auto !important','max-width': '620px !important','margin-top': '80px !important'}"
     class="p-2" height="400px" id="TRADE_APP" [name]="'Email Id : '+this.TRADE_APP_DATA?.emailId" #TRADE_APP_PANEL>
@@ -606,7 +610,8 @@
     [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
     class="p-2" height="450px" id="PLAN_CREATE_APP" name="Add Subscription Plan" #PLAN_CREATE_APP_PANEL>
     <div class="col-12">
-        <create-plan [EditCondition]="false" (SubmitButtonEvent)="ClosePopup($event,PLAN_CREATE_APP_PANEL)"></create-plan>
+        <create-plan [EditCondition]="false"
+            (SubmitButtonEvent)="ClosePopup($event,PLAN_CREATE_APP_PANEL)"></create-plan>
     </div>
 </app-custom-model>
 
@@ -664,8 +669,7 @@
                 </tr>
             </tbody>
         </table>
-        <app-custom-model
-            [RemoveBgTop]="false"
+        <app-custom-model [RemoveBgTop]="false"
             [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
             class="p-2" height="450px" id="EDIT_PLAN_CREATE_APP" name="Edit Subscription Plan"
             #EDIT_PLAN_CREATE_APP_PANEL>

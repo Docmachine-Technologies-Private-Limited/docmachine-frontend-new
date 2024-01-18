@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, forwardRef } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 declare var $: any;
 
@@ -14,7 +14,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
   styleUrls: ['./custom-model.component.scss'],
   providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR],
 })
-export class CustomModelComponent implements OnInit {
+export class CustomModelComponent implements OnInit,AfterContentInit {
   @Input('name') name: any;
   @Input('width') width: any;
   @Input('height') height: any;
@@ -42,14 +42,21 @@ export class CustomModelComponent implements OnInit {
   @Input('HIDDEN_SHOW') HIDDEN_SHOW: boolean = false;
   @Input('ModalTitleStyle') ModalTitleStyle: any = '';
   @Input('CloseIconColor') CloseIconColor: any = 'black';
-  
+
   toggleminimize: boolean = false;
   footerbuttontext: any = [];
 
-  constructor() { }
+  constructor(public eleref:ElementRef) { }
 
   ngOnInit(): void {
+    document.body.appendChild(this.eleref.nativeElement);
     this.footerbuttontext[this.id] = this.condition;
+  }
+  
+  ngAfterContentInit(): void {
+    $(function () {
+      $("#draggable").draggable();
+    });
   }
 
   get displayHidden() {
@@ -59,7 +66,7 @@ export class CustomModelComponent implements OnInit {
   get displayHide() {
     return $('.upload-modal#' + this.id).css('display', 'none');
   }
-  
+
   get displayShow() {
     return $('.PopupOpen#' + this.id).click()
   }

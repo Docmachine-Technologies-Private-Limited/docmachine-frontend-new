@@ -50,6 +50,7 @@ import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-in
 import { AuthorizationComponent } from "./authorization/authorization.component";
 import { TallyAuthorizationService } from "./authorization-tally-intrgration/tally-authorization.service";
 import { LEIRecordsService } from "./service/LEIRecord/leirecords.service";
+import { BusinessEmailValidatorDirective } from "./RegistrationPage/Controller/business-email-validator.directive";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -76,7 +77,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ResetOTPComponent,
     RoleVerifyEmailComponent,
     CustomMatTabComponent,
-    AuthorizationTallyIntrgrationComponent
+    AuthorizationTallyIntrgrationComponent,
   ],
   providers: [
     WindowInformationService,
@@ -92,7 +93,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     TallyAuthorizationService,
     LEIRecordsService,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
-    IdleService
+    IdleService,
   ],
   bootstrap: [AppComponent],
   imports: [

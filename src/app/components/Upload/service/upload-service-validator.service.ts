@@ -679,6 +679,8 @@ export class UploadServiceValidatorService implements OnInit {
       BOE: rule?.required == true ? [Validators.required] : [],
       ORM_SELECTION: rule?.required == true ? [Validators.required] : [],
       LABLE_CHECKBOX: rule?.required == true ? [Validators.required] : [],
+      EmailButton: rule?.required == true ? [Validators.required] : [],
+      NumberButton: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       CallbackButton: [],

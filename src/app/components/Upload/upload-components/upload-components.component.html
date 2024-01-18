@@ -5,7 +5,7 @@
         (keyup.enter)="this.KEY_ENTER_ENABLED==true?onSubmit($event,this.validator.dynamicFormGroup[this.id]):''">
         <label *ngIf="label!=undefined && label!=''" [style]="labelStyle">{{label}}</label>
         <ng-content *ngIf="morecontent==true" select="more-content"></ng-content>
-        <div class="col-12 p-2" [ngClass]="{'hidden':field?.disabled==true}"
+        <div class="col-12 p-2" [ngClass]="{'hidden':field?.disabled==true,'hidden':field?.divhide==true}"
             *ngFor="let field of this.validator?.FIELDS_DATA[this.id];let fieldIndex=index">
             <ng-container [ngSwitch]="field.type">
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined">
@@ -22,7 +22,7 @@
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined"
                     [style]="field?.style">
                     <div class="form-group mb-0" *ngSwitchCase="'button'">
-                        <button type="button" class="btn btn-primary"
+                        <button type="button" [style]="field?.ButtonStyle" class="btn btn-primary"
                             (click)="this.AddButton?.emit({text:field?.text})">{{field?.text}}</button>
                     </div>
                 </div>
@@ -30,7 +30,9 @@
                     [style]="field?.style">
                     <div class="form-group mb-0" *ngSwitchCase="'CallbackButton'">
                         <button type="button" class="btn btn-primary"
-                            (click)="this.field?.Callback({text:field?.text})">{{field?.text}}</button>
+                        [style]="field?.ButtonStyle"
+                        [disabled]="field?.ButtonDisabled"
+                            (click)="this.field?.Callback({text:field?.text,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]})">{{field?.text}}</button>
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined">
@@ -50,7 +52,8 @@
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <select class="form-select" [name]="field?.fieldName" [(ngModel)]="field.value"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            aria-label="Default select example" [disabled]="field?.Inputdisabled">
+                            aria-label="Default select example" [disabled]="field?.Inputdisabled"
+                            (change)="dumpFunc({value:$event,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)">
                             <option [value]="item" *ngFor="let item of field?.items;let i=index">
                                 {{item}}</option>
                         </select>
@@ -302,7 +305,7 @@
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <div class="email-input-icon">
-                            <input [(ngModel)]="field.value"
+                            <input [(ngModel)]="field.value" EmailValidator
                                 (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                                 [type]="field.type" [name]="field.fieldName"
                                 [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -326,19 +329,19 @@
                         <div class="d-flex" [ngClass]="field?.class" [style]="field?.style"
                             *ngIf="field?.CoveringLetter==false || field?.CoveringLetter==undefined">
                             <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button"
-                                (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName},field.fieldName);ShowInputCheckBox(true,field?.YesButton)"
+                                (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field.fieldName,field?.callback);ShowInputCheckBox(true,field?.YesButton)"
                                 [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">{{field?.text1!=undefined?field?.text1:'Yes'}}</button>
                             <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button"
-                                (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName},field.fieldName);HideInputCheckBox(false,field?.NoButton)"
+                                (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field.fieldName,field?.callback);HideInputCheckBox(false,field?.NoButton)"
                                 [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">{{field?.text2!=undefined?field?.text2:'No'}}</button>
                         </div>
                         <custom-ng-content-header *ngIf="field?.CoveringLetter==true">
                             <div class="d-flex">
                                 <button [name]="field.fieldName" class="btn-primary yes-btn btn remove-no-button"
-                                    (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName},field.fieldName);ShowInputCheckBox(true,field?.YesButton)"
+                                    (click)="field.YesNo='true';YesNoFunction({bool:true,text:field?.text1,id:field.fieldName,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field.fieldName,field?.callback);ShowInputCheckBox(true,field?.YesButton)"
                                     [ngClass]="{'yes-button':field?.YesNo=='true','remove-no-button-1':field?.YesNo=='false'}">{{field?.text1!=undefined?field?.text1:'Yes'}}</button>
                                 <button [name]="field.fieldName" class="btn-primary btn no-btn remove-no-button"
-                                    (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName},field.fieldName);HideInputCheckBox(false,field?.NoButton)"
+                                    (click)="field.YesNo='false';YesNoFunction({bool:false,text:field?.text2,id:field.fieldName,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field.fieldName,field?.callback);HideInputCheckBox(false,field?.NoButton)"
                                     [ngClass]="{'no-button':field?.YesNo=='false','remove-no-button-2':field?.YesNo=='true'}">{{field?.text2!=undefined?field?.text2:'No'}}</button>
                             </div>
                         </custom-ng-content-header>
@@ -363,14 +366,48 @@
                 <div class="form-group mb-0" *ngSwitchCase="'InputButton'">
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
-                    <div class="grid">
+                    <div class="grid" [style]="field?.DivStyle">
                         <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
-                            [type]="field.type" [name]="field.fieldName"
+                            [type]="field.InputType" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.InputStyle" />
-                        <button class="btn btn-primary"
-                            (click)="dumpFunc({value:field.value,form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
+                        <button [style]="field?.buttonStyle" class="btn btn-primary" 
+                        [disabled]="field?.buttondisabled"
+                        [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
+                            (click)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
+                    </div>
+                </div>
+                <div class="form-group mb-0" *ngSwitchCase="'EmailButton'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
+                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <div class="grid" [style]="field?.DivStyle">
+                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled" EmailValidator
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            [type]="field.InputType" [name]="field.fieldName"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            class="form-control" [style]="field?.InputStyle"
+                            (keydown)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.KeyPressCallBack)" />
+                        <button [style]="field?.buttonStyle" class="btn btn-primary"
+                        [disabled]="field?.buttondisabled"
+                        [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
+                            (click)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
+                    </div>
+                </div>
+                <div class="form-group mb-0" *ngSwitchCase="'NumberButton'">
+                    <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
+                            *ngIf="field?.rules?.required==true">*</span></label>
+                    <div class="grid" [style]="field?.DivStyle">
+                        <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled" MaxMinValidation
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            [type]="field?.InputType" [name]="field.fieldName"
+                            [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                            class="form-control" [style]="field?.InputStyle"
+                            (keydown)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.KeyPressCallBack)" />
+                        <button [style]="field?.buttonStyle" class="btn btn-primary" 
+                        [disabled]="field?.buttondisabled"
+                        [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
+                            (click)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'ArrayList_Object'">
@@ -397,6 +434,7 @@
                     <div class="col-12 p-0">
                         <i class="fa fa-lock lock-icon" aria-hidden="true"></i>
                         <input [(ngModel)]="field.value"
+                            PasswordValidation
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.showhide==true?'text':field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -814,8 +852,8 @@
                     <div class="col-12 p-0">
                         <div class="col-12 division-panel" [style]="field?.Style"
                             *ngFor="let Optionfield of field?.NewformArray;let OptionfieldIndex=index">
+                            <label>{{field?.GroupLabel[OptionfieldIndex]}}</label>
                             <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="field?.AddNewRequried==true">
-                                <label>{{field?.GroupLabel[OptionfieldIndex]}}</label>
                                 <button type="button" class="btn btn-primary"
                                     *ngIf="(field?.NewformArray?.length-1)==OptionfieldIndex"
                                     (click)="this.validator.addNewFormArray(this.id,fieldIndex,field.fieldName)"><i

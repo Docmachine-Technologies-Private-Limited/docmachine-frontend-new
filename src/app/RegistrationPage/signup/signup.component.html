@@ -1,0 +1,38 @@
+<template-main-page text="Register">
+        <upload-components [KEY_ENTER_ENABLED]="true" style="width: 100%;" id="UserRegistration"
+                [HIDE_SUBMIT_BUTTON]="false" [HIDE_BACKGROUND]="false" (SubmitEvent)="onSubmit(uploadcomponents?.getRawValue)"
+                #uploadcomponents>
+                <p class="text-muted mb-4 bottom-text ml-2">
+                        By continuing, you agree to DocMachine
+                        <a class="hover-a-tag" (click)="TermsofService_PANEL?.displayShow">Terms of Service</a>
+                        we will
+                        manage
+                        information as described in our
+                        <a>Privacy Policy Agreement</a>
+                </p>
+                <div *ngIf="this.VALIDATION_DONE==true" class="container-login100-form-btn">
+                        <button class="login100-form-btn" (click)="dump(uploadcomponents)">
+                                Register
+                        </button>
+                </div>
+                <div class="text-center mt-3">
+                        <span class="txt1">Forgot </span>
+                        <a class="txt2 Signup hover-a-tag" [routerLink]="['/forgotpassword']">Password?
+                                /</a>
+                        <a class="txt2 Signup hover-a-tag" [routerLink]="['/resetOTP']"> OTP?</a>
+                </div>
+                <div class="text-center mt-3">
+                        <a class="txt2 Signup hover-a-tag" (click)="onLogin()">Login <i
+                                        class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>
+                </div>
+        </upload-components>
+</template-main-page>
+<app-custom-model [customstyle]="{'max-width':'750px !important'}" class="p-2" height="65vh" id="TermsofService"
+        modalbodyheight="65vh" ModalTitleStyle="font-size: 20px;
+    font-weight: bold;" name="SOFTWARE LICENSE AGREEMENT" #TermsofService_PANEL>
+        <div class="col-12 mt-2 mb-2">
+                <tearms-condition></tearms-condition>
+                <button type="button" class="btn btn-primary" (click)="TermsofService_PANEL?.displayHidden">Ok</button>
+        </div>
+</app-custom-model>

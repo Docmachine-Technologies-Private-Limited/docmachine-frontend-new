@@ -122,8 +122,8 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     return this.validator.dynamicFormGroup[this.id]?.getRawValue()
   }
 
-  dumpFunc(value:any,callback:any){
-    if (callback!=undefined) {
+  dumpFunc(value: any, callback: any) {
+    if (callback != undefined) {
       callback(value)
     }
   }
@@ -137,7 +137,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
 
   setValue(value: any, name1: any) {
     this.validator.dynamicFormGroup[this.id]?.controls[name1]?.setValue(value)
-    this.validator.dynamicFormGroup[this.id].value[name1]=(value)
+    this.validator.dynamicFormGroup[this.id].value[name1] = (value)
   }
 
   addFormArray(key1: any, index: any, data: any, GroupLabel: any) {
@@ -172,7 +172,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
         this.CALLBACK({ form: this.validator.dynamicFormGroup[this.id], AUTOFILL_INPUT_NAME_LIST: AUTOFILL_INPUT_NAME_LIST, FIELDS_DATA: this.field })
       }
     } else {
-      this.validator.ORM_SELECTION_DATA.splice(index,1)
+      this.validator.ORM_SELECTION_DATA.splice(index, 1)
       event.target.checked = false;
     }
   }
@@ -556,9 +556,12 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  YesNoFunction(value: any, name: any) {
+  YesNoFunction(value: any, name: any, callback) {
     this.setValue(value, name)
     this.YesNoCheckBoxEvent.emit(value);
+    if (callback != null && callback != undefined) {
+      callback(value);
+    }
   }
 
   AddAdditionalDocuments(form, name, index, fromitems) {

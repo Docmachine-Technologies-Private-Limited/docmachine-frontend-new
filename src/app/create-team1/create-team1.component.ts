@@ -173,7 +173,7 @@ export class CreateTeam1Component implements OnInit {
             required: false,
           }
         },
-        Location: {
+        location: {
           type: "formGroup",
           label: "Branch List",
           GroupLabel: [''],
@@ -271,7 +271,7 @@ export class CreateTeam1Component implements OnInit {
                 rules: {
                   required: true,
                 },
-                
+
               },
               {
                 type: "AccountType",
@@ -293,7 +293,7 @@ export class CreateTeam1Component implements OnInit {
               },
             ]
           ],
-         
+
         }
       }, 'SetupCompanyDetails');
     }, 200);

@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormGroup } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../service/user.service';
 import { AuthGuard } from '../../../service/authguard.service';
 import { DocumentService } from '../../../service/document.service';
 import { UploadServiceValidatorService } from '../../../components/Upload/service/upload-service-validator.service';
+import moment from 'moment';
+declare var Razorpay: any;
 
 @Component({
   selector: 'app-twofactorauth',
@@ -44,8 +46,35 @@ export class TwofactorauthComponent implements OnInit {
     'Maker and Approver': 2,
     'Maker/checker/Approver': 3
   }
+  VALIDATION_DONE: boolean = false;
+  SUBSCRIPTION_PALN: any = {
+    both: {
+      DMS: 40000,
+      ForwardContractManagement: 40000,
+      TransactionDMS: 100000,
+      DMS_Teasury: 45000,
+      ALL: 110000
+    },
+    Export: {
+      DMS: 25000,
+      ForwardContractManagement: 30000,
+      TransactionDMS: 60000,
+      DMS_Teasury: 45000,
+      ALL: 65000
+    },
+    Import: {
+      DMS: 25000,
+      ForwardContractManagement: 30000,
+      TransactionDMS: 60000,
+      DMS_Teasury: 45000,
+      ALL: 65000
+    }
+  }
+  CouponData: any = {}
+  @ViewChild('TermsofService_PANEL') TermsofService_PANEL: any;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService,
+  constructor(
+    private userService: UserService,
     public authGuard: AuthGuard,
     public documentService: DocumentService,
     public validator: UploadServiceValidatorService,
@@ -80,18 +109,24 @@ export class TwofactorauthComponent implements OnInit {
               },
               maxLength: 6
             },
-          }, '2_FACTOR_AUTH');
+          }, '2_FACTOR_AUTH').then((res) => {
+            this.VALIDATION_DONE = true
+          });
         })
       } else {
         this.validator.buildForm({
           Subscription: {
             type: "SelectOption",
             value: "",
-            label: "Subscription",
+            label: "Export/Import",
             items: SubscriptionType,
             rules: {
               required: true,
-            }
+            },
+            callback: (item: any) => {
+              console.log(item, "callback")
+              this.SubscriptionAmountSum(item);
+            },
           },
           Role: {
             type: "SelectOption",
@@ -104,7 +139,7 @@ export class TwofactorauthComponent implements OnInit {
           },
           DocumentsList: {
             type: "formGroup",
-            label: "Documents List :",
+            label: "Features :",
             GroupLabel: [''],
             AddNewRequried: false,
             rules: {
@@ -127,18 +162,29 @@ export class TwofactorauthComponent implements OnInit {
                   },
                   callback: (item: any) => {
                     console.log(item, "callback")
+                    const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                    if (item?.value == false) {
+                      if (myForm.value[item?.OptionfieldIndex]["Transaction"] == true) {
+                        myForm.value[item?.OptionfieldIndex]["Transaction"] = false;
+                        myForm.controls[item?.OptionfieldIndex]?.controls["Transaction"]?.setValue(false);
+                        myForm['touched'] = true;
+                        myForm['status'] = 'VALID';
+                      }
+                    }
+                    this.SubscriptionAmountSum(item);
                   },
                 },
                 {
                   type: "CheckboxMultiple",
                   value: false,
                   label: "",
-                  checkboxlabel: "Teasury",
+                  checkboxlabel: "Forward Contract Management",
                   name: 'Teasury',
                   rules: {
                     required: false,
                   },
                   callback: (item: any) => {
+                    this.SubscriptionAmountSum(item);
                     console.log(item, "callback")
                   },
                 },
@@ -158,10 +204,106 @@ export class TwofactorauthComponent implements OnInit {
                     myForm['touched'] = true;
                     myForm['status'] = 'VALID';
                     console.log(item, "callback")
+                    this.SubscriptionAmountSum(item);
                   },
                 }
               ]
             ]
+          },
+          DirectDispatch: {
+            type: "yesnocheckbox",
+            value: '',
+            label: "You Have any Coupon Code?",
+            rules: {
+              required: true,
+            },
+            YesNo: '',
+            YesButton: [
+              { name: 'CouponCode', status: true },
+              { name: 'PlanView', status: false }
+            ],
+            NoButton: [
+              { name: 'CouponCode', status: false },
+              { name: 'PlanView', status: true }
+            ],
+            callback: (value: any) => {
+              console.log(value, "sdfsdfdfdsfd")
+              if (value?.bool == true) {
+                value.field[4]['divhide'] = false;
+                value.field[5]['divhide'] = true;
+              } else {
+                value.field[4]['divhide'] = true;
+                value.field[5]['divhide'] = false;
+              }
+            }
+          },
+          CouponCode: {
+            type: "InputButton",
+            InputType: "text",
+            value: "",
+            label: "",
+            showhide: false,
+            rules: {
+              required: true,
+            },
+            divhide: true,
+            placeholderText: 'Enter Coupon Code',
+            ButtonText: "Verify",
+            DivStyle: `display: flex !important;`,
+            InputStyle: `border-radius: 20px 0px 0px 20px;`,
+            buttonStyle: `border-radius: 0px 20px 20px 0px;background-color: transparent;color: black;`,
+            buttondisabled: false,
+            callback: (value: any) => {
+              this.userService.BharatheximCouponValidation(value?.form?.value?.CouponCode).subscribe((res: any) => {
+                console.log(value, "hjhfhfhgfhf")
+                this.CouponData = res;
+                if (res?.status == true) {
+                  this.userService.updateregister(this.USER_LOGIN_DATA?._id, {
+                    DeviceInfoRegistartion: this.userService.getDeviceInfo(),
+                    CouponVerified: true, FreeTrailPeroid: true, FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+                    FreeTrailPeroidEndDate: moment(this.addDays(new Date(), this.CouponData?.data[0]?.TrailDays)).format('dddd, MMMM DD, YYYY h:mm A')
+                  }).subscribe((res1: any) => {
+                    console.log(res1, 'hfhffgffg')
+                    if (res1?.success) {
+                      this.VALIDATION_DONE = true;
+                      value.field[6]['divhide'] = false;
+                      value.field[7]['divhide'] = false;
+                    } else {
+                      this.toastr.success(res1?.msg);
+                      this.VALIDATION_DONE = false;
+                      value.field[6]['divhide'] = true;
+                      value.field[7]['divhide'] = true;
+                    }
+                  })
+                } else {
+                  this.VALIDATION_DONE = false;
+                  value.field[6]['divhide'] = true;
+                  value.field[7]['divhide'] = true;
+                }
+              })
+            }
+          },
+          PlanView: {
+            type: "CallbackButton",
+            value: "",
+            label: "",
+            text: "Subscribe",
+            rules: {
+              required: true,
+            },
+            divhide: true,
+            Callback: (val: any) => {
+              if (val?.form?.value?.Subscription != '' && val?.form?.value?.Subscription != undefined && val?.form?.value?.Subscription != null) {
+                if (val?.form?.value?.DocumentsList[0]?.DMS != '' || val?.form?.value?.DocumentsList[0]?.Teasury != '' || val?.form?.value?.DocumentsList[0]?.Transaction != '') {
+                  this.OpenRazorPay(this.USER_LOGIN_DATA,this.SUM_AMOUNT);
+                } else {
+                  this.toastr.error("Please select Documents List...")
+                }
+              } else {
+                this.toastr.error("Please select Subscription...")
+              }
+              console.log(val, this.TermsofService_PANEL, "CallbackButton")
+            }
           },
           Login_Limit: {
             type: "number",
@@ -170,7 +312,8 @@ export class TwofactorauthComponent implements OnInit {
             rules: {
               required: true,
             },
-            maxLength: 2
+            maxLength: 2,
+            divhide: true
           },
           OTP: {
             type: "number",
@@ -179,7 +322,8 @@ export class TwofactorauthComponent implements OnInit {
             rules: {
               required: true,
             },
-            maxLength: 6
+            maxLength: 6,
+            divhide: true
           },
         }, '2_FACTOR_AUTH');
       }
@@ -188,6 +332,44 @@ export class TwofactorauthComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  SUM_AMOUNT: any = 0;
+  SubscriptionAmountSum(data: any) {
+    this.SUM_AMOUNT = 0
+    const element = data?.form?.value?.DocumentsList[0];
+    const ValueCompare = this.getSumKey(element);
+    if (ValueCompare == "DMS") {
+      this.SUM_AMOUNT = this.SUBSCRIPTION_PALN[data?.form?.value?.Subscription]?.DMS
+    } else if (ValueCompare == "Teasury") {
+      this.SUM_AMOUNT = this.SUBSCRIPTION_PALN[data?.form?.value?.Subscription]?.ForwardContractManagement
+    } else if (ValueCompare == "DMS_Teasury") {
+      this.SUM_AMOUNT = this.SUBSCRIPTION_PALN[data?.form?.value?.Subscription]?.DMS_Teasury
+    } else if (ValueCompare == "DMS_Transaction") {
+      this.SUM_AMOUNT = this.SUBSCRIPTION_PALN[data?.form?.value?.Subscription]?.TransactionDMS;
+    } else if (ValueCompare == "DMS_Teasury_Transaction") {
+      this.SUM_AMOUNT = this.SUBSCRIPTION_PALN[data?.form?.value?.Subscription]?.ALL
+    } else {
+      this.SUM_AMOUNT = 0;
+    }
+    console.log(element, ValueCompare, this.SUM_AMOUNT, "SubscriptionAmountSum")
+  }
+
+  getSumKey(object: any) {
+    let newobject: any = []
+    for (const key in object) {
+      if (object[key] == true) {
+        newobject.push(key);
+      }
+    }
+    return newobject?.join("_");
+  }
+
+  addDays(date: any, days: any) {
+    var result = new Date();
+    result.setDate(result.getDate() + parseInt(days));
+    console.log(result, date, days, "addDays")
+    return result;
   }
 
   onSubmit(e: any) {
@@ -214,7 +396,8 @@ export class TwofactorauthComponent implements OnInit {
       } else {
         e.value['Role'] = this.LIST_ROLE[e.value['Role']];
       }
-      this.userService.SingUpVerify(e.value).subscribe(data => {
+      delete e?.value?.DirectDispatch;
+      this.userService.SingUpVerify(e.value).subscribe((data: any) => {
         if (data['status'] == 200) {
           this.toastr.success(data['message']);
           this.router.navigate(['/login'], { queryParams: { registered: true } });
@@ -222,15 +405,14 @@ export class TwofactorauthComponent implements OnInit {
         } else {
           this.toastr.error(data['message']);
         }
-      },
-        error => {
-          this.toastr.error('something wrong, please check the details!');
-          console.log("error", error)
-        });
+      }, error => {
+        this.toastr.error('something wrong, please check the details!');
+        console.log("error", error)
+      });
     }
   }
 
-  dump(panel: any) {
+  dump2(panel: any) {
     panel?.onClickButton
     console.log(panel, 'sdfsdsdfdf')
   }
@@ -322,5 +504,41 @@ export class TwofactorauthComponent implements OnInit {
       this.VIEWS_CHECKBOX_DATA[iterator] = false;
     }
     this.VIEWS_CHECKBOX_DATA[value] = true;
+  }
+
+  dump(panel: any) {
+    panel?.onClickButton
+    console.log(panel, 'sdfsdsdfdf')
+  }
+  
+  OpenRazorPay(data:any,Amount:any){
+    const RozarpayOptions = {
+      description: "Pay amount for Subscription",
+      currency: "INR",
+      amount: parseFloat(Amount) * 100,
+      key: 'rzp_live_YDjE76c4yZAjIi',
+      key_id: 'wU1wAv1IycbHI4usMlthMMzP',
+      image: 'https://www.bharathexim.com/images/logo-transparent.png',
+      prefill: {
+        name: data?.fullName,
+        email: data?.emailId,
+        phone: data?.phone
+      },
+      theme: {
+        color: '#6466e3'
+      },
+      modal: {
+        ondismiss: (e:any) => {
+          console.log(e,'dismissed')
+        }
+      }
+    }
+    const successCallback = (paymentid: any) => {
+      console.log(paymentid,"successCallback");
+    }
+    const failureCallback = (e: any) => {
+      console.log(e,"failureCallback");
+    }
+    Razorpay.open(RozarpayOptions, successCallback, failureCallback)
   }
 }
