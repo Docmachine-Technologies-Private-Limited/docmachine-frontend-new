@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import mongoose from 'mongoose';
 
 @Component({
   selector: 'edit-export-airway-bl-copy',
@@ -182,7 +183,7 @@ export class EditAirwayBlCopyComponent implements OnInit {
         console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
       }, 200);
     });
-   
+
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
@@ -236,13 +237,8 @@ export class EditAirwayBlCopyComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.pipoDataService.getShippingNo(event?._id, 'export');
+      this.LoadShippingBill(this.pipoArr);
       this.validator.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
-        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
-        }
-      }
     } else {
       this.btndisabled = true;
     }
@@ -253,8 +249,9 @@ export class EditAirwayBlCopyComponent implements OnInit {
     return new Promise((resolve, reject) => {
       let API_DATA: any = [];
       pipoArr?.forEach(element => {
+        console.log(new mongoose.Types.ObjectId(element), "new mongoose.Types.ObjectId(element)")
         API_DATA.push({
-          query: { pipo: { $eq: element } }, tableName: "masterrecord", filterPage: { limit: 20 }
+          query: { pipo: { $eq: new mongoose.Types.ObjectId(element) } }, tableName: "masterrecord", filterPage: { limit: 20 }
         })
       });
       console.log(API_DATA, "API_DATA");

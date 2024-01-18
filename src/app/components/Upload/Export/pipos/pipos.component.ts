@@ -401,9 +401,11 @@ export class PIPOSComponent implements OnInit {
       this.toastr.error(`Total amount in payment Term should be equal to PIPO amount`);
     }
   }
+  
   paymentTermSum(value: any) {
-    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+    return value.reduce((a, b) => a + parseInt(b?.amount), 0)
   }
+  
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;

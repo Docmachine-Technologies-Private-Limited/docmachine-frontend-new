@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import mongoose from 'mongoose';
 
 @Component({
   selector: 'export-airway-bl-copy',
@@ -190,8 +191,10 @@ export class AirwayBlCopyComponent implements OnInit {
   LoadShippingBill(pipoArr: any) {
     let API_DATA: any = [];
     pipoArr?.forEach(element => {
+      console.log(new mongoose.Types.ObjectId(element), "new mongoose.Types.ObjectId(element)")
+
       API_DATA.push({
-        query: { pipo: {pipo: { $eq: element } } }, tableName: "masterrecord", filterPage: { limit: 20 }
+        query: { pipo: { $eq: new mongoose.Types.ObjectId(element)} }, tableName: "masterrecord", filterPage: { limit: 20 }
       })
     });
     console.log(API_DATA, "API_DATA");
