@@ -225,6 +225,7 @@ export class SignupComponent implements OnInit {
               if (emailvalidation[0]?.Userdata[0]?.phoneOTP == value?.form?.value?.MobileOTP) {
                 this.userService.updateregister(emailvalidation[0]?.Userdata[0]?._id, {
                   MobileOTPVerified: true,
+                  phoneVerified:true
                 }).subscribe(data => {
                   value.field[6]['divhide'] = false;
                   value.field[7]['divhide'] = false;

@@ -6,7 +6,7 @@ Application">
     - OTP</p>
   <upload-components FormStyle="display: grid;
   grid-template-columns: repeat(2,1fr);" [HIDE_SUBMIT_BUTTON]="this.VALIDATION_DONE" [KEY_ENTER_ENABLED]="true"
-    style="width: 100%;" id="2_FACTOR_AUTH" [HIDE_BACKGROUND]="false" (SubmitEvent)="onSubmit($event)"
+    style="width: 100%;" id="2_FACTOR_AUTH" [HIDE_BACKGROUND]="false" (SubmitEvent)="onSubmit($event,FACTOR_AUTH_PANEL?.getRawValue)"
     #FACTOR_AUTH_PANEL>
     <p *ngIf="CouponData?.notfound==true" style="color: red;margin-left: 10px;">Coupon code not
       valid..</p>
@@ -15,7 +15,8 @@ Application">
     <p *ngIf="CouponData?.status==true" style="color: #2f93ff;margin-left: 10px;">Coupon code
       verified</p>
     <p *ngIf="this.SUM_AMOUNT" style="color: #2f93ff;margin-left: 10px;">Total Subscription Amount :
-      <span>{{this.SUM_AMOUNT}}</span></p>
+      <span>{{this.SUM_AMOUNT}}</span>
+    </p>
   </upload-components>
 </template-main-page>
 

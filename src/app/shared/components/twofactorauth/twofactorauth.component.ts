@@ -106,26 +106,46 @@ export class TwofactorauthComponent implements OnInit {
           }
 
           this.validator.buildForm({
-            Subscription: {
-              type: "SelectOption",
-              value: "",
-              label: "Export/Import",
-              items: SubscriptionType,
+            DirectDispatch: {
+              type: "yesnocheckbox",
+              value: '',
+              label: "You Have any Coupon Code?",
               rules: {
                 required: true,
               },
-              callback: (item: any) => {
-                console.log(item, "callback")
-                this.SubscriptionAmountSum(item);
-              },
-            },
-            Role: {
-              type: "SelectOption",
-              value: "",
-              label: "Role",
-              items: RoleType,
-              rules: {
-                required: true,
+              YesNo: '',
+              YesButton: [
+                { name: 'CouponCode', status: true },
+                { name: 'PlanView', status: false }
+              ],
+              NoButton: [
+                { name: 'CouponCode', status: false },
+                { name: 'PlanView', status: true }
+              ],
+              callback: (value: any) => {
+                console.log(value, "callback")
+                value?.form?.reset();
+                value?.form?.controls?.DirectDispatch?.setValue({ bool: value?.bool });
+                this.SUM_AMOUNT = 0;
+                if (value?.bool == true) {
+                  value.field[1]['divhide'] = true;
+                  value.field[2]['divhide'] = false;
+                  value.field[3]['divhide'] = false;
+                  value.field[4]['divhide'] = false;
+                  value.field[5]['divhide'] = false;
+                  value.field[6]['divhide'] = true;
+                  value.field[1]['disabled'] = true;
+                  value?.form?.controls?.PlanType?.disable();
+                } else {
+                  value.field[1]['divhide'] = false;
+                  value.field[2]['divhide'] = false;
+                  value.field[3]['divhide'] = false;
+                  value.field[4]['divhide'] = false;
+                  value.field[5]['divhide'] = true;
+                  value.field[6]['divhide'] = false;
+                  value.field[1]['disabled'] = false;
+                  value?.form?.controls?.PlanType?.enable();
+                }
               }
             },
             PlanType: {
@@ -136,10 +156,10 @@ export class TwofactorauthComponent implements OnInit {
               rules: {
                 required: true,
               },
+              disabled: true,
               divhide: true,
               callback: (Formitem: any) => {
                 console.log(Formitem, "callback")
-                // this.SubscriptionAmountSum(item);
                 this.filterPlan = Data?.filter((item: any) => (item?.PlanName).toLowerCase() == (Formitem?.form?.value?.PlanType)?.toLowerCase())
                 if (this.filterPlan?.length != 0) {
                   Formitem.field[5]['buttondisabled'] = false;
@@ -171,6 +191,30 @@ export class TwofactorauthComponent implements OnInit {
                 }
               },
             },
+            Subscription: {
+              type: "SelectOption",
+              value: "",
+              label: "Export/Import",
+              items: SubscriptionType,
+              rules: {
+                required: true,
+              },
+              callback: (item: any) => {
+                console.log(item, "callback")
+                this.SubscriptionAmountSum(item);
+              },
+              divhide: true,
+            },
+            Role: {
+              type: "SelectOption",
+              value: "",
+              label: "Role",
+              items: RoleType,
+              rules: {
+                required: true,
+              },
+              divhide: true,
+            },
             DocumentsList: {
               type: "formGroup",
               label: "Features :",
@@ -179,6 +223,7 @@ export class TwofactorauthComponent implements OnInit {
               rules: {
                 required: false,
               },
+              divhide: true,
               Style: `
               box-shadow: unset;
               padding: 0;
@@ -244,35 +289,6 @@ export class TwofactorauthComponent implements OnInit {
                 ]
               ]
             },
-            DirectDispatch: {
-              type: "yesnocheckbox",
-              value: '',
-              label: "You Have any Coupon Code?",
-              rules: {
-                required: true,
-              },
-              YesNo: '',
-              YesButton: [
-                { name: 'CouponCode', status: true },
-                { name: 'PlanView', status: false }
-              ],
-              NoButton: [
-                { name: 'CouponCode', status: false },
-                { name: 'PlanView', status: true }
-              ],
-              callback: (value: any) => {
-                console.log(value, "sdfsdfdfdsfd")
-                if (value?.bool == true) {
-                  value.field[5]['divhide'] = false;
-                  value.field[2]['divhide'] = true;
-                  value.field[6]['divhide'] = true;
-                } else {
-                  value.field[5]['divhide'] = true;
-                  value.field[2]['divhide'] = false;
-                  value.field[6]['divhide'] = false;
-                }
-              }
-            },
             CouponCode: {
               type: "InputButton",
               InputType: "text",
@@ -327,18 +343,34 @@ export class TwofactorauthComponent implements OnInit {
               rules: {
                 required: true,
               },
+              ButtonStyle:'margin-top: 90px;',
               divhide: true,
               Callback: (val: any) => {
-                if (val?.form?.value?.Subscription != '' && val?.form?.value?.Subscription != undefined && val?.form?.value?.Subscription != null) {
-                  if (val?.form?.value?.DocumentsList[0]?.DMS != '' || val?.form?.value?.DocumentsList[0]?.Teasury != '' || val?.form?.value?.DocumentsList[0]?.Transaction != '') {
-                    this.OpenRazorPay(this.USER_LOGIN_DATA, this.SUM_AMOUNT, val);
+                if (val?.form?.getRawValue()?.Subscription != '' && val?.form?.getRawValue()?.Subscription != undefined && val?.form?.getRawValue()?.Subscription != null) {
+                  if (val?.form?.getRawValue()?.DocumentsList[0]?.DMS != '' || val?.form?.getRawValue()?.DocumentsList[0]?.Teasury != '' || val?.form?.getRawValue()?.DocumentsList[0]?.Transaction != '') {
+                    if (val?.form?.getRawValue()?.DocumentsList[0]?.DMS != null || val?.form?.getRawValue()?.DocumentsList[0]?.Teasury != null || val?.form?.getRawValue()?.DocumentsList[0]?.Transaction != null) {
+                      val.field[1]['disabled'] = true;
+                      val.field[2]['disabled'] = true;
+                      val.field[3]['disabled'] = true;
+                      val.field[4]['disabled'] = true;
+                      val.field[5]['disabled'] = true;
+                      val.field[6]['disabled'] = true;
+                      val?.form?.controls?.PlanType?.disable();
+                      val?.form?.controls?.Subscription?.disable();
+                      val?.form?.controls?.Role?.disable();
+                      val?.form?.controls?.DirectDispatch?.disable();
+                      val?.form?.controls?.DocumentsList?.disable();
+                      this.OpenRazorPay(this.USER_LOGIN_DATA, this.SUM_AMOUNT, val);
+                    } else {
+                      this.toastr.error("Please select Documents List...")
+                    }
                   } else {
                     this.toastr.error("Please select Documents List...")
                   }
                 } else {
                   this.toastr.error("Please select Subscription...")
                 }
-                console.log(val, this.TermsofService_PANEL, "CallbackButton")
+                console.log(val, val?.form?.getRawValue(), this.TermsofService_PANEL, "CallbackButton")
               }
             },
             Login_Limit: {
@@ -411,32 +443,32 @@ export class TwofactorauthComponent implements OnInit {
     return result;
   }
 
-  onSubmit(e: any) {
-    console.log(e, "onSubmit")
+  onSubmit(e: any, RawValue) {
+    console.log(e, RawValue, "onSubmit")
     if (e.status = "VALID") {
-      e?.value?.DocumentsList?.forEach(element => {
+      RawValue?.DocumentsList?.forEach(element => {
         for (const key in element) {
           if (element[key] == null || element[key] == undefined || element[key] == "") {
             element[key] = false;
-            e.value[key] = false;
+            RawValue[key] = false;
           } else {
-            e.value[key] = element[key]
+            RawValue[key] = element[key]
           }
         }
       });
       if (this.USER_LOGIN_DATA['role'] == 'member') {
-        e.value['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
-        e.value['Subscription'] = this.ADMIN_ACCESS['Subscription'];
-        e.value['Teasury'] = this.ADMIN_ACCESS['Teasury'];
-        e.value['Transaction'] = this.ADMIN_ACCESS['Transaction'];
-        e.value['DMS'] = this.ADMIN_ACCESS['DMS'];
-        e.value['companyName'] = this.ADMIN_ACCESS['companyName'];
-        e.value['AdminRole'] = this.USER_LOGIN_DATA['role'];
+        RawValue['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
+        RawValue['Subscription'] = this.ADMIN_ACCESS['Subscription'];
+        RawValue['Teasury'] = this.ADMIN_ACCESS['Teasury'];
+        RawValue['Transaction'] = this.ADMIN_ACCESS['Transaction'];
+        RawValue['DMS'] = this.ADMIN_ACCESS['DMS'];
+        RawValue['companyName'] = this.ADMIN_ACCESS['companyName'];
+        RawValue['AdminRole'] = this.USER_LOGIN_DATA['role'];
       } else {
-        e.value['Role'] = this.LIST_ROLE[e.value['Role']];
+        RawValue['Role'] = this.LIST_ROLE[RawValue['Role']];
       }
-      delete e?.value?.DirectDispatch;
-      this.userService.SingUpVerify(e.value).subscribe((data: any) => {
+      delete RawValue?.DirectDispatch;
+      this.userService.SingUpVerify(RawValue).subscribe((data: any) => {
         if (data['status'] == 200) {
           this.toastr.success(data['message']);
           this.router.navigate(['/login'], { queryParams: { registered: true } });
@@ -589,6 +621,11 @@ export class TwofactorauthComponent implements OnInit {
                   },
                   modal: {
                     ondismiss: (e: any) => {
+                      FormValue?.form?.controls?.PlanType?.enable();
+                      FormValue?.form?.controls?.Subscription?.enable();
+                      FormValue?.form?.controls?.Role?.enable();
+                      FormValue?.form?.controls?.DirectDispatch?.enable();
+                      FormValue?.form?.controls?.DocumentsList?.enable();
                       console.log(e, 'dismissed')
                     }
                   },
@@ -670,12 +707,17 @@ export class TwofactorauthComponent implements OnInit {
             },
             modal: {
               ondismiss: (e: any) => {
+                FormValue?.form?.controls?.PlanType?.enable();
+                FormValue?.form?.controls?.Subscription?.enable();
+                FormValue?.form?.controls?.Role?.enable();
+                FormValue?.form?.controls?.DirectDispatch?.enable();
+                FormValue?.form?.controls?.DocumentsList?.enable();
                 console.log(e, 'dismissed')
               }
             },
             redirect: true, // this redirects to the bank page from my website without opening a new window
             handler: (response: any) => {
-              console.log(response,this.userService.checkUserExpired(), "exitresponse")
+              console.log(response, this.userService.checkUserExpired(), "exitresponse")
               response['Date'] = new Date().toLocaleDateString();
               this.userService.checkUserExpired().then((checkUserExpired) => {
                 let InfoPaymentStatus = USER_DATA?.order_id;
