@@ -164,7 +164,7 @@ export class SignupComponent implements OnInit {
           })
         }
       },
-      phone: {
+      mobileNo: {
         type: "NumberButton",
         InputType: "number",
         value: "",
@@ -180,7 +180,28 @@ export class SignupComponent implements OnInit {
         buttonStyle: `border-radius: 0px 20px 20px 0px;background-color: transparent;color: black;`,
         buttondisabled: false,
         callback: (value) => {
-          value.field[5]['divhide'] = false;
+          if (value?.form?.controls?.mobileNo?.errors == null || value?.form?.controls?.mobileNo?.errors == undefined) {
+            this.userService?.getEamilByIdUserMember(value?.form?.value?.email).then((emailvalidation: any) => {
+              this.userService.updateregister(emailvalidation[0]?.Userdata[0]?._id, {
+                mobileNo: value?.form?.value?.mobileNo,
+              }).subscribe(data => {
+                console.log(data,"updateregister")
+                this.userService.SendMobileOTP(value?.form?.value?.email).subscribe((otpdata:any) => {
+                  console.log(data,"mobileNo")
+                  if (otpdata?.status==true) {
+                    value.field[5]['divhide'] = false;
+                    this.toastr.success(otpdata?.message)
+                  }else{
+                    this.toastr.success(otpdata?.message)
+                  }
+                })
+              })
+              console.log(emailvalidation, value, "emailvalidation")
+            })
+          } else {
+            value.field[5]['divhide'] = true;
+            this.toastr.error('mobile no. id not valid...');
+          }
         }
       },
       MobileOTP: {

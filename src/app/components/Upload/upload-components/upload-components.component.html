@@ -13,7 +13,7 @@
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);dumpFunc({value:$event?.target?.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.InputStyle" />
@@ -29,9 +29,8 @@
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined"
                     [style]="field?.style">
                     <div class="form-group mb-0" *ngSwitchCase="'CallbackButton'">
-                        <button type="button" class="btn btn-primary"
-                        [style]="field?.ButtonStyle"
-                        [disabled]="field?.ButtonDisabled"
+                        <button type="button" class="btn btn-primary" [style]="field?.ButtonStyle"
+                            [disabled]="field?.ButtonDisabled"
                             (click)="this.field?.Callback({text:field?.text,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]})">{{field?.text}}</button>
                     </div>
                 </div>
@@ -127,7 +126,7 @@
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);dumpFunc({value:$event?.target?.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.InputStyle" />
@@ -294,7 +293,7 @@
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <textarea [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
-                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                            (keypress)="this.validator.max_length_validator(this.id,field.fieldName);dumpFunc({value:$event?.target?.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)"
                             [type]="field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.style"></textarea>
@@ -306,7 +305,7 @@
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <div class="email-input-icon">
                             <input [(ngModel)]="field.value" EmailValidator
-                                (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
+                                (keypress)="this.validator.max_length_validator(this.id,field.fieldName);dumpFunc({value:$event?.target?.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)"
                                 [type]="field.type" [name]="field.fieldName"
                                 [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                                 class="form-control email-password-padding" />
@@ -372,9 +371,8 @@
                             [type]="field.InputType" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.InputStyle" />
-                        <button [style]="field?.buttonStyle" class="btn btn-primary" 
-                        [disabled]="field?.buttondisabled"
-                        [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
+                        <button [style]="field?.buttonStyle" class="btn btn-primary" [disabled]="field?.buttondisabled"
+                            [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null || field?.buttondisabled==false?false:true"
                             (click)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
                     </div>
                 </div>
@@ -388,9 +386,8 @@
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.InputStyle"
                             (keydown)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.KeyPressCallBack)" />
-                        <button [style]="field?.buttonStyle" class="btn btn-primary"
-                        [disabled]="field?.buttondisabled"
-                        [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
+                        <button [style]="field?.buttonStyle" class="btn btn-primary" [disabled]="field?.buttondisabled"
+                            [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
                             (click)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
                     </div>
                 </div>
@@ -404,9 +401,8 @@
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.InputStyle"
                             (keydown)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.KeyPressCallBack)" />
-                        <button [style]="field?.buttonStyle" class="btn btn-primary" 
-                        [disabled]="field?.buttondisabled"
-                        [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
+                        <button [style]="field?.buttonStyle" class="btn btn-primary" [disabled]="field?.buttondisabled"
+                            [disabled]="this.validator.dynamicFormGroup[this.id]?.controls[field.fieldName]?.errors == null?false:true"
                             (click)="dumpFunc({value:field.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)">{{field?.ButtonText}}</button>
                     </div>
                 </div>
@@ -433,8 +429,7 @@
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <div class="col-12 p-0">
                         <i class="fa fa-lock lock-icon" aria-hidden="true"></i>
-                        <input [(ngModel)]="field.value"
-                            PasswordValidation
+                        <input [(ngModel)]="field.value" PasswordValidation
                             (keypress)="this.validator.max_length_validator(this.id,field.fieldName);"
                             [type]="field.showhide==true?'text':field.type" [name]="field.fieldName"
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
@@ -449,6 +444,7 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <input [(ngModel)]="field.value" [disabled]="field?.Inputdisabled"
+                        (change)="dumpFunc({value:$event?.target?.value,field:this.validator?.FIELDS_DATA[this.id],form:this.validator.dynamicFormGroup[this.id]},field?.callback)"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''" [type]="field.type"
                         [name]="field.fieldName" class="form-control" [style]="field?.style" />
                 </div>
@@ -850,7 +846,7 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <div class="col-12 p-0">
-                        <div class="col-12 division-panel" [style]="field?.Style"
+                        <div class="col-12 formGroup-division-panel" [style]="field?.Style"
                             *ngFor="let Optionfield of field?.NewformArray;let OptionfieldIndex=index">
                             <label>{{field?.GroupLabel[OptionfieldIndex]}}</label>
                             <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="field?.AddNewRequried==true">
@@ -1034,6 +1030,7 @@
                                             [multiple]="false"
                                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                                             [name]="Optionfield[FormOptionfield].fieldName"
+                                            (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback)"
                                             [(ngModel)]="Optionfield[FormOptionfield].value">
                                         </ng-select>
                                     </div>
@@ -1339,7 +1336,7 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <div [formArrayName]="field.fieldName">
-                        <div class="division-panel"
+                        <div class="formGroup-division-panel"
                             *ngFor="let GroupLabelItem of field?.GroupLabel;let labelIndex=index;">
                             <div class="col-12 row m-0 add-btn-panel p-0" *ngIf="this.AddNewRequried==true">
                                 <label>{{GroupLabelItem}}</label>
@@ -1557,19 +1554,19 @@
                 [formName]="this.validator.dynamicFormGroup[this.id]"
                 [fieldName]="field.fieldName"></inner-dynamic-error>
         </div>
-        <div [ngClass]="{'more-button-panel':BUTTON_PANEL_SHOW==true}"
-            [style]="this.BUTTON_PANEL_HIDE==true?'display:block;':'display:none'" [style]="ButtonPanelStyle">
-            <ng-content></ng-content>
-            <button *ngIf="BUTTON_PANEL_SHOW==true" type="button" class="btn btn-primary submit-button" [id]="this.id"
-                [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block;':'display:none'" [style]="SubmitButtonStyle"
-                [disabled]="SubmitButtonDisabled"
-                (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
-            <button *ngIf="BUTTON_PANEL_SHOW==false" type="button" class="btn btn-primary submit-button" [id]="this.id"
-                [ngClass]="{'button-show':this.HIDE_SUBMIT_BUTTON==true,'button-hide':this.HIDE_SUBMIT_BUTTON==false}"
-                [style]="SubmitButtonStyle" [disabled]="SubmitButtonDisabled"
-                (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
-        </div>
     </form>
+    <div [ngClass]="{'more-button-panel':BUTTON_PANEL_SHOW==true}"
+        [style]="this.BUTTON_PANEL_HIDE==true?'display:block;':'display:none'" [style]="ButtonPanelStyle">
+        <ng-content></ng-content>
+        <button *ngIf="BUTTON_PANEL_SHOW==true" type="button" class="btn btn-primary submit-button" [id]="this.id"
+            [style]="this.HIDE_SUBMIT_BUTTON==true?'display:block;':'display:none'" [style]="SubmitButtonStyle"
+            [disabled]="SubmitButtonDisabled"
+            (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
+        <button *ngIf="BUTTON_PANEL_SHOW==false" type="button" class="btn btn-primary submit-button" [id]="this.id"
+            [ngClass]="{'button-show':this.HIDE_SUBMIT_BUTTON==true,'button-hide':this.HIDE_SUBMIT_BUTTON==false}"
+            [style]="SubmitButtonStyle" [disabled]="SubmitButtonDisabled"
+            (click)="onSubmit($event,this.validator.dynamicFormGroup[this.id]);">{{SubmitName}}</button>
+    </div>
 </div>
 
 <app-custom-model modalbodyheight="70vh" [FooterButton]="true" EventButton="false"

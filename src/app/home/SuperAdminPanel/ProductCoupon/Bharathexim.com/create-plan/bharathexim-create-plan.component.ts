@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { DocumentService } from '../../../../../service/document.service';
 import { UploadServiceValidatorService } from '../../../../../components/Upload/service/upload-service-validator.service';
-import { FormGroup } from '@angular/forms';
+import moment from 'moment';
 
 @Component({
   selector: 'bharathexim-create-plan',
@@ -57,6 +57,17 @@ export class BharatheximCreatePlanComponent implements OnInit, OnChanges {
           label: "Plan Company Name",
           rules: {
             required: true,
+          }
+        },
+        TotalMonthDays: {
+          type: "number",
+          value: "",
+          label: "No. of Days",
+          rules: {
+            required: true,
+          },
+          callback:(value:any)=>{
+            console.log(value,"TodayDays")
           }
         },
         PlanType: {
@@ -212,7 +223,7 @@ export class BharatheximCreatePlanComponent implements OnInit, OnChanges {
             ]
           ]
         },
-      }, 'CREATE_PLAN');
+      }, 'CREATE_BHARATHEXIM_SUBSCRIPTION_PLAN');
     }, 200);
   }
 
@@ -235,32 +246,171 @@ export class BharatheximCreatePlanComponent implements OnInit, OnChanges {
             required: true,
           }
         },
-        Currency: {
-          type: "text",
-          value: "INR",
-          label: "Plan Currency",
-          Inputdisabled: true,
-          rules: {
-            required: true,
-          }
-        },
-        Amount: {
+        TotalMonthDays: {
           type: "number",
-          value: data?.Amount,
-          label: "Plan Amount",
+          value: data?.TotalMonthDays,
+          label: "No. of Days",
           rules: {
             required: true,
+          },
+          callback:(value:any)=>{
+            console.log(value,"TodayDays")
           }
         },
-        Description: {
-          type: "textarea",
-          value: data?.Description,
-          label: "Plan Description",
+        PlanType: {
+          type: "formGroup",
+          label: "Plan Type :",
+          GroupLabel: ['Plan Both', 'Plan Export', 'Plan Import'],
+          AddNewRequried: false,
           rules: {
             required: true,
-          }
+          },
+          Style: `box-shadow: unset;padding: 0;`,
+          formArray: [
+            [
+              {
+                type: "number",
+                value: data?.both?.DMS,
+                label: "Add DMS Amount",
+                name: 'DMS',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.both?.ForwardContractManagement,
+                label: "Add Forward Contract Management Amount",
+                name: 'ForwardContractManagement',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.both?.TransactionDMS,
+                label: "Add Transaction+DMS Amount",
+                name: 'TransactionDMS',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.both?.DMS_Teasury,
+                label: "Add DMS+Teasury Amount",
+                name: 'DMS_Teasury',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.both?.ALL,
+                label: "Add ALL Amount",
+                name: 'ALL',
+                rules: {
+                  required: false,
+                },
+              }
+            ],
+            [
+              {
+                type: "number",
+                value: data?.Export?.DMS,
+                label: "Add DMS Amount",
+                name: 'DMS',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Export?.ForwardContractManagement,
+                label: "Add Forward Contract Management Amount",
+                name: 'ForwardContractManagement',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Export?.TransactionDMS,
+                label: "Add Transaction+DMS Amount",
+                name: 'TransactionDMS',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Export?.DMS_Teasury,
+                label: "Add DMS+Teasury Amount",
+                name: 'DMS_Teasury',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Export?.ALL,
+                label: "Add ALL Amount",
+                name: 'ALL',
+                rules: {
+                  required: false,
+                },
+              }
+            ],
+            [
+              {
+                type: "number",
+                value: data?.Import?.DMS,
+                label: "Add DMS Amount",
+                name: 'DMS',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Import?.ForwardContractManagement,
+                label: "Add Forward Contract Management Amount",
+                name: 'ForwardContractManagement',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Import?.TransactionDMS,
+                label: "Add Transaction+DMS Amount",
+                name: 'TransactionDMS',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Import?.DMS_Teasury,
+                label: "Add DMS+Teasury Amount",
+                name: 'DMS_Teasury',
+                rules: {
+                  required: false,
+                },
+              },
+              {
+                type: "number",
+                value: data?.Import?.ALL,
+                label: "Add ALL Amount",
+                name: 'ALL',
+                rules: {
+                  required: false,
+                },
+              }
+            ]
+          ]
         },
-      }, 'EDIT_CREATE_PLAN');
+      }, 'EDIT_BHARATHEXIM_SUBSCRIPTION_PLAN');
     }, 200);
   }
 
@@ -272,6 +422,7 @@ export class BharatheximCreatePlanComponent implements OnInit, OnChanges {
       e.value['Export'] = e?.value?.PlanType[1]
       e.value['Import'] = e?.value?.PlanType[2];
       delete e?.value?.PlanType;
+      e.value['StartDate'] = moment().format('dddd, MMMM DD, YYYY h:mm A')
       this.documentService.addBharatheximSubscriptionPlan(e.value).subscribe((res: any) => {
         if (res?.status == true) {
           this.SubmitButtonEvent.emit({ status: true, REST_FORM: REST_FORM })
@@ -282,11 +433,23 @@ export class BharatheximCreatePlanComponent implements OnInit, OnChanges {
       });
     }
   }
+  
+  getDays(d1: any, d2: any) {
+    let date1 = new Date(d1);
+    let date2 = new Date(d2);
+    let Difference_In_Time = date2.getTime() - date1.getTime();
+    let Difference_In_Days =
+      Math.round(Difference_In_Time / (1000 * 3600 * 24));
+    return Difference_In_Days
+  }
 
   onUpdate(e: any, REST_FORM: any) {
     console.log(e)
     if (e.status == "VALID") {
-      e.value.Currency = e?.value?.Currency?.type != undefined ? e?.value?.Currency?.type : e?.value?.Currency
+      e.value['both'] = e?.value?.PlanType[0]
+      e.value['Export'] = e?.value?.PlanType[1]
+      e.value['Import'] = e?.value?.PlanType[2];
+      delete e?.value?.PlanType;
       this.documentService.updateBharatheximSubscriptionPlan(this.data?._id, e.value).subscribe((res: any) => {
         if (res?.status == true) {
           this.SubmitButtonEvent.emit({ status: true, REST_FORM: REST_FORM })

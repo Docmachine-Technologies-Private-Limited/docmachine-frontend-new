@@ -65,6 +65,17 @@ export class CreatePlanComponent implements OnInit, OnChanges {
             required: true,
           }
         },
+        TotalMonthDays: {
+          type: "number",
+          value: "",
+          label: "No. of Days",
+          rules: {
+            required: true,
+          },
+          callback:(value:any)=>{
+            console.log(value,"TodayDays")
+          }
+        },
         Amount: {
           type: "number",
           value: "",

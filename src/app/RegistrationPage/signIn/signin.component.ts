@@ -110,6 +110,7 @@ export class SigninComponent implements OnInit {
     console.log(e, 'sdfksdfhsdkfjshskdfsdfsdfds')
     this.value = e?.value?.otp;
     this.userService.getUserbyEmail({ emailId: e.value?.email }).subscribe((resany: any) => {
+      this.userService.addUserData(resany?.result);
       if (this.rolebaseddata.includes(resany?.result?.role)) {
         let tempdata: any = {
           emailId: e.value?.email,

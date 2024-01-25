@@ -64,7 +64,7 @@
 </div>
 
 <app-custom-model
-    [customstyle]="{'margin':'auto !important','max-width': '620px !important','margin-top': '80px !important'}"
+    [customstyle]="{'margin':'auto !important','max-width': '620px !important','margin-top': '20px !important'}"
     class="p-2" height="400px" id="BHARATHEXIM_APP" [name]="'Email Id : '+this.TRADE_APP_DATA?.emailId"
     #BHARATHEXIM_APP_PANEL>
     <div class="col-12">
@@ -79,7 +79,7 @@
 </app-custom-model>
 
 <app-custom-model
-    [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
+    [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '20px !important'}"
     class="p-2" height="450px" id="BHARATHEXIM_COUPON_CODE_APP" name="Add Coupon Code"
     #BHARATHEXIM_COUPON_CODE_APP_PANEL>
     <div class="col-12">
@@ -89,7 +89,7 @@
 </app-custom-model>
 
 <app-custom-model
-    [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
+    [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '20px !important'}"
     class="p-2" height="450px" id="BHARATHEXIM_PLAN_CREATE_APP" name="Add Subscription Plan"
     #BHARATHEXIM_PLAN_CREATE_APP_PANEL>
     <div class="col-12">
@@ -99,7 +99,7 @@
 </app-custom-model>
 
 <app-custom-model
-    [customstyle]="{'margin':'auto !important','max-width': '85vw !important','margin-top': '80px !important'}"
+    [customstyle]="{'margin':'auto !important','max-width': '85vw !important','margin-top': '20px !important'}"
     class="p-2" height="650px" id="BHARATHEXIM_VIEW_COUPON_CODE_APP" name="View Coupon Code"
     #BHARATHEXIM_VIEW_COUPON_CODE_APP_PANEL>
     <div class="col-12 p-3">
@@ -125,7 +125,7 @@
 </app-custom-model>
 
 <app-custom-model
-    [customstyle]="{'margin':'auto !important','max-width': '85vw !important','margin-top': '80px !important'}"
+    [customstyle]="{'margin':'auto !important','max-width': '85vw !important','margin-top': '20px !important'}"
     class="p-2" height="650px" id="BHARATHEXIM_VIEW_SUBSCRIPTION_PLAN" name="View Subscription Plan"
     #BHARATHEXIM_VIEW_SUBSCRIPTION_PLAN_APP_PANEL>
     <div class="col-12 p-3">
@@ -134,6 +134,8 @@
                 <tr class="table-tr">
                     <th scope="col" class="col-td-th-3">#</th>
                     <th scope="col" class="col-td-th-2">Plan Name</th>
+                    <th scope="col" class="col-td-th-2">Company Name</th>
+                    <th scope="col" class="col-td-th-2">No. of Days</th>
                     <th scope="col" class="col-td-th-2 width-th-controller">
                         <p>Both</p>
                         <div class="col-12 d-flex flex-row">
@@ -170,10 +172,12 @@
                 <tr class="table-tr" *ngFor="let collectionitem of this.VIEW_SUBSCRIPTION_PLAN_DATA;let i=index">
                     <td scope="col" class="col-td-th-3" style="cursor: pointer;"
                         (click)="EditSubsciptionPlan(collectionitem)">
-                        <i popup-close="EDIT_PLAN_CREATE_APP" style="cursor: pointer;" aria-hidden="true"
+                        <i popup-close="BHARATHEXIM_EDIT_PLAN_CREATE_APP" style="cursor: pointer;" aria-hidden="true"
                             class="fa fa-edit PopupOpen"></i>
                     </td>
                     <td class="col-td-th-2">{{collectionitem?.PlanName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.CompanyName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.TotalMonthDays}}</td>
                     <td scope="col" class="col-td-th-2 width-th-controller">
                         <div class="col-12 d-flex flex-row">
                             <p scope="col" class="col-td-th-2">{{collectionitem?.both?.DMS}}</p>
@@ -204,14 +208,15 @@
                 </tr>
             </tbody>
         </table>
-        <app-custom-model [RemoveBgTop]="false"
-            [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
-            class="p-2" height="450px" id="BHARATHEXIM_EDIT_PLAN_CREATE_APP" name="Edit Subscription Plan"
-            #BHARATHEXIM_EDIT_PLAN_CREATE_APP_PANEL>
-            <div class="col-12">
-                <bharathexim-create-plan [EditCondition]="true" [data]="this.EditSubsciptionPlan_DATA"
-                    (SubmitButtonEvent)="ClosePopup($event,BHARATHEXIM_EDIT_PLAN_CREATE_APP_PANEL)"></bharathexim-create-plan>
-            </div>
-        </app-custom-model>
     </div>
+</app-custom-model>
+
+<app-custom-model [RemoveBgTop]="false"
+[customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '20px !important'}"
+class="p-2" height="450px" id="BHARATHEXIM_EDIT_PLAN_CREATE_APP" name="Edit Subscription Plan"
+#BHARATHEXIM_EDIT_PLAN_CREATE_APP_PANEL>
+<div class="col-12">
+    <bharathexim-create-plan [EditCondition]="true" [data]="this.EditSubsciptionPlan_DATA"
+        (SubmitButtonEvent)="ClosePopup($event,BHARATHEXIM_EDIT_PLAN_CREATE_APP_PANEL)"></bharathexim-create-plan>
+</div>
 </app-custom-model>

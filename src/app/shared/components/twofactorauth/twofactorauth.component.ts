@@ -47,31 +47,10 @@ export class TwofactorauthComponent implements OnInit {
     'Maker/checker/Approver': 3
   }
   VALIDATION_DONE: boolean = false;
-  SUBSCRIPTION_PALN: any = {
-    both: {
-      DMS: 40000,
-      ForwardContractManagement: 40000,
-      TransactionDMS: 100000,
-      DMS_Teasury: 45000,
-      ALL: 110000
-    },
-    Export: {
-      DMS: 25000,
-      ForwardContractManagement: 30000,
-      TransactionDMS: 60000,
-      DMS_Teasury: 45000,
-      ALL: 65000
-    },
-    Import: {
-      DMS: 25000,
-      ForwardContractManagement: 30000,
-      TransactionDMS: 60000,
-      DMS_Teasury: 45000,
-      ALL: 65000
-    }
-  }
+  SUBSCRIPTION_PALN: any = []
   CouponData: any = {}
   @ViewChild('TermsofService_PANEL') TermsofService_PANEL: any;
+  filterPlan: any = [];
 
   constructor(
     private userService: UserService,
@@ -85,6 +64,7 @@ export class TwofactorauthComponent implements OnInit {
       }
     })
     let SubscriptionType: any = [];
+    let PlanType: any = [];
     let RoleType: any = [];
     RoleType = ['Without maker/checker', 'Maker and Approver', 'Maker/checker/Approver']
     SubscriptionType = ['Export', 'Import', 'both']
@@ -114,218 +94,277 @@ export class TwofactorauthComponent implements OnInit {
           });
         })
       } else {
-        this.validator.buildForm({
-          Subscription: {
-            type: "SelectOption",
-            value: "",
-            label: "Export/Import",
-            items: SubscriptionType,
-            rules: {
-              required: true,
+        this.documentService?.getBharatheximSubscriptionPlan().subscribe((res: any) => {
+          let Data = res?.data;
+          var DATA_SUBSCRIPTION_NAME: any = [];
+          if (Data?.length != 0) {
+            Data?.forEach(element => {
+              if (!DATA_SUBSCRIPTION_NAME?.includes(element?.PlanName)) {
+                DATA_SUBSCRIPTION_NAME.push(element?.PlanName)
+              }
+            });
+          }
+
+          this.validator.buildForm({
+            Subscription: {
+              type: "SelectOption",
+              value: "",
+              label: "Export/Import",
+              items: SubscriptionType,
+              rules: {
+                required: true,
+              },
+              callback: (item: any) => {
+                console.log(item, "callback")
+                this.SubscriptionAmountSum(item);
+              },
             },
-            callback: (item: any) => {
-              console.log(item, "callback")
-              this.SubscriptionAmountSum(item);
+            Role: {
+              type: "SelectOption",
+              value: "",
+              label: "Role",
+              items: RoleType,
+              rules: {
+                required: true,
+              }
             },
-          },
-          Role: {
-            type: "SelectOption",
-            value: "",
-            label: "Role",
-            items: RoleType,
-            rules: {
-              required: true,
-            }
-          },
-          DocumentsList: {
-            type: "formGroup",
-            label: "Features :",
-            GroupLabel: [''],
-            AddNewRequried: false,
-            rules: {
-              required: false,
+            PlanType: {
+              type: "SelectOption",
+              value: "",
+              label: "Select Plan",
+              items: DATA_SUBSCRIPTION_NAME,
+              rules: {
+                required: true,
+              },
+              divhide: true,
+              callback: (Formitem: any) => {
+                console.log(Formitem, "callback")
+                // this.SubscriptionAmountSum(item);
+                this.filterPlan = Data?.filter((item: any) => (item?.PlanName).toLowerCase() == (Formitem?.form?.value?.PlanType)?.toLowerCase())
+                if (this.filterPlan?.length != 0) {
+                  Formitem.field[5]['buttondisabled'] = false;
+                  this.SUBSCRIPTION_PALN = {
+                    both: {
+                      DMS: this.filterPlan[0]?.both?.DMS,
+                      ForwardContractManagement: this.filterPlan[0]?.both?.ForwardContractManagement,
+                      TransactionDMS: this.filterPlan[0]?.both?.TransactionDMS,
+                      DMS_Teasury: this.filterPlan[0]?.both?.DMS_Teasury,
+                      ALL: this.filterPlan[0]?.both?.ALL
+                    },
+                    Export: {
+                      DMS: this.filterPlan[0]?.Export?.DMS,
+                      ForwardContractManagement: this.filterPlan[0]?.Export?.ForwardContractManagement,
+                      TransactionDMS: this.filterPlan[0]?.Export?.TransactionDMS,
+                      DMS_Teasury: this.filterPlan[0]?.Export?.DMS_Teasury,
+                      ALL: this.filterPlan[0]?.Export?.ALL
+                    },
+                    Import: {
+                      DMS: this.filterPlan[0]?.Import?.DMS,
+                      ForwardContractManagement: this.filterPlan[0]?.Import?.ForwardContractManagement,
+                      TransactionDMS: this.filterPlan[0]?.Import?.TransactionDMS,
+                      DMS_Teasury: this.filterPlan[0]?.Import?.DMS_Teasury,
+                      ALL: this.filterPlan[0]?.Import?.ALL
+                    }
+                  };
+                } else {
+                  Formitem.field[5]['buttondisabled'] = true;
+                }
+              },
             },
-            Style: `
-            box-shadow: unset;
-            padding: 0;
-            `,
-            formArray: [
-              [
-                {
-                  type: "CheckboxMultiple",
-                  value: false,
-                  label: "",
-                  name: 'DMS',
-                  checkboxlabel: "DMS(Documents Management System)",
-                  rules: {
-                    required: false,
-                  },
-                  callback: (item: any) => {
-                    console.log(item, "callback")
-                    const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                    if (item?.value == false) {
-                      if (myForm.value[item?.OptionfieldIndex]["Transaction"] == true) {
-                        myForm.value[item?.OptionfieldIndex]["Transaction"] = false;
-                        myForm.controls[item?.OptionfieldIndex]?.controls["Transaction"]?.setValue(false);
-                        myForm['touched'] = true;
-                        myForm['status'] = 'VALID';
+            DocumentsList: {
+              type: "formGroup",
+              label: "Features :",
+              GroupLabel: [''],
+              AddNewRequried: false,
+              rules: {
+                required: false,
+              },
+              Style: `
+              box-shadow: unset;
+              padding: 0;
+              `,
+              formArray: [
+                [
+                  {
+                    type: "CheckboxMultiple",
+                    value: false,
+                    label: "",
+                    name: 'DMS',
+                    checkboxlabel: "DMS(Documents Management System)",
+                    rules: {
+                      required: false,
+                    },
+                    callback: (item: any) => {
+                      console.log(item, "callback")
+                      const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                      if (item?.value == false) {
+                        if (myForm.value[item?.OptionfieldIndex]["Transaction"] == true) {
+                          myForm.value[item?.OptionfieldIndex]["Transaction"] = false;
+                          myForm.controls[item?.OptionfieldIndex]?.controls["Transaction"]?.setValue(false);
+                          myForm['touched'] = true;
+                          myForm['status'] = 'VALID';
+                        }
                       }
-                    }
-                    this.SubscriptionAmountSum(item);
+                      this.SubscriptionAmountSum(item);
+                    },
                   },
-                },
-                {
-                  type: "CheckboxMultiple",
-                  value: false,
-                  label: "",
-                  checkboxlabel: "Forward Contract Management",
-                  name: 'Teasury',
-                  rules: {
-                    required: false,
+                  {
+                    type: "CheckboxMultiple",
+                    value: false,
+                    label: "",
+                    checkboxlabel: "Forward Contract Management",
+                    name: 'Teasury',
+                    rules: {
+                      required: false,
+                    },
+                    callback: (item: any) => {
+                      this.SubscriptionAmountSum(item);
+                      console.log(item, "callback")
+                    },
                   },
-                  callback: (item: any) => {
-                    this.SubscriptionAmountSum(item);
-                    console.log(item, "callback")
-                  },
-                },
-                {
-                  type: "CheckboxMultiple",
-                  value: false,
-                  label: "",
-                  name: 'Transaction',
-                  checkboxlabel: "Transaction",
-                  rules: {
-                    required: false,
-                  },
-                  callback: (item: any) => {
-                    const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                    myForm.value[item?.OptionfieldIndex]["DMS"] = item?.value;
-                    myForm.controls[item?.OptionfieldIndex]?.controls["DMS"]?.setValue(item?.value);
-                    myForm['touched'] = true;
-                    myForm['status'] = 'VALID';
-                    console.log(item, "callback")
-                    this.SubscriptionAmountSum(item);
-                  },
-                }
+                  {
+                    type: "CheckboxMultiple",
+                    value: false,
+                    label: "",
+                    name: 'Transaction',
+                    checkboxlabel: "Transaction",
+                    rules: {
+                      required: false,
+                    },
+                    callback: (item: any) => {
+                      const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                      myForm.value[item?.OptionfieldIndex]["DMS"] = item?.value;
+                      myForm.controls[item?.OptionfieldIndex]?.controls["DMS"]?.setValue(item?.value);
+                      myForm['touched'] = true;
+                      myForm['status'] = 'VALID';
+                      console.log(item, "callback")
+                      this.SubscriptionAmountSum(item);
+                    },
+                  }
+                ]
               ]
-            ]
-          },
-          DirectDispatch: {
-            type: "yesnocheckbox",
-            value: '',
-            label: "You Have any Coupon Code?",
-            rules: {
-              required: true,
             },
-            YesNo: '',
-            YesButton: [
-              { name: 'CouponCode', status: true },
-              { name: 'PlanView', status: false }
-            ],
-            NoButton: [
-              { name: 'CouponCode', status: false },
-              { name: 'PlanView', status: true }
-            ],
-            callback: (value: any) => {
-              console.log(value, "sdfsdfdfdsfd")
-              if (value?.bool == true) {
-                value.field[4]['divhide'] = false;
-                value.field[5]['divhide'] = true;
-              } else {
-                value.field[4]['divhide'] = true;
-                value.field[5]['divhide'] = false;
-              }
-            }
-          },
-          CouponCode: {
-            type: "InputButton",
-            InputType: "text",
-            value: "",
-            label: "",
-            showhide: false,
-            rules: {
-              required: true,
-            },
-            divhide: true,
-            placeholderText: 'Enter Coupon Code',
-            ButtonText: "Verify",
-            DivStyle: `display: flex !important;`,
-            InputStyle: `border-radius: 20px 0px 0px 20px;`,
-            buttonStyle: `border-radius: 0px 20px 20px 0px;background-color: transparent;color: black;`,
-            buttondisabled: false,
-            callback: (value: any) => {
-              this.userService.BharatheximCouponValidation(value?.form?.value?.CouponCode).subscribe((res: any) => {
-                console.log(value, "hjhfhfhgfhf")
-                this.CouponData = res;
-                if (res?.status == true) {
-                  this.userService.updateregister(this.USER_LOGIN_DATA?._id, {
-                    DeviceInfoRegistartion: this.userService.getDeviceInfo(),
-                    CouponVerified: true, FreeTrailPeroid: true, FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
-                    FreeTrailPeroidEndDate: moment(this.addDays(new Date(), this.CouponData?.data[0]?.TrailDays)).format('dddd, MMMM DD, YYYY h:mm A')
-                  }).subscribe((res1: any) => {
-                    console.log(res1, 'hfhffgffg')
-                    if (res1?.success) {
-                      this.VALIDATION_DONE = true;
-                      value.field[6]['divhide'] = false;
-                      value.field[7]['divhide'] = false;
-                    } else {
-                      this.toastr.success(res1?.msg);
-                      this.VALIDATION_DONE = false;
-                      value.field[6]['divhide'] = true;
-                      value.field[7]['divhide'] = true;
-                    }
-                  })
-                } else {
-                  this.VALIDATION_DONE = false;
+            DirectDispatch: {
+              type: "yesnocheckbox",
+              value: '',
+              label: "You Have any Coupon Code?",
+              rules: {
+                required: true,
+              },
+              YesNo: '',
+              YesButton: [
+                { name: 'CouponCode', status: true },
+                { name: 'PlanView', status: false }
+              ],
+              NoButton: [
+                { name: 'CouponCode', status: false },
+                { name: 'PlanView', status: true }
+              ],
+              callback: (value: any) => {
+                console.log(value, "sdfsdfdfdsfd")
+                if (value?.bool == true) {
+                  value.field[5]['divhide'] = false;
+                  value.field[2]['divhide'] = true;
                   value.field[6]['divhide'] = true;
-                  value.field[7]['divhide'] = true;
-                }
-              })
-            }
-          },
-          PlanView: {
-            type: "CallbackButton",
-            value: "",
-            label: "",
-            text: "Subscribe",
-            rules: {
-              required: true,
-            },
-            divhide: true,
-            Callback: (val: any) => {
-              if (val?.form?.value?.Subscription != '' && val?.form?.value?.Subscription != undefined && val?.form?.value?.Subscription != null) {
-                if (val?.form?.value?.DocumentsList[0]?.DMS != '' || val?.form?.value?.DocumentsList[0]?.Teasury != '' || val?.form?.value?.DocumentsList[0]?.Transaction != '') {
-                  this.OpenRazorPay(this.USER_LOGIN_DATA,this.SUM_AMOUNT);
                 } else {
-                  this.toastr.error("Please select Documents List...")
+                  value.field[5]['divhide'] = true;
+                  value.field[2]['divhide'] = false;
+                  value.field[6]['divhide'] = false;
                 }
-              } else {
-                this.toastr.error("Please select Subscription...")
               }
-              console.log(val, this.TermsofService_PANEL, "CallbackButton")
-            }
-          },
-          Login_Limit: {
-            type: "number",
-            value: "",
-            label: "Maximum No. of User :",
-            rules: {
-              required: true,
             },
-            maxLength: 2,
-            divhide: true
-          },
-          OTP: {
-            type: "number",
-            value: "",
-            label: "Otp :",
-            rules: {
-              required: true,
+            CouponCode: {
+              type: "InputButton",
+              InputType: "text",
+              value: "",
+              label: "",
+              showhide: false,
+              rules: {
+                required: true,
+              },
+              divhide: true,
+              placeholderText: 'Enter Coupon Code',
+              ButtonText: "Verify",
+              DivStyle: `display: flex !important;`,
+              InputStyle: `border-radius: 20px 0px 0px 20px;`,
+              buttonStyle: `border-radius: 0px 20px 20px 0px;background-color: transparent;color: black;`,
+              buttondisabled: true,
+              callback: (value: any) => {
+                this.userService.BharatheximCouponValidation(value?.form?.value?.CouponCode).subscribe((res: any) => {
+                  console.log(value, "hjhfhfhgfhf")
+                  this.CouponData = res;
+                  if (res?.status == true) {
+                    this.userService.updateregister(this.USER_LOGIN_DATA?._id, {
+                      DeviceInfoRegistartion: this.userService.getDeviceInfo(),
+                      CouponVerified: true, FreeTrailPeroid: true, FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+                      FreeTrailPeroidEndDate: moment(this.addDays(new Date(), this.CouponData?.data[0]?.TrailDays)).format('dddd, MMMM DD, YYYY h:mm A')
+                    }).subscribe((res1: any) => {
+                      console.log(res1, 'hfhffgffg')
+                      if (res1?.success) {
+                        this.VALIDATION_DONE = true;
+                        value.field[7]['divhide'] = false;
+                        value.field[8]['divhide'] = false;
+                      } else {
+                        this.toastr.success(res1?.msg);
+                        this.VALIDATION_DONE = false;
+                        value.field[7]['divhide'] = true;
+                        value.field[8]['divhide'] = true;
+                      }
+                    })
+                  } else {
+                    this.VALIDATION_DONE = false;
+                    value.field[7]['divhide'] = true;
+                    value.field[8]['divhide'] = true;
+                  }
+                })
+              }
             },
-            maxLength: 6,
-            divhide: true
-          },
-        }, '2_FACTOR_AUTH');
+            PlanView: {
+              type: "CallbackButton",
+              value: "",
+              label: "",
+              text: "Subscribe",
+              rules: {
+                required: true,
+              },
+              divhide: true,
+              Callback: (val: any) => {
+                if (val?.form?.value?.Subscription != '' && val?.form?.value?.Subscription != undefined && val?.form?.value?.Subscription != null) {
+                  if (val?.form?.value?.DocumentsList[0]?.DMS != '' || val?.form?.value?.DocumentsList[0]?.Teasury != '' || val?.form?.value?.DocumentsList[0]?.Transaction != '') {
+                    this.OpenRazorPay(this.USER_LOGIN_DATA, this.SUM_AMOUNT, val);
+                  } else {
+                    this.toastr.error("Please select Documents List...")
+                  }
+                } else {
+                  this.toastr.error("Please select Subscription...")
+                }
+                console.log(val, this.TermsofService_PANEL, "CallbackButton")
+              }
+            },
+            Login_Limit: {
+              type: "number",
+              value: "",
+              label: "Maximum No. of User :",
+              rules: {
+                required: true,
+              },
+              maxLength: 2,
+              divhide: true
+            },
+            OTP: {
+              type: "number",
+              value: "",
+              label: "Otp :",
+              rules: {
+                required: true,
+              },
+              maxLength: 6,
+              divhide: true
+            },
+          }, '2_FACTOR_AUTH');
+          console.log(res, "getSubscriptionPlan")
+        })
+
       }
     })
   }
@@ -352,7 +391,7 @@ export class TwofactorauthComponent implements OnInit {
     } else {
       this.SUM_AMOUNT = 0;
     }
-    console.log(element, ValueCompare, this.SUM_AMOUNT, "SubscriptionAmountSum")
+    console.log(data, element, ValueCompare, this.SUM_AMOUNT, this.SUBSCRIPTION_PALN, "SubscriptionAmountSum")
   }
 
   getSumKey(object: any) {
@@ -510,35 +549,202 @@ export class TwofactorauthComponent implements OnInit {
     panel?.onClickButton
     console.log(panel, 'sdfsdsdfdf')
   }
-  
-  OpenRazorPay(data:any,Amount:any){
-    const RozarpayOptions = {
-      description: "Pay amount for Subscription",
-      currency: "INR",
-      amount: parseFloat(Amount) * 100,
-      key: 'rzp_live_YDjE76c4yZAjIi',
-      key_id: 'wU1wAv1IycbHI4usMlthMMzP',
-      image: 'https://www.bharathexim.com/images/logo-transparent.png',
-      prefill: {
-        name: data?.fullName,
-        email: data?.emailId,
-        phone: data?.phone
-      },
-      theme: {
-        color: '#6466e3'
-      },
-      modal: {
-        ondismiss: (e:any) => {
-          console.log(e,'dismissed')
+
+  OpenRazorPay(data: any, Amount: any, FormValue: any) {
+    this.userService.getEamilByIdUserMember(data?.emailId).then((res: any) => {
+      console.log(res, "CheckUserExit")
+      let USER_DATA: any = res[0]?.Userdata[0]
+      if (USER_DATA?.length != 0) {
+        let last_Order_Id_Status_False = USER_DATA?.order_id;
+        let last_Order_Id_Status_TRUE = USER_DATA?.order_id;
+        console.log(last_Order_Id_Status_False, last_Order_Id_Status_TRUE, "status")
+        if (last_Order_Id_Status_False?.status == undefined || last_Order_Id_Status_False?.PlanDetails?.TotalMonthDays != this.filterPlan?.TotalMonthDays) {
+          this.userService.creareOrder({
+            currency: "INR",
+            amount: parseFloat(Amount) * 100,
+            note: "Pay amount for Subscription",
+            receipt: 'UserId_' + USER_DATA?._id
+          }).then((order: any) => {
+            console.log(order, "sfdsfdsfdsfdfd")
+            if (order?.id != undefined && order?.id != null) {
+              let InfoPaymentStatus = {
+                id: order?.id,
+                time: new Date(),
+                status: false,
+                PlanDetails: this.filterPlan
+              }
+              this.userService.updateregister(USER_DATA?._id, { order_id: InfoPaymentStatus, PlanDetails: this.filterPlan }).subscribe((updateres) => {
+                console.log(updateres, "UpdateUserPaymentDetails")
+                const RozarpayOptions = {
+                  key: 'rzp_live_YDjE76c4yZAjIi',
+                  image: 'https://www.bharathexim.com/images/logo-transparent.png',
+                  prefill: {
+                    name: USER_DATA?.firstName,
+                    email: USER_DATA?.emailId,
+                    phone: USER_DATA?.mobileNo
+                  },
+                  order_id: order?.id,
+                  theme: {
+                    color: '#6466e3'
+                  },
+                  modal: {
+                    ondismiss: (e: any) => {
+                      console.log(e, 'dismissed')
+                    }
+                  },
+                  redirect: true, // this redirects to the bank page from my website without opening a new window
+                  handler: (response: any) => {
+                    console.log(response, this.userService.checkUserExpired(), "newresponse")
+                    response['Date'] = new Date().toLocaleDateString();
+                    this.userService.checkUserExpired().then((checkUserExpired) => {
+                      InfoPaymentStatus['status'] = true;
+                      this.userService.getRazorpayOrderById(order?.id).subscribe((RazorpayOrderById: any) => {
+                        console.log(RazorpayOrderById, "RazorpayOrderById")
+                        if (checkUserExpired == false) {
+                          this.userService.UpdateUserPaymentDetails(response, {
+                            FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+                            FreeTrailPeroidEndDate: moment(this.addMonth(new Date(), this.filterPlan[0]?.TotalMonthDays)).format('dddd, MMMM DD, YYYY h:mm A'),
+                            order_id: InfoPaymentStatus,
+                            order_status: RazorpayOrderById[0]
+                          }).then((res) => {
+                            this.toastr.success("Your Subscription added successfully...");
+                            this.VALIDATION_DONE = true;
+                            FormValue.field[7]['divhide'] = false;
+                            FormValue.field[8]['divhide'] = false;
+                            console.log(res, "UpdateUserPaymentDetails")
+                          }).catch((err) => {
+                            this.VALIDATION_DONE = false;
+                            FormValue.field[7]['divhide'] = true;
+                            FormValue.field[8]['divhide'] = true;
+                          })
+                        } else {
+                          this.userService.UpdateUserPaymentDetails(response, {
+                            FreeTrailPeroidStratDate: moment(new Date(res[0]?.FreeTrailPeroidEndDate)).format('dddd, MMMM DD, YYYY h:mm A'),
+                            FreeTrailPeroidEndDate: moment(this.addMonth(new Date(res[0]?.FreeTrailPeroidEndDate), this.filterPlan[0]?.TotalMonthDays)).format('dddd, MMMM DD, YYYY h:mm A'),
+                            order_id: InfoPaymentStatus,
+                            order_status: RazorpayOrderById[0]
+                          }).then((res) => {
+                            this.toastr.success("Your Subscription added successfully...");
+                            this.VALIDATION_DONE = true;
+                            FormValue.field[7]['divhide'] = false;
+                            FormValue.field[8]['divhide'] = false;
+                            console.log(res, "UpdateUserPaymentDetails")
+                          }).catch((err) => {
+                            this.VALIDATION_DONE = false;
+                            FormValue.field[7]['divhide'] = true;
+                            FormValue.field[8]['divhide'] = true;
+                          })
+                        }
+                      })
+                    })
+                  }
+                }
+                var rzp1 = new Razorpay(RozarpayOptions);
+                console.log(rzp1, "fsdfdsfdsfdsfds")
+                rzp1.on('payment.failed', (response: any) => {
+                  console.log(response, "errorresponse")
+                  response['Date'] = new Date().toLocaleDateString()
+                  this.userService.UpdateUserPaymentDetails(response, {}).then((res) => {
+                    console.log(res, "UpdateUserPaymentDetails")
+                  })
+                });
+                rzp1.on("payment.order", (e: any) => {
+                  console.log(e, "dfdfdsfdfdfds")
+                });
+                rzp1.open();
+              })
+            }
+          })
+        } else if (last_Order_Id_Status_False?.status == false) {
+          const RozarpayOptions = {
+            key: 'rzp_live_YDjE76c4yZAjIi',
+            image: 'https://www.bharathexim.com/images/logo-transparent.png',
+            prefill: {
+              name: USER_DATA?.firstName,
+              email: USER_DATA?.emailId,
+              phone: USER_DATA?.mobileNo
+            },
+            order_id: last_Order_Id_Status_False?.id,
+            theme: {
+              color: '#6466e3'
+            },
+            modal: {
+              ondismiss: (e: any) => {
+                console.log(e, 'dismissed')
+              }
+            },
+            redirect: true, // this redirects to the bank page from my website without opening a new window
+            handler: (response: any) => {
+              console.log(response,this.userService.checkUserExpired(), "exitresponse")
+              response['Date'] = new Date().toLocaleDateString();
+              this.userService.checkUserExpired().then((checkUserExpired) => {
+                let InfoPaymentStatus = USER_DATA?.order_id;
+                InfoPaymentStatus['status'] = true;
+                this.userService.getRazorpayOrderById(last_Order_Id_Status_False?.id).subscribe((RazorpayOrderById: any) => {
+                  console.log(RazorpayOrderById, "RazorpayOrderById")
+                  if (checkUserExpired == false) {
+                    this.userService.UpdateUserPaymentDetails(response, {
+                      FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+                      FreeTrailPeroidEndDate: moment(this.addMonth(new Date(), this.filterPlan[0]?.TotalMonthDays)).format('dddd, MMMM DD, YYYY h:mm A'),
+                      order_id: InfoPaymentStatus,
+                      order_status: RazorpayOrderById[0]
+                    }).then((res) => {
+                      this.toastr.success("Your Subscription added successfully...");
+                      this.VALIDATION_DONE = true;
+                      FormValue.field[7]['divhide'] = false;
+                      FormValue.field[8]['divhide'] = false;
+                      console.log(res, "UpdateUserPaymentDetails")
+                    }).catch((err) => {
+                      this.VALIDATION_DONE = false;
+                      FormValue.field[7]['divhide'] = true;
+                      FormValue.field[8]['divhide'] = true;
+                    })
+                  } else {
+                    this.userService.UpdateUserPaymentDetails(response, {
+                      FreeTrailPeroidStratDate: moment(new Date(USER_DATA?.FreeTrailPeroidEndDate)).format('dddd, MMMM DD, YYYY h:mm A'),
+                      FreeTrailPeroidEndDate: moment(this.addMonth(new Date(USER_DATA?.FreeTrailPeroidEndDate), this.filterPlan[0]?.TotalMonthDays)).format('dddd, MMMM DD, YYYY h:mm A'),
+                      order_id: InfoPaymentStatus,
+                      order_status: RazorpayOrderById[0]
+                    }).then((res) => {
+                      this.toastr.success("Your Subscription added successfully...");
+                      this.VALIDATION_DONE = true;
+                      FormValue.field[7]['divhide'] = false;
+                      FormValue.field[8]['divhide'] = false;
+                      console.log(res, "UpdateUserPaymentDetails")
+                    }).catch((err) => {
+                      this.VALIDATION_DONE = false;
+                      FormValue.field[7]['divhide'] = true;
+                      FormValue.field[8]['divhide'] = true;
+                    })
+                  }
+                })
+              })
+            }
+          }
+          var rzp1 = new Razorpay(RozarpayOptions);
+          rzp1.on('payment.failed', (response: any) => {
+            response['Date'] = new Date().toLocaleDateString()
+            this.userService.UpdateUserPaymentDetails(response, {}).then((res) => {
+              console.log(res, "UpdateUserPaymentDetails")
+            })
+          });
+          rzp1.open();
+        } else if (last_Order_Id_Status_TRUE?.status == true) {
+          this.toastr.success("Your Subscription already done");
         }
       }
+    });
+  }
+
+  addMonth(date: any, days: any) {
+    var result = new Date(date);
+    if (days == "3") {
+      result.setDate(result.getDate() + 90);
+    } else if (days == "6") {
+      result.setDate(result.getDate() + 180);
+    } else if (days == "12") {
+      result.setDate(result.getDate() + 365);
     }
-    const successCallback = (paymentid: any) => {
-      console.log(paymentid,"successCallback");
-    }
-    const failureCallback = (e: any) => {
-      console.log(e,"failureCallback");
-    }
-    Razorpay.open(RozarpayOptions, successCallback, failureCallback)
+    return result;
   }
 }

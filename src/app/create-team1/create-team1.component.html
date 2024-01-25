@@ -1,15 +1,19 @@
 <div class="controller-setup-form">
+<p style="font-size: 30px;
+margin: auto;
+color: aliceblue;" *ngIf="this.userService.UserData==null || this.userService.UserData==undefined">Sorry you don't have any email id... <br>
+ <a routerLink="/login" style="color: aliceblue;">Try go to login page</a>
+</p>
+<div class="con-12" *ngIf="this.userService.UserData!=null && this.userService.UserData!=undefined">
     <h6 class="display-5">Setup Company Details</h6>
     <div *ngIf="Visible==true">
         <p class="side1">Please tell us something about of yourselves</p>
         <upload-components FormStyle="
          display: grid;
-         grid-template-columns: repeat(3,1fr);" SubmitName="Get Started" SubmitButtonStyle="position: absolute;
-         bottom: 10px;
-         right: 10px;" id="SetupCompanyDetails" (SubmitEvent)="onSubmit($event)"></upload-components>
+         grid-template-columns: repeat(3,1fr);" SubmitName="Get Started" id="SetupCompanyDetails" (SubmitEvent)="onSubmit($event)"></upload-components>
     </div>
     <div class="col-12" *ngIf="Visible==false">
-        <p class="side1">Do you want intregrate API to LEI</p>
+        <p class="side1">Do you have LEI Number</p>
         <div class="yes-no-panel">
             <label class="rad-label" (click)="LEI_YES_NO=true">
                 <input type="radio" class="rad-input" name="rad">
@@ -47,4 +51,6 @@
             </div>
         </div>
     </div>
+</div>
+   
 </div>
