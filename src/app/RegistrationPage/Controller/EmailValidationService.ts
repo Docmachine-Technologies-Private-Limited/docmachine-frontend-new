@@ -1,6 +1,7 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export class EmailValidationService {
+  static WhiteListedEmail: any = [];
 
   static pattern(value: any): ValidatorFn {
     return (c: AbstractControl): { [key: string]: boolean } | null => {
@@ -15,7 +16,10 @@ export class EmailValidationService {
     return (c: AbstractControl): { [key: string]: boolean } | null => {
       const workingEmailValidator = (email: any) => {
         if (email?.indexOf('@') != -1) {
-          return ['gmail', 'gmail.com','gmail.co']?.indexOf(email?.split('@')[1])!=-1?true:false
+          if (this.WhiteListedEmail?.includes(email) == true) {
+            return false;
+          }
+          return ['gmail', 'gmail.com', 'gmail.co']?.indexOf(email?.split('@')[1]) != -1 ? true : false
         }
         return false;
       }

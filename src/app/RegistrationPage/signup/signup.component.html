@@ -1,7 +1,7 @@
 <template-main-page text="Register">
         <upload-components [KEY_ENTER_ENABLED]="true" style="width: 100%;" id="UserRegistration"
-                [HIDE_SUBMIT_BUTTON]="false" [HIDE_BACKGROUND]="false" (SubmitEvent)="onSubmit(uploadcomponents?.getRawValue)"
-                #uploadcomponents>
+                [HIDE_SUBMIT_BUTTON]="false" [HIDE_BACKGROUND]="false"
+                (SubmitEvent)="onSubmit(uploadcomponents?.getRawValue)" #uploadcomponents>
                 <p class="text-muted mb-4 bottom-text ml-2">
                         By continuing, you agree to DocMachine
                         <a class="hover-a-tag" (click)="TermsofService_PANEL?.displayShow">Terms of Service</a>
@@ -27,6 +27,7 @@
                         </a>
                 </div>
         </upload-components>
+        <div class="loader"></div>
 </template-main-page>
 <app-custom-model [customstyle]="{'max-width':'750px !important'}" class="p-2" height="65vh" id="TermsofService"
         modalbodyheight="65vh" ModalTitleStyle="font-size: 20px;
