@@ -821,3 +821,11 @@
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
 }
+
+.button-disabled{
+    pointer-events: none;
+    opacity: .8;
+    background-color: #e9ecef;
+    padding: 5px !important;
+    border-radius: 5px;
+}

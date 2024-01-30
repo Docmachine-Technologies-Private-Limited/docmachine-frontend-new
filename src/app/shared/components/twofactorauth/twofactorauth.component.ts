@@ -7,6 +7,7 @@ import { AuthGuard } from '../../../service/authguard.service';
 import { DocumentService } from '../../../service/document.service';
 import { UploadServiceValidatorService } from '../../../components/Upload/service/upload-service-validator.service';
 import moment from 'moment';
+import { FormControllerService } from '../../../components/form-controller/form/form.service';
 declare var Razorpay: any;
 
 @Component({
@@ -46,17 +47,28 @@ export class TwofactorauthComponent implements OnInit {
     'Maker and Approver': 2,
     'Maker/checker/Approver': 3
   }
+  LIST_ROLE2 = {
+    1: 'Without maker/checker',
+    2: 'Maker and Approver',
+    3: 'Maker/checker/Approver'
+  }
   VALIDATION_DONE: boolean = false;
   SUBSCRIPTION_PALN: any = []
   CouponData: any = {}
   @ViewChild('TermsofService_PANEL') TermsofService_PANEL: any;
   filterPlan: any = [];
+  TEXT: string = ''
+
+  FORM_CREATE_LIST: any = [];
+  FORM_LIST: any = {}
+  PLAN_BUTTON: boolean = true;
 
   constructor(
     private userService: UserService,
     public authGuard: AuthGuard,
     public documentService: DocumentService,
     public validator: UploadServiceValidatorService,
+    public forservice: FormControllerService,
     private router: Router, private toastr: ToastrService) {
     this.userService.loginData.subscribe((data) => {
       if (data['result']['dataURL']) {
@@ -104,303 +116,463 @@ export class TwofactorauthComponent implements OnInit {
               }
             });
           }
-
-          this.validator.buildForm({
-            DirectDispatch: {
-              type: "yesnocheckbox",
-              value: '',
-              label: "You Have any Coupon Code?",
-              rules: {
-                required: true,
+          this.FORM_LIST = {
+            personalDetails: {
+              companyName: {
+                type: "LabelShow",
+                value: this.USER_LOGIN_DATA?.companyName,
+                label: "Company Name",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'Your Company Name'
               },
-              YesNo: '',
-              YesButton: [
-                { name: 'CouponCode', status: true },
-                { name: 'PlanView', status: false }
-              ],
-              NoButton: [
-                { name: 'CouponCode', status: false },
-                { name: 'PlanView', status: true }
-              ],
-              callback: (value: any) => {
-                console.log(value, "callback")
-                value?.form?.reset();
-                value?.form?.controls?.DirectDispatch?.setValue({ bool: value?.bool });
-                this.SUM_AMOUNT = 0;
-                if (value?.bool == true) {
-                  value.field[1]['divhide'] = true;
-                  value.field[2]['divhide'] = false;
-                  value.field[3]['divhide'] = false;
-                  value.field[4]['divhide'] = false;
-                  value.field[5]['divhide'] = false;
-                  value.field[6]['divhide'] = true;
-                  value.field[1]['disabled'] = true;
-                  value?.form?.controls?.PlanType?.disable();
-                } else {
-                  value.field[1]['divhide'] = false;
-                  value.field[2]['divhide'] = false;
-                  value.field[3]['divhide'] = false;
-                  value.field[4]['divhide'] = false;
-                  value.field[5]['divhide'] = true;
-                  value.field[6]['divhide'] = false;
-                  value.field[1]['disabled'] = false;
-                  value?.form?.controls?.PlanType?.enable();
-                }
-              }
-            },
-            PlanType: {
-              type: "SelectOption",
-              value: "",
-              label: "Select Plan",
-              items: DATA_SUBSCRIPTION_NAME,
-              rules: {
-                required: true,
+              fullName: {
+                type: "LabelShow",
+                value: this.USER_LOGIN_DATA?.fullName,
+                label: "User Name",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'User Full Name'
               },
-              disabled: true,
-              divhide: true,
-              callback: (Formitem: any) => {
-                console.log(Formitem, "callback")
-                this.filterPlan = Data?.filter((item: any) => (item?.PlanName).toLowerCase() == (Formitem?.form?.value?.PlanType)?.toLowerCase())
-                if (this.filterPlan?.length != 0) {
-                  Formitem.field[5]['buttondisabled'] = false;
-                  this.SUBSCRIPTION_PALN = {
-                    both: {
-                      DMS: this.filterPlan[0]?.both?.DMS,
-                      ForwardContractManagement: this.filterPlan[0]?.both?.ForwardContractManagement,
-                      TransactionDMS: this.filterPlan[0]?.both?.TransactionDMS,
-                      DMS_Teasury: this.filterPlan[0]?.both?.DMS_Teasury,
-                      ALL: this.filterPlan[0]?.both?.ALL
-                    },
-                    Export: {
-                      DMS: this.filterPlan[0]?.Export?.DMS,
-                      ForwardContractManagement: this.filterPlan[0]?.Export?.ForwardContractManagement,
-                      TransactionDMS: this.filterPlan[0]?.Export?.TransactionDMS,
-                      DMS_Teasury: this.filterPlan[0]?.Export?.DMS_Teasury,
-                      ALL: this.filterPlan[0]?.Export?.ALL
-                    },
-                    Import: {
-                      DMS: this.filterPlan[0]?.Import?.DMS,
-                      ForwardContractManagement: this.filterPlan[0]?.Import?.ForwardContractManagement,
-                      TransactionDMS: this.filterPlan[0]?.Import?.TransactionDMS,
-                      DMS_Teasury: this.filterPlan[0]?.Import?.DMS_Teasury,
-                      ALL: this.filterPlan[0]?.Import?.ALL
-                    }
-                  };
-                } else {
-                  Formitem.field[5]['buttondisabled'] = true;
-                }
+              email: {
+                type: "LabelShow",
+                InputType: "text",
+                value: this.USER_LOGIN_DATA?.emailId,
+                label: "Email Id",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'Your Email Id',
+              },
+              mobileNo: {
+                type: "LabelShow",
+                value: this.USER_LOGIN_DATA?.mobileNo,
+                label: "Mobile No.",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'Enter your mobile no.',
               },
             },
-            Subscription: {
-              type: "SelectOption",
-              value: "",
-              label: "Export/Import",
-              items: SubscriptionType,
-              rules: {
-                required: true,
-              },
-              callback: (item: any) => {
-                console.log(item, "callback")
-                this.SubscriptionAmountSum(item);
-              },
-              divhide: true,
-            },
-            Role: {
-              type: "SelectOption",
-              value: "",
-              label: "Role",
-              items: RoleType,
-              rules: {
-                required: true,
-              },
-              divhide: true,
-            },
-            DocumentsList: {
-              type: "formGroup",
-              label: "Features :",
-              GroupLabel: [''],
-              AddNewRequried: false,
-              rules: {
-                required: false,
-              },
-              divhide: true,
-              Style: `
-              box-shadow: unset;
-              padding: 0;
-              `,
-              formArray: [
-                [
-                  {
-                    type: "CheckboxMultiple",
-                    value: false,
-                    label: "",
-                    name: 'DMS',
-                    checkboxlabel: "DMS(Documents Management System)",
-                    rules: {
-                      required: false,
-                    },
-                    callback: (item: any) => {
-                      console.log(item, "callback")
-                      const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                      if (item?.value == false) {
-                        if (myForm.value[item?.OptionfieldIndex]["Transaction"] == true) {
-                          myForm.value[item?.OptionfieldIndex]["Transaction"] = false;
-                          myForm.controls[item?.OptionfieldIndex]?.controls["Transaction"]?.setValue(false);
-                          myForm['touched'] = true;
-                          myForm['status'] = 'VALID';
-                        }
+            plandeatils: {
+              DirectDispatch: {
+                type: "yesnocheckbox",
+                value: '',
+                label: "Do you have coupon code?",
+                rules: {
+                  required: true,
+                },
+                YesNo: '',
+                divdisabled:false,
+                YesButton: [
+                  { name: 'CouponCode', status: true },
+                  { name: 'PlanView', status: false }
+                ],
+                NoButton: [
+                  { name: 'CouponCode', status: false },
+                  { name: 'PlanView', status: true }
+                ],
+                callback: (value: any) => {
+                  console.log(value, "callback")
+                  this.CouponData = {}
+                  value?.form?.reset();
+                  value?.form?.controls?.DirectDispatch?.setValue({ bool: value?.bool });
+                  this.SUM_AMOUNT = 0;
+                  if (value?.bool == true) {
+                    value.field[1]['divhide'] = true;
+                    value.field[2]['divhide'] = false;
+                    value.field[3]['divhide'] = false;
+                    value.field[4]['divhide'] = false;
+                    value.field[5]['divhide'] = true;
+                    value.field[1]['disabled'] = true;
+                    this.SUBSCRIPTION_PALN = {
+                      both: {
+                        DMS: 0,
+                        ForwardContractManagement: 0,
+                        TransactionDMS: 0,
+                        DMS_Teasury: 0,
+                        ALL: 0
+                      },
+                      Export: {
+                        DMS: 0,
+                        ForwardContractManagement: 0,
+                        TransactionDMS: 0,
+                        DMS_Teasury: 0,
+                        ALL: 0
+                      },
+                      Import: {
+                        DMS: 0,
+                        ForwardContractManagement: 0,
+                        TransactionDMS: 0,
+                        DMS_Teasury: 0,
+                        ALL: 0
                       }
-                      this.SubscriptionAmountSum(item);
-                    },
-                  },
-                  {
-                    type: "CheckboxMultiple",
-                    value: false,
-                    label: "",
-                    checkboxlabel: "Forward Contract Management",
-                    name: 'Teasury',
-                    rules: {
-                      required: false,
-                    },
-                    callback: (item: any) => {
-                      this.SubscriptionAmountSum(item);
-                      console.log(item, "callback")
-                    },
-                  },
-                  {
-                    type: "CheckboxMultiple",
-                    value: false,
-                    label: "",
-                    name: 'Transaction',
-                    checkboxlabel: "Transaction",
-                    rules: {
-                      required: false,
-                    },
-                    callback: (item: any) => {
-                      const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
-                      myForm.value[item?.OptionfieldIndex]["DMS"] = item?.value;
-                      myForm.controls[item?.OptionfieldIndex]?.controls["DMS"]?.setValue(item?.value);
-                      myForm['touched'] = true;
-                      myForm['status'] = 'VALID';
-                      console.log(item, "callback")
-                      this.SubscriptionAmountSum(item);
-                    },
-                  }
-                ]
-              ]
-            },
-            CouponCode: {
-              type: "InputButton",
-              InputType: "text",
-              value: "",
-              label: "",
-              showhide: false,
-              rules: {
-                required: true,
-              },
-              divhide: true,
-              placeholderText: 'Enter Coupon Code',
-              ButtonText: "Verify",
-              DivStyle: `display: flex !important;`,
-              InputStyle: `border-radius: 20px 0px 0px 20px;`,
-              buttonStyle: `border-radius: 0px 20px 20px 0px;background-color: transparent;color: black;`,
-              buttondisabled: true,
-              callback: (value: any) => {
-                this.userService.BharatheximCouponValidation(value?.form?.value?.CouponCode).subscribe((res: any) => {
-                  console.log(value, "hjhfhfhgfhf")
-                  this.CouponData = res;
-                  if (res?.status == true) {
-                    this.userService.updateregister(this.USER_LOGIN_DATA?._id, {
-                      DeviceInfoRegistartion: this.userService.getDeviceInfo(),
-                      CouponVerified: true, FreeTrailPeroid: true, FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
-                      FreeTrailPeroidEndDate: moment(this.addDays(new Date(), this.CouponData?.data[0]?.TrailDays)).format('dddd, MMMM DD, YYYY h:mm A')
-                    }).subscribe((res1: any) => {
-                      console.log(res1, 'hfhffgffg')
-                      if (res1?.success) {
-                        this.VALIDATION_DONE = true;
-                        value.field[7]['divhide'] = false;
-                        value.field[8]['divhide'] = false;
-                      } else {
-                        this.toastr.success(res1?.msg);
-                        this.VALIDATION_DONE = false;
-                        value.field[7]['divhide'] = true;
-                        value.field[8]['divhide'] = true;
-                      }
-                    })
+                    };
+                    value?.form?.controls?.PlanType?.disable();
                   } else {
-                    this.VALIDATION_DONE = false;
-                    value.field[7]['divhide'] = true;
-                    value.field[8]['divhide'] = true;
+                    value.field[1]['divhide'] = false;
+                    value.field[2]['divhide'] = true;
+                    value.field[3]['divhide'] = true;
+                    value.field[4]['divhide'] = true;
+                    value.field[5]['divhide'] = true;
+                    value.field[1]['disabled'] = true;
+                    value?.form?.controls?.PlanType?.enable();
                   }
-                })
-              }
-            },
-            PlanView: {
-              type: "CallbackButton",
-              value: "",
-              label: "",
-              text: "Subscribe",
-              rules: {
-                required: true,
+                }
               },
-              ButtonStyle:'margin-top: 90px;',
-              divhide: true,
-              Callback: (val: any) => {
-                if (val?.form?.getRawValue()?.Subscription != '' && val?.form?.getRawValue()?.Subscription != undefined && val?.form?.getRawValue()?.Subscription != null) {
-                  if (val?.form?.getRawValue()?.DocumentsList[0]?.DMS != '' || val?.form?.getRawValue()?.DocumentsList[0]?.Teasury != '' || val?.form?.getRawValue()?.DocumentsList[0]?.Transaction != '') {
-                    if (val?.form?.getRawValue()?.DocumentsList[0]?.DMS != null || val?.form?.getRawValue()?.DocumentsList[0]?.Teasury != null || val?.form?.getRawValue()?.DocumentsList[0]?.Transaction != null) {
-                      val.field[1]['disabled'] = true;
-                      val.field[2]['disabled'] = true;
-                      val.field[3]['disabled'] = true;
-                      val.field[4]['disabled'] = true;
-                      val.field[5]['disabled'] = true;
-                      val.field[6]['disabled'] = true;
-                      val?.form?.controls?.PlanType?.disable();
-                      val?.form?.controls?.Subscription?.disable();
-                      val?.form?.controls?.Role?.disable();
-                      val?.form?.controls?.DirectDispatch?.disable();
-                      val?.form?.controls?.DocumentsList?.disable();
-                      this.OpenRazorPay(this.USER_LOGIN_DATA, this.SUM_AMOUNT, val);
+              PlanType: {
+                type: "SelectOption",
+                value: "",
+                label: "Select Plan",
+                items: DATA_SUBSCRIPTION_NAME,
+                rules: {
+                  required: true,
+                },
+                disabled: false,
+                divhide: true,
+                callback: (Formitem: any) => {
+                  console.log(Formitem, "callback")
+                  this.filterPlan = Data?.filter((item: any) => (item?.PlanName).toLowerCase() == (Formitem?.form?.value?.PlanType)?.toLowerCase())
+                  if (this.filterPlan?.length != 0) {
+                    Formitem.field[4]['buttondisabled'] = false;
+                    Formitem.field[2]['divhide'] = false;
+                    this.SUBSCRIPTION_PALN = {
+                      both: {
+                        DMS: this.filterPlan[0]?.both?.DMS,
+                        ForwardContractManagement: this.filterPlan[0]?.both?.ForwardContractManagement,
+                        TransactionDMS: this.filterPlan[0]?.both?.TransactionDMS,
+                        DMS_Teasury: this.filterPlan[0]?.both?.DMS_Teasury,
+                        ALL: this.filterPlan[0]?.both?.ALL
+                      },
+                      Export: {
+                        DMS: this.filterPlan[0]?.Export?.DMS,
+                        ForwardContractManagement: this.filterPlan[0]?.Export?.ForwardContractManagement,
+                        TransactionDMS: this.filterPlan[0]?.Export?.TransactionDMS,
+                        DMS_Teasury: this.filterPlan[0]?.Export?.DMS_Teasury,
+                        ALL: this.filterPlan[0]?.Export?.ALL
+                      },
+                      Import: {
+                        DMS: this.filterPlan[0]?.Import?.DMS,
+                        ForwardContractManagement: this.filterPlan[0]?.Import?.ForwardContractManagement,
+                        TransactionDMS: this.filterPlan[0]?.Import?.TransactionDMS,
+                        DMS_Teasury: this.filterPlan[0]?.Import?.DMS_Teasury,
+                        ALL: this.filterPlan[0]?.Import?.ALL
+                      }
+                    };
+                    Formitem.field[5]['divhide'] = true;
+                    this.SUM_AMOUNT = 0;
+                    Formitem?.form?.controls?.DocumentsList?.reset();
+                  } else {
+                    Formitem.field[4]['buttondisabled'] = true;
+                  }
+                },
+              },
+              Subscription: {
+                type: "SelectOption",
+                value: "",
+                label: "Export/Import",
+                items: SubscriptionType,
+                rules: {
+                  required: true,
+                },
+                callback: (item: any) => {
+                  console.log(item, "callback")
+                  if (item?.form?.value?.DirectDispatch?.bool == false) {
+                    this.SubscriptionAmountSum(item);
+                    item.field[5]['divhide'] = true;
+                    this.SUM_AMOUNT = 0;
+                    item?.form?.controls?.DocumentsList?.reset();
+                  }
+                  item.field[3]['divhide'] = false;
+                  item?.form?.controls?.DocumentsList?.reset();
+                },
+                divhide: true,
+              },
+              DocumentsList: {
+                type: "formGroup",
+                label: "Features :",
+                GroupLabel: [''],
+                AddNewRequried: false,
+                rules: {
+                  required: true,
+                },
+                divhide: true,
+                Style: `box-shadow: unset;padding: 0;`,
+                formArray: [
+                  [
+                    {
+                      type: "CheckboxMultiple",
+                      value: "",
+                      label: "",
+                      name: 'DMS',
+                      checkboxlabel: "DMS(Documents Management System)",
+                      rules: {
+                        required: false,
+                      },
+                      callback: (item: any) => {
+                        console.log(item, "callback")
+                        const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                        if (item?.value == false) {
+                          if (myForm.value[item?.OptionfieldIndex]["Transaction"] == true) {
+                            myForm.value[item?.OptionfieldIndex]["Transaction"] = null;
+                            myForm.controls[item?.OptionfieldIndex]?.controls["Transaction"]?.setValue(null);
+                            myForm['touched'] = true;
+                            myForm['status'] = 'VALID';
+                          }
+                          if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == true) {
+                            item.field[5]['divhide'] = true;
+                          } else {
+                            item.field[5]['divhide'] = false;
+                          }
+                        } else {
+                          if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == true) {
+                            item.field[5]['divhide'] = true;
+                          } else {
+                            item.field[5]['divhide'] = false;
+                          }
+                        }
+                        if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == false) {
+                          this.SubscriptionAmountSum(item);
+                        }
+                      },
+                    },
+                    {
+                      type: "CheckboxMultiple",
+                      value: false,
+                      label: "",
+                      checkboxlabel: "Forward Contract Management",
+                      name: 'Teasury',
+                      rules: {
+                        required: false,
+                      },
+                      callback: (item: any) => {
+                        if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == false) {
+                          this.SubscriptionAmountSum(item);
+                        }
+                        if (item?.value == false) {
+                          if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == true) {
+                            item.field[5]['divhide'] = true;
+                          } else {
+                            item.field[5]['divhide'] = false;
+                          }
+                        } else {
+                          if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == true) {
+                            item.field[5]['divhide'] = true;
+                          } else {
+                            item.field[5]['divhide'] = false;
+                          }
+                        }
+                        console.log(item, "callback")
+                      },
+                    },
+                    {
+                      type: "CheckboxMultiple",
+                      value: "",
+                      label: "",
+                      name: 'Transaction',
+                      checkboxlabel: "Transaction",
+                      rules: {
+                        required: false,
+                      },
+                      callback: (item: any) => {
+                        const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                        myForm.value[item?.OptionfieldIndex]["DMS"] = item?.value;
+                        myForm.controls[item?.OptionfieldIndex]?.controls["DMS"]?.setValue(item?.value);
+                        myForm['touched'] = true;
+                        myForm['status'] = 'VALID';
+                        console.log(item, "callback")
+                        if (item?.value == false) {
+                          if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == true) {
+                            item.field[5]['divhide'] = true;
+                          } else {
+                            item.field[5]['divhide'] = false;
+                          }
+                        } else {
+                          if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == true) {
+                            item.field[5]['divhide'] = true;
+                          } else {
+                            item.field[5]['divhide'] = false;
+                          }
+                        }
+                        if (item?.dynamicFormGroup?.value?.DirectDispatch?.bool == false) {
+                          this.SubscriptionAmountSum(item);
+                        }
+                      },
+                    }
+                  ]
+                ]
+              },
+              CouponCode: {
+                type: "InputButton",
+                InputType: "text",
+                value: "",
+                label: "",
+                showhide: false,
+                rules: {
+                  required: true,
+                },
+                divhide: true,
+                minLength: 15,
+                maxLength: 15,
+                placeholderText: 'Enter Coupon Code',
+                ButtonText: "Verify",
+                DivStyle: `display: flex !important;`,
+                InputStyle: `border-radius: 20px 0px 0px 20px;`,
+                buttonStyle: `border-radius: 0px 20px 20px 0px;background-color: transparent;color: black;`,
+                buttondisabled: true,
+                callback: (value: any) => {
+                  if (value?.form?.getRawValue()?.Subscription != '' && value?.form?.getRawValue()?.Subscription != undefined && value?.form?.getRawValue()?.Subscription != null) {
+                    if (value?.form?.getRawValue()?.DocumentsList[0]?.DMS != '' || value?.form?.getRawValue()?.DocumentsList[0]?.Teasury != '' || value?.form?.getRawValue()?.DocumentsList[0]?.Transaction != '') {
+                      if (value?.form?.getRawValue()?.DocumentsList[0]?.DMS != null || value?.form?.getRawValue()?.DocumentsList[0]?.Teasury != null || value?.form?.getRawValue()?.DocumentsList[0]?.Transaction != null) {
+                        this.userService.BharatheximCouponValidation(value?.form?.value?.CouponCode).subscribe((res: any) => {
+                          console.log(value, "hjhfhfhgfhf")
+                          this.CouponData = res;
+                          if (res?.status == true) {
+                            this.userService.updateregister(this.USER_LOGIN_DATA?._id, {
+                              DeviceInfoRegistartion: this.userService.getDeviceInfo(),
+                              CouponVerified: true, FreeTrailPeroid: true, FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+                              FreeTrailPeroidEndDate: moment(this.addDays(new Date(), this.CouponData?.data[0]?.TrailDays)).format('dddd, MMMM DD, YYYY h:mm A')
+                            }).subscribe((res1: any) => {
+                              console.log(res1, 'hfhffgffg')
+                              if (res1?.success) {
+                                this.VALIDATION_DONE = true;
+                                this.PLAN_BUTTON = false;
+                                this.loadTitle();
+                              } else {
+                                this.toastr.success(res1?.msg);
+                                this.VALIDATION_DONE = false;
+                                this.PLAN_BUTTON = true;
+                                this.loadTitle();
+                                value?.form?.controls.CouponCode?.setErrors({ matched: "Coupon code expired.." })
+                              }
+                            })
+                          } else {
+                            this.VALIDATION_DONE = false;
+                            this.PLAN_BUTTON = true;
+                            if (res?.notfound == true) {
+                              value?.form?.controls.CouponCode?.setErrors({ matched: "Coupon code not valid.." })
+                            } else {
+                              value?.form?.controls.CouponCode?.setErrors({ matched: "Coupon code expired.." })
+                            }
+                            this.loadTitle();
+                          }
+                        })
+                      } else {
+                        this.toastr.error("Please select Documents List...")
+                      }
                     } else {
                       this.toastr.error("Please select Documents List...")
                     }
                   } else {
-                    this.toastr.error("Please select Documents List...")
+                    this.toastr.error("Please select Subscription...")
                   }
-                } else {
-                  this.toastr.error("Please select Subscription...")
-                }
-                console.log(val, val?.form?.getRawValue(), this.TermsofService_PANEL, "CallbackButton")
-              }
-            },
-            Login_Limit: {
-              type: "number",
-              value: "",
-              label: "Maximum No. of User :",
-              rules: {
-                required: true,
-              },
-              maxLength: 2,
-              divhide: true
-            },
-            OTP: {
-              type: "number",
-              value: "",
-              label: "Otp :",
-              rules: {
-                required: true,
-              },
-              maxLength: 6,
-              divhide: true
-            },
-          }, '2_FACTOR_AUTH');
-          console.log(res, "getSubscriptionPlan")
-        })
 
+                }
+              },
+              PlanView: {
+                type: "CallbackButton",
+                value: "",
+                label: "",
+                text: "Subscribe",
+                rules: {
+                  required: true,
+                },
+                ButtonStyle: 'margin-top: 0px;',
+                divhide: true,
+                divdisabled: false,
+                Callback: (val: any) => {
+                  this.PLAN_BUTTON = true;
+                  if (val?.form?.getRawValue()?.PlanType != '' && val?.form?.getRawValue()?.PlanType != undefined && val?.form?.getRawValue()?.PlanType != null) {
+                    if (val?.form?.getRawValue()?.Subscription != '' && val?.form?.getRawValue()?.Subscription != undefined && val?.form?.getRawValue()?.Subscription != null) {
+                      if (val?.form?.getRawValue()?.DocumentsList[0]?.DMS != '' || val?.form?.getRawValue()?.DocumentsList[0]?.Teasury != '' || val?.form?.getRawValue()?.DocumentsList[0]?.Transaction != '') {
+                        if (val?.form?.getRawValue()?.DocumentsList[0]?.DMS != null || val?.form?.getRawValue()?.DocumentsList[0]?.Teasury != null || val?.form?.getRawValue()?.DocumentsList[0]?.Transaction != null) {
+                          val.field[1]['disabled'] = true;
+                          val.field[2]['disabled'] = true;
+                          val.field[3]['disabled'] = true;
+                          val.field[4]['disabled'] = true;
+                          val.field[5]['disabled'] = true;
+                          val?.form?.controls?.PlanType?.disable();
+                          val?.form?.controls?.Subscription?.disable();
+                          val?.form?.controls?.Role?.disable();
+                          val?.form?.controls?.DirectDispatch?.disable();
+                          val?.form?.controls?.DocumentsList?.disable();
+                          this.OpenRazorPay(this.USER_LOGIN_DATA, this.SUM_AMOUNT, val);
+                        } else {
+                          this.toastr.error("Please select Features List...")
+                        }
+                      } else {
+                        this.toastr.error("Please select Features List...")
+                      }
+                    } else {
+                      this.toastr.error("Please select Subscription...")
+                    }
+                  } else {
+                    this.toastr.error("Please select Plan...")
+                  }
+                  console.log(val, val?.form?.getRawValue(), this.TermsofService_PANEL, "CallbackButton")
+                }
+              },
+            },
+            twofactor: {
+              ImageShow: {
+                type: "ImageShow",
+                value: "",
+                label: this.TEXT,
+                rules: {
+                  required: true,
+                },
+                src: this.tfa?.dataURL
+              },
+              Role: {
+                type: "SelectOption",
+                value: "",
+                label: "Role",
+                items: RoleType,
+                rules: {
+                  required: true,
+                },
+              },
+              Login_Limit: {
+                type: "number",
+                value: "",
+                label: "Maximum No. of User :",
+                rules: {
+                  required: true,
+                },
+                maxLength: 2,
+              },
+              OTP: {
+                type: "number",
+                value: "",
+                label: "Otp :",
+                rules: {
+                  required: true,
+                },
+                maxLength: 6,
+              },
+            }
+          };
+          this.FORM_CREATE_LIST = ['personalDetails', 'plandeatils', 'twofactor'];
+          this.loadTitle()
+          console.log(res, this.FORM_LIST, "getSubscriptionPlan")
+        })
       }
     })
   }
 
+  loadTitle() {
+    this.forservice.TitleDesciption = [
+      { Title: 'Personal info', description: '', condition: false },
+      { Title: 'Select your plan', description: 'You have the option of monthly or yearly billing.', condition: this.PLAN_BUTTON },
+      { Title: '2 Factor Authentication', description: 'Two-factor authentication is a form of MFA. Technically, it is in use any time two authentication factors are required to gain access to a system or service.', condition: false }
+    ]
+  }
   ngOnInit(): void {
 
   }
@@ -444,31 +616,40 @@ export class TwofactorauthComponent implements OnInit {
   }
 
   onSubmit(e: any, RawValue) {
-    console.log(e, RawValue, "onSubmit")
+    let ObjectAssign = Object.assign(RawValue?.twofactor, RawValue?.plandeatils)
+    console.log(e, RawValue, ObjectAssign, "onSubmit")
     if (e.status = "VALID") {
-      RawValue?.DocumentsList?.forEach(element => {
+      ObjectAssign?.DocumentsList?.forEach(element => {
         for (const key in element) {
           if (element[key] == null || element[key] == undefined || element[key] == "") {
             element[key] = false;
-            RawValue[key] = false;
+            ObjectAssign[key] = false;
           } else {
-            RawValue[key] = element[key]
+            ObjectAssign[key] = element[key]
           }
         }
       });
       if (this.USER_LOGIN_DATA['role'] == 'member') {
-        RawValue['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
-        RawValue['Subscription'] = this.ADMIN_ACCESS['Subscription'];
-        RawValue['Teasury'] = this.ADMIN_ACCESS['Teasury'];
-        RawValue['Transaction'] = this.ADMIN_ACCESS['Transaction'];
-        RawValue['DMS'] = this.ADMIN_ACCESS['DMS'];
-        RawValue['companyName'] = this.ADMIN_ACCESS['companyName'];
-        RawValue['AdminRole'] = this.USER_LOGIN_DATA['role'];
+        ObjectAssign['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
+        ObjectAssign['Subscription'] = this.ADMIN_ACCESS['Subscription'];
+        ObjectAssign['Teasury'] = this.ADMIN_ACCESS['Teasury'];
+        ObjectAssign['Transaction'] = this.ADMIN_ACCESS['Transaction'];
+        ObjectAssign['DMS'] = this.ADMIN_ACCESS['DMS'];
+        ObjectAssign['companyName'] = this.ADMIN_ACCESS['companyName'];
+        ObjectAssign['AdminRole'] = this.USER_LOGIN_DATA['role'];
       } else {
-        RawValue['Role'] = this.LIST_ROLE[RawValue['Role']];
+        if (this.last_Order_Id_Status_TRUE?.status == true) {
+          ObjectAssign['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
+          ObjectAssign['Subscription'] = this.USER_LOGIN_DATA['Subscription'];
+          ObjectAssign['Teasury'] = this.USER_LOGIN_DATA['Teasury'];
+          ObjectAssign['Transaction'] = this.USER_LOGIN_DATA['Transaction'];
+          ObjectAssign['DMS'] = this.USER_LOGIN_DATA['DMS'];
+          ObjectAssign['Role'] = this.LIST_ROLE[this.USER_LOGIN_DATA['Role']];
+        } else {
+          ObjectAssign['Role'] = this.LIST_ROLE[ObjectAssign['Role']];
+        }
       }
-      delete RawValue?.DirectDispatch;
-      this.userService.SingUpVerify(RawValue).subscribe((data: any) => {
+      this.userService.SingUpVerify(ObjectAssign).subscribe((data: any) => {
         if (data['status'] == 200) {
           this.toastr.success(data['message']);
           this.router.navigate(['/login'], { queryParams: { registered: true } });
@@ -581,15 +762,15 @@ export class TwofactorauthComponent implements OnInit {
     panel?.onClickButton
     console.log(panel, 'sdfsdsdfdf')
   }
-
+  last_Order_Id_Status_TRUE: any = {}
   OpenRazorPay(data: any, Amount: any, FormValue: any) {
     this.userService.getEamilByIdUserMember(data?.emailId).then((res: any) => {
       console.log(res, "CheckUserExit")
       let USER_DATA: any = res[0]?.Userdata[0]
       if (USER_DATA?.length != 0) {
         let last_Order_Id_Status_False = USER_DATA?.order_id;
-        let last_Order_Id_Status_TRUE = USER_DATA?.order_id;
-        console.log(last_Order_Id_Status_False, last_Order_Id_Status_TRUE, "status")
+        this.last_Order_Id_Status_TRUE = USER_DATA?.order_id;
+        console.log(last_Order_Id_Status_False, this.last_Order_Id_Status_TRUE, "status")
         if (last_Order_Id_Status_False?.status == undefined || last_Order_Id_Status_False?.PlanDetails?.TotalMonthDays != this.filterPlan?.TotalMonthDays) {
           this.userService.creareOrder({
             currency: "INR",
@@ -646,13 +827,22 @@ export class TwofactorauthComponent implements OnInit {
                           }).then((res) => {
                             this.toastr.success("Your Subscription added successfully...");
                             this.VALIDATION_DONE = true;
-                            FormValue.field[7]['divhide'] = false;
-                            FormValue.field[8]['divhide'] = false;
+                            this.PLAN_BUTTON = false
+                            FormValue?.form?.controls?.PlanView?.setValue("abbbb");
+                            FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
+                            FormValue?.form?.controls?.PlanView?.disable();
+                            FormValue.field[0]['divdisabled']=true;
+                            FormValue.field[5]['divdisabled']=true;
+                            this.loadTitle();
                             console.log(res, "UpdateUserPaymentDetails")
                           }).catch((err) => {
                             this.VALIDATION_DONE = false;
-                            FormValue.field[7]['divhide'] = true;
-                            FormValue.field[8]['divhide'] = true;
+                            this.PLAN_BUTTON = true;
+                            FormValue?.form?.controls?.PlanView?.setValue(null);
+                            FormValue?.form?.controls?.CouponCode?.setValue(null);
+                            FormValue.field[0]['divdisabled']=false;
+                            FormValue.field[5]['divdisabled']=false;
+                            this.loadTitle();
                           })
                         } else {
                           this.userService.UpdateUserPaymentDetails(response, {
@@ -663,13 +853,22 @@ export class TwofactorauthComponent implements OnInit {
                           }).then((res) => {
                             this.toastr.success("Your Subscription added successfully...");
                             this.VALIDATION_DONE = true;
-                            FormValue.field[7]['divhide'] = false;
-                            FormValue.field[8]['divhide'] = false;
+                            this.PLAN_BUTTON = false
+                            FormValue?.form?.controls?.PlanView?.setValue("abbbb");
+                            FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
+                            FormValue?.form?.controls?.PlanView?.disable();
+                            FormValue.field[0]['divdisabled']=true;
+                            FormValue.field[5]['divdisabled']=true;
+                            this.loadTitle();
                             console.log(res, "UpdateUserPaymentDetails")
                           }).catch((err) => {
                             this.VALIDATION_DONE = false;
-                            FormValue.field[7]['divhide'] = true;
-                            FormValue.field[8]['divhide'] = true;
+                            this.PLAN_BUTTON = true;
+                            FormValue?.form?.controls?.PlanView?.setValue(null);
+                            FormValue?.form?.controls?.CouponCode?.setValue(null);
+                            FormValue.field[0]['divdisabled']=false;
+                            FormValue.field[5]['divdisabled']=false;
+                            this.loadTitle();
                           })
                         }
                       })
@@ -733,13 +932,22 @@ export class TwofactorauthComponent implements OnInit {
                     }).then((res) => {
                       this.toastr.success("Your Subscription added successfully...");
                       this.VALIDATION_DONE = true;
-                      FormValue.field[7]['divhide'] = false;
-                      FormValue.field[8]['divhide'] = false;
+                      this.PLAN_BUTTON = false
+                      FormValue?.form?.controls?.PlanView?.setValue("abbbb");
+                      FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
+                      FormValue?.form?.controls?.PlanView?.disable();
+                      FormValue.field[0]['divdisabled']=true;
+                      FormValue.field[5]['divdisabled']=true;
+                      this.loadTitle();
                       console.log(res, "UpdateUserPaymentDetails")
                     }).catch((err) => {
                       this.VALIDATION_DONE = false;
-                      FormValue.field[7]['divhide'] = true;
-                      FormValue.field[8]['divhide'] = true;
+                      this.PLAN_BUTTON = true;
+                      FormValue?.form?.controls?.PlanView?.setValue(null);
+                      FormValue?.form?.controls?.CouponCode?.setValue(null);
+                      FormValue.field[0]['divdisabled']=false;
+                      FormValue.field[5]['divdisabled']=false;
+                      this.loadTitle();
                     })
                   } else {
                     this.userService.UpdateUserPaymentDetails(response, {
@@ -750,13 +958,22 @@ export class TwofactorauthComponent implements OnInit {
                     }).then((res) => {
                       this.toastr.success("Your Subscription added successfully...");
                       this.VALIDATION_DONE = true;
-                      FormValue.field[7]['divhide'] = false;
-                      FormValue.field[8]['divhide'] = false;
+                      FormValue?.form?.controls?.PlanView?.setValue("abbbb");
+                      FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
+                      FormValue?.form?.controls?.PlanView?.disable();
+                      FormValue.field[0]['divdisabled']=true;
+                      FormValue.field[5]['divdisabled']=true;
+                      this.PLAN_BUTTON = false;
+                      this.loadTitle();
                       console.log(res, "UpdateUserPaymentDetails")
                     }).catch((err) => {
                       this.VALIDATION_DONE = false;
-                      FormValue.field[7]['divhide'] = true;
-                      FormValue.field[8]['divhide'] = true;
+                      this.PLAN_BUTTON = true
+                      FormValue?.form?.controls?.PlanView?.setValue(null);
+                      FormValue?.form?.controls?.CouponCode?.setValue(null);
+                      FormValue.field[0]['divdisabled']=false;
+                      FormValue.field[5]['divdisabled']=false;
+                      this.loadTitle();
                     })
                   }
                 })
@@ -771,8 +988,22 @@ export class TwofactorauthComponent implements OnInit {
             })
           });
           rzp1.open();
-        } else if (last_Order_Id_Status_TRUE?.status == true) {
+        } else if (this.last_Order_Id_Status_TRUE?.status == true) {
+          this.PLAN_BUTTON = false
+          FormValue?.form?.controls?.PlanView?.disable();
+          FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
+          FormValue.field[0]['divdisabled']=true;
+          FormValue.field[5]['divdisabled']=true;
+          FormValue?.form?.controls?.PlanType?.setValue(USER_DATA?.PlanDetails[0]?.PlanName);
+          FormValue?.form?.controls?.Subscription?.setValue(USER_DATA?.Subscription);
+          FormValue?.form?.controls?.Role?.setValue(this.LIST_ROLE2[USER_DATA?.Subscription]);
+          FormValue?.form?.controls?.DocumentsList?.setValue([{
+            DMS: USER_DATA?.DMS,
+            Teasury: USER_DATA?.Teasury,
+            Transaction: USER_DATA?.Transaction
+          }]);
           this.toastr.success("Your Subscription already done");
+          this.loadTitle();
         }
       }
     });

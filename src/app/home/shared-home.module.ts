@@ -106,6 +106,11 @@ import { PasswordValidationDirective } from "../RegistrationPage/Controller/Pass
 import { BharatheximCreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/create-plan/bharathexim-create-plan.component";
 import { BharatheximGeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/generator-coupon-product/bharathexim-generator-coupon-product.component";
 import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-panel/bharathexim-subscription-module/bharathexim-subscription-module.component";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -205,6 +210,11 @@ import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-
     MatFormFieldModule,
     MatInputModule,
     CustomMatStepperModule,
+    MatSlideToggleModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatListModule,
+    MatTableModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [
@@ -315,7 +325,12 @@ import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-
     BharatheximSubscriptionModuleComponent,
     BusinessEmailValidatorDirective,
     MaxMinValidationDirective,
-    PasswordValidationDirective
+    PasswordValidationDirective,
+    MatSlideToggleModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatListModule,
+    MatTableModule,
   ],
 })
 export class SharedHomeModule { }

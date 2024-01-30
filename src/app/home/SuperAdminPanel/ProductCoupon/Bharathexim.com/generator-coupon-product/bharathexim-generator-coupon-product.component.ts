@@ -36,6 +36,8 @@ export class BharatheximGeneratorCouponProductComponent implements OnInit {
           rules: {
             required: true,
           },
+          minLength: 15,
+          maxLength: 15,
           ButtonText: 'Generator',
           callback: (item: any) => {
             item?.form?.controls['couponCodeName']?.setValue(this.generateId())
@@ -107,7 +109,7 @@ export class BharatheximGeneratorCouponProductComponent implements OnInit {
   }
 
   generateId() {
-    return 'NEWYEAR-' + this.randomString(4) + '-' + this.mathRandom();
+    return this.randomString(4) + '-' + this.mathRandom();
   }
 
 }

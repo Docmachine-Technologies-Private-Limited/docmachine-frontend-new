@@ -50,7 +50,8 @@ import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-in
 import { AuthorizationComponent } from "./authorization/authorization.component";
 import { TallyAuthorizationService } from "./authorization-tally-intrgration/tally-authorization.service";
 import { LEIRecordsService } from "./service/LEIRecord/leirecords.service";
-import { BusinessEmailValidatorDirective } from "./RegistrationPage/Controller/business-email-validator.directive";
+import { FormControllerModule } from "./components/form-controller/form-controller.module";
+import { FormControllerService } from "./components/form-controller/form/form.service";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -94,6 +95,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     LEIRecordsService,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     IdleService,
+    FormControllerService
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -108,6 +110,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     HomeModule,
     NgSelectModule,
     AppRoutingModule,
+    FormControllerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

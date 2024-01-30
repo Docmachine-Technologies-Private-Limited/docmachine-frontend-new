@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined"
-                    [style]="field?.style">
+                    [style]="field?.style" [ngClass]="{'button-disabled':field?.divdisabled==true}">
                     <div class="form-group mb-0" *ngSwitchCase="'CallbackButton'">
                         <button type="button" class="btn btn-primary" [style]="field?.ButtonStyle"
                             [disabled]="field?.ButtonDisabled"
@@ -87,6 +87,18 @@
                         <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
                                 style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
                         <label for="" class="form-label-control" [innerHTML]="field?.value"></label>
+                    </div>
+                </div>
+                <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined">
+                    <div class="form-group mb-0" *ngSwitchCase="'ImageShow'">
+                        <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span
+                                style="color: red;" *ngIf="field?.rules?.required==true">*</span></label>
+                                <img [src]="field?.src" style="margin: auto;
+                                width: 90px;
+                                box-shadow: 0px 0px 13px 8px #c1bfbf;
+                                border-radius: 5px;
+                                display: flex;
+                                margin-top: 0;" alt="anythings">
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngIf="field?.visible==true || field?.visible==undefined">
@@ -321,7 +333,7 @@
                     </div>
                 </div>
                 <div class="form-group mb-0" *ngSwitchCase="'yesnocheckbox'">
-                    <div class="col-12 p-0 d-flex" style="align-items: center;">
+                    <div class="col-12 p-0 d-flex" style="align-items: center;" [ngClass]="{'button-disabled':field?.divdisabled==true}">
                         <label style="margin: auto;margin-left: 0;"
                             *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                                 *ngIf="field?.rules?.required==true">*</span></label>
