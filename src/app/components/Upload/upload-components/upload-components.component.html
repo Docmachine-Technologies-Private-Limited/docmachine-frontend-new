@@ -948,12 +948,8 @@
                                             *ngIf="Optionfield[FormOptionfield]?.label!=undefined && Optionfield[FormOptionfield]?.label!=''">{{Optionfield[FormOptionfield]?.label}}
                                             <span style="color: red;"
                                                 *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
-                                        <upload-popup [name]="Optionfield[FormOptionfield]?.name"
-                                            [id]="Optionfield[FormOptionfield]?.id"
-                                            [url]="Optionfield[FormOptionfield]?.url"
-                                            (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event[1]?.publicUrl)"></upload-popup>
                                         <button type="button" [id]="Optionfield[FormOptionfield]?.id"
-                                            class="btn btn-primary"><i class="fa fa-minus"></i>Upload</button>
+                                            class="btn btn-primary PopupOpen"><i class="fa fa-minus"></i>Upload</button>
                                             <button type="button" class="btn btn-primary PopupOpen"
                                             (click)="UploadedViewPdf(this.validator.dynamicFormGroup[this.id]?.value[field.fieldName][OptionfieldIndex][Optionfield[FormOptionfield]?.fieldName])"
                                             popup-close="UploadPdfOpen">View</button>

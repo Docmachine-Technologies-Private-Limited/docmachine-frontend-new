@@ -14,14 +14,15 @@
             border: none;
             outline: none;
             color: white;
-            font-size: 23px;" *ngIf="this.OPTION_CHANGED==false" (click)="this.OPTION_CHANGED=true"><i
+            font-size: 23px;" *ngIf="this.OPTION_CHANGED==false && this.userData?.role=='manager'" (click)="this.OPTION_CHANGED=true"><i
                 class="fas fa-edit"></i></button>
           </div>
           <upload-components *ngIf="this.OPTION_CHANGED==false" FormStyle="display: grid; 
           grid-template-columns: repeat(2,1fr);" [KEY_ENTER_ENABLED]="false" style="width: 100%;"
             id="SHOW_COMPANY_INFO" [HIDE_SUBMIT_BUTTON]="false" [HIDE_BACKGROUND]="false" #uploadcomponents>
           </upload-components>
-          <upload-components SubmitName="Update" *ngIf="this.OPTION_CHANGED==true" (SubmitEvent)="onSubmit(this.item._id,$event)" FormStyle="display: grid; 
+          <upload-components SubmitName="Update" *ngIf="this.OPTION_CHANGED==true"
+            (SubmitEvent)="onSubmit(this.item._id,$event)" FormStyle="display: grid; 
           grid-template-columns: repeat(2,1fr);" (LETTER_HEADE_URL)="this.LETTER_HEADE_URL=$event"
             [KEY_ENTER_ENABLED]="false" style="width: 100%;" id="EDIT_COMPANY_INFO" #uploadcomponents>
             <button class="btn btn-primary" (click)="this.OPTION_CHANGED=false">Back</button>
@@ -30,6 +31,7 @@
       </div>
     </div>
   </main>
+  <upload-popup id="Starhousecertificate_Details" url="member/uploadImage" (event)="StarHouse($event)"></upload-popup>
   <!-- <div class="modal" tabindex="-1" #bank_details style="display: none;">
     <div class="col-5 m-auto d-flex" *ngIf="ID!=-1">
       <div class="modal-content">

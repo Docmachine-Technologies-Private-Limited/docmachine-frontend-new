@@ -819,7 +819,6 @@ export class EditCompanyComponent implements OnInit {
               value: this.item?.Starhousecertificate_Details[0]?.Documents,
               label: "Upload Documents",
               name: 'Documents',
-              url: '/member/uploadImage',
               id: "Starhousecertificate_Details",
               rules: {
                 required: false,
@@ -847,6 +846,10 @@ export class EditCompanyComponent implements OnInit {
         this.OPTION_CHANGED = true;
       });
     }
+  }
+
+  StarHouse(event) {
+    console.log(event, "StarHouse")
   }
 
   letterheadUrl: any = ''
