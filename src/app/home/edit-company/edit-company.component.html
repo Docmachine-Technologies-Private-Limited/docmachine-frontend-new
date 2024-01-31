@@ -7,385 +7,30 @@
           <div class="header">
             <h2 class="col-12 border-2px p-0">Company {{TEXT_CHANGED}}</h2>
             <h6 class="col-12 p-0 h6">Give some information about your company</h6>
+            <button style="position: absolute;
+            right: 20px;
+            top: 25px;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 23px;" *ngIf="this.OPTION_CHANGED==false" (click)="this.OPTION_CHANGED=true"><i
+                class="fas fa-edit"></i></button>
           </div>
-          <div class="card">
-            <div class="main-panel front col-12 p-0 m-0">
-              <div class="col-12 p-0 m-0 grid-template">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Company Name</label>
-                  <input type="text" [value]="this.item?.teamName" class="form-control" aria-describedby="emailHelp"
-                    disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">*Importer exporter code (IEC)</label>
-                  <input type="text" class="form-control" [value]="this.item?.iec" id="exampleInputPassword1" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Company Address</label>
-                  <input type="text" class="form-control" [value]="this.item?.adress" aria-describedby="emailHelp"
-                    disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Contact Phone number</label>
-                  <input type="text" class="form-control" [value]="this.item?.phone" id="exampleInputPassword1"
-                    disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">CA email id
-                    <h6 style="font-size: 12px;
-                            color: gray;">Ex: CA email ID’s for submission of documents for documents like 15B,annual
-                      statutory auditor certificate, write off etc.,</h6>
-                  </label>
-                  <input type="text" class="form-control" [value]="this.item?.caEmail" aria-describedby="emailHelp"
-                    disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">CHA email id</label>
-                  <input type="text" class="form-control" [value]="this.item?.chaEmail" id="exampleInputPassword1"
-                    disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">*GSTIN</label>
-                  <input type="text" class="form-control" [value]="this.item?.gst" aria-describedby="emailHelp"
-                    disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Location</label>
-                  <input type="text" *ngFor="let location of this.item?.location" class="form-control mb-2"
-                    [value]="location?.loc" id="exampleInputPassword1" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Commodity</label>
-                  <input type="text" *ngFor="let commodity of this.item?.commodity" class="form-control mb-2"
-                    [value]="commodity?.como" aria-describedby="emailHelp" disabled>
-                </div>
-
-                <div class="form-group">
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Main Branch Name</label>
-                    <input type="text" class="form-control mb-2" [value]="this.item?.BranchName"
-                      aria-describedby="emailHelp" disabled>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Main Branch Address</label>
-                    <input type="text" class="form-control mb-2" [value]="this.item?.BranchAddress"
-                      aria-describedby="emailHelp" disabled>
-                  </div>
-                  <label for="exampleInputPassword1">Bank Details</label>
-                  <div *ngFor="let course of item?.bankDetails; let i = index" class="mb-2">
-                    <div class="bankClass">
-                      <div class="column">
-                        <label class="bank">*Bank Name | Account Number</label>
-                        <span id="password1" type="" placeholder="bank name"
-                          class="form-control rounded-pill password password1">
-                          {{course.bank}} | {{course.accNumber}}</span>
-                      </div>
-                      <button type="submit" class="btn btn-primary"
-                        (click)="bank_details.style.display='flex';view_bank_details(i)">View</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group" style="display: flex;flex-direction: column;">
-                  <label for="exampleInputEmail1">Letter Head</label>
-                  <div class="col-12">
-                    <div class="row col-12" style="gap:20px">
-                      <div class="form-group col-12 p-0">
-                        <div class="d-flex col-12">
-                          <input type="text" name="CertificateNo" disabled class="form-control"
-                            value="letter head found" style="border-radius: 5px;" aria-describedby="emailHelp">
-                          <button type="submit" class="PopupOpen btn btn-primary" popup-close="letterImageView"
-                            (click)="letterheadView(this.item?.letterHead)">View</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Round Seal</label>
-                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;"
-                    id="exampleInputPassword1" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">For Seal</label>
-                  <div class="row col-12" style="gap:20px">
-                    <div class="form-group col-12 p-0">
-                      <div class="d-flex col-12">
-                        <input type="text" name="forSeal" disabled class="form-control" value="For Seal found"
-                          style="border-radius: 5px;" aria-describedby="emailHelp">
-                        <button type="submit" class="PopupOpen btn btn-primary" popup-close="For_Seal_PDF_VIEW"
-                          (click)="ForSealheadView(this.item?.forSeal)">View</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Star house certificate</label>
-                  <div class="col-12" *ngIf="iframeVisible==true && publicUrl!=null && publicUrl!=''">
-                    <div class="row col-12" style="gap:20px">
-                      <div class="form-group col-12 p-0">
-                        <label for="exampleInputEmail1">Certificate no</label>
-                        <div class="d-flex col-12">
-                          <input type="text" name="CertificateNo" disabled class="form-control"
-                            [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.CertificateNo"
-                            style="border-radius: 5px;" aria-describedby="emailHelp">
-                          <button type="submit" class="PopupOpen btn btn-primary" popup-close="Starhousecertificate_Details"
-                            (click)="Starhousecertificate_DetailsView(this.UPDATED_DETAILS?.Starhousecertificate_Details)">View</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group" style="display: flex;align-items: end;">
-                  <button type="submit" class="btn btn-primary" (click)="Edit('.front','.back')"
-                    [style]="this.userData?.role!='manager'? ' pointer-events: none;' : ' pointer-events: auto;' ">Edit</button>
-                  <button type="submit" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">Back</button>
-                </div>
-              </div>
-            </div>
-            <div class="back col-12 p-0 m-0">
-              <div class="col-12 p-0 m-0 grid-template">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Company Name</label>
-                  <input type="text" (keyup)="add_Form_value('teamName',$event.target.value)"
-                    [value]="this.UPDATED_DETAILS?.teamName" class="form-control" aria-describedby="emailHelp">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">*Importer exporter code (IEC)</label>
-                  <input type="text" pattern="^[a-zA-Z0-9 _]{10}$" (keyup)="add_Form_value('iec',$event.target.value)"
-                    class="form-control" [value]="this.UPDATED_DETAILS?.iec" maxlength="10" #iec>
-                  <span [style]="iec.value.length<10 ? 'display:block' : 'display:none'" class="invalid-feedback">ICE
-                    should contains only 10 numbers</span>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Company Address</label>
-                  <input type="text" (keyup)="add_Form_value('adress',$event.target.value)" class="form-control"
-                    [value]="this.UPDATED_DETAILS?.adress" aria-describedby="emailHelp">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Contact Phone number</label>
-                  <input type="text" pattern="[1-9]{1}[0-9]{9}" maxlength="10"
-                    (keyup)="add_Form_value('phone',$event.target.value)" class="form-control" appPhoneValidator
-                    [value]="this.UPDATED_DETAILS?.phone" placeholder="Ex: +91 95023 23352" id="exampleInputPassword1"
-                    #phone>
-                  <span class="invalid-feedback" *ngIf="phone.value.length<10"
-                    [style]="phone.value.length<10 ? 'display:block' : 'display:none'">
-                    Phone number must be 10 digits
-                  </span>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">CA email id
-                    <h6 style="font-size: 12px;
-                            color: gray;">Ex: CA email ID’s for submission of documents for documents like 15B,annual
-                      statutory auditor certificate, write off etc.,</h6>
-                  </label>
-                  <input type="text" (keyup)="add_Form_value('caEmail',$event.target.value)" class="form-control"
-                    [value]="this.UPDATED_DETAILS?.caEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required
-                    aria-describedby="emailHelp">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">CHA email id</label>
-                  <input type="text" (keyup)="add_Form_value('chaEmail',$event.target.value)" class="form-control"
-                    [value]="this.UPDATED_DETAILS?.chaEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required
-                    id="exampleInputPassword1">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">*GSTIN</label>
-                  <input type="text" (keyup)="add_Form_value('gst',$event.target.value)" class="form-control"
-                    [value]="this.UPDATED_DETAILS?.gst" aria-describedby="emailHelp">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Location</label>
-                  <div class="row col-12 grid-template-1 p-0 mb-3"
-                    *ngFor="let location of this.UPDATED_DETAILS?.location;let i=index">
-                    <input type="text" (keyup)="add_ArrayForm_value('location',i,'loc',$event.target.value)"
-                      class="form-control col-12" [value]="location?.loc" id="exampleInputPassword1">
-                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Location[i]==true"
-                      class="btn danger-primary remove-btn" style="background-color: #fd5f00;"
-                      (click)="remove_location(i)"><span>&#215;</span></button>
-                    <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.location.length"
-                      class="btn btn-primary remove-btn" (click)="add_location(i)"><span>&#43;</span></button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Commodity</label>
-                  <div class="row col-12 grid-template-2 p-0 mb-3"
-                    *ngFor="let comm of this.UPDATED_DETAILS?.commodity;let i=index">
-                    <input type="text" (keyup)="add_ArrayForm_value('commodity',i,'como',$event.target.value)"
-                      class="form-control col-12" [value]="comm?.como" aria-describedby="emailHelp">
-                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Commodity[i]==true"
-                      class="btn danger-primary remove-btn" style="background-color: #fd5f00;"
-                      (click)="remove_commodity(i)"><span>&#215;</span></button>
-                    <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.commodity.length"
-                      class="btn btn-primary remove-btn" (click)="add_commodity(i)"><span>&#43;</span></button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Main Branch Name</label>
-                    <input type="text" class="form-control mb-2"
-                      (keyup)="add_Form_value('BranchName',$event.target.value)"
-                      [value]="this.UPDATED_DETAILS?.BranchName" aria-describedby="emailHelp">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Main Branch Address</label>
-                    <input type="text" class="form-control mb-2"
-                      (keyup)="add_Form_value('BranchAddress',$event.target.value)"
-                      [value]="this.UPDATED_DETAILS?.BranchAddress" aria-describedby="emailHelp">
-                  </div>
-                  <label for="exampleInputPassword1">Bank Details</label>
-                  <div class="column bankClass1">
-                    <div class="column bank-details"
-                      *ngFor="let course of this.UPDATED_DETAILS?.bankDetails; let i = index">
-                      <div class="row bank-header p-1 m-auto">
-                        <h4>Bank Details_{{i+1}}</h4>
-                        <div class="row mr-2">
-                          <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Bank_Details[i]==true"
-                            class="btn danger-primary remove-btn mr-2" style="background-color: #fd5f00;"
-                            (click)="remove_more_Bank(i)"><span>&#215;</span></button>
-                          <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.bankDetails.length"
-                            class="btn btn-primary remove-btn mr-2"
-                            (click)="add_more_Bank(i)"><span>&#43;</span></button>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <label class="bank">*Bank Name</label>
-                        <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST"
-                          bindLabel="value" [multiple]="false" placeholder="Select Bank Name" name="accType"
-                          [ngModel]="course?.bank"
-                          (change)="add_ArrayForm_value('bankDetails',i,'bank',$event?.value);bankClick($event, i)"></ng-select>
-                        <label class="bank">*Account Number</label>
-                        <input type="text"
-                          (keyup)="add_ArrayForm_value('bankDetails',i,'accNumber',$event.target.value)"
-                          placeholder="Amount Number" [value]="course?.accNumber"
-                          class="form-control rounded-pill password password1">
-                        <label class="bank">Bic Address</label>
-                        <input type="text"
-                          (keyup)="add_ArrayForm_value('bankDetails',i,'bicAddress',$event.target.value)"
-                          [value]="course?.bicAddress" placeholder="Bic address"
-                          class="form-control rounded-pill password password1" style="text-transform: uppercase;">
-                        <label class="bank">Account Type</label>
-                        <ng-select *ngIf="this.Account_Type?.length!=0" [items]="this.Account_Type" bindLabel="type"
-                          [multiple]="false" placeholder="Select AccType" name="accType" [ngModel]="course?.accType"
-                          (change)="add_ArrayForm_value('bankDetails',i,'accType',$event?.type)"></ng-select>
-                        <label class="bank">Currency Type</label>
-                        <ng-select *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST" bindLabel="type"
-                          [multiple]="false" placeholder="Select Currency" name="currency" [ngModel]="course?.currency"
-                          (change)="add_ArrayForm_value('bankDetails',i,'currency',$event?.type)"></ng-select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Letter Head</label>
-                  <div class="upload-letter-head" style="display: flex;gap: 5px;">
-                    <div class="col-12">
-                      <div class="iframe">
-                        <div class="pdf_invoce">
-                          <div class="file_addd_to">
-                            <div class="new_form_selct" method="POST" style="display: flex;
-                                  flex-direction: row;
-                                  align-items: center;">
-                              <input type="file" accept="application/pdf" (change)="onFileSelect($event.target)" class="dropzone dropzone-container" id="dropzone" />
-                              <img src="assets/new-img/Icon-feather-upload.svg"
-                                alt="Drag & drop files here or Browse" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Round Seal</label>
-                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;" disabled>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">For Seal</label>
-                  <div class="col-12">
-                    <div class="iframe">
-                      <div class="pdf_invoce">
-                        <div class="file_addd_to">
-                          <div class="new_form_selct" method="POST" style="display: flex;
-                                flex-direction: row;
-                                align-items: center;">
-                            <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                              (success)="onSoForSealUploadSuccess($event)" (sending)="submit($event)"
-                              [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
-                            <img src="assets/new-img/Icon-feather-upload.svg" alt="Drag & drop files here or Browse" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Upload Star house certificate</label>
-                  <div class="col-12">
-                    <div class="iframe">
-                      <div class="pdf_invoce">
-                        <div class="file_addd_to">
-                          <div class="new_form_selct" method="POST" style="display: flex;
-                                flex-direction: row;
-                                align-items: center;">
-                            <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                              (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config"
-                              class="dropzone dropzone-container" id="dropzone" />
-                            <img src="assets/new-img/Icon-feather-upload.svg" alt="Drag & drop files here or Browse" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="progressbar" *ngIf="uploading">
-                        <div class="meter">
-                          <span [style.width]="width + '%'"></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12" *ngIf="iframeVisible==true && publicUrl!=null && publicUrl!=''">
-                      <div class="row" style="gap:20px">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Certificate no</label>
-                          <input type="text" name="CertificateNo"
-                            (keyup)="this.UPDATED_DETAILS.Starhousecertificate_Details['CertificateNo']=$event.target.value"
-                            class="form-control"
-                            [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.CertificateNo"
-                            style="border-radius: 5px;" aria-describedby="emailHelp">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Issues date</label>
-                          <input type="date" name="Issuesdate"
-                            (change)="this.UPDATED_DETAILS.Starhousecertificate_Details['Issuesdate']=$event.target.value"
-                            class="form-control"
-                            [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.Issuesdate"
-                            style="border-radius: 5px;" aria-describedby="emailHelp">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Expiry Date</label>
-                          <input type="date" name="ExpiryDate"
-                            (change)="this.UPDATED_DETAILS.Starhousecertificate_Details['ExpiryDate']=$event.target.value"
-                            class="form-control"
-                            [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.ExpiryDate"
-                            style="border-radius: 5px;" aria-describedby="emailHelp">
-                        </div>
-                      </div>
-                      <div class="sb2">
-                        <app-pdf-viewer *ngIf="publicUrl!=''" [downloadShow]="false" name="Star house certificate"
-                          [src]="publicUrl" width="100%" height="500px"></app-pdf-viewer>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group" style="display: flex;align-items: end;">
-                  <button type="submit" class="btn btn-primary" (click)="onSubmit(this.item._id)">Update</button>
-                  <button type="submit" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">Back</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <upload-components *ngIf="this.OPTION_CHANGED==false" FormStyle="display: grid; 
+          grid-template-columns: repeat(2,1fr);" [KEY_ENTER_ENABLED]="false" style="width: 100%;"
+            id="SHOW_COMPANY_INFO" [HIDE_SUBMIT_BUTTON]="false" [HIDE_BACKGROUND]="false" #uploadcomponents>
+          </upload-components>
+          <upload-components SubmitName="Update" *ngIf="this.OPTION_CHANGED==true" (SubmitEvent)="onSubmit(this.item._id,$event)" FormStyle="display: grid; 
+          grid-template-columns: repeat(2,1fr);" (LETTER_HEADE_URL)="this.LETTER_HEADE_URL=$event"
+            [KEY_ENTER_ENABLED]="false" style="width: 100%;" id="EDIT_COMPANY_INFO" #uploadcomponents>
+            <button class="btn btn-primary" (click)="this.OPTION_CHANGED=false">Back</button>
+          </upload-components>
         </div>
       </div>
     </div>
   </main>
-  <div class="modal" tabindex="-1" #bank_details style="display: none;">
+  <!-- <div class="modal" tabindex="-1" #bank_details style="display: none;">
     <div class="col-5 m-auto d-flex" *ngIf="ID!=-1">
       <div class="modal-content">
         <div class="modal-header">
@@ -416,7 +61,7 @@
       </div>
     </div>
   </div>
-  
+
   <app-custom-model
     [customstyle]="{'margin':'auto !important','max-width': '65vw !important','margin-top': '50px !important'}"
     class="p-2" height="400px" id="Starhousecertificate_Details" name="Star house certificate">
@@ -447,7 +92,7 @@
       </div>
     </div>
   </app-custom-model>
-  
+
   <app-custom-model
     [customstyle]="{'margin':'auto !important','max-width': '65vw !important','margin-top': '50px !important'}"
     class="p-2" height="400px" id="For_Seal_PDF_VIEW" name="For Seal Documents">
@@ -462,4 +107,4 @@
     <div class="p-2">
       <img [src]="letterheadUrl" style="width: 500px;height: 500px;" alt="">
     </div>
-  </app-custom-model>
+  </app-custom-model> -->

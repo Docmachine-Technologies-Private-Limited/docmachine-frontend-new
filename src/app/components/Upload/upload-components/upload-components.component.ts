@@ -586,6 +586,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       form.value[name][index] = args[1].publicUrl
     }
   }
+  
   AdditionalDocumentsUrl: any = ''
   ViewAdditionalDocuments(doc: any) {
     this.AdditionalDocumentsUrl = ''
@@ -593,12 +594,30 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.AdditionalDocumentsUrl = doc;
     }, 200);
   }
+  
   UploadedViewPdfUrl: any = ''
   UploadedViewPdf(pdf: any) {
     this.UploadedViewPdfUrl = '';
     setTimeout(() => {
       this.UploadedViewPdfUrl = pdf;
     }, 200);
+  }
+  
+  @Output('LETTER_HEADE_URL')LETTER_HEADE_URL:any=new EventEmitter(); 
+  onFileSelect(input,urladd) {
+    console.log(input.files);
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = async (e: any) => {
+        let data = e.target.result.substr(e.target.result.indexOf(',') + 1)
+        this.userService.ConvertPdfImage(data).subscribe((res: any) => {
+          console.log(res, "ConvertPdfImage")
+          this.LETTER_HEADE_URL.emit(res?.pdf2imgae);
+          urladd.setValue(res?.pdf2imgae)
+        })
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
   }
 
 }
