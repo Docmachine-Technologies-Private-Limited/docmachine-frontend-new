@@ -15,7 +15,7 @@ export class UserService implements OnInit {
   userData;
   USER_RESULT: any = [];
   public loginData = new BehaviorSubject({});
-  public UserData:any=null;
+  public UserData: any = null;
   public userDataListener$ = this.loginData.asObservable();
   constructor(private http: HttpClient, public router: Router, public SubjectListService: BehaviorSubjectListService, private deviceInformationService: DeviceDetectorService) {
     this.api_base = AppConfig.BASE_URL;
@@ -24,14 +24,14 @@ export class UserService implements OnInit {
   ngOnInit(): void {
     // this.SubjectListService.callAllCommonApi();
   }
-  
+
   public addLoginData(data) {
     this.loginData.next(data);
     this.userData = data
   }
-  
+
   public addUserData(data) {
-    this.UserData=data;
+    this.UserData = data;
   }
 
   public addToken(token) {
@@ -71,10 +71,10 @@ export class UserService implements OnInit {
       this.getUserDetail().then((res: any) => {
         console.log(res, "CheckUserExit")
         let InfoPaymentStatus = res?.result?.PaymentStatus;
-          InfoPaymentStatus.push(updatedata);
-          this.updateregister(res?.result?._id, { PaymentStatus: InfoPaymentStatus, ...other }).subscribe((updatedataRes) => {
-            resolve(updatedataRes);
-          }, (error) => resolve(error))
+        InfoPaymentStatus.push(updatedata);
+        this.updateregister(res?.result?._id, { PaymentStatus: InfoPaymentStatus, ...other }).subscribe((updatedataRes) => {
+          resolve(updatedataRes);
+        }, (error) => resolve(error))
       })
     })
   }
@@ -89,17 +89,21 @@ export class UserService implements OnInit {
       })
     })
   }
-  
+
   checkUserExpired() {
     return new Promise((resolve, reject) => {
       this.getUserDetail().then((res: any) => {
-        if (compareDates(res?.result?.FreeTrailPeroidStratDate, res?.result?.FreeTrailPeroidEndDate) == true) {
-          resolve(true)
+        if (res?.result?.FreeTrailPeroidEndDate != undefined && res?.result?.FreeTrailPeroidEndDate != null && res?.result?.FreeTrailPeroidEndDate != '') {
+          if (compareDates(res?.result?.FreeTrailPeroidEndDate) == true) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
         } else {
           resolve(false)
         }
       })
-      const compareDates = (d1: any, d2: any) => {
+      const compareDates = (d2: any) => {
         var Enddate = new Date(d2)
         var dateCheck = new Date()
         return dateCheck.getTime() <= Enddate.getTime()
@@ -110,11 +114,11 @@ export class UserService implements OnInit {
   updateregister(id: any, user: any) {
     return this.http.post(`${this.api_base}/authenticate/updateregister`, { id: id, user: user });
   }
-  
+
   getRazorpayOrderById(id: any) {
     return this.http.post(`${this.api_base}/authenticate/OrderById`, { id: id });
   }
-  
+
   SendMobileOTP(emailId) {
     return this.http.post(`${this.api_base}/authenticate/SendOtpMobile`, { emailId: emailId });
   }
@@ -870,15 +874,15 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/user/getprofilebyId`, { email: id }, httpOptions).toPromise();
   }
-  
+
   getEamilByIdUserMember(id: any) {
     return this.http.post(`${this.api_base}/authenticate/getEamilByIdUserMember`, { email: id }).toPromise();
   }
-  
+
   creareOrder(data: any) {
     return this.http.post(`${this.api_base}/authenticate/createOrder`, { data: data }).toPromise();
   }
-  
+
   getEamilByIdUserMemberDetails(id: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

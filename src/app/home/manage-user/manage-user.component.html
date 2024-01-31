@@ -69,12 +69,12 @@
 <app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="60vh" id="ADD_NEW_MEMBER_POPUP"
     [minimizedisabled]="false" modalbodyheight="55vh" ModalTitleStyle="font-size:13px;"
     name="Add New Member"  #ADD_NEW_MEMBER_POPUP_PANEL>
-    <custom-model-header *ngIf="this.SUBMITTED_BUTTON_SHOW==true">
+    <!-- <custom-model-header *ngIf="this.SUBMITTED_BUTTON_SHOW==true">
         <div class="d-flex" style="gap: 10px;">
           <button class="btn btn-primary"
             style="margin-left:16px" (click)="RawValueEventPanel?.onClickButton">Sumbit</button>
         </div>
-      </custom-model-header>
+      </custom-model-header> -->
     <div class="col-12 mt-2 mb-2">
         <upload-components [BUTTON_PANEL_HIDE]="false" FormStyle="
         display: grid;

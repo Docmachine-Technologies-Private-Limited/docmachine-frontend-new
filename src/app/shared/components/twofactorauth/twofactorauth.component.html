@@ -33,11 +33,8 @@ Application">
   <app-form (onSubmit)="onSubmit($event?.value,$event?.RawValue)" *ngIf="this.FORM_CREATE_LIST?.length!=0" [item]="{
     FORM_CREATE_LIST:this.FORM_CREATE_LIST,
     FORM_LIST:this.FORM_LIST,
-    StepItem:[
-    { step: 1, description: 'Your info' },
-    { step: 2, description: 'SELECT PLAN' },
-    { step: 3, description: '2 Factor' }
-    ]}">
+    StepItem:this.StepItem
+    }">
     <p *ngIf="CouponData?.status==true" style="color: #2f93ff;margin-left: 10px;">Coupon code
       verified</p>
     <p *ngIf="this.SUM_AMOUNT" style="color: #2f93ff;margin-left: 10px;">Total Subscription Amount :

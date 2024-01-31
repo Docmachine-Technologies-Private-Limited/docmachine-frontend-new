@@ -62,6 +62,7 @@ export class TwofactorauthComponent implements OnInit {
   FORM_CREATE_LIST: any = [];
   FORM_LIST: any = {}
   PLAN_BUTTON: boolean = true;
+  StepItem: any = [];
 
   constructor(
     private userService: UserService,
@@ -91,19 +92,78 @@ export class TwofactorauthComponent implements OnInit {
         }, 'users').subscribe((res: any) => {
           this.ADMIN_ACCESS = res?.data[0];
           console.log(res, this.ADMIN_ACCESS, "filterAnyTable")
-          this.validator.buildForm({
-            OTP: {
-              type: "number",
-              value: "",
-              label: "Otp :",
-              rules: {
-                required: true,
+          this.FORM_LIST = {
+            personalDetails: {
+              companyName: {
+                type: "LabelShow",
+                value: this.ADMIN_ACCESS?.companyName,
+                label: "Company Name",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'Your Company Name'
               },
-              maxLength: 6
+              fullName: {
+                type: "LabelShow",
+                value: this.USER_LOGIN_DATA?.fullName,
+                label: "User Name",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'User Full Name'
+              },
+              email: {
+                type: "LabelShow",
+                InputType: "text",
+                value: this.USER_LOGIN_DATA?.emailId,
+                label: "Email Id",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'Your Email Id',
+              },
+              mobileNo: {
+                type: "LabelShow",
+                value: this.ADMIN_ACCESS?.mobileNo,
+                label: "Mobile No.",
+                rules: {
+                  required: true,
+                },
+                Inputdisabled: true,
+                placeholderText: 'Enter your mobile no.',
+              },
             },
-          }, '2_FACTOR_AUTH').then((res) => {
-            this.VALIDATION_DONE = true
-          });
+            twofactor: {
+              ImageShow: {
+                type: "ImageShow",
+                value: "",
+                label: this.TEXT,
+                rules: {
+                  required: true,
+                },
+                src: this.tfa?.dataURL
+              },
+              OTP: {
+                type: "number",
+                value: "",
+                label: "Otp :",
+                rules: {
+                  required: true,
+                },
+                maxLength: 6,
+              },
+            }
+          };
+          this.FORM_CREATE_LIST = ['personalDetails', 'twofactor'];
+          this.StepItem = [
+            { step: 1, description: 'Your info' },
+            { step: 2, description: '2 Factor' }
+          ]
+          this.PLAN_BUTTON=false;
+          this.loadTitle()
         })
       } else {
         this.documentService?.getBharatheximSubscriptionPlan().subscribe((res: any) => {
@@ -169,7 +229,7 @@ export class TwofactorauthComponent implements OnInit {
                   required: true,
                 },
                 YesNo: '',
-                divdisabled:false,
+                divdisabled: false,
                 YesButton: [
                   { name: 'CouponCode', status: true },
                   { name: 'PlanView', status: false }
@@ -559,6 +619,11 @@ export class TwofactorauthComponent implements OnInit {
             }
           };
           this.FORM_CREATE_LIST = ['personalDetails', 'plandeatils', 'twofactor'];
+          this.StepItem = [
+            { step: 1, description: 'Your info' },
+            { step: 2, description: 'Select Plan' },
+            { step: 3, description: '2 Factor' }
+          ]
           this.loadTitle()
           console.log(res, this.FORM_LIST, "getSubscriptionPlan")
         })
@@ -630,6 +695,8 @@ export class TwofactorauthComponent implements OnInit {
         }
       });
       if (this.USER_LOGIN_DATA['role'] == 'member') {
+        ObjectAssign['FreeTrailPeroidEndDate'] = this.ADMIN_ACCESS['FreeTrailPeroidEndDate'];
+        ObjectAssign['FreeTrailPeroidStratDate'] = this.ADMIN_ACCESS['FreeTrailPeroidStratDate'];
         ObjectAssign['RoleCheckbox'] = this.USER_LOGIN_DATA['RoleCheckbox'];
         ObjectAssign['Subscription'] = this.ADMIN_ACCESS['Subscription'];
         ObjectAssign['Teasury'] = this.ADMIN_ACCESS['Teasury'];
@@ -812,7 +879,7 @@ export class TwofactorauthComponent implements OnInit {
                   },
                   redirect: true, // this redirects to the bank page from my website without opening a new window
                   handler: (response: any) => {
-                    console.log(response, this.userService.checkUserExpired(), "newresponse")
+                    console.log(response,  this.filterPlan[0],this.userService.checkUserExpired(), "newresponse")
                     response['Date'] = new Date().toLocaleDateString();
                     this.userService.checkUserExpired().then((checkUserExpired) => {
                       InfoPaymentStatus['status'] = true;
@@ -831,8 +898,8 @@ export class TwofactorauthComponent implements OnInit {
                             FormValue?.form?.controls?.PlanView?.setValue("abbbb");
                             FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
                             FormValue?.form?.controls?.PlanView?.disable();
-                            FormValue.field[0]['divdisabled']=true;
-                            FormValue.field[5]['divdisabled']=true;
+                            FormValue.field[0]['divdisabled'] = true;
+                            FormValue.field[5]['divdisabled'] = true;
                             this.loadTitle();
                             console.log(res, "UpdateUserPaymentDetails")
                           }).catch((err) => {
@@ -840,8 +907,8 @@ export class TwofactorauthComponent implements OnInit {
                             this.PLAN_BUTTON = true;
                             FormValue?.form?.controls?.PlanView?.setValue(null);
                             FormValue?.form?.controls?.CouponCode?.setValue(null);
-                            FormValue.field[0]['divdisabled']=false;
-                            FormValue.field[5]['divdisabled']=false;
+                            FormValue.field[0]['divdisabled'] = false;
+                            FormValue.field[5]['divdisabled'] = false;
                             this.loadTitle();
                           })
                         } else {
@@ -857,8 +924,8 @@ export class TwofactorauthComponent implements OnInit {
                             FormValue?.form?.controls?.PlanView?.setValue("abbbb");
                             FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
                             FormValue?.form?.controls?.PlanView?.disable();
-                            FormValue.field[0]['divdisabled']=true;
-                            FormValue.field[5]['divdisabled']=true;
+                            FormValue.field[0]['divdisabled'] = true;
+                            FormValue.field[5]['divdisabled'] = true;
                             this.loadTitle();
                             console.log(res, "UpdateUserPaymentDetails")
                           }).catch((err) => {
@@ -866,8 +933,8 @@ export class TwofactorauthComponent implements OnInit {
                             this.PLAN_BUTTON = true;
                             FormValue?.form?.controls?.PlanView?.setValue(null);
                             FormValue?.form?.controls?.CouponCode?.setValue(null);
-                            FormValue.field[0]['divdisabled']=false;
-                            FormValue.field[5]['divdisabled']=false;
+                            FormValue.field[0]['divdisabled'] = false;
+                            FormValue.field[5]['divdisabled'] = false;
                             this.loadTitle();
                           })
                         }
@@ -916,7 +983,7 @@ export class TwofactorauthComponent implements OnInit {
             },
             redirect: true, // this redirects to the bank page from my website without opening a new window
             handler: (response: any) => {
-              console.log(response, this.userService.checkUserExpired(), "exitresponse")
+              console.log(response,  this.filterPlan[0],this.userService.checkUserExpired(), "exitresponse")
               response['Date'] = new Date().toLocaleDateString();
               this.userService.checkUserExpired().then((checkUserExpired) => {
                 let InfoPaymentStatus = USER_DATA?.order_id;
@@ -936,8 +1003,8 @@ export class TwofactorauthComponent implements OnInit {
                       FormValue?.form?.controls?.PlanView?.setValue("abbbb");
                       FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
                       FormValue?.form?.controls?.PlanView?.disable();
-                      FormValue.field[0]['divdisabled']=true;
-                      FormValue.field[5]['divdisabled']=true;
+                      FormValue.field[0]['divdisabled'] = true;
+                      FormValue.field[5]['divdisabled'] = true;
                       this.loadTitle();
                       console.log(res, "UpdateUserPaymentDetails")
                     }).catch((err) => {
@@ -945,8 +1012,8 @@ export class TwofactorauthComponent implements OnInit {
                       this.PLAN_BUTTON = true;
                       FormValue?.form?.controls?.PlanView?.setValue(null);
                       FormValue?.form?.controls?.CouponCode?.setValue(null);
-                      FormValue.field[0]['divdisabled']=false;
-                      FormValue.field[5]['divdisabled']=false;
+                      FormValue.field[0]['divdisabled'] = false;
+                      FormValue.field[5]['divdisabled'] = false;
                       this.loadTitle();
                     })
                   } else {
@@ -961,8 +1028,8 @@ export class TwofactorauthComponent implements OnInit {
                       FormValue?.form?.controls?.PlanView?.setValue("abbbb");
                       FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
                       FormValue?.form?.controls?.PlanView?.disable();
-                      FormValue.field[0]['divdisabled']=true;
-                      FormValue.field[5]['divdisabled']=true;
+                      FormValue.field[0]['divdisabled'] = true;
+                      FormValue.field[5]['divdisabled'] = true;
                       this.PLAN_BUTTON = false;
                       this.loadTitle();
                       console.log(res, "UpdateUserPaymentDetails")
@@ -971,8 +1038,8 @@ export class TwofactorauthComponent implements OnInit {
                       this.PLAN_BUTTON = true
                       FormValue?.form?.controls?.PlanView?.setValue(null);
                       FormValue?.form?.controls?.CouponCode?.setValue(null);
-                      FormValue.field[0]['divdisabled']=false;
-                      FormValue.field[5]['divdisabled']=false;
+                      FormValue.field[0]['divdisabled'] = false;
+                      FormValue.field[5]['divdisabled'] = false;
                       this.loadTitle();
                     })
                   }
@@ -992,8 +1059,8 @@ export class TwofactorauthComponent implements OnInit {
           this.PLAN_BUTTON = false
           FormValue?.form?.controls?.PlanView?.disable();
           FormValue?.form?.controls?.CouponCode?.setValue("abbbb");
-          FormValue.field[0]['divdisabled']=true;
-          FormValue.field[5]['divdisabled']=true;
+          FormValue.field[0]['divdisabled'] = true;
+          FormValue.field[5]['divdisabled'] = true;
           FormValue?.form?.controls?.PlanType?.setValue(USER_DATA?.PlanDetails[0]?.PlanName);
           FormValue?.form?.controls?.Subscription?.setValue(USER_DATA?.Subscription);
           FormValue?.form?.controls?.Role?.setValue(this.LIST_ROLE2[USER_DATA?.Subscription]);
@@ -1011,13 +1078,7 @@ export class TwofactorauthComponent implements OnInit {
 
   addMonth(date: any, days: any) {
     var result = new Date(date);
-    if (days == "3") {
-      result.setDate(result.getDate() + 90);
-    } else if (days == "6") {
-      result.setDate(result.getDate() + 180);
-    } else if (days == "12") {
-      result.setDate(result.getDate() + 365);
-    }
+    result.setDate(result.getDate() + parseInt(days));
     return result;
   }
 }
