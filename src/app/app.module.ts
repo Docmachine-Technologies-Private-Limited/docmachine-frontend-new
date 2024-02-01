@@ -50,8 +50,10 @@ import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-in
 import { AuthorizationComponent } from "./authorization/authorization.component";
 import { TallyAuthorizationService } from "./authorization-tally-intrgration/tally-authorization.service";
 import { LEIRecordsService } from "./service/LEIRecord/leirecords.service";
-import { FormControllerModule } from "./components/form-controller/form-controller.module";
 import { FormControllerService } from "./components/form-controller/form/form.service";
+import { FormControllerModule } from "./components/form-controller/form-controller.module";
+import { SharedHomeModule } from "./home/shared-home.module";
+import { UploadServiceValidatorService } from "./components/Upload/service/upload-service-validator.service";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -92,6 +94,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DateFormatService,
     BehaviorSubjectListService,
     TallyAuthorizationService,
+    UploadServiceValidatorService,
     LEIRecordsService,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     IdleService,
@@ -110,6 +113,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     HomeModule,
     NgSelectModule,
     AppRoutingModule,
+    SharedHomeModule,
     FormControllerModule,
     TranslateModule.forRoot({
       loader: {

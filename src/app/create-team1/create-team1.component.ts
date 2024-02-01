@@ -31,10 +31,8 @@ export class CreateTeam1Component implements OnInit {
     public leiRecords: LEIRecordsService) {
   }
 
-  ngOnInit(): void {
-    this.docservice.getBankNameList().then((res) => {
-      this.validator.BANK_NAME_LIST_GLOABL = res;
-    });
+  async ngOnInit() {
+    this.validator.BANK_NAME_LIST_GLOABL = await this.docservice.getBankNameList();
     console.log(this.validator.BANK_NAME_LIST_GLOABL, this.userService.UserData, 'BANK_NAME_LIST')
   }
 
@@ -92,11 +90,11 @@ export class CreateTeam1Component implements OnInit {
   loadForm() {
     setTimeout(() => {
       let Address: any = this.LEI_DATA?.entity?.legalAddress?.addressLines?.join(',') + ' ' + this.LEI_DATA?.entity?.legalAddress?.city + ' ' + this.LEI_DATA?.entity?.legalAddress?.country;
-      if (this.userService.UserData?.Teasury==true && this.userService.UserData?.Transaction==false && this.userService.UserData?.DMS==false) {
+      if ((this.userService.UserData?.Teasury == true || this.userService.UserData?.DMS == true) && this.userService.UserData?.Transaction == false) {
         this.validator.buildForm({
           teamName: {
             type: "text",
-            value: this.LEI_DATA?.entity?.legalName?.name!=undefined?this.LEI_DATA?.entity?.legalName?.name:this.userService.UserData?.companyName,
+            value: this.LEI_DATA?.entity?.legalName?.name != undefined ? this.LEI_DATA?.entity?.legalName?.name : this.userService.UserData?.companyName,
             label: "Company Name",
             rules: {
               required: true,
@@ -172,11 +170,11 @@ export class CreateTeam1Component implements OnInit {
             ]
           }
         }, 'SetupCompanyDetails');
-      }else {
+      } else if (this.userService.UserData?.Transaction == true) {
         this.validator.buildForm({
           teamName: {
             type: "text",
-            value: this.LEI_DATA?.entity?.legalName?.name!=undefined?this.LEI_DATA?.entity?.legalName?.name:this.userService.UserData?.companyName,
+            value: this.LEI_DATA?.entity?.legalName?.name != undefined ? this.LEI_DATA?.entity?.legalName?.name : this.userService.UserData?.companyName,
             label: "Company Name",
             rules: {
               required: true,
@@ -351,7 +349,7 @@ export class CreateTeam1Component implements OnInit {
                   rules: {
                     required: true,
                   },
-  
+
                 },
                 {
                   type: "AccountType",
@@ -373,11 +371,10 @@ export class CreateTeam1Component implements OnInit {
                 },
               ]
             ],
-  
+
           }
         }, 'SetupCompanyDetails');
       }
-     
     }, 200);
   }
 }

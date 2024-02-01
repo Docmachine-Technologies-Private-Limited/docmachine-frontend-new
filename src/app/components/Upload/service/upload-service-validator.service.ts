@@ -73,7 +73,8 @@ export class UploadServiceValidatorService implements OnInit {
   USER_DATA: any = [];
   PIPO_TRANSCTION_LIST: any = [];
   DROP_DOWN_DATA: any = [];
-
+  ALL_DATA_PURPOSE_CODE:any='';
+  
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public authGuard: AuthGuard,

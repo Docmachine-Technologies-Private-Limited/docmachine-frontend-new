@@ -1,15 +1,17 @@
 <div class="content-wrap pb-2 ml-0 scroll-bar-main">
     <div class="background-color">
         <mat-tab-group>
-            <mat-tab label="Member Panel">  
+            <mat-tab label="Member Panel">
                 <div class="top-panel">
                     <div class="left-panel">
-                        <label for="" class="label-text">Total Member : <span>{{this.MEMBER_DATA?.length}}</span></label>
+                        <label for="" class="label-text">Total Member :
+                            <span>{{this.MEMBER_DATA?.length}}</span></label>
                     </div>
                     <div class="right-panel col-5">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control border-radius" placeholder="Search customer by name or email"
-                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <input type="text" class="form-control border-radius"
+                                placeholder="Search customer by name or email" aria-label="Recipient's username"
+                                aria-describedby="button-addon2">
                             <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
                         </div>
                     </div>
@@ -28,8 +30,11 @@
                         </thead>
                         <tbody>
                             <tr class="table-tr" *ngFor="let item of this.MEMBER_DATA;let i=index">
-                                <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl" class="img-icon">{{item?.name}} | {{item?.email}}</td>
-                                <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{this.initialName(item?.name)}}</span>{{item?.name}} | {{item?.email}}</td>
+                                <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl"
+                                        class="img-icon">{{item?.name}} | {{item?.email}}</td>
+                                <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span
+                                        class="img-text">{{this.initialName(item?.name)}}</span>{{item?.name}} |
+                                    {{item?.email}}</td>
                                 <td class="col-td-th-3">
                                     <span class="InActive" *ngIf="item?.isLoggin==undefined">Not found..</span>
                                     <span class="active-status" *ngIf="item?.isLoggin==true">Active</span>
@@ -37,16 +42,18 @@
                                 </td>
                                 <td class="col-td-th-3">Member</td>
                                 <td class="col-td-th-3">{{item?.Subscription}}</td>
-                                <td class="td-th-w-2">{{ item?.LastLogin!=undefined?item?.LastLogin+' ago':'Not found..'}}</td>
+                                <td class="td-th-w-2">{{ item?.LastLogin!=undefined?item?.LastLogin+' ago':'Not
+                                    found..'}}</td>
                                 <td class="col-td-th-3 btn-td">
                                     <!-- <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View(i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button> -->
-                                    <button class="btn btn-primary" (click)="deleteMember(item?.email)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    <button class="btn btn-primary" (click)="deleteMember(item?.email)"><i
+                                            class="fa fa-trash" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                </mat-tab>
+            </mat-tab>
             <mat-tab label="Subcription Panel">
                 <div class="subcription-panel">
                     <div class="col-12 p-0" style="height: 100%;"
@@ -55,10 +62,8 @@
                             <div class="display-item">
                                 <div class="card seamus">
                                     <div class="card-top">
-                                        <button class="btn btn-primary PopupOpen" popup-close="SUBCRIPTION_CHANGES"
-                                            (click)="ChangeSubcriptionData(item,item?._id)">
-                                            <i class="fa fa-edit PopupOpen" popup-close="SUBCRIPTION_CHANGES"
-                                                aria-hidden="true"></i>
+                                        <button class="btn btn-primary" (click)="ChangeSubcriptionData(item,item?._id)">
+                                            <i class="fa fa-edit" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                     <div class="card-profile">
@@ -120,6 +125,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 p-0 add-card" style="height: 100%;"
+                        [ngClass]="{'show-card':this.EDIT_OPTION_SHOW==true,'hide-card':this.EDIT_OPTION_SHOW==false}">
+                        <div class="display" *ngIf="this.EDIT_OPTION_SHOW==true">
+                            <subscription-page></subscription-page>
+                        </div>
+                    </div>
                 </div>
             </mat-tab>
         </mat-tab-group>
@@ -136,18 +147,14 @@
                     <div class="card seamus">
                         <div class="card-top"></div>
                         <div class="card-profile">
-                            <div class="profile-image"
-                                *ngIf="this.VIEWDATA?.imageUrl!=undefined"
+                            <div class="profile-image" *ngIf="this.VIEWDATA?.imageUrl!=undefined"
                                 [title]="this.VIEWDATA?.isLoggin==true?'User Active':'User Not Active'"
                                 [ngClass]="{'border-active':this.VIEWDATA?.isLoggin==true,'border-inactive':this.VIEWDATA?.isLoggin==false}">
-                                <img [src]="this.VIEWDATA?.imageUrl" alt=""
-                                    srcset="">
+                                <img [src]="this.VIEWDATA?.imageUrl" alt="" srcset="">
                             </div>
-                            <div class="profile-image"
-                                *ngIf="this.VIEWDATA?.imageUrl==undefined"
+                            <div class="profile-image" *ngIf="this.VIEWDATA?.imageUrl==undefined"
                                 [title]="this.VIEWDATA?.isLoggin==true?'User Active':'User Not Active'">
-                                <span
-                                    class="img-text">{{this.initialName(this.VIEWDATA?.fullName)}}</span>
+                                <span class="img-text">{{this.initialName(this.VIEWDATA?.fullName)}}</span>
                             </div>
                         </div>
                         <div class="card-info">
@@ -158,14 +165,12 @@
                             </div>
                             <div class="info-follow">
                                 <div class="follow-followers">
-                                    <span
-                                        style="font-size: 16px;">{{this.VIEWDATA?.companyName
+                                    <span style="font-size: 16px;">{{this.VIEWDATA?.companyName
                                         }}</span><br />
                                     <span style="font-weight: 700;">Company Name</span>
                                 </div>
                                 <div class="follow-following">
-                                    <span
-                                        style="font-size: 16px;">{{this.VIEWDATA?.companyId
+                                    <span style="font-size: 16px;">{{this.VIEWDATA?.companyId
                                         }}</span><br />
                                     <span style="font-weight: 700;">Company Id</span>
                                 </div>
@@ -207,19 +212,20 @@
                 </div>
                 <div class="row flex-label" style="width: 300px;height: 110px;">
                     <label for="message-text" class="col-form-label">Documents List :</label>
-                     <div class="col">
+                    <div class="col">
                         <input type="checkbox" formControlName="DMS" id="" #DMS>
                         <label for="message-text" class="col-form-label">DMS</label>
-                     </div>
-                     <div class="col">
+                    </div>
+                    <div class="col">
                         <input type="checkbox" formControlName="Teasury" id="">
                         <label for="message-text" class="col-form-label">Teasury</label>
-                     </div>
-                     <div class="col">
-                        <input type="checkbox" formControlName="Transaction" id="" (change)="Transaction_Checked($event)">
+                    </div>
+                    <div class="col">
+                        <input type="checkbox" formControlName="Transaction" id=""
+                            (change)="Transaction_Checked($event)">
                         <label for="message-text" class="col-form-label">Transaction</label>
-                     </div>
-                  </div>
+                    </div>
+                </div>
                 <div class="row" style="width: 300px;">
                     <label for="message-text" class="col-form-label">Maximum No. of User :</label>
                     <input name="loginrange" type="number" class="form-control"

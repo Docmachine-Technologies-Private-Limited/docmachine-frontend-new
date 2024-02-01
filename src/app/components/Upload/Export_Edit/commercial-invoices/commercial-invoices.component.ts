@@ -88,15 +88,6 @@ export class EditCommercialInvoicesComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
       this.validator.buildForm({
-        sbNo: {
-          type: "text",
-          value: args?.sbNo,
-          label: "Select Shipping Bill",
-          disabled: true,
-          rules: {
-            required: true,
-          }
-        },
         commercialNumber: {
           type: "text",
           value: args?.commercialNumber,
@@ -153,7 +144,6 @@ export class EditCommercialInvoicesComponent implements OnInit {
           value: this.data?.currency,
           label: "Currency",
           name: 'currency',
-          disabled: true,
           rules: {
             required: true,
           }
@@ -166,15 +156,6 @@ export class EditCommercialInvoicesComponent implements OnInit {
           rules: {
             required: true,
           }
-        },
-        type: {
-          type: "PaymentTermType",
-          value: this.data?.type,
-          label: "Type",
-          name: 'type',
-          rules: {
-            required: true,
-          },
         },
       }, 'ExportCommercialInvoices');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')

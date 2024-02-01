@@ -2,20 +2,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../service/user.service';
-import { AuthGuard } from '../../../service/authguard.service';
-import { DocumentService } from '../../../service/document.service';
-import { UploadServiceValidatorService } from '../../../components/Upload/service/upload-service-validator.service';
 import moment from 'moment';
-import { FormControllerService } from '../../../components/form-controller/form/form.service';
+import { UserService } from '../../service/user.service';
+import { AuthGuard } from '../../service/authguard.service';
+import { DocumentService } from '../../service/document.service';
+import { UploadServiceValidatorService } from '../Upload/service/upload-service-validator.service';
+import { FormControllerService } from '../form-controller/form/form.service';
 declare var Razorpay: any;
 
 @Component({
-  selector: 'app-twofactorauth',
-  templateUrl: './twofactorauth.component.html',
-  styleUrls: ['./twofactorauth.component.scss']
+  selector: 'subscription-page',
+  templateUrl: './subscription-page.component.html',
+  styleUrls: ['./subscription-page.component.scss']
 })
-export class TwofactorauthComponent implements OnInit {
+export class SubscriptionPageComponent implements OnInit {
   public authcode: any;
   public tfa: any;
   RoleCheckbox_DATA: any = [];

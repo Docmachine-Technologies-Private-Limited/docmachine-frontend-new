@@ -11,6 +11,7 @@ import $ from 'jquery';
 import { AuthGuard } from '../../../service/authguard.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ExportBillLodgementData } from '../../../home/Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'upload-components',
@@ -264,21 +265,37 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
 
   ToHSCode_Selected: any = [];
   ToHSCode(event: any, value: any, index: any) {
+    if (this.ToHSCode_Selected[this.HSCODE_FEILD_FORM.FormOptionfieldName] == undefined) {
+      this.ToHSCode_Selected[this.HSCODE_FEILD_FORM.FormOptionfieldName] = []
+    }
     if (event?.target?.checked == true) {
-      this.ToHSCode_Selected[index] = value;
+      this.ToHSCode_Selected[this.HSCODE_FEILD_FORM.FormOptionfieldName][index] = value;
     } else {
-      this.ToHSCode_Selected[index] = '';
+      this.ToHSCode_Selected[this.HSCODE_FEILD_FORM.FormOptionfieldName][index] = '';
     }
   }
 
-  ALL_DATA_HSCODE: any = '';
+  ALL_DATA_HSCODE: any = [];
   DoneButton() {
     let temp2: any = [];
-    this.ToHSCode_Selected.forEach(element => {
+    this.ToHSCode_Selected[this.HSCODE_FEILD_FORM.FormOptionfieldName]?.forEach(element => {
       temp2.push(element?.hscode);
     });
-    this.ALL_DATA_HSCODE = temp2.join(',');
-    this.setValue(this.ALL_DATA_HSCODE, this.HSCODE_FEILD_FORM?.field);
+    this.ALL_DATA_HSCODE[this.HSCODE_FEILD_FORM.FormOptionfieldName] = temp2.join(',');
+    // this.setValue(this.ALL_DATA_HSCODE, this.HSCODE_FEILD_FORM?.field);
+
+    const myForm: any = this.HSCODE_FEILD_FORM?.form?.controls[this.HSCODE_FEILD_FORM.fieldName] as FormGroup;
+    let currentVal = this.ALL_DATA_HSCODE[this.HSCODE_FEILD_FORM.FormOptionfieldName];
+    myForm.value[this.HSCODE_FEILD_FORM?.OptionfieldIndex][this.HSCODE_FEILD_FORM.FormOptionfieldName] = currentVal;
+    myForm?.controls[this.HSCODE_FEILD_FORM?.OptionfieldIndex]?.controls[this.HSCODE_FEILD_FORM.FormOptionfieldName]?.setValue(currentVal);
+    myForm['touched'] = true;
+    myForm['status'] = 'VALID';
+    this.validator.dynamicFormGroup[this.HSCODE_FEILD_FORM?.id].get(this.HSCODE_FEILD_FORM?.fieldName).clearValidators();
+    this.validator.dynamicFormGroup[this.HSCODE_FEILD_FORM?.id].get(this.HSCODE_FEILD_FORM?.fieldName).updateValueAndValidity();
+    console.log(myForm, this.HSCODE_FEILD_FORM.value, "myForm")
+    if (this.HSCODE_FEILD_FORM?.callback != undefined && this.HSCODE_FEILD_FORM?.callback != null) {
+      this.HSCODE_FEILD_FORM.callback({ id: this.HSCODE_FEILD_FORM.id, form: this.HSCODE_FEILD_FORM.form, fieldName: this.HSCODE_FEILD_FORM.fieldName, OptionfieldIndex: this.HSCODE_FEILD_FORM.OptionfieldIndex, FormOptionfieldName: this.HSCODE_FEILD_FORM.FormOptionfieldName, value: this.HSCODE_FEILD_FORM.value, dynamicFormGroup: this.validator.dynamicFormGroup[this.HSCODE_FEILD_FORM.id], field: this.validator.FIELDS_DATA[this.HSCODE_FEILD_FORM.id] });
+    }
   }
 
   filtertimeout: any = ''
@@ -298,9 +315,17 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     field: ''
   }
 
-  ValueAdd(id: any, field: any) {
-    this.HSCODE_FEILD_FORM['id'] = id;
-    this.HSCODE_FEILD_FORM['field'] = field;
+  ValueAdd(id: any, form: any, fieldName: any, OptionfieldIndex: any, FormOptionfieldName: any, value: any, callback: any = undefined, field: any = undefined) {
+    this.HSCODE_FEILD_FORM = {
+      id: id,
+      form: form,
+      fieldName: fieldName,
+      OptionfieldIndex: OptionfieldIndex,
+      FormOptionfieldName: FormOptionfieldName,
+      value: value,
+      callback: callback,
+      field: field
+    };
   }
 
   PUPOSE_CODE_FEILD_FORM: any = {
@@ -310,14 +335,15 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
 
 
   SELECT_PURPOSE_CODE(event: any, index: any) {
-    console.log(event, 'SELECT_PURPOSE_CODE')
-    this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = { PurposeCode: event[0], Description: this.validator.PURPOSE_CODE_FILTER_DATA[index]?.Value_greater_25000_equv[0] };
+    this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = { PurposeCode: event[0]?.toString(), Description: this.validator.PURPOSE_CODE_FILTER_DATA[index]?.Value_greater_25000_equv[0] };
     this.validator.SELECTED_PURPOSE_CODE_INDEX[index] = true;
     this.validator.PURPOSE_CODE_FILTER_DATA?.forEach((element, i) => {
       if (index == i) {
         element['isActive'] = true;
       }
     });
+    console.log(event, this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION, 'SELECT_PURPOSE_CODE')
+
   }
 
   PURPOSE_ValueAdd(id: any, field: any) {
@@ -325,15 +351,14 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
     this.PUPOSE_CODE_FEILD_FORM['field'] = field;
   }
 
-  ALL_DATA_PURPOSE_CODE: any = '';
   PURPOSEDoneButton() {
     let temp2: any = [];
     this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION.forEach(element => {
       temp2.push(element?.PurposeCode);
     });
-    console.log(temp2, "PURPOSEDoneButton")
-    this.ALL_DATA_PURPOSE_CODE = temp2.join(',');
-    this.setValue(this.ALL_DATA_PURPOSE_CODE, this.PUPOSE_CODE_FEILD_FORM?.field);
+    this.validator.ALL_DATA_PURPOSE_CODE = temp2.join(',');
+    console.log(temp2,this.validator.ALL_DATA_PURPOSE_CODE, "PURPOSEDoneButton")
+    this.setValue(this.validator.ALL_DATA_PURPOSE_CODE, this.PUPOSE_CODE_FEILD_FORM?.field);
   }
 
   IMAGE_UPLOAD_LIST: any = [];
@@ -586,7 +611,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       form.value[name][index] = args[1].publicUrl
     }
   }
-  
+
   AdditionalDocumentsUrl: any = ''
   ViewAdditionalDocuments(doc: any) {
     this.AdditionalDocumentsUrl = ''
@@ -594,7 +619,7 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.AdditionalDocumentsUrl = doc;
     }, 200);
   }
-  
+
   UploadedViewPdfUrl: any = ''
   UploadedViewPdf(pdf: any) {
     this.UploadedViewPdfUrl = '';
@@ -602,9 +627,9 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
       this.UploadedViewPdfUrl = pdf;
     }, 200);
   }
-  
-  @Output('LETTER_HEADE_URL')LETTER_HEADE_URL:any=new EventEmitter(); 
-  onFileSelect(input,urladd) {
+
+  @Output('LETTER_HEADE_URL') LETTER_HEADE_URL: any = new EventEmitter();
+  onFileSelect(input, urladd) {
     console.log(input.files);
     if (input.files && input.files[0]) {
       var reader = new FileReader();

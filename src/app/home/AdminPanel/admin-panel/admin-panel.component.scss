@@ -47,6 +47,7 @@
     font-weight: bold;
     padding-left: 30px;
 }
+
 .td-th-w-2 {
     width: 200px;
     display: flex;
@@ -55,6 +56,7 @@
     align-items: center;
     gap: 5px;
 }
+
 .img-icon {
     width: 30px;
     border-radius: 50%;
@@ -222,7 +224,7 @@
     border: 4px solid #e04b4b !important;
 }
 
-.profile-image img{
+.profile-image img {
     width: 215px;
 }
 
@@ -235,19 +237,19 @@
     border: 0;
 }
 
-.subcription-panel{
+.subcription-panel {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(2, 1fr);
     align-items: center;
 }
 
-.subcription-panel .card{
+.subcription-panel .card {
     width: 100%;
 }
 
 .subcription-panel table .col-td-th-1 {
     width: 150px;
-    border: 0!important;
+    border: 0 !important;
     margin: auto;
     display: flex;
     align-items: center;
@@ -256,15 +258,15 @@
     word-break: break-all;
 }
 
-.background-color ::ng-deep .mat-tab-body-content{
+.background-color ::ng-deep .mat-tab-body-content {
     width: calc(100vw - 220px);
-    height: calc(100vh - 133px)!important;
+    height: calc(100vh - 133px) !important;
     overflow: auto;
 }
 
-.Approve_Reject_Delete ::ng-deep .mat-tab-body-content{
+.Approve_Reject_Delete ::ng-deep .mat-tab-body-content {
     width: calc(100vw - 220px);
-    height: calc(100vh - 180px)!important;
+    height: calc(100vh - 180px) !important;
 }
 
 .card-top button {
@@ -276,27 +278,47 @@
     margin-top: 0;
 }
 
-.SUBCRIPTION_CHANGES{
+.SUBCRIPTION_CHANGES {
     margin: auto;
     height: 380px;
     overflow: auto;
     padding: 30px;
 }
-.flex-label{
+
+.flex-label {
     width: 300px;
     display: flex;
     flex-direction: column;
     text-align: left;
-  }
-  /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-  
-  /* Firefox */
-  input[type=number] {
+}
+
+/* Firefox */
+input[type=number] {
     -moz-appearance: textfield;
-  }
-  
+}
+
+.add-card {
+    transition: .2s all ease-in;
+    transform: translateX(0px);
+    opacity: 1;
+}
+
+.show-card {
+    transition: .2s all ease-in;
+    transform: translateX(0px);
+    opacity: 1;
+}
+
+.hide-card {
+    transition: .2s all ease-in;
+    transform: translateX(-100%);
+    z-index: -1;
+    opacity: 0;
+}

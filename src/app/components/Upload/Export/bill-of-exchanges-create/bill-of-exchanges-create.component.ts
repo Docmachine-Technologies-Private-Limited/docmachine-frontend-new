@@ -129,7 +129,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
       getAllFields[6]?.setText(moment(filldata?.CI_DATE)?.format("DD/MM/YYYY"));
       getAllFields[7]?.setText(filldata?.BLCopy?.value);
       getAllFields[8]?.setText('For ' + this.validator.COMPANY_INFO[0]?.teamName);
-      getAllFields[9]?.setText(this.BUYER_DETAILS?.buyerbank +''+ this.BUYER_DETAILS?.buyerbankaddress);
+      getAllFields[9]?.setText(this.BUYER_DETAILS?.buyerbank + '' + this.BUYER_DETAILS?.buyerbankaddress);
     }
     const pdfBytes = await pdfDoc.save()
     var base64String = this._arrayBufferToBase64(pdfBytes)
@@ -142,7 +142,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
     }
     const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
     copiedPages.forEach((page) => {
-    page.setFontColor(rgb(0,0,0))
+      page.setFontColor(rgb(0, 0, 0))
       mergedPdf.addPage(page);
       if (this.validator.COMPANY_INFO?.length != 0) {
         const { width, height } = page.getSize();
@@ -313,7 +313,8 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
           rules: {
             required: true,
           },
-          ChargeLabelHide:null
+          TypeOfCurrency: 'INR',
+          ChargeLabelHide: null
         },
         sbNo: {
           type: "ShippingBill",
@@ -340,7 +341,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
             required: true,
           }
         },
-      }, 'EXPORT_BILL_OF_EXCHANGE').then((res)=>this.validator.CHECK_BOX_BANK_LIST_CHARGES=[]);
+      }, 'EXPORT_BILL_OF_EXCHANGE').then((res) => this.validator.CHECK_BOX_BANK_LIST_CHARGES = []);
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
@@ -395,7 +396,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.response(null);
       this.validator.SHIPPING_BILL_LIST = [];
-      this.LoadShippingBill(this.pipoArr);     
+      this.LoadShippingBill(this.pipoArr);
       this.COMMERCIAL_LIST = [];
       console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
     } else {
@@ -403,7 +404,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
+
   LoadShippingBill(pipoArr: any) {
     this.filteranytablepagination.PaginationfilterAnyTable({
       pipo: pipoArr
@@ -423,10 +424,10 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
       console.log('Master Country', this.validator.SHIPPING_BUNDEL, this.validator.origin);
     })
   }
-  
+
   onChangeShippingBill(data: any) {
     console.log(data, "onChangeShippingBill")
-    this.validator.COMMERICAL_NO=[];
+    this.validator.COMMERICAL_NO = [];
     let fileterdata = this.validator.SHIPPING_BILL_MASTER_DATA.filter((item: any) => item?._id?.includes(data?.SB_ID))[0];
     fileterdata?.commercialdetails?.forEach(element => {
       let checkexit = this.validator.COMMERICAL_NO.filter((item: any) => item?.value?.includes(element?.commercialNumber))
@@ -441,7 +442,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
         });
       }
     });
-    this.validator.BL_COPY_LIST=[];
+    this.validator.BL_COPY_LIST = [];
     fileterdata?.blcopydetails?.forEach(element => {
       let checkexit = this.validator.BL_COPY_LIST.filter((item: any) => item?.value?.includes(element?.airwayBlCopyNumber))
       if (checkexit?.length == 0) {

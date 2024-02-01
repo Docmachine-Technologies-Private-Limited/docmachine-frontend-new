@@ -106,11 +106,8 @@ import { PasswordValidationDirective } from "../RegistrationPage/Controller/Pass
 import { BharatheximCreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/create-plan/bharathexim-create-plan.component";
 import { BharatheximGeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/generator-coupon-product/bharathexim-generator-coupon-product.component";
 import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-panel/bharathexim-subscription-module/bharathexim-subscription-module.component";
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from '@angular/material/list';
-import { MatTableModule } from '@angular/material/table';
+import { SubscriptionPageComponent } from "../components/subscription-page/subscription-page.component";
+import { FormControllerModule } from "../components/form-controller/form-controller.module";
 
 @NgModule({
   declarations: [
@@ -185,7 +182,8 @@ import { MatTableModule } from '@angular/material/table';
     PasswordValidationDirective,
     BharatheximCreatePlanComponent,
     BharatheximGeneratorCouponProductComponent,
-    BharatheximSubscriptionModuleComponent
+    BharatheximSubscriptionModuleComponent,
+    SubscriptionPageComponent
   ],
   imports: [
     CommonModule,
@@ -210,11 +208,6 @@ import { MatTableModule } from '@angular/material/table';
     MatFormFieldModule,
     MatInputModule,
     CustomMatStepperModule,
-    MatSlideToggleModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatListModule,
-    MatTableModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [
@@ -326,11 +319,7 @@ import { MatTableModule } from '@angular/material/table';
     BusinessEmailValidatorDirective,
     MaxMinValidationDirective,
     PasswordValidationDirective,
-    MatSlideToggleModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatListModule,
-    MatTableModule,
+    SubscriptionPageComponent,
   ],
 })
 export class SharedHomeModule { }

@@ -665,7 +665,7 @@ export class EditCompanyComponent implements OnInit {
           required: true,
         },
         Inputdisabled: true,
-        placeholderText: 'Enter your mobile no.',
+        placeholderText: 'Enter caEmail',
       },
       chaEmail: {
         type: "text",
@@ -675,7 +675,7 @@ export class EditCompanyComponent implements OnInit {
           required: true,
         },
         Inputdisabled: true,
-        placeholderText: 'Enter your mobile no.',
+        placeholderText: 'Enter chaEmail',
       },
       gst: {
         type: "text",
@@ -685,7 +685,7 @@ export class EditCompanyComponent implements OnInit {
           required: true,
         },
         Inputdisabled: true,
-        placeholderText: 'Enter your mobile no.',
+        placeholderText: 'Enter gst no.',
       },
       BranchName: {
         type: "text",
@@ -695,7 +695,7 @@ export class EditCompanyComponent implements OnInit {
           required: true,
         },
         Inputdisabled: true,
-        placeholderText: 'Enter your mobile no.',
+        placeholderText: 'Enter BranchName',
       },
       BranchAddress: {
         type: "text",
@@ -705,7 +705,7 @@ export class EditCompanyComponent implements OnInit {
           required: true,
         },
         Inputdisabled: true,
-        placeholderText: 'Enter your mobile no.',
+        placeholderText: 'Enter BranchAddress',
       },
       AdCode: {
         type: "formGroup",
@@ -833,6 +833,16 @@ export class EditCompanyComponent implements OnInit {
   onSubmit(id, UPDATED_DETAILS: any) {
     console.log(UPDATED_DETAILS, 'UPDATED_DETAILS');
     if (UPDATED_DETAILS?.status == "VALID") {
+      let array1: any = []
+      UPDATED_DETAILS.value.bankDetails.forEach((value, index) => {
+        const newVal = { ...value };
+        newVal['BankUniqueId'] = value?.bank?.BankUniqueId != undefined ? value?.bank?.BankUniqueId : this.item?.bankDetails[index]?.BankUniqueId;
+        newVal['bank'] = value?.bank?.value != undefined ? value?.bank?.value : value?.bank;
+        newVal['accType'] = value?.accType?.type != undefined ? value?.accType?.type : value?.accType;
+        newVal['currency'] = value?.currency?.type != undefined ? value?.currency?.type : value?.currency;
+        array1.push(newVal)
+      });
+      UPDATED_DETAILS.value.bankDetails = array1;
       UPDATED_DETAILS.value.Starhousecertificate_Details = UPDATED_DETAILS?.value?.Starhousecertificate_Details;
       this.userService.updateTeamById(UPDATED_DETAILS?.value, id).subscribe(data => {
         console.log("king123")

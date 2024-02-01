@@ -35,6 +35,8 @@ export class AdminPanelComponent implements OnInit {
   SUBCRIPTION_CHANGES: any = FormGroup;
   USER_DATA:any=[];
   MEMBER_DATA:any=[];
+  EDIT_OPTION_SHOW:boolean=false;
+  
   constructor(public route?: ActivatedRoute, public formBuilder?: FormBuilder,
     public userService?: UserService,
     public sanitizer?: DomSanitizer, public toastr?: ToastrService,
@@ -56,13 +58,13 @@ export class AdminPanelComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let token = this.authGuard?.loadFromLocalStorage();
     this.ORIGNAL_DATA = await this.userService?.getAllUserMember();
     this.USER_DEATILS = this.ORIGNAL_DATA;
     this.loaddata();
     this.ApprovalRejectDelete(null, 'approved')
-    console.log(this.USER_DEATILS, 'this.USER_DEATILS')
+    console.log(this.USER_DEATILS, 'USER_DEATILS')
   }
+  
   async loaddata() {
     this.SUBCRIPTION_DATA = [];
     let buyerDetail: any = [];
@@ -349,6 +351,7 @@ export class AdminPanelComponent implements OnInit {
       Teasury:[data?.Teasury, Validators.required],
       Transaction:[data?.Transaction, Validators.required],
     });
+    this.EDIT_OPTION_SHOW=true;
   }
   SUBCRIPTION_Submit(form_value: any,displayHidden:any) {
     console.log(form_value,displayHidden, 'SUBCRIPTION_Submit')
@@ -364,7 +367,8 @@ export class AdminPanelComponent implements OnInit {
             this.toastr?.success('Updated Succesfully...');
             this.ngOnInit()
             this.SUBCRIPTION_ID='';
-            displayHidden.PopUpOpenClose.nativeElement.style.display='none';
+            // displayHidden.PopUpOpenClose.nativeElement.style.display='none';
+            this.EDIT_OPTION_SHOW=false
         });
       })
     } else {

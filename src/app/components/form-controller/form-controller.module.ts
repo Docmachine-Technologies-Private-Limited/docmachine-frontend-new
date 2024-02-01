@@ -12,6 +12,7 @@ import { StepTrackerIconsComponent } from './step-nav/step-tracker-icons.compone
 import { ProgressionButtonsComponent } from './progression-buttons/progression-buttons.component';
 import { FormControllerComponent } from './form/form.component';
 import { FormControllerService } from './form/form.service';
+import { UploadServiceValidatorService } from '../Upload/service/upload-service-validator.service';
 import { SharedHomeModule } from '../../home/shared-home.module';
 
 @NgModule({
@@ -20,10 +21,9 @@ import { SharedHomeModule } from '../../home/shared-home.module';
     ProgressionButtonsComponent,
     FormControllerComponent,
   ],
-  providers: [FormControllerService],
+  providers: [FormControllerService,UploadServiceValidatorService],
   imports: [
     CommonModule,
-    SharedHomeModule,
     MatSlideToggleModule,
     MatFormFieldModule,
     MatButtonToggleModule,
@@ -32,7 +32,8 @@ import { SharedHomeModule } from '../../home/shared-home.module';
     MatListModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule,
+    SharedHomeModule
   ],
   exports: [
     MatSlideToggleModule,

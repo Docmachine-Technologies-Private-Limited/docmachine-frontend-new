@@ -632,7 +632,6 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
 
   async getS3Url2() {
     return new Promise(async (reslove, reject) => {
-      let temp: any = [];
       let url: any = [{
         fileName: this.guid() + '.pdf', buffer: this.A1_FORM_PDF_URL,
         type: 'application/pdf'
@@ -644,12 +643,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
         fileName: this.guid() + '.pdf', buffer: this.FBG_FORM_PDF_URL,
         type: 'application/pdf'
       }]
-      var fitertemp: any = url?.filter(n => n);
+      var fitertemp: any = url?.filter((n) => n?.buffer!='' && n?.buffer!=undefined && n?.buffer!=null);
       if (fitertemp?.length == 0) {
         reslove([])
       }
       console.log(fitertemp, "fitertemp")
-      await this.userService?.UploadListS3Buket(url).subscribe(async (pdfresponse1: any) => {
+      await this.userService?.UploadListS3Buket(fitertemp).subscribe(async (pdfresponse1: any) => {
         console.log(pdfresponse1, "UploadListS3Buket")
         reslove(pdfresponse1)
       });

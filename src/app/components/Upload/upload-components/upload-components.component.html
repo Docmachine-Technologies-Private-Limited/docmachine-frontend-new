@@ -950,7 +950,7 @@
                                                 *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
                                         <button type="button" [id]="Optionfield[FormOptionfield]?.id"
                                             class="btn btn-primary PopupOpen"><i class="fa fa-minus"></i>Upload</button>
-                                            <button type="button" class="btn btn-primary PopupOpen"
+                                        <button type="button" class="btn btn-primary PopupOpen"
                                             (click)="UploadedViewPdf(this.validator.dynamicFormGroup[this.id]?.value[field.fieldName][OptionfieldIndex][Optionfield[FormOptionfield]?.fieldName])"
                                             popup-close="UploadPdfOpen">View</button>
                                     </div>
@@ -1173,14 +1173,15 @@
                                             <span style="color: red;"
                                                 *ngIf="Optionfield[FormOptionfield]?.rules?.required==true">*</span></label>
                                         <div class="row m-0">
-                                            <ng-input [item]="{value:this.ALL_DATA_HSCODE,type:'text'}"
+                                            <ng-input
+                                                [item]="{value:this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]!='' && this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]!=undefined && this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]!=null?this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]:Optionfield[FormOptionfield].value,type:'text'}"
                                                 [required]="Optionfield[FormOptionfield]?.rules?.required"
                                                 [name]="Optionfield[FormOptionfield]?.name" [disabled]="true"
-                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event)"
+                                                (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback,field)"
                                                 [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
                                             <button type="button" class="btn btn-primary PopupOpen"
                                                 popup-close="HS_CODE_POPUP"
-                                                (click)="ValueAdd(this.id,Optionfield[FormOptionfield].fieldName)">Select
+                                                (click)="ValueAdd(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback,field)">Select
                                                 HS Code</button>
                                         </div>
                                     </div>
@@ -1290,9 +1291,11 @@
                     <label *ngIf="field.label!=undefined && field.label!=''">{{field.label}} <span style="color: red;"
                             *ngIf="field?.rules?.required==true">*</span></label>
                     <div class="row m-0">
-                        <input [value]="this.ALL_DATA_PURPOSE_CODE" ngModel type="text" [name]="field.fieldName"
-                            disabled [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                            class="form-control" [style]="field?.style" />
+                        <ng-input
+                            [item]="{value:this.validator.ALL_DATA_PURPOSE_CODE!='' && this.validator.ALL_DATA_PURPOSE_CODE!=undefined && this.validator.ALL_DATA_PURPOSE_CODE!=null?this.validator.ALL_DATA_PURPOSE_CODE:field?.value,type:'text'}"
+                            [name]="field.fieldName" [required]="field?.rules?.required" [disabled]="true"
+                            (event)="this.validator.setValueFrom(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,$event,field?.callback,field)"
+                            [(ngModel)]="field.value"></ng-input>
                         <button type="button" class="btn btn-primary PopupOpen" popup-close="Purpose_Code_POPUP"
                             (click)="PURPOSE_ValueAdd(this.id,field.fieldName)">Select Purpose Code</button>
                     </div>

@@ -22,6 +22,7 @@ import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-in
 import { SigninComponent } from "./RegistrationPage/signIn/signin.component";
 import { SignupComponent } from "./RegistrationPage/signup/signup.component";
 import { TearmsConditionComponent } from "./RegistrationPage/tearms-condition/tearms-condition.component";
+import { FormControllerModule } from "./components/form-controller/form-controller.module";
 
 const routes: Routes = [
   {
