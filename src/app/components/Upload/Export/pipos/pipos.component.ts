@@ -345,17 +345,6 @@ export class PIPOSComponent implements OnInit {
             ]
           ]
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'PIPO_EXPORT');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);

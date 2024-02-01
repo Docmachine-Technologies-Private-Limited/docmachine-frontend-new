@@ -712,7 +712,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
     }
   }
 
-  SendApproval(Status: string, UniqueId: any) {
+  SendApproval(Status: string, UniqueId: any,PREVIEWS_PANEL) {
     if (UniqueId != null) {
       var pipo_id: any = [];
       var pipo_name: any = [];
@@ -736,6 +736,12 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
       this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
         console.log(approval_data, res, 'approval_data')
         if (res?.id != approval_data?.id || res == undefined) {
+         delete this.ExportBillLodgement_Form?.A1Form?.field;
+         delete this.ExportBillLodgement_Form?.A1Form?.form
+         
+         delete this.ExportBillLodgement_Form?.FEMAForm?.field;
+         delete this.ExportBillLodgement_Form?.FEMAForm?.form
+
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.validator.userData['RoleCheckbox'], approval_data, () => {
             var data: any = {
               data: {
@@ -790,6 +796,7 @@ export class NewAdvanceImportPaymentsComponent implements OnInit {
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
+                        PREVIEWS_PANEL?.displayHidden;
                       });
                     }
                   }, (error) => {

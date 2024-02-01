@@ -375,7 +375,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
           element['isDisabled'] = true;
         }
         let filterDirectImports = element?.paymentTerm?.filter((item: any) => item?.type?.value === "Direct Imports(Payment Against Bill of entry)")
-        filterDirectImports.forEach((paymentTermelement: any) => {
+        filterDirectImports?.forEach((paymentTermelement: any) => {
           paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
         });
         element["paymentTerm"] = filterDirectImports;

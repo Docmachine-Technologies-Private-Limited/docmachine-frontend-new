@@ -1176,8 +1176,10 @@
                                             <ng-input
                                                 [item]="{value:this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]!='' && this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]!=undefined && this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]!=null?this.ALL_DATA_HSCODE[Optionfield[FormOptionfield]?.fieldName]:Optionfield[FormOptionfield].value,type:'text'}"
                                                 [required]="Optionfield[FormOptionfield]?.rules?.required"
-                                                [name]="Optionfield[FormOptionfield]?.name" [disabled]="true"
-                                                (change)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback,field)"
+                                                [name]="Optionfield[FormOptionfield]?.name"
+                                                [InputName]="OptionfieldIndex"
+                                                [disabled]="true"
+                                                (event)="this.validator.setValueFromArray(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,OptionfieldIndex,Optionfield[FormOptionfield]?.fieldName,$event,Optionfield[FormOptionfield]?.callback,field)"
                                                 [(ngModel)]="Optionfield[FormOptionfield].value"></ng-input>
                                             <button type="button" class="btn btn-primary PopupOpen"
                                                 popup-close="HS_CODE_POPUP"
@@ -1283,7 +1285,7 @@
                             [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                             class="form-control" [style]="field?.style" />
                         <button type="button" class="btn btn-primary PopupOpen" popup-close="HS_CODE_POPUP"
-                            (click)="ValueAdd(this.id,field.fieldName)">Select HS Code</button>
+                            (click)="ValueAdd(this.id,this.validator.dynamicFormGroup[this.id],field.fieldName,null,null,null)">Select HS Code</button>
                     </div>
                 </div>
 

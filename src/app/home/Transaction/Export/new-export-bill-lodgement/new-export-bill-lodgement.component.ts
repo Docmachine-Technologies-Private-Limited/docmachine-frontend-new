@@ -100,7 +100,7 @@ export class NewExportBillLodgementComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public ExportBillLodgementControllerData: ExportBillLodgementControllerData,
     public filteranytablepagination: filterAnyTablePagination,
-    public ExportletterheadService:ExportletterheadService,
+    public ExportletterheadService: ExportletterheadService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -662,7 +662,7 @@ export class NewExportBillLodgementComponent implements OnInit {
     if (this.BankId != '') {
       if (this.BankId == 'F_B_L_6') {
         this.ExportBillLodgementControllerData.BankFormatLoad().
-          FedralNotANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then(async(res: any) => {
+          FedralNotANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then(async (res: any) => {
             this.TIMEOUT = setTimeout(async () => {
               if (sbdata != undefined && sbdata != null) {
                 this.exportbilllodgementdata.PREVIWES_URL = '';
@@ -672,7 +672,7 @@ export class NewExportBillLodgementComponent implements OnInit {
               if (sbdata != undefined && sbdata != null) {
                 this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
               }
-              this.LETTER_HEAD_URL=''
+              this.LETTER_HEAD_URL = ''
               await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
                 this.LETTER_HEAD_URL = letterhead;
                 console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
@@ -685,7 +685,7 @@ export class NewExportBillLodgementComponent implements OnInit {
         if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
           this.ExportBillLodgementControllerData.BankFormatLoad().
             HDFCExportRegularization(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-              this.TIMEOUT = setTimeout(async() => {
+              this.TIMEOUT = setTimeout(async () => {
                 if (sbdata != undefined && sbdata != null) {
                   this.exportbilllodgementdata.PREVIWES_URL = '';
                 }
@@ -694,7 +694,7 @@ export class NewExportBillLodgementComponent implements OnInit {
                 if (sbdata != undefined && sbdata != null) {
                   this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
                 }
-                this.LETTER_HEAD_URL=''
+                this.LETTER_HEAD_URL = ''
                 await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
                   this.LETTER_HEAD_URL = letterhead;
                   console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
@@ -705,7 +705,7 @@ export class NewExportBillLodgementComponent implements OnInit {
         } else {
           this.ExportBillLodgementControllerData.BankFormatLoad().
             HDFCExportLODGEMENT(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-              this.TIMEOUT = setTimeout(async() => {
+              this.TIMEOUT = setTimeout(async () => {
                 if (sbdata != undefined && sbdata != null) {
                   this.exportbilllodgementdata.PREVIWES_URL = '';
                 }
@@ -714,7 +714,7 @@ export class NewExportBillLodgementComponent implements OnInit {
                 if (sbdata != undefined && sbdata != null) {
                   this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
                 }
-                this.LETTER_HEAD_URL=''
+                this.LETTER_HEAD_URL = ''
                 await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
                   this.LETTER_HEAD_URL = letterhead;
                   console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
@@ -792,7 +792,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           this.PREVIWES_URL = ''
           this.ExportBillLodgementControllerData.BankFormatLoad().
             FedralWithANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-              this.TIMEOUT = setTimeout(async() => {
+              this.TIMEOUT = setTimeout(async () => {
                 if (sbdata != undefined && sbdata != null) {
                   this.exportbilllodgementdata.PREVIWES_URL = '';
                 }
@@ -801,7 +801,7 @@ export class NewExportBillLodgementComponent implements OnInit {
                 if (sbdata != undefined && sbdata != null) {
                   this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
                 }
-                this.LETTER_HEAD_URL=''
+                this.LETTER_HEAD_URL = ''
                 await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
                   this.LETTER_HEAD_URL = letterhead;
                   console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
@@ -815,7 +815,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
             this.ExportBillLodgementControllerData.BankFormatLoad().
               HDFCExportRegularization(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-                this.TIMEOUT = setTimeout(async() => {
+                this.TIMEOUT = setTimeout(async () => {
                   if (sbdata != undefined && sbdata != null) {
                     this.exportbilllodgementdata.PREVIWES_URL = '';
                   }
@@ -825,7 +825,7 @@ export class NewExportBillLodgementComponent implements OnInit {
                     this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
                   }
                   resolve(this.PREVIWES_URL)
-                  this.LETTER_HEAD_URL=''
+                  this.LETTER_HEAD_URL = ''
                   await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
                     this.LETTER_HEAD_URL = letterhead;
                     console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
@@ -836,7 +836,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           } else {
             this.ExportBillLodgementControllerData.BankFormatLoad().
               HDFCExportLODGEMENT(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
-                this.TIMEOUT = setTimeout(async() => {
+                this.TIMEOUT = setTimeout(async () => {
                   if (sbdata != undefined && sbdata != null) {
                     this.exportbilllodgementdata.PREVIWES_URL = '';
                   }
@@ -846,7 +846,7 @@ export class NewExportBillLodgementComponent implements OnInit {
                     this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
                   }
                   resolve(this.PREVIWES_URL)
-                  this.LETTER_HEAD_URL=''
+                  this.LETTER_HEAD_URL = ''
                   await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
                     this.LETTER_HEAD_URL = letterhead;
                     console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
@@ -959,6 +959,21 @@ export class NewExportBillLodgementComponent implements OnInit {
                 this.ExportBillLodgement_Form['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: Uniquekey })
               }
               this.ExportBillLodgement_Form['documents'] = (mergePdf_List);
+              delete this.ExportBillLodgement_Form?.SingleMultiple?.field
+              delete this.ExportBillLodgement_Form?.SingleMultiple?.form
+              delete this.ExportBillLodgement_Form?.DirectDispatch?.field
+              delete this.ExportBillLodgement_Form?.DirectDispatch?.form
+              delete this.ExportBillLodgement_Form?.Sight?.field
+              delete this.ExportBillLodgement_Form?.Sight?.form
+              delete this.ExportBillLodgement_Form?.Usance?.field
+              delete this.ExportBillLodgement_Form?.Usance?.form
+              delete this.ExportBillLodgement_Form?.WithScrutiny?.field
+              delete this.ExportBillLodgement_Form?.WithScrutiny?.form
+              delete this.ExportBillLodgement_Form?.InvoiceReduction?.field
+              delete this.ExportBillLodgement_Form?.InvoiceReduction?.form
+              delete this.ExportBillLodgement_Form?.YesNoUnderLCAsk?.field
+              delete this.ExportBillLodgement_Form?.YesNoUnderLCAsk?.form
+
               if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
                 var data: any = {
                   data: this.ExportBillLodgement_Form,
