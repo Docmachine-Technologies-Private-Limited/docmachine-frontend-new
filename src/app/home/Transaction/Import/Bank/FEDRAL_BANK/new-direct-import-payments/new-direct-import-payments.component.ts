@@ -745,7 +745,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     }
   }
 
-  SendApproval(Status: string, UniqueId: any) {
+  SendApproval(Status: string, UniqueId: any,PREVIEWS_PANEL) {
     if (UniqueId != null) {
       var pipo_id: any = [];
       var boe_id: any = [];
@@ -835,6 +835,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
+                        PREVIEWS_PANEL?.displayHidden;
                         this.toastr.success("Direct Import Payment transaction created successfully...")
                       });
                     }
