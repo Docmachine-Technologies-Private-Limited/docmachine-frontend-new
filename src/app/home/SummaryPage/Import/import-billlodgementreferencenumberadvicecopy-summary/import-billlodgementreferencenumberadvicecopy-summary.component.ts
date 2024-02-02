@@ -302,7 +302,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
       console.log('king123');
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('bill lodgement reference advicecopy Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -311,7 +311,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
   toSave2(data) {
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('bill lodgement reference advicecopy Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -321,7 +321,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     console.log(data);
     this.documentService.updateDebit(data, id).subscribe((data) => {
       console.log(data);
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('bill lodgement reference advicecopy Is Updated Successfully.');
       this.ngOnInit();
       EditSummaryPagePanel?.displayHidden
     }, (error) => {
@@ -339,7 +339,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/Bill-Lodgement-Referance-AdviceCopy`], navigationExtras);
-    this.toastr.warning('Debit Note Row Is In Edit Mode');
+    this.toastr.warning('bill lodgement reference advicecopy Is In Edit Mode');
   }
 
   handleDelete(data: any) {

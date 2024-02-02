@@ -20,14 +20,9 @@
                     [BUTTON_PANEL_SHOW]="false" SubmitName="Fill PDF" id="IMPORT_TRANSACTION"
                     (BankEvent)="setSelectedBankDetails($event,null)" (BENEFICIARY_EVENT)="BENEFICIARY_CALLBACK($event)"
                     (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)" #RawValueEventPanel>
-                    <button class="btn btn-primary PopupOpen" style="position: absolute;
-                bottom: 10px;
-                height: 50px;" popup-close="AutofillLCTable" #AutofillLCTableButton>AutoFill</button>
+                    <button class="btn btn-primary PopupOpen" popup-close="AutofillLCTable" #AutofillLCTableButton>AutoFill</button>
                     <button class="btn btn-primary" *ngIf="this.Send_for_Approval_button==true"
-                        (click)="PREVIEWS_PANEL?.displayShow" style="position: absolute;
-                    bottom: 10px;
-                    right: 100px;
-                    height: 50px;">Previews</button>
+                        (click)="PREVIEWS_PANEL?.displayShow">Previews</button>
                 </upload-components>
             </div>
         </custom-mat-step>
@@ -127,7 +122,7 @@
     </div>
     <custom-model-header>
         <button type="button" class="btn btn-primary"
-            (click)="SaveAsDraft(this.EDIT_OPTION_ENABLED==true?'Changed_':'New_','SendApprover');">Save</button>
+            (click)="SaveAsDraft(this.EDIT_OPTION_ENABLED==true?'Changed_':'New_','SendApprover',PREVIEWS_PANEL);">Save</button>
     </custom-model-header>
 </app-custom-model>
 
@@ -156,10 +151,7 @@
         </div>
         <upload-components SubmitName="AutoFill" id="AutofillLCTableForm" [BUTTON_PANEL_SHOW]="false"
             [BUTTON_PANEL_HIDE]="false" #AutofillLCTableFormPanel></upload-components>
-        <div class="modal-footer" style="position: fixed;
-        bottom: 40px;
-        right: 20px;
-        border: none;">
+        <div class="modal-footer">
             <div style="display:flex;" class="mt-3">
                 <button type="button" class="btn btn-primary"
                     (click)="QuestionDoneButton(AutofillLCTableFormPanel?.geForm,AutofillLCTablePanel);">Done</button>

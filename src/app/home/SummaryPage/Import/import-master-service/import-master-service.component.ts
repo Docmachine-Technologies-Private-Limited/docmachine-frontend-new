@@ -21,7 +21,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 })
 export class ImportMasterServiceComponent implements OnInit {
 
-  
+
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
   public item: any;
   public item1: any = [];
@@ -122,7 +122,7 @@ export class ImportMasterServiceComponent implements OnInit {
           this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
         }
       }
-      this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+      this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS: any) => {
         console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
         this.FILTER_FORM = {
           buyerName: {
@@ -233,37 +233,6 @@ export class ImportMasterServiceComponent implements OnInit {
     this.ngOnInit()
   }
 
-
-  MasterServiceTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['UtilizationAddition']),
-          date: element['date'],
-          masterServiceNumber: element['masterServiceNumber'],
-          StartDate: moment(element['StartDate']).format("DD-MM-YYYY"),
-          Expirydate: moment(element['Expirydate']).format("DD-MM-YYYY"),
-          PartyName: element['PartyName']?.value,
-          masterServiceAmount: element['masterServiceAmount'],
-          currency: element['currency'],
-          buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
-      });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
-      }
-    });
-  }
-
   async removeEmpty(data: any) {
     await data.forEach(element => {
       for (const key in element) {
@@ -347,6 +316,14 @@ export class ImportMasterServiceComponent implements OnInit {
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
+    let temp: any = [];
+    this.LIST_PIPO?.forEach(element => {
+      temp.push(element);
+    });
+    data['pipo'] = temp
+    data?.UtilizationAddition?.forEach(element => {
+      element["buyerName"] = data["buyerName"]
+    });
     this.documentService.updateMasterService(data, id).subscribe((data) => {
       console.log(data);
       this.toastr.success('Master Service Row Is Updated Successfully.');
@@ -413,7 +390,7 @@ export class ImportMasterServiceComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
-        documents:[index?.doc],
+        documents: [index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -432,11 +409,13 @@ export class ImportMasterServiceComponent implements OnInit {
     xlsx.writeFile(wb, 'MasterService.xlsx');
   }
 
+  LIST_PIPO: any = [];
   clickPipo($event, index) {
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['pi_poNo'] = $event["pi_poNo"];
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['amount'] = $event["amount"];
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['UtilizationAmount'] = $event["UtilizationAmount"];
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['buyerName'] = $event["buyerName"];
+    this.LIST_PIPO[index] = $event?.id;
   }
   AddMore() {
     this.EDIT_FORM_DATA?.UtilizationAddition.push({

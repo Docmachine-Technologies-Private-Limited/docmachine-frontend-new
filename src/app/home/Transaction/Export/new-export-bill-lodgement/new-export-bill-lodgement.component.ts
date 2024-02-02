@@ -350,7 +350,19 @@ export class NewExportBillLodgementComponent implements OnInit {
             { name: 'Usance', status: false },
             { name: 'Usancedays', status: false },
             { name: 'Usancefrom', status: false },
-          ]
+          ],
+          callback: (item: any) => {
+            console.log(item, "Sight")
+            if (item?.bool == false) {
+              item.field[5]['divhide'] = false;
+              item.field[6]['divhide'] = false;
+              item.field[7]['divhide'] = false;
+            } else {
+              item.field[5]['divhide'] = true;
+              item.field[6]['divhide'] = true;
+              item.field[7]['divhide'] = true;
+            }
+          }
         },
         Usance: {
           type: "yesnocheckbox",
@@ -365,7 +377,8 @@ export class NewExportBillLodgementComponent implements OnInit {
           ],
           NoButton: [
             { name: 'Sight', status: false }
-          ]
+          ],
+          divhide: true
         },
         Usancedays: {
           type: "text",
@@ -374,6 +387,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
+          divhide: true
         },
         Usancefrom: {
           type: "text",
@@ -382,6 +396,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
+          divhide: true
         },
         WithScrutiny: {
           type: "yesnocheckbox",
@@ -425,6 +440,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
+          divhide: true,
           ButtonId: "UPLOAD_LC",
           Show: true,
           innerHTML: `<i class="fa fa-upload" aria-hidden="true"></i>`,

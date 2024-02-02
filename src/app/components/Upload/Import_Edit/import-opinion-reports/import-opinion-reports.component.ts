@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
@@ -90,9 +89,9 @@ export class EditImportOpinionReportComponent implements OnInit {
           }
         },
         ForeignPartyName: {
-          type: "buyer",
+          type: "benne",
           value: args?.ForeignPartyName,
-          label: "Foreign Party Name",
+          label: "Foreign bene Name",
           rules: {
             required: true,
           }
@@ -113,17 +112,6 @@ export class EditImportOpinionReportComponent implements OnInit {
             required: true,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'ImportOpinionreport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -145,9 +133,9 @@ export class EditImportOpinionReportComponent implements OnInit {
           }
         },
         ForeignPartyName: {
-          type: "buyer",
+          type: "benne",
           value: this.data?.ForeignPartyName,
-          label: "Foreign Party Name",
+          label: "Foreign bene Name",
           rules: {
             required: true,
           }
@@ -168,17 +156,6 @@ export class EditImportOpinionReportComponent implements OnInit {
             required: true,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'ImportOpinionreport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -187,7 +164,6 @@ export class EditImportOpinionReportComponent implements OnInit {
 
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'export';
     e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
     console.log(e.value);
     if (this.data?.opinionReportNumber != e.value.opinionReportNumber) {
@@ -201,7 +177,7 @@ export class EditImportOpinionReportComponent implements OnInit {
               e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
               this.documentService.updateOpinionReport(e.value,this.data?._id).subscribe((res: any) => {
                 this.toastr.success(`Opinion Report Document Updated Successfully`);
-                this.router.navigate(['home/Summary/Import/opinion-report']);
+                this.router.navigate(['home/Summary/Import/Opinion-Report']);
               }, (err) => console.log('Error adding pipo'));
             }else{
               this.toastr.error(`Please check this Opinion Report Number : ${e.value.opinionReportNumber} already exit...`);
@@ -213,7 +189,7 @@ export class EditImportOpinionReportComponent implements OnInit {
       e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateOpinionReport(e.value,this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Opinion Report Document Updated Successfully`);
-        this.router.navigate(['home/Summary/Import/opinion-report']);
+        this.router.navigate(['home/Summary/Import/Opinion-Report']);
       }, (err) => console.log('Error adding pipo'));
     }
    

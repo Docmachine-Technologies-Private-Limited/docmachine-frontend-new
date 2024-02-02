@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
@@ -78,9 +77,19 @@ export class EditImportBillOfExchangesComponent implements OnInit {
   
   Edit(args: any) {
     this.publicUrl = '';
+    this.changedCommercial([args?.pipo[0]?._id]);
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
+        CommericalNoList: {
+          type: "CommericalListCheckBox",
+          value: args?.CommericalNoList,
+          label: "Commerical Number*",
+          rules: {
+            required: true,
+          },
+          ShowCheckBox: true,
+        },
         billExchangeNumber: {
           type: "text",
           value: args?.billExchangeNumber,
@@ -89,17 +98,6 @@ export class EditImportBillOfExchangesComponent implements OnInit {
             required: true,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       },'ImportBillOfExchange');
     }, 200);
 
@@ -108,9 +106,19 @@ export class EditImportBillOfExchangesComponent implements OnInit {
   
   ReUplod(args: any) {
     this.publicUrl = '';
+    this.changedCommercial([this.data?.pipo[0]?._id])
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
       this.validator.buildForm({
+        CommericalNoList: {
+          type: "CommericalListCheckBox",
+          value: this.data?.CommericalNoList,
+          label: "Commerical Number*",
+          rules: {
+            required: true,
+          },
+          ShowCheckBox: true,
+        },
         billExchangeNumber: {
           type: "text",
           value: this.data?.billExchangeNumber,
@@ -119,17 +127,6 @@ export class EditImportBillOfExchangesComponent implements OnInit {
             required: true,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       },'ImportBillOfExchange');
     }, 200);
 
@@ -176,5 +173,19 @@ export class EditImportBillOfExchangesComponent implements OnInit {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+  
+  changedCommercial(pipo: any) {
+    this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
+      this.validator.COMMERICAL_NO = [];
+      res?.data.forEach(element => {
+        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], data: element });
+      });
+      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
+    },
+      (err) => {
+        console.log(err)
+      }
+    );
   }
 }
