@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { SharedModule } from "./shared/shared.module";
@@ -98,7 +98,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     LEIRecordsService,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     IdleService,
-    FormControllerService
+    FormControllerService,
   ],
   bootstrap: [AppComponent],
   imports: [

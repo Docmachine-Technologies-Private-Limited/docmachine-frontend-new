@@ -177,6 +177,16 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           NoButton: [
             { name: 'AdvanceInfo', status: false },
           ],
+          callback: (item: any) => {
+            if (item?.bool == true) {
+              item.field[5]['divhide'] = false;
+              item.form?.controls?.AdvanceInfo?.enable();
+            } else {
+              item.field[5]['divhide'] = true;
+              item.form?.controls?.AdvanceInfo?.disable();
+            }
+            console.log(item, "IfAdvancePaid")
+          }
         },
         AdvanceInfo: {
           type: "formGroup",
@@ -323,6 +333,16 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           NoButton: [
             { name: 'AdvanceInfo', status: false },
           ],
+          callback: (item: any) => {
+            if (item?.bool == true) {
+              item.field[5]['divhide'] = false;
+              item.form?.controls?.AdvanceInfo?.enable();
+            } else {
+              item.field[5]['divhide'] = true;
+              item.form?.controls?.AdvanceInfo?.disable();
+            }
+            console.log(item, "IfAdvancePaid")
+          }
         },
         AdvanceInfo: {
           type: "formGroup",
@@ -417,6 +437,8 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
         e.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
         e.BoeRef = AdvanceInfo?.ID
         e.ORM_Ref = AdvanceInfo?.ID
+        delete e.IfAdvancePaid?.field
+        delete e.IfAdvancePaid?.form
         if (this.data?.commercialNumber != e.commercialNumber) {
           this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
             if (CustomConfirmDialogRes?.value == "Ok") {

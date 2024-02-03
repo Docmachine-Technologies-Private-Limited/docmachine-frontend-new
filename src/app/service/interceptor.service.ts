@@ -16,16 +16,16 @@ export class InterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     this.documentService.loading = true;
-    // req = req.clone({
-    //   setHeaders: {
-    //     "Permissions-Policy": "*",
-    //     "Strict-Transport-Security": "max-age=31536000; includeSubdomains",
-    //     "X-Frame-Options": "SAMEORIGIN",
-    //     "X-Content-Type-Options": "nosniff",
-    //     "X-Xss-Protection": "1; mode=block",
-    //     "Content-Security-Policy": "script-src https: 'unsafe-inline' 'unsafe-eval';style-src https: 'unsafe-inline' 'unsafe-eval';img-src https: data:;font-src https: data:;"
-    //   }
-    // });
+    req = req.clone({
+      setHeaders: {
+        "Permissions-Policy": "*",
+        "Strict-Transport-Security": "max-age=31536000; includeSubdomains",
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-Content-Type-Options": "nosniff",
+        "X-Xss-Protection": "1; mode=block",
+        "Content-Security-Policy": "script-src https: 'unsafe-inline' 'unsafe-eval';style-src https: 'unsafe-inline' 'unsafe-eval';img-src https: data:;font-src https: data:;"
+      }
+    });
     return next.handle(req).pipe(
       finalize(() => setTimeout(() => { this.documentService.loading = false }, 500)));
   }

@@ -305,7 +305,7 @@ export class ExportSwiftCopyDocumentSummaryComponent implements OnInit {
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
       console.log('king123');
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('Swift-Copy Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -314,7 +314,7 @@ export class ExportSwiftCopyDocumentSummaryComponent implements OnInit {
   toSave2(data) {
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('Swift-Copy Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -324,7 +324,7 @@ export class ExportSwiftCopyDocumentSummaryComponent implements OnInit {
     console.log(data);
     this.documentService.updateDebit(data, id).subscribe((data) => {
       console.log(data);
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('Swift-Copy Is Updated Successfully.');
       this.ngOnInit();
       EditSummaryPagePanel?.displayHidden
     }, (error) => {
@@ -342,7 +342,7 @@ export class ExportSwiftCopyDocumentSummaryComponent implements OnInit {
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/Swift-Copy-Documents`],navigationExtras);
-    this.toastr.warning('Debit Note Row Is In Edit Mode');
+    this.toastr.warning('Swift-Copy Is In Edit Mode');
   }
 
   handleDelete(data: any) {

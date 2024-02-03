@@ -97,27 +97,28 @@ export class DirectPaymentsControllerData {
                             BOE_DETAIILS_FILTER['BOEAmount'].push(element?.BOE?.invoiceAmount)
                         });
                         
-                        if (filldata?.Remittance == "FullFinalRemittance") {
-                            getAllFields[11]?.uncheck()
-                            getAllFields[12]?.check()
-                        } else if (filldata?.Remittance == "PartRemittance") {
-                            getAllFields[11]?.check()
-                            getAllFields[12]?.uncheck()
-                        }
-
+                        getAllFields[11]?.uncheck()
+                        getAllFields[12]?.uncheck();
+                        getAllFields[13]?.uncheck()
+                        getAllFields[14]?.uncheck();
+                        getAllFields[17]?.uncheck()
+                        getAllFields[18]?.uncheck();
+                        console.log(filldata?.Remittance,"filldata?.Remittance")
                         if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
-                            getAllFields[13]?.uncheck();
-                            getAllFields[14]?.check();
+                            getAllFields[11]?.check()
                         } else if (filldata?.ForeignBankCharges == "OwnAccount") {
-                            getAllFields[13]?.check();
-                            getAllFields[14]?.uncheck();
+                            getAllFields[12]?.check();
+                        }
+                        
+                        if (filldata?.Remittance == "FullFinalRemittance") {
+                            getAllFields[13]?.check()
+                        } else if (filldata?.Remittance == "PartRemittance") {
+                            getAllFields[14]?.check()
                         }
 
                         if (filldata?.TypeofGoods == "Capital") {
                             getAllFields[17]?.check();
-                            getAllFields[18]?.uncheck();
                         } else if (filldata?.TypeofGoods == "NonCapital") {
-                            getAllFields[17]?.uncheck();
                             getAllFields[18]?.check();
                         }
                         

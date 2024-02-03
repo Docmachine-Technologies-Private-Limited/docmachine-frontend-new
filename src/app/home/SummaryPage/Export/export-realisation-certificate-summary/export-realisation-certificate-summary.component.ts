@@ -3,8 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
-import * as data1 from '../../../../currency.json';
-
 import {
   Component,
   ElementRef,
@@ -310,7 +308,7 @@ export class ExportRealisationCertificateSummaryComponent implements OnInit {
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
       console.log('king123');
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('EBRC Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -319,7 +317,7 @@ export class ExportRealisationCertificateSummaryComponent implements OnInit {
   toSave2(data) {
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('EBRC Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -329,7 +327,7 @@ export class ExportRealisationCertificateSummaryComponent implements OnInit {
     console.log(data);
     this.documentService.updateDebit(data, id).subscribe((data) => {
       console.log(data);
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('EBRC Is Updated Successfully.');
       this.ngOnInit();
       EditSummaryPagePanel?.displayHidden
     }, (error) => {
@@ -347,7 +345,7 @@ export class ExportRealisationCertificateSummaryComponent implements OnInit {
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/Realisation-Cretificate`], navigationExtras);
-    this.toastr.warning('Debit Note Row Is In Edit Mode');
+    this.toastr.warning('EBRC Is In Edit Mode');
   }
 
   handleDelete(data: any) {
