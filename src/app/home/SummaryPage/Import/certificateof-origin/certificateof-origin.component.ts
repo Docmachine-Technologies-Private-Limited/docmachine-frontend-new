@@ -329,7 +329,7 @@ reset(){
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/Certificate-of-Origin`], navigationExtras);
-    this.toastr.warning('Certificate-of-Origin Invoie Row Is In Edit Mode');
+    this.toastr.warning('Certificate-of-Origin Row Is In Edit Mode');
   }
 
   handleDelete(data: any) {
