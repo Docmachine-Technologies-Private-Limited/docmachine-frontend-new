@@ -108,6 +108,8 @@ import { BharatheximGeneratorCouponProductComponent } from "./SuperAdminPanel/Pr
 import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-panel/bharathexim-subscription-module/bharathexim-subscription-module.component";
 import { SubscriptionPageComponent } from "../components/subscription-page/subscription-page.component";
 import { FormControllerModule } from "../components/form-controller/form-controller.module";
+import { CheckboxComponent } from "../custom/Controller/checkbox.component";
+import { CheckboxGroupComponent } from "../custom/Controller/checkbox-group.component";
 
 @NgModule({
   declarations: [
@@ -183,7 +185,9 @@ import { FormControllerModule } from "../components/form-controller/form-control
     BharatheximCreatePlanComponent,
     BharatheximGeneratorCouponProductComponent,
     BharatheximSubscriptionModuleComponent,
-    SubscriptionPageComponent
+    SubscriptionPageComponent,
+    CheckboxGroupComponent,
+    CheckboxComponent
   ],
   imports: [
     CommonModule,
@@ -320,6 +324,8 @@ import { FormControllerModule } from "../components/form-controller/form-control
     MaxMinValidationDirective,
     PasswordValidationDirective,
     SubscriptionPageComponent,
+    CheckboxGroupComponent,
+    CheckboxComponent
   ],
 })
 export class SharedHomeModule { }

@@ -31,7 +31,8 @@ export class SigninComponent implements OnInit {
   data: any;
   closeResult: string;
   CODE: any = [];
-  rolebaseddata: any = ['Buyer Credit Aggregator', 'Insurance', 'CA', 'Auditor']
+  rolebaseddata: any = ['Buyer Credit Aggregator', 'Insurance', 'CA', 'Auditor'];
+  ROLE_DELTA_TRADE_APP: any = ['TradeApp']
   API_URL: any = AppConfig?.environment;
 
   constructor(
@@ -127,6 +128,24 @@ export class SigninComponent implements OnInit {
               role: res?.docs?.role
             }))
             window.open(AppConfig?.ROLE_URL + "/login/" + res?.docs?.token, "_self")
+          }
+        });
+      } else if (this.ROLE_DELTA_TRADE_APP.includes(resany?.result?.role)) {
+        let tempdata: any = {
+          emailId: e.value?.email,
+          password: e.value?.password
+        }
+        this.userService.DeltaTradeAppLogin(tempdata).subscribe((res: any) => {
+          console.log(res, 'hfhffgffg')
+          if (res?.docs?.token != null && res?.docs?.token != undefined) {
+            console.log(res, 'token')
+            this.toastr.success('Sucessfully Login...');
+            this.userService.addToken(res?.docs?.token);
+            this.sessionstorage.set('PERMISSION', JSON.stringify({
+              emailId: res?.docs?.emailId,
+              role: res?.docs?.role
+            }))
+            window.open(AppConfig?.ROLE_DELTA_TRADE_APP_API + "/login/" + res?.docs?.token, "_self")
           }
         });
       } else {

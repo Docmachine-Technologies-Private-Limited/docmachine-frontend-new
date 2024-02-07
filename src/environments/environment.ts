@@ -7,5 +7,6 @@ export const AppConfig = {
   S3_BUCKET_URL:'http://localhost:4200/',
   TALLY_API:"http://localhost:8083/v1",
   COUPON_API:"http://localhost:8082/v1",
+  ROLE_DELTA_TRADE_APP_API:"http://localhost:4201",
   appVersion: require('../../package.json').version,
 };

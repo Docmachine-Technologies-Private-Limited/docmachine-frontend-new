@@ -176,6 +176,21 @@ export class UserService implements OnInit {
     return this.http.post(`${this.api_base}/authenticate/SingIn`, null, httpOptions);
   }
 
+  DeltaTradeAppLogin(data: any) {
+    let authToken: any = this.loadFromLocalStorage();
+    console.log(authToken, data);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer " + btoa(data.emailId + ":" + data.password),
+      }),
+    };
+    console.log('httpOptions');
+    console.log(httpOptions);
+    return this.http.post(`${this.api_base}/authenticate/DeltaTradeAppLogin`, null, httpOptions);
+  }
+
   public getUserbyEmail(loginData) {
     const httpOptions = {
       headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -854,7 +869,7 @@ export class UserService implements OnInit {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
+      headers: new HttpHeaders({ Authorization: this.authToken}),
     };
     return this.http.get(`${this.api_base}/user/profile`, httpOptions).toPromise();
   }
@@ -1009,6 +1024,19 @@ export class UserService implements OnInit {
       data: data,
       emailId: email,
     });
+  }
+
+  DeltaTradeAppAddUser(data: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/DeltaTradeApp/SingUp`, data, httpOptions);
+  }
+
+  public DeltaTradeAppLoginUpdate(data, email) {
+    return this.http.post(`${this.api_base}/authenticate/DeltaTradeAppUpdate`, { data: data, emailId: email });
   }
 
 }
