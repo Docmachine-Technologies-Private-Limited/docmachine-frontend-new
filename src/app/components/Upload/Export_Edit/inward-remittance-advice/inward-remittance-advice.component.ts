@@ -210,6 +210,7 @@ export class EditInwardRemittanceAdviceComponent implements OnInit {
           rules: {
             required: true,
           },
+          Show: true,
           RemitterLabel: "Select Remitter Ref No.",
         },
         date: {
