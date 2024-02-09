@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
 import { DocumentService } from "../../../../service/document.service";
-import { PDFDocument } from "pdf-lib";
+import { BlendMode, PDFDocument, StandardFonts } from "pdf-lib";
 import { Router } from "@angular/router";
 import moment from 'moment';
 import jsPDF from 'jspdf'
@@ -31,13 +31,17 @@ export class ExportBillLodgementControllerData {
 
                     const form: any = pdfDoc?.getForm()
                     const getAllFields = form?.getFields();
+                    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
                     getAllFields?.forEach(element => {
                         const elementvalue: any = element?.acroField?.dict?.values();
                         if (elementvalue[0]?.encodedName == '/Tx') {
-                            element.setFontSize(8)
+                            element.setFontSize(10)
                             element?.enableReadOnly();
+                            element?.enableMultiline();
+                            element?.needsAppearancesUpdate();
                             const [widget]: any = element?.acroField?.getWidgets();
                             widget?.getOrCreateBorderStyle()?.setWidth(0);
+                            element?.defaultUpdateAppearances(helvetica)
                         }
                     });
 
@@ -46,37 +50,19 @@ export class ExportBillLodgementControllerData {
                     getAllFields[2]?.setText('');
                     getAllFields[3]?.setText('');
                     getAllFields[4]?.setText('');
-                    getAllFields[5]?.setText(validator.COMPANY_INFO[0]?.teamName);
-                    getAllFields[6]?.setText(validator.COMPANY_INFO[0]?.adress);
-                    getAllFields[7]?.setText('');
-                    getAllFields[8]?.setText('');
-                    getAllFields[8]?.setText('');
-                    getAllFields[9]?.setText('');
-                    getAllFields[10]?.setText('');
-                    getAllFields[11]?.setText('');
-                    getAllFields[12]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName);
-                    getAllFields[13]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs);
-                    getAllFields[14]?.setText('');
-                    getAllFields[15]?.setText('');
-                    getAllFields[16]?.setText('');
-                    getAllFields[17]?.setText('');
-                    getAllFields[18]?.setText('');
-                    getAllFields[19]?.uncheck();
-                    getAllFields[20]?.uncheck();
-                    getAllFields[21]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-                    getAllFields[22]?.uncheck()
-                    getAllFields[23]?.uncheck()
-                    console.log(sbdata, ExportBillLodgement_Form, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
+                    getAllFields[5]?.setText((validator.COMPANY_INFO[0]?.teamName+'\n'+validator.COMPANY_INFO[0]?.adress)?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
+                    getAllFields[6]?.setText((exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName+'\n'+exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs)?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
+                    getAllFields[10]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
+                    console.log(sbdata, ExportBillLodgement_Form,validator.COMPANY_INFO[0]?.teamName, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
 
+                    getAllFields[24]?.uncheck();
+                    getAllFields[25]?.uncheck();
                     if (ExportBillLodgement_Form?.Sight?.bool == true) {
-                        getAllFields[35]?.check();
-                        getAllFields[36]?.uncheck();
-
+                        getAllFields[24]?.check();
                     } else if (ExportBillLodgement_Form?.Usance?.bool == true) {
-                        getAllFields[35]?.uncheck();
-                        getAllFields[36]?.check();
-                        getAllFields[37]?.setText(ExportBillLodgement_Form?.Usancedays);
-                        getAllFields[38]?.setText(ExportBillLodgement_Form?.Usancefrom);
+                        getAllFields[25]?.check();
+                        getAllFields[26]?.setText(ExportBillLodgement_Form?.Usancedays);
+                        getAllFields[27]?.setText(ExportBillLodgement_Form?.Usancefrom);
                     }
 
                     let CommercialNumberList: any = [];
@@ -108,106 +94,49 @@ export class ExportBillLodgementControllerData {
                                 IRM_REF_Element?.InputValue, element?.commercialNumber, element?.sbNo])
                             });
                         });
+                        
+                        getAllFields[13]?.setText(CommercialNumberList?.join(' ')?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
+                        getAllFields[14]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
+                        getAllFields[15]?.uncheck()
+                        getAllFields[16]?.uncheck()
+                        getAllFields[17]?.setText(FIRX_DATE_NO?.NUMBER?.length<3?FIRX_DATE_NO?.NUMBER?.join(' ')?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'):'As per Annexure Attached');
+                        getAllFields[18]?.setText(FIRX_DATE_NO?.DATE?.join(' ')?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
+                        getAllFields[19]?.setText(sbdata?.fobCurrency);
 
-                        getAllFields[24]?.setText(CommercialNumberList?.join(","));
-                        getAllFields[25]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-                        getAllFields[26]?.uncheck()
-                        getAllFields[27]?.uncheck()
-                        getAllFields[28]?.setText(FIRX_DATE_NO?.NUMBER?.slice(0, 3)?.join(','));
-                        getAllFields[29]?.setText(FIRX_DATE_NO?.DATE?.slice(0, 3)?.join(','));
-                        getAllFields[30]?.setText(FIRX_DATE_NO?.CURRENCY?.slice(0, 3)?.join(','));
-
-
-                        getAllFields[39]?.setText('');
                         let BillAmount: any = parseFloat(sbdata?.fobValue)
-                        getAllFields[31]?.setText(!isNaN(TOTAL_SUM_FIREX) ? TOTAL_SUM_FIREX.toString() : '0');
-                        getAllFields[32]?.setText(sbdata?.fobCurrency);
-                        getAllFields[33]?.setText(BillAmount != undefined ? this.ConvertNumberToWords(BillAmount).toUpperCase() : '0');
-                        getAllFields[34]?.setText(BillAmount?.toString());
+                        getAllFields[20]?.setText(!isNaN(TOTAL_SUM_FIREX) ? TOTAL_SUM_FIREX.toString() : '0');
+                        getAllFields[21]?.setText(sbdata?.fobCurrency);
+                        getAllFields[22]?.setText(BillAmount != undefined ? this.ConvertNumberToWords(BillAmount).toUpperCase() : '0');
+                        getAllFields[23]?.setText(BillAmount?.toString());
+                        
+                        getAllFields[28]?.setText('');
+                        getAllFields[29]?.setText(sbdata?.pipo[0]?.HSCODE);
+                        getAllFields[30]?.setText('');
+                        getAllFields[31]?.setText(sbdata?.countryOfFinaldestination);
+                        getAllFields[32]?.setText(sbdata['blcopydetails'] != undefined ? sbdata['blcopydetails'][0]?.airwayBlCopyNumber : '');
+                        getAllFields[33]?.setText(sbdata?.sbno.toString());
+                        getAllFields[34]?.setText(sbdata?.portCode);
+                        getAllFields[35]?.setText(sbdata?.sbdate);
+                        getAllFields[36]?.setText('');
+                        getAllFields[37]?.setText(CommercialNumberList?.length<3?CommercialNumberList?.join(" ")?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'):'As per Annexure Attached');
 
-                        getAllFields[40]?.setText(sbdata?.pipo[0]?.HSCODE);
-                        getAllFields[41]?.setText('');
-                        getAllFields[42]?.setText(sbdata?.countryOfFinaldestination);
-                        getAllFields[43]?.setText(sbdata['blcopydetails'] != undefined ? sbdata['blcopydetails'][0]?.airwayBlCopyNumber : '');
-                        getAllFields[44]?.setText(sbdata?.sbno.toString());
-                        getAllFields[45]?.setText(sbdata?.portCode);
-                        getAllFields[46]?.setText(sbdata?.sbdate);
-                        getAllFields[47]?.setText('');
-                        getAllFields[48]?.setText(CommercialNumberList?.join(","));
-                        getAllFields[49]?.setText('');
-                        getAllFields[50]?.setText('');
-                        getAllFields[51]?.setText('');
-                        getAllFields[52]?.setText('');
-                        getAllFields[53]?.setText('');
-                        getAllFields[54]?.setText('');
-                        getAllFields[55]?.setText('');
-                        getAllFields[56]?.setText('');
-                        getAllFields[57]?.setText('');
-                        getAllFields[58]?.setText('');
-                        getAllFields[59]?.setText('');
-                        getAllFields[60]?.setText('');
-                        getAllFields[61]?.setText('');
-                        getAllFields[62]?.setText('');
-                        getAllFields[63]?.setText('');
-                        getAllFields[64]?.setText('');
-
-                        // // OD/CC/CA
-                        getAllFields[65]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[0]);
-                        getAllFields[66]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[1]);
-                        getAllFields[67]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[2]);
-                        getAllFields[68]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[3]);
-                        getAllFields[69]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[4]);
-                        getAllFields[70]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[5]);
-                        getAllFields[71]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[6]);
-                        getAllFields[72]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[7]);
-                        getAllFields[73]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[8]);
-                        getAllFields[74]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[9]);
-                        getAllFields[75]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
-                        getAllFields[76]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
-                        getAllFields[77]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
-                        getAllFields[78]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
-
-                        getAllFields[79]?.uncheck();
-                        getAllFields[80]?.uncheck();
-                        getAllFields[81]?.uncheck();
-                        getAllFields[82]?.uncheck();
-                        getAllFields[83]?.uncheck();
-                        getAllFields[84]?.setText("");
-                        getAllFields[85]?.uncheck();
-                        getAllFields[86]?.uncheck();
-                        getAllFields[87]?.uncheck();
-                        getAllFields[88]?.setText(this.CURRENT_DATE);
-                        getAllFields[89]?.uncheck();
-                        getAllFields[90]?.uncheck();
-                        getAllFields[91]?.uncheck();
-                        getAllFields[92]?.uncheck();
-                        getAllFields[93]?.uncheck();
-                        getAllFields[94]?.uncheck();
-                        getAllFields[95]?.setText(this.CURRENT_DATE);
-                        getAllFields[96]?.setText('');
-                        getAllFields[97]?.setText('');
-                        getAllFields[98]?.setText('');
-                        getAllFields[99]?.setText('');
-                        getAllFields[100]?.setText('');
-                        if (FIRX_DATE_NO?.DATE[0] != undefined) {
-                            getAllFields[101]?.setText(FIRX_DATE_NO?.DATE[0]);
-                            getAllFields[102]?.setText(FIRX_DATE_NO?.NUMBER[0]);
-                            getAllFields[103]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
-                            getAllFields[104]?.setText(FIRX_DATE_NO?.USED_AMOUNT[0]?.toString());
-                        }
-                        if (FIRX_DATE_NO?.DATE[1] != undefined) {
-                            getAllFields[105]?.setText(FIRX_DATE_NO?.DATE[1]);
-                            getAllFields[106]?.setText(FIRX_DATE_NO?.NUMBER[1]);
-                            getAllFields[107]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
-                            getAllFields[108]?.setText(FIRX_DATE_NO?.USED_AMOUNT[1]?.toString());
-                        }
-                        if (FIRX_DATE_NO?.DATE[2] != undefined) {
-                            getAllFields[109]?.setText(FIRX_DATE_NO?.DATE[2]);
-                            getAllFields[110]?.setText(FIRX_DATE_NO?.NUMBER[2]);
-                            getAllFields[111]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
-                            getAllFields[112]?.setText(FIRX_DATE_NO?.USED_AMOUNT[2]?.toString());
-                        }
-                        getAllFields[113]?.setText('');
+                        // // // OD/CC/CA
+                        getAllFields[54]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[0]);
+                        getAllFields[55]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[1]);
+                        getAllFields[56]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[2]);
+                        getAllFields[57]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[3]);
+                        getAllFields[58]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[4]);
+                        getAllFields[59]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[5]);
+                        getAllFields[60]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[6]);
+                        getAllFields[61]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[7]);
+                        getAllFields[62]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[8]);
+                        getAllFields[63]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[9]);
+                        getAllFields[64]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
+                        getAllFields[65]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
+                        getAllFields[66]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
+                        getAllFields[67]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
+                        getAllFields[76]?.setText(this.CURRENT_DATE);
+                        getAllFields[84]?.setText(this.CURRENT_DATE);
                     }
                     await pdfDoc.save();
 
@@ -227,21 +156,29 @@ export class ExportBillLodgementControllerData {
                     const mergedPdf = await PDFDocument.create();
                     const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
                     copiedPages.forEach((page, index) => {
-                        if ((index + 1) != copiedPages?.length) {
-                            mergedPdf.addPage(page);
-                        }
+                        mergedPdf.addPage(page);
                     });
                     
                     const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
                     copiedPages3.forEach((page) => {
                         mergedPdf.addPage(page);
                     });
-                    const mergedPdfFile = await mergedPdf.save();
-                    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-                    const mergedPdfFileload = await mergedPdfload.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    await resolve(x1);
+                    await mergedPdf.save();
+                    this.addForSealWaterMark(mergedPdf, validator, [
+                        {
+                            index: 1,
+                            x: 290,
+                            y: 453
+                        }, {
+                            index: 1,
+                            x: 290,
+                            y: 66
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             FedralWithANNEXURE: async (validator, exportbilllodgementdata, sbdata, ExportBillLodgement_Form, SELECT_BUYER_DETAILS) => {
@@ -253,52 +190,40 @@ export class ExportBillLodgementControllerData {
                     const pdfDoc = await PDFDocument.load(formPdfBytes)
                     const form: any = pdfDoc?.getForm()
                     const getAllFields = form?.getFields();
+                    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
                     getAllFields?.forEach(element => {
                         const elementvalue: any = element?.acroField?.dict?.values();
                         if (elementvalue[0]?.encodedName == '/Tx') {
-                            element.setFontSize(8)
+                            element.setFontSize(10)
                             element?.enableReadOnly();
+                            element?.enableMultiline();
+                            element?.needsAppearancesUpdate();
                             const [widget]: any = element?.acroField?.getWidgets();
                             widget?.getOrCreateBorderStyle()?.setWidth(0);
+                            element?.defaultUpdateAppearances(helvetica)
                         }
                     });
 
-                    getAllFields[0]?.setText('');
+                    getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.BranchName);
                     getAllFields[1]?.setText('');
                     getAllFields[2]?.setText('');
                     getAllFields[3]?.setText('');
                     getAllFields[4]?.setText('');
-                    getAllFields[5]?.setText(validator.COMPANY_INFO[0]?.teamName);
-                    getAllFields[6]?.setText(validator.COMPANY_INFO[0]?.adress);
-                    getAllFields[7]?.setText('');
-                    getAllFields[8]?.setText('');
-                    getAllFields[8]?.setText('');
-                    getAllFields[9]?.setText('');
-                    getAllFields[10]?.setText('');
-                    getAllFields[11]?.setText('');
-                    getAllFields[12]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName);
-                    getAllFields[13]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs);
-                    getAllFields[14]?.setText('');
-                    getAllFields[15]?.setText('');
-                    getAllFields[16]?.setText('');
-                    getAllFields[17]?.setText('');
-                    getAllFields[18]?.setText('');
-                    getAllFields[19]?.uncheck();
-                    getAllFields[20]?.uncheck();
-                    getAllFields[21]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-                    getAllFields[22]?.uncheck()
-                    getAllFields[23]?.uncheck()
-                    console.log(sbdata, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
-                    if (ExportBillLodgement_Form?.Sight?.bool == true) {
-                        getAllFields[35]?.check();
-                        getAllFields[36]?.uncheck();
+                    getAllFields[5]?.setText((validator.COMPANY_INFO[0]?.teamName+'\n'+validator.COMPANY_INFO[0]?.adress)?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
+                    getAllFields[6]?.setText((exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName+'\n'+exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs)?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
+                    getAllFields[10]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
+                    console.log(sbdata, ExportBillLodgement_Form,validator.COMPANY_INFO[0]?.teamName, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
 
+                    getAllFields[24]?.uncheck();
+                    getAllFields[25]?.uncheck();
+                    if (ExportBillLodgement_Form?.Sight?.bool == true) {
+                        getAllFields[24]?.check();
                     } else if (ExportBillLodgement_Form?.Usance?.bool == true) {
-                        getAllFields[35]?.uncheck();
-                        getAllFields[36]?.check();
-                        getAllFields[37]?.setText(ExportBillLodgement_Form?.Usancedays);
-                        getAllFields[38]?.setText(ExportBillLodgement_Form?.Usancefrom);
+                        getAllFields[25]?.check();
+                        getAllFields[26]?.setText(ExportBillLodgement_Form?.Usancedays);
+                        getAllFields[27]?.setText(ExportBillLodgement_Form?.Usancefrom);
                     }
+                    
                     let CommercialNumberList: any = [];
                     let FIRX_DATE_NO: any = {
                         NUMBER: [],
@@ -350,87 +275,46 @@ export class ExportBillLodgementControllerData {
                                 });
                             });
                         });
+                        getAllFields[13]?.setText("As per Annexure Attached");
+                        getAllFields[14]?.setText("As per Annexure Attached");
+                        getAllFields[17]?.setText("As per Annexure Attached");
+                        getAllFields[18]?.setText("As per Annexure Attached");
+                        getAllFields[19]?.setText("As per Annexure Attached");
+                        getAllFields[20]?.setText("As per Annexure Attached");
+                        getAllFields[21]?.setText("As per Annexure Attached");
 
-                        getAllFields[24]?.setText(CommercialNumberList?.join(","));
-                        getAllFields[25]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-                        getAllFields[26]?.uncheck()
-                        getAllFields[27]?.uncheck()
+                        getAllFields[22]?.setText("As per Shiiping bill Attached");
+                        getAllFields[41]?.setText('');
+                        getAllFields[23]?.setText("Refer Shipping Bill attached");
                         getAllFields[28]?.setText("As per Annexure Attached");
-                        getAllFields[29]?.setText("As per Annexure Attached");
+                        getAllFields[46]?.setText("As per Annexure Attached");
+                        getAllFields[29]?.setText(hscodelist?.join(" ")?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
                         getAllFields[30]?.setText("As per Annexure Attached");
-
-                        getAllFields[39]?.setText('');
-
                         getAllFields[31]?.setText("As per Annexure Attached");
                         getAllFields[32]?.setText("As per Annexure Attached");
                         getAllFields[33]?.setText("As per Annexure Attached");
                         getAllFields[34]?.setText("As per Annexure Attached");
+                        getAllFields[35]?.setText("As per Annexure Attached");
+                        getAllFields[36]?.setText('');
+                        getAllFields[37]?.setText("As per Annexure Attached");
 
-                        getAllFields[40]?.setText("As per Shiiping bill Attached");
-                        getAllFields[41]?.setText('');
-                        getAllFields[42]?.setText("Refer Shipping Bill attached");
-                        getAllFields[43]?.setText("As per Annexure Attached");
-                        getAllFields[44]?.setText("As per Annexure Attached");
-                        getAllFields[45]?.setText("As per Annexure Attached");
-                        getAllFields[46]?.setText("As per Annexure Attached");
-                        getAllFields[47]?.setText('');
-                        getAllFields[48]?.setText('');
-                        getAllFields[49]?.setText('');
-                        getAllFields[50]?.setText('');
-                        getAllFields[51]?.setText('');
-                        getAllFields[52]?.setText('');
-                        getAllFields[53]?.setText('');
-                        getAllFields[54]?.setText('');
-                        getAllFields[55]?.setText('');
-                        getAllFields[56]?.setText('');
-                        getAllFields[57]?.setText('');
-                        getAllFields[58]?.setText('');
-                        getAllFields[59]?.setText('');
-                        getAllFields[60]?.setText('');
-                        getAllFields[61]?.setText('');
-                        getAllFields[62]?.setText('');
-                        getAllFields[63]?.setText('');
-                        getAllFields[64]?.setText('');
-
-                        // // OD/CC/CA
-                        getAllFields[65]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[0]);
-                        getAllFields[66]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[1]);
-                        getAllFields[67]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[2]);
-                        getAllFields[68]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[3]);
-                        getAllFields[69]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[4]);
-                        getAllFields[70]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[5]);
-                        getAllFields[71]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[6]);
-                        getAllFields[72]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[7]);
-                        getAllFields[73]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[8]);
-                        getAllFields[74]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[9]);
-                        getAllFields[75]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
-                        getAllFields[76]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
-                        getAllFields[77]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
-                        getAllFields[78]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
-
-                        getAllFields[79]?.uncheck();
-                        getAllFields[80]?.uncheck();
-                        getAllFields[81]?.uncheck();
-                        getAllFields[82]?.uncheck();
-                        getAllFields[83]?.uncheck();
-                        getAllFields[84]?.setText("");
-                        getAllFields[85]?.uncheck();
-                        getAllFields[86]?.uncheck();
-                        getAllFields[87]?.uncheck();
-                        getAllFields[88]?.setText(this.CURRENT_DATE);
-                        getAllFields[89]?.uncheck();
-                        getAllFields[90]?.uncheck();
-                        getAllFields[91]?.uncheck();
-                        getAllFields[92]?.uncheck();
-                        getAllFields[93]?.uncheck();
-                        getAllFields[94]?.uncheck();
-                        getAllFields[95]?.setText(this.CURRENT_DATE);
-                        getAllFields[96]?.setText('');
-                        getAllFields[97]?.setText('');
-                        getAllFields[98]?.setText('');
-                        getAllFields[99]?.setText('');
-                        getAllFields[100]?.setText('');
-                        getAllFields[113]?.setText('');
+                        // // // OD/CC/CA
+                        getAllFields[54]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[0]);
+                        getAllFields[55]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[1]);
+                        getAllFields[56]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[2]);
+                        getAllFields[57]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[3]);
+                        getAllFields[58]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[4]);
+                        getAllFields[59]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[5]);
+                        getAllFields[60]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[6]);
+                        getAllFields[61]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[7]);
+                        getAllFields[62]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[8]);
+                        getAllFields[63]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[9]);
+                        getAllFields[64]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
+                        getAllFields[65]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
+                        getAllFields[66]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
+                        getAllFields[67]?.setText(SELECT_BUYER_DETAILS?.accNumber?.split('')[13]);
+                        getAllFields[76]?.setText(this.CURRENT_DATE);
+                        getAllFields[84]?.setText(this.CURRENT_DATE);
                     }
                     await pdfDoc.save();
 
@@ -478,13 +362,22 @@ export class ExportBillLodgementControllerData {
                     copiedPages2.forEach((page) => {
                         mergedPdf.addPage(page);
                     });
-
-                    const mergedPdfFile = await mergedPdf.save();
-                    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-                    const mergedPdfFileload = await mergedPdfload.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    await resolve(x1);
+                    await mergedPdf.save();
+                    this.addForSealWaterMark(mergedPdf, validator, [
+                        {
+                            index: 1,
+                            x: 290,
+                            y: 453
+                        }, {
+                            index: 1,
+                            x: 290,
+                            y: 66
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             HDFCExportRegularization: async (charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected) => {
@@ -536,6 +429,37 @@ export class ExportBillLodgementControllerData {
                 })
             }
         }
+    }
+
+    addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            copiedPages.forEach((page, index) => {
+                const { width, height } = page.getSize();
+                let data = indexList?.filter((item: any) => item?.index == index);
+                if (data?.length != 0) {
+                    data?.forEach(element => {
+                        page.drawImage(jpgImage, {
+                            x: width - element?.x,
+                            y: element?.y,
+                            width: 250,
+                            height: 250,
+                            opacity: 1,
+                            blendMode: BlendMode.Multiply
+                        });
+                    });
+                }
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
     }
 
     _arrayBufferToBase64(buffer) {

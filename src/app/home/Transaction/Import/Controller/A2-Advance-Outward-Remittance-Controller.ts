@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
 import { DocumentService } from "../../../../service/document.service";
-import { PDFDocument } from "pdf-lib";
+import { BlendMode, PDFDocument } from "pdf-lib";
 import { Router } from "@angular/router";
 import moment from 'moment';
 
@@ -171,11 +171,18 @@ export class A2AdvanceOutwardRemittanceControllerData {
                         getAllFields[106]?.setText(purppose?.Code?.join(','));
                         getAllFields[107]?.setText(purppose?.Description?.join(','));
                     }
-                    const mergedPdfFile = await pdfDoc.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    console.log(x1, "base64String1")
-                    await resolve(x1);
+                    await pdfDoc.save();
+                    this.addForSealWaterMark(pdfDoc, validator, [
+                        {
+                            index: 2,
+                            x: 280,
+                            y: 320
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             HDFC: async (validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected) => {
@@ -214,6 +221,35 @@ export class A2AdvanceOutwardRemittanceControllerData {
             binary += String.fromCharCode(bytes[i]);
         }
         return window.btoa(binary);
+    }
+
+    addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            copiedPages.forEach((page, index) => {
+                const { width, height } = page.getSize();
+                let data = indexList?.filter((item: any) => item?.index == index);
+                if (data?.length != 0) {
+                    page.drawImage(jpgImage, {
+                        x: width - data[0]?.x,
+                        y: data[0]?.y,
+                        width: 250,
+                        height: 250,
+                        opacity: 1,
+                        blendMode: BlendMode.Multiply
+                    });
+                }
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
     }
 
     ConvertNumberToWords(number: any) {
