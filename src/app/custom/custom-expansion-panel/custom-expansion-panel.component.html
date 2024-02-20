@@ -43,12 +43,12 @@
                             <td scope="col" class="col-td-th-1"
                                 *ngIf="item?.disabled==false && this.ActionRequired==true">
                                 <a title="View" *ngIf="this.ViewButton==true" (click)="View(item,i)" class="PopupOpen"
-                                    popup-close="PDF_VIEW">
-                                    <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW" aria-hidden="true"></i>
+                                    [attr.popup-close]="this.PDF_VIEWS">
+                                    <i class="fa fa-eye PopupOpen" [attr.popup-close]="this.PDF_VIEWS" aria-hidden="true"></i>
                                 </a>
-                                <a title="Edit" [disabled]="item?.EditDisabled" *ngIf="this.EditButton==true" popup-close="EditSummaryPage"
+                                <a title="Edit" [disabled]="item?.EditDisabled" *ngIf="this.EditButton==true" [attr.popup-close]="this.EditSummaryPage"
                                     (click)="Edit(item,i)" class="savBtn bgnone PopupOpen">
-                                    <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage"
+                                    <i class="fa fa-pencil-square-o PopupOpen" [attr.popup-close]="this.EditSummaryPage"
                                         aria-hidden="true"></i>
                                 </a>
                                 <a title="Delete" [disabled]="item?.DeleteDisabled" *ngIf="this.DeleteButton==true && item?.RoleType!='Approver'"

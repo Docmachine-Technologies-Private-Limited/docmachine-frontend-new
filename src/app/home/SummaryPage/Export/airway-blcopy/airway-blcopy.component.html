@@ -8,6 +8,7 @@
         <div class="analytics">
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
                 [items]="this.FILTER_VALUE_LIST_NEW?.items"
+                PDF_VIEWS="Exportairwayblcopies"
                 [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
                 [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" [PageSize]="this.FILTER_VALUE_LIST_NEW?.PageSize"
                 TableName="airwayblcopies" [SHOW_TABLE_TBODY]="this.filteranytablepagination?.SHOW_TABLE_TBODY"
@@ -18,7 +19,7 @@
     </main>
 </div>
 
-<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="PDF_VIEW"
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="Exportairwayblcopies"
     name="Airway / BLCopy Documents">
     <div class="p-2">
         <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Airway / BLCopy Documents" [src]="viewData"
@@ -26,9 +27,9 @@
     </div>
 </app-custom-model>
 
-<app-custom-model *ngIf="this.SELECTED_VALUE!=''"
+<!-- <app-custom-model *ngIf="this.SELECTED_VALUE!=''"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
-    EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2" id="EditSummaryPage"
+    EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2" id="Exportairwayblcopies"
     [name]="'Airway / BLCopy Documents Update || Airway / BLCopy Documents No. : '+this.SELECTED_VALUE?.airwayBlCopyNumber"
     #EditSummaryPagePanel>
     <div class="ml-0 p-3 col-12">
@@ -74,4 +75,4 @@
             </div>
         </div>
     </div>
-</app-custom-model>
+</app-custom-model> -->

@@ -1,7 +1,7 @@
 <div class="content-wrap pb-2 ml-0 scroll-bar-main">
     <div class="background-color">
-        <mat-tab-group>
-            <mat-tab label="Admin Panel">
+        <mat-tab-group (selectedTabChange)="onTabChanged($event);">
+            <mat-tab id="adminpanel" label="Admin Panel">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total Member :
@@ -59,7 +59,7 @@
                     </table>
                 </div>
             </mat-tab>
-            <mat-tab label="Member Panel">
+            <mat-tab id="memberpanel" label="Member Panel">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total Member :
@@ -111,7 +111,7 @@
                     </table>
                 </div>
             </mat-tab>
-            <mat-tab label="Approve_Reject_Delete Panel">
+            <mat-tab id="Approve_Reject_Deletepanle" label="Approve_Reject_Delete Panel">
                 <mat-tab-group (selectedTabChange)="ApprovalRejectDelete($event,'')" class="Approve_Reject_Delete">
                     <mat-tab id="approved" label="Approve Panel">
                         <div class="top-panel">
@@ -240,7 +240,7 @@
                     </mat-tab>
                 </mat-tab-group>
             </mat-tab>
-            <mat-tab label="Subcription Panel">
+            <mat-tab id="Subcriptionpanel" label="Subcription Panel">
                 <div class="subcription-panel">
                     <div class="col-12 p-0" style="height: 100%;"
                         *ngFor="let item of this.SUBCRIPTION_DATA;let i=index">
@@ -350,7 +350,7 @@
                     </table>
                 </div>
             </mat-tab> -->
-            <mat-tab label="Delete-Data-By-Table">
+            <mat-tab id="DeleteDataByTable" label="Delete-Data-By-Table">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total Table :
@@ -402,7 +402,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab label="Trade App Subscription">
+            <mat-tab id="TradeAppSubscription" label="Trade App Subscription">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total User :
@@ -439,6 +439,7 @@
                                     <th scope="col" class="col-td-th-2">Start Date</th>
                                     <th scope="col" class="col-td-th-2">End Date</th>
                                     <th scope="col" class="col-td-th-2">Days</th>
+                                    <th scope="col" class="col-td-th-2">Discount</th>
                                     <th scope="col" class="col-td-th-2">User Id</th>
                                     <th scope="col" class="col-td-th-2">Last Login</th>
                                     <th scope="col" class="col-td-th-2">Total Login</th>
@@ -447,9 +448,12 @@
                             <tbody>
                                 <tr class="table-tr" *ngFor="let collectionitem of this.TradeAppUserData;let i=index">
                                     <td scope="col" class="col-td-th-3" style="cursor: pointer;"
-                                        (click)="EditTradeApp(collectionitem)">
-                                        <i popup-close="TRADE_APP" style="cursor: pointer;" aria-hidden="true"
-                                            class="fa fa-edit PopupOpen"></i>
+                                        (click)="collectionitem.disabled=false" *ngIf="collectionitem.disabled==true">
+                                        <i style="cursor: pointer;" aria-hidden="true" class="fa fa-edit"></i>
+                                    </td>
+                                    <td scope="col" class="col-td-th-3" style="cursor: pointer;"
+                                        (click)="collectionitem.disabled=true;UpdateTradeAppSubscriptionUserInfo(collectionitem)" *ngIf="collectionitem.disabled==false">
+                                        <button type="button" class="btn btn-primary">Update</button>
                                     </td>
                                     <td class="col-td-th-2">{{collectionitem?.companyName}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.firstName}}</td>
@@ -457,7 +461,13 @@
                                     <td class="col-td-th-2">{{collectionitem?.mobileNo}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.StartDate}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.EndDate}}</td>
-                                    <td class="col-td-th-2">{{collectionitem?.Days}}</td>
+                                    <td class="col-td-th-2"><input type="number" [disabled]="collectionitem?.disabled"
+                                            style="width: 80px;" [(ngModel)]="collectionitem.Days" class="form-control">
+                                        Days</td>
+                                    <td class="col-td-th-2"> <input type="number" [disabled]="collectionitem?.disabled"
+                                            style="width: 80px;" [(ngModel)]="collectionitem.discount"
+                                            class="form-control"> %
+                                    </td>
                                     <td class="col-td-th-2">{{collectionitem?.userId}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.LastLogin}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.LoginCounter}}</td>
@@ -467,7 +477,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab label="Bharathexim Subscription">
+            <mat-tab id="BharatheximSubscription" label="Bharathexim Subscription">
                 <app-bharathexim-subscription-module></app-bharathexim-subscription-module>
             </mat-tab>
         </mat-tab-group>

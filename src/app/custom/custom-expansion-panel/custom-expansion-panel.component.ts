@@ -12,6 +12,8 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('items') items: any = [];
   @Input('data') data: any = [];
   @Input('Keys') Keys: any = [];
+  @Input('PDF_VIEWS') PDF_VIEWS: any = 'PDF_VIEW';
+  @Input('EditSummaryPage') EditSummaryPage: any = 'EditSummaryPage';
   @Input('FILTER_FORM_VALUE') FILTER_FORM_VALUE: any = [];
   @Input('EXTRA_DATA') EXTRA_DATA: any = [];
   @Input('eventId') eventId: any = '';
@@ -54,7 +56,6 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   }
 
   CollapseAll(data: any, key: any, i: any) {
-    console.log(this.items, 'sdfdsfdsfdsf')
     this.ArrowEvent.emit({ item: data[i], index: i })
     data.forEach((element, index) => {
       if (index != i) {
@@ -91,20 +92,18 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
 
   async PAGINATION_EVENT(event: any, tableName: any, TableFormat) {
     if (this.filteranytablepagination.USER_RESULT?.sideMenu == "export") {
-      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex+1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex + 1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
         this.PAGINATOR_TABLE_DATA = [];
         setTimeout(() => {
           this.PAGINATOR_TABLE_DATA = res?.items;
         }, 100);
-        console.log(event, this.ORIGNAL_DATA, this.items, tableName, res, this.PAGINATOR_TABLE_DATA, res?.items, 'PAGINATION_EVENT');
       })
     } else if (this.filteranytablepagination.USER_RESULT?.sideMenu == "import") {
-      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex+1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex + 1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
         this.PAGINATOR_TABLE_DATA = [];
         setTimeout(() => {
           this.PAGINATOR_TABLE_DATA = res?.items;
         }, 100);
-        console.log(event, this.ORIGNAL_DATA, this.items, tableName, res, this.PAGINATOR_TABLE_DATA, res?.items, 'PAGINATION_EVENT');
       })
     }
   }
@@ -119,7 +118,6 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
     }
     this.PAGINATOR_DATA[this.PAGINATOR_DATA.length - 1] = changesdata?.PageSize?.currentValue != undefined ? changesdata?.PageSize?.currentValue : this.PageSize;
     this.PAGINATOR_TABLE_DATA = this.ORIGNAL_DATA;
-    console.log(changes, this.ORIGNAL_DATA, 'ngOnChanges');
   }
 
 }

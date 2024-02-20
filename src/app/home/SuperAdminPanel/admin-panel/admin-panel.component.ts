@@ -1,7 +1,7 @@
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '.././../../service/user.service';
-import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { WindowInformationService } from '../../../service/window-information.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -36,8 +36,8 @@ export class SuperAdminPanelComponent implements OnInit {
   OrgAllCompanyId: any = [];
   AlldeletebyCollectionName: any = [];
   OrgAlldeletebyCollectionName: any = [];
-  VIEW_SUBSCRIPTION_PLAN_DATA:any=[];
-  
+  VIEW_SUBSCRIPTION_PLAN_DATA: any = [];
+
   constructor(public route?: ActivatedRoute, public formBuilder?: FormBuilder,
     public userService?: UserService,
     public sanitizer?: DomSanitizer, public toastr?: ToastrService,
@@ -94,10 +94,10 @@ export class SuperAdminPanelComponent implements OnInit {
   EditTradeApp(data) {
     this.TRADE_APP_DATA = data;
   }
-  
-  EditSubsciptionPlan_DATA:any=[]
+
+  EditSubsciptionPlan_DATA: any = []
   EditSubsciptionPlan(data) {
-    this.EditSubsciptionPlan_DATA= data;
+    this.EditSubsciptionPlan_DATA = data;
   }
 
   LoadTradedata() {
@@ -105,7 +105,9 @@ export class SuperAdminPanelComponent implements OnInit {
       res?.forEach(element => {
         element['StartDate'] = moment(element?.FreeTrailPeroidStratDate).format('YYYY-MM-DD')
         element['EndDate'] = moment(element?.FreeTrailPeroidEndDate).format('YYYY-MM-DD')
-        element['Days'] = this.getDays(element?.FreeTrailPeroidStratDate, element?.FreeTrailPeroidEndDate) + ' Days'
+        element['Days'] = this.getDays(element?.FreeTrailPeroidStratDate, element?.FreeTrailPeroidEndDate)
+        element['OldDays'] = this.getDays(element?.FreeTrailPeroidStratDate, element?.FreeTrailPeroidEndDate)
+        element['disabled'] = true;
         if (element?.isLoggin) {
           setInterval(() => {
             element['LastLogin'] = this.SubtractDates(new Date(element?.updatedAt), new Date());
@@ -118,15 +120,57 @@ export class SuperAdminPanelComponent implements OnInit {
       console.log(res, "getTradeAppUserData")
     })
   }
-  
-  onclickCouponDetails(){
+
+  onTabChanged(event: any) {
+    console.log("onTabChanged", event)
+    if (event?.index == 0) {
+
+    }
+  }
+
+  UpdateTradeAppSubscriptionUserInfo(value: any) {
+    console.log(value, "UpdateTradeAppSubscriptionUserInfo")
+    if (value?.OldDays != value?.Days) {
+      this.userService?.UpdateTradeAppUserData(value?._id, {
+        FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+        FreeTrailPeroidEndDate: moment(this.addDays(new Date(),value?.Days)).format('dddd, MMMM DD, YYYY h:mm A'),
+        TrailDays: value?.Days,
+        discount:value?.discount
+      }).subscribe((res: any) => {
+        console.log(res, "UpdateTradeAppUserData")
+        if (res?.status == true) {
+          this.toastr?.success(res?.msg)
+          this.LoadTradedata();
+          value['disabled'] = true
+        } else {
+          this.toastr?.error(res?.msg)
+        }
+      })
+    } else {
+      this.userService?.UpdateTradeAppUserData(value?._id, {
+        TrailDays: value?.Days,
+        discount:value?.discount
+      }).subscribe((res: any) => {
+        console.log(res, "UpdateTradeAppUserData")
+        if (res?.status == true) {
+          this.toastr?.success(res?.msg)
+          this.LoadTradedata();
+          value['disabled'] = true
+        } else {
+          this.toastr?.error(res?.msg)
+        }
+      })
+    }
+  }
+
+  onclickCouponDetails() {
     this.docserivce?.GetCouponCodeDetails().subscribe((res: any) => {
       this.COUPON_CODE_DATA = res?.data;
       console.log(res, "GetCouponCodeDetails")
     })
   }
-  
-  onclickSubscriptionPlan(){
+
+  onclickSubscriptionPlan() {
     this.docserivce?.getSubscriptionPlan().subscribe((res: any) => {
       this.VIEW_SUBSCRIPTION_PLAN_DATA = res?.data;
       console.log(res, "getSubscriptionPlan")
