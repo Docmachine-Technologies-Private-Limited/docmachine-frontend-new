@@ -49,7 +49,6 @@ export class ExportletterheadService {
           doc.text(strArr4, 10, 210, { align: 'left' });
           doc.text("Authorized Signatory", 10, 250, { align: 'left' });
           let tableuri = doc.output("arraybuffer");
-          console.log('data:application/pdf;base64,' + tableuri, "tableuri")
           const loadmergedPdf = await PDFDocument.load(tableuri);
           loadmergedPdf.save();
           this.addForSealWaterMark(loadmergedPdf, validator, [
@@ -99,7 +98,6 @@ export class ExportletterheadService {
           doc.text(strArr4, 10, 210, { align: 'left' });
           doc.text("Authorized Signatory", 10, 250, { align: 'left' });
           let tableuri = doc.output("arraybuffer");
-          console.log('data:application/pdf;base64,' + tableuri, "tableuri")
           const loadmergedPdf = await PDFDocument.load(tableuri);
           loadmergedPdf.save();
           await this.addForSealWaterMark(loadmergedPdf, validator, [
@@ -150,8 +148,7 @@ export class ExportletterheadService {
           var strArr4 = doc.splitTextToSize(`Thanking You,`, 200)
           doc.text(strArr4, 10, 210, { align: 'left' });
           doc.text("Authorized Signatory", 10, 250, { align: 'left' });
-          let tableuri = doc.output("arraybuffer");
-          console.log('data:application/pdf;base64,' + tableuri, "tableuri")
+          let tableuri = await doc.output("arraybuffer");
           const loadmergedPdf = await PDFDocument.load(tableuri);
           await loadmergedPdf.save();
           await this.addForSealWaterMark(loadmergedPdf, validator, [
