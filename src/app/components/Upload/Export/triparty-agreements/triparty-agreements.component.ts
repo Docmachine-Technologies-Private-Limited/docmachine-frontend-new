@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -32,7 +30,6 @@ export class TripartyAgreementsComponent implements OnInit {
   };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup?: any | FormGroup;
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
@@ -169,7 +166,18 @@ export class TripartyAgreementsComponent implements OnInit {
               }
             }
           ]
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       },'ExportTryPartyAgreements');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -204,7 +212,7 @@ export class TripartyAgreementsComponent implements OnInit {
               );
           }, (err) => console.log('Error adding pipo'));
         } else {
-          this.toastr.error(`Please check this sb no. : ${e.value.triPartyAgreementNumber} already exit...`);
+          this.toastr.error(`Please check this Third Party no. : ${e.value.triPartyAgreementNumber} already exit...`);
         }
       });
   }
@@ -212,21 +220,17 @@ export class TripartyAgreementsComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
-      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.COMMERCIAL_LIST = [];
-      this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.SHIPPING_BUNDEL.length; j++) {
-        if (this.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.SHIPPING_BILL_LIST.push({
-            sbno: this.SHIPPING_BUNDEL[j]?.sbno,
-            _id: this.SHIPPING_BUNDEL[j]?.SB_ID
-          });
-        }
-      }
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
+      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);     
     } else {
       this.btndisabled = true;
     }

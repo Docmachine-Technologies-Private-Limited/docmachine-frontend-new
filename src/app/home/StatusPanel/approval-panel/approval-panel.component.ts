@@ -80,8 +80,11 @@ export class ApprovalPanelComponent implements OnInit {
     if (type == 'download') {
       var fitertemp: any = doc.filter(n => n)
       await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+        this.userserivce.getReadS3File({ fileName: merge?.pdfurl }).subscribe((res: any) => {
+          console.log(res, "getReadS3File")
+          this.SaveAsBase64(this._arrayBufferToBase64bota(res?.pdf.data), 'MergePdf_' + new Date().toUTCString())
+        })
         console.log(merge, 'mergeAllPDFs')
-        this.downloadAsSingleFile('MergePdf_' + new Date().toUTCString(), merge?.actulapdfbase64);
       });
     } else if (type == 'zip') {
       var fitertemp: any = doc.filter(n => n)
@@ -115,11 +118,29 @@ export class ApprovalPanelComponent implements OnInit {
     }
   }
 
+  _arrayBufferToBase64bota(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
+  
+  SaveAsBase64(pdfInBase64, fileName) {
+    const linkElement = document.createElement('a');
+    const linkSource = 'data:application/pdf;base64,' + pdfInBase64;
+    linkElement.setAttribute('href', linkSource);
+    linkElement.setAttribute('download', fileName+'.pdf');
+    linkElement.click();
+  }
+
   mergePdfs(pdfsToMerges) {
     return new Promise(async (resolve, reject) => {
       const mergedPdf = await PDFDocument.create();
       const actions = pdfsToMerges.map(async pdfBuffer => {
-        const pdf = await PDFDocument.load(this.toArrayBuffer(pdfBuffer?.data));
+        const pdf = await PDFDocument.load(this.toArrayBuffer(pdfBuffer?.data), { ignoreEncryption: true });
         const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
         copiedPages.forEach((page) => {
           mergedPdf.addPage(page);
@@ -142,6 +163,7 @@ export class ApprovalPanelComponent implements OnInit {
     }
     return Buffer.from(binary).toString('base64');
   }
+  
   toArrayBuffer(buffer) {
     const arrayBuffer = new ArrayBuffer(buffer.length);
     const view = new Uint8Array(arrayBuffer);
@@ -150,6 +172,7 @@ export class ApprovalPanelComponent implements OnInit {
     }
     return arrayBuffer;
   }
+  
   sendMail2 = async (pdfDoc: any, tableName, Maildata) => {
     if (tableName === 'Inward-Remitance-Dispoal-Realization') {
       this.SendMailTextWithPDF(pdfDoc, Maildata)

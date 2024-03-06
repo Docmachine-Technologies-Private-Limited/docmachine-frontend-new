@@ -1,7 +1,10 @@
 <div class="bg-white filter_main mt-2" id="filter_main" #filter_main appFilterToggle>
     <div class="select_filter_options">
        <ng-content></ng-content>
-       <upload-components [FormStyle]="this.FormStyle" SubmitName="Filter" [BUTTON_PANEL_SHOW]="true" [HIDE_BACKGROUND]="false" id="NgCustomFilterPopup" (SubmitEvent)="onSubmit($event);filter_main.style.display='none'" #NgCustomFilterPopupPanel>
+       <upload-components *ngIf="SHOW_HIDE" ButtonPanelStyle="display: inline-flex;
+       position: absolute;
+       bottom: -40px;
+       right: 0;" [FormStyle]="this.FormStyle" SubmitName="Filter" [BUTTON_PANEL_SHOW]="true" [HIDE_BACKGROUND]="false" id="NgCustomFilterPopup" (SubmitEvent)="onSubmit($event);filter_main.style.display='none'" #NgCustomFilterPopupPanel>
         <button type="button" class="btn btn-light" (click)="NgCustomFilterPopupPanel?.resetForm;Reset();filter_main.style.display='none'">RESET</button>
        </upload-components>
     </div>

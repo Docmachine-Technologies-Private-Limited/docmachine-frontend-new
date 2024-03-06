@@ -6,14 +6,13 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import * as data1 from '../../../../currency.json';
-import * as _ from 'lodash';
-import moment from 'moment';
+import moment from "moment";
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
+import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 
 @Component({
   selector: 'import-tri-party-summary',
@@ -36,7 +35,7 @@ export class ImportTriPartyComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    T_P_A_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -71,6 +70,11 @@ export class ImportTriPartyComponent implements OnInit {
     currency: '',
     buyerName: '',
   }
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
+  PIPO_DROP_DOWN_DATA: any = [];
+  PIPO_SELECTED_DROP_DOWN_DATA: any = {};
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -78,50 +82,138 @@ export class ImportTriPartyComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
+    public filteranytablepagination: TableServiceController,
+    private pipodataservice: PipoDataService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-  ) {
-  }
+    public dialog: MatDialog) {}
 
-  async ngOnInit() {
-    this.FILTER_VALUE_LIST = [];
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
-    this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getThird().subscribe(
-      (res: any) => {
-        console.log('Res', res);
-        for (let value of res.data) {
-          if (value['file'] == 'import') {
-            this.item.push(value);
-            this.FILTER_VALUE_LIST.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-            }
-            value?.buyerName.forEach(element => {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-              }
-            });
-            if (this.ALL_FILTER_DATA['T_P_A_No'].includes(value?.triPartyAgreementNumber) == false) {
-              this.ALL_FILTER_DATA['T_P_A_No'].push(value?.triPartyAgreementNumber);
-            }
-            if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.date);
-            }
+    async ngOnInit() {
+      this.USER_DATA = await this.userService.getUserDetail();
+      this.FILTER_FORM_VALUE = [];
+      await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'thirdparties',this.FILTER_VALUE_LIST_NEW)?.thirdparties().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+        for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+          }
+          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+            this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+          }
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
           }
         }
-        this.TriPartyAgreementTable(this.item)
-      },
-      (err) => console.log(err)
-    );
-  }
+        this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+          console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+          this.FILTER_FORM = {
+            buyerName: {
+              type: "ArrayList",
+              value: "",
+              label: "Select BENEFICIARY Name",
+              rules: {
+                required: false,
+              },
+              item: BENEFICIARY_DETAILS,
+              bindLabel: "value"
+            },
+            todate: {
+              type: "date",
+              value: "",
+              label: "Select Start Date",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['DATE'],
+              bindLabel: "value"
+            },
+            fromdate: {
+              type: "date",
+              value: "",
+              label: "Select End Date",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['DATE'],
+              bindLabel: "value"
+            },
+            NO: {
+              type: "ArrayList",
+              value: "",
+              label: "Select Pipo No",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['NO'],
+              bindLabel: "value"
+            },
+          }
+        })
+      })
+      // this.pipodataservice.getPipoList("import").then((res: any) => {
+      //   this.PIPO_DROP_DOWN_DATA = [];
+      //   this.PIPO_SELECTED_DROP_DOWN_DATA = [];
+      //   res?.pipoModelList?.forEach(element => {
+      //     this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
+      //       pi_poNo: element?.pi_poNo,
+      //       amount: element?.amount,
+      //       UtilizationAmount: 0,
+      //       buyerName: element?.buyerName,
+      //     }
+      //     this.PIPO_DROP_DOWN_DATA.push({
+      //       pi_poNo: element?.pi_poNo,
+      //       amount: element?.amount,
+      //       UtilizationAmount: 0,
+      //       id: element?._id,
+      //       buyerName: element?.buyerName,
+      //     });
+      //   });
+      //   console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
+      // })
+    }
+  
+   async onSubmit(value: any) {
+      let form_value: any = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+      };
+  
+      if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          triPartyAgreementDate: { $gte: value?.value?.todate }
+        };
+        if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+          form_value = {
+            buyerName: value?.value?.buyerName,
+            pi_poNo: value?.value?.NO,
+            triPartyAgreementDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+          };
+        }
+      } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          triPartyAgreementDate: { $lt: value?.value?.fromdate }
+        };
+        if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+          form_value = {
+            buyerName: value?.value?.buyerName,
+            pi_poNo: value?.value?.NO,
+            triPartyAgreementDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+          };
+        }
+      }
+      this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'thirdparties',this.FILTER_VALUE_LIST_NEW)?.thirdparties().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    }
+    
+    reset(){
+      this.ngOnInit()
+    }
 
   TriPartyAgreementTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
@@ -130,7 +222,7 @@ export class ImportTriPartyComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          date: moment(element['date']).format('DD-MM-YYYY'),
+          date: moment(element['date']).format("DD-MM-YYYY"),
           triPartyAgreementNumber: element['triPartyAgreementNumber'],
           triPartyAgreementAmount: element['triPartyAgreementAmount'],
           currency: element['currency'],
@@ -211,25 +303,10 @@ export class ImportTriPartyComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
-  toSave(data, index) {
-    this.optionsVisibility[index] = false;
-    let document: any = {
-      ..._.cloneDeep(data)
-    };
-    delete document.pipo;
-    this.documentService.updateThird(document, data._id).subscribe(
-      (data) => {
-        console.log('king123');
-        this.toastr.success('Tri-Party Agreement Row Is Updated Successfully.');
-      }, (error) => {
-        console.log('error');
-      }
-    );
-  }
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
@@ -244,23 +321,14 @@ export class ImportTriPartyComponent implements OnInit {
   }
 
   triParty() {
-    this.router.navigate(['home/upload', { file: 'import', document: 'tryPartyAgreement' }]);
+    this.router.navigate(['/home/upload/Export/TripartyAgreements']);
   }
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   triPartyAgreementNumber: this.SELECTED_VALUE['triPartyAgreementNumber'],
-    //   triPartyAgreementAmount: this.SELECTED_VALUE['triPartyAgreementAmount'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/TripartyAgreements`],navigationExtras);
@@ -275,9 +343,9 @@ export class ImportTriPartyComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -297,6 +365,7 @@ export class ImportTriPartyComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -309,7 +378,7 @@ export class ImportTriPartyComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new TriPartyAgreementFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new TriPartyAgreementFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Tri-Party.xlsx');

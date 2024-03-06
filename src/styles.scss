@@ -719,9 +719,9 @@ label {
   background-color: #fff;
   background-image: none;
   background-clip: padding-box;
-  border: 1px solid rgba(0,0,0,.15);
+  border: 1px solid rgba(0, 0, 0, .15);
   border-radius: 0.25rem;
-  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   direction: ltr !important;
 }
 
@@ -729,3 +729,4 @@ input[type=number] {
   -moz-appearance: textfield;
   direction: ltr !important;
 }
+

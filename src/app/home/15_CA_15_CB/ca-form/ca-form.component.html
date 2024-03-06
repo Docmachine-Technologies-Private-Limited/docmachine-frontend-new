@@ -1,0 +1,7 @@
+<button type="button" class="btn btn-primary" (click)="ShippingBill?.displayShow">Open</button>
+<app-custom-model [FooterButton]="false" [modalbodystyle]="{height:'90vh !important'}"
+    [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="90vh" id="SHIPING_BILL_POPUP"
+    [name]="'Selection of Shipping Bill'" #ShippingBill>
+    <app-pdf-viewer class="pt-3" [downloadShow]="false" width="100%" Newheight="calc(100vh - 130px)"
+        name="eportal.incometax.gov.in" src="https://eportal.incometax.gov.in/iec/foservices/#/login"></app-pdf-viewer>
+</app-custom-model>

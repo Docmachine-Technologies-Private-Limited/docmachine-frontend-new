@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'edit-export-letterof-credit',
@@ -51,6 +53,8 @@ export class EditLetterofCreditComponent implements OnInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -60,8 +64,18 @@ export class EditLetterofCreditComponent implements OnInit {
       console.log(this.data, "EditLetterofCreditComponent")
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -105,7 +119,80 @@ export class EditLetterofCreditComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'ExportLetterOfCredit');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        letterOfCreditNumber: {
+          type: "text",
+          value: this.data?.letterOfCreditNumber,
+          label: "Letter Of Credit Number*",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.currency,
+          label: "Currency*",
+          rules: {
+            required: true,
+          }
+        },
+        letterOfCreditAmount: {
+          type: "text",
+          value: this.data?.letterOfCreditAmount,
+          label: "Letter Of Credit Amount",
+          rules: {
+            required: true,
+          }
+        },
+        Expirydate: {
+          type: "date",
+          value: this.data?.Expirydate,
+          label: "Expiry Date",
+          rules: {
+            required: true,
+          }
+        },
+        LastDateofShipment: {
+          type: "date",
+          value: this.data?.LastDateofShipment,
+          label: "Last Date of Shipment",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportLetterOfCredit');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -114,13 +201,35 @@ export class EditLetterofCreditComponent implements OnInit {
 
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'export';
     e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
     console.log(e.value);
-    this.documentService.updateLetterLC(e.value, this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Letter Of Credit Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Export/letterofcredit-lc']);
-    }, (err) => console.log('Error adding pipo'));
+    if (this.data?.letterOfCreditNumber != e.value.letterOfCreditNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Letter Of Credit Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            letterOfCreditNumber: e.value.letterOfCreditNumber
+          }, 'letterlcs').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateLetterLC(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Letter Of Credit Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Export/letterofcredit-lc']);
+              }, (err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this Letter Of Credit Number : ${e.value.letterOfCreditNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+      this.documentService.updateLetterLC(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Letter Of Credit Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Export/letterofcredit-lc']);
+      }, (err) => console.log('Error adding pipo'));
+    }
+    
   }
 
   clickPipo(event: any) {

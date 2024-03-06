@@ -3,8 +3,11 @@ export const AppConfig = {
   environment: 'DEV',
   BASE_URL: 'https://devapi.bharathexim.com/v1',
   SOCKET_ENDPONT: 'https://devapi.bharathexim.com',
-  ROLE_URL:'https://role.bharathexim.com',
-  FRONT_END_URL:'https://devapp.bharathexim.com/',
-  S3_BUCKET_URL:'https://devapp.bharathexim.com/',
-  TALLY_API:"http://192.168.29.126:8083/"
+  ROLE_URL: 'https://role.bharathexim.com',
+  FRONT_END_URL: 'https://devapp.bharathexim.com/',
+  S3_BUCKET_URL: 'https://devapp.bharathexim.com/',
+  TALLY_API: "http://192.168.29.126:8083/",
+  COUPON_API: "https://forexappapi.bharathexim.com/v1",
+  ROLE_DELTA_TRADE_APP_API: "https://webapp.deltatradeglobal.com",
+  appVersion: require('../../package.json').version,
 };

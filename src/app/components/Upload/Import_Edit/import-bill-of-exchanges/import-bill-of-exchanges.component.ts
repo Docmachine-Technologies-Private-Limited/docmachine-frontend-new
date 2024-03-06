@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-import-bill-of-exchanges',
@@ -51,6 +52,8 @@ export class EditImportBillOfExchangesComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public route: ActivatedRoute,
     public userService: UserService) { }
 
@@ -63,10 +66,30 @@ export class EditImportBillOfExchangesComponent implements OnInit {
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  Edit(args: any) {
     this.publicUrl = '';
+    this.changedCommercial([args?.pipo[0]?._id]);
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
+        CommericalNoList: {
+          type: "CommericalListCheckBox",
+          value: args?.CommericalNoList,
+          label: "Commerical Number*",
+          rules: {
+            required: true,
+          },
+          ShowCheckBox: true,
+        },
         billExchangeNumber: {
           type: "text",
           value: args?.billExchangeNumber,
@@ -74,20 +97,69 @@ export class EditImportBillOfExchangesComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
       },'ImportBillOfExchange');
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    this.changedCommercial([this.data?.pipo[0]?._id])
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        CommericalNoList: {
+          type: "CommericalListCheckBox",
+          value: this.data?.CommericalNoList,
+          label: "Commerical Number*",
+          rules: {
+            required: true,
+          },
+          ShowCheckBox: true,
+        },
+        billExchangeNumber: {
+          type: "text",
+          value: this.data?.billExchangeNumber,
+          label: "Bill Of Exchange Number*",
+          rules: {
+            required: true,
+          }
+        },
+      },'ImportBillOfExchange');
+    }, 200);
+
+    console.log(this.data, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    this.documentService.updateBillExchange(e.value,this.data?._id).subscribe((res: any) => {
+    if (this.data?.billExchangeNumber != e.value.billExchangeNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your bill Exchange Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            billExchangeNumber: e.value.billExchangeNumber
+          }, 'billofexchanges').subscribe((resp: any) => {
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateBillExchange(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Bill Of Exchange Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
+              }, (err) => console.log('Error adding pipo'));
+            } else {
+              this.toastr.error(`Please check this BillExchange no. : ${e.value.billExchangeNumber} already exit...`);
+            }
+          });
+        }
+      })
+    } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+      this.documentService.updateBillExchange(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Bill Of Exchange Document Updated Successfully`);
         this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
-      },(err) => console.log('Error adding pipo')
-    );
+      }, (err) => console.log('Error adding pipo'));
+    }
   }
 
   clickPipo(event: any) {
@@ -101,5 +173,19 @@ export class EditImportBillOfExchangesComponent implements OnInit {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+  
+  changedCommercial(pipo: any) {
+    this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
+      this.validator.COMMERICAL_NO = [];
+      res?.data.forEach(element => {
+        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], data: element });
+      });
+      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
+    },
+      (err) => {
+        console.log(err)
+      }
+    );
   }
 }

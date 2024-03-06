@@ -1,13 +1,13 @@
-<app-custom-model [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}"
+<app-custom-model CloseIconColor="white" [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}"
     [FooterButton]="false" EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2"
     [id]="this.id" [minimizedisabled]="false" [removebg]="false" #Uploaddocuments>
     <div class="p-2">
         <div class="col-12">
             <div class="card">
                 <div class="row m-0">
-                    <h3 class="m-auto ml-2" style="margin-left: 0 !important;">{{UploadFilesNames}}</h3>
+                    <h3 class="m-auto ml-2 col-10" style="margin-left: 0 !important;">{{UploadFilesNames}}</h3>
                     <button type="button" style="margin-right: 0 !important;"
-                        class="btn btn-primary m-auto mr-2 remove-upload" (click)="removeAll(dropzonecontainer)"><i
+                        class="col-2 btn btn-primary m-auto mr-2 remove-upload" (click)="removeAll(dropzonecontainer)"><i
                             class="fa fa-trash" aria-hidden="true"></i></button>
                 </div>
                 <div class="drop_box">

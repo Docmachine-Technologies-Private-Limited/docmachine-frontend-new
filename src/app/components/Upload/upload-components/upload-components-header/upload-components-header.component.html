@@ -11,23 +11,22 @@
                 <div class="col-12" *ngIf="this.HIDE_OPTION==true">
                     <div class="filter_right_new padding_new_top p-0"
                         *ngIf="this.validator?.BUYER_NOT_EXITS==false && this.validator?.userData?.sideMenu=='export'">
+                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
+                                aria-hidden="true"></i>
+                           PIPO Filter</button>
                         <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && 
                             PIPO_TARANSACTION==false && 
                             this.PIPO_DISABLED==true"
                             [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                            [multiple]="true"
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                            (change)="clickPipo($event)">
+                            (change)="clickPipo($event)" [(ngModel)]="this.AutoFillPIPO" #PI_PO_BUYER_NAME_NG_SELECT>
                         </ng-select>
-                        <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && 
-                        PIPO_TARANSACTION==false && 
-                        this.PIPO_VISIBLE==true" [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
-                            bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                            (change)="clickPipo($event)">
-                        </ng-select>
-                        <ng-input [disabled]="true" *ngIf="this.PIPO_TARANSACTION==true"
-                            [item]="{value:this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[0]?.pi_po_buyerName,type:'text'}"
+                        <ng-input [disabled]="true"
+                            *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
+                            [item]="{value:this.validator?.PIPO_TRANSCTION_LIST[0]?.pi_po_buyerName,type:'text'}"
                             id="PIPO_TRANSACTION" disabled
-                            (event)="this.clickPipo(this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[0])">
+                            (event)="this.clickPipo(this.validator?.PIPO_TRANSCTION_LIST[0])">
                         </ng-input>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
                             *ngIf="this.PIPO_DISABLED==true && this.UPLOAD_BUTTON==true && PIPO_TARANSACTION==false"
@@ -39,68 +38,119 @@
                                 [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
-                            *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
-                            [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
-                                [attr.popup-close]="this.id"></i>
+                            *ngIf="this.PIPO_TARANSACTION==true" [attr.popup-close]="this.id"><i
+                                class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
                             Upload</button>
-                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
-                                aria-hidden="true"></i>
-                            Filter</button>
-                        <ng-custom-filter-popup (FilterEvent)="onSubmit($event)"
-                            [data]="this.EXPORT_FORM"></ng-custom-filter-popup>
+                            <ng-custom-filter-popup [SHOW_HIDE]="false" #CustomFilterPopup>
+                                <div class="col-12 pt-3 filter-popup-panel" style="display: flex;">
+                                    <button type="button" (click)="CustomFilterPopup?.ClosePopUp" class="btn btn-primary"
+                                    style="background: transparent;border: none;outline: none;color: white;position: absolute;right: 0px;top: 0px;">OK
+                                </button>
+                                    <div class="hide-show">
+                                        <upload-components [HIDE_BACKGROUND]="false"
+                                            ButtonPanelStyle="display:none !important;" id="EXPORT_FILTER"
+                                            (SubmitEvent)="onSubmit($event)" #EXPORT_FILTER_PANEL></upload-components>
+                                        <div class="row-1">
+                                            <button class="btn btn-primary"
+                                                (click)="Reset();EXPORT_FILTER_PANEL?.resetForm">Reset</button>
+                                            <button class="btn btn-primary"
+                                                (click)="EXPORT_FILTER_PANEL?.onClickButton">Submit</button>
+                                        </div>
+                                    </div>
+                                    <table class="table mb-0 mt-2">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-1">#</th>
+                                                <th scope="col" class="col-td-th-3">PIPO No.</th>
+                                                <th scope="col" class="col-td-th-3">PIPO Amount</th>
+                                                <th scope="col" class="col-td-th-3">Buyer Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr" *ngFor='let item of this.PIPODATA; let i = index'>
+                                                <td class="col-td-th-3"><input class="checkbox" [checked]="item?.Checked" type="checkbox" (click)="clickPipoNext($event,i,item,PI_PO_BUYER_NAME_NG_SELECT)"></td>
+                                                <td class="col-td-th-3">{{item?.pi_poNo}}</td>
+                                                <td class="col-td-th-3">{{item?.amount}}</td>
+                                                <td class="col-td-th-3">{{item?.buyerName}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-custom-filter-popup>
                     </div>
                     <div class="filter_right_new padding_new_top p-0"
                         *ngIf="this.validator?.BENEFICIARY_NOT_EXITS==false && this.validator?.userData?.sideMenu=='import'">
+                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
+                                aria-hidden="true"></i>
+                            PIPO Filter</button>
                         <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0 && 
                         PIPO_TARANSACTION==false && 
                         this.PIPO_DISABLED==true" [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                            (change)="clickPipo($event)">
+                            [multiple]="true"
+                            (change)="clickPipo($event)" [(ngModel)]="this.AutoFillPIPO" #PI_PO_BENNE_NAME_NG_SELECT>
                         </ng-select>
-                        <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0 && 
-                    PIPO_TARANSACTION==false && 
-                    this.PIPO_VISIBLE==true" [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
-                            bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                            (change)="clickPipo($event)">
-                        </ng-select>
-
-                        <!-- <ng-select class="custom-ng-select" *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0 && 
-                            PIPO_TARANSACTION==false && 
-                            this.PIPO_DISABLED==true"
-                            [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
-                            bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
-                            (change)="clickPipo($event)">
-                        </ng-select>
-                        <ng-select class="custom-ng-select"
-                            *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
-                            [items]="this.documentService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
-                            bindLabel="pi_po_buyerName" placeholder="Select PI/PO" (change)="clickPipo($event)">
-                        </ng-select> -->
-                        <ng-input [disabled]="true" *ngIf="this.PIPO_TARANSACTION==true"
-                            [item]="{value:this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[0]?.pi_po_buyerName,type:'text'}"
+                        <ng-input [disabled]="true"
+                            *ngIf="this.PIPO_TARANSACTION==true && this.validator?.PIPO_TRANSCTION_LIST?.length!=0"
+                            [item]="{value:this.validator?.PIPO_TRANSCTION_LIST[0]?.pi_po_buyerName,type:'text'}"
                             id="PIPO_TRANSACTION" disabled
-                            (event)="this.clickPipo(this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[0])">
+                            (event)="this.clickPipo(this.validator?.PIPO_TRANSCTION_LIST)">
                         </ng-input>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
-                            *ngIf="this.PIPO_DISABLED==true && PIPO_TARANSACTION==false" [attr.popup-close]="this.id"><i
-                                class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
+                            *ngIf="this.PIPO_DISABLED==true && this.UPLOAD_BUTTON==true && PIPO_TARANSACTION==false"
+                            [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
+                                [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success PopupOpen" *ngIf="this.PIPO_DISABLED==false"
                             [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
                                 [attr.popup-close]="this.id"></i>
                             Upload</button>
                         <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
-                            *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
-                            [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
-                                [attr.popup-close]="this.id"></i>
+                            *ngIf="this.PIPO_TARANSACTION==true" [attr.popup-close]="this.id"><i
+                                class="fa fa-upload PopupOpen" aria-hidden="true" [attr.popup-close]="this.id"></i>
                             Upload</button>
-                        <button class="upload-button btn btn-success filter-popup"><i class="fa fa-filter filter-popup"
-                                aria-hidden="true"></i>
-                            Filter</button>
-                        <ng-custom-filter-popup (FilterEvent)="onSubmit($event)"
-                            [data]="this.IMPORT_FORM"></ng-custom-filter-popup>
+                        <ng-custom-filter-popup [SHOW_HIDE]="false" #CustomFilterPopup>
+                            <div class="col-12 pt-3 filter-popup-panel" style="display: flex;">
+                                <button type="button" (click)="CustomFilterPopup?.ClosePopUp" class="btn btn-primary"
+                                style="background: transparent;border: none;outline: none;color: white;position: absolute;right: 0px;top: 0px;">OK
+                            </button>
+                                <div class="hide-show">
+                                    <upload-components [HIDE_BACKGROUND]="false"
+                                        ButtonPanelStyle="display:none !important;" id="IMPORT_FILTER"
+                                        (SubmitEvent)="onSubmit($event)" #IMPORT_FILTER_PANEL></upload-components>
+                                    <div class="row-1">
+                                        <button class="btn btn-primary"
+                                            (click)="Reset();IMPORT_FILTER_PANEL?.resetForm">Reset</button>
+                                        <button class="btn btn-primary"
+                                            (click)="IMPORT_FILTER_PANEL?.onClickButton">Submit</button>
+                                    </div>
+                                </div>
+                                <table class="table mb-0 mt-2">
+                                    <thead>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-1">#</th>
+                                            <th scope="col" class="col-td-th-3">PIPO No.</th>
+                                            <th scope="col" class="col-td-th-3">PIPO Amount</th>
+                                            <th scope="col" class="col-td-th-2">Beneficiary Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor='let item of this.PIPODATA; let i = index' >
+                                            <td class="col-td-th-3"><input class="checkbox" [checked]="item?.Checked" type="checkbox" (click)="clickPipoNext($event,i,item,PI_PO_BENNE_NAME_NG_SELECT)"></td>
+                                            <td class="col-td-th-3">{{item?.pi_poNo}}</td>
+                                            <td class="col-td-th-3">{{item?.amount}}</td>
+                                            <td class="col-td-th-2">{{item?.benneName}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ng-custom-filter-popup>
                     </div>
                 </div>
+                <button *ngIf="this.RE_UPLOAD==true" class="upload-button btn btn-success col-3 PopupOpen RE_UPLOAD"
+                    [attr.popup-close]="this.id"><i class="fa fa-upload PopupOpen" aria-hidden="true"
+                        [attr.popup-close]="this.id"></i>
+                    Re-Upload</button>
             </div>
         </div>
         <ng-content></ng-content>

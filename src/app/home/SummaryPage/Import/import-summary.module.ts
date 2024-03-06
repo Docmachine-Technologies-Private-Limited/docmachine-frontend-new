@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImportRoutingModule } from './import-summary-routing.module';
 import { ImportBOEComponent } from './boe/boe.component';
-import { ImportsCreditNoteComponent } from './imports-credit-note/imports-credit-note.component';
+import { ImportsCreditNoteComponent } from './import-credit-note/imports-credit-note.component';
 import { ImportDebitNoteComponent } from './import-debit-note/import-debit-note.component';
 import { ImportInsuranceComponent } from './import-insurance/import-insurance.component';
 import { ImportTriPartyComponent } from './import-tri-party/import-tri-party.component';
@@ -17,9 +17,10 @@ import { ImportAirwayBlcopyComponent } from './import-airway-blcopy/import-airwa
 import { ImportOutwardRemittanceSheetComponent } from './import-outward-remittance-sheet/import-outward-remittance-sheet.component';
 import { ImportOpinionReportsComponent } from './import-opinion-reports/import-opinion-reports.component';
 import { ImportMasterServiceComponent } from './import-master-service/import-master-service.component';
-import { LetterOfCreditImportLCComponent } from './letter-of-credit-import-lc/letter-of-credit-import-lc.component';
+import { LetterOfCreditImportLCComponent } from './import-letter-of-credit/letter-of-credit-import-lc.component';
 import { SharedHomeModule } from '../../shared-home.module';
-import { ImportEditPipoComponent } from './pipo-documents/edit-pipo/edit-pipo.component';
+import { OutwardRemittanceDisposalComponent } from './Outward-remittance-disposal/outward-remittance-disposal.component';
+import { ImportCertificateofOriginComponent } from './certificateof-origin/certificateof-origin.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ImportEditPipoComponent } from './pipo-documents/edit-pipo/edit-pipo.co
     ImportCommercialComponent,
     ImportTriPartyComponent,
     ImportInsuranceComponent,
-    ImportEditPipoComponent
+    OutwardRemittanceDisposalComponent,
+    ImportCertificateofOriginComponent
   ],
   imports: [
     CommonModule,

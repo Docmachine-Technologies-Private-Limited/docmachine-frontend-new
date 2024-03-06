@@ -39,3 +39,7 @@
 ::ng-deep ng-custom-filter-popup .filter_main {
     width: 540px !important;
 }
+
+::ng-deep ng-custom-filter-popup .form-container-fluid {
+   overflow: unset !important; 
+}

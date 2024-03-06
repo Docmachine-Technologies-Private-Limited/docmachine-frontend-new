@@ -1,19 +1,24 @@
-
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
-import * as xlsx from 'xlsx';
-import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../../../service/user.service';
+import { UserService } from './../../../../service/user.service'
+
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import * as xlsx from 'xlsx';
+import { NavigationExtras, Router } from '@angular/router';
+import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import * as data1 from '../../../../currency.json';
 import moment from 'moment';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'app-import-billlodgementreferencenumberadvicecopy-summary',
@@ -36,7 +41,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    D_N_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -71,6 +76,9 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     currency: '',
     buyerName: '',
   }
+  
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
 
   constructor(
     private documentService: DocumentService,
@@ -81,42 +89,119 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     private router: Router,
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
 
   ) {
   }
   async ngOnInit() {
-    this.FILTER_VALUE_LIST = [];
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item1 = [];
-    this.documentService.getBlcopyref().subscribe(
-      (res: any) => {
-        for (let value of res.data) {
-          this.item1.push(value);
-            this.FILTER_VALUE_LIST.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-            }
-            value?.buyerName.forEach(element => {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-              }
-            });
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'blCopy',this.FILTER_VALUE_LIST_NEW)?.blCopy().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        this.DebitNoteTable(this.item1)
-        console.log(res, 'yuyuyuyuyuyuyuuy')
-      },
-      (err) => console.log(err)
-    );
-
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+        console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select BENEFICIARY Name",
+            rules: {
+              required: false,
+            },
+            item: BENEFICIARY_DETAILS,
+            bindLabel: "value"
+          },
+          todate: {
+            type: "date",
+            value: "",
+            label: "Select Start Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          fromdate: {
+            type: "date",
+            value: "",
+            label: "Select End Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Pipo No",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
+      })
+    })
   }
 
+ async onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+    };
+
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        blcopyrefdate: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          blcopyrefdate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        blcopyrefdate: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          blcopyrefdate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'blCopy',this.FILTER_VALUE_LIST_NEW)?.blCopy().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+  }
+  
+  reset(){
+    this.ngOnInit()
+  }
+  
   DebitNoteTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -124,6 +209,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
+          SbNo: element['SbRef'] != 'NF' ? element['SbRef'][0]?.sbno : 'NF',
           date: moment(element['date']).format('DD-MM-YYYY'),
           blcopyrefNumber: element['blcopyrefNumber'],
           amount: element['amount'],
@@ -190,10 +276,10 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     }
   }
 
-  viewpdf(a) {
+  viewDN(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -216,7 +302,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
       console.log('king123');
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('bill lodgement reference advicecopy Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -225,7 +311,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
   toSave2(data) {
     console.log(data);
     this.documentService.updateDebit(data, data._id).subscribe((data) => {
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('bill lodgement reference advicecopy Is Updated Successfully.');
     }, (error) => {
       console.log('error');
     });
@@ -235,7 +321,7 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     console.log(data);
     this.documentService.updateDebit(data, id).subscribe((data) => {
       console.log(data);
-      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.toastr.success('bill lodgement reference advicecopy Is Updated Successfully.');
       this.ngOnInit();
       EditSummaryPagePanel?.displayHidden
     }, (error) => {
@@ -249,11 +335,11 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
   toEdit(data: any) {
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Import/Edit/Bill-Lodgement-Referance-AdviceCopy`],navigationExtras);
-    this.toastr.warning('Debit Note Row Is In Edit Mode');
+    this.router.navigate([`/home/Summary/Import/Edit/Bill-Lodgement-Referance-AdviceCopy`], navigationExtras);
+    this.toastr.warning('bill lodgement reference advicecopy Is In Edit Mode');
   }
 
   handleDelete(data: any) {
@@ -264,16 +350,16 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
 
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
     if (RoleCheckbox == '') {
-      this.documentService.deleteById({ id: id, tableName: 'debitnotes' }).subscribe((res) => {
+      this.documentService.deleteById({ id: id, tableName: 'blcopyRef' }).subscribe((res) => {
         console.log(res)
         if (res) {
           this.ngOnInit()
@@ -282,10 +368,11 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
     } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
       var approval_data: any = {
         id: id,
-        tableName: 'debitnotes',
+        tableName: 'blcopyRef',
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -304,10 +391,10 @@ export class ImportBilllodgementreferencenumberadvicecopySummaryComponent implem
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new DeditNoteFormat(this.FILTER_VALUE_LIST).getDeditNote());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new DeditNoteFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).getDeditNote());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'debitnotes.xlsx');
+    xlsx.writeFile(wb, 'Bill-Lodgement-Referance-AdviceCopy.xlsx');
   }
 }
 
@@ -322,11 +409,10 @@ class DeditNoteFormat {
     this.data?.forEach(element => {
       temp.push({
         PipoNo: this.getPipoNumber(element['pipo']),
-        date: element['date'],
-        commercialNumber: element['commercialNumber'],
-        debitNoteNumber: element['debitNoteNumber'],
-        DebitAmount: element['totalDebitAmount'],
-        currency: element['currency'],
+        SbNo: element['SbRef'] != 'NF' ? element['SbRef'][0]?.sbno : 'NF',
+        date: moment(element['date']).format('DD-MM-YYYY'),
+        blcopyrefNumber: element['blcopyrefNumber'],
+        amount: element['amount'],
         buyerName: this.getBuyerName(element['buyerName']),
       })
     });
@@ -352,3 +438,4 @@ class DeditNoteFormat {
     return array[key]?.join(',')
   }
 }
+

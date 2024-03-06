@@ -7,6 +7,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'app-export-billlodgementreferencenumberadvicecopy',
@@ -34,7 +35,7 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
   @Input('Transaction_id') Transaction_id: any = '';
-  UPLOAD_STATUS:boolean=false;
+  UPLOAD_STATUS: boolean = false;
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -43,20 +44,17 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
     public userService: UserService) { }
 
   async ngOnInit() {
-    var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
-    var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-    var Transaction_pipoid: any = this.route.snapshot.paramMap.get('pipo');
-    console.log(TransactionSbRef, Transaction_pipoid, Transaction_id)
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
-    if (temp_pipo?.length != 0) {
+    if (temp_pipo?.length != 0 && temp_pipo != undefined) {
       this.btndisabled = false;
-      await this.documentService.getPipoListNo('export', temp_pipo);
-      this.UPLOAD_STATUS=this.route.snapshot.paramMap.get('upload')=='true'?true:false  
+      this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
+      this.validator.CommonLoadTransaction(temp_pipo);
     }
-    console.log(temp_pipo, this.UPLOAD_STATUS,"temp_pipo")
+    console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
   }
 
 
@@ -67,12 +65,26 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
       this.pipourl1 = args[1].publicUrl;
       this.validator.buildForm({
         sbNo: {
-          type: "ShippingBill",
-          value: "",
-          label: "Select Shipping Bill",
+          type: "formGroup",
+          label: "",
+          GroupLabel: ['Shipping Bill 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
-          }
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "ShippingBill",
+                value: "",
+                label: "Select Shipping Bill",
+                rules: {
+                  required: true,
+                },
+                name: 'SBData',
+              }
+            ]
+          ]
         },
         blcopyrefNumber: {
           type: "text",
@@ -89,7 +101,18 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'exportbilllodgementreferencenumberadvicecopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -101,11 +124,15 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
+    let temp: any = [];
+    e?.value?.sbNo?.forEach(element => {
+      temp.push(element?.SBData)
+    });
     var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
     if (TransactionSbRef != '' && TransactionSbRef != undefined && TransactionSbRef != null) {
-      e.value.SbRef = [TransactionSbRef];
+      e.value.SbRef = temp;
     } else {
-      e.value.SbRef = [e?.value?.sbNo];
+      e.value.SbRef = temp;
     }
     e.value.file = 'export';
     console.log(e.value, 'onSubmitblCopy');
@@ -170,20 +197,52 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.validator.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
-        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
-        }
-      }
+      this.LoadShippingBill(this.pipoArr);
     } else {
       this.btndisabled = true;
     }
-    console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(event, this.validator.SHIPPING_BILL_LIST, this.validator.SHIPPING_BUNDEL, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+
+  LoadShippingBill(pipoArr: any) {
+    let API_DATA: any = [];
+    pipoArr?.forEach(element => {
+      API_DATA.push({
+        query: { pipo: [element] }, tableName: "masterrecord", filterPage: { limit: 20 }
+      })
+    });
+    console.log(API_DATA, "API_DATA");
+    this.filteranytablepagination.PaginationfilterAnyTableList(API_DATA).subscribe((res: any) => {
+      console.log(res, "LoadShippingBill")
+      let DATA_WRAP: any = []
+      res?.forEach(element => {
+        element?.data?.forEach(SBElement => {
+          DATA_WRAP.push(SBElement);
+        });
+      });
+      this.validator.SHIPPING_BILL_MASTER_DATA = DATA_WRAP;
+      this.validator.origin = [];
+      this.validator.SHIPPING_BUNDEL = [];
+      this.validator.SHIPPING_BILL_LIST = [];
+      DATA_WRAP?.forEach((element, i) => {
+        if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
+          this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+          this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+        }
+        this.validator.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
+      });
+      console.log('Master Country', this.validator.SHIPPING_BUNDEL, this.validator.origin);
+    })
   }
 }

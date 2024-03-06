@@ -9,6 +9,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import { BoeBill } from '../../../../../model/boe.model';
 import $ from "jquery";
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'edit-app-boe-bill',
@@ -39,7 +42,7 @@ export class EditBOEComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   data: any = '';
-  
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -48,6 +51,8 @@ export class EditBOEComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -59,386 +64,420 @@ export class EditBOEComponent implements OnInit {
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.changedCommercial(args?.pipo[0]?._id)
+      this.changedCommercial(this.data?.pipo[0]?._id)
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
+      let CI_DETAILS: any = [];
+      args?.CI_DETAILS?.forEach(element => {
+        CI_DETAILS?.push(
+          {
+            type: "CommericalNo",
+            value: element?.invoiceno,
+            label: "Invoices No.",
+            name: 'invoiceno',
+            id: "CommericalNo",
+            rules: {
+              required: true,
+            },
+            callback: (item: any) => {
+              const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+              let currentVal = item?.value;
+              item.form['value'][item?.fieldName][item?.OptionfieldIndex]["amount"] = (currentVal?.data?.amount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.data?.amount);
+              myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.data?.currency);
+              myForm['touched'] = true;
+              myForm['status'] = 'VALID';
+              console.log(item, "callback")
+            },
+          },
+          {
+            type: "currency",
+            value: this.data?.pipo[0]?.currency,
+            label: "Invoices Currency",
+            name: 'currency',
+            rules: {
+              required: true,
+            },
+            disabled: true
+          },
+          {
+            type: "text",
+            value: element?.amount,
+            label: "Invoices Amount",
+            name: 'amount',
+            rules: {
+              required: true,
+            }
+          },
+          {
+            type: "PaymentTermType",
+            value: element?.type,
+            label: "Type",
+            name: 'type',
+            rules: {
+              required: true,
+            },
+          },
+        )
+      });
       this.validator.buildForm({
-        CI_DETAILS: {
-          type: "CommericalNo",
-          value: args?.CI_DETAILS,
-          label: "Commerical No.",
-          id:"CommericalNo",
-          autofill: [{ input: 'CIINVOICE', key: 'InvoiceValue', name: 'invoices', index: 3, equalinput: 'invoiceNumber', equalindex: 3 },
-          { input: 'CIfreightValue', key: 'FreightValue', name: 'FOBFREIGHT', index: 2, equalinput: 'freightValue', equalindex: 1 },
-          { input: 'CIinsuranceAmount', key: 'InsuranceValue', name: 'INSURANCE', index: 2, equalinput: 'insuranceAmount', equalindex: 1 },
-          { input: 'CImiscellaneousAmount', key: 'MiscCharges', name: 'MISCELLANEOUS', index: 2, equalinput: 'miscellaneousAmount', equalindex: 1 }],
-          autofillrequired: true,
+        boeDate: {
+          type: "date",
+          value: args?.boeDate,
+          label: "BOE Date",
           rules: {
             required: true,
           }
         },
-        BOEDETAILS: {
-          type: "formArray",
-          label: "BOE DETAILS",
-          GroupLabel: ['BOE DETAILS 1'],
-          MAX_LIMIT: 9,
+        boeNumber: {
+          type: "text",
+          value: args['boeNumber'],
+          label: "BOE No.",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.pipo[0]?.currency,
+          label: "BOE Currency",
           rules: {
             required: true,
           },
-          formGroup: [{
-            boeDate: {
-              type: "date",
-              value: args?.boeDate,
-              label: "Boe Date",
-              rules: {
-                required: true,
-              }
-            },
-            boeNumber: {
-              type: "text",
-              value:  args?.boeNumber,
-              label: "Boe No.",
-              rules: {
-                required: true,
-              }
-            },
-            AWBNo: {
-              type: "text",
-              value:  args?.AWBNo,
-              label: "AWB No.*",
-              rules: {
-                required: true,
-              }
-            },
-            origin: {
-              type: "text",
-              value:  args?.origin,
-              label: "ORIGIN*",
-              rules: {
-                required: true,
-              }
-            },
-            dischargePort: {
-              type: "text",
-              value:  args?.dischargePort,
-              label: "DISCHARGE PORT*",
-              rules: {
-                required: true,
-              }
-            },
-            iecName: {
-              type: "text",
-              value: args?.iecName,
-              label: "IEC NAME",
-              maxLength:200,
-              rules: {
-                required: true,
-              }
-            },
-            iecCode: {
-              type: "text",
-              value:  args?.iecCode,
-              label: "IEC CODE",
-              rules: {
-                required: true,
-              }
-            },
-            adCode: {
-              type: "text",
-              value:  args?.adCode,
-              label: "AD CODE",
-              rules: {
-                required: true,
-              }
-            },
-            adBillNo: {
-              type: "text",
-              value:  args?.adBillNo,
-              label: "AD BILL CODE*",
-              rules: {
-                required: true,
-              }
-            },
-
-          }]
+          Inputdisabled: true,
+          autofill: {
+            type: "formGroup",
+            SetInputName: "currency",
+            CONTROLS_NAME: "CI_DETAILS",
+            GetInputName: "currency"
+          }
         },
-        invoices: {
-          type: "formArray",
+        invoiceAmount: {
+          type: "text",
+          value: args['invoiceAmount'],
+          label: "BOE Amount",
+          rules: {
+            required: true,
+          }
+        },
+        AWBNo: {
+          type: "text",
+          value: args['AWBNo'],
+          label: "AWB No.",
+          rules: {
+            required: true,
+          }
+        },
+        origin: {
+          type: "text",
+          value: args['origin'],
+          label: "ORIGIN",
+          rules: {
+            required: true,
+          }
+        },
+        dischargePort: {
+          type: "text",
+          value: args['dischargePort'],
+          label: "DISCHARGE PORT*",
+          rules: {
+            required: true,
+          }
+        },
+        adCode: {
+          type: "text",
+          value: args['adCode'],
+          label: "AD CODE",
+          rules: {
+            required: true,
+          }
+        },
+        freightValue: {
+          type: "text",
+          value: args['freightAmount'],
+          label: "FREIGHT VALUE",
+          rules: {
+            required: true,
+          }
+        },
+        miscellaneousAmount: {
+          type: "text",
+          value: args['miscellaneousAmount'],
+          label: "MISCELLANEOUS AMOUNT*",
+          rules: {
+            required: true,
+          }
+        },
+        CI_DETAILS: {
+          type: "formGroup",
           label: "Invoices Info",
           GroupLabel: ['Invoices 1'],
-          AutoFill: true,
-          EqualList: {
-            key: 'CIINVOICE',
-            equalkey: 'invoiceAmount',
-            index: 3,
-            equalindex: 2,
-            errormsg: 'INVOICE AMOUNT and CI INVOICE AMOUNT should be equal is required.',
-          },
-          MAX_LIMIT: 6,
+          AddNewRequried: true,
           rules: {
-            required: true,
+            required: false,
           },
-          formGroup: [{
-            invoiceNumber: {
-              type: "text",
-              value:  args?.invoiceNumber,
-              label: "Invoices No.",
-              rules: {
-                required: true,
-              }
-            },
-            currency: {
-              type: "currency",
-              value:  args?.currency,
-              label: "Invoices Currency",
-              rules: {
-                required: true,
-              }
-            },
-            invoiceAmount: {
-              type: "text",
-              value:  args?.invoiceAmount!="NF"?args?.invoiceAmount:0,
-              label: "Invoices Amount",
-              rules: {
-                required: true,
-              }
-            },
-            CIINVOICE: {
-              type: "text",
-              value: args?.CI_DETAILS?.data?.InvoiceValue,
-              label: "CI INVOICE Amount",
-              disabled: true,
-              rules: {
-                required: true,
-              }
-            },
-            settledAmount: {
-              type: "text",
-              value: args?.settledAmount,
-              label: "SETTELED AMOUNT*",
-              rules: {
-                required: true,
-              }
-            },
-            status: {
-              type: "text",
-              value: args?.status,
-              label: "STATUS*",
-              rules: {
-                required: true,
-              }
-            }
-          }]
+          formArray: [CI_DETAILS]
         },
-        FOBFREIGHT: {
-          type: "formArray",
-          label: "FOB and FREIGHT",
-          GroupLabel: ['FOB and FREIGHT 1'],
-          AutoFill: true,
-          EqualList: {
-            key: 'CIfreightValue',
-            equalkey: 'freightValue',
-            index: 2,
-            equalindex: 1,
-            errormsg: 'FREIGHT AMOUNT and CI FREIGHT AMOUNT should be equal is required.',
-          },
-          MAX_LIMIT: 3,
-          rules: {
-            required: true,
-          },
-          formGroup: [{
-            freightCurrency: {
-              type: "currency",
-              value: args?.freightCurrency,
-              label: "FREIGHT CURRENCY",
-              rules: {
-                required: true,
-              }
-            },
-            freightValue: {
-              type: "text",
-              value: args?.freightAmount,
-              label: "FREIGHT VALUE",
-              rules: {
-                required: true,
-              }
-            },
-            CIfreightValue: {
-              type: "text",
-              value:  args?.CI_DETAILS?.data?.FreightValue,
-              label: "CI FREIGHT VALUE",
-              disabled: true,
-              rules: {
-                required: true,
-              }
-            }
-          }]
-        },
-        INSURANCE: {
-          type: "formArray",
-          label: "INSURANCE",
-          GroupLabel: ['INSURANCE 1'],
-          AutoFill: true,
-          EqualList: {
-            key: 'CIinsuranceAmount',
-            equalkey: 'insuranceAmount',
-            index: 2,
-            equalindex: 1,
-            errormsg: 'INSURANCE AMOUNT and CI INSURANCE AMOUNT should be equal is required.',
-          },
-          MAX_LIMIT: 3,
-          rules: {
-            required: true,
-          },
-          formGroup: [{
-            insuranceCurrency: {
-              type: "currency",
-              value: args?.insuranceCurrency,
-              label: "Insurance Currency",
-              rules: {
-                required: true,
-              }
-            },
-            insuranceAmount: {
-              type: "text",
-              value: args?.insuranceAmount!="NF"?args?.insuranceAmount:'0',
-              label: "INSURANCE AMOUNT*",
-              rules: {
-                required: true,
-              }
-            },
-            CIinsuranceAmount: {
-              type: "text",
-              value:  args?.CI_DETAILS?.data?.InsuranceValue,
-              label: "CI INSURANCE AMOUNT*",
-              disabled: true,
-              rules: {
-                required: true,
-              }
-            },
-          }]
-        },
-        DISCOUNT: {
-          type: "formArray",
-          label: "DISCOUNT",
-          GroupLabel: ['DISCOUNT 1'],
-          MAX_LIMIT: 2,
-          rules: {
-            required: true,
-          },
-          formGroup: [{
-            discountCurrency: {
-              type: "currency",
-              value: args?.discountCurrency,
-              label: "DISCOUNT Currency",
-              rules: {
-                required: true,
-              }
-            },
-            discountAmount: {
-              type: "text",
-              value: args?.discountAmount!="NF"?args?.discountAmount:'0',
-              label: "DISCOUNT AMOUNT*",
-              rules: {
-                required: true,
-              }
-            },
-          }]
-        },
-        MISCELLANEOUS: {
-          type: "formArray",
-          label: "MISCELLANEOUS",
-          GroupLabel: ['MISCELLANEOUS 1'],
-          AutoFill: true,
-          EqualList: {
-            key: 'CImiscellaneousAmount',
-            equalkey: 'miscellaneousAmount',
-            index: 2,
-            equalindex: 1,
-            errormsg: 'MISCELLANEOUS AMOUNT and CI MISCELLANEOUS AMOUNT should be equal is required.',
-          },
-          MAX_LIMIT: 3,
-          rules: {
-            required: true,
-          },
-          formGroup: [{
-            miscellaneousCurrency: {
-              type: "currency",
-              value: args?.miscellaneousCurrency,
-              label: "MISCELLANEOUS Currency",
-              rules: {
-                required: true,
-              }
-            },
-            miscellaneousAmount: {
-              type: "text",
-              value:  args?.miscellaneousAmount!="NF"?args?.miscellaneousAmount:'0',
-              label: "MISCELLANEOUS AMOUNT*",
-              rules: {
-                required: true,
-              }
-            },
-            CImiscellaneousAmount: {
-              type: "text",
-              value:  args?.CI_DETAILS?.data?.MiscCharges,
-              label: "CI MISCELLANEOUS AMOUNT*",
-              disabled: true,
-              rules: {
-                required: true,
-              }
-            },
-          }]
-        },
-        COMMISSION: {
-          type: "formArray",
-          label: "COMMISSION",
-          GroupLabel: ['COMMISSION 1'],
-          MAX_LIMIT: 2,
-          rules: {
-            required: true,
-          },
-          formGroup: [{
-            commissionCurrency: {
-              type: "currency",
-              value: args?.commissionCurrency,
-              label: "COMMISSION Currency",
-              rules: {
-                required: true,
-              }
-            },
-            commissionAmount: {
-              type: "text",
-              value: args?.commissionAmount!="NF"?args?.commissionAmount:'0',
-              label: "COMMISSION AMOUNT*",
-              rules: {
-                required: true,
-              }
-            },
-          }]
-        },
-      }, 'BILL_OF_ENTRY').then((res)=>{
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'BILL_OF_ENTRY').then((res) => {
       });
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.changedCommercial(this.data?.pipo[0]?._id)
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.UPLOAD_FORM = new BoeBill(args[1]?.data);
+      this.pipourl1 = args[1].publicUrl;
+      this.validator.buildForm({
+        boeDate: {
+          type: "date",
+          value: this.UPLOAD_FORM['boeDate']?.replaceAll('/', '-').toString(),
+          label: "BOE Date",
+          rules: {
+            required: true,
+          }
+        },
+        boeNumber: {
+          type: "text",
+          value: this.UPLOAD_FORM['boeNumber'],
+          label: "BOE No.",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.pipo[0]?.currency,
+          label: "BOE Currency",
+          rules: {
+            required: true,
+          },
+          Inputdisabled: true,
+          autofill: {
+            type: "formGroup",
+            SetInputName: "currency",
+            CONTROLS_NAME: "CI_DETAILS",
+            GetInputName: "currency"
+          }
+        },
+        invoiceAmount: {
+          type: "text",
+          value: this.UPLOAD_FORM['invoiceAmount'],
+          label: "BOE Amount",
+          rules: {
+            required: true,
+          }
+        },
+        AWBNo: {
+          type: "text",
+          value: this.UPLOAD_FORM['AWBNo'],
+          label: "AWB No.",
+          rules: {
+            required: true,
+          }
+        },
+        origin: {
+          type: "text",
+          value: "",
+          label: "ORIGIN",
+          rules: {
+            required: true,
+          }
+        },
+        dischargePort: {
+          type: "text",
+          value: this.UPLOAD_FORM['dischargePort'],
+          label: "DISCHARGE PORT*",
+          rules: {
+            required: true,
+          }
+        },
+        adCode: {
+          type: "text",
+          value: this.UPLOAD_FORM['adCode'],
+          label: "AD CODE",
+          rules: {
+            required: true,
+          }
+        },
+        freightValue: {
+          type: "text",
+          value: this.UPLOAD_FORM['freightAmount'],
+          label: "FREIGHT VALUE",
+          rules: {
+            required: true,
+          }
+        },
+        miscellaneousAmount: {
+          type: "text",
+          value: "",
+          label: "MISCELLANEOUS AMOUNT*",
+          rules: {
+            required: true,
+          }
+        },
+        CI_DETAILS: {
+          type: "formGroup",
+          label: "Invoices Info",
+          GroupLabel: ['Invoices 1'],
+          AddNewRequried: true,
+          rules: {
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "CommericalNo",
+                value: "",
+                label: "Invoices No.",
+                name: 'invoiceno',
+                id: "CommericalNo",
+                rules: {
+                  required: true,
+                },
+                callback: (item: any) => {
+                  const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+                  let currentVal = item?.value;
+                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["amount"] = (currentVal?.data?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.data?.amount);
+                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.data?.currency);
+                  myForm['touched'] = true;
+                  myForm['status'] = 'VALID';
+                  console.log(item, "callback")
+                },
+              },
+              {
+                type: "currency",
+                value: this.PIPO_DATA['currency'],
+                label: "Invoices Currency",
+                name: 'currency',
+                rules: {
+                  required: true,
+                },
+                disabled: true
+              },
+              {
+                type: "text",
+                value: '',
+                label: "Invoices Amount",
+                name: 'amount',
+                rules: {
+                  required: true,
+                }
+              },
+              {
+                type: "PaymentTermType",
+                value: "",
+                label: "Type",
+                name: 'type',
+                rules: {
+                  required: true,
+                },
+              },
+            ]
+          ]
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'BILL_OF_ENTRY').then((res) => {
+      });
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
   onSubmit(e: any) {
-    let newform: any = this.formJSON_To_Array(e.value);
+    let newform: any = e.value;
     console.log(e, newform, 'formJSON_To_Array')
-    newform.file = 'import';
-    newform.currency = newform.currency?.type != undefined ? newform.currency.type : newform.currency;
-    newform.commissionCurrency = newform.commissionCurrency?.type != undefined ? newform.commissionCurrency.type : newform.commissionCurrency;
-    newform.discountCurrency = newform.discountCurrency?.type != undefined ? newform.discountCurrency.type : newform.discountCurrency;
-    newform.freightCurrency = newform.freightCurrency?.type != undefined ? newform.freightCurrency.type : newform.freightCurrency;
-    newform.insuranceCurrency = newform.insuranceCurrency?.type != undefined ? newform.insuranceCurrency.type : newform.insuranceCurrency;
-    newform.miscellaneousCurrency = newform.miscellaneousCurrency?.type != undefined ? newform.miscellaneousCurrency.type : newform.miscellaneousCurrency;
+    if (parseInt(this.paymentTermSum(newform.CI_DETAILS)) >= this.Percentage(parseInt(newform.invoiceAmount))) {
+      newform.currency = newform.currency?.type != undefined ? newform.currency.type : newform.currency;
+      newform.commissionCurrency = newform.commissionCurrency?.type != undefined ? newform.commissionCurrency.type : newform.commissionCurrency;
+      newform.discountCurrency = newform.discountCurrency?.type != undefined ? newform.discountCurrency.type : newform.discountCurrency;
+      newform.freightCurrency = newform.freightCurrency?.type != undefined ? newform.freightCurrency.type : newform.freightCurrency;
+      newform.insuranceCurrency = newform.insuranceCurrency?.type != undefined ? newform.insuranceCurrency.type : newform.insuranceCurrency;
+      newform.miscellaneousCurrency = newform.miscellaneousCurrency?.type != undefined ? newform.miscellaneousCurrency.type : newform.miscellaneousCurrency;
+      let CI_LIST: any = [];
+      newform.CI_DETAILS.forEach(element => {
+        CI_LIST.push(element?.invoiceno?.id)
+      });
+      newform.CI_REF = CI_LIST
+      console.log('Benne Name', newform);
+      if (this.data?.boeNumber != newform.boeNumber) {
+        this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Boe Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+          if (CustomConfirmDialogRes?.value == "Ok") {
+            this.documentService.getInvoice_No({
+              boeNumber: newform.boeNumber
+            }, 'boerecords').subscribe((resp: any) => {
+              console.log('creditNoteNumber Invoice_No', resp)
+              if (resp.data.length == 0) {
+                newform.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+                this.documentService.updateBoe(newform, this.data?._id).subscribe((data: any) => {
+                  this.toastr.success('Boe added successfully.');
+                  this.router.navigate(['home/Summary/Import/boe']);
+                });
+              } else {
+                this.toastr.error(`Please check this Boe Number : ${newform.boeNumber} already exit...`);
+              }
+            });
+          }
+        });
+      } else {
+        this.documentService.updateBoe(newform, this.data?._id).subscribe((data: any) => {
+          this.toastr.success('Boe added successfully.');
+          this.router.navigate(['home/Summary/Import/boe']);
+        });
+      }
+
+    } else {
+      this.toastr.error(`BOE Amount and total invoice amount should be equal`);
+    }
     console.log('Benne Name', newform);
-    this.documentService.updateBoe(newform,this.data?._id).subscribe((data: any) => {
-      this.toastr.success('Boe added successfully.');
-      this.router.navigate(['home/Summary/Import/boe']);
-    });
+
+  }
+
+  Percentage(amount: any) {
+    return parseFloat(amount) - ((parseFloat(amount) * 5) / 100);
+  }
+
+  paymentTermSum(value: any) {
+    return value?.reduce((a, b) => a + parseFloat(b?.amount), 0)
   }
 
   clickPipo(event: any) {
@@ -455,18 +494,15 @@ export class EditBOEComponent implements OnInit {
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
   changedCommercial(pipo: any) {
+    this.validator.COMMERICAL_NO=[]
     this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], data: element });
       });
       console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
-    },
-      (err) => {
-        console.log(err)
-      }
-    );
+    }, (err) => { console.log(err) } );
   }
-  
+
   formJSON_To_Array(data: any) {
     var temp: any = {};
     for (const key in data) {

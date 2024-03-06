@@ -11,7 +11,8 @@
           <tr class="table-tr">
             <th scope="col" class="col-td-th-1">PIPO NO.</th>
             <th scope="col" class="col-td-th-1">Currency</th>
-            <th scope="col" class="col-td-th-1">Amount</th>
+            <th scope="col" class="col-td-th-1">PIPO Amount</th>
+            <th scope="col" class="col-td-th-2">Transaction Amount</th>
             <th scope="col" class="col-td-th-1">ORM Date</th>
             <th scope="col" class="col-td-th-2">ORM Ref No.</th>
             <th scope="col" class="col-td-th-1">BOE No</th>
@@ -24,6 +25,7 @@
             <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency(item?.data?.formdata?.paymentTerm)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-2">{{this.getPipoPaymentTermsAmountSum(item?.data?.formdata?.paymentTerm)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getORM_Details(item?.ORMRef)?.ORM_DATE}}</td>
             <td scope="col" class="col-td-th-2">{{this.getORM_Details(item?.ORMRef)?.ORM_NO}}</td>
             <td scope="col" class="col-td-th-1">{{this.getBOE_DETAILS(item?.BOERef)?.BOE_NO}}</td>
@@ -49,9 +51,9 @@
           <tr class="table-tr">
             <th scope="col" class="col-td-th-1">PIPO NO.</th>
             <th scope="col" class="col-td-th-1">Currency</th>
-            <th scope="col" class="col-td-th-1">Amount</th>
-            <th scope="col" class="col-td-th-2">Bill Ref no.</th>
-            <th scope="col" class="col-td-th-1">Amount</th>
+            <th scope="col" class="col-td-th-2">Transaction Amount</th>
+            <th scope="col" class="col-td-th-2">ORM Ref no.</th>
+            <th scope="col" class="col-td-th-1">Advice Amount</th>
             <th scope="col" class="col-td-th-2">BOE No</th>
             <th scope="col" class="col-td-th-1">Status</th>
             <th scope="col" class="col-td-th-1">Action</th>
@@ -61,17 +63,17 @@
           <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
             <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency(item?.data?.formdata?.paymentTerm)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.blcopyrefNumber}}</td>
-            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.blCopyRef?.amount}}</td>
-            <td scope="col" class="col-td-th-2">{{this.getBOE_DETAILS(item?.pipo)?.BOE_NO}}</td>
+            <td scope="col" class="col-td-th-2">{{this.getAdviceAmountSum(item?.data?.formdata?.BOE_DETAIILS)}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.ORMRefData?.billNo}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.ORMRefData?.amount}}</td>
+            <td scope="col" class="col-td-th-2">{{this.getBOE_DETAILS(item?.BOERef)?.BOE_NO}}</td>
             <td scope="col" class="col-td-th-1">
-              {{item?.Ref_Data?.blCopyRef?.blcopyrefNumber==undefined?'Pending':'Completed'}}</td>
+              {{item?.Ref_Data?.ORMRefData?.billNo==undefined?'Pending':'Completed'}}</td>
             <td scope="col" class="col-td-th-1">
               <button class="btn btn-primary"
-                [disabled]="item?.Ref_Data?.blCopyRef?.blcopyrefNumber==undefined?false:true"
-                (click)="this.router.navigate(['home/upload-documents/Import/Bill-Lodgement-Referance-AdviceCopy',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
-                AdviceCopy</button>
+                [disabled]="item?.Ref_Data?.ORMRefData?.billNo==undefined?false:true"
+                (click)="this.router.navigate(['home/upload-documents/Import/OutwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id,upload:'true'}]);">Upload
+               ORM Advice Copy</button>
             </td>
           </tr>
         </tbody>
@@ -97,7 +99,7 @@
           <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
             <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency(item?.data?.formdata?.paymentTerm)}}</td>
-            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.data?.formdata?.paymentTerm)}}</td>
             <td scope="col" class="col-td-th-1">{{this.getORM_Details(item?.ORMRef)?.ORM_DATE}}</td>
             <td scope="col" class="col-td-th-2">{{this.getORM_Details(item?.ORMRef)?.ORM_NO}}</td>
             <td scope="col" class="col-td-th-1">
@@ -173,16 +175,66 @@
             <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
             <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
             <td scope="col" class="col-td-th-2">{{item?.data?.formdata?.BCQuote[0]?.Tenor}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
-            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.billNo}}</td>
-            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.BCRef?.billNo==undefined?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.BCRefNo}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.BCRef?.DueDate}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.BCRef?.BCRefNo==undefined?'Pending':'Completed'}}</td>
             <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
-                [disabled]="item?.Ref_Data?.BCRef?.billNo!=undefined?true:false"
-                (click)="this.router.navigate(['home/upload-documents/Export/InwardRemittanceAdvice',{pipo:this.getPipoNumber(item?.pipo),transaction_id:item?._id}]);">Upload
-                IRM</button></td>
+              [disabled]="item?.Ref_Data?.BCRef?.BCRefNo!=undefined?true:false"
+              (click)="uploadBC(BCRefNoPanel,item)">Upload
+              BC Ref No.</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </custom-mat-step>
+  </custom-mat-stepper>
+  <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='LC-Transaction'"
+    (TabEvent)="onTabChanges($event)">
+    <custom-mat-step MATSTEP_LABEL="LC Transaction" [NextTrue]="true">
+      <table class="table table-striped">
+        <thead>
+          <tr class="table-tr">
+            <th scope="col" class="col-td-th-1">Date</th>
+            <th scope="col" class="col-td-th-1">Party Name</th>
+            <th scope="col" class="col-td-th-1">Pipo No.</th>
+            <th scope="col" class="col-td-th-1">Currency</th>
+            <th scope="col" class="col-td-th-1">Amount</th>
+            <th scope="col" class="col-td-th-2">FLC Ref No.</th>
+            <th scope="col" class="col-td-th-2">Issuance Date</th>
+            <th scope="col" class="col-td-th-1">Status</th>
+            <th scope="col" class="col-td-th-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-tr" *ngFor="let item of this.TRANSACTION_DATA;let i=index">
+            <td scope="col" class="col-td-th-1">{{item?.date}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPIPOBenneName(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPipoNumber(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPIPOCurrency2(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-1">{{this.getPipoAmountSum(item?.pipo)}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.FLCRef?.FLCRefNo}}</td>
+            <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.FLCRef?.IssuanceDate}}</td>
+            <td scope="col" class="col-td-th-1">{{item?.Ref_Data?.FLCRef?.FLCRefNo==undefined?'Pending':'Completed'}}</td>
+            <td scope="col" class="col-td-th-1"><button class="btn btn-primary"
+                [disabled]="item?.Ref_Data?.FLCRef?.FLCRefNo!=undefined?true:false"
+                (click)="uploadFLC(FLCRefNoPanel,item)">Upload
+                FLC Ref No.</button></td>
           </tr>
         </tbody>
       </table>
     </custom-mat-step>
   </custom-mat-stepper>
 </div>
+
+<app-custom-model [FooterButton]="false" [minimizedisabled]="false" [customstyle]="{'max-width':'50vw !important'}"
+  [modalbodystyle]="{'max-height':'44vh !important','height':'44vh !important','max-width':'50vw !important'}"
+  height="44vh" id="FLCRefNo" name="FLC Ref No." #FLCRefNoPanel>
+  <upload-components id="FLCRefNo_UPLOAD" (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm,FLCRefNoPanel)"
+    #RawValueEventPanel></upload-components>
+</app-custom-model>
+
+<app-custom-model [FooterButton]="false" [minimizedisabled]="false" [customstyle]="{'max-width':'50vw !important'}"
+  [modalbodystyle]="{'max-height':'44vh !important','height':'44vh !important','max-width':'50vw !important'}"
+  height="44vh" id="BCRefNo" name="BC Ref No." #BCRefNoPanel>
+  <upload-components id="BCRefNo_UPLOAD" (SubmitEvent)="this.SubmitButtonBC(BCRefNoRawValueEventPanel?.geForm,BCRefNoPanel)"
+    #BCRefNoRawValueEventPanel></upload-components>
+</app-custom-model>

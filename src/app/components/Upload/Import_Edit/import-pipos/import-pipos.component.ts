@@ -64,7 +64,7 @@ export class EditImportPIPOSComponent implements OnInit {
       let ModeofTransportData2: any = [];
 
       args?.paymentTerm?.forEach(element => {
-        paymentTermdata.push({
+        paymentTermdata.push([{
           type: "PaymentTermType",
           value: element?.type,
           label: "Type",
@@ -93,14 +93,14 @@ export class EditImportPIPOSComponent implements OnInit {
           },
           {
             type: "currency",
-            value: element?.currency?.type,
+            value: args?.currency,
             label: "Currency",
             name: 'currency',
             rules: {
               required: true,
             },
             disabled: true
-          })
+          }])
       });
       ModeofTransportData1 = [{
         type: "checkbox",
@@ -144,8 +144,8 @@ export class EditImportPIPOSComponent implements OnInit {
           value: args?.document,
           label: "Select the type of document",
           checkboxlabel: [
-            { text: "Proforma Inovice", value: 'PI' },
-            { text: 'Purchase Order', value: 'PO' }
+            { text: "Proforma Inovice",type:"checkbox", value: 'PI' },
+            { text: 'Purchase Order',type:"checkbox", value: 'PO' }
           ],
           rules: {
             required: true,
@@ -210,11 +210,11 @@ export class EditImportPIPOSComponent implements OnInit {
           value: args?.MaterialTypes,
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Raw Material", value: 'Raw Material' },
-            { text: 'Capital Goods', value: 'Capital Goods' },
-            { text: 'Services', value: 'Services' },
-            { text: 'Samples', value: 'Samples' },
-            { text: 'Repairs and returns', value: 'Repairs and returns' }
+            { text: "Raw Material", type:"checkbox",value: 'Raw Material' },
+            { text: 'Capital Goods', type:"checkbox",value: 'Capital Goods' },
+            { text: 'Services',type:"checkbox", value: 'Services' },
+            { text: 'Samples',type:"checkbox", value: 'Samples' },
+            { text: 'Repairs and returns',type:"checkbox", value: 'Repairs and returns' }
           ],
           NotificationShow: {
             "Raw Material": "",
@@ -266,7 +266,7 @@ export class EditImportPIPOSComponent implements OnInit {
           type: "OptionMultiCheckBox",
           value: args?.ModeofTransport[0]?.EDI != '' && args?.ModeofTransport[0]?.EDI != undefined ? "Sea" : "Air",
           label: "Mode of Transport",
-          checkboxlabel: [{ text: "Sea", value: 'Sea' }, { text: 'Air', value: 'Air' }],
+          checkboxlabel: [{ text: "Sea",type:"checkbox", value: 'Sea' }, { text: 'Air',type:"checkbox", value: 'Air' }],
           rules: {
             required: true,
           },
@@ -283,7 +283,7 @@ export class EditImportPIPOSComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: [paymentTermdata]
+          formArray: paymentTermdata
         },
       }, 'PIPO_IMPORT');
     }, 200);

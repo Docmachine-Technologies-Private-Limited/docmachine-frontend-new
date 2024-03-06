@@ -17,6 +17,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
   @Input('placeholder') placeHolderText: any = ''
   @Input('items') items: any = [];
   @Output('modelChanges') modelChanges: any = new EventEmitter<any>();
+  @Output('modelObjectChanges') modelObjectChanges: any = new EventEmitter<any>();
   @Input('bindLabel') bindLabel: any = 'demo';
   @Input('bindValue') bindValue: any = '';
   @Input('multiple') multiple: any = [];
@@ -49,6 +50,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
     $('#' + $($event.target).parent().attr('id')).addClass('custom-dropdown-active');
     console.log(this.items,"selectedItems")
   }
+  
   dropdownHide($event, val, inputid) {
     var uq_id: any = $($event.target).parent().parent().attr('id')
     $('.custom-dropdown').removeClass('custom-dropdown-active');
@@ -77,6 +79,7 @@ export class NgCustomDropdownComponent implements OnInit, ControlValueAccessor, 
         this.onChange(this.value);
       }
     }
+    this.modelObjectChanges.emit(val)
   }
 
   filterdropdown($event: any, val: any) {

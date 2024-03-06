@@ -19,6 +19,7 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import moment from "moment";
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'export-inward-remittance-advice-summary',
@@ -114,7 +115,8 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     billNo: "",
     BalanceAvail: "",
   }
-  FILTER_FORM: any = ''
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
   
   constructor(
     private toastr: ToastrService,
@@ -126,111 +128,108 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public wininfo: WindowInformationService,
     public dialog: MatDialog,
-    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService
-  ) { }
+    public filteranytablepagination: TableServiceController,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService) { }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any) => {
-      this.PENDING_DATA = res;
-      console.log("this.PENDING_DATA", res)
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'iradvices',this.FILTER_VALUE_LIST_NEW)?.iradvices().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+        }
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
+          bindLabel: "value"
+        },
+        todate: {
+          type: "date",
+          value: "",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
     })
-    this.item1 = [];
-    this.documentService.getIrAdvice(1).subscribe((res: any) => {
-      console.log(res), (this.item = res.data);
-      console.log('king', this.item);
-      this.item1 = res?.data;
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
-            }
-            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
-            }
-            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.billNo)?.length == 0) {
-              this.ALL_FILTER_DATA['NO'].push({ value: value?.billNo });
-            }
-            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
-              this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
-            }
-          }
-        }
-        this.FILTER_FORM = {
-          buyerName: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Buyer",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['Buyer_Name'],
-            bindLabel: "value"
-          },
-          date: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Date",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['DATE'],
-            bindLabel: "value"
-          },
-          NO: {
-            type: "ArrayList",
-            value: "",
-            label: "Select FIRX Number",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['NO'],
-            bindLabel: "value"
-          },
-        }
-      this.item1.forEach((element, i) => {
-        let commision = parseFloat(element.commision)
-        let exchangeRate = parseFloat(element.exchangeRate)
-        let pipoamount: any = parseFloat(element?.pipo[0]?.amount)
-        this.item1[i].recUSD = (pipoamount - commision).toFixed(2);
-        let cv = (parseFloat(this.item1[i].recUSD) * exchangeRate).toFixed(2);
-        this.item1[i].convertedAmount = cv != "NaN" ? cv : null;
-        element['BalanceAvail'] = element['BalanceAvail'] == 0 ? (element['BalanceAvail']).toString() : element['BalanceAvail']
-      });
-      this.FILTER_VALUE_LIST = this.item1;
-      this.ForexAdviceTable(this.item1);
-      console.log('exchangeRate', this.item1);
-    },
-      (err) => console.log(err)
-    );
-    this.userService.getTeam().subscribe((data) => {
-      console.log(data['data'][0]);
-      this.location = data['data'][0]['location'];
-      this.commodity = data['data'][0]['commodity'];
-      console.log(this.location);
-      console.log('jsadffhsjshd', this.commodity);
-      console.log('team data', data);
-      this.location = this.location.filter((value, index) => this.location.indexOf(value) === index);
-      this.commodity = this.commodity.filter((value, index) => this.commodity.indexOf(value) === index);
-    }, (error) => {
-      console.log('error');
-    });
   }
   
-  onSubmit(value: any) {
+
+  async onSubmit(value: any) {
     let form_value: any = {
       buyerName: value?.value?.buyerName,
-      date: value?.value?.date,
-      billNo: value?.value?.NO
+      pi_poNo: value?.value?.NO,
     };
 
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
     const removeEmptyValues = (object) => {
-      let newobject = {}
+      let newobject: any = {}
       for (const key in object) {
         if (object[key] != '' && object[key] != null && object[key] != undefined) {
           newobject[key] = object[key];
@@ -238,19 +237,19 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       }
       return newobject;
     };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'iradvices').subscribe((resp: any) => {
-      console.log(resp, value, "iradvices")
-      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
-      this.ForexAdviceTable(this.FILTER_VALUE_LIST)
-    });
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'iradvices',this.FILTER_VALUE_LIST_NEW)?.iradvices().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
   }
-
-  reset() {
-    this.FILTER_VALUE_LIST = this.item;
-    this.ForexAdviceTable(this.FILTER_VALUE_LIST)
+  
+  reset(){
+    this.ngOnInit()
   }
-
 
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
@@ -363,7 +362,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -395,7 +394,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
     // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/InwardRemittanceAdvice`], navigationExtras);
@@ -410,9 +409,9 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -432,6 +431,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -444,7 +444,7 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ForexAdviceFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ForexAdviceFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Forex Advice.xlsx');

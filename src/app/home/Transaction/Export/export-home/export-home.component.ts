@@ -17,6 +17,8 @@ import { PipoDataService } from "../../../../service/homeservices/pipo.service";
 import { StorageEncryptionDecryptionService } from "../../../../Storage/storage-encryption-decryption.service";
 import { MergePdfListService } from "../../../merge-pdf-list.service";
 import $ from "jquery";
+import { ExportHomeControllerData } from "../Controller/ExportHome-Controller";
+import { filterAnyTablePagination } from "../../../../service/v1/Api/filterAnyTablePagination";
 declare var kendo: any;
 
 @Component({
@@ -209,6 +211,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public sessionstorage: StorageEncryptionDecryptionService,
+    public ExportBillLodgementData: ExportHomeControllerData,
+    public filteranytablepagination: filterAnyTablePagination,
     public pdfmerge: MergePdfListService) {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
@@ -272,6 +276,19 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     this.PIPONumbersBuyerName = this.InwardDisposalData[0]?.BuyerName?.value
     this.PIPOFilter(this.InwardDisposalData[0])
     console.log(this.bank, 'sallBankallBankallBankallBankallBank')
+    this.Blcopyref = [];
+    this.filteranytablepagination.PaginationfilterAnyTable({
+      buyerName: [this.Inward_Remittance_MT103[0]?.BuyerName?.value]
+    }, { skip: 0, limit: 1000 }, 'blCopy').subscribe((res: any) => {
+      this.Blcopyref = res?.data;
+      this.Blcopyrefoldata = res?.data;
+      res?.data?.forEach(element => {
+        element['CheckBoxEnabled'] = false;
+        element['SBDATA'] = [];
+      });
+      this.Export_Direct_Dispatch = res?.data;
+      console.log(res, this.Export_Direct_Dispatch, 'getBlcopyref')
+    });
   }
   async ngOnInit() {
     this.wininfo.set_controller_of_width(250, '.content_top_common')
@@ -306,26 +323,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     console.log(this.GROUP_NAME_LIST, "GROUP_NAME_LIST")
-    this.documentService.getBlcopyrefPromies().then((res: any) => {
-      this.Blcopyref = res;
-      this.Blcopyrefoldata = res;
-      this.Export_Direct_Dispatch = res;
-      console.log(res, this.Export_Direct_Dispatch, 'getBlcopyref')
 
-    }).catch((error) => {
-      this.Blcopyref = [];
-    });
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
-        console.log(res, 'res.data')
-        res.data.forEach((element, i) => {
-          if (element.buyerName != '' && element.buyerName != undefined) {
-            this.PARTY_NAME.push(element.buyerName);
-          }
-        });
-      },
-      (err) => console.log(err)
-    );
+    this.documentService.getMaster(1).subscribe((res: any) => {
+      console.log(res, 'res.data')
+      res.data.forEach((element, i) => {
+        if (element.buyerName != '' && element.buyerName != undefined) {
+          this.PARTY_NAME.push(element.buyerName);
+        }
+      });
+    }, (err) => console.log(err));
     this.Inward_Remittancefilter = this.Inward_Remittance;
     this.old_data = this.default_value;
 
@@ -941,148 +947,28 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     return (text.replace(repl_text, '')).trim()
   }
   PREVIWES_URL: any = '';
-
+  TIMEOUT: any = ''
   async fillForm(a) {
-    console.log(a, 'dshdsfdsfdgjsdhfgdsjf')
-    var data_temp: any = this.documentService.getSessionData('InwardSheet');
-    const formUrl = './../../assets/pdf/FedralBank/Inward_Remittance_disposal_format.pdf'
-    if (data_temp == undefined || data_temp == null || data_temp == '') {
-      const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-      const pdfDoc = await PDFDocument.load(formPdfBytes)
-      const form: any = pdfDoc.getForm()
-      const getAllFields = form?.getFields();
-      getAllFields?.forEach(element => {
-        const elementvalue: any = element?.acroField?.dict?.values();
-        if (elementvalue[0]?.encodedName == '/Tx') {
-          element?.setFontSize(8);
-          element?.enableReadOnly();
-          const [widget]: any = element?.acroField?.getWidgets();
-          widget?.getOrCreateBorderStyle()?.setWidth(0); // trying to restore border
-        }
-      });
-      getAllFields[0].setText(this.COMPANY_INFO?.BranchName)
-      getAllFields[3].setText(this.item5.teamName)
-      getAllFields[4].setText(this.charge[0])
-      getAllFields[5].setText(this.charge[1])
-      getAllFields[6].setText(this.charge[2])
-      getAllFields[7].setText(this.charge[3])
-      getAllFields[8].setText(this.charge[4])
-      getAllFields[9].setText(this.charge[5])
-      getAllFields[10].setText(this.charge[6])
-      getAllFields[11].setText(this.charge[7])
-      getAllFields[12].setText(this.charge[8])
-      getAllFields[13].setText(this.charge[9])
-      getAllFields[14].setText(this.charge[10])
-      getAllFields[15].setText(this.charge[11])
-      getAllFields[16].setText(this.charge[12])
-      getAllFields[17].setText(this.charge[13])
-      getAllFields[18].setText('Export')
-      getAllFields[19].setText('')
-      const updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      getAllFields[20].setText(updatedata?.currency)
-      getAllFields[21].setText(this.ConvertNumberToWords(updatedata?.Inward_amount_for_disposal).toUpperCase())
-      getAllFields[22].setText(updatedata?.Inward_amount_for_disposal?.toString())
-      getAllFields[23].setText(a['buyerName'])
-      getAllFields[24].setText(this.buyerAds)
-      getAllFields[25].setText('ADVANCE AGAINST EXPORT')
-      getAllFields[25].setFontSize(8);
-      getAllFields[26].setText(this.generatePurpose[0])
-
-      getAllFields[77].setText(this.credit[0])
-      getAllFields[78].setText(this.credit[1])
-      getAllFields[79].setText(this.credit[2])
-      getAllFields[80].setText(this.credit[3])
-      getAllFields[81].setText(this.credit[4])
-      getAllFields[82].setText(this.credit[5])
-      getAllFields[83].setText(this.credit[6])
-      getAllFields[84].setText(this.credit[7])
-      getAllFields[85].setText(this.credit[8])
-      getAllFields[86].setText(this.credit[9])
-      getAllFields[87].setText(this.credit[10])
-      getAllFields[88].setText(this.credit[11])
-      getAllFields[89].setText(this.credit[12])
-      getAllFields[90].setText(this.credit[13])
-
-      getAllFields[105].setText(this.charge[0])
-      getAllFields[106].setText(this.charge[1])
-      getAllFields[107].setText(this.charge[2])
-      getAllFields[108].setText(this.charge[3])
-      getAllFields[109].setText(this.charge[4])
-      getAllFields[110].setText(this.charge[5])
-      getAllFields[111].setText(this.charge[6])
-      getAllFields[112].setText(this.charge[7])
-      getAllFields[113].setText(this.charge[8])
-      getAllFields[114].setText(this.charge[9])
-      getAllFields[115].setText(this.charge[10])
-      getAllFields[116].setText(this.charge[11])
-      getAllFields[117].setText(this.charge[12])
-      getAllFields[118].setText(this.charge[13])
-
-      if (this.ToForwardContract_Selected != undefined && this.ToForwardContract_Selected?.length != 0) {
-        let bookingdatesplit = this.ToForwardContract_Selected[0]?.BookingDate?.replaceAll('-', '')?.split('');
-        let duedatesplit = this.ToForwardContract_Selected[0]?.ToDate?.replaceAll('-', '')?.split('');
-        getAllFields[119].setText(this.ToForwardContract_Selected[0]?.ForwardRefNo)
-        getAllFields[120].setText(bookingdatesplit[6])
-        getAllFields[121].setText(bookingdatesplit[7])
-        getAllFields[122].setText(bookingdatesplit[4])
-        getAllFields[123].setText(bookingdatesplit[5])
-        getAllFields[124].setText(bookingdatesplit[0])
-        getAllFields[125].setText(bookingdatesplit[1])
-        getAllFields[126].setText(bookingdatesplit[2])
-        getAllFields[127].setText(bookingdatesplit[3])
-
-        getAllFields[128].setText(duedatesplit[6])
-        getAllFields[129].setText(duedatesplit[7])
-        getAllFields[130].setText(duedatesplit[4])
-        getAllFields[131].setText(duedatesplit[5])
-        getAllFields[132].setText(duedatesplit[0])
-        getAllFields[133].setText(duedatesplit[1])
-        getAllFields[134].setText(duedatesplit[2])
-        getAllFields[135].setText(duedatesplit[3])
-
-        getAllFields[136].setText(this.ToForwardContract_Selected[0]?.BookingAmount)
-        getAllFields[137].setText(this.ToForwardContract_Selected[0]?.UtilizedAmount)
-        getAllFields[138].setText(this.ToForwardContract_Selected[0]?.NetRate);
-      }
-
-      getAllFields[139].setText(this.jstoday)
-
-      var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
-      console.log(this.newBankArray, bankformat, 'this.newBankArray')
-      if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
-        const pdfBytes = await pdfDoc.save()
-        console.log(pdfDoc, "pdf")
-        console.log(pdfBytes, "pdfBytes")
-        console.log(form, "form")
-        var base64String = this._arrayBufferToBase64(pdfBytes)
-
-        const x = 'data:application/pdf;base64,' + base64String;
-
-        const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-        console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
-        this.formerge = x
-        this.value = base64String;
-        this.newTask[0].generateDoc1 = x
-
-        const mergedPdf = await PDFDocument.create();
-        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-        copiedPages.forEach((page) => {
-          mergedPdf.addPage(page);
-        });
-        const mergedPdfFile = await mergedPdf.save();
-        const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-        await this.disabledTextbox(pdfDoc)
-        const mergedPdfFileload = await mergedPdfload.save();
-        var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-        const x1 = 'data:application/pdf;base64,' + base64String1;
-        this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
-        console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-      } else {
-        this.newDone = false;
-        $('#ProceedPreview').click()
-      }
-    } else {
-      this.uploadingData(data_temp, a)
+    this.PREVIWES_URL = '';
+    clearTimeout(this.TIMEOUT);
+    var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
+    console.log(bankformat, "bankformat")
+    if (bankformat[0]?.BankUniqueId == "F_B_L_6") {
+      this.ExportBillLodgementData.BankFormatLoad().
+        Fedral(this.charge, this.credit, this.Inward_Remittance_MT103, this.generatePurpose, this.ToForwardContract_Selected).then((res: any) => {
+          this.TIMEOUT = setTimeout(() => {
+            this.PREVIWES_URL = res;
+            console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+          }, 200);
+        })
+    } else if (bankformat[0]?.BankUniqueId == "H_B_L_7") {
+      this.ExportBillLodgementData.BankFormatLoad().
+        HDFC(this.charge, this.credit, this.Inward_Remittance_MT103, this.generatePurpose, this.ToForwardContract_Selected).then((res: any) => {
+          this.TIMEOUT = setTimeout(() => {
+            this.PREVIWES_URL = res;
+            console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+          }, 200);
+        })
     }
   }
   sendFileDownload(fileName: any) {
@@ -3204,16 +3090,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     console.log(this.ShippingbillNumberfilter, this.item1, 'ShippingbillNumberfilter');
 
   }
-  ClickbankNumber(name: any, inputsetvalue: any, hiddenprops) {
-    let indexof = this.SELECT_bankreferencenumber.indexOf(name);
-    if (indexof == -1) {
-      this.SELECT_bankreferencenumber.push(name);
-    } else {
-      this.SELECT_bankreferencenumber.splice(indexof, 1);
-    }
-    console.log(name, this.SELECT_bankreferencenumber, inputsetvalue, 'bnk_reff')
-    this.bankRef = name;
-  }
 
   REMITTANCE_DATA: any = ''
   Remittancedata(data: any, i: any) {
@@ -3241,28 +3117,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
   ArrayToString(array: any) {
     return array.length != 0 ? array.toString() : '';
   }
+
   loadPopup(inputid, hidden_props) {
-    var oldata: any = [];
-    this.documentService.getBlcopyrefPromies().then((res: any) => {
-      this.Blcopyref = res;
-      oldata = res;
-      console.log(res, 'getBlcopyref')
-    }).catch((error) => {
-      this.Blcopyref = [];
-    });
-    var timer: any = null;
-    $(inputid).keyup((e: any) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        var value = $(inputid).val();
-        if (value) {
-          this.Blcopyref = this.filterBlcopyref(oldata, value)
-        } else {
-          this.Blcopyref = oldata;
-        }
-      }, 200);
-    });
+
   }
+
   loadPopupThirdParty(event, dropdownid) {
     var timer: any = null;
     clearTimeout(timer);
@@ -3430,8 +3289,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             Amount: [],
             Number: [],
             Documents: [],
-            Id:[],
-            SB_REF:[]
+            Id: [],
+            SB_REF: []
           }
           var tempPipo: any = [];
           var P102_DATA: any = [];
@@ -3488,6 +3347,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                 this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
                   console.log('king123');
                   console.log(data);
+                  this.toastr.success("Transaction created successfully...")
                   this.router.navigate(['/home/dashboardTask'])
                 }, (error) => {
                   console.log('error');
@@ -3499,8 +3359,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
 
     } else {
-      if (this.value != '' && this.value != null) {
-        temp_doc[0] = { name: 'Bank format', pdf: 'data:application/pdf;base64,' + this.value };
+      if (this.PREVIWES_URL != '' && this.PREVIWES_URL != null) {
+        temp_doc[0] = { name: 'Bank format', pdf: this.PREVIWES_URL };
         temp_doc[1] = { name: 'Inward_Remittance_MT103', pdf: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file };
       } else {
         temp_doc[0] = { name: 'Inward_Remittance_MT103', pdf: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file };
@@ -3573,6 +3433,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                       id: this.ToForwardContract_Selected[0]?._id, data:
                         { AvailableAmount: (parseInt(this.ToForwardContract_Selected[0]?.BookingAmount) - parseInt(this.ToForwardContract_Selected[0]?.UtilizedAmount)) }
                     }).subscribe((res) => {
+                      this.toastr.success("Transaction created successfully...")
                       this.router.navigate(['/home/dashboardTask'])
                     })
                   })
@@ -3598,8 +3459,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
           Amount: [],
           Number: [],
           Documents: [],
-          Id:[],
-          SB_REF:[]
+          Id: [],
+          SB_REF: [],
+          SBDATA: []
         }
         var tempPipo: any = [];
         var P102_DATA: any = [];
@@ -3610,8 +3472,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
             filterValue['Amount'].push(filterItem?.amount)
             filterValue['Number'].push(filterItem?.blcopyrefNumber)
             filterValue['Documents'].push(filterItem?.doc)
-            filterValue['Id'].push(filterItem?._id),
-            filterValue['SB_REF'].push(filterItem?.SbRef[0])
+            filterValue['Id'].push(filterItem?._id);
+            filterItem?.SBDATA?.forEach(SBDATAElement => {
+              filterValue['SB_REF'].push(SBDATAElement?._id)
+              filterValue['SBDATA'].push(filterItem?.SBDATAElement);
+            });
             tempPipo.push(filterItem?.pipo[0]?._id)
           })
         });
@@ -3655,9 +3520,30 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
                 ]
               }
               this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
-                console.log('king123');
                 console.log(data);
-                this.router.navigate(['/home/dashboardTask'])
+                filterValue['SBDATA']?.forEach((element, i) => {
+                  let sumfixAmount2 = parseFloat(element?.fobValue) - parseFloat(updatedata?.Inward_amount_for_disposal);
+                  this.documentService.Update_Amount_by_Table({
+                    tableName: 'masterrecord',
+                    id: element?._id,
+                    query: {
+                      balanceAvai: sumfixAmount2,
+                      TrackerRef: [updatedata?._id],
+                      TrackerData: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1],
+                      TransactionStatus: true,
+                      AMOUNT_STATUS: "Use"
+                    }
+                  }).subscribe((r3: any) => {
+                    if (filterValue['SBDATA']?.length == (i + 1)) {
+                      this.router.navigate(['/home/dashboardTask'])
+                    }
+                    this.toastr.success("Transaction created successfully...")
+                  });
+                });
+                if (filterValue['SBDATA']?.length == 0) {
+                  this.router.navigate(['/home/dashboardTask'])
+                  this.toastr.success("Transaction created successfully...")
+                }
               }, (error) => {
                 console.log('error');
               });
@@ -3667,6 +3553,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
   checkapproval(name: any) {
     return new Promise((resolve, reject) => {
       this.documentService.getApprovedData(name + '_' + this.randomId(5)).subscribe((res: any) => {
@@ -3702,6 +3589,28 @@ export class ExportHomeComponent implements OnInit, OnDestroy, OnChanges {
     };
     let pipoValue = this.itemArray[0];
     this.fillForm(pipoValue);
+  }
+
+  ClickbankNumber(name: any, inputsetvalue: any, data: any) {
+    let indexof = this.SELECT_bankreferencenumber.indexOf(name);
+    if (indexof == -1) {
+      data['CheckBoxEnabled'] = true
+      this.SELECT_bankreferencenumber.push(name);
+    } else {
+      this.SELECT_bankreferencenumber.splice(indexof, 1);
+      data['CheckBoxEnabled'] = false
+    }
+    console.log(name, this.SELECT_bankreferencenumber, inputsetvalue, 'bnk_reff')
+    this.bankRef = name;
+  }
+
+  SBAdd($event, data, BLIndex, SBIndex) {
+    if ($event?.target?.checked == true) {
+      this.Blcopyref[BLIndex]['SBDATA'].push(data);
+    } else {
+      this.Blcopyref[BLIndex]['SBDATA'].splice(SBIndex, 1);
+    }
+    console.log(this.Blcopyref, "SELECT_bankreferencenumber")
   }
 
 }

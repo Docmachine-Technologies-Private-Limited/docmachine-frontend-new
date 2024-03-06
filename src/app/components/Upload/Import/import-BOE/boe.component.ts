@@ -54,7 +54,13 @@ export class BOEComponent implements OnInit {
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
     if (temp_pipo?.length != 0) {
       this.btndisabled = false;
-      await this.documentService.getPipoListNo('import', temp_pipo);
+      this.validator.documentService.PI_PO_NUMBER_LIST = {
+        PI_PO_BUYER_NAME: [],
+        PI_PO_BENNE_NAME: [],
+        PIPO_TRANSACTION: [],
+        PIPO_NO: []
+      };
+      this.validator.CommonLoadTransaction(temp_pipo);;
       this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
     }
     console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
@@ -85,7 +91,7 @@ export class BOEComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: this.PIPO_DATA['currency'],
+          value: this.PIPO_DATA[0]?.currency,
           label: "BOE Currency",
           rules: {
             required: true,
@@ -176,11 +182,18 @@ export class BOEComponent implements OnInit {
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
-                  item.form['value'][item?.fieldName][item?.OptionfieldIndex]["amount"] = (currentVal?.data?.amount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.data?.amount);
-                  myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.data?.currency);
-                  myForm['touched'] = true;
-                  myForm['status'] = 'VALID';
+                  if (currentVal?.data?.BalanceAmount != '0' || currentVal?.data?.BalanceAmount != 0) {
+                    item.form['value'][item?.fieldName][item?.OptionfieldIndex]["amount"] = (currentVal?.data?.amount);
+                    myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.setValue(currentVal?.data?.amount);
+                    myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.data?.currency);
+                    myForm['touched'] = true;
+                    myForm['status'] = 'VALID';
+                    myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.enable();
+                  } else {
+                    item.form['value'][item?.fieldName] = null
+                    myForm.controls[item?.OptionfieldIndex]?.controls["amount"]?.disable();
+                    this.toastr.error("Please select other CI,\nthis CI already used another BOE...")
+                  }
                   console.log(item, "callback")
                 },
               },
@@ -214,13 +227,25 @@ export class BOEComponent implements OnInit {
               },
             ]
           ]
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'BILL_OF_ENTRY');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
   onSubmit(e: any) {
     let newform: any = e.value;
     console.log(e, newform, this.Percentage(parseInt(newform.invoiceAmount)), 'formJSON_To_Array')
@@ -256,24 +281,45 @@ export class BOEComponent implements OnInit {
             let updatedData2 = {
               "BoeRef": [
                 data?._id,
-              ]
+              ],
             }
             newform.CI_DETAILS?.forEach(element => {
+              let BalanceAmount: any = parseFloat(element?.invoiceno?.data?.amount) - parseFloat(element?.amount);
+              updatedData2['BalanceAmount'] = BalanceAmount
               this.documentService.updateCommercial(updatedData2, element?.invoiceno?.id).subscribe((res: any) => { })
             });
             this.userService.updateManyPipo(this.pipoArr, 'import', '', updatedData1).subscribe((data_res) => {
               console.log('updateManyPipo', data_res);
-              this.toastr.success('Boe added successfully.');
-              var Transaction_id: any = this.route.snapshot.paramMap.get('transaction_id');
-              if (Transaction_id != '') {
-                this.documentService.AnyUpdateTable(Transaction_id, { BOERef: [data?._id] }, "ExportTransaction").subscribe((res: any) => {
-                  this.documentService.UpdateTransaction({
-                    id: Transaction_id, data: { BOE: newform }
-                  }).subscribe((res: any) => {
-                    this.router.navigate(['home/Summary/Import/boe']);
+              var Transaction_id: any = [];
+              let TransActionType: any = []
+              this.PIPO_DATA?.forEach(element => {
+                element?.TransActionType?.forEach(TransActionTypeElement => {
+                  TransActionType.push(TransActionTypeElement)
+                });
+              });
+              if (TransActionType?.length != 0) {
+                TransActionType?.forEach(element => {
+                  if (element?.Type == "Advance Payment") {
+                    Transaction_id.push(element?.TransactionId)
+                  }
+                });
+              } else {
+                Transaction_id = this.route.snapshot.paramMap.get('transaction_id')?.split(',');
+              }
+              console.log(TransActionType, Transaction_id, "Transaction_id");
+              if (Transaction_id?.length != 0 && Transaction_id?.length != undefined) {
+                Transaction_id?.forEach((element, index) => {
+                  this.documentService.AnyUpdateTable(element, { BOERef: [data?._id] }, "ExportTransaction").subscribe((res: any) => {
+                    this.documentService.UpdateTransaction({ id: element, data: { BOE: newform } }).subscribe((res: any) => {
+                      if ((index + 1) == Transaction_id?.length) {
+                        this.toastr.success('BOE Successfully added...');
+                        this.router.navigate(['home/Summary/Import/boe']);
+                      }
+                    });
                   });
                 });
               } else {
+                this.toastr.success('BOE Successfully added...');
                 this.router.navigate(['home/Summary/Import/boe']);
               }
             }, (error) => {
@@ -299,18 +345,31 @@ export class BOEComponent implements OnInit {
   paymentTermSum(value: any) {
     return value?.reduce((a, b) => a + parseFloat(b?.amount), 0)
   }
+
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.changedCommercial(this.pipoArr)
-      this.documentService.getPipoById(event?._id).subscribe((res: any) => {
-        this.PIPO_DATA = res?.data[0];
-        console.log(res, "getPipoById")
-      })
+      this.COMMERCIAL_LIST = [];
+      this.changedCommercial(this.pipoArr);
+      let PIPODATA: any = [];
+      this.documentService.getPipoByIdList(this.pipoArr).subscribe((res: any) => {
+        console.log(res, 'getPipoByIdList')
+        res?.forEach(element => {
+          let DATA: any = element?.data[0];
+          PIPODATA.push(DATA)
+        });
+        this.PIPO_DATA = PIPODATA;
+      });
     } else {
       this.btndisabled = true;
     }
@@ -322,7 +381,8 @@ export class BOEComponent implements OnInit {
     this.documentService.filterAnyTable({
       buyerName: this.BUYER_LIST,
       currency: this.PIPO_DATA?.currency,
-      pipo: this.pipoArr
+      pipo: this.pipoArr,
+      BalanceAmount: { $ne: "0" }
     }, 'commercials').subscribe((res: any) => {
       console.log(res, 'commercials')
       this.validator.COMMERICAL_NO = [];

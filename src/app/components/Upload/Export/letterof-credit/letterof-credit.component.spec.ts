@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LetterofCreditComponent } from './letterof-credit.component';
+import { UploadLetterofCreditComponent } from './letterof-credit.component';
 
-describe('LetterofCreditComponent', () => {
-  let component: LetterofCreditComponent;
-  let fixture: ComponentFixture<LetterofCreditComponent>;
+describe('UploadLetterofCreditComponent', () => {
+  let component: UploadLetterofCreditComponent;
+  let fixture: ComponentFixture<UploadLetterofCreditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LetterofCreditComponent ]
+      declarations: [ UploadLetterofCreditComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LetterofCreditComponent);
+    fixture = TestBed.createComponent(UploadLetterofCreditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

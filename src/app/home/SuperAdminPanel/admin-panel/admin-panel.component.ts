@@ -1,16 +1,16 @@
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '.././../../service/user.service';
-import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { WindowInformationService } from '../../../service/window-information.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, interval, timeInterval } from 'rxjs';
 import { AuthenticateService } from '../../../service/authenticate.service';
 import { AuthGuard } from '../../../service/authguard.service';
 import { DocumentService } from '../../../service/document.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
+import moment from 'moment';
 
 @Component({
   selector: 'app-admin-panel',
@@ -31,10 +31,12 @@ export class SuperAdminPanelComponent implements OnInit {
   declined: boolean;
   SUBCRIPTION_DATA: any = [];
   SUBCRIPTION_CHANGES: any = FormGroup;
+  TRADE_APP_FORM: any = FormGroup;
   AllCompanyId: any = [];
   OrgAllCompanyId: any = [];
   AlldeletebyCollectionName: any = [];
   OrgAlldeletebyCollectionName: any = [];
+  VIEW_SUBSCRIPTION_PLAN_DATA: any = [];
 
   constructor(public route?: ActivatedRoute, public formBuilder?: FormBuilder,
     public userService?: UserService,
@@ -46,6 +48,7 @@ export class SuperAdminPanelComponent implements OnInit {
     public authservice?: AuthenticateService,
     public dialog?: MatDialog,
     public wininfo?: WindowInformationService) {
+
     this.SUBCRIPTION_CHANGES = this.formBuilder?.group({
       Login_Limit: ['', Validators.required],
       Role_Type: ['', Validators.required],
@@ -54,24 +57,22 @@ export class SuperAdminPanelComponent implements OnInit {
       Teasury: ['', Validators.required],
       Transaction: ['', Validators.required],
     });
+    this.TRADE_APP_FORM = this.formBuilder?.group({
+      TrailDays: ['', Validators.required],
+    });
   }
 
-  async ngOnInit() {
-    let token = this.authGuard?.loadFromLocalStorage();
-    if (token != null) {
-      // interval(2 * 60 * 1000).subscribe(async () => {
-      //   this.ORIGNAL_DATA = await this.userService?.getAllUserMember();
-      //   this.USER_DEATILS = this.ORIGNAL_DATA;
-      //   this.loaddata()
-      // })
-    }
+  TRADE_APP_DATA: any = [];
+  TradeAppUserData: any = [];
+  COUPON_CODE_DATA: any = [];
 
+  async ngOnInit() {
     this.ORIGNAL_DATA = await this.userService?.getAllUserMember();
     this.USER_DEATILS = this.ORIGNAL_DATA;
     this.loaddata();
     this.ApprovalRejectDelete(null, 'approved')
     console.log(this.USER_DEATILS, 'this.USER_DEATILS')
-
+    this.LoadTradedata()
     this.userService?.getAllCompanyId().then((res: any) => {
       this.AllCompanyId = res?.data;
       this.OrgAllCompanyId = res?.data;
@@ -89,6 +90,138 @@ export class SuperAdminPanelComponent implements OnInit {
     })
 
   }
+
+  EditTradeApp(data) {
+    this.TRADE_APP_DATA = data;
+  }
+
+  EditSubsciptionPlan_DATA: any = []
+  EditSubsciptionPlan(data) {
+    this.EditSubsciptionPlan_DATA = data;
+  }
+
+  LoadTradedata() {
+    this.userService?.getTradeAppUserData().subscribe((res: any) => {
+      res?.forEach(element => {
+        element['StartDate'] = moment(element?.FreeTrailPeroidStratDate).format('YYYY-MM-DD')
+        element['EndDate'] = moment(element?.FreeTrailPeroidEndDate).format('YYYY-MM-DD')
+        element['Days'] = this.getDays(element?.FreeTrailPeroidStratDate, element?.FreeTrailPeroidEndDate)
+        element['OldDays'] = this.getDays(element?.FreeTrailPeroidStratDate, element?.FreeTrailPeroidEndDate)
+        element['disabled'] = true;
+        if (element?.isLoggin) {
+          setInterval(() => {
+            element['LastLogin'] = this.SubtractDates(new Date(element?.updatedAt), new Date());
+          }, 1000)
+        } else {
+          element['LastLogin'] = this.SubtractDates(new Date(element?.updatedAt), new Date());
+        }
+      });
+      this.TradeAppUserData = res
+      console.log(res, "getTradeAppUserData")
+    })
+  }
+
+  onTabChanged(event: any) {
+    console.log("onTabChanged", event)
+    if (event?.index == 0) {
+
+    }
+  }
+
+  UpdateTradeAppSubscriptionUserInfo(value: any) {
+    console.log(value, "UpdateTradeAppSubscriptionUserInfo")
+    if (value?.OldDays != value?.Days) {
+      this.userService?.UpdateTradeAppUserData(value?._id, {
+        FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+        FreeTrailPeroidEndDate: moment(this.addDays(new Date(),value?.Days)).format('dddd, MMMM DD, YYYY h:mm A'),
+        TrailDays: value?.Days,
+        discount:value?.discount
+      }).subscribe((res: any) => {
+        console.log(res, "UpdateTradeAppUserData")
+        if (res?.status == true) {
+          this.toastr?.success(res?.msg)
+          this.LoadTradedata();
+          value['disabled'] = true
+        } else {
+          this.toastr?.error(res?.msg)
+        }
+      })
+    } else {
+      this.userService?.UpdateTradeAppUserData(value?._id, {
+        TrailDays: value?.Days,
+        discount:value?.discount
+      }).subscribe((res: any) => {
+        console.log(res, "UpdateTradeAppUserData")
+        if (res?.status == true) {
+          this.toastr?.success(res?.msg)
+          this.LoadTradedata();
+          value['disabled'] = true
+        } else {
+          this.toastr?.error(res?.msg)
+        }
+      })
+    }
+  }
+
+  onclickCouponDetails() {
+    this.docserivce?.GetCouponCodeDetails().subscribe((res: any) => {
+      this.COUPON_CODE_DATA = res?.data;
+      console.log(res, "GetCouponCodeDetails")
+    })
+  }
+
+  onclickSubscriptionPlan() {
+    this.docserivce?.getSubscriptionPlan().subscribe((res: any) => {
+      this.VIEW_SUBSCRIPTION_PLAN_DATA = res?.data;
+      console.log(res, "getSubscriptionPlan")
+    })
+  }
+
+  getDays(d1: any, d2: any) {
+    let date1 = new Date(d1);
+    let date2 = new Date(d2);
+    // To calculate the time difference of two dates
+    let Difference_In_Time = date2.getTime() - date1.getTime();
+    let Difference_In_Days =
+      Math.round(Difference_In_Time / (1000 * 3600 * 24));
+    return Difference_In_Days
+  }
+
+  UpdateTradeData(TRADE_APP_PANEL) {
+    console.log(this.TRADE_APP_FORM, "asdasdsadasdsad")
+    if (this.TRADE_APP_FORM?.status != '') {
+      this.userService?.UpdateTradeAppUserData(this.TRADE_APP_DATA?._id, {
+        TrailDays: this.TRADE_APP_FORM?.value?.TrailDays,
+        FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
+        FreeTrailPeroidEndDate: moment(this.addDays(new Date(), this.TRADE_APP_FORM?.value?.TrailDays)).format('dddd, MMMM DD, YYYY h:mm A')
+      }).subscribe((res: any) => {
+        console.log(res, "UpdateTradeAppUserData")
+        if (res?.status == true) {
+          this.toastr?.success(res?.msg)
+          TRADE_APP_PANEL?.displayHidden;
+          this.LoadTradedata();
+        } else {
+          this.toastr?.error(res?.msg)
+        }
+      })
+    }
+  }
+
+  ClosePopup(event, panel) {
+    if (event?.status == true) {
+      panel?.displayHidden
+      event?.REST_FORM?.resetForm
+      this.LoadTradedata()
+    }
+  }
+
+  addDays(date: any, days: any) {
+    var result = new Date();
+    result.setDate(result.getDate() + parseInt(days));
+    console.log(result, date, days, "addDays")
+    return result;
+  }
+
   loaddata() {
     this.SUBCRIPTION_DATA = [];
     let buyerDetail: any = [];
@@ -219,6 +352,7 @@ export class SuperAdminPanelComponent implements OnInit {
     var sDisplay = s > 0 ? s.toString().padStart(2, '0') + '' : '00';
     return (h > 24 ? this.SplitTime(h)?.Days + 'days | ' : hDisplay + 'h | ') + mDisplay + 'm | ' + sDisplay + 's';
   }
+
   SplitTime(numberOfHours) {
     var Days = Math.floor(numberOfHours / 24);
     var Remainder = numberOfHours % 24;
@@ -407,7 +541,7 @@ export class SuperAdminPanelComponent implements OnInit {
       this.AllCompanyId = this.OrgAllCompanyId;
     }
   }
-  DeleteCompanyIdData(val: any,compnayname:any) {
+  DeleteCompanyIdData(val: any, compnayname: any) {
     const message = `Are you sure you want to delete this all table data from ${compnayname}?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef: any = this.dialog?.open(ConfirmDialogBoxComponent, {
@@ -427,17 +561,17 @@ export class SuperAdminPanelComponent implements OnInit {
   }
   SearchCompanyIdCollectionName(val: any) {
     this.OrgAllCompanyId.forEach(element => {
-      this.AlldeletebyCollectionName[element?._id] = this.OrgAlldeletebyCollectionName[element?._id].filter((items: any) => 
-      items?.name?.toLowerCase()?.includes(val?.value?.toLowerCase()) 
-      || items?.teamname?.toLowerCase()?.includes(val?.value?.toLowerCase())
-      || items?.id?.toLowerCase()?.includes(val?.value?.toLowerCase()));
+      this.AlldeletebyCollectionName[element?._id] = this.OrgAlldeletebyCollectionName[element?._id].filter((items: any) =>
+        items?.name?.toLowerCase()?.includes(val?.value?.toLowerCase())
+        || items?.teamname?.toLowerCase()?.includes(val?.value?.toLowerCase())
+        || items?.id?.toLowerCase()?.includes(val?.value?.toLowerCase()));
     });
     if (val?.value == '') {
       this.AlldeletebyCollectionName = this.OrgAlldeletebyCollectionName;
     }
   }
-  
-  DeleteCompanyIdCollectionNameData(val: any, name: any,compnayname:any) {
+
+  DeleteCompanyIdCollectionNameData(val: any, name: any, compnayname: any) {
     const message = `Are you sure you want to delete this table (${name}) data  from ${compnayname}?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef: any = this.dialog?.open(ConfirmDialogBoxComponent, {

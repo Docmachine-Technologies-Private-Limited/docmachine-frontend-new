@@ -4,7 +4,6 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as xlsx from 'xlsx';
-import * as data1 from '../../../../currency.json';
 import JSZip from 'jszip/dist/jszip';
 import * as FileSaver from 'file-saver';
 import { PDFDocument } from 'pdf-lib';
@@ -23,7 +22,7 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
-import moment from 'moment';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'app-view-document',
@@ -131,7 +130,8 @@ export class ViewDocumentComponent implements OnInit {
     ],
     Expansion_Items2: [],
     ExpansionKeys2: [],
-  }
+    PageSize: 0
+  };
   SHIPPING_BILL_EDIT_FORM_DATA: any = {
     sbdate: '',
     sbno: '',
@@ -145,7 +145,7 @@ export class ViewDocumentComponent implements OnInit {
     fobValue: ''
   }
   FILTER_FORM: any = ''
-  
+
   constructor(
     public documentService: DocumentService,
     public shippingBillService: ShippingbillDataService,
@@ -159,78 +159,28 @@ export class ViewDocumentComponent implements OnInit {
     private userService: UserService,
     public dialog: MatDialog,
     public pdfmerge: MergePdfListService,
-    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService
-  ) { }
+    public filteranytablepagination: TableServiceController,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService) {
+  }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any) => {
-      this.PENDING_DATA = res;
-      console.log("this.PENDING_DATA", res)
-    })
-    
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    
-    this.shippingBillService.getShippingBillList_Master().then((data: any) => {
-      console.log('getShippingBillList_Master', data)
-      this.item1 = data;
-      this.item1.forEach(element => {
-        let totalFirxAmount: any = 0;
-        let tp: any = {
-          firxNumber: [],
-          firxDate: [],
-          firxCurrency: [],
-          firxAmount: [],
-          firxCommision: [],
-          firxRecAmo: [],
-          id: [],
-        };
-        for (let index = 0; index < element?.firxdetails.length; index++) {
-          const elementfirxdetails = element?.firxdetails[index];
-          totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
-
-          elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
-            tp?.firxNumber?.push(firxelementno)
-          });
-          elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
-            tp?.firxDate?.push(firxDateelement)
-          });
-          elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
-            tp?.firxCurrency?.push(firxCurrencyelement)
-          });
-          elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
-            tp?.firxAmount?.push(firxAmountelement)
-          });
-          elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
-            tp?.firxCommision?.push(firxCommisionelement)
-          });
-        }
-        element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
-        element['FIRX_INFO'] = tp;
-      });
-
-      this.ShippingBillTable(data);
-      this.FILTER_VALUE_LIST = data;
-
-      for (let value of data) {
-        // if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-        //   this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
-        // }
+    this.FILTER_FORM_VALUE = [];
+    this.filteranytablepagination.SHOW_TABLE_TBODY = false;
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
           this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.sbno)?.length == 0) {
-          this.ALL_FILTER_DATA['NO'].push({ value: value?.sbno });
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
         }
-        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.sbdate)?.length == 0) {
-          this.ALL_FILTER_DATA['DATE'].push({ value: value?.sbdate });
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
         }
       }
-      
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, this.FILTER_VALUE_LIST_NEW, "BUYER_DETAILS")
       this.FILTER_FORM = {
         buyerName: {
           type: "ArrayList",
@@ -239,13 +189,23 @@ export class ViewDocumentComponent implements OnInit {
           rules: {
             required: false,
           },
-          item: this.ALL_FILTER_DATA['Buyer_Name'],
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
           bindLabel: "value"
         },
-        date: {
-          type: "ArrayList",
+        todate: {
+          type: "date",
           value: "",
-          label: "Select Date",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
           rules: {
             required: false,
           },
@@ -255,7 +215,7 @@ export class ViewDocumentComponent implements OnInit {
         NO: {
           type: "ArrayList",
           value: "",
-          label: "Select SB NUMBER",
+          label: "Select Pipo No",
           rules: {
             required: false,
           },
@@ -263,89 +223,72 @@ export class ViewDocumentComponent implements OnInit {
           bindLabel: "value"
         },
       }
-    });
+    })
+    console.log("this.USER_DATA", this.USER_DATA, this.FILTER_VALUE_LIST_NEW);
     this.showInvoice = false;
   }
-  
-  onSubmit(value: any) {
+
+  FILTER_FORM_VALUE: any = []
+  async onSubmit(value: any) {
     let form_value: any = {
       buyerName: value?.value?.buyerName,
-      sbdate: value?.value?.date,
-      sbno: value?.value?.NO
+      pi_poNo: value?.value?.NO,
     };
 
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        sbdate: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          sbdate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        sbdate: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          sbdate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
     const removeEmptyValues = (object) => {
-      let newobject = {}
+      let newobject: any = {}
       for (const key in object) {
+        console.log(typeof object[key], "object[key]")
         if (object[key] != '' && object[key] != null && object[key] != undefined) {
           newobject[key] = object[key];
         }
       }
       return newobject;
     };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'masterrecord').subscribe((resp: any) => {
-      console.log(resp, value, "masterrecord")
-      resp?.data?.forEach(element => {
-        let totalFirxAmount: any = 0;
-        let tp: any = {
-          firxNumber: [],
-          firxDate: [],
-          firxCurrency: [],
-          firxAmount: [],
-          firxCommision: [],
-          firxRecAmo: [],
-          id: [],
-        };
-        for (let index = 0; index < element?.firxdetails.length; index++) {
-          const elementfirxdetails = element?.firxdetails[index];
-          totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
-
-          elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
-            tp?.firxNumber?.push(firxelementno)
-          });
-          elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
-            tp?.firxDate?.push(firxDateelement)
-          });
-          elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
-            tp?.firxCurrency?.push(firxCurrencyelement)
-          });
-          elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
-            tp?.firxAmount?.push(firxAmountelement)
-          });
-          elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
-            tp?.firxCommision?.push(firxCommisionelement)
-          });
-        }
-        element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
-        element['FIRX_INFO'] = tp;
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
       });
-      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item1;
-      this.ShippingBillTable(this.FILTER_VALUE_LIST)
-    });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
   }
 
   reset() {
-    this.FILTER_VALUE_LIST = this.item1;
-    this.ShippingBillTable(this.FILTER_VALUE_LIST)
-  }
-  
-  filter(value, key) {
-    this.FILTER_VALUE_LIST = this.item1.filter((item: any) => item[key].indexOf(value) != -1);
-    if (this.FILTER_VALUE_LIST.length == 0) {
-      this.FILTER_VALUE_LIST = this.item1;
-    }
-  }
-  resetFilter() {
-    this.FILTER_VALUE_LIST = this.item1;
-    this.ShippingBillTable(this.FILTER_VALUE_LIST);
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
+    this.ngOnInit()
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ShippingBillFormat(this.FILTER_VALUE_LIST).getShippingBill());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ShippingBillFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).getShippingBill());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'ShippingBill.xlsx');
@@ -390,10 +333,10 @@ export class ViewDocumentComponent implements OnInit {
   getInvoicesNew(data: any, panel: any) {
     if (data != null) {
       this.lastIndex = data?.index;
-      this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[data?.index]['doc']);
+      this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]['doc']);
       panel?.displayShow;
       return (
-        (this.selectedRow = this.FILTER_VALUE_LIST[data?.index]),
+        (this.selectedRow = this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]),
         (this.showInvoice = true),
         (this.tableWidth = '30%'),
         (this.greaterAmount = parseInt(this.selectedRow.amount))
@@ -404,7 +347,7 @@ export class ViewDocumentComponent implements OnInit {
 
   getTransactionsNew(data: any) {
     if (data != null) {
-      this.documentService.getTask({ pi_poNo: this.FILTER_VALUE_LIST[data?.index]['pipo'][0]?.pi_poNo, file: 'advance' }).subscribe((res: any) => {
+      this.documentService.getTask({ pi_poNo: this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]['pipo'][0]?.pi_poNo, file: 'advance' }).subscribe((res: any) => {
         this.allTransactions = res.task;
         console.log('ALL TRANSACTIONS', this.allTransactions);
       }, (err) => console.log(err));
@@ -493,7 +436,7 @@ export class ViewDocumentComponent implements OnInit {
   viewCN(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -527,24 +470,9 @@ export class ViewDocumentComponent implements OnInit {
 
   SELECTED_SHIPPING_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_SHIPPING_VALUE = '';
-    // this.SELECTED_SHIPPING_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.SHIPPING_BILL_EDIT_FORM_DATA = {
-    //   sbdate: this.SELECTED_SHIPPING_VALUE['sbdate'],
-    //   sbno: this.SELECTED_SHIPPING_VALUE['sbno'],
-    //   adCode: this.SELECTED_SHIPPING_VALUE['adCode'],
-    //   adBillNo: this.SELECTED_SHIPPING_VALUE['adBillNo'],
-    //   buyerName: this.SELECTED_SHIPPING_VALUE['buyerName'],
-    //   consigneeName: this.SELECTED_SHIPPING_VALUE['consigneeName'],
-    //   exporterLocationCode: this.SELECTED_SHIPPING_VALUE['exporterLocationCode'],
-    //   countryOfFinaldestination: this.SELECTED_SHIPPING_VALUE['countryOfFinaldestination'],
-    //   fobCurrency: this.SELECTED_SHIPPING_VALUE['fobCurrency'],
-    //   fobValue: this.SELECTED_SHIPPING_VALUE['fobValue']
-    // }
-    // this.optionsVisibility[index] = true;
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/Shippingbill`], navigationExtras);
@@ -560,9 +488,9 @@ export class ViewDocumentComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -582,6 +510,7 @@ export class ViewDocumentComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents: [index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -592,32 +521,53 @@ export class ViewDocumentComponent implements OnInit {
       });
     }
   }
+
   transform(input: Array<any>): string {
     return input.join(',');
   }
+
   FIRX_AMOUNT(amountarray: any): any {
     return parseFloat(amountarray?.split(',')?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
   }
+
   ARRAY_TO_STRING(array, key) {
     return array[key]?.join(',')
   }
+
   SHIPPING_BILL_ALL_RELATED_DOCUMENTS: any = [];
   SHIPPING_BILL: any = [];
-  SbSearch(value: any) {
+  async SbSearch(value: any) {
     this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS = [];
-    var doclist: any = this.item1.filter((item: any) => item?.sbno?.includes(value));
+    var doclist: any = this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.filter((item: any) => item?.sbno?.includes(value));
     this.FILTER_VALUE_LIST = doclist;
     if (doclist.length == 0) {
-      this.resetFilter();
+      this.ngOnInit();
+    } else {
+      this.SHIPPING_BILL = value;
+      doclist.forEach(element => {
+        element?.pipo?.forEach((PIPOElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: PIPOElement?.doc, name: 'PIPO' + (i + 1), status: false })
+        });
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: element?.doc, name: 'Shipping Bill', status: false })
+        element?.blcopydetails?.forEach((blcopydetailsElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: blcopydetailsElement?.blCopyDoc, name: 'Bl Copy' + (i + 1), status: false })
+        });
+        element?.commercialdetails?.forEach((CI_DETAILSElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: CI_DETAILSElement?.commercialDoc, name: 'Commercial' + (i + 1), status: false })
+        });
+        element?.packingdetails?.forEach((packingdetailsElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: packingdetailsElement?.packingDoc, name: 'Packing' + (i + 1), status: false })
+        });
+        element?.debitnotedetails?.forEach((debitnotedetailsElement, i) => {
+          this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS?.push({ doc: debitnotedetailsElement?.doc, name: 'DebitNote' + (i + 1), status: false })
+        });
+      });
+      await this.filteranytablepagination.LoadTableExport({ sbno: value }, { skip: 0, limit: 10 }, 'masterrecord', this.FILTER_VALUE_LIST_NEW)?.masterrecord().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
     }
-    this.SHIPPING_BILL = value;
-    doclist.forEach(element => {
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.doc, name: 'Shipping Bill', status: false })
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.commercialDoc, name: 'Commercial', status: false })
-    });
-    this.ShippingBillTable(this.FILTER_VALUE_LIST);
   }
+
   tickdoc(event: any, index: any) {
     if (event?.target.checked) {
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS[index]['status'] = true
@@ -703,59 +653,6 @@ export class ViewDocumentComponent implements OnInit {
     return arrayBuffer;
   }
 
-  ShippingBillTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        let invoicedeatils: any = [];
-        element?.invoices?.forEach((element2: any) => {
-          invoicedeatils.push({
-            InvoiceNo: element2?.invoiceno?.value,
-            Amount: element2?.amount
-          })
-        });
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['pipo']),
-          sbdate: moment(element['sbdate']).format('DD-MM-YYYY'),
-          sbno: element['sbno'],
-          buyerName: element['buyerName'],
-          fobCurrency: element['fobCurrency'],
-          fobValue: element['fobValue'],
-          balanceAvai: element['balanceAvai'] != '-1' ? element['balanceAvai'] : element['fobValue'],
-          isExpand: false,
-          isExpand2: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox,
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          Expansion_Items: [{
-            adCode: element['adCode'],
-            adBillNo: element['adBillNo'],
-            consigneeName: element['consigneeName'],
-            exporterLocationCode: element['exporterLocationCode'],
-            countryOfFinaldestination: element['countryOfFinaldestination'],
-            firxNumber: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxNumber'),
-            firxDate: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxDate'),
-            firxCurrency: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCurrency'),
-            firxAmount: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxAmount'),
-            firxCommision: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCommision'),
-            FIRX_TOTAL_AMOUNT: element['FIRX_TOTAL_AMOUNT']
-          }],
-          Expansion_Items2: invoicedeatils
-        })
-      });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'isExpand2')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items');
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2');
-        this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
-        this.FILTER_VALUE_LIST_NEW['ExpansionKeys2'] = await this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'][0]) : []
-      }
-    });
-  }
   getPipoNumber(pipo: any) {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {

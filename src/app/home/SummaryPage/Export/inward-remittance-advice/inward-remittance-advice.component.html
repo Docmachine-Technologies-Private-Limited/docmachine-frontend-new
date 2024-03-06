@@ -1,55 +1,38 @@
 <div class="content-wrap pb-2 scroll-bar-main">
     <main id="content" class="content table-padding" role="main">
-        <div class="filter_section_top p-2">
-            <div class="row m-0">
-                <div style="margin: auto;margin-left: 0;">
-                    <div class="import_export_sec">
-                        <h3 class="heading_common_tag">Inward Remittance Advice ({{this.FILTER_VALUE_LIST?.length}})</h3>
-                    </div>
-                </div>
-                <div class="col-md-8 col-sm-8 col-12">
-                    <div class="filter_right_new padding_new_top p-0">
-                        <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
-                                class="ex_icon"></span>Export</button>
-                        <div class="filter_posit">
-                            <button type="button" class="filter-popup btn btn-secondary"><span
-                                class="fi_icon filter-popup"></span>Filter</button>
-                        <ng-custom-filter-popup (ResetEvent)="reset()" FormStyle="display: grid;
-                            grid-template-columns: repeat(2,1fr);" (FilterEvent)="onSubmit($event)"
-                            *ngIf="this.FILTER_FORM!=''" [data]="this.FILTER_FORM"></ng-custom-filter-popup>
-                        </div>
-                        <button class="upload-button btn btn-success" [routerLink]="['/home/upload-documents/Export/InwardRemittanceAdvice']">
-                            <span class="add_icon"></span> ADD NEW
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <summary-page-header [Length]="this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.length"
+            TITLE="Inward Remittance Advice" (exportToExcel)="exportToExcel()" (reset)="reset()"
+            (onSubmit)="onSubmit($event)" [RouterLink]="['/home/upload-documents/Export/InwardRemittanceAdvice']"
+            [FILTER_FORM]="this.FILTER_FORM">
+        </summary-page-header>
         <div class="analytics" #epltable>
             <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="true"
-            [items]="this.FILTER_VALUE_LIST_NEW?.items"
-            [Expansionheader]="this.FILTER_VALUE_LIST_NEW?.Expansion_header"
-            [ExpansionKeys]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys"
-            [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
-            [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
-            (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
-        </custom-expansion-panel>
+                [items]="this.FILTER_VALUE_LIST_NEW?.items"
+                [Expansionheader]="this.FILTER_VALUE_LIST_NEW?.Expansion_header"
+                [ExpansionKeys]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys"
+                [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" [PageSize]="this.FILTER_VALUE_LIST_NEW?.PageSize"
+                TableName="iradvices" [SHOW_TABLE_TBODY]="this.filteranytablepagination?.SHOW_TABLE_TBODY"
+                [TableFormat]="this.FILTER_VALUE_LIST_NEW" [FILTER_FORM_VALUE]="this.FILTER_FORM_VALUE"
+                (ViewChanges)="viewpdf($event)" (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
+            </custom-expansion-panel>
         </div>
     </main>
 </div>
 
-<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh"
-    id="PDF_VIEW" name="Shipping Bill">
+<app-custom-model [customstyle]="{'margin':'auto !important'}" class="p-2" height="95vh" id="PDF_VIEW"
+    name="Inward Remittance Advice">
     <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Shipping Bill" [src]="viewData" width="100%"
-        height="500px"></app-pdf-viewer>
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Inward Remittance Advice" [src]="viewData"
+            width="100%" height="500px"></app-pdf-viewer>
     </div>
 </app-custom-model>
 
 <app-custom-model modalbodyheight="55vh" *ngIf="this.SELECTED_VALUE!=''"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
     EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="60vh"
-    id="EditSummaryPage" [name]="'Inward Remittance Advice Update || Inward Remittance Advice No. : '+this.SELECTED_VALUE?.billNo"
+    id="EditSummaryPage"
+    [name]="'Inward Remittance Advice Update || Inward Remittance Advice No. : '+this.SELECTED_VALUE?.billNo"
     #EditSummaryPagePanel>
     <div class="ml-0 p-3 col-12">
         <div class="container-fluid m-auto p-0">

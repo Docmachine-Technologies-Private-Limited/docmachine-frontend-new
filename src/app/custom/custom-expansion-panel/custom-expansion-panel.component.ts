@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CustomExpansionPanelService } from './custom-expansion-panel.service';
+import { TableServiceController } from '../../service/v1/TableServiceController';
 
 @Component({
   selector: 'custom-expansion-panel',
@@ -11,12 +12,19 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('items') items: any = [];
   @Input('data') data: any = [];
   @Input('Keys') Keys: any = [];
+  @Input('PDF_VIEWS') PDF_VIEWS: any = 'PDF_VIEW';
+  @Input('EditSummaryPage') EditSummaryPage: any = 'EditSummaryPage';
+  @Input('FILTER_FORM_VALUE') FILTER_FORM_VALUE: any = [];
+  @Input('EXTRA_DATA') EXTRA_DATA: any = [];
   @Input('eventId') eventId: any = '';
+  @Input('TableName') TableName: any = '';
+  @Input('PageSize') PageSize: number = 0;
   @Input('ExpandTitle1') ExpandTitle1: any = 'Data Show and Hide';
   @Input('ExpandTitle2') ExpandTitle2: any = 'Data Show and Hide';
   @Input('ViewButton') ViewButton: boolean = true;
   @Input('EditButton') EditButton: boolean = true;
   @Input('DeleteButton') DeleteButton: boolean = true;
+  @Input('SHOW_TABLE_TBODY') SHOW_TABLE_TBODY: boolean = false;
   @Input('TableHeaderClass') TableHeaderClass: any = [];
 
   @Input('Expansionitems') Expansionitems: any = [];
@@ -26,6 +34,7 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('ExpansionTitle2') ExpansionTitle2: any = '';
   @Input('ExpansionKeys') ExpansionKeys: any = [];
   @Input('ExpansionKeys2') ExpansionKeys2: any = [];
+  @Input('TableFormat') TableFormat: any = [];
   @Input('ExpansionShowHide') Expansion: boolean = true;
   @Input('ActionRequired') ActionRequired: boolean = true;
 
@@ -39,14 +48,14 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   ORIGNAL_DATA: any = [];
   PAGINATOR_TABLE_DATA: any = [];
 
-  constructor(public exp_service: CustomExpansionPanelService) { }
+  constructor(public exp_service: CustomExpansionPanelService,
+    public filteranytablepagination: TableServiceController) { }
 
   async ngOnInit() {
-
+    this.PAGINATOR_TABLE_DATA = this.items;
   }
 
   CollapseAll(data: any, key: any, i: any) {
-    console.log(this.items, 'sdfdsfdsfdsf')
     this.ArrowEvent.emit({ item: data[i], index: i })
     data.forEach((element, index) => {
       if (index != i) {
@@ -81,41 +90,34 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
     return Object.keys(data);
   }
 
-  PAGINATION_EVENT(event: any) {
-    this.updatetabledata(event)
-    console.log(event, this.ORIGNAL_DATA, this.items, 'PAGINATION_EVENT');
+  async PAGINATION_EVENT(event: any, tableName: any, TableFormat) {
+    if (this.filteranytablepagination.USER_RESULT?.sideMenu == "export") {
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex + 1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
+        this.PAGINATOR_TABLE_DATA = [];
+        setTimeout(() => {
+          this.PAGINATOR_TABLE_DATA = res?.items;
+        }, 100);
+      })
+    } else if (this.filteranytablepagination.USER_RESULT?.sideMenu == "import") {
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE?.length == 0 ? {} : this.FILTER_FORM_VALUE, { skip: event?.length, limit: event?.pageIndex == 0 ? event?.pageSize : (event?.pageSize * (event?.pageIndex + 1)) }, tableName, TableFormat, this.EXTRA_DATA)[tableName]()?.then(async (res) => {
+        this.PAGINATOR_TABLE_DATA = [];
+        setTimeout(() => {
+          this.PAGINATOR_TABLE_DATA = res?.items;
+        }, 100);
+      })
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     let changesdata: any = changes;
-    this.ORIGNAL_DATA = changesdata?.items?.currentValue!=undefined?changesdata?.items?.currentValue:[];
-    // this.Keys = changesdata?.Keys?.currentValue!=undefined?changesdata?.Keys?.currentValue:[];
-    // this.header= changesdata?.header?.currentValue!=undefined?changesdata?.header?.currentValue:[]; 
-    // this.ExpansionKeys= changesdata?.ExpansionKeys?.currentValue!=undefined?changesdata?.ExpansionKeys?.currentValue:[];
-    // this.ExpansionKeys2=changesdata?.ExpansionKeys2?.currentValue!=undefined?changesdata?.ExpansionKeys2?.currentValue:[];
-    // this.ExpansionTitle=changesdata?.ExpansionTitle?.currentValue!=undefined?changesdata?.ExpansionTitle?.currentValue:[];
-    // this.ExpansionTitle2=changesdata?.ExpansionTitle2?.currentValue!=undefined?changesdata?.ExpansionTitle2?.currentValue:[];
-    // this.Expansionitems=changesdata?.Expansionitems?.currentValue!=undefined?changesdata?.Expansionitems?.currentValue:[];
-    // this.Expansionheader=changesdata?.Expansionheader?.currentValue!=undefined?changesdata?.Expansionheader?.currentValue:[];
-    // this.Expansionheader2=changesdata?.Expansionheader2?.currentValue!=undefined?changesdata?.Expansionheader2?.currentValue:[];
-    console.log(changes, this.ORIGNAL_DATA, 'ngOnChanges');
-    setTimeout(() => {
-      this.PAGINATOR_DATA = [];
-      let lenforloop: number = parseInt(changesdata?.items?.currentValue?.length) / 10;
-      for (let index = 0; index < lenforloop; index++) {
-        this.PAGINATOR_DATA.push(10 * (index + 1))
-      }
-      this.PAGINATOR_DATA[this.PAGINATOR_DATA.length - 1] = changesdata?.items?.currentValue?.length;
-      if (this.ORIGNAL_DATA.length != 0) {
-        this.updatetabledata({ pageIndex: 0, pageSize: this.PAGINATOR_DATA[0], length: this.ORIGNAL_DATA.length })
-      }
-    }, 300);
-  }
-  updatetabledata(event) {
-    this.PAGINATOR_TABLE_DATA = [];
-    for (let index = event?.pageIndex; index < event?.pageSize; index++) {
-      const element = this.ORIGNAL_DATA[index];
-      this.PAGINATOR_TABLE_DATA.push(element)
+    this.ORIGNAL_DATA = changesdata?.items?.currentValue != undefined ? changesdata?.items?.currentValue : this.PAGINATOR_TABLE_DATA;
+    this.PAGINATOR_DATA = [];
+    let lenforloop: number = parseInt(changesdata?.PageSize?.currentValue != undefined ? changesdata?.PageSize?.currentValue : this.PageSize) / 10;
+    for (let index = 0; index < lenforloop; index++) {
+      this.PAGINATOR_DATA.push(10 * (index + 1))
     }
+    this.PAGINATOR_DATA[this.PAGINATOR_DATA.length - 1] = changesdata?.PageSize?.currentValue != undefined ? changesdata?.PageSize?.currentValue : this.PageSize;
+    this.PAGINATOR_TABLE_DATA = this.ORIGNAL_DATA;
   }
+
 }

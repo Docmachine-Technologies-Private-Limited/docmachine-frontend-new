@@ -7,6 +7,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 @Component({
   selector: 'edit-import-credit-note',
   templateUrl: './import-credit-note.component.html',
@@ -41,6 +43,8 @@ export class EditImportCreditNoteComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public route: ActivatedRoute,
     public userService: UserService) { }
 
@@ -48,12 +52,21 @@ export class EditImportCreditNoteComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.data = JSON.parse(params["item"]);
       this.response(JSON.parse(params["item"]));
-      console.log(this.data, "EditDestructionCertificatesComponent")
+      console.log(this.data, "EditCreditNoteComponent")
     });
   }
 
-
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -82,21 +95,99 @@ export class EditImportCreditNoteComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'CreditNoteImport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  
+
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        creditNoteNumber: {
+          type: "text",
+          value: this.data?.creditNoteNumber,
+          label: "Credit Note Number",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.currency,
+          label: "Currency",
+          rules: {
+            required: true,
+          }
+        },
+        creditNoteAmount: {
+          type: "text",
+          value: this.data?.creditNoteAmount,
+          label: "Credit Note Amount",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'CreditNoteImport');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    this.documentService.updateCredit(e.value, this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Credit Note Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Import/Credit']);
-    }, (err) => console.log('Error adding pipo'));
+    if (this.data?.creditNoteNumber != e.value.creditNoteNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your creditNoteNumber`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            creditNoteNumber: e.value.creditNoteNumber
+          }, 'creditNote').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateCredit(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Credit Note Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Import/Credit']);
+              }, (err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this creditNoteNumber. : ${e.value.creditNoteNumber} already exit...`);
+            }
+          })
+        }
+      })
+    } else {
+      this.documentService.updateCredit(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Credit Note Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Import/Credit']);
+      }, (err) => console.log('Error adding pipo'));
+    }
   }
 
   clickPipo(event: any) {

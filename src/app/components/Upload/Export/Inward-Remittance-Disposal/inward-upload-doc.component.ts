@@ -108,6 +108,17 @@ export class InwardUploadDocumentsComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'inwardremittancedisposal');
     }, 200);
 
@@ -117,7 +128,7 @@ export class InwardUploadDocumentsComponent implements OnInit {
 
   }
   onUpload(e) {
-    e.value.BankName = e.value?.BankName?.value != undefined ? e.value?.BankName?.value : e.value?.BankName
+    e.value.BankName = e.value?.BankName?.bank != undefined ? e.value?.BankName?.bank : e.value?.BankName
     e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
     e.value.file = this.pipourl1;
     this.documentService.addInward_remittance(e.value).subscribe((res: any) => {

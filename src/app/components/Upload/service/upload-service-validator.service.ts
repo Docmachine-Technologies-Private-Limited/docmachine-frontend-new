@@ -5,7 +5,6 @@ import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
 import { AuthGuard } from '../../../service/authguard.service';
 import A2_JOSN from '../../../../assets/JSON/A2.json';
-import { EventEmitter } from 'stream';
 
 @Injectable({
   providedIn: 'root'
@@ -70,72 +69,114 @@ export class UploadServiceValidatorService implements OnInit {
   SELECTED_PURPOSE_CODE_DATA: any = [];
   SELECTED_PURPOSE_CODE_INDEX: any = [];
   SELECTED_PURPOSE_CODE_DUMP_SLEECTION: any = [];
-
+  UPLOAD_STATUS: boolean = false;
+  USER_DATA: any = [];
+  PIPO_TRANSCTION_LIST: any = [];
+  DROP_DOWN_DATA: any = [];
+  ALL_DATA_PURPOSE_CODE:any='';
+  
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public authGuard: AuthGuard,
     public userService: UserService) {
-    this.A2_JSON_DATA = A2_JOSN;
-    this.A2_JSON_DATA.forEach(element => {
-      for (const key in element) {
-        if (key != 'SL_No' && key != 'isActive' && key != 'isExpand' && key != '') {
-          element[key] = this.text_array(element[key])
-        }
-      }
-    });
-    this.PURPOSE_CODE_LIST_DATA = [];
-    var temp_purcode: any = [];
-    this.A2_JSON_DATA.forEach(element => {
-      if (!temp_purcode.includes(element?.RBI_Purpose_Code[0])) {
-        temp_purcode.push(element?.RBI_Purpose_Code[0])
-      }
-      for (const key in element) {
-        element['isExpand'] = false;
-        element['isActive'] = false;
-      }
-    });
-    temp_purcode.forEach(element => {
-      this.PURPOSE_CODE_LIST_DATA.push({ value: element })
-    });
-    this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
-    console.log(this.A2_JSON_DATA, this.PURPOSE_CODE_FILTER_DATA, this.PURPOSE_CODE_LIST_DATA, 'A2_JOSN')
+    this.PIPO_LOAD();
   }
 
   ngOnInit(): void {
   }
+
+
+  toWords(s) {
+    var th = ['', 'thousand', 'million', 'billion', 'trillion'];
+    var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    s = s.toString();
+    s = s.replace(/[\, ]/g, '');
+    if (s != parseFloat(s)) return 'not a number';
+    var x = s.indexOf('.');
+    if (x == -1)
+        x = s.length;
+    if (x > 15)
+        return 'too big';
+    var n = s.split('');
+    var str = '';
+    var sk = 0;
+    for (var i = 0; i < x; i++) {
+        if ((x - i) % 3 == 2) {
+            if (n[i] == '1') {
+                str += tn[Number(n[i + 1])] + ' ';
+                i++;
+                sk = 1;
+            } else if (n[i] != 0) {
+                str += tw[n[i] - 2] + ' ';
+                sk = 1;
+            }
+        } else if (n[i] != 0) { // 0235
+            str += dg[n[i]] + ' ';
+            if ((x - i) % 3 == 0) str += 'hundred ';
+            sk = 1;
+        }
+        if ((x - i) % 3 == 1) {
+            if (sk)
+                str += th[(x - i - 1) / 3] + ' ';
+            sk = 0;
+        }
+    }
+
+    if (x != s.length) {
+        var y = s.length;
+        str += 'point ';
+        for (let i = x + 1; i < y; i++)
+            str += dg[n[i]] + ' ';
+    }
+    return str.replace(/\s+/g, ' ');
+}
+
+  async PIPO_LOAD() {
+    let token = this.authGuard.loadFromLocalStorage();
+    if (token != undefined) {
+      this.USER_DATA = await this.userService.getUserDetail();
+      if (this.USER_DATA?.result?.sideMenu == 'import') {
+        await this.documentService.getPipoListNo('import', [], this.UPLOAD_STATUS);
+      } else if (this.USER_DATA?.result?.sideMenu == 'export') {
+        await this.documentService.getPipoListNo('export', [], this.UPLOAD_STATUS);
+      }
+    }
+  }
+
+  async CommonLoadTransaction(SELECTED_PIPO: any) {
+    let token = this.authGuard.loadFromLocalStorage();
+    if (token != undefined) {
+      this.USER_DATA = await this.userService.getUserDetail();
+      if (this.USER_DATA?.result?.sideMenu == 'import') {
+        if (SELECTED_PIPO?.length != 0) {
+          await this.documentService.getPipoTransactionData('import', SELECTED_PIPO).then((Res: any) => {
+            this.PIPO_TRANSCTION_LIST = Res;
+            console.log(Res, "PIPO_TRANSCTION_LIST")
+          });
+        }
+      } else if (this.USER_DATA?.result?.sideMenu == 'export') {
+        if (SELECTED_PIPO?.length != 0) {
+          await this.documentService.getPipoTransactionData('export', SELECTED_PIPO).then((Res: any) => {
+            this.PIPO_TRANSCTION_LIST = Res;
+            console.log(Res, "PIPO_TRANSCTION_LIST")
+          });
+        }
+      }
+    }
+  }
+
   BENEFICIARY_DETAILS_LIST: any = [];
   async loaddata() {
     return new Promise(async (reslove, reject) => {
       let token = this.authGuard.loadFromLocalStorage();
       this.LOGIN_TOEKN = token;
       if (token != undefined) {
+        this.USER_DATA = await this.userService.getUserDetail();
         this.getCompanyInfo();
         this.CURRENCY_LIST = this.documentService.getCurrencyList();
-        let USER_DATA: any = await this.userService.getUserDetail();
-
-        if (USER_DATA?.result?.sideMenu == 'import') {
-          if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
-            (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
-            this.documentService.getPipoListNo('export', []);
-          }
-          await this.userService.getBene(1).subscribe((res: any) => {
-            this.BENEFICIARY_DETAILS = [];
-            this.ConsigneeNameList = [];
-            this.BENEFICIARY_DETAILS_LIST = res.data;
-            res.data?.forEach(element => {
-              if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-                this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-              }
-              this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
-            });
-            if (this.BENEFICIARY_DETAILS.length == 0) {
-              this.BENEFICIARY_NOT_EXITS = true;
-            } else {
-              this.BENEFICIARY_NOT_EXITS = false;
-            }
-            console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
-          }, (err) => console.log('Error', err));
-
+        if (this.USER_DATA?.result?.sideMenu == 'import') {
           await this.documentService.getBoe(1).subscribe((res: any) => {
             this.SHIPPING_BUNDEL = [];
             this.origin = [];
@@ -148,45 +189,9 @@ export class UploadServiceValidatorService implements OnInit {
             });
             console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
           }, (err) => console.log(err));
+          this.BenneLoad();
           await reslove(true)
-        } else if (USER_DATA?.result?.sideMenu == 'export') {
-          if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length ||
-            (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length == 0)) {
-            this.documentService.getPipoListNo('export', this.SELECTED_PIPO?.length != 0 ? this.SELECTED_PIPO : []);
-          }
-          await this.userService.getBuyer(1).subscribe((res: any) => {
-            this.BUYER_DETAILS_MASTER = res?.data;
-            this.BUYER_DETAILS = [];
-            this.ConsigneeNameList = [];
-            res.data?.forEach(element => {
-              if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-                this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-              }
-              this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-            });
-            if (this.BUYER_DETAILS.length == 0) {
-              this.BUYER_NOT_EXITS = true;
-            } else {
-              this.BUYER_NOT_EXITS = false;
-            }
-            console.log('getBuyer Details', res, this.ConsigneeNameList, this.BUYER_DETAILS);
-          }, (err) => console.log('Error', err));
-          this.documentService.getMaster(1).subscribe((res: any) => {
-            console.log('Master Data File', res);
-            this.SHIPPING_BILL_MASTER_DATA = res?.data;
-            this.origin = [];
-            this.SHIPPING_BUNDEL = [];
-            res.data.forEach((element, i) => {
-              element?.pipo?.forEach((ele, j) => {
-                if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
-                  this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
-                }
-              });
-              this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
-            });
-            console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
-          }, (err) => console.log(err));
-
+        } else if (this.USER_DATA?.result?.sideMenu == 'export') {
           this.documentService.getInward_remittanceName().subscribe(async (res: any) => {
             this.INWARD_REMITTANCE_NAME_LIST = res?.data;
             this.NEW_INWARD_REMITTANCE_NAME_LIST = [];
@@ -204,10 +209,36 @@ export class UploadServiceValidatorService implements OnInit {
             });
             console.log(res, this.REMITTER_LIST, 'getInward_remittanceName')
           })
+          this.getBuyerLoad()
           await reslove(true)
         } else {
           reslove(true)
         }
+
+        this.A2_JSON_DATA = A2_JOSN;
+        this.A2_JSON_DATA.forEach(element => {
+          for (const key in element) {
+            if (key != 'SL_No' && key != 'isActive' && key != 'isExpand' && key != '') {
+              element[key] = this.text_array(element[key])
+            }
+          }
+        });
+        this.PURPOSE_CODE_LIST_DATA = [];
+        var temp_purcode: any = [];
+        this.A2_JSON_DATA.forEach(element => {
+          if (!temp_purcode.includes(element?.RBI_Purpose_Code[0])) {
+            temp_purcode.push(element?.RBI_Purpose_Code[0])
+          }
+          for (const key in element) {
+            element['isExpand'] = false;
+            element['isActive'] = false;
+          }
+        });
+        temp_purcode.forEach(element => {
+          this.PURPOSE_CODE_LIST_DATA.push({ value: element })
+        });
+        this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
+        console.log(this.A2_JSON_DATA, this.PURPOSE_CODE_FILTER_DATA, this.PURPOSE_CODE_LIST_DATA, 'A2_JOSN')
       } else {
         reslove(true);
       }
@@ -216,7 +247,7 @@ export class UploadServiceValidatorService implements OnInit {
 
   filterData(data: any) {
     this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA.filter((item: any) => item?.RBI_Purpose_Code.includes(data));
-    console.log(data, this.PURPOSE_CODE_FILTER_DATA, 'asdhasdkasdsads')
+    console.log(data, this.PURPOSE_CODE_FILTER_DATA, this.A2_JSON_DATA, 'asdhasdkasdsads')
     if (this.PURPOSE_CODE_FILTER_DATA.length == 0 || data == '') {
       this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
     }
@@ -226,7 +257,47 @@ export class UploadServiceValidatorService implements OnInit {
     let split_text: any = text?.indexOf("\n") != -1 ? text?.split('\n') : [text];
     return split_text;
   }
-
+  async BenneLoad() {
+    return new Promise(async (resolve, reject) => {
+      await this.userService.getBene(1).subscribe((res: any) => {
+        this.BENEFICIARY_DETAILS = [];
+        this.ConsigneeNameList = [];
+        this.BENEFICIARY_DETAILS_LIST = res.data;
+        res.data?.forEach(element => {
+          if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+            this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+          }
+          this.BENEFICIARY_DETAILS.push({ value: element.benneName, id: element?._id, Address: element?.beneAdrs })
+        });
+        if (this.BENEFICIARY_DETAILS.length == 0) {
+          this.BENEFICIARY_NOT_EXITS = true;
+        } else {
+          this.BENEFICIARY_NOT_EXITS = false;
+        }
+        resolve(this.BENEFICIARY_DETAILS)
+        console.log('Benne Detail111', this.ConsigneeNameList, this.BENEFICIARY_DETAILS);
+      }, (err) => console.log('Error', err));
+    })
+  }
+  async getBuyerLoad() {
+    await this.userService.getBuyer(1).subscribe((res: any) => {
+      this.BUYER_DETAILS_MASTER = res?.data;
+      this.BUYER_DETAILS = [];
+      this.ConsigneeNameList = [];
+      res.data?.forEach(element => {
+        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
+        }
+        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
+      });
+      if (this.BUYER_DETAILS.length == 0) {
+        this.BUYER_NOT_EXITS = true;
+      } else {
+        this.BUYER_NOT_EXITS = false;
+      }
+      console.log('getBuyer Details', res, this.ConsigneeNameList, this.BUYER_DETAILS);
+    }, (err) => console.log('Error', err));
+  }
   async getCompanyInfo() {
     await this.userService.getTeam().subscribe(async (data: any) => {
       this.COMPANY_INFO = data?.data;
@@ -254,22 +325,26 @@ export class UploadServiceValidatorService implements OnInit {
         data['data'][0]['bankDetails']['checked'] = false
         this.bankDetail[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
           value: data['data'][0]['bankDetails'][index],
-          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber + ' | ' + data['data'][0]['bankDetails'][index]?.currency,
           org: data['data'][0]['bankDetails'][index]
         })
         this.ToChargesAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
           value: data['data'][0]['bankDetails'][index],
-          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber + ' | ' + data['data'][0]['bankDetails'][index]?.currency,
           org: data['data'][0]['bankDetails'][index]
         })
         this.ToCreditAccountdata[data['data'][0]['bankDetails'][index]?.BankUniqueId].push({
           value: data['data'][0]['bankDetails'][index],
-          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber,
+          text: (data['data'][0]['bankDetails'][index]?.accType)?.split('-')[0] + ' | ' + data['data'][0]['bankDetails'][index]?.accNumber + ' | ' + data['data'][0]['bankDetails'][index]?.currency,
           org: data['data'][0]['bankDetails'][index]
         })
-        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.value?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
+        if (this.BANK_LIST_DROPDOWN.filter((item: any) => item?.bank?.includes(data['data'][0]['bankDetails'][index]?.bank))?.length == 0) {
           this.BANK_LIST_DROPDOWN.push({
-            value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+            bank: data['data'][0]['bankDetails'][index]?.bank,
+            BankUniqueId: data['data'][0]['bankDetails'][index]?.BankUniqueId,
+            accNumber: data['data'][0]['bankDetails'][index]?.accNumber,
+            accType: data['data'][0]['bankDetails'][index]?.accType,
+            bicAddress: data['data'][0]['bankDetails'][index]?.bicAddress,
           })
         }
       }
@@ -293,6 +368,22 @@ export class UploadServiceValidatorService implements OnInit {
           console.log(this.dynamicFormGroup, formGroupFields, model, 'dynamicFormGroup');
           await this.dynamicFormGroup;
           await resolve(this.dynamicFormGroup);
+          await this.FIELDS_DATA[id]?.forEach(element => {
+            if (element?.type === "yesnocheckbox") {
+              element?.HideShowInput?.forEach(HideShowInputElement => {
+                const index = this.FIELDS_DATA[id]?.findIndex(val => val?.fieldName?.includes(HideShowInputElement?.name));
+                if (index != -1) {
+                  if (HideShowInputElement?.status == true) {
+                    this.FIELDS_DATA[id][index]['disabled'] = false;
+                    this.dynamicFormGroup[id]?.controls[HideShowInputElement?.name]?.enable();
+                  } else {
+                    this.FIELDS_DATA[id][index]['disabled'] = true;
+                    this.dynamicFormGroup[id]?.controls[HideShowInputElement?.name]?.disable();
+                  }
+                }
+              });
+            }
+          });
         }
       })
     })
@@ -458,7 +549,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
     console.log(myForm, value, "myForm")
     if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
+      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: this.FIELDS_DATA[id] });
     }
   }
 
@@ -488,7 +579,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.dynamicFormGroup[id].get(FormArrayfieldName).updateValueAndValidity();
     console.log(myForm, value, "setValueFromChildArray")
     if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: FormArrayfieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
+      callback({ id: id, form: form, fieldName: FormArrayfieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: this.FIELDS_DATA[id] });
     }
   }
 
@@ -546,6 +637,9 @@ export class UploadServiceValidatorService implements OnInit {
         hasAmountGreaterThanForm(field?.EqualName, field?.errormsg)],
 
       buyer: rule?.required == true ? [Validators.required] : [],
+      Newbuyer: rule?.required == true ? [Validators.required] : [],
+      ReUpload: rule?.required == true ? [Validators.required] : [],
+      DropDown: rule?.required == true ? [Validators.required] : [],
       button: rule?.required == true ? [Validators.required] : [],
       checkbox: rule?.required == true ? [Validators.required] : [],
       PURPOSE_CODE: rule?.required == true ? [Validators.required] : [],
@@ -581,10 +675,19 @@ export class UploadServiceValidatorService implements OnInit {
       BLCopy: rule?.required == true ? [Validators.required] : [],
       yesnocheckbox: rule?.required == true ? [Validators.required] : [],
       ArrayList: rule?.required == true ? [Validators.required] : [],
+      ArrayList_Object: rule?.required == true ? [Validators.required] : [],
+      InputButton:  rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
+      [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
       BOE: rule?.required == true ? [Validators.required] : [],
+      ORM_SELECTION: rule?.required == true ? [Validators.required] : [],
+      LABLE_CHECKBOX: rule?.required == true ? [Validators.required] : [],
+      EmailButton: rule?.required == true ? [Validators.required] : [],
+      NumberButton: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
+      CallbackButton: [],
       LabelShow: [],
+      OnlyLabelShow: [],
       SB_DETAILS_SHOW: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50), alphaNumericValidator],

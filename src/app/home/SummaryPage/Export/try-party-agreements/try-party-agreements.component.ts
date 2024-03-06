@@ -5,15 +5,13 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
-import * as data1 from '../../../../currency.json';
 import { NavigationExtras, Router } from '@angular/router';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
-import * as _ from 'lodash';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from "moment";
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'export-try-party-agreements-summary',
@@ -72,7 +70,9 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
     currency: '',
     buyerName: '',
   }
-  FILTER_FORM: any = ''
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -80,41 +80,28 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
+    public filteranytablepagination: TableServiceController,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-  ) {
-  }
+    public dialog: MatDialog) {}
 
-  async ngOnInit() {
-    this.FILTER_VALUE_LIST = [];
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
-    this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getThird().subscribe(
-      (res: any) => {
-        console.log('Res', res);
-        this.item = res?.data;
-        this.FILTER_VALUE_LIST = this.item;
-        for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
-          }
+    async ngOnInit() {
+      this.USER_DATA = await this.userService.getUserDetail();
+      this.FILTER_FORM_VALUE = [];
+      await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'thirdparties',this.FILTER_VALUE_LIST_NEW)?.thirdparties().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+        for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
           if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
             this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
           }
-          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.triPartyAgreementNumber)?.length == 0) {
-            this.ALL_FILTER_DATA['NO'].push({ value: value?.triPartyAgreementNumber });
+          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+            this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
           }
-          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.triPartyAgreementDate)?.length == 0) {
-            this.ALL_FILTER_DATA['DATE'].push({ value: value?.triPartyAgreementDate });
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
           }
         }
+        console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
         this.FILTER_FORM = {
           buyerName: {
             type: "ArrayList",
@@ -123,13 +110,23 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
             rules: {
               required: false,
             },
-            item: this.ALL_FILTER_DATA['Buyer_Name'],
+            item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
             bindLabel: "value"
           },
-          date: {
-            type: "ArrayList",
+          todate: {
+            type: "date",
             value: "",
-            label: "Select Date",
+            label: "Select Start Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          fromdate: {
+            type: "date",
+            value: "",
+            label: "Select End Date",
             rules: {
               required: false,
             },
@@ -139,7 +136,7 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
           NO: {
             type: "ArrayList",
             value: "",
-            label: "Select T P A No.",
+            label: "Select Pipo No",
             rules: {
               required: false,
             },
@@ -147,41 +144,65 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
             bindLabel: "value"
           },
         }
-        this.TriPartyAgreementTable(this.item)
-      },
-      (err) => console.log(err)
-    );
-  }
+      })
+    }
   
-  onSubmit(value: any) {
-    let form_value: any = {
-      buyerName: value?.value?.buyerName,
-      triPartyAgreementDate: value?.value?.date,
-      triPartyAgreementNumber: value?.value?.NO
-    };
-
-    const removeEmptyValues = (object) => {
-      let newobject = {}
-      for (const key in object) {
-        if (object[key] != '' && object[key] != null && object[key] != undefined) {
-          newobject[key] = object[key];
+   async onSubmit(value: any) {
+      let form_value: any = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+      };
+  
+      if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          triPartyAgreementDate: { $gte: value?.value?.todate }
+        };
+        if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+          form_value = {
+            buyerName: value?.value?.buyerName,
+            pi_poNo: value?.value?.NO,
+            triPartyAgreementDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+          };
+        }
+      } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          triPartyAgreementDate: { $lt: value?.value?.fromdate }
+        };
+        if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+          form_value = {
+            buyerName: value?.value?.buyerName,
+            pi_poNo: value?.value?.NO,
+            triPartyAgreementDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+          };
         }
       }
-      return newobject;
-    };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'thirdparties').subscribe((resp: any) => {
-      console.log(resp, value, "thirdparties")
-      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
-      this.TriPartyAgreementTable(this.FILTER_VALUE_LIST)
-    });
-  }
-
-  reset() {
-    this.FILTER_VALUE_LIST = this.item;
-    this.TriPartyAgreementTable(this.FILTER_VALUE_LIST)
-  }
-
+  
+      const removeEmptyValues = (object) => {
+        let newobject: any = {}
+        for (const key in object) {
+          if (object[key] != '' && object[key] != null && object[key] != undefined) {
+            newobject[key] = object[key];
+          }
+        }
+        return newobject;
+      };
+      if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+        this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+        await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'thirdparties',this.FILTER_VALUE_LIST_NEW)?.thirdparties().then((res) => {
+          this.FILTER_VALUE_LIST_NEW = res;
+        });
+      } else {
+        this.toastr.error("Please fill field...")
+      }
+    }
+    
+    reset(){
+      this.ngOnInit()
+    }
 
   TriPartyAgreementTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
@@ -271,25 +292,10 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
-  toSave(data, index) {
-    this.optionsVisibility[index] = false;
-    let document: any = {
-      ..._.cloneDeep(data)
-    };
-    delete document.pipo;
-    this.documentService.updateThird(document, data._id).subscribe(
-      (data) => {
-        console.log('king123');
-        this.toastr.success('Tri-Party Agreement Row Is Updated Successfully.');
-      }, (error) => {
-        console.log('error');
-      }
-    );
-  }
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
@@ -309,18 +315,9 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   triPartyAgreementNumber: this.SELECTED_VALUE['triPartyAgreementNumber'],
-    //   triPartyAgreementAmount: this.SELECTED_VALUE['triPartyAgreementAmount'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/TripartyAgreements`],navigationExtras);
@@ -335,9 +332,9 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -357,6 +354,7 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -369,7 +367,7 @@ export class ExportTryPartyAgreementsComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new TriPartyAgreementFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new TriPartyAgreementFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Tri-Party.xlsx');

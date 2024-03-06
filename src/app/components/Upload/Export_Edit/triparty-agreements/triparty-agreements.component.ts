@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-export-triparty-agreements',
@@ -53,6 +54,7 @@ export class EditTripartyAgreementsComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -63,7 +65,18 @@ export class EditTripartyAgreementsComponent implements OnInit {
     });
   }
 
+
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUpload(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args.doc);
@@ -174,12 +187,132 @@ export class EditTripartyAgreementsComponent implements OnInit {
             required: true,
           },
           formGroup: PartyDetails_Data
-        }
+        },
       }, 'ExportTryPartyAgreements');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
+  ReUpload(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+      this.pipourl1 = args[1].data;
+      let PartyDetails_Data = [
+        {
+          Party1Name: {
+            type: "buyer",
+            value: this.data?.PartyDetails[0]?.Party1Name?.value,
+            label: "Party1 Name",
+            InputBindValue: 'Party1Address',
+            rules: {
+              required: true,
+            }
+          },
+          Party1Address: {
+            type: "text",
+            value: this.data?.PartyDetails[0]?.Party1Name?.Address,
+            label: "Party1 Address",
+            InputBindValue: '',
+            disabled: true,
+            rules: {
+              required: true,
+            }
+          }
+        },
+        {
+          Party2Name: {
+            type: "buyer",
+            value: this.data?.PartyDetails[1]?.Party2Name?.value,
+            label: "Party2 Name",
+            InputBindValue: 'Party2Address',
+            rules: {
+              required: true,
+            }
+          },
+          Party2Address: {
+            type: "text",
+            value: this.data?.PartyDetails[1]?.Party2Name?.Address,
+            label: "Party2 Address",
+            InputBindValue: '',
+            disabled: true,
+            rules: {
+              required: true,
+            }
+          }
+        },
+        {
+          Party3Name: {
+            type: "buyer",
+            value: this.data?.PartyDetails[2]?.Party3Name?.value,
+            label: "Party3 Name",
+            InputBindValue: 'Party3Address',
+            rules: {
+              required: true,
+            }
+          },
+          Party3Address: {
+            type: "text",
+            value: this.data?.PartyDetails[2]?.Party3Name?.Address,
+            InputBindValue: '',
+            label: "Party3 Address",
+            disabled: true,
+            rules: {
+              required: true,
+            }
+          }
+        }
+      ]
+      this.validator.buildForm({
+        triPartyAgreementDate: {
+          type: "date",
+          value: this.data?.triPartyAgreementDate,
+          label: "Date",
+          rules: {
+            required: true,
+          }
+        },
+        triPartyAgreementNumber: {
+          type: "text",
+          value: this.data?.triPartyAgreementNumber,
+          label: "Tri Party Number*",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.currency,
+          label: "Currency*",
+          rules: {
+            required: true,
+          }
+        },
+        triPartyAgreementAmount: {
+          type: "text",
+          value: this.data?.triPartyAgreementAmount,
+          label: "Tri Party Amount",
+          rules: {
+            required: true,
+          }
+        },
+        PartyDetails: {
+          type: "formArray",
+          label: "Party Name and Address",
+          GroupLabel: ['Party Name and Address 1', 'Party Name and Address 2', 'Party Name and Address 3'],
+          MAX_LIMIT: 2,
+          rules: {
+            required: true,
+          },
+          formGroup: PartyDetails_Data
+        },
+      }, 'ExportTryPartyAgreements');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
@@ -193,10 +326,34 @@ export class EditTripartyAgreementsComponent implements OnInit {
     if (e?.value?.PartyDetails[2]?.Party3Name?.Address == '' || e?.value?.PartyDetails[2]?.Party3Name?.Address == undefined) {
       e.value.PartyDetails[2].Party3Name = this.data?.PartyDetails[2]?.Party3Name;
     }
+    if (this.data?.triPartyAgreementNumber != e.value.triPartyAgreementNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Try Party Agreements Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            triPartyAgreementNumber: e.value.triPartyAgreementNumber
+          }, 'thirdparties').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updatePackingList(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Packing List Added Successfully`);
+                console.log('Packing List Added Successfully');
+                this.router.navigate(['home/Summary/Export/packing-list']);
+              }, (err) => console.log('Error adding pipo'));
+            } else {
+              this.toastr.error(`Please check this Try Party Agreements no. : ${e.value.triPartyAgreementNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateThird(e.value, this.data?._id).subscribe((res: any) => {
         this.toastr.success(`Third Party Document Updated Successfully`);
         this.router.navigate(['home/Summary/Export/try-party']);
       }, (err) => console.log('Error adding pipo'));
+    }
+
   }
 
   clickPipo(event: any) {

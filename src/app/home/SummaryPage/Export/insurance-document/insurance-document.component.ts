@@ -5,7 +5,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as xlsx from 'xlsx';
-import * as data1 from '../../../../currency.json';
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -18,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from "moment";
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'export-insurance-document-summary',
@@ -88,7 +88,8 @@ export class InsuranceDocumentComponent implements OnInit {
       buyerName:""
     }]
   }
-  FILTER_FORM: any = ''
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
 
   constructor(
     private documentService: DocumentService,
@@ -99,106 +100,130 @@ export class InsuranceDocumentComponent implements OnInit {
     private router: Router,
     private pipodataservice: PipoDataService,
     public wininfo: WindowInformationService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) {
   }
 
   async ngOnInit() {
-    this.FILTER_VALUE_LIST = [];
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getInsurance().subscribe((res: any) => {
-        this.item = res?.data;
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-            if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
-            }
-            if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
-            }
-            if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.insuranceNumber)?.length == 0) {
-              this.ALL_FILTER_DATA['NO'].push({ value: value?.insuranceNumber });
-            }
-            if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
-              this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
-            }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'insurances',this.FILTER_VALUE_LIST_NEW)?.insurances().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+        }
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      console.log(this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS, "BUYER_DETAILS")
+      this.FILTER_FORM = {
+        buyerName: {
+          type: "ArrayList",
+          value: "",
+          label: "Select buyerName",
+          rules: {
+            required: false,
+          },
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
+          bindLabel: "value"
+        },
+        todate: {
+          type: "date",
+          value: "",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        NO: {
+          type: "ArrayList",
+          value: "",
+          label: "Select Pipo No",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['NO'],
+          bindLabel: "value"
+        },
+      }
+      this.pipodataservice.getPipoList("export").then((res: any) => {
+        this.PIPO_DROP_DOWN_DATA = [];
+        this.PIPO_SELECTED_DROP_DOWN_DATA = [];
+        res?.pipoModelList?.forEach(element => {
+          this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
+            pi_poNo: element?.pi_poNo,
+            amount: element?.amount,
+            UtilizationAmount: 0,
+            buyerName: element?.buyerName,
           }
-        }
-        this.FILTER_FORM = {
-          buyerName: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Buyer",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['Buyer_Name'],
-            bindLabel: "value"
-          },
-          date: {
-            type: "ArrayList",
-            value: "",
-            label: "Select Date",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['DATE'],
-            bindLabel: "value"
-          },
-          NO: {
-            type: "ArrayList",
-            value: "",
-            label: "Select IP NO.",
-            rules: {
-              required: false,
-            },
-            item: this.ALL_FILTER_DATA['NO'],
-            bindLabel: "value"
-          },
-        }
-        this.FILTER_VALUE_LIST = this.item;
-        this.InsuranceNoTable(this.item)
-        console.log(res, 'yuyuyuyuyuyuyuuy')
-      }, (err) => console.log(err));
-    this.pipodataservice.getPipoList("export").then((res: any) => {
-      this.PIPO_DROP_DOWN_DATA = [];
-      this.PIPO_SELECTED_DROP_DOWN_DATA = [];
-      res?.pipoModelList?.forEach(element => {
-        this.PIPO_SELECTED_DROP_DOWN_DATA[element?._id] = {
-          pi_poNo: element?.pi_poNo,
-          amount: element?.amount,
-          UtilizationAmount: 0,
-          buyerName: element?.buyerName,
-        }
-        this.PIPO_DROP_DOWN_DATA.push({
-          pi_poNo: element?.pi_poNo,
-          amount: element?.amount,
-          UtilizationAmount: 0,
-          id: element?._id,
-          buyerName: element?.buyerName,
+          this.PIPO_DROP_DOWN_DATA.push({
+            pi_poNo: element?.pi_poNo,
+            amount: element?.amount,
+            UtilizationAmount: 0,
+            id: element?._id,
+            buyerName: element?.buyerName,
+          });
         });
-      });
-      console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
-
+        console.log(res, this.PIPO_DROP_DOWN_DATA, this.PIPO_SELECTED_DROP_DOWN_DATA, "pipodataservice")
+      })
     })
   }
-  
-  onSubmit(value: any) {
+
+ async onSubmit(value: any) {
     let form_value: any = {
       buyerName: value?.value?.buyerName,
-      date: value?.value?.date,
-      insuranceNumber: value?.value?.NO
+      pi_poNo: value?.value?.NO,
     };
 
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
     const removeEmptyValues = (object) => {
-      let newobject = {}
+      let newobject: any = {}
       for (const key in object) {
         if (object[key] != '' && object[key] != null && object[key] != undefined) {
           newobject[key] = object[key];
@@ -206,47 +231,18 @@ export class InsuranceDocumentComponent implements OnInit {
       }
       return newobject;
     };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'insurances').subscribe((resp: any) => {
-      console.log(resp, value, "insurances")
-      this.FILTER_VALUE_LIST = resp?.data?.length != 0 ? resp?.data : this.item;
-      this.InsuranceNoTable(this.FILTER_VALUE_LIST)
-    });
-  }
-
-  reset() {
-    this.FILTER_VALUE_LIST = this.item;
-    this.InsuranceNoTable(this.FILTER_VALUE_LIST)
-  }
-
-
-  InsuranceNoTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          PipoNo: this.getPipoNumber(element['UtilizationAddition']),
-          date: moment(element['date']).format("DD-MM-YYYY"),
-          insuranceNumber: element['insuranceNumber'],
-          StartDate: moment(element['StartDate']).format("DD-MM-YYYY"),
-          Expirydate: moment(element['Expirydate']).format("DD-MM-YYYY"),
-          insuranceAmount: element['insuranceAmount'],
-          currency: element['currency'],
-          buyerName: this.getPipoBuyerName(element['UtilizationAddition']),
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'insurances',this.FILTER_VALUE_LIST_NEW)?.insurances().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
       });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
-      }
-    });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
+  }
+  
+  reset(){
+    this.ngOnInit()
   }
 
   async removeEmpty(data: any) {
@@ -320,7 +316,7 @@ export class InsuranceDocumentComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -359,7 +355,7 @@ export class InsuranceDocumentComponent implements OnInit {
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
     this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.SELECTED_VALUE = this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index];
     this.EDIT_FORM_DATA = {
       date: this.SELECTED_VALUE['date'],
       insuranceNumber: this.SELECTED_VALUE['insuranceNumber'],
@@ -387,9 +383,9 @@ export class InsuranceDocumentComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -409,6 +405,7 @@ export class InsuranceDocumentComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -421,7 +418,7 @@ export class InsuranceDocumentComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new InsurancesFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new InsurancesFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'insurances.xlsx');

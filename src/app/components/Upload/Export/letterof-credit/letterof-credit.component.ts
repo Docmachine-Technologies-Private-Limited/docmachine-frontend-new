@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -15,7 +13,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
   templateUrl: './letterof-credit.component.html',
   styleUrls: ['./letterof-credit.component.scss', '../../commoncss/common.component.scss']
 })
-export class LetterofCreditComponent implements OnInit {
+export class UploadLetterofCreditComponent implements OnInit {
   publicUrl: any = '';
   UPLOAD_FORM: any = [];
   CURRENCY_LIST: any = [];
@@ -32,7 +30,6 @@ export class LetterofCreditComponent implements OnInit {
   };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup: FormGroup;
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
@@ -42,6 +39,8 @@ export class LetterofCreditComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
+  @Input('upload') upload:Boolean=false;
+  @Input('PopupUpload') PopupUpload:any='';
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -101,7 +100,18 @@ export class LetterofCreditComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportLetterOfCredit');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -133,7 +143,11 @@ export class LetterofCreditComponent implements OnInit {
               (data) => {
                 console.log('king123');
                 console.log(data);
-                this.router.navigate(['home/Summary/Export/letterofcredit-lc']);
+                if (this.upload==false) {
+                  this.router.navigate(['home/Summary/Export/letterofcredit-lc']);
+                }else{
+                  this.PopupUpload?.displayHidden
+                }
               }, (error) => {
                 console.log('error');
               }
@@ -150,9 +164,16 @@ export class LetterofCreditComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;

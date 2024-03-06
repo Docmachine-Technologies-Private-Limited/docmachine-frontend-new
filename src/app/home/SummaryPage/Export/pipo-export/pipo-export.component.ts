@@ -8,7 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { NavigationExtras, Router } from '@angular/router';
-import moment from 'moment';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-pipo-export',
@@ -18,28 +19,11 @@ import moment from 'moment';
 
 export class PipoExportComponent implements OnInit {
   @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
-
-  displayedColumns: string[] = ['pi_poNo', 'date', 'buyerName', 'location', 'commodity', 'amount', 'paymentTerm', 'actions'];
-  dataSource: any=[];
-  OrgdataSource: any=[];
-  benneDetailArray: any;
-  locationArray: any;
-  commodityArray: any;
-
-  buyer: string = '';
-  location: string = '';
-  commodity: string = '';
-  page: number = 0
-  limit: number = 10
   USER_DATA: any = [];
-
+  dataSource: any = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  filtervisible: boolean = false
-  startDate: any = '';
-  endDate: any = '';
   PENDING_DATA: any = [];
   HOVER_DATA: any = '';
-
   FILTER_VALUE_LIST_NEW: any = {
     header: [
       "Invoice No.",
@@ -49,12 +33,12 @@ export class PipoExportComponent implements OnInit {
       "Amount",
       "Payment Term",
       "Action"],
-    items: [],
-    Expansion_header: [],
-    Expansion_Items: [],
-    Objectkeys: [],
-    ExpansionKeys: [],
-    TableHeaderClass: [
+  items: [],
+  Expansion_header: [],
+  Expansion_Items: [],
+  Objectkeys: [],
+  ExpansionKeys: [],
+  TableHeaderClass: [
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-2",
@@ -62,9 +46,10 @@ export class PipoExportComponent implements OnInit {
       "col-td-th-1",
       "col-td-th-1",
       "col-td-th-1"
-    ],
-    eventId: '0'
-  }
+  ],
+  eventId: '0',
+  PageSize: 0
+  };
   ALL_FILTER_DATA: any = {
     Buyer_Name: [],
     Company_Name: [],
@@ -75,41 +60,24 @@ export class PipoExportComponent implements OnInit {
     NO: []
   };
   FILTER_FORM: any = ''
+  FILTER_FORM_VALUE = [];
   
   constructor(public documentService: DocumentService,
     private userService: UserService,
     public dialog: MatDialog,
+    private toastr: ToastrService,
     private router: Router,
     public wininfo: WindowInformationService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService) {
-    this.getDropDownItems()
   }
+
   async ngOnInit() {
     this.USER_DATA = await this.userService.getUserDetail();
-    this.getPipoData();
-    console.log("this.USER_DATA", this.USER_DATA)
-    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any) => {
-      this.PENDING_DATA = res;
-      console.log("this.PENDING_DATA", res)
-    })
-  }
-
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
-
-  getPipoData() {
-    console.log("-->", this.page, this.limit)
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer, 'export').subscribe((res: any) => {
-      var sort_of_deleteflag_1: any = res.docs.filter((item) => item.deleteflag == '0');
-      var sort_of_deleteflag_2: any = res.docs.filter((item) => item.deleteflag == '-1');
-      this.dataSource = res.docs;
-      this.OrgdataSource = res.docs;
-      this.PIPOTable(this.dataSource)
-      for (let value of this.dataSource) {
-        // if (this.ALL_FILTER_DATA['PI_PO_No'].filter((item: any) => item?.value == value?.pipo[0]?.pi_poNo)?.length == 0) {
-        //   this.ALL_FILTER_DATA['PI_PO_No'].push({ value: value?.pipo[0]?.pi_poNo, id: value?.pipo[0]?._id });
-        // }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableExport({}, { skip: 0, limit: 10 }, 'pi_po',this.FILTER_VALUE_LIST_NEW)?.pi_po().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
         if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
           this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
@@ -120,7 +88,7 @@ export class PipoExportComponent implements OnInit {
           this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
         }
       }
-      
+
       this.FILTER_FORM = {
         buyerName: {
           type: "ArrayList",
@@ -129,13 +97,23 @@ export class PipoExportComponent implements OnInit {
           rules: {
             required: false,
           },
-          item: this.ALL_FILTER_DATA['Buyer_Name'],
+          item: this.filteranytablepagination.UploadServiceValidatorService.BUYER_DETAILS,
           bindLabel: "value"
         },
-        date: {
-          type: "ArrayList",
+        todate: {
+          type: "date",
           value: "",
-          label: "Select Date",
+          label: "Select Start Date",
+          rules: {
+            required: false,
+          },
+          item: this.ALL_FILTER_DATA['DATE'],
+          bindLabel: "value"
+        },
+        fromdate: {
+          type: "date",
+          value: "",
+          label: "Select End Date",
           rules: {
             required: false,
           },
@@ -153,126 +131,72 @@ export class PipoExportComponent implements OnInit {
           bindLabel: "value"
         },
       }
-      console.log("res", sort_of_deleteflag_1, sort_of_deleteflag_2, this.dataSource);
-      if (this.paginator.length != undefined) {
-        this.paginator.length = res.totalDocs
-      }
     })
+    console.log("this.USER_DATA", this.USER_DATA, this.FILTER_VALUE_LIST_NEW);
   }
-  
-  onSubmit(value: any) {
+
+  async onSubmit(value: any) {
     let form_value: any = {
       buyerName: value?.value?.buyerName,
-      date: value?.value?.date,
-      pi_poNo: value?.value?.NO
+      pi_poNo: value?.value?.NO,
     };
 
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+
     const removeEmptyValues = (object) => {
-      let newobject = {}
+      let newobject: any = {}
       for (const key in object) {
+        console.log(typeof object[key], "object[key]")
         if (object[key] != '' && object[key] != null && object[key] != undefined) {
           newobject[key] = object[key];
         }
       }
       return newobject;
     };
-
-    this.documentService.filterAnyTable(removeEmptyValues(form_value), 'pi_po').subscribe((resp: any) => {
-      console.log(resp, value, "pi_po")
-      this.dataSource = resp?.data?.length != 0 ? resp?.data : this.OrgdataSource;
-      this.PIPOTable(this.dataSource)
-    });
+    if (Object.keys(removeEmptyValues(form_value))?.length != 0) {
+      this.FILTER_FORM_VALUE = removeEmptyValues(form_value)
+      await this.filteranytablepagination.LoadTableExport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'pi_po',this.FILTER_VALUE_LIST_NEW)?.pi_po().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    } else {
+      this.toastr.error("Please fill field...")
+    }
   }
 
   reset() {
-    this.dataSource = this.OrgdataSource;
-    this.PIPOTable(this.dataSource)
+    this.ngOnInit()
   }
 
-
-  handlePage(pagination: any) {
-    console.log("==>", pagination)
-    this.page = pagination.pageIndex
-    this.limit = pagination.pageSize
-    this.getPipoData()
-  }
 
   ngAfterViewInit() {
     this.paginator.pageSize = 10
     this.paginator.pageSizeOptions = [10, 20, 30]
-  }
-
-  getDropDownItems() {
-    this.userService.getTeam().subscribe(
-      (data) => {
-        this.locationArray = data['data'][0]['location'];
-        this.commodityArray = data['data'][0]['commodity'];
-        console.log("--------->locationArray", this.locationArray)
-        console.log("--------->commodityArray", this.commodityArray)
-      },
-      (error) => {
-        console.log('error');
-      }
-    );
-
-    this.userService.getBuyer(1).subscribe(
-      (res: any) => {
-        this.benneDetailArray = res.data
-        console.log("--------->benneDetailArray", this.benneDetailArray)
-      },
-      (err) => console.log('Error', err)
-    );
-  }
-
-  PIPOTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          "InvoiceNo": element['pi_poNo'],
-          "InvoiceDate": moment(element['date']).format('DD-MM-YYYY'),
-          "ConsigneeName": element['buyerName'],
-          "BRANCH": element['location'],
-          "Amount": element['amount'],
-          "PaymentTerm": element['paymentTerm'][0]?.type?.value,
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
-      });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
-      }
-    });
-  }
-
-  async removeEmpty(data: any) {
-    await data.forEach(element => {
-      for (const key in element) {
-        if (element[key] == '' || element[key] == null || element[key] == undefined) {
-          element[key] = 'NF'
-        }
-      }
-    });
-    return await new Promise(async (resolve, reject) => { await resolve(data) });
-  }
-
-  filter() {
-    this.getPipoData()
-    this.filtervisible = !this.filtervisible
-  }
-
-  resetFilter() {
-    this.commodity = ''
-    this.location = ''
-    this.buyer = ''
-    this.getPipoData()
-    this.filtervisible = !this.filtervisible
   }
 
   handleDelete(data: any) {
@@ -283,9 +207,9 @@ export class PipoExportComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.dataSource[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.dataSource[data?.index]?._id, this.dataSource[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -301,7 +225,7 @@ export class PipoExportComponent implements OnInit {
       this.documentService.deletePipoByid(id).subscribe((res) => {
         console.log(res)
         if (res) {
-          this.getPipoData()
+          this.ngOnInit();
         }
       }, (err) => console.log(err))
     } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
@@ -311,6 +235,7 @@ export class PipoExportComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -325,20 +250,20 @@ export class PipoExportComponent implements OnInit {
   toEdit(data: any) {
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.dataSource[data?.index])
+        "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
-    this.router.navigate([`/home/Summary/Export/Edit/PIPO`],navigationExtras);
+    this.router.navigate([`/home/Summary/Export/Edit/PIPO`], navigationExtras);
   }
 
   toView(data: any) {
-    this.router.navigate([`home/view-pipo/` + this.dataSource[data?.index]?._id])
+    this.router.navigate([`home/view-pipo/` + this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id])
   }
 
   MouseHover(data: any, panel: any) {
     if (data != null && data != undefined) {
       this.HOVER_DATA = '';
-      this.HOVER_DATA = this.dataSource[data?.index]?._id;
+      this.HOVER_DATA = this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id;
       console.log('hgdsdsdasdsadas', data);
       setTimeout(() => {
         panel?.displayShow
@@ -347,7 +272,7 @@ export class PipoExportComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new PipoSummaryFormat(this.dataSource).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new PipoSummaryFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Pipo-Summary.xlsx');

@@ -8,7 +8,6 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { UserService } from './../../../../service/user.service';
-import * as data1 from '../../../../currency.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
@@ -17,6 +16,7 @@ import * as FileSaver from 'file-saver';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
 import { PDFDocument } from 'pdf-lib';
 import moment from 'moment';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
 
 @Component({
   selector: 'import-boe-summary',
@@ -41,16 +41,13 @@ export class ImportBOEComponent implements OnInit {
   USER_DATA: any = [];
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
-    BOE_NUMBER: [],
     Buyer_Name: [],
-    AD_CODE: [],
-    AD_BILL_NO: [],
-    IEC_CODE: [],
-    IEC_NAME: [],
-    ORIGIN: [],
-    DISCHARGE_PORT: [],
+    Company_Name: [],
+    Origin: [],
+    Destination: [],
     Currency: [],
-    DATE: []
+    DATE: [],
+    NO: []
   };
   FILTER_VALUE_LIST_NEW: any = {
     header: [
@@ -102,6 +99,8 @@ export class ImportBOEComponent implements OnInit {
     origin: "",
     dischargePort: ""
   }
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
 
   constructor(
     public documentService: DocumentService,
@@ -114,69 +113,118 @@ export class ImportBOEComponent implements OnInit {
     private userService: UserService,
     public wininfo: WindowInformationService,
     public pdfmerge: MergePdfListService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog,
-
-  ) { }
+    public dialog: MatDialog) { }
 
 
-  async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
-    this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    this.item1 = [];
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.documentService.getBoe(1).subscribe(
-      (res: any) => {
-        for (let value of res.data) {
-          if (value['file'] == 'import') {
-            this.item1.push(value);
-            value?.benneName.forEach(element => {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-              }
-            });
-            if (this.ALL_FILTER_DATA['BOE_NUMBER'].includes(value?.boeNumber) == false) {
-              this.ALL_FILTER_DATA['BOE_NUMBER'].push(value?.boeNumber);
-            }
-            if (this.ALL_FILTER_DATA['AD_CODE'].includes(value?.adCode) == false) {
-              this.ALL_FILTER_DATA['AD_CODE'].push(value?.adCode);
-            }
-            if (this.ALL_FILTER_DATA['AD_BILL_NO'].includes(value?.adBillNo) == false) {
-              this.ALL_FILTER_DATA['AD_BILL_NO'].push(value?.adBillNo);
-            }
-            if (this.ALL_FILTER_DATA['IEC_CODE'].includes(value?.iecCode) == false) {
-              this.ALL_FILTER_DATA['IEC_CODE'].push(value?.iecCode);
-            }
-            if (this.ALL_FILTER_DATA['IEC_NAME'].includes(value?.iecName) == false) {
-              this.ALL_FILTER_DATA['IEC_NAME'].push(value?.iecName);
-            }
-            if (this.ALL_FILTER_DATA['ORIGIN'].includes(value?.origin) == false) {
-              this.ALL_FILTER_DATA['ORIGIN'].push(value?.origin);
-            }
-            if (this.ALL_FILTER_DATA['DISCHARGE_PORT'].includes(value?.dischargePort) == false) {
-              this.ALL_FILTER_DATA['DISCHARGE_PORT'].push(value?.dischargePort);
-            }
-            if (this.ALL_FILTER_DATA['DATE'].includes(value?.boeDate) == false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.boeDate);
-            }
+    async ngOnInit() {
+      this.USER_DATA = await this.userService.getUserDetail();
+      this.FILTER_FORM_VALUE = [];
+      await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'boerecords',this.FILTER_VALUE_LIST_NEW)?.boerecords().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+        for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+          if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
+          }
+          if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+            this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+          }
+          if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+            this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
           }
         }
-        this.item1.forEach(element => {
-          if (element?.balanceAmount == '-1') {
-            element['balanceAmount'] = element?.invoiceAmount
+        this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+          console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+          this.FILTER_FORM = {
+            buyerName: {
+              type: "ArrayList",
+              value: "",
+              label: "Select BENEFICIARY Name",
+              rules: {
+                required: false,
+              },
+              item: BENEFICIARY_DETAILS,
+              bindLabel: "value"
+            },
+            todate: {
+              type: "date",
+              value: "",
+              label: "Select Start Date",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['DATE'],
+              bindLabel: "value"
+            },
+            fromdate: {
+              type: "date",
+              value: "",
+              label: "Select End Date",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['DATE'],
+              bindLabel: "value"
+            },
+            NO: {
+              type: "ArrayList",
+              value: "",
+              label: "Select Pipo No",
+              rules: {
+                required: false,
+              },
+              item: this.ALL_FILTER_DATA['NO'],
+              bindLabel: "value"
+            },
           }
-        });
-        this.FILTER_VALUE_LIST = this.item1;
-        this.BILL_OF_ENTRY_Table(this.FILTER_VALUE_LIST);
-        console.log(res, 'yuyuyuyuyuyuyuuy')
-      },
-      (err) => console.log(err)
-    );
-
-  }
+        })
+      })
+      console.log("this.USER_DATA", this.USER_DATA, this.FILTER_VALUE_LIST_NEW);
+    }
+  
+    async onSubmit(value: any) {
+      let form_value: any = {
+        benneName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+      };
+  
+      if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+        form_value = {
+          benneName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate }
+        };
+        if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+          form_value = {
+            benneName: value?.value?.buyerName,
+            pi_poNo: value?.value?.NO,
+            date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+          };
+        }
+      } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+        form_value = {
+          benneName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $lt: value?.value?.fromdate }
+        };
+        if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+          form_value = {
+            benneName: value?.value?.buyerName,
+            pi_poNo: value?.value?.NO,
+            date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+          };
+        }
+      }
+      this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+      await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'boerecords',this.FILTER_VALUE_LIST_NEW)?.boerecords().then((res) => {
+        this.FILTER_VALUE_LIST_NEW = res;
+      });
+    }
+  
+    reset() {
+      this.ngOnInit()
+    }
 
   openBoe(content) {
     this.modalService
@@ -211,7 +259,7 @@ export class ImportBOEComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new BillofEntryFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new BillofEntryFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'BOE.xlsx');
@@ -256,7 +304,7 @@ export class ImportBOEComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -287,27 +335,9 @@ export class ImportBOEComponent implements OnInit {
 
   SELECTED_SHIPPING_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_SHIPPING_VALUE = '';
-    // this.SELECTED_SHIPPING_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.SHIPPING_BILL_EDIT_FORM_DATA = {
-    //   boeDate: this.SELECTED_SHIPPING_VALUE['boeDate'],
-    //   commercialNumber: this.SELECTED_SHIPPING_VALUE['commercialNumber'],
-    //   boeNumber: this.SELECTED_SHIPPING_VALUE['boeNumber'],
-    //   benneName: this.SELECTED_SHIPPING_VALUE['benneName'],
-    //   currency: this.SELECTED_SHIPPING_VALUE['currency'],
-    //   invoiceAmount: this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
-    //   balanceAmount: this.SELECTED_SHIPPING_VALUE['balanceAmount'] != '-1' ? this.SELECTED_SHIPPING_VALUE['balanceAmount'] : this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
-    //   adCode: this.SELECTED_SHIPPING_VALUE['adCode'],
-    //   adBillNo: this.SELECTED_SHIPPING_VALUE['adBillNo'],
-    //   iecCode: this.SELECTED_SHIPPING_VALUE['iecCode'],
-    //   iecName: this.SELECTED_SHIPPING_VALUE['iecName'],
-    //   origin: this.SELECTED_SHIPPING_VALUE['origin'],
-    //   dischargePort: this.SELECTED_SHIPPING_VALUE['dischargePort']
-    // }
-    // this.optionsVisibility[index] = true;
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/Boe`],navigationExtras);
@@ -323,9 +353,9 @@ export class ImportBOEComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -351,6 +381,7 @@ export class ImportBOEComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -361,22 +392,34 @@ export class ImportBOEComponent implements OnInit {
       });
     }
   }
+  
   SHIPPING_BILL_ALL_RELATED_DOCUMENTS: any = [];
   SHIPPING_BILL: any = [];
-  SbSearch(value: any) {
+ async SbSearch(value: any) {
     this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS = [];
-    var doclist: any = this.item1.filter((item: any) => item?.boeNumber == value);
+    var doclist: any = this.filteranytablepagination?.TABLE_CONTROLLER_DATA?.filter((item: any) => item?.boeNumber == value);
     this.FILTER_VALUE_LIST = doclist;
     if (doclist.length == 0) {
-      this.resetFilter();
+      this.ngOnInit();
     }
     this.SHIPPING_BILL = value;
     doclist.forEach(element => {
+      element?.pipo?.forEach((PIPOElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: PIPOElement?.doc, name: 'PIPO'+(i+1), status: false })
+      });
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.doc, name: 'BOE', status: false })
+      element?.CI_DETAILS?.forEach((CI_DETAILSElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: CI_DETAILSElement?.invoiceno?.data?.commercialDoc, name: 'Commercial'+(i+1), status: false })
+      });
+      
+      element?.packingdetails?.forEach((packingdetailsElement,i) => {
+        this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: packingdetailsElement?.packingDoc, name: 'PackingList'+(i+1), status: false })
+      });
       // this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
-      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.CI_DETAILS?.commercialDoc, name: 'Commercial', status: false })
     });
-    this.BILL_OF_ENTRY_Table(this.FILTER_VALUE_LIST);
+    await this.filteranytablepagination.LoadTableImport({boeNumber:value}, { skip: 0, limit: 10 }, 'boerecords',this.FILTER_VALUE_LIST_NEW)?.boerecords().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
   }
 
   tickdoc(event: any, index: any) {

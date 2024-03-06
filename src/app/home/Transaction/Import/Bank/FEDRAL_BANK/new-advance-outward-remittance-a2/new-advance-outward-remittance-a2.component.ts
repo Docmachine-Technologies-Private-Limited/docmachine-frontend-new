@@ -14,6 +14,8 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../../../serv
 import { StorageEncryptionDecryptionService } from '../../../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../../../merge-pdf-list.service';
 import moment from 'moment';
+import { A2AdvanceOutwardRemittanceControllerData } from '../../../Controller/A2-Advance-Outward-Remittance-Controller';
+import { ImportLetterHeadService } from '../../../../../AllBankFormat/FederalBank/import-letter-head/import-letter-head.component';
 
 @Component({
   selector: 'app-new-advance-outward-remittance-a2',
@@ -97,6 +99,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     public pdfmerge: MergePdfListService,
     private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
+    public A2AdvanceOutwardRemittanceControllerData:A2AdvanceOutwardRemittanceControllerData,
+    public ImportLetterHeadService: ImportLetterHeadService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -135,7 +139,8 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
           fieldName2: "BankCharges",
           rules: {
             required: true,
-          }
+          },
+          ChargeLabelHide:true,
         },
         BankCharges: {
           type: "xyzzzz",
@@ -145,7 +150,6 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: true,
           }
         },
-
         ADBranch: {
           type: "text",
           value: "",
@@ -171,6 +175,19 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
             required: true,
           },
           maxLength: 10
+        },
+        ForeignBankCharges: {
+          type: "MultiCheckBox",
+          value: "",
+          label: "Select Foreign Bank Charges",
+          checkboxlabel: [
+            { text: "Beneficiary", type: "checkbox", value: 'BeneficiaryAccount' },
+            { text: 'Own', type: "checkbox", value: 'OwnAccount' },
+            { text: 'Sharing', type: "checkbox", value: 'SharingAccount' }
+          ],
+          rules: {
+            required: true,
+          }
         },
         paymentTerm: {
           type: "formGroup",
@@ -881,175 +898,48 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
       this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['15CBDOCUMENTS'].setValue(false);
     }
   }
-
+  
+  TIMEOUT: any = ''
   async fillForm(filldata: any) {
     console.log(filldata, "fillForm")
     let formUrl: any = '';
     this.VISIBLITY_PDF = false;
     return new Promise(async (resolve, reject) => {
       if (this.BankId == 'F_B_L_6') {
-        formUrl = './../../assets/pdf/FedralBank/Revised_Form_A2_BLANK.pdf'
-        console.log(filldata, 'filldata')
-        const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-        const pdfDoc = await PDFDocument.load(formPdfBytes)
-        const form: any = pdfDoc.getForm()
-        const getAllFields = form?.getFields();
-        getAllFields?.forEach(element => {
-          const elementvalue: any = element?.acroField?.dict?.values();
-          if (elementvalue[0]?.encodedName == '/Tx') {
-            element?.setFontSize(11);
-            element?.enableReadOnly();
-            const [widget]: any = element?.acroField?.getWidgets();
-            widget?.getOrCreateBorderStyle()?.setWidth(0);
-          }
-        });
-        getAllFields[8]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
-        getAllFields[14]?.setText(this.validator.COMPANY_INFO[0]?.teamName + '\n' + this.validator.COMPANY_INFO[0]?.adress);
-
-        if (this.BENEFICIARY_DETAILS?.length != 0) {
-          getAllFields[70]?.setText(this.BENEFICIARY_DETAILS[0]?.benneName);
-          getAllFields[71]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAdrs);
-          getAllFields[72]?.setText(this.BENEFICIARY_DETAILS[0]?.beneAccNo + '\n' + this.BENEFICIARY_DETAILS[0]?.iban);
-          getAllFields[73]?.setText(this.BENEFICIARY_DETAILS[0]?.beneBankName + '' + this.BENEFICIARY_DETAILS[0]?.beneBankAdress);
-
-          let spliSwiftCode: any = this.BENEFICIARY_DETAILS[0]?.beneBankSwiftCode?.split('');
-          if (spliSwiftCode != undefined) {
-            getAllFields[74]?.setText(spliSwiftCode[0]);
-            getAllFields[75]?.setText(spliSwiftCode[1]);
-            getAllFields[76]?.setText(spliSwiftCode[2]);
-            getAllFields[77]?.setText(spliSwiftCode[3]);
-            getAllFields[78]?.setText(spliSwiftCode[4]);
-            getAllFields[79]?.setText(spliSwiftCode[5]);
-            getAllFields[80]?.setText(spliSwiftCode[6]);
-            getAllFields[81]?.setText(spliSwiftCode[7]);
-            getAllFields[82]?.setText(spliSwiftCode[8]);
-            getAllFields[83]?.setText(spliSwiftCode[9]);
-            getAllFields[84]?.setText(spliSwiftCode[10]);
-          }
-          getAllFields[85]?.setText(this.BENEFICIARY_DETAILS[0]?.sortCode);
-          getAllFields[86]?.setText(this.BENEFICIARY_DETAILS[0]?.interBankName);
-
-          let spliIntermediarySwiftCode: any = this.BENEFICIARY_DETAILS[0]?.interBankSwiftCode?.split('')
-          if (spliIntermediarySwiftCode != undefined) {
-            getAllFields[87]?.setText(spliIntermediarySwiftCode[0]);
-            getAllFields[88]?.setText(spliIntermediarySwiftCode[1]);
-            getAllFields[89]?.setText(spliIntermediarySwiftCode[2]);
-            getAllFields[90]?.setText(spliIntermediarySwiftCode[3]);
-            getAllFields[91]?.setText(spliIntermediarySwiftCode[4]);
-            getAllFields[92]?.setText(spliIntermediarySwiftCode[5]);
-            getAllFields[93]?.setText(spliIntermediarySwiftCode[6]);
-            getAllFields[94]?.setText(spliIntermediarySwiftCode[7]);
-            getAllFields[95]?.setText(spliIntermediarySwiftCode[8]);
-            getAllFields[96]?.setText(spliIntermediarySwiftCode[9]);
-            getAllFields[97]?.setText(spliIntermediarySwiftCode[10]);
-          }
-        }
-
-        if (filldata != undefined && filldata != null && filldata != '') {
-          getAllFields[9]?.setText(filldata?.ADBranch);
-          let remitancedata: any = {
-            Currency: filldata?.paymentTerm[0]?.PIPO_LIST?.currency,
-            CurrencyAmount: [],
-            ExchangeRate: [],
-            INREquivalentAmount: []
-          }
-          filldata?.paymentTerm?.forEach(element => {
-            remitancedata?.CurrencyAmount.push(element?.RemittanceAmount);
-          });
-          getAllFields[10]?.setText(remitancedata?.Currency);
-          getAllFields[11]?.setText(remitancedata?.CurrencyAmount?.join(','))
-
-          let splitDebitAccount: any = filldata?.BankDebit?.accNumber?.split('');
-          if (splitDebitAccount != undefined) {
-            getAllFields[40]?.setText(splitDebitAccount[0]);
-            getAllFields[41]?.setText(splitDebitAccount[1]);
-            getAllFields[42]?.setText(splitDebitAccount[2]);
-            getAllFields[43]?.setText(splitDebitAccount[3]);
-            getAllFields[44]?.setText(splitDebitAccount[4]);
-            getAllFields[45]?.setText(splitDebitAccount[5]);
-            getAllFields[46]?.setText(splitDebitAccount[6]);
-            getAllFields[47]?.setText(splitDebitAccount[7]);
-            getAllFields[48]?.setText(splitDebitAccount[8]);
-            getAllFields[49]?.setText(splitDebitAccount[9]);
-            getAllFields[50]?.setText(splitDebitAccount[10]);
-            getAllFields[51]?.setText(splitDebitAccount[11]);
-            getAllFields[52]?.setText(splitDebitAccount[12]);
-            getAllFields[53]?.setText(splitDebitAccount[13]);
-          }
-
-          let splitcustomerid: any = filldata?.CustomerID?.split('')
-          getAllFields[15]?.setText(splitcustomerid[0]);
-          getAllFields[16]?.setText(splitcustomerid[1]);
-          getAllFields[17]?.setText(splitcustomerid[2]);
-          getAllFields[18]?.setText(splitcustomerid[3]);
-          getAllFields[19]?.setText(splitcustomerid[4]);
-          getAllFields[20]?.setText(splitcustomerid[5]);
-          getAllFields[21]?.setText(splitcustomerid[6]);
-          getAllFields[22]?.setText(splitcustomerid[7]);
-          getAllFields[23]?.setText(splitcustomerid[8]);
-          getAllFields[24]?.setText(splitcustomerid[9]);
-
-          let splitPANNo: any = filldata?.PANNo?.split('')
-          getAllFields[25]?.setText(splitPANNo[0]);
-          getAllFields[26]?.setText(splitPANNo[1]);
-          getAllFields[27]?.setText(splitPANNo[2]);
-          getAllFields[28]?.setText(splitPANNo[3]);
-          getAllFields[29]?.setText(splitPANNo[4]);
-          getAllFields[30]?.setText(splitPANNo[5]);
-          getAllFields[31]?.setText(splitPANNo[6]);
-          getAllFields[32]?.setText(splitPANNo[7]);
-          getAllFields[33]?.setText(splitPANNo[8]);
-          getAllFields[34]?.setText(splitPANNo[9]);
-
-          let splitDebitChargesAccount: any = filldata?.BankCharges?.accNumber?.split('')
-          if (splitDebitChargesAccount != undefined) {
-            getAllFields[54]?.setText(splitDebitChargesAccount[0]);
-            getAllFields[55]?.setText(splitDebitChargesAccount[1]);
-            getAllFields[56]?.setText(splitDebitChargesAccount[2]);
-            getAllFields[57]?.setText(splitDebitChargesAccount[3]);
-            getAllFields[58]?.setText(splitDebitChargesAccount[4]);
-            getAllFields[59]?.setText(splitDebitChargesAccount[5]);
-            getAllFields[60]?.setText(splitDebitChargesAccount[6]);
-            getAllFields[61]?.setText(splitDebitChargesAccount[7]);
-            getAllFields[62]?.setText(splitDebitChargesAccount[8]);
-            getAllFields[63]?.setText(splitDebitChargesAccount[9]);
-            getAllFields[64]?.setText(splitDebitChargesAccount[10]);
-            getAllFields[65]?.setText(splitDebitChargesAccount[11]);
-            getAllFields[66]?.setText(splitDebitChargesAccount[12]);
-            getAllFields[67]?.setText(splitDebitChargesAccount[13]);
-          }
-
-          let purppose: any = { Code: [], Description: [] }
-          this.validator.SELECTED_PURPOSE_CODE_DUMP_SLEECTION?.forEach(element => {
-            purppose?.Code?.push(element?.PurposeCode)
-            purppose?.Description?.push(element?.Description?.join(','))
-          });
-          getAllFields[106]?.setText(purppose?.Code?.join(','));
-          getAllFields[107]?.setText(purppose?.Description?.join(','));
-        }
-        const pdfBytes = await pdfDoc.save()
-        var base64String = this._arrayBufferToBase64(pdfBytes)
-        const x = 'data:application/pdf;base64,' + base64String;
-        const mergedPdf = await PDFDocument.create();
-        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-        copiedPages.forEach((page) => {
-          mergedPdf.addPage(page);
-        });
-        const mergedPdfFile = await mergedPdf.save();
-        const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-        const mergedPdfFileload = await mergedPdfload.save();
-        var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-        const x1 = 'data:application/pdf;base64,' + base64String1;
-        this.PREVIWES_URL = ''
-        setTimeout(() => {
-          this.PREVIWES_URL = x1;
-          this.VISIBLITY_PDF = true;
-          setTimeout(() => {
-            resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL })
-            this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: this.LETTER_HEAD_URL });
-            this.validator.dynamicFormGroup['IMPORT_TRANSACTION'].controls['A2CUMAPPLICATION'].setValue(true);
+        this.A2AdvanceOutwardRemittanceControllerData.BankFormatLoad().
+          Fedral(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
+            this.VISIBLITY_PDF = false;
+            this.PREVIWES_URL = ''
+            this.TIMEOUT = setTimeout(async () => {
+              this.PREVIWES_URL = res;
+              this.VISIBLITY_PDF = true;
+              this.LETTER_HEAD_URL=''
+              this.ImportLetterHeadService.createLetterHead().FedralAdvance(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+                this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
+            
+            }, 200);
+          })
+      }else if (this.BankId == "H_B_L_7") {
+        this.A2AdvanceOutwardRemittanceControllerData.BankFormatLoad().
+        HDFC(this.validator, this.BENEFICIARY_DETAILS, filldata, this.ToForwardContract_Selected).then((res: any) => {
+          this.VISIBLITY_PDF = false;
+          this.PREVIWES_URL = ''
+          this.TIMEOUT = setTimeout(async () => {
+            this.PREVIWES_URL = res;
+            this.VISIBLITY_PDF = true;
+            this.LETTER_HEAD_URL=''
+            this.ImportLetterHeadService.createLetterHead().FedralAdvance(this.validator, this.BENEFICIARY_DETAILS, filldata).then(async (letterhead) => {
+              this.LETTER_HEAD_URL = letterhead;
+              await resolve({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead })
+              this.event.emit({ BankUrl: this.PREVIWES_URL, LetterHeadUrl: letterhead });
+              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+            })
           }, 200);
-        }, 200);
+        })
       }
     })
   }
@@ -1254,7 +1144,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     }
   }
 
-  SendApproval(Status: string, UniqueId: any) {
+  SendApproval(Status: string, UniqueId: any,PREVIEWS_PANEL) {
     if (UniqueId != null) {
       var pipo_id: any = [];
       var boe_id: any = [];
@@ -1322,6 +1212,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
+                        PREVIEWS_PANEL?.displayHidden;
                         this.toastr.success("Outward-Remittance-A2 transaction created successfully...")
                       });
                     }

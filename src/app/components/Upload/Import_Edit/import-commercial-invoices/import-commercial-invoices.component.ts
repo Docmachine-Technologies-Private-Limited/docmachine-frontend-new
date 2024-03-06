@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup} from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-import-commercial-invoices',
   templateUrl: './import-commercial-invoices.component.html',
-  styleUrls: ['./import-commercial-invoices.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-commercial-invoices.component.scss', '../../commoncss/common.component.scss']
 })
 export class EditImportCommercialInvoicesComponent implements OnInit {
   publicUrl: any = '';
@@ -43,7 +44,13 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
   data: any = '';
-  
+  CI_INFO_SUM: any = {
+    CI_SUM: 0,
+    TOTAL_CI: 0,
+    PIPO_AMOUNT: 0,
+    REMAINING_AMOUNT: 0
+  }
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -52,6 +59,8 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -63,9 +72,64 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
+    this.PIPOInfo(this.data?.pipo[0]?._id)
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.commercialDoc);
+      let AdvanceInfo:any=[];
+      args?.AdvanceInfo.forEach(element => {
+        AdvanceInfo.push([{
+          type: "ORM_SELECTION",
+          value:element?.ORM_SELECTION,
+          label: "Select Advance No.",
+          name: 'ORM_SELECTION',
+          rules: {
+            required: true,
+          },
+          callback: (item: any) => {
+            const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+            let currentVal = item?.value;
+            item['field']['NewformArray'][item?.OptionfieldIndex]["ORMAmount"]['value'] = currentVal?.amount
+            myForm.controls[item?.OptionfieldIndex]?.controls["ORMAmount"]?.setValue(currentVal?.amount);
+            myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+            myForm['touched'] = true;
+            myForm['status'] = 'VALID';
+            console.log(item, this.validator.FIELDS_DATA, "callback")
+          },
+        },
+        {
+          type: "currency",
+          value: element?.currency,
+          label: "Advance Currency",
+          name: 'currency',
+          rules: {
+            required: true,
+          },
+          disabled: true
+        },
+        {
+          type: "TextValiadtion",
+          value: element?.ORMAmount,
+          label: "Advance Amount",
+          name: 'ORMAmount',
+          EqualName: "AvailableAmount",
+          rules: {
+            required: true,
+          },
+          disabled: true,
+          errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+        }])
+      });
       this.validator.buildForm({
         commercialNumber: {
           type: "text",
@@ -99,68 +163,47 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
             required: true,
           }
         },
+        IfAdvancePaid: {
+          type: "yesnocheckbox",
+          value: 'true',
+          label: "If Advance Paid?",
+          rules: {
+            required: false,
+          },
+          YesNo: 'false',
+          YesButton: [
+            { name: 'AdvanceInfo', status: true }
+          ],
+          NoButton: [
+            { name: 'AdvanceInfo', status: false },
+          ],
+          callback: (item: any) => {
+            if (item?.bool == true) {
+              item.field[5]['divhide'] = false;
+              item.form?.controls?.AdvanceInfo?.enable();
+            } else {
+              item.field[5]['divhide'] = true;
+              item.form?.controls?.AdvanceInfo?.disable();
+            }
+            console.log(item, "IfAdvancePaid")
+          }
+        },
         AdvanceInfo: {
           type: "formGroup",
-          label: "Advance Info",
-          GroupLabel: ['Advance Info 1'],
-          AddNewRequried: false,
+          label: "",
+          GroupLabel: ['ORM SELECTION 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
+            required: false,
           },
-          disabled: true,
-          formArray: [
-            [
-              {
-                type: "AdvanceInfo",
-                value: "",
-                label: "Select Advance no.",
-                name: 'AdvanceInfoAny',
-                rules: {
-                  required: true,
-                },
-                AutoFillType: "formGroup",
-                autofillinput: [
-                  { input: 'AdvanceNo', key: 'billNo', parent: "AdvanceInfo" },
-                  { input: 'AdvanceCurrency', key: 'currency', parent: "AdvanceInfo" },
-                  { input: 'AdvanceAmount', key: 'amount', parent: "AdvanceInfo" }
-                ],
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Advance No.",
-                name: 'AdvanceNo',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "currency",
-                value: "",
-                label: "Advance Currency",
-                name: 'AdvanceCurrency',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "number",
-                value: "",
-                label: "Advance Amount",
-                name: 'AdvanceAmount',
-                rules: {
-                  required: true,
-                },
-              }
-            ]
-          ]
+          formArray:AdvanceInfo
         },
         InvoiceValue: {
           type: "number",
           value: args?.InvoiceValue,
           label: "Commodity Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         FreightValue: {
@@ -168,7 +211,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: args?.FreightValue,
           label: "Freight Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         InsuranceValue: {
@@ -176,7 +219,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: args?.InsuranceValue,
           label: "Insurance Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         MiscCharges: {
@@ -184,7 +227,7 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
           value: args?.MiscCharges,
           label: "Misc Charges",
           rules: {
-            required: true,
+            required: false,
           }
         },
       }, 'EditImportCommerical');
@@ -193,15 +236,239 @@ export class EditImportCommercialInvoicesComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    this.PIPOInfo(this.data?.pipo[0]?._id)
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      let AdvanceInfo:any=[];
+      this.data?.AdvanceInfo.forEach(element => {
+        AdvanceInfo.push([{
+          type: "ORM_SELECTION",
+          value:element?.ORM_SELECTION,
+          label: "Select Advance No.",
+          name: 'ORM_SELECTION',
+          rules: {
+            required: true,
+          },
+          callback: (item: any) => {
+            const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
+            let currentVal = item?.value;
+            item['field']['NewformArray'][item?.OptionfieldIndex]["ORMAmount"]['value'] = currentVal?.amount
+            myForm.controls[item?.OptionfieldIndex]?.controls["ORMAmount"]?.setValue(currentVal?.amount);
+            myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+            myForm['touched'] = true;
+            myForm['status'] = 'VALID';
+            console.log(item, this.validator.FIELDS_DATA, "callback")
+          },
+        },
+        {
+          type: "currency",
+          value: element?.currency,
+          label: "Advance Currency",
+          name: 'currency',
+          rules: {
+            required: true,
+          },
+          disabled: true
+        },
+        {
+          type: "TextValiadtion",
+          value: element?.ORMAmount,
+          label: "Advance Amount",
+          name: 'ORMAmount',
+          EqualName: "AvailableAmount",
+          rules: {
+            required: true,
+          },
+          disabled: true,
+          errormsg: 'Remittance amount should be lesser than  or equal to the available amount.',
+        }])
+      });
+      this.validator.buildForm({
+        commercialNumber: {
+          type: "text",
+          value: this.data?.commercialNumber,
+          label: "Commercial Invoice Number",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.currency,
+          label: "Currency",
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "number",
+          value: this.data?.amount,
+          label: "Amount",
+          rules: {
+            required: true,
+          }
+        },
+        InvoiceDate: {
+          type: "date",
+          value: this.data?.InvoiceDate,
+          label: "Invoice Date",
+          rules: {
+            required: true,
+          }
+        },
+        IfAdvancePaid: {
+          type: "yesnocheckbox",
+          value: 'true',
+          label: "If Advance Paid?",
+          rules: {
+            required: false,
+          },
+          YesNo: 'false',
+          YesButton: [
+            { name: 'AdvanceInfo', status: true }
+          ],
+          NoButton: [
+            { name: 'AdvanceInfo', status: false },
+          ],
+          callback: (item: any) => {
+            if (item?.bool == true) {
+              item.field[5]['divhide'] = false;
+              item.form?.controls?.AdvanceInfo?.enable();
+            } else {
+              item.field[5]['divhide'] = true;
+              item.form?.controls?.AdvanceInfo?.disable();
+            }
+            console.log(item, "IfAdvancePaid")
+          }
+        },
+        AdvanceInfo: {
+          type: "formGroup",
+          label: "",
+          GroupLabel: ['ORM SELECTION 1'],
+          AddNewRequried: true,
+          rules: {
+            required: false,
+          },
+          formArray: AdvanceInfo
+        },
+        InvoiceValue: {
+          type: "number",
+          value: this.data?.InvoiceValue,
+          label: "Commodity Amount",
+          rules: {
+            required: false,
+          }
+        },
+        FreightValue: {
+          type: "number",
+          value: this.data?.FreightValue,
+          label: "Freight Amount",
+          rules: {
+            required: false,
+          }
+        },
+        InsuranceValue: {
+          type: "number",
+          value: this.data?.InsuranceValue,
+          label: "Insurance Amount",
+          rules: {
+            required: false,
+          }
+        },
+        MiscCharges: {
+          type: "number",
+          value: this.data?.MiscCharges,
+          label: "Misc Charges",
+          rules: {
+            required: false,
+          }
+        },
+      }, 'EditImportCommerical');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  PIPOInfo(id) {
+    this.documentService.getPipoById(id).subscribe((res: any) => {
+      this.PIPO_DATA = res?.data[0];
+      let CI_SUM = this.PIPO_DATA?.commercialRef?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+      this.CI_INFO_SUM['CI_SUM'] = CI_SUM;
+      this.CI_INFO_SUM['TOTAL_CI'] = this.PIPO_DATA?.commercialRef?.length
+      this.CI_INFO_SUM['PIPO_AMOUNT'] = this.PIPO_DATA?.amount;
+      this.CI_INFO_SUM['REMAINING_AMOUNT'] = (parseFloat(this.PIPO_DATA?.amount) - parseFloat(CI_SUM)) + parseFloat(this.data?.amount);
+      console.log(res, "getPipoById", this.CI_INFO_SUM)
+      this.documentService.filterAnyTable({
+        beneficiaryName: this.PIPO_DATA?.benneName,
+        currency: this.PIPO_DATA?.currency,
+        pipo: [id]
+      }, 'iradvices').subscribe((res: any) => {
+        this.validator.ORM_BY_PARTY_NAME = res?.data;
+        console.log(res, 'ORM_BY_PARTY_NAME')
+      });
+    })
+  }
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.AdvanceCurrency = e.value.AdvanceCurrency?.type != undefined ? e.value.AdvanceCurrency.type : e.value.AdvanceCurrency;
-    this.documentService.updateCommercial(e.value,this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Commercial Invoice Updated Successfully`);
-      this.router.navigate(['home/Summary/Import/Commercial']);     
-    },(err) => console.log('Error adding pipo'));
+    if (e != false) {
+      if (parseFloat(this.CI_INFO_SUM['REMAINING_AMOUNT']) >= parseFloat(e?.amount)) {
+        e.currency = e.currency?.type != undefined ? e.currency.type : e.currency;
+        let AdvanceInfo: any = {
+          ID: [],
+          AdvanceCurrency: [],
+          AdvanceNo: [],
+          AdvanceAmount: []
+        };
+        e?.AdvanceInfo?.forEach(element => {
+          AdvanceInfo?.ID?.push(element?.ORM_SELECTION?._id)
+          AdvanceInfo?.AdvanceCurrency?.push(element?.ORM_SELECTION?.currency)
+          AdvanceInfo?.AdvanceNo?.push(element?.ORM_SELECTION?.billNo)
+          AdvanceInfo?.AdvanceAmount?.push(element?.ORM_SELECTION?.amount)
+        });
+        e.AdvanceCurrency = AdvanceInfo?.AdvanceCurrency?.join(',');
+        e.AdvanceNo = AdvanceInfo?.AdvanceNo?.join(',');
+        e.AdvanceAmount = AdvanceInfo?.AdvanceAmount?.join(',');
+        e.sbNo = '';
+        e.sbRef = [];
+        e.BoeNo = this.validator.ORM_SELECTION_DATA?.billNo;
+        e.BoeRef = AdvanceInfo?.ID
+        e.ORM_Ref = AdvanceInfo?.ID
+        delete e.IfAdvancePaid?.field
+        delete e.IfAdvancePaid?.form
+        if (this.data?.commercialNumber != e.commercialNumber) {
+          this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Commercial Invoice Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+            if (CustomConfirmDialogRes?.value == "Ok") {
+              this.documentService.getInvoice_No({
+                commercialNumber: e.commercialNumber
+              }, 'commercials').subscribe((resp: any) => {
+                console.log('creditNoteNumber Invoice_No', resp)
+                if (resp.data.length == 0) {
+                  e.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+                  this.documentService.updateCommercial(e, this.data?._id).subscribe((res: any) => {
+                    this.toastr.success(`Commercial Invoice Updated Successfully`);
+                    this.router.navigate(['home/Summary/Import/Commercial']);
+                  }, (err) => console.log('Error adding pipo'));
+                } else {
+                  this.toastr.error(`Please check this Commercial Invoice Number : ${e.commercialNumber} already exit...`);
+                }
+              });
+            }
+          });
+        } else {
+          e.commercialDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+          this.documentService.updateCommercial(e, this.data?._id).subscribe((res: any) => {
+            this.toastr.success(`Commercial Invoice Updated Successfully`);
+            this.router.navigate(['home/Summary/Import/Commercial']);
+          }, (err) => console.log('Error adding pipo'));
+        }
+      } else {
+        this.toastr.error(`CI Amount should be equal to PIPO or less`);
+      }
+    }
   }
 
   clickPipo(event: any) {

@@ -1,0 +1,57 @@
+@use '/src/variables';
+
+:host {
+  @include variables.flexCenter(column);
+  width: 100%;
+  bottom: 0;
+  background-color: variables.$bright-white;
+  position: absolute;
+  bottom: 0;
+  z-index: 9999999999999;
+  height: 4em;
+  right: 0;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+
+
+.btn-next,
+.btn-confirm {
+  margin: 1rem 0 1rem auto;
+}
+
+.btn-confirm {
+  background-color: variables.$shady-neon-blue;
+}
+
+.btn-next:disabled, .btn-confirm:disabled{
+  background-color: variables.$lavender-blue-shadow;
+}
+
+@media (min-width: 37.5em) {
+  :host {
+    width: 50.125em;
+    position: absolute;
+    bottom: 0;
+    z-index: 9999999999999;
+    height: 4em;
+    right: 0;
+  }
+
+  .container {
+    width: 100%;
+    padding: 0;
+  }
+
+  .btn-next,
+  .btn-confirm {
+    margin: 0 0 0 auto;
+  }
+}

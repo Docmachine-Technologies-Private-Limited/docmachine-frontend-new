@@ -86,7 +86,18 @@ export class ImportDebitNotesComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'DebitNoteImport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -132,9 +143,16 @@ export class ImportDebitNotesComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.changedCommercial(this.pipoArr)
     } else {
@@ -143,6 +161,7 @@ export class ImportDebitNotesComponent implements OnInit {
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
   changedCommercial(pipo: any) {
+    this.validator.COMMERICAL_NO=[];
     this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0] });

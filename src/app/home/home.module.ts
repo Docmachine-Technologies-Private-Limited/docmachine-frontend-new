@@ -32,7 +32,6 @@ import { InwardRemittanceComponent } from "./yesBank/inwardRemittance/inwardRemi
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ProgressBarModule } from "angular-progress-bar"
 import { PipoExportComponent } from './SummaryPage/Export/pipo-export/pipo-export.component';
-import { EditPipoComponent } from './edit-pipo/edit-pipo.component';
 import { ViewPipoComponent } from './view-pipo/view-pipo.component';
 import { AddPipoComponent } from './add-pipo/add-pipo.component';
 import { UploadBankIntimationComponent } from './upload-bank-intimation/upload-bank-intimation.component';
@@ -100,6 +99,10 @@ import { ContactusTechnicalComponent } from "./contactuspanel/contactus-technica
 import { ContactusProductOptionComponent } from "./contactuspanel/contactus-product-option/contactus-product-option.component";
 import { AddBuyerNameAdminMemberComponent } from "./manage-customer/add-buyer-name-admin-member/add-buyer-name-admin-member.component";
 import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-beneficiary-name-admin-member/add-beneficiary-name-admin-member.component";
+import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-db/back-up-panel-mongo-db.component";
+import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
+import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.component";
+import { FormControllerModule } from "../components/form-controller/form-controller.module";
 
 @NgModule({
   declarations: [
@@ -118,7 +121,6 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
     AddPipoComponent,
     TermsAndConditionComponent,
     PipoExportComponent,
-    EditPipoComponent,
     ViewPipoComponent,
     FooterComponent,
     ConfirmDialogBoxComponent,
@@ -146,7 +148,10 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
     ContactusTechnicalComponent,
     ContactusProductOptionComponent,
     AddBuyerNameAdminMemberComponent,
-    AddBeneficiaryNameAdminMemberComponent
+    AddBeneficiaryNameAdminMemberComponent,
+    BackUpPanelMongoDBComponent,
+    CAFormComponent,
+    LiveTradeAppComponent,
   ],
   imports: [
     SharedHomeModule,
@@ -171,6 +176,7 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
     ImportSummaryModule,
     ExportTransactionModule,
     ImportTransactionModule,
+    FormControllerModule,
     RouterModule.forChild([
       {
         path: "",
@@ -224,6 +230,18 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
             canActivate: [MemberGuard]
           },
           {
+            path: "eportal.incometax.gov.in",
+            component: CAFormComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "backup-mongodb",
+            component: BackUpPanelMongoDBComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
             path: "edit-remittance",
             component: EditRemittanceComponent,
             pathMatch: "full",
@@ -256,12 +274,6 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
           {
             path: "add-pipo/:doc_type",
             component: AddPipoComponent,
-            pathMatch: "full",
-            canActivate: [MemberGuard]
-          },
-          {
-            path: "edit-pipo/:doc_type/:id",
-            component: EditPipoComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
@@ -497,6 +509,7 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
           { path: "SuperAdminPanel", pathMatch: "full", component: SuperAdminPanelComponent, canActivate: [SuperGuard] },
           { path: "AdminPanel", pathMatch: "full", component: AdminPanelComponent, canActivate: [AdminGuard] },
           { path: "RoleBase", component: RoleBasedSingUpComponent, pathMatch: "full", canActivate: [SuperGuard] },
+          { path: "LiveTradeApp", component: LiveTradeAppComponent, pathMatch: "full", canActivate: [SuperGuard] },
         ],
       },
     ]),
@@ -508,7 +521,6 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
   exports: [
     MatProgressBarModule,
     MatTabsModule,
-    SharedHomeModule,
   ],
 })
 export class HomeModule {

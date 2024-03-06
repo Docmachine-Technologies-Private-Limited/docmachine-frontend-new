@@ -1,0 +1,347 @@
+.background-color {
+    background: white;
+    height: 91vh;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 2px #5c595933;
+    overflow: auto;
+    margin-top: 5px;
+}
+
+.top-panel {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid #7e7b7b;
+    height: 60px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.right-panel {
+    margin: auto;
+    margin-right: 20px;
+}
+
+.btn-outline-secondary {
+    margin-left: -2px;
+}
+
+.table-tr input {
+    height: 15px !important;
+}
+
+.active-status {
+    background: #20c62a;
+    padding: 8px;
+    border-radius: 20px;
+    color: white;
+}
+
+.td-th-w-1 {
+    width: 350px;
+    display: flex;
+    border: none;
+    justify-content: flex-start !important;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    padding-left: 30px;
+}
+
+.td-th-w-2 {
+    width: 200px;
+    display: flex;
+    border: none;
+    justify-content: center !important;
+    align-items: center;
+    gap: 5px;
+}
+
+.img-icon {
+    width: 30px;
+    border-radius: 50%;
+    height: 30px;
+}
+
+.Userlist {
+    padding: 10px;
+}
+
+.text-label {
+    border: 2px solid #1469d6;
+    padding: 5px;
+    border-radius: 50px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.btn-td button {
+    background: transparent;
+    border: none;
+    color: #6322e2;
+}
+
+.img-text {
+    width: 30px;
+    border-radius: 50%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #047af8;
+    justify-content: center;
+    font-size: 15px;
+    color: blue;
+}
+
+.InActive {
+    background-color: #e04b4b;
+    color: white;
+    padding: 8px;
+    border-radius: 20px;
+}
+
+// card css
+
+.container {
+    width: 1600px;
+    max-width: 100%;
+    margin: auto;
+}
+
+.display {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    height: 100%;
+}
+
+.display .display-item {
+    flex-grow: 1;
+    flex-basis: 1px;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    max-width: 100%;
+}
+
+.card {
+    width: 400px;
+    max-width: 100%;
+    min-height: 430px;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px #00000029, 0 3px 6px #0000003b;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .card-top {
+    flex-basis: 155px;
+    flex-shrink: 1;
+    background-color: #0003;
+    background-position: center;
+    background-size: cover;
+    background: rgba(3, 30, 248, 1.0);
+    background: -webkit-linear-gradient(bottom left, rgba(3, 30, 248, 1.0), rgba(145, 21, 125, 1.0));
+    background: -moz-linear-gradient(bottom left, rgba(3, 30, 248, 1.0), rgba(145, 21, 125, 1.0));
+    background: linear-gradient(to top right, rgba(3, 30, 248, 1.0), rgba(145, 21, 125, 1.0));
+    display: flex;
+}
+
+.card .card-profile {
+    flex-basis: 45px;
+    flex-shrink: 1;
+}
+
+.card .card-profile .profile-image {
+    overflow: hidden;
+    border-radius: 100%;
+    position: absolute;
+    left: calc(50% - 75px);
+    top: 17px;
+    border: 4px solid white;
+    width: 120px;
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card .card-info {
+    flex-basis: 56, 66665%;
+    flex-grow: 1;
+    padding: 0 15px;
+    text-align: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .card-info .info-title {
+    padding-bottom: 15px;
+    color: #6322e2;
+}
+
+.card .card-info .info-title h3 {
+    font-weight: 400;
+}
+
+.card .card-info .info-follow {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    padding: 15px 0;
+    font-size: 1.2em;
+    height: 200px;
+    overflow: auto;
+}
+
+.card .card-info .info-follow>div {
+    flex-grow: 1;
+    flex-basis: 1px;
+    min-height: 20px;
+}
+
+.card .card-info .info-bio {
+    padding: 15px 0;
+}
+
+.border-active {
+    border: 4px solid #20c62a !important;
+}
+
+.border-inactive {
+    border: 4px solid #e04b4b !important;
+}
+
+.profile-image img {
+    width: 215px;
+}
+
+.profile-image .img-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5em;
+    color: white;
+    border: 0;
+}
+
+.subcription-panel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+}
+
+.subcription-panel .card {
+    width: 100%;
+}
+
+.subcription-panel table .col-td-th-1 {
+    width: 150px;
+    border: 0 !important;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    word-break: break-all;
+}
+
+.background-color ::ng-deep .mat-tab-body-content {
+    width: calc(100vw - 220px);
+    height: calc(100vh - 133px) !important;
+    overflow: auto;
+}
+
+.Approve_Reject_Delete ::ng-deep .mat-tab-body-content {
+    width: calc(100vw - 220px);
+    height: calc(100vh - 180px) !important;
+}
+
+.card-top button {
+    background: transparent;
+    outline: none;
+    border: none;
+    margin: auto;
+    margin-right: 0;
+    margin-top: 0;
+}
+
+.SUBCRIPTION_CHANGES {
+    margin: auto;
+    height: 380px;
+    overflow: auto;
+    padding: 30px;
+}
+
+.flex-label {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.col-td-th-300 {
+    width: 150px;
+    border: 0 !important;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    word-break: break-all;
+}
+
+.card-table-data {
+    width: 98%;
+    text-align: center;
+    margin: auto;
+    box-shadow: 0 0 2px 2px #dcdada;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+.card-table-data h5 {
+    padding: 10px;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-size: 20px;
+    text-align: left;
+}
+
+.card-table-data .btn-right {
+    margin: auto;
+    margin-right: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: unset !important;
+    color: black;
+}
+
+

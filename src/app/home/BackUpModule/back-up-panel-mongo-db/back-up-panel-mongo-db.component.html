@@ -1,0 +1,121 @@
+<div class="content-wrap pb-2 ml-0 scroll-bar-main">
+    <div class="background-color">
+        <mat-tab-group>
+            <mat-tab label="MongoDB">
+                <div class="top-panel">
+                    <div class="left-panel">
+                        <label for="" class="label-text">Total Table :
+                            <span>{{this.AllCompanyId?.length}}</span></label>
+                    </div>
+                    <div class="right-panel col-5">
+                        <div class="d-flex flex-row mb-3">
+                            <ng-input style="margin:auto;margin-right:0;" class="col-10"
+                                [item]="{type:'text',value:'',placeHolderText:'Search customer by name or email'}"
+                                (event)="SearchCompanyIdCollectionName($event)"></ng-input>
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="center-panel">
+                    <custom-mat-stepper *ngIf="this.SHOW_PANEL">
+                        <custom-mat-step [MATSTEP_LABEL]="item?.teamName" errorMessage="Please select Inward Remittance"
+                            [NextTrue]="true" *ngFor="let item of this.AllCompanyId;let i=index">
+                            <div class="card-table-data" *ngIf="this.AlldeletebyCollectionName[item?._id].length!=0">
+                                <div class="row m-0">
+                                    <h5>{{item?.teamName}}</h5>
+                                    <button class="btn btn-primary btn-right" title="delete overall data"
+                                        (click)="DeleteCompanyIdData(this.AlldeletebyCollectionName[item?._id])"><i
+                                            class="fa fa-download" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="controller-table" style="height: 61vh;
+                                overflow: auto;">
+                                    <table class="table">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-300">Table Name</th>
+                                                <th scope="col" class="col-td-th-300">Company Id</th>
+                                                <th scope="col" class="col-td-th-3">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr"
+                                                *ngFor="let collectionitem of this.AlldeletebyCollectionName[item?._id];let i=index">
+                                                <td class="col-td-th-300">{{collectionitem?.name}}</td>
+                                                <td class="col-td-th-300">{{collectionitem?.id}}</td>
+                                                <td class="col-td-th-3 btn-td">
+                                                    <button class="btn btn-primary"
+                                                        (click)="DeleteCompanyIdCollectionNameData(collectionitem?.id,collectionitem?.name,collectionitem?.teamname)"><i
+                                                            class="fa fa-download" aria-hidden="true"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </custom-mat-step>
+                    </custom-mat-stepper>
+
+                </div>
+            </mat-tab>
+            <mat-tab label="Upload-MongoDB">
+                <div class="top-panel">
+                    <div class="left-panel" *ngIf="this.UPLOAD_COLUMN_DATA_JSON?.length!=0">
+                        <label for="" class="label-text">Total {{this.UPLOAD_COMPANY_INFO?.name}} :
+                            <span>{{this.UPLOAD_COLUMN_DATA_JSON?.length}}</span></label>
+                    </div>
+                    <div class="right-panel col-5">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control border-radius"
+                                placeholder="Search customer by name or email" aria-label="Recipient's username"
+                                aria-describedby="button-addon2"
+                                (keypress)="SearchCompanyIdCollectionName($event.target)">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                            <button class="upload-button btn btn-success PopupOpen"
+                                [attr.popup-close]="'uploadpopuplocalfile'"><i class="fa fa-upload PopupOpen"
+                                    aria-hidden="true" [attr.popup-close]="'uploadpopuplocalfile'"></i>
+                                Upload</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="center-panel">
+                    <div>
+                        <div class="card-table-data" *ngIf="this.UPLOAD_COMPANY_INFO!=''">
+                            <div class="d-flex flex-row m-0">
+                                <h5>{{this.UPLOAD_COMPANY_INFO?.teamname}} | {{this.UPLOAD_COMPANY_INFO?.name}} |
+                                    {{this.UPLOAD_COMPANY_INFO?.CompanyId}}</h5>
+                                <ng-input style="margin:auto;margin-right:0;" class="col-4"
+                                    [item]="{type:'text',value:'',placeHolderText:'Change your CompanyId'}"
+                                    (event)="ChangeCompanyId($event,this.UPLOAD_COMPANY_INFO?.CompanyId)"></ng-input>
+                                <button style="width: 50px;" class="btn btn-primary btn-right"
+                                    title="overall data upload"
+                                    [disabled]="this.UPLOAD_COLUMN_DATA_JSON?.length!=0?false:true"
+                                    (click)="UploadData(this.UPLOAD_COMPANY_INFO?.CompanyId,this.UPLOAD_COMPANY_INFO?.name,this.UPLOAD_COLUMN_DATA_JSON)"><i
+                                        class="fa fa-upload" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="controller-table" style="height: 61vh;
+                            overflow: auto;">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-300"
+                                                *ngFor="let item of this.UPLOAD_COLUMN_KEY_JSON">{{item}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-tr"
+                                            *ngFor="let collectionitem of this.UPLOAD_COLUMN_DATA_JSON;let i=index">
+                                            <td class="col-td-th-300" *ngFor="let item of this.UPLOAD_COLUMN_KEY_JSON">
+                                                {{collectionitem[item]}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+<upload-pop-up-local-file id="uploadpopuplocalfile" (event)="uploadpopuplocalfile($event)"></upload-pop-up-local-file>

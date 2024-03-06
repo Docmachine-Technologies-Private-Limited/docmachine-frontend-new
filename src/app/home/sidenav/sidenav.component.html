@@ -136,6 +136,11 @@
                   </h6>
                 </li>
                 <li class="nav-item">
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Import/Import-certificate-of-origin')">Certificate Of
+                    Origin</h6>
+                </li>
+                <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/Credit')">Credit Notes
                   </h6>
                 </li>
@@ -158,6 +163,10 @@
                     Master Service
                     Agreement
                   </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'Summary/Import/Outward-Remittance-Disposal')">Outward-Remittance-Disposal Tracker</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/TripartyAgreements')">Tri
@@ -222,19 +231,11 @@
               <a href="#Transactions" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="Transactions">
-                <!-- <h6 class="nav-link p-0"
-                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction','ADVANCE')">
-                  ADVANCE OUTWARD REMITTANCE
-                </h6>
-                <h6 class="nav-link p-0"
-                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction','DIRECTBILL')">
-                  DIRECT BILL
-                </h6>
-                <h6 class="nav-link p-0"
-                  (click)="navigationByUrlParam($event,'/Transaction/Import/Transaction',' OutwardRemittanceA2')">
-                  Outward Remittance (A2)
-                </h6> -->
-
+                <!-- <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Transaction/Import/import-home')">Outward
+                    Remittance Disposal
+                  </h6>
+                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance')">ADVANCE
@@ -244,6 +245,7 @@
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/Import-Direct-Payment')">DIRECT BILL</h6>
                 </li>
+               
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance-a2')">
@@ -251,14 +253,9 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
-                    (click)="navigationByUrl($event,'/Transaction/Import/import-direct-dispatch')">Import Bill
+                    (click)="navigationByUrl($event,'/Transaction/Import/Import-Bill-Lodgement')">Import Bill
                     Lodgement</h6>
                 </li>
-                <!-- <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/a2cum-application-yesbank')">A2cum
-                    Application
-                  </h6>
-                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/fbg-waiver')">FBG Waiver</h6>
                 </li>
@@ -619,7 +616,19 @@
                 Super Admin Panel</h6>
             </li>
             <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/backup-mongodb')">
+                BackUp Panel</h6>
+            </li>
+            <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
               <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/RoleBase')">Role Panel
+              </h6>
+            </li>
+            <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/LiveTradeApp')">Role Panel 2
+              </h6>
+            </li>
+            <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/LiveTradeApp')">Live Trade App
               </h6>
             </li>
             <li class="nav-item"
@@ -651,7 +660,7 @@
                   Condition</h6>
               </li>
             </ul>
-            <h5 class="footer-heading">DocMachine 2023.</h5>
+            <h5 class="footer-heading">DocMachine 2023 <span>{{this.APP_VERSION}}</span></h5>
           </div>
         </div>
       </div>

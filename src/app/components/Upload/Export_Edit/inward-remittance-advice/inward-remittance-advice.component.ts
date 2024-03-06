@@ -8,6 +8,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-export-inward-remittance-advice',
@@ -44,6 +46,8 @@ export class EditInwardRemittanceAdviceComponent implements OnInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -55,6 +59,16 @@ export class EditInwardRemittanceAdviceComponent implements OnInit {
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -163,19 +177,148 @@ export class EditInwardRemittanceAdviceComponent implements OnInit {
             required: false,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'InwardRemittanceAdvice');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+      this.pipourl1 = args[1].publicUrl;
+      let res: any = new IRAdvice(args[1].data);
+      console.log(res, 'sdfjhksdjhdkfjsdhfsdkfhsd')
+      this.validator.buildForm({
+        TrackerRef: {
+          type: "RemitterCheckBox",
+          value: res?.partyName,
+          label: "Select Remitter Name",
+          rules: {
+            required: true,
+          },
+          RemitterLabel: "Select Remitter Ref No.",
+        },
+        date: {
+          type: "date",
+          value: res?.date,
+          label: "TT Date",
+          rules: {
+            required: true,
+          }
+        },
+        billNo: {
+          type: "text",
+          value: res?.billNo,
+          label: "FOREX ADVICE No.",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: res?.currency,
+          label: "Currency*",
+          rules: {
+            required: true,
+          }
+        },
+        amount: {
+          type: "number",
+          value: res?.amount,
+          label: "TT AMOUNT",
+          rules: {
+            required: true,
+          }
+        },
+        recievedDate: {
+          type: "date",
+          value: res?.recievedDate,
+          label: "Recieved Date",
+          rules: {
+            required: true,
+          }
+        },
+        commision: {
+          type: "number",
+          value: res?.commision,
+          label: "Commission",
+          rules: {
+            required: true,
+          }
+        },
+        conversionDate: {
+          type: "date",
+          value: res?.conversionDate,
+          label: "Conversion Date",
+          rules: {
+            required: true,
+          }
+        },
+        exchangeRate: {
+          type: "number",
+          value: res?.exchangeRate,
+          label: "Exchange Rate",
+          rules: {
+            required: true,
+          }
+        },
+        location: {
+          type: "location",
+          value: res?.location,
+          label: "Location",
+          rules: {
+            required: true,
+          }
+        },
+        commodity: {
+          type: "commodity",
+          value: res?.commodity,
+          label: "Commodity",
+          rules: {
+            required: true,
+          }
+        },
+        origin: {
+          type: "origin",
+          value: res?.origin,
+          label: "Origin",
+          rules: {
+            required: false,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      },  'InwardRemittanceAdvice');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-  
-    e.value.file = 'export';
-    if (e?.value?.BuyerName?.Address == undefined) {
-      e.value.BuyerName = this.data?.BuyerName;
-    }
     e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
     e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
@@ -184,11 +327,34 @@ export class EditInwardRemittanceAdviceComponent implements OnInit {
     e.value.origin = e.value.origin?.value != undefined ? e.value.origin.value : e.value.origin;
     console.log('doc', this.pipourl1);
     console.log('onSubmitIrAdvice', e.value);
-    this.documentService.updateIrAdvice(e.value,this.data?._id).subscribe((data: any) => {
-      console.log('addIrAdvice', data);
-      this.toastr.success('Firex Document added successfully.');
-      this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
-    },(error) =>console.log('error'));
+    if (this.data?.billNo != e.value.billNo) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Firex Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            billNo: e.value.billNo
+          }, 'iradvices').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateIrAdvice(e.value,this.data?._id).subscribe((data: any) => {
+                console.log('addIrAdvice', data);
+                this.toastr.success('Firex Document added successfully.');
+                this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
+              },(error) =>console.log('error'));
+            }else{
+              this.toastr.error(`Please check this Firex Number : ${e.value.billNo} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      this.documentService.updateIrAdvice(e.value,this.data?._id).subscribe((data: any) => {
+        console.log('addIrAdvice', data);
+        this.toastr.success('Firex Document added successfully.');
+        this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
+      },(error) =>console.log('error'));
+    }
+    
   }
 
   clickPipo(event: any) {

@@ -68,6 +68,7 @@ export class TransactionDashboardComponent implements OnInit {
     this.TRANSACTION_NAME = value?.MATSTEP_LABEL != undefined && value?.MATSTEP_LABEL != null ? value?.MATSTEP_LABEL?.split(" ")?.join('-') : value?.name?.split(" ")?.join('-');
     this.documentService.filterAnyTable({
       TypeTransaction: value?.MATSTEP_LABEL != undefined && value?.MATSTEP_LABEL != null ? value?.MATSTEP_LABEL?.split(" ")?.join('-') : value?.name?.split(" ")?.join('-'),
+      "$or": [{ "deleteflag": '2' }]
     }, 'ExportTransaction').subscribe((res: any) => {
       this.TRANSACTION_DATA = res?.data;
       console.log(res, this.TRANSACTION_DATA, "TransactionDashboardComponent")

@@ -1,6 +1,8 @@
 * {
     font-family: 'Nunito Sans', sans-serif;
+    font-size: 12px !important;
 }
+
 
 .first {
     text-align: left;
@@ -1063,4 +1065,8 @@ body {
     font-size: 13px;
     color: red;
     margin: auto;
+}
+
+.Pending_realisation ::ng-deep canvasjs-chart .canvasjs-chart-credit {
+    display: none;
 }

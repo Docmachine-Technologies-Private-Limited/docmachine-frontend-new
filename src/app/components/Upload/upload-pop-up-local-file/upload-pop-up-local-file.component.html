@@ -1,0 +1,23 @@
+<app-custom-model [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}"
+    [FooterButton]="false" EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2"
+    [id]="this.id" [minimizedisabled]="false" [removebg]="false" #Uploaddocuments>
+    <div class="p-2">
+        <div class="col-12">
+            <div class="card">
+                <div class="row m-0">
+                    <h3 class="m-auto ml-2" style="margin-left: 0 !important;">{{UploadFilesNames}}</h3>
+                </div>
+                <div class="drop_box">
+                    <input style="display: none" type="file" (change)="onFileChanged($event,Uploaddocuments)" #fileInput>
+                    <button style="position: absolute;
+                    height: 68%;
+                    width: 90%;
+                    opacity: 0;" (click)="fileInput.click()">Select File</button>
+                    <h5>Drag and Drop files here</h5>
+                    <p>Files Supported: PDF, XSLS, Image, Scanner</p>
+                    <p>Maximum Size: 5MB</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>

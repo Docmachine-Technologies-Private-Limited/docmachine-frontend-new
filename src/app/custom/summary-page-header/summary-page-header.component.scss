@@ -1,0 +1,44 @@
+.import_export_sec {
+    margin: auto;
+    margin-left: 0;
+}
+
+.filter_section_top {
+    display: grid;
+    width: 99%;
+    background-color: #ffffff;
+    border-radius: 0;
+    box-shadow: inset 0 0 4px 3px #c9c7c7;
+    padding: 10px;
+    margin: auto;
+    margin-top: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.middle_datatable .support {
+    height: calc(100vh - 159px);
+}
+
+.table-padding {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.content-wrap.scroll-bar-main {
+    overflow: hidden;
+    padding: 0;
+}
+
+.filter_right_new.padding_new_top {
+    display: flex;
+    gap: 10px;
+}
+
+::ng-deep ng-custom-filter-popup .filter_main {
+    width: 540px !important;
+}
+
+::ng-deep ng-custom-filter-popup .form-container-fluid {
+   overflow: unset !important; 
+}

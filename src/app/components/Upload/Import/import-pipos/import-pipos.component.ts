@@ -95,11 +95,11 @@ export class ImportPIPOSComponent implements OnInit {
           value: "",
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Raw Material", value: 'Raw Material' },
-            { text: 'Capital Goods', value: 'Capital Goods' },
-            { text: 'Services', value: 'Services' },
+            { text: "Raw Material",type:"checkbox", value: 'Raw Material' },
+            { text: 'Capital Goods',type:"checkbox", value: 'Capital Goods' },
+            { text: 'Services',type:"checkbox", value: 'Services' },
             { text: 'Samples', value: 'Samples' },
-            { text: 'Repairs and returns', value: 'Repairs and returns' }
+            { text: 'Repairs and returns',type:"checkbox", value: 'Repairs and returns' }
           ],
           NotificationShow: {
             "Raw Material": "",
@@ -205,7 +205,7 @@ export class ImportPIPOSComponent implements OnInit {
           type: "OptionMultiCheckBox",
           value: "",
           label: "Mode of Transport",
-          checkboxlabel: [{ text: "Sea", value: 'Sea' }, { text: 'Air', value: 'Air' }],
+          checkboxlabel: [{ text: "Sea", type:"checkbox",value: 'Sea' }, { text: 'Air',type:"checkbox", value: 'Air' }],
           rules: {
             required: true,
           },
@@ -308,6 +308,17 @@ export class ImportPIPOSComponent implements OnInit {
             ]
           ]
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'PIPO_IMPORT').then((res: any) => {
         console.log(res, 'PIPO_IMPORT')
       });
@@ -358,7 +369,7 @@ export class ImportPIPOSComponent implements OnInit {
   }
 
   paymentTermSum(value: any) {
-    return value.reduce((a, b) => a + parseFloat(b?.amount), 0)
+    return value.reduce((a, b) => a + parseInt(b?.amount), 0)
   }
 
   clickPipo(event: any) {

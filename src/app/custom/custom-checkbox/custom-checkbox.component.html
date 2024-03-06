@@ -1,12 +1,29 @@
 <ng-container *ngFor="let item of items;let i=index">
-  <div class="checkbox-container">
-    <label class="checkbox-container-label">
-      <div class="checkbox-border" [ngClass]="{'checkmark-border-color':item?.isToggle==true || value==item?.value}">
-        <div class="checkbox-filling" *ngIf="item?.isToggle==true || value==item?.value"></div>
-      </div>
-      <input class="checkbox-input" [name]="this.name" type="checkbox" [ngModel]="item?.value"
-        (ngModelChange)="onModelChange($event,i,item?.value,item?.isToggle);item.isToggle=!item?.isToggle" />
-      {{item?.text}}
-    </label>
-  </div>
+  <ng-container [ngSwitch]="item?.type">
+    <div class="checkbox-container" *ngSwitchCase="'checkbox'">
+      <label class="checkbox-container-label">
+        <div class="checkbox-border" [ngClass]="{'checkmark-border-color':item?.isToggle==true || value==item?.value}">
+          <div class="checkbox-filling" *ngIf="item?.isToggle==true || value==item?.value"></div>
+        </div>
+        <input class="checkbox-input" [name]="this.name" type="checkbox" [ngModel]="item?.value"
+          (ngModelChange)="onModelChange($event,i,item?.value,item?.isToggle);item.isToggle=!item?.isToggle" />
+        {{item?.text}}
+      </label>
+    </div>
+    <div class="col-12 mb-3" *ngSwitchCase="'date'">
+      <label class="checkbox-container-label"> {{item?.label}}</label>
+      <input class="form-control" type="date" [(ngModel)]="item.value"
+        (ngModelChange)="onModelChange($event,i,item?.value,item?.isToggle);">
+    </div>
+    <div class="col-12 mb-3" *ngSwitchCase="'text'">
+      <label class="checkbox-container-label"> {{item?.label}}</label>
+      <input class="form-control" type="text" [(ngModel)]="item.value"
+        (ngModelChange)="onModelChange($event,i,item?.value,item?.isToggle);">
+    </div>
+    <div class="col-12 mb-3" *ngSwitchCase="'textarea'">
+      <label class="checkbox-container-label"> {{item?.label}}</label>
+      <textarea [style]="item?.style" class="form-control" type="text" [(ngModel)]="item.value"
+        (ngModelChange)="onModelChange($event,i,item?.value,item?.isToggle);"></textarea>
+    </div>
+  </ng-container>
 </ng-container>

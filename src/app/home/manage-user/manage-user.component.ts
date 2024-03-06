@@ -103,17 +103,12 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]]
     });
 
-    this.userService?.getMemeber(this.id)
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data)
-          this.item1 = data['data']
-          console.log(this.item1['length'])
-        },
-        error => {
-          console.log("error")
-        });
+    this.userService?.getMemeber(this.id).subscribe((data) => {
+      console.log(data,"getMemeber")
+      this.item1 = data['data']
+    }, error => {
+      console.log("error")
+    });
   }
 
   URL_CREATE(url) {
@@ -134,7 +129,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     this.toggle = true;
   }
   OpenPopup(formmodel: any) {
-    if (this.userData['result']['Login_Limit'] > this.item1.length) {
+    if (this.userData['result']['Login_Limit'] > this.userData['result']?.members_list?.length) {
       this.img = '';
       formmodel?.displayShow
       this.response()

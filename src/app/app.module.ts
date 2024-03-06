@@ -1,6 +1,6 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { SharedModule } from "./shared/shared.module";
@@ -50,6 +50,10 @@ import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-in
 import { AuthorizationComponent } from "./authorization/authorization.component";
 import { TallyAuthorizationService } from "./authorization-tally-intrgration/tally-authorization.service";
 import { LEIRecordsService } from "./service/LEIRecord/leirecords.service";
+import { FormControllerService } from "./components/form-controller/form/form.service";
+import { FormControllerModule } from "./components/form-controller/form-controller.module";
+import { SharedHomeModule } from "./home/shared-home.module";
+import { UploadServiceValidatorService } from "./components/Upload/service/upload-service-validator.service";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -76,7 +80,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ResetOTPComponent,
     RoleVerifyEmailComponent,
     CustomMatTabComponent,
-    AuthorizationTallyIntrgrationComponent
+    AuthorizationTallyIntrgrationComponent,
   ],
   providers: [
     WindowInformationService,
@@ -90,9 +94,11 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DateFormatService,
     BehaviorSubjectListService,
     TallyAuthorizationService,
+    UploadServiceValidatorService,
     LEIRecordsService,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
-    IdleService
+    IdleService,
+    FormControllerService,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -107,6 +113,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     HomeModule,
     NgSelectModule,
     AppRoutingModule,
+    SharedHomeModule,
+    FormControllerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

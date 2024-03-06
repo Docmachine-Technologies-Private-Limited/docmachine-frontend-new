@@ -4,7 +4,7 @@ import { UploadServiceValidatorService } from '../service/upload-service-validat
 import { UserService } from '../../../service/user.service';
 import { ShippingBillComponent } from '../../../components/Upload/Export/shipping-bill/shipping-bill.component';
 import { InsurancedocumentsComponent } from '../../../components/Upload/Export/insurancedocuments/insurancedocuments.component';
-import { LetterofCreditComponent } from '../../../components/Upload/Export/letterof-credit/letterof-credit.component';
+import { UploadLetterofCreditComponent } from '../../../components/Upload/Export/letterof-credit/letterof-credit.component';
 import { MasterServiceAgreementsComponent } from '../../../components/Upload/Export/master-service-agreements/master-service-agreements.component';
 import { TripartyAgreementsComponent } from '../../../components/Upload/Export/triparty-agreements/triparty-agreements.component';
 import { AirwayBlCopyComponent } from '../../../components/Upload/Export/airway-bl-copy/airway-bl-copy.component';
@@ -32,7 +32,7 @@ import { InwardRemittanceAdviceSummaryComponent } from '../../../home/SummaryPag
 import { ExportOpinionReportsComponent } from '../../../home/SummaryPage/Export/opinion-reports/opinion-reports.component';
 import { ExportTryPartyAgreementsComponent } from '../../../home/SummaryPage/Export/try-party-agreements/try-party-agreements.component';
 import { MasterServiceComponent } from '../../../home/SummaryPage/Export/master-service/master-service.component';
-import { LetterOfCreditExportLCComponent } from '../../../home/SummaryPage/Export/letter-of-credit-export-lc/letter-of-credit-export-lc.component';
+import { LetterOfCreditExportLCComponent } from '../../../home/SummaryPage/Export/export-letter-of-credit/letter-of-credit-export-lc.component';
 import { InsuranceDocumentComponent } from '../../../home/SummaryPage/Export/insurance-document/insurance-document.component';
 import { DebitNoteSummaryComponent } from '../../../home/SummaryPage/Export/debit-note/debit-note.component';
 import { CreditNoteSummaryComponent } from '../../../home/SummaryPage/Export/credit-note/credit-note.component';
@@ -53,10 +53,6 @@ import { ImportOpinionReportComponent } from '../../../components/Upload/Import/
 import { ImportOutwardRemittanceAdviceComponent } from '../../../components/Upload/Import/import-outward-remittance-advice/import-inward-remittance-advice.component';
 import { ImportCreditNoteComponent } from '../../../components/Upload/Import/import-credit-note/import-credit-note.component';
 import { ImportDebitNotesComponent } from '../../../components/Upload/Import/import-debit-note/import-debit-note.component';
-import { ImportPIPOSComponent } from '../../../components/Upload/Import/import-pipos/import-pipos.component';
-import { ImportBilllodgementreferencenumberadvicecopyComponent } from '../../../components/Upload/Import/import-billlodgementreferencenumberadvicecopy/import-billlodgementreferencenumberadvicecopy.component';
-import { ImportRealisationCertificateComponent } from '../../../components/Upload/Import/import-realisation-certificate/import-realisation-certificate.component';
-import { ImportSwiftCopyDocumentComponent } from '../../../components/Upload/Import/import-swift-copy-document/import-swift-copy-document.component';
 
 import $ from 'jquery'
 
@@ -75,7 +71,7 @@ export class MasterUploadComponent implements OnInit {
       CreditNoteComponent,
       DebitNotesComponent,
       InsurancedocumentsComponent,
-      LetterofCreditComponent,
+      UploadLetterofCreditComponent,
       MasterServiceAgreementsComponent,
       TripartyAgreementsComponent,
       OpinionReportsComponent,
@@ -167,7 +163,7 @@ export class MasterUploadComponent implements OnInit {
     setTimeout(() => {
       this.validator.SELECTED_PIPO_ID = item?._id;
       this.validator.SELECTED_PIPO = [item?.pi_poNo];
-      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : []);
+      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : [],false);
     }, 200);
   }
   onTabToggleChanged(event:any){
@@ -179,7 +175,7 @@ export class MasterUploadComponent implements OnInit {
     this.validator.SELECTED_PIPO = [];
     setTimeout(() => {
       this.validator.SELECTED_PIPO = ['jgjhgjhg'];
-      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : []);
+      this.documentservice.getPipoListNo('export', this.validator.SELECTED_PIPO?.length != 0 ? this.validator.SELECTED_PIPO : [],false);
     }, 200);
   }
 

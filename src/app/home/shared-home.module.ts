@@ -7,7 +7,7 @@ import {
 } from "ngx-dropzone-wrapper";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatBadgeModule} from '@angular/material/badge'; 
+import { MatBadgeModule } from '@angular/material/badge';
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -79,21 +79,37 @@ import { hdfcbankRevisedFormA2BANKFormatComponent } from "./AllBankFormat/HDFC-B
 import { CommonOpenPopUpDirective } from "../custom/custom-model/CustomPopupOpen/open-pop-up.directive";
 import { PopupOpenDirective } from "../custom/PopupOpen/popup-open.directive";
 import { FederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterhead/exportletterhead.component";
-import { FederalBankImportLetterHeadComponent } from "./AllBankFormat/FederalBank/import-letter-head/import-letter-head.component";
 import { DirectExportPaymentComponent } from "./AllBankFormat/HDFC-Bank/direct-import-payment/direct-import-payment.component";
 import { FederalBankDirectImportPaymentComponent } from "./AllBankFormat/FederalBank/direct-import-payment/direct-import-payment.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { CustomMatStepperModule } from "../components/custom-mat-stepper/custom-mat-stepper.module";
 import { CustomModelHeaderComponent } from "../custom/custom-model/custom-model-header/custom-model-header.component";
 import { MoreContentComponent } from "../components/Upload/upload-components/more-content/more-content.component";
 import { ExportBillLodgementData } from "./Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data";
 import { NgCustomFilterPopupComponent } from "../custom/ng-custom-filter-popup/ng-custom-filter-popup.component";
-import { OldFederalBankExportletterheadComponent } from "./AllBankFormat/FederalBank/exportletterheadold/exportoldletterhead.component";
 import { CustomNgContentHeaderComponent } from "../components/Upload/upload-components/upload-components-header/custom-ng-content-header/custom-ng-content-header.component";
 import { TooltipsCustomNgComponent } from "../custom/tooltips-custom-ng/tooltips-custom-ng.component";
 import { SummaryTransactionUIHeaderComponent } from "../custom/SummaryTransactionUI/summary-transaction-uiheader/summary-transaction-uiheader.component";
 import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/summary-transaction-ui.component";
+import { UploadPopUpLocalFileComponent } from "../components/Upload/upload-pop-up-local-file/upload-pop-up-local-file.component";
+import { filterAnyTablePagination } from "../service/v1/Api/filterAnyTablePagination";
+import { TableServiceController } from "../service/v1/TableServiceController";
+import { ExportHomeControllerData } from "./Transaction/Export/Controller/ExportHome-Controller";
+import { SummaryPageHeaderComponent } from "../custom/summary-page-header/summary-page-header.component";
+import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child-summary-header/child-summary-header.component";
+import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/generator-coupon-product/generator-coupon-product.component";
+import { CreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/create-plan/create-plan.component";
+import { BusinessEmailValidatorDirective } from "../RegistrationPage/Controller/business-email-validator.directive";
+import { MaxMinValidationDirective } from "../RegistrationPage/Controller/MaxMinValidationService";
+import { PasswordValidationDirective } from "../RegistrationPage/Controller/PasswordValidation.directive";
+import { BharatheximCreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/create-plan/bharathexim-create-plan.component";
+import { BharatheximGeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/generator-coupon-product/bharathexim-generator-coupon-product.component";
+import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-panel/bharathexim-subscription-module/bharathexim-subscription-module.component";
+import { SubscriptionPageComponent } from "../components/subscription-page/subscription-page.component";
+import { FormControllerModule } from "../components/form-controller/form-controller.module";
+import { CheckboxComponent } from "../custom/Controller/checkbox.component";
+import { CheckboxGroupComponent } from "../custom/Controller/checkbox-group.component";
 
 @NgModule({
   declarations: [
@@ -149,17 +165,29 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     hdfcbankInwardRemittanceDisposalFormatComponent,
     hdfcbankRevisedFormA2BANKFormatComponent,
     FederalBankExportletterheadComponent,
-    FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
     CustomModelHeaderComponent,
     MoreContentComponent,
     NgCustomFilterPopupComponent,
-    OldFederalBankExportletterheadComponent,
     CustomNgContentHeaderComponent,
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
-    SummaryTransactionUIComponent
+    SummaryTransactionUIComponent,
+    UploadPopUpLocalFileComponent,
+    SummaryPageHeaderComponent,
+    ChildSummaryHeaderComponent,
+    GeneratorCouponProductComponent,
+    CreatePlanComponent,
+    BusinessEmailValidatorDirective,
+    MaxMinValidationDirective,
+    PasswordValidationDirective,
+    BharatheximCreatePlanComponent,
+    BharatheximGeneratorCouponProductComponent,
+    BharatheximSubscriptionModuleComponent,
+    SubscriptionPageComponent,
+    CheckboxGroupComponent,
+    CheckboxComponent
   ],
   imports: [
     CommonModule,
@@ -183,10 +211,23 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
-    CustomMatStepperModule
+    CustomMatStepperModule,
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,ExportBillLodgementData, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService,GlobalsAccessService],
+  providers: [
+    ConfirmDialogService,
+    NgbModal,
+    ExportBillLodgementData,
+    SharedDataService,
+    PipoDataService,
+    TableServiceController,
+    TreeViewComponent,
+    MergePdfService,
+    UploadServiceValidatorService,
+    GlobalsAccessService,
+    filterAnyTablePagination,
+    ExportHomeControllerData,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     FilternewPipe,
@@ -255,7 +296,6 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     CommonOpenPopUpDirective,
     PopupOpenDirective,
     FederalBankExportletterheadComponent,
-    FederalBankImportLetterHeadComponent,
     DirectExportPaymentComponent,
     FederalBankDirectImportPaymentComponent,
     MatBadgeModule,
@@ -268,11 +308,24 @@ import { SummaryTransactionUIComponent } from "../custom/SummaryTransactionUI/su
     CustomModelHeaderComponent,
     MoreContentComponent,
     NgCustomFilterPopupComponent,
-    OldFederalBankExportletterheadComponent,
     CustomNgContentHeaderComponent,
     TooltipsCustomNgComponent,
     SummaryTransactionUIHeaderComponent,
-    SummaryTransactionUIComponent
+    SummaryTransactionUIComponent,
+    UploadPopUpLocalFileComponent,
+    SummaryPageHeaderComponent,
+    ChildSummaryHeaderComponent,
+    GeneratorCouponProductComponent,
+    CreatePlanComponent,
+    BharatheximCreatePlanComponent,
+    BharatheximGeneratorCouponProductComponent,
+    BharatheximSubscriptionModuleComponent,
+    BusinessEmailValidatorDirective,
+    MaxMinValidationDirective,
+    PasswordValidationDirective,
+    SubscriptionPageComponent,
+    CheckboxGroupComponent,
+    CheckboxComponent
   ],
 })
 export class SharedHomeModule { }

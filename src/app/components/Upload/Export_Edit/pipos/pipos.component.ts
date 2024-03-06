@@ -50,6 +50,7 @@ export class EditPIPOSComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.data = JSON.parse(params["item"]);
       this.response(JSON.parse(params["item"]));
+      console.log(this.data,"PIPO_EDIT")
     });
   }
 
@@ -63,7 +64,7 @@ export class EditPIPOSComponent implements OnInit {
       let ModeofTransportData2: any = [];
 
       args?.paymentTerm?.forEach(element => {
-        paymentTermdata.push({
+        paymentTermdata.push([{
           type: "PaymentTermType",
           value: element?.type,
           label: "Type",
@@ -92,14 +93,14 @@ export class EditPIPOSComponent implements OnInit {
           },
           {
             type: "currency",
-            value: element?.currency?.type,
+            value:args?.currency,
             label: "Currency",
             name: 'currency',
             rules: {
               required: true,
             },
             disabled: true
-          })
+          }])
       });
       ModeofTransportData1 = [{
         type: "checkbox",
@@ -138,7 +139,7 @@ export class EditPIPOSComponent implements OnInit {
       }];
 
       args?.PCReferanceDetails?.forEach(element => {
-        PCReferanceDetailsData.push({
+        PCReferanceDetailsData.push([{
           type: "text",
           value: element?.amount,
           label: "Amount of PC",
@@ -170,7 +171,7 @@ export class EditPIPOSComponent implements OnInit {
           rules: {
             required: false,
           }
-        })
+        }])
       });
       this.validator.buildForm({
         document: {
@@ -178,8 +179,8 @@ export class EditPIPOSComponent implements OnInit {
           value: args?.document,
           label: "Select the type of document",
           checkboxlabel: [
-            { text: "Proforma Inovice", value: 'PI' },
-            { text: 'Purchase Order', value: 'PO' }
+            { text: "Proforma Inovice",type:"checkbox", value: 'PI' },
+            { text: 'Purchase Order',type:"checkbox", value: 'PO' }
           ],
           rules: {
             required: true,
@@ -244,10 +245,10 @@ export class EditPIPOSComponent implements OnInit {
           value: args?.MaterialTypes,
           label: "Type of goods category",
           checkboxlabel: [
-            { text: "Finished Goods", value: 'Finished Goods' },
-            { text: 'Services', value: 'Services' },
-            { text: 'Samples', value: 'Samples' },
-            { text: 'Repairs and returns', value: 'Repairs and returns' }
+            { text: "Finished Goods", type:"checkbox",value: 'Finished Goods' },
+            { text: 'Services',type:"checkbox", value: 'Services' },
+            { text: 'Samples',type:"checkbox", value: 'Samples' },
+            { text: 'Repairs and returns',type:"checkbox", value: 'Repairs and returns' }
           ],
           NotificationShow: {
             "Finished Goods": "",
@@ -286,6 +287,14 @@ export class EditPIPOSComponent implements OnInit {
             required: true,
           }
         },
+        commodity: {
+          type: "commodity",
+          value:args?.ConsigneeName,
+          label: "Choose commodity",
+          rules: {
+            required: true,
+          }
+        },
         RemitterName: {
           type: "RemitterName",
           value: args?.RemitterName,
@@ -314,18 +323,18 @@ export class EditPIPOSComponent implements OnInit {
           type: "OptionMultiCheckBox",
           value: args?.PCReferanceDetails[0]?.amount != '' ? "Yes" : "No",
           label: "PC reference number",
-          checkboxlabel: [{ text: "Yes", value: 'Yes' }, { text: 'No', value: 'No' }],
+          checkboxlabel: [{ text: "Yes", type:"checkbox",value: 'Yes' }, { text: 'No',type:"checkbox", value: 'No' }],
           Yes: "Yes",
           rules: {
             required: true,
           },
-          option: [PCReferanceDetailsData]
+          option: PCReferanceDetailsData
         },
         ModeofTransport: {
           type: "OptionMultiCheckBox",
           value: args?.ModeofTransport[0]?.EDI != '' && args?.ModeofTransport[0]?.EDI != undefined ? "Sea" : "Air",
           label: "Mode of Transport",
-          checkboxlabel: [{ text: "Sea", value: 'Sea' }, { text: 'Air', value: 'Air' }],
+          checkboxlabel: [{ text: "Sea", type:"checkbox",value: 'Sea' }, { text: 'Air',type:"checkbox", value: 'Air' }],
           rules: {
             required: true,
           },
@@ -342,7 +351,7 @@ export class EditPIPOSComponent implements OnInit {
           rules: {
             required: false,
           },
-          formArray: [paymentTermdata]
+          formArray: paymentTermdata
         },
       }, 'PIPO_EXPORT');
     }, 200);

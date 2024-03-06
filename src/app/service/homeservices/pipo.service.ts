@@ -314,6 +314,7 @@ export class PipoDataService {
       }
     }
   }
+  
   SHIPPING_BILL_LIST: any = [];
   getShippingNo(id: any, type: string) {
     let pipolist: any = this.pipolistModelSubsciber.value;

@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
-import { observable, Observable, of, Subject } from 'rxjs';
+import { forkJoin, observable, Observable, of, Subject } from 'rxjs';
 // import { AppConfig } from '../../app/app.config';
 import * as data1 from './../currency.json';
 import { Router } from '@angular/router';
@@ -46,7 +46,56 @@ export class DocumentService {
   item2: any;
   item1: any;
 
-  getPipoListNo = (type, pipolist: any) => {
+
+  toWords(s) {
+    var th = ['', 'thousand', 'million', 'billion', 'trillion'];
+    var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    s = s.toString();
+    s = s.replace(/[\, ]/g, '');
+    if (s != parseFloat(s)) return 'not a number';
+    var x = s.indexOf('.');
+    if (x == -1)
+        x = s.length;
+    if (x > 15)
+        return 'too big';
+    var n = s.split('');
+    var str = '';
+    var sk = 0;
+    for (var i = 0; i < x; i++) {
+        if ((x - i) % 3 == 2) {
+            if (n[i] == '1') {
+                str += tn[Number(n[i + 1])] + ' ';
+                i++;
+                sk = 1;
+            } else if (n[i] != 0) {
+                str += tw[n[i] - 2] + ' ';
+                sk = 1;
+            }
+        } else if (n[i] != 0) { // 0235
+            str += dg[n[i]] + ' ';
+            if ((x - i) % 3 == 0) str += 'hundred ';
+            sk = 1;
+        }
+        if ((x - i) % 3 == 1) {
+            if (sk)
+                str += th[(x - i - 1) / 3] + ' ';
+            sk = 0;
+        }
+    }
+
+    if (x != s.length) {
+        var y = s.length;
+        str += 'point ';
+        for (let i = x + 1; i < y; i++)
+            str += dg[n[i]] + ' ';
+    }
+    return str.replace(/\s+/g, ' ');
+}
+
+  getPipoListNo = (type, pipolist: any, BoolTransaction) => {
+    console.log(BoolTransaction, "BoolTransaction")
     this.PI_PO_NUMBER_LIST = {
       PI_PO_BUYER_NAME: [],
       PI_PO_BENNE_NAME: [],
@@ -74,29 +123,41 @@ export class DocumentService {
           })
         }
       }
-      for (let index = 0; index < pipolist?.length; index++) {
-        const element = pipolist[index];
-        var t: any = data.filter((item: any) => item?.pi_poNo.indexOf(element) != -1)
-        if (type == 'import') {
-          t.forEach(item => {
-            this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
-              pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.benneName,
-              id: [item.pi_poNo, item?.benneName],
-              _id: item?._id
-            })
-          });
-        } else {
-          t.forEach(item => {
-            this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'].push({
-              pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.buyerName,
-              id: [item.pi_poNo, item?.buyerName],
-              _id: item?._id
-            })
-          });
-        }
-      }
       console.log(this.PI_PO_NUMBER_LIST, type, 'getPipoListNo');
       return data;
+    })
+  }
+
+  getPipoTransactionData(type, pipolist) {
+    return new Promise(async (resolve, reject) => {
+      await this.getPipoNoList().subscribe((res: any) => {
+        var data: any = res?.data;
+        let PI_PO_NUMBER_LIST: any = [];
+        for (let index = 0; index < pipolist?.length; index++) {
+          const element = pipolist[index];
+          var t: any = data?.filter((item: any) => item?.pi_poNo.indexOf(element) != -1)
+          if (type == 'import') {
+            t.forEach(item => {
+              PI_PO_NUMBER_LIST.push({
+                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.benneName,
+                id: [item.pi_poNo, item?.benneName],
+                _id: item?._id
+              })
+            });
+          } else {
+            t.forEach(item => {
+              PI_PO_NUMBER_LIST.push({
+                pi_po_buyerName: 'PI-' + item?.pi_poNo + '-' + item.buyerName,
+                id: [item.pi_poNo, item?.buyerName],
+                _id: item?._id
+              })
+            });
+          }
+          if ((index + 1) == pipolist?.length) {
+            resolve(PI_PO_NUMBER_LIST)
+          }
+        }
+      })
     })
   }
 
@@ -128,7 +189,7 @@ export class DocumentService {
     }
     console.log(this.PI_PO_NUMBER_LIST, 'getPipoListNo');
   }
-  
+
   // Inward inwardRemittance Advice
   setSessionData(key: any, data: any) {
     sessionStorage.setItem(key, JSON.stringify(data));
@@ -257,15 +318,15 @@ export class DocumentService {
     console.log(query, 'filterAnyTable')
     return this.http.post(`${this.api_base}/orAdvice/filterAnyTable`, { query: query, tableName: table_name }, httpOptions);
   }
-  
-  AnyUpdateTable(id,query, table_name: any) {
+
+  AnyUpdateTable(id, query, table_name: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     console.log(query, 'filterAnyTable')
-    return this.http.post(`${this.api_base}/orAdvice/UpdateAnyTable`, {id:id ,query: query, tableName: table_name }, httpOptions);
+    return this.http.post(`${this.api_base}/orAdvice/UpdateAnyTable`, { id: id, query: query, tableName: table_name }, httpOptions);
   }
 
 
@@ -412,9 +473,9 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     let url = `${this.api_base}/edpms/getEdpmsQuery`;
-    return this.http.post(url,{query:data} ,httpOptions);
+    return this.http.post(url, { query: data }, httpOptions);
   }
-  
+
   createIDPMS(payload) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -467,7 +528,7 @@ export class DocumentService {
     let url = `${this.api_base}/master/get`;
     return this.http.get(url, httpOptions);
   }
-  
+
 
   getMasterBuyer(user) {
     this.loadFromLocalStorage();
@@ -498,17 +559,17 @@ export class DocumentService {
     let url = `${this.api_base}/pipo/getPipoNo`;
     return this.http.get(url, httpOptions);
   }
-  
-  getPipoNoFilter(query:any) {
+
+  getPipoNoFilter(query: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     let url = `${this.api_base}/pipo/getPipoNoFilter`;
-    return this.http.post(url,{query:query} ,httpOptions);
+    return this.http.post(url, { query: query }, httpOptions);
   }
-  
+
   getMasterScheduler() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -747,6 +808,17 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/pipo/getPipoById`, { id: id }, httpOptions);
   }
 
+  getPipoByIdList(ID_List: any) {
+    let API_CREATE: any = [];
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    for (let index = 0; index < ID_List.length; index++) {
+      const element = ID_List[index];
+      API_CREATE.push(this.http.post(`${this.api_base}/pipo/getPipoById`, { id: element }, httpOptions))
+    }
+    return forkJoin(API_CREATE);
+  }
   getInward_remittance() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -1206,6 +1278,115 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(`${this.api_base}/blcopy/updateSB`, { data: data, id: id }, httpOptions);
+  }
+
+  //get airway blcopy and advice copy api
+  addCouponCode(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/product/Add`, { data: pipo }, httpOptions);
+  }
+
+  //get airway blcopy and advice copy api
+  addCouponCode2(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/product/AddCoupon`, { data: pipo }, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  addSubscriptionPlan(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/SubscriptionPlan/add`, { data: pipo }, httpOptions);
+  }
+  
+   //get airway blcopy and advice copy api
+   updateSubscriptionPlan(id,pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/SubscriptionPlan/update`, { id:id,data: pipo }, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  getSubscriptionPlan() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${AppConfig.COUPON_API}/SubscriptionPlan/get`, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  GetCouponCodeDetails() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${AppConfig.COUPON_API}/product/getProduct`, httpOptions);
+  }
+  
+   //get airway blcopy and advice copy api
+   addBharatheximCouponCode2(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/product/AddCoupon`, { data: pipo }, httpOptions);
+  }
+   //get airway blcopy and advice copy api
+   addBharatheximSubscriptionPlan(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/SubscriptionPlan/add`, { data: pipo }, httpOptions);
+  }
+  
+   //get airway blcopy and advice copy api
+   updateBharatheximSubscriptionPlan(id,pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/SubscriptionPlan/update`, { id:id,data: pipo }, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  getBharatheximSubscriptionPlan() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/SubscriptionPlan/get`, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  GetBharatheximCouponCodeDetails() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/product/getProduct`, httpOptions);
   }
 
   //get airway blcopy and advice copy api
@@ -2206,6 +2387,24 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.get(`${this.api_base}/LCTransaction/get`, httpOptions);
+  }
+
+  updateLCTransaction(id, data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/LCTransaction/update`, { LCTransaction: data, id: id }, httpOptions);
+  }
+
+  deleteLCTransaction(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/LCTransaction/delete`, { id: id }, httpOptions);
   }
 
   UpdateTransaction(data) {

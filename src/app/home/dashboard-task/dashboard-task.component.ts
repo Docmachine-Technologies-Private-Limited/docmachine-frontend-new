@@ -62,7 +62,8 @@ export class DashboardTaskComponent implements OnInit {
   public inwardChartOptions;
   public OutwardChartOptions;
   public shippingBillChartOptions;
-  public PendingrealisationChartOptions;
+  public PartialPendingrealisationChartOptions;
+  public FullPendingrealisationChartOptions;
   public orderPendingForShipmentChartOptions;
   public packingCreditAvailedChartOptions;
   public totalBillLodgedChartOptions;
@@ -76,7 +77,8 @@ export class DashboardTaskComponent implements OnInit {
   inwardChart;
   OutwardChart;
   orderShipmentChart;
-  PendingrealisationChart;
+  PartialPendingrealisationChart;
+  FullPendingrealisationChart;
   EDPMSChart;
   packingCreditAvailedChart;
   totalBillLodgedChart;
@@ -86,6 +88,13 @@ export class DashboardTaskComponent implements OnInit {
   BOE_SUBMISSION_DATA: any = [];
   @ViewChild("chart") chart: ChartComponent;
 
+  ORDER_PENDING_SHIPMENT_SHOW_CHART: boolean = false;
+  ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS: any;
+
+  TOTAL_BILL_LODGEMENT_SHOW_CHART: boolean = false;
+  TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS: any;
+  billLoedgmentPartial: any = [];
+  billLoedgmentFull: any = [];
   constructor(public documentService: DocumentService, public dashboardService: DashBoardService,
     public userService: UserService, public wininfo: WindowInformationService) {
   }
@@ -126,99 +135,141 @@ export class DashboardTaskComponent implements OnInit {
 
   getDashboardData = () => {
     return new Promise(async (resolve, reject) => {
-      await this.dashboardService.getDashboardData().subscribe(
-        (res: any) => {
+      await this.dashboardService.getDashboardData().subscribe((res: any) => {
 
-          // Import data..
-          this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
-          this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
-          this.BOE_DATA = res?.BOE_DEATILS;
-          this.BOE_PENDING_DATA = res?.Pending_BOE_Submission;
-          this.BOE_SUBMISSION_DATA= res?.BOE_Submission;
-          console.log("pipoBuyerImportData", res, this.pipoBuyerImportData)
-          this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
-            if (data._id !== null && data._id !== '') {
-              return data
-            }
-          })
+        // Import data..
+        this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
+        this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
+        this.BOE_DATA = res?.BOE_DEATILS;
+        this.BOE_PENDING_DATA = res?.Pending_BOE_Submission;
+        this.BOE_SUBMISSION_DATA = res?.BOE_Submission;
+        this.billLoedgmentPartial = res?.billLoedgmentPartial;
+        this.billLoedgmentFull = res?.billLoedgmentFully
 
-          this.pipoBuyerImportData = this.pipoBuyerImportData.filter(data => {
-            if (data._id !== null && data._id !== '') {
-              return data
-            }
-          })
+        console.log("pipoBuyerImportData", res, this.pipoBuyerImportData)
+        this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        })
 
-          this.inwardCurrencyImportData = res?.inward?.import?.currencyWise;
-          this.inwardBuyerImportData = res?.inward?.import?.buyerWise;
-          this.inwardCurrencyImportData = this.inwardCurrencyImportData?.filter(data => {
-            if (data._id !== null && data._id !== '') {
-              return data
-            }
-          });
+        this.pipoBuyerImportData = this.pipoBuyerImportData.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        })
 
-          this.inwardBuyerImportData = this.inwardBuyerImportData?.filter(data => {
-            if (data._id) {
-              return data
-            }
-          });
+        this.inwardCurrencyImportData = res?.inward?.import?.currencyWise;
+        this.inwardBuyerImportData = res?.inward?.import?.buyerWise;
+        this.inwardCurrencyImportData = this.inwardCurrencyImportData?.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        });
 
-          this.SBCurrrenycyImportData = res?.ShippingBill?.currencyWise;
-          this.SBbuyerImportData = res?.ShippingBill?.import?.buyerWise;
-          this.SBbuyerImportData = this.SBbuyerImportData?.filter(data => {
-            if (data._id) {
-              return data
-            }
-          });
-          this.inwardRemitanceImportData = res?.inwardRemittances?.import;
-          this.shipmentPendingImport = res?.sbPendingData?.import;
-          this.shipmentSubmitImport = res?.docSubmitedAndNoAwaitedData?.import;
+        this.inwardBuyerImportData = this.inwardBuyerImportData?.filter(data => {
+          if (data._id) {
+            return data
+          }
+        });
 
-          // Export data
-          this.pipoCurrencyExportData = res?.pipo?.export?.currencyWise;
-          this.pipoBuyerExportData = res?.pipo?.export?.buyerWise;
-          this.pipoCurrencyExportData = this.pipoCurrencyExportData?.filter(data => {
-            if (data._id !== null && data._id !== '') {
-              return data
-            }
-          })
+        this.SBCurrrenycyImportData = res?.ShippingBill?.currencyWise;
+        this.SBbuyerImportData = res?.ShippingBill?.import?.buyerWise;
+        this.SBbuyerImportData = this.SBbuyerImportData?.filter(data => {
+          if (data._id) {
+            return data
+          }
+        });
+        this.inwardRemitanceImportData = res?.inwardRemittances?.import;
+        this.shipmentPendingImport = res?.sbPendingData?.import;
+        this.shipmentSubmitImport = res?.docSubmitedAndNoAwaitedData?.import;
 
-          this.pipoBuyerExportData = this.pipoBuyerExportData?.filter(data => {
-            if (data._id !== null && data._id !== '') {
-              return data
-            }
-          })
+        // Export data
+        this.pipoCurrencyExportData = res?.pipo?.export?.currencyWise;
+        this.pipoBuyerExportData = res?.pipo?.export?.buyerWise;
+        this.pipoCurrencyExportData = this.pipoCurrencyExportData?.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        })
 
-          this.inwardCurrencyExportData = res?.inward?.export?.currencyWise;
-          this.inwardBuyerExportData = res?.inward?.export?.buyerWise;
-          this.inwardCurrencyExportData = this.inwardCurrencyExportData?.filter(data => {
-            if (data._id !== null && data._id !== '') {
-              return data
-            }
-          })
+        this.pipoBuyerExportData = this.pipoBuyerExportData?.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        })
 
-          this.inwardBuyerExportData = this.inwardBuyerExportData?.filter(data => {
-            if (data._id) {
-              return data
-            }
-          })
+        this.inwardCurrencyExportData = res?.inward?.export?.currencyWise;
+        this.inwardBuyerExportData = res?.inward?.export?.buyerWise;
+        this.inwardCurrencyExportData = this.inwardCurrencyExportData?.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        })
 
-          this.SBCurrencyExportData = res?.ShippingBill?.currencyWise;
-          this.SBbuyerExportData = res?.ShippingBill?.export?.buyerWise;
+        this.inwardBuyerExportData = this.inwardBuyerExportData?.filter(data => {
+          if (data._id) {
+            return data
+          }
+        })
 
-          this.SBbuyerExportData = this.SBbuyerExportData?.filter(data => {
-            if (data._id) {
-              return data
-            }
-          })
+        this.SBCurrencyExportData = res?.ShippingBill?.currencyWise;
+        this.SBbuyerExportData = res?.ShippingBill?.export?.buyerWise;
 
-          this.inwardRemitanceExportData = res?.inwardRemittances?.export;
+        this.SBbuyerExportData = this.SBbuyerExportData?.filter(data => {
+          if (data._id) {
+            return data
+          }
+        })
+
+        this.shipmentPendingExport = res?.sbPendingData?.export;
+        this.shipmentSubmitExport = res?.docSubmitedAndNoAwaitedData?.export;
+        this.shipmentSubmitExport = this.shipmentSubmitExport?.map(data => {
+          let conut = data?.blcopyrefNumber?.filter(x => !x)?.length
+          return { ...data, awaitSubmit: conut }
+        })
+
+        if (this.documentService.EXPORT_IMPORT['import'] == true) {
+          this.EDPMSData = res?.IDPMSData;
+          this.inwardRemitanceExportData = res?.inwardRemittances?.import;
+          this.OrderPendingforShipment(res?.Orderpendingforshipment?.import?.ImportData)
+          this.TotalBillLodgement(res?.billLoedgmentData?.import?.ImportData)
+        } else {
           this.EDPMSData = res?.EDPMSData;
-          this.shipmentPendingExport = res?.sbPendingData?.export;
-          this.shipmentSubmitExport = res?.docSubmitedAndNoAwaitedData?.export;
-          this.shipmentSubmitExport = this.shipmentSubmitExport?.map(data => {
-            let conut = data?.blcopyrefNumber?.filter(x => !x)?.length
-            return { ...data, awaitSubmit: conut }
-          })
+          this.inwardRemitanceExportData = res?.inwardRemittances?.export;
+          this.OrderPendingforShipment(res?.Orderpendingforshipment?.export?.ImportData)
+          this.TotalBillLodgement(res?.billLoedgmentData?.export?.ImportData)
+        }
+
+        if (this.documentService.EXPORT_IMPORT['import'] == true) {
+          this.isImport = true;
+          setTimeout(() => {
+            this.ChartMethod()
+            setTimeout(() => {
+              this.handleImportData();
+            }, 200)
+          }, 200)
+        } else {
+          this.isImport = false;
+          setTimeout(() => {
+            this.ChartMethod()
+            setTimeout(() => {
+              this.handleExportData()
+            }, 200)
+          }, 200)
+        }
+        this.documentService.EXPORT_IMPORT['callback'] = () => {
+          if (this.documentService.EXPORT_IMPORT['import'] == true) {
+            this.EDPMSData = res?.IDPMSData;
+            this.inwardRemitanceExportData = res?.inwardRemittances?.import;
+            this.OrderPendingforShipment(res?.Orderpendingforshipment?.import?.ImportData)
+            this.TotalBillLodgement(res?.billLoedgmentData?.import?.ImportData)
+          } else {
+            this.EDPMSData = res?.EDPMSData;
+            this.inwardRemitanceExportData = res?.inwardRemittances?.export;
+            this.OrderPendingforShipment(res?.Orderpendingforshipment?.export?.ImportData)
+            this.TotalBillLodgement(res?.billLoedgmentData?.export?.ImportData)
+          }
           if (this.documentService.EXPORT_IMPORT['import'] == true) {
             this.isImport = true;
             setTimeout(() => {
@@ -236,27 +287,9 @@ export class DashboardTaskComponent implements OnInit {
               }, 200)
             }, 200)
           }
-          this.documentService.EXPORT_IMPORT['callback'] = () => {
-            if (this.documentService.EXPORT_IMPORT['import'] == true) {
-              this.isImport = true;
-              setTimeout(() => {
-                this.ChartMethod()
-                setTimeout(() => {
-                  this.handleImportData();
-                }, 200)
-              }, 200)
-            } else {
-              this.isImport = false;
-              setTimeout(() => {
-                this.ChartMethod()
-                setTimeout(() => {
-                  this.handleExportData()
-                }, 200)
-              }, 200)
-            }
-          }
-          console.log("this.documentService.EXPORT_IMPORT", this.documentService.EXPORT_IMPORT)
-        },
+        }
+        console.log("this.documentService.EXPORT_IMPORT", this.documentService.EXPORT_IMPORT)
+      },
         (err) => console.log(err)
       );
     })
@@ -358,6 +391,7 @@ export class DashboardTaskComponent implements OnInit {
           let tooltipData = w?.config?.chartData[seriesIndex]
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
+            console.log(tooltipData?.convertData[i].amount, "tooltipData")
             toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
@@ -512,10 +546,10 @@ export class DashboardTaskComponent implements OnInit {
       }
     }
 
-    this.PendingrealisationChartOptions = {
+    this.PartialPendingrealisationChartOptions = {
       series: [
         {
-          name: "distibuted",
+          name: "Full",
           data: [25, 70, 60, 30, 40, 80]
         }
       ],
@@ -555,14 +589,80 @@ export class DashboardTaskComponent implements OnInit {
       },
       xaxis: {
         categories: [
-
           "B1",
           "B2",
           "B3",
           "B4",
           "B5",
           "B6",
+        ],
+        labels: {
+          style: {
+            colors: [
+              "#008FFB",
+              "#00E396",
+              "#FEB019",
+              "#FF4560",
+              "#775DD0",
+              "#546E7A",
+              "#26a69a",
+              "#D10CE8"
+            ],
+            fontSize: "12px"
+          }
+        }
+      }
+    };
 
+    this.FullPendingrealisationChartOptions = {
+      series: [
+        {
+          name: "Full",
+          data: [25, 70, 60, 30, 40, 80]
+        }
+      ],
+      chart: {
+        height: 180,
+        type: "bar",
+        events: {
+          click: function (chart, w, e) {
+            // console.log(chart, w, e)
+          }
+        }
+      },
+      colors: [
+        "#008FFB",
+        "#00E396",
+        "#FEB019",
+        "#FF4560",
+        "#775DD0",
+        "#546E7A",
+        "#26a69a",
+        "#D10CE8"
+      ],
+      plotOptions: {
+        bar: {
+          columnWidth: "45%",
+          distributed: true
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      legend: {
+        show: false
+      },
+      grid: {
+        show: false
+      },
+      xaxis: {
+        categories: [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
         ],
         labels: {
           style: {
@@ -798,17 +898,20 @@ export class DashboardTaskComponent implements OnInit {
     this.EDPMSChart = new ApexCharts(document.querySelector('#EdpmsChart'), this.edpmsChartOptions);
     this.EDPMSChart.render();
 
-    this.orderShipmentChart = new ApexCharts(document.querySelector('#orderShipmentChart'), this.orderPendingForShipmentChartOptions);
-    this.orderShipmentChart.render();
+    // this.orderShipmentChart = new ApexCharts(document.querySelector('#orderShipmentChart'), this.orderPendingForShipmentChartOptions);
+    // this.orderShipmentChart.render();
 
-    this.PendingrealisationChart = new ApexCharts(document.querySelector('#PendingRealisationChart'), this.PendingrealisationChartOptions);
-    this.PendingrealisationChart.render();
+    // this.PartialPendingrealisationChart = new ApexCharts(document.querySelector('#PartialPendingRealisationChart'), this.PartialPendingrealisationChartOptions);
+    // this.PartialPendingrealisationChart.render();
+
+    // this.FullPendingrealisationChart = new ApexCharts(document.querySelector('#FullPendingRealisationChart'), this.FullPendingrealisationChartOptions);
+    // this.FullPendingrealisationChart.render();
 
     this.packingCreditAvailedChart = new ApexCharts(document.querySelector('#PackingCreditAvailedChart'), this.packingCreditAvailedChartOptions);
     this.packingCreditAvailedChart.render();
 
-    this.totalBillLodgedChart = new ApexCharts(document.querySelector('#TotalBillLodgedChart'), this.totalBillLodgedChartOptions);
-    this.totalBillLodgedChart.render();
+    // this.totalBillLodgedChart = new ApexCharts(document.querySelector('#TotalBillLodgedChart'), this.totalBillLodgedChartOptions);
+    // this.totalBillLodgedChart.render();
   }
 
   handleImportData = () => {
@@ -832,7 +935,7 @@ export class DashboardTaskComponent implements OnInit {
 
     this.EDPMSChart.updateOptions({
       series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
-      labels: ["Pending", "Upload"],
+      labels: ["Pending", "Uploaded"],
     });
 
     let sampleDataforSPI = [
@@ -847,10 +950,25 @@ export class DashboardTaskComponent implements OnInit {
       { _id: 'BOE from SLBT', toTalcount: 3, awaitSubmit: 1 }
     ]
     this.shipmentSubmit = sampleDataforSS
-    this.progressBarvalue = 80
-    this.inwardRemitanceAmount = 15000
-    this.inwardRemitanceTotalCount = 65000
-    this.inwardRemitancePendingCount = 10
+    if (this.inwardRemitanceExportData?.totalCount > 0) {
+      let proBarValue = this.calculatePercentage(this.inwardRemitanceExportData?.importInwardData[0]?.pendingCount, this.inwardRemitanceExportData?.totalCount)
+      if (proBarValue) {
+        this.progressBarvalue = proBarValue
+        this.inwardRemitanceAmount = this.inwardRemitanceExportData?.importInwardData[0]?.toTalAmount
+        this.inwardRemitanceTotalCount = this.inwardRemitanceExportData?.totalCount
+        this.inwardRemitancePendingCount = this.inwardRemitanceExportData?.importInwardData[0]?.pendingCount
+      } else {
+        this.progressBarvalue = 0
+        this.inwardRemitanceAmount = 0
+        this.inwardRemitanceTotalCount = 0
+        this.inwardRemitancePendingCount = 0
+      }
+    } else {
+      this.progressBarvalue = 0
+      this.inwardRemitanceAmount = 0
+      this.inwardRemitanceTotalCount = 0
+      this.inwardRemitancePendingCount = 0
+    }
   }
 
   handleExportData = () => {
@@ -874,7 +992,7 @@ export class DashboardTaskComponent implements OnInit {
 
     this.EDPMSChart.updateOptions({
       series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
-      labels: ["Pending", "Upload"],
+      labels: ["Pending", "Uploaded"],
     });
     console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData, 'asdsadsadsadadasdasdsadsadsadsad')
 
@@ -937,7 +1055,6 @@ export class DashboardTaskComponent implements OnInit {
   }
 
   currencyFormate(number, currencyType) {
-
     try {
       return number.toLocaleString('en-US', { style: 'currency', currency: currencyType });
     }
@@ -950,5 +1067,115 @@ export class DashboardTaskComponent implements OnInit {
   ospTypeChange(data) {
     console.log("change", this.ospType)
     this.getOrderShipmentData()
+  }
+
+  OrderPendingforShipment(data: any) {
+    var dataPointsAmount: any = [];
+    var dataPointsInovice: any = [];
+    var dataPointsCurrency: any = [];
+    data?.forEach(element => {
+      dataPointsAmount?.push(element?.totalAmount)
+      dataPointsInovice?.push(element?.totalItems)
+      dataPointsCurrency?.push(element?._id)
+    });
+    this.ORDER_PENDING_SHIPMENT_SHOW_CHART = true;
+    setTimeout(() => {
+      var options = {
+        series: [{
+          name: 'No of Invoice',
+          type: 'column',
+          data: dataPointsInovice
+        }, {
+          name: 'Amount',
+          type: 'line',
+          data: dataPointsAmount
+        }],
+        chart: {
+          height: 230,
+          type: 'line',
+          toolbar: {
+            show: false
+          }
+        },
+        stroke: {
+          width: [0, 4]
+        },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1]
+        },
+        labels: dataPointsCurrency,
+        yaxis: [{
+          title: {
+            text: 'No of Invoice',
+          },
+        }, {
+          opposite: true,
+          title: {
+            text: 'Amount'
+          }
+        }]
+      };
+
+      var chart: any = new ApexCharts(document.querySelector("#ORDER_PENDING_SHIPMENT_SHOW_CHART_OPTIONS"), options);
+      chart?.render();
+
+      console.log(data, dataPointsAmount, dataPointsInovice,dataPointsCurrency, "newChart")
+    }, (150 * data?.length));
+  }
+
+  TotalBillLodgement(data: any) {
+    var dataPointsAmount: any = [];
+    var dataPointsInovice: any = [];
+    var dataPointsCurrency: any = [];
+    data?.forEach(element => {
+      dataPointsAmount?.push(element?.totalAmount)
+      dataPointsInovice?.push(element?.totalItems)
+      dataPointsCurrency?.push(element?._id)
+    });
+    this.TOTAL_BILL_LODGEMENT_SHOW_CHART = true;
+    setTimeout(() => {
+      var options = {
+        series: [{
+          name: 'No of Bill Ref.',
+          type: 'column',
+          data: dataPointsInovice
+        }, {
+          name: 'Amount',
+          type: 'line',
+          data: dataPointsAmount
+        }],
+        chart: {
+          height: 230,
+          type: 'line',
+          toolbar: {
+            show: false
+          }
+        },
+        stroke: {
+          width: [0, 4]
+        },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1]
+        },
+        labels: dataPointsCurrency,
+        yaxis: [{
+          title: {
+            text: 'No of Bill Ref.',
+          },
+        }, {
+          opposite: true,
+          title: {
+            text: 'Amount'
+          }
+        }]
+      };
+
+      var chart: any = new ApexCharts(document.querySelector("#TOTAL_BILL_LODGEMENT_SHOW_CHART_OPTIONS"), options);
+      chart?.render();
+
+      console.log(data, dataPointsAmount, dataPointsInovice,dataPointsCurrency, "newChart")
+    }, (150 * data?.length));
   }
 }

@@ -7,6 +7,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'export-airway-bl-copy',
@@ -39,6 +40,7 @@ export class AirwayBlCopyComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -52,12 +54,26 @@ export class AirwayBlCopyComponent implements OnInit {
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
         sbNo: {
-          type: "ShippingBill",
-          value: "",
-          label: "Select Shipping Bill",
+          type: "formGroup",
+          label: "",
+          GroupLabel: ['Shipping Bill 1'],
+          AddNewRequried: true,
           rules: {
-            required: true,
-          }
+            required: false,
+          },
+          formArray: [
+            [
+              {
+                type: "ShippingBill",
+                value: "",
+                label: "Select Shipping Bill",
+                rules: {
+                  required: true,
+                },
+                name: 'SBData',
+              }
+            ]
+          ]
         },
         date: {
           type: "date",
@@ -84,7 +100,15 @@ export class AirwayBlCopyComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
-    let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
+    let SB_NO:any=[];
+    let SB_ID:any=[];
+    let SB_ID_NO:any=[];
+    e?.value?.sbNo?.forEach(element => {
+      SB_ID.push(element?.SBData)
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === element?.SBData)[0];
+      SB_NO.push(selectedShippingBill?.sbno)
+      SB_ID_NO.push({id:element?.SBData,no:selectedShippingBill?.sbno})
+    });
     console.log('this is console of blcopy', e.value);
     e.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
@@ -92,31 +116,31 @@ export class AirwayBlCopyComponent implements OnInit {
     console.log('pipodoc', this.pipourl1);
     e.value.buyerName = this.BUYER_LIST;
     e.value.CommercialNumber = this.CommercialNumber
-    e.value.sbNo = selectedShippingBill?.sbno;
-    e.value.sbRef = [selectedShippingBill?._id];
-    console.log(e.value, selectedShippingBill, 'onSubmitblCopy');
+    e.value.sbNo = SB_NO?.join(',');
+    e.value.sbRef = SB_ID;
+    console.log(e.value, SB_ID, 'onSubmitblCopy');
     this.documentService.getInvoice_No({
       airwayBlCopyNumber: e.value.airwayBlCopyNumber
     }, 'airwayblcopies').subscribe((resp: any) => {
       console.log('creditNoteNumber Invoice_No', resp)
       if (resp.data.length == 0) {
         this.documentService.addAirwayBlcopyFile(e.value).subscribe((res: any) => {
-          this.toastr.success(`AWB/Bl Copy Succesffuly added`);
+          this.toastr.success(`AWB/Bl Copy Successfully added`);
           let updatedDataSB = {
             "blcopydetails": [
               res.data._id,
             ],
           }
-          this.documentService.updateMasterBySb(
-            updatedDataSB,
-            selectedShippingBill?.sbno,
-            selectedShippingBill?._id
-          ).subscribe((data) => {
-            console.log('updateMasterBySbupdateMasterBySb', data);
-          }, (error) => {
-            console.log('error');
-          }
-          );
+          SB_ID_NO?.forEach(element => {
+            this.documentService.updateMasterBySb(
+              updatedDataSB,
+              element?.no,
+              element?.id
+            ).subscribe((data) => {
+              console.log('updateMasterBySbupdateMasterBySb', data);
+            }, (error) => console.log('error'));
+          });
+         
           let updatedData = {
             "airwayBlCopyRef": [
               res.data._id,
@@ -124,26 +148,18 @@ export class AirwayBlCopyComponent implements OnInit {
           }
           this.userService.updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData).subscribe((data) => {
             console.log(data);
+            SB_ID_NO?.forEach(element => {
             this.documentService.updateMasterBySb(
               e.value,
-              selectedShippingBill?.sbno,
-              selectedShippingBill?._id
+              element?.no,
+              element?.id
             ).subscribe((data) => {
               console.log('DATA', data);
               this.router.navigate(['home/Summary/Export/airway-bl-copy']);
-            },
-              (error) => {
-                console.log('error');
-              }
-            );
-          },
-            (error) => {
-              console.log('error');
-            }
-          );
-        },
-          (err) => console.log('Error adding pipo')
-        );
+            },(error) => console.log('error'));
+            })
+          },(error) => console.log('error'));
+        },(err) => console.log('Error adding pipo'));
       } else {
         this.toastr.error(`Please check this airway-bl-copy no. : ${e.value.airwayBlCopyNumber} already exit...`);
       }
@@ -153,20 +169,52 @@ export class AirwayBlCopyComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.validator.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
-        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
-        }
-      }
+      this.LoadShippingBill(this.pipoArr);
     } else {
       this.btndisabled = true;
     }
-    console.log(event, this.validator.SHIPPING_BUNDEL,this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(event, this.validator.SHIPPING_BUNDEL, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
+  }
+
+  LoadShippingBill(pipoArr: any) {
+    let API_DATA: any = [];
+    pipoArr?.forEach(element => {
+      API_DATA.push({
+        query: { pipo: { $eq: element } }, tableName: "masterrecord", filterPage: { limit: 20 }
+      })
+    });
+    console.log(API_DATA, "API_DATA");
+    this.filteranytablepagination.PaginationfilterAnyTableList(API_DATA).subscribe((res: any) => {
+      console.log(res, "LoadShippingBill")
+      let DATA_WRAP: any = []
+      res?.forEach(element => {
+        element?.data?.forEach(SBElement => {
+          DATA_WRAP.push(SBElement);
+        });
+      });
+      this.validator.SHIPPING_BILL_MASTER_DATA = DATA_WRAP;
+      this.validator.origin = [];
+      this.validator.SHIPPING_BUNDEL = [];
+      this.validator.SHIPPING_BILL_LIST = [];
+      DATA_WRAP?.forEach((element, i) => {
+        if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
+          this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+          this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+        }
+        this.validator.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
+      });
+      console.log('Master Country', this.validator.SHIPPING_BUNDEL, this.validator.origin);
+    })
   }
 }

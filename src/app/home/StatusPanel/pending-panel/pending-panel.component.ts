@@ -31,7 +31,6 @@ export class PendingPanelComponent implements OnInit {
     this.userserivce.getUserDetail().then((status: any) => {
       this.USER_DETAILS = status['result'];
       console.log(this.USER_DETAILS, 'USER_DETAILS');
-
       this.documentService.getPendingStatus(this.USER_DETAILS?.sideMenu).subscribe((status) => {
         this.DATA_CREATE = status;
         this.documentService.getVerifyStatus(this.USER_DETAILS?.sideMenu).subscribe((status2: any) => {
@@ -214,10 +213,10 @@ export class PendingPanelComponent implements OnInit {
         } catch (error) {
           console.log(error, 'errror')
         }
-      }
-      else {
+      }else {
         try {
-          await this.pdfmerge._multiple_merge_pdf([item['dummydata']['doc'] != '' ? item['dummydata']['doc'] : item['dummydata']['doc1']]).then(async (merge: any) => {
+          var temp: any = item?.documents?.filter(n => n)
+          await this.pdfmerge._multiple_merge_pdf(temp).then(async (merge: any) => {
             this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, roletype, (value) => {
               console.log(value, "IframeConfirmDialogModel")
                 if (value?.Name == "Verify") {

@@ -6,13 +6,13 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../../../service/user.service'
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
-import * as data1 from '../../../../currency.json';
 import moment from "moment";
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
+
 
 @Component({
   selector: 'import-opinion-reports-summary',
@@ -35,7 +35,7 @@ export class ImportOpinionReportsComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    O_R_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -71,6 +71,8 @@ export class ImportOpinionReportsComponent implements OnInit {
     currency: '',
     buyerName: '',
   }
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -78,77 +80,127 @@ export class ImportOpinionReportsComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
+    public filteranytablepagination: TableServiceController,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) {
   }
 
-
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    for (let index = 0; index < data1['default']?.length; index++) {
-      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
-    }
-    this.item = [];
-    this.documentService.getOpinionReportfile("import").subscribe(
-      (res: any) => {
-        this.item = res?.data;
-        console.log(res, 'getOpinionReportfile');
-        this.FILTER_VALUE_LIST = this.item;
-        for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['O_R_No'].includes(value?.opinionReportNumber) == false) {
-            this.ALL_FILTER_DATA['O_R_No'].push(value?.opinionReportNumber);
-          }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.date);
-          }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'opinionreports',this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        this.OpinionReportTable(this.item)
-      },
-      (err) => console.log(err)
-    );
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+        console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select BENEFICIARY Name",
+            rules: {
+              required: false,
+            },
+            item: BENEFICIARY_DETAILS,
+            bindLabel: "value"
+          },
+          todate: {
+            type: "date",
+            value: "",
+            label: "Select Start Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          fromdate: {
+            type: "date",
+            value: "",
+            label: "Select End Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Pipo No",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
+      })
+    })
   }
 
-  OpinionReportTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          date: moment(element['date']).format("DD-MM-YYYY"),
-          opinionReportNumber: element['opinionReportNumber'],
-          ForeignPartyName: element['ForeignPartyName']?.value,
-          ReportDate: element['ReportDate'],
-          ReportRatings: element['ReportRatings'],
-          buyerName: element['buyerName'],
-          AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
-      });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
+ async onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+    };
+
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
       }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        date: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          date: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'opinionreports',this.FILTER_VALUE_LIST_NEW)?.opinionreports().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
     });
   }
+  
+  reset(){
+    this.ngOnInit()
+  }
 
+  SplitTime(numberOfHours) {
+    var Days = Math.floor(numberOfHours / 24);
+    var Remainder = numberOfHours % 24;
+    var Hours = Math.floor(Remainder);
+    var Minutes = Math.floor(60 * (Remainder - Hours));
+    return ({ "Days": Days, "Hours": Hours, "Minutes": Minutes })
+  }
   async removeEmpty(data: any) {
     await data.forEach(element => {
       for (const key in element) {
@@ -159,19 +211,7 @@ export class ImportOpinionReportsComponent implements OnInit {
     });
     return await new Promise(async (resolve, reject) => { await resolve(data) });
   }
-  
-  public SubtractDates(startDate: Date, endDate: Date): any {
-    let dateDiff = (endDate.getTime() - startDate.getTime()) / 1000;
-    var h: any = Math.floor(dateDiff / 3600);
-    return (h > 24 ? this.SplitTime(h)?.Days + 'days' :startDate.toDateString());
-  }
-  SplitTime(numberOfHours) {
-    var Days = Math.floor(numberOfHours / 24);
-    var Remainder = numberOfHours % 24;
-    var Hours = Math.floor(Remainder);
-    var Minutes = Math.floor(60 * (Remainder - Hours));
-    return ({ "Days": Days, "Hours": Hours, "Minutes": Minutes })
-  }
+
   getPipoNumber(pipo: any) {
     let temp: any = [];
     (pipo != 'NF' ? pipo : []).forEach(element => {
@@ -223,12 +263,15 @@ export class ImportOpinionReportsComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
   newOpinion() {
-    this.router.navigate(['home/upload', {file: 'import', document: 'import-opinionReport'}]);
+    console.log('upload');
+    // this.sharedData.changeretunurl('home/opinion-report')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'opinionReport' }]);
+    this.router.navigate(['/home/upload/Export/OpinionReports']);
   }
 
   toSave(data, index) {
@@ -257,11 +300,10 @@ export class ImportOpinionReportsComponent implements OnInit {
     });
   }
 
-  SELECTED_VALUE: any = '';
   toEdit(data: any) {
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/OpinionReports`],navigationExtras);
@@ -276,9 +318,9 @@ export class ImportOpinionReportsComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -298,6 +340,7 @@ export class ImportOpinionReportsComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -310,7 +353,7 @@ export class ImportOpinionReportsComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new OpinionReportFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new OpinionReportFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'OpinionReport.xlsx');
@@ -328,11 +371,13 @@ class OpinionReportFormat {
     var temp: any = [];
     this.data?.forEach(element => {
       temp.push({
-        PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
         opinionReportNumber: element['opinionReportNumber'],
         opinionReportAmount: element['opinionReportAmount'],
         currency: element['currency'],
+        ForeignPartyName: element['ForeignPartyName']?.value,
+        ReportDate: element['ReportDate'],
+        ReportRatings: element['ReportRatings'],
         buyerName: this.getBuyerName(element['buyerName']),
       })
     });
@@ -348,7 +393,7 @@ class OpinionReportFormat {
 
   getBuyerName(buyerName: any) {
     let temp: any = [];
-    buyerName.forEach(element => {
+    (buyerName!="NF"?buyerName:[])?.forEach(element => {
       temp.push(element);
     });
     return temp.join(',')

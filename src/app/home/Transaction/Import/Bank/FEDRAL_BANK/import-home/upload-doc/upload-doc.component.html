@@ -1,0 +1,172 @@
+<div class="content-wrap ml-0 scroll-bar-main">
+    <div class="container-fluid">
+        <div class="import_export_sec">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="Dashbord_sec">
+                        <h2 class="title_dash">Inward remittance settlement or disposal</h2>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="float_right_page">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <!-- <li class="breadcrumb-item"><a routerLink="/home/view-pipo">Documents</a></li> -->
+                                <li class="breadcrumb-item"><a routerLink="/home/pipo">Transactions</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Inward remittance settlement or disposal</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_white_background">
+            <div class="data_table_new">
+                <h3>Upload bank intimation / MT103</h3>
+                <div class="row">
+
+                    <div class="col-md-7 col-sm-12 col-xs-12 col-12" #input_disabled style="display: none;">
+                        <div class="iframe" *ngIf="this.iframeVisible==false">
+                            <div class="pdf_invoce">
+                                <div class="file_addd_to">
+                                    <div class="new_form_selct" method="POST">
+                                        <input  (error)="onUploadError($event)"
+                                         (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
+                                          (sending)="submit($event)" [dropzone]="config" class="dropzone dropzone-container"
+                                            id="dropzone" />
+                                        <img src="assets/new-img/Icon-feather-upload.svg" alt="Drag & drop files here or Browse" />
+                                        <h5>Drag & drop files here or <span class="change_textcolor">Browse</span></h5>
+                                        <p>Files supported: PDF, XSLS, Image, Scanner</p>
+                                        <p>Max. size: 5 MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progressbar" *ngIf="uploading">
+                                <div class="meter">
+                                    <span [style.width]="width + '%'"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sb2" *ngIf="iframeVisible==true && publicUrl!=null && publicUrl!=''">
+                            <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="550px" Newheight="600px"></app-pdf-viewer>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-12 col-xs-12 col-12">
+                        <div class="left_edit_form">
+                            <form [formGroup]="this.MT103_Form" (ngSubmit)="onUpload(this.MT103_Form)">
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Select bank name*</label>
+                                    <ng-select class="custom" *ngIf="this.UNIQUE_BANK.length!=0"
+                                    [items]="this.UNIQUE_BANK"
+                                    bindLabel="bank"
+                                    [multiple]="false"
+                                    placeholder="Select Bank Name"
+                                    ngModel
+                                    #bank_name formControlName="BankName" (change)="!this.MT103_Form.get('BankName').hasError('required')?input_disabled.style.display='block' : input_disabled.style.display='none';filterBankName($event?.bank)" [ngClass]="{ 'is-invalid': this.MT103_Form.get('BankName').errors }">
+                                  </ng-select>
+                                  <span class="invalid-feedback" *ngIf="this.MT103_Form.get('BankName').hasError('required') &&
+                                  (this.formSubmitted || this.MT103_Form.get('BankName').touched)">Please select bank is required
+                                  </span>
+                                 </div>
+                                <div *ngIf="this.iframeVisible==true && this.ObjectLength(this.dataPdf).length!=0">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Inward reference number</label>
+                                        <input #Inwardreferencenumber type="text" class="form-control" id="Amount"
+                                        aria-describedby="emailHelp" placeholder="1187651 80131" autocomplete="off"
+                                        formControlName="Inward_reference_number" [ngModel]="this.removeallSpace2('Uniquedigitldentifier',this.dataPdf)!='' ? this.removeallSpace2('Uniquedigitldentifier',this.dataPdf) : 0"
+                                        >
+                                        <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Inward_reference_number').hasError('required') &&
+                                        (this.formSubmitted || this.MT103_Form.get('Inward_reference_number').touched)">Inward reference number is required
+                                       </span>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="exampleInputEmail1" class="form-label">Amount</label>
+                                      <input #Amount type="number" class="form-control" id="Amount" aria-describedby="emailHelp"
+                                      placeholder="30713.25" autocomplete="off" formControlName="amount"
+                                      [ngModel]="replaceText(this.dataPdf['Amount'],'32A')==''?0 : replaceText(this.dataPdf['Amount'],'32A')">
+                                       <span class="invalid-feedback" *ngIf="this.MT103_Form.get('amount').hasError('required') &&
+                                       (this.formSubmitted || this.MT103_Form.get('amount').touched)">Amount is required
+                                      </span>
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Currency</label>
+                                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                                    [items]="this.CURRENCY_LIST"
+                                    bindLabel="type"
+                                    [multiple]="false"
+                                    placeholder="Select Currency"
+                                    [ngModel]="this.dataPdf?.CurrencyCode" #Currency formControlName="currency">
+                                  </ng-select>
+                                  <span class="invalid-feedback" *ngIf="this.MT103_Form.get('currency').hasError('required') &&
+                                  (this.formSubmitted || this.MT103_Form.get('currency').touched)">Currency is required
+                                 </span>
+                                </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Remitter name ( as per MT103 )</label>
+                                        <input #Remittername type="text" class="form-control" id="Amount" aria-describedby="emailHelp"
+                                        placeholder="NORMEKS AMBALAJ SANAYI LE TICARET"
+                                        autocomplete="off" formControlName="Remitter_Name"
+                                         [ngModel]="replaceText(this.dataPdf['RemittersCustomerName'],'50A/50K')">
+                                        <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Remitter_Name').hasError('required') &&
+                                        (this.formSubmitted || this.MT103_Form.get('Remitter_Name').touched)">Remitter Name is required
+                                      </span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Bill lodgment number</label>
+                                        <input #Billlodgmentnumber type="text" class="form-control"
+                                        id="Amount" aria-describedby="emailHelp" placeholder="Bill lodgment number"
+                                         autocomplete="off" [ngModel]="this.dataPdf['RemittanceInformation']!=undefined?this.dataPdf['RemittanceInformation'] : 0"
+                                         formControlName="Bill_lodgment_Number">
+                                         <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Bill_lodgment_Number').hasError('required') &&
+                                         (this.formSubmitted || this.MT103_Form.get('Bill_lodgment_Number').touched)">Bill lodgment Number Name is required
+                                       </span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Inward amount for disposal</label>
+                                        <input #Inwardamountfordisposal type="number" class="form-control" id="Amount" aria-describedby="emailHelp"
+                                         placeholder="00000.00" ngModel
+                                         formControlName="Inward_amount_for_disposal" autocomplete="off">
+                                         <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Inward_amount_for_disposal').hasError('required') &&
+                                         (this.formSubmitted || this.MT103_Form.get('Inward_amount_for_disposal').touched)">Inward amount for disposal is required
+                                       </span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Credit account number</label>
+                                        <ng-select
+                                        [items]="this.BANK_DETAILS"
+                                        bindLabel="value"
+                                        [multiple]="false"
+                                        placeholder="0000 0000 0000 0000"
+                                        formControlName="Credit_Account_Number" autocomplete="off" ngModel #Credit_account_number></ng-select>
+                                         <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Credit_Account_Number').hasError('required') &&
+                                         (this.formSubmitted || this.MT103_Form.get('Credit_Account_Number').touched)">Credit Account Number is required
+                                       </span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Charges account number</label>
+                                        <ng-select
+                                        [items]="this.BANK_DETAILS"
+                                        bindLabel="value"
+                                        [multiple]="false"
+                                        placeholder="Select Charges account number"
+                                        formControlName="Charges_Account_Number" ngModel #Charges_account_number></ng-select>
+                                        <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Charges_Account_Number').hasError('required') &&
+                                        (this.formSubmitted || this.MT103_Form.get('Charges_Account_Number').touched)">Charges Account Number is required
+                                      </span>
+                                    </div>
+                                    <div class="data_submit_righg">
+                                        <div class="data_submit">
+                                            <button type="button" class="btn btn-secondary" routerLink='/home/Pdf-Upload'>CANCEL</button>
+                                            <button type="submit" class="btn btn-primary">UPLOAD</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

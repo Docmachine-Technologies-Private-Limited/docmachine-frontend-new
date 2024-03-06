@@ -1,6 +1,4 @@
-
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { SharedDataService } from "../../../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 import { NavigationExtras, Router } from '@angular/router';
 import { DocumentService } from '../../../../service/document.service';
@@ -13,6 +11,8 @@ import { AprrovalPendingRejectTransactionsService } from '../../../../service/ap
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../../confirm-dialog-box/confirm-dialog-box.component';
 import moment from 'moment';
+import { TableServiceController } from '../../../../service/v1/TableServiceController';
+
 
 @Component({
   selector: 'import-destruction-summary',
@@ -36,7 +36,7 @@ export class ImportDestructionComponent implements OnInit {
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Buyer_Name: [],
-    Destruction_Certificate_No: [],
+    NO: [],
     Currency: [],
     DATE: []
   };
@@ -65,6 +65,9 @@ export class ImportDestructionComponent implements OnInit {
     destructionNumber: '',
     buyerName: '',
   }
+  FILTER_FORM: any = '';
+  FILTER_FORM_VALUE = [];
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -72,43 +75,119 @@ export class ImportDestructionComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private userService: UserService,
-    private sharedData: SharedDataService,
+    public filteranytablepagination: TableServiceController,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) { }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA);
-    this.item = [];
-    this.documentService.getDestructionfile("import").subscribe(
-      (res: any) => {
-        this.item = res?.data;
-        this.FILTER_VALUE_LIST = this.item;
-        for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['Destruction_Certificate_No'].includes(value?.destructionNumber) == false) {
-            this.ALL_FILTER_DATA['Destruction_Certificate_No'].push(value?.destructionNumber);
-          }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.destructionDate) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.destructionDate);
-          }
+    this.FILTER_FORM_VALUE = [];
+    await this.filteranytablepagination.LoadTableImport({}, { skip: 0, limit: 10 }, 'destructions',this.FILTER_VALUE_LIST_NEW)?.destructions().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+      for (let value of this.filteranytablepagination?.TABLE_CONTROLLER_DATA) {
+        if (this.ALL_FILTER_DATA['Buyer_Name'].filter((item: any) => item?.value == value?.buyerName)?.length == 0) {
+          this.ALL_FILTER_DATA['Buyer_Name'].push({ value: value?.buyerName });
         }
-        this.DestructionTable(this.item)
-        console.log(res, 'getDestructionfile');
-      },
-      (err) => console.log(err)
-    );
+        if (this.ALL_FILTER_DATA['NO'].filter((item: any) => item?.value == value?.pi_poNo)?.length == 0) {
+          this.ALL_FILTER_DATA['NO'].push({ value: value?.pi_poNo });
+        }
+        if (this.ALL_FILTER_DATA['DATE'].filter((item: any) => item?.value == value?.date)?.length == 0) {
+          this.ALL_FILTER_DATA['DATE'].push({ value: value?.date });
+        }
+      }
+      this.filteranytablepagination.UploadServiceValidatorService.BenneLoad().then((BENEFICIARY_DETAILS:any)=>{
+        console.log(BENEFICIARY_DETAILS, "BENEFICIARY_DETAILS")
+        this.FILTER_FORM = {
+          buyerName: {
+            type: "ArrayList",
+            value: "",
+            label: "Select BENEFICIARY Name",
+            rules: {
+              required: false,
+            },
+            item: BENEFICIARY_DETAILS,
+            bindLabel: "value"
+          },
+          todate: {
+            type: "date",
+            value: "",
+            label: "Select Start Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          fromdate: {
+            type: "date",
+            value: "",
+            label: "Select End Date",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['DATE'],
+            bindLabel: "value"
+          },
+          NO: {
+            type: "ArrayList",
+            value: "",
+            label: "Select Pipo No",
+            rules: {
+              required: false,
+            },
+            item: this.ALL_FILTER_DATA['NO'],
+            bindLabel: "value"
+          },
+        }
+      })
+    })
   }
+
+ async onSubmit(value: any) {
+    let form_value: any = {
+      buyerName: value?.value?.buyerName,
+      pi_poNo: value?.value?.NO,
+    };
+
+    if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        destructionDate: { $gte: value?.value?.todate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          destructionDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    } else if (value?.value?.todate != '' && value?.value?.todate != undefined) {
+      form_value = {
+        buyerName: value?.value?.buyerName,
+        pi_poNo: value?.value?.NO,
+        destructionDate: { $lt: value?.value?.fromdate }
+      };
+      if ((value?.value?.todate != '' && value?.value?.todate != undefined) && (value?.value?.fromdate != '' && value?.value?.fromdate != undefined)) {
+        form_value = {
+          buyerName: value?.value?.buyerName,
+          pi_poNo: value?.value?.NO,
+          destructionDate: { $gte: value?.value?.todate, $lt: value?.value?.fromdate }
+        };
+      }
+    }
+    this.FILTER_FORM_VALUE = this.filteranytablepagination.removeNullOrEmpty(form_value)
+    await this.filteranytablepagination.LoadTableImport(this.FILTER_FORM_VALUE, { skip: 0, limit: 10 }, 'destructions',this.FILTER_VALUE_LIST_NEW)?.destructions().then((res) => {
+      this.FILTER_VALUE_LIST_NEW = res;
+    });
+  }
+  
+  reset(){
+    this.ngOnInit()
+  }
+
 
   DestructionTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
@@ -117,7 +196,7 @@ export class ImportDestructionComponent implements OnInit {
       await newdata?.forEach(async (element) => {
         await this.FILTER_VALUE_LIST_NEW['items'].push({
           PipoNo: this.getPipoNumber(element['pipo']),
-          destructionDate: moment(element['destructionDate']).format('DD-MM-YYYY') ,
+          destructionDate: moment(element['destructionDate']).format('DD-MM-YYYY'),
           destructionNumber: element['destructionNumber'],
           buyerName: element['buyerName'],
           ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
@@ -192,7 +271,7 @@ export class ImportDestructionComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[a?.index]['doc']);
     }, 200);
   }
 
@@ -235,7 +314,7 @@ export class ImportDestructionComponent implements OnInit {
     // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "item": JSON.stringify(this.FILTER_VALUE_LIST[data?.index])
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/DestructionCertificates`],navigationExtras);
@@ -250,9 +329,9 @@ export class ImportDestructionComponent implements OnInit {
       data: dialogData
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      console.log("---->", this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index]?._id, this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
       }
     });
   }
@@ -272,6 +351,7 @@ export class ImportDestructionComponent implements OnInit {
         deleteflag: '-1',
         userdetails: this.USER_DATA['result'],
         status: 'pending',
+        documents:[index?.doc],
         dummydata: index,
         Types: 'deletion',
         TypeOfPage: 'summary',
@@ -284,11 +364,13 @@ export class ImportDestructionComponent implements OnInit {
   }
 
   newDest() {
-    this.router.navigate(['home/upload', { file: 'import', document: 'import-destruction' }]);
+    // this.sharedData.changeretunurl('home/destruction')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'destruction' }]);
+    this.router.navigate(['/home/upload/Export/DestructionCertificates']);
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new DestructionFormat(this.FILTER_VALUE_LIST).get());
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new DestructionFormat(this.filteranytablepagination?.TABLE_CONTROLLER_DATA).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Destruction.xlsx');

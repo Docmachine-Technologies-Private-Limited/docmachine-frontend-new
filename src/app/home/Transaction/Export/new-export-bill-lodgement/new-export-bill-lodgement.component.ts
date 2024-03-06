@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PDFDocument } from 'pdf-lib';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
@@ -13,9 +12,9 @@ import { ExportBillLodgementData } from './export-bill-lodgemet-data';
 import { AprrovalPendingRejectTransactionsService } from '../../../../service/aprroval-pending-reject-transactions.service';
 import { StorageEncryptionDecryptionService } from '../../../../Storage/storage-encryption-decryption.service';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
-import $ from 'jquery'
+import { ExportBillLodgementControllerData } from '../Controller/Export-Bill-Lodgement-Controller';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { ExportletterheadService } from '../../../AllBankFormat/FederalBank/exportletterheadold/exportoldletterhead.component';
 
 @Component({
   selector: 'new-export-bill-lodgement',
@@ -99,6 +98,9 @@ export class NewExportBillLodgementComponent implements OnInit {
     public pdfmerge: MergePdfListService,
     private actRoute: ActivatedRoute,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
+    public ExportBillLodgementControllerData: ExportBillLodgementControllerData,
+    public filteranytablepagination: filterAnyTablePagination,
+    public ExportletterheadService: ExportletterheadService,
     public userService: UserService) {
     exportbilllodgementdata.clear();
   }
@@ -150,248 +152,7 @@ export class NewExportBillLodgementComponent implements OnInit {
       this.exportbilllodgementdata.SELECTED_SHIPPING_BILL = data;
       this.FormValue(null, formvalue, null);
     }
-    console.log(data, this.exportbilllodgementdata.SELECTED_SHIPPING_BILL, "SubmitButton")
-  }
-
-  async fillForm(sbdata: any) {
-    console.log(sbdata, "sdfsdfsdfdsfd")
-    let formUrl: any = '';
-    this.VISIBLITY_PDF = false;
-    if (this.BankId != '') {
-      if (this.BankId == 'F_B_L_6') {
-        formUrl = './../../assets/pdf/FedralBank/Export_bill_submission_format.pdf'
-      }
-      const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-      const pdfDoc = await PDFDocument.load(formPdfBytes)
-      const doc = new jsPDF()
-
-      const form: any = pdfDoc?.getForm()
-      const getAllFields = form?.getFields();
-      getAllFields?.forEach(element => {
-        const elementvalue: any = element?.acroField?.dict?.values();
-        if (elementvalue[0]?.encodedName == '/Tx') {
-          element.setFontSize(8)
-          element?.enableReadOnly();
-          const [widget]: any = element?.acroField?.getWidgets();
-          widget?.getOrCreateBorderStyle()?.setWidth(0);
-        }
-      });
-
-      getAllFields[0]?.setText(this.validator.COMPANY_INFO[0]?.BranchName);
-      getAllFields[1]?.setText('');
-      getAllFields[2]?.setText('');
-      getAllFields[3]?.setText('');
-      getAllFields[4]?.setText('');
-      getAllFields[5]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
-      getAllFields[6]?.setText(this.validator.COMPANY_INFO[0]?.adress);
-      getAllFields[7]?.setText('');
-      getAllFields[8]?.setText('');
-      getAllFields[8]?.setText('');
-      getAllFields[9]?.setText('');
-      getAllFields[10]?.setText('');
-      getAllFields[11]?.setText('');
-      getAllFields[12]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName);
-      getAllFields[13]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs);
-      getAllFields[14]?.setText('');
-      getAllFields[15]?.setText('');
-      getAllFields[16]?.setText('');
-      getAllFields[17]?.setText('');
-      getAllFields[18]?.setText('');
-      getAllFields[19]?.uncheck();
-      getAllFields[20]?.uncheck();
-      getAllFields[21]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-      getAllFields[22]?.uncheck()
-      getAllFields[23]?.uncheck()
-      console.log(sbdata, this.ExportBillLodgement_Form, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
-
-      if (this.ExportBillLodgement_Form?.Sight?.bool == true) {
-        getAllFields[35]?.check();
-        getAllFields[36]?.uncheck();
-
-      } else if (this.ExportBillLodgement_Form?.Usance?.bool == true) {
-        getAllFields[35]?.uncheck();
-        getAllFields[36]?.check();
-        getAllFields[37]?.setText(this.ExportBillLodgement_Form?.Usancedays);
-        getAllFields[38]?.setText(this.ExportBillLodgement_Form?.Usancefrom);
-      }
-
-      let CommercialNumberList: any = [];
-      let FIRX_DATE_NO: any = {
-        NUMBER: [],
-        DATE: [],
-        CURRENCY: [],
-        AMOUNT: [],
-        RECIVCED_AMOUNT: [],
-        USED_AMOUNT: []
-      };
-      let dataTable: any = []
-      if (sbdata != null) {
-        sbdata?.firxdetails?.forEach(element => {
-          element?.FirxUsed_Balance?.split(',').forEach(FirxUsed_Balance => {
-            FIRX_DATE_NO?.AMOUNT?.push(FirxUsed_Balance)
-          });
-        });
-        let TOTAL_SUM_FIREX: any = FIRX_DATE_NO?.AMOUNT?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-        sbdata?.COMMERICAIL_DATA?.forEach(element => {
-          CommercialNumberList.push(element?.commercialNumber)
-          element?.MatchOffData?.forEach(IRM_REF_Element => {
-            FIRX_DATE_NO?.NUMBER?.push(IRM_REF_Element?.billNo)
-            FIRX_DATE_NO?.DATE?.push(IRM_REF_Element?.date)
-            FIRX_DATE_NO?.CURRENCY?.push(IRM_REF_Element?.currency)
-            FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.amount)
-            FIRX_DATE_NO?.USED_AMOUNT?.push(IRM_REF_Element?.InputValue)
-            dataTable.push([IRM_REF_Element?.date, IRM_REF_Element?.billNo, IRM_REF_Element?.amount,
-            IRM_REF_Element?.InputValue, element?.commercialNumber, element?.sbNo])
-          });
-        });
-
-        getAllFields[24]?.setText(CommercialNumberList?.join(","));
-        getAllFields[25]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '' + this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-        getAllFields[26]?.uncheck()
-        getAllFields[27]?.uncheck()
-        getAllFields[28]?.setText(FIRX_DATE_NO?.NUMBER?.slice(0, 3)?.join(','));
-        getAllFields[29]?.setText(FIRX_DATE_NO?.DATE?.slice(0, 3)?.join(','));
-        getAllFields[30]?.setText(FIRX_DATE_NO?.CURRENCY?.slice(0, 3)?.join(','));
-
-
-        getAllFields[39]?.setText('');
-
-        getAllFields[31]?.setText(!isNaN(TOTAL_SUM_FIREX) ? TOTAL_SUM_FIREX.toString() : '0');
-        getAllFields[32]?.setText(sbdata?.fobCurrency);
-        getAllFields[33]?.setText(sbdata?.fobValue != undefined ? this.ConvertNumberToWords(sbdata?.fobValue).toUpperCase() : '0');
-        getAllFields[34]?.setText(sbdata?.fobValue?.toString());
-
-        getAllFields[40]?.setText(sbdata?.pipo[0]?.HSCODE);
-        getAllFields[41]?.setText('');
-        getAllFields[42]?.setText(sbdata?.countryOfFinaldestination);
-        getAllFields[43]?.setText(sbdata['blcopydetails'] != undefined ? sbdata['blcopydetails'][0]?.airwayBlCopyNumber : '');
-        getAllFields[44]?.setText(sbdata?.sbno.toString());
-        getAllFields[45]?.setText(sbdata?.portCode);
-        getAllFields[46]?.setText(sbdata?.sbdate);
-        getAllFields[47]?.setText('');
-        getAllFields[48]?.setText('');
-        getAllFields[49]?.setText('');
-        getAllFields[50]?.setText('');
-        getAllFields[51]?.setText('');
-        getAllFields[52]?.setText('');
-        getAllFields[53]?.setText('');
-        getAllFields[54]?.setText('');
-        getAllFields[55]?.setText('');
-        getAllFields[56]?.setText('');
-        getAllFields[57]?.setText('');
-        getAllFields[58]?.setText('');
-        getAllFields[59]?.setText('');
-        getAllFields[60]?.setText('');
-        getAllFields[61]?.setText('');
-        getAllFields[62]?.setText('');
-        getAllFields[63]?.setText('');
-        getAllFields[64]?.setText('');
-
-        // // OD/CC/CA
-        getAllFields[65]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[0]);
-        getAllFields[66]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[1]);
-        getAllFields[67]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[2]);
-        getAllFields[68]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[3]);
-        getAllFields[69]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[4]);
-        getAllFields[70]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[5]);
-        getAllFields[71]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[6]);
-        getAllFields[72]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[7]);
-        getAllFields[73]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[8]);
-        getAllFields[74]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[9]);
-        getAllFields[75]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
-        getAllFields[76]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
-        getAllFields[77]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
-
-        getAllFields[78]?.setText('');
-        getAllFields[79]?.uncheck();
-        getAllFields[80]?.uncheck();
-        getAllFields[81]?.uncheck();
-        getAllFields[82]?.uncheck();
-        getAllFields[83]?.uncheck();
-        getAllFields[84]?.setText("");
-        getAllFields[85]?.uncheck();
-        getAllFields[86]?.uncheck();
-        getAllFields[87]?.uncheck();
-        getAllFields[88]?.setText(this.getCurrentDate().toString());
-        getAllFields[89]?.uncheck();
-        getAllFields[90]?.uncheck();
-        getAllFields[91]?.uncheck();
-        getAllFields[92]?.uncheck();
-        getAllFields[93]?.uncheck();
-        getAllFields[94]?.uncheck();
-        getAllFields[95]?.setText(this.getCurrentDate().toString());
-        getAllFields[96]?.setText('');
-        getAllFields[97]?.setText('');
-        getAllFields[98]?.setText('');
-        getAllFields[99]?.setText('');
-        getAllFields[100]?.setText('');
-        if (FIRX_DATE_NO?.DATE[0] != undefined) {
-          getAllFields[101]?.setText(FIRX_DATE_NO?.DATE[0]);
-          getAllFields[102]?.setText(FIRX_DATE_NO?.NUMBER[0]);
-          getAllFields[103]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
-          getAllFields[104]?.setText(FIRX_DATE_NO?.USED_AMOUNT[0]?.toString());
-        }
-        if (FIRX_DATE_NO?.DATE[1] != undefined) {
-          getAllFields[105]?.setText(FIRX_DATE_NO?.DATE[1]);
-          getAllFields[106]?.setText(FIRX_DATE_NO?.NUMBER[1]);
-          getAllFields[107]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
-          getAllFields[108]?.setText(FIRX_DATE_NO?.USED_AMOUNT[1]?.toString());
-        }
-        if (FIRX_DATE_NO?.DATE[2] != undefined) {
-          getAllFields[109]?.setText(FIRX_DATE_NO?.DATE[2]);
-          getAllFields[110]?.setText(FIRX_DATE_NO?.NUMBER[2]);
-          getAllFields[111]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
-          getAllFields[112]?.setText(FIRX_DATE_NO?.USED_AMOUNT[2]?.toString());
-        }
-        getAllFields[113]?.setText('');
-      }
-      await pdfDoc.save();
-
-      let text = "ANNEXURE – REMITTANCE RECEIVED";
-      var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
-      var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-      doc.text(text, pageWidth / 2, 20, { align: 'center' });
-      autoTable(doc, {
-        margin: { top: 30, left: 10, bottom: 30 },
-        head: [['Date', 'FIRX No.', 'Amount received', 'SB Setoff Amount', 'CI No.', 'SB No.']],
-        body: dataTable,
-      })
-      let tableuri = doc.output("arraybuffer");
-      console.log(tableuri, "tableuri")
-      const loadmergedPdf = await PDFDocument.load(tableuri);
-
-      const mergedPdf = await PDFDocument.create();
-      const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-      copiedPages.forEach((page, index) => {
-        if ((index + 1) != copiedPages?.length) {
-          mergedPdf.addPage(page);
-        }
-      });
-      if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
-        const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
-        copiedPages3.forEach((page) => {
-          mergedPdf.addPage(page);
-        });
-      }
-      const mergedPdfFile = await mergedPdf.save();
-      const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-      const mergedPdfFileload = await mergedPdfload.save();
-      var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-      const x1 = 'data:application/pdf;base64,' + base64String1;
-      this.PREVIWES_URL = '';
-      if (sbdata != undefined && sbdata != null) {
-        sbdata["PREVIWES_URL"] = ''
-        this.exportbilllodgementdata.PREVIWES_URL = '';
-      }
-      setTimeout(() => {
-        this.PREVIWES_URL = x1;
-        this.VISIBLITY_PDF = true;
-        if (sbdata != undefined && sbdata != null) {
-          this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
-          sbdata["PREVIWES_URL"] = this.PREVIWES_URL;
-        }
-      }, 200);
-    }
+    console.log(data, formvalue.value, this.exportbilllodgementdata.SELECTED_SHIPPING_BILL, "SubmitButton")
   }
 
   _arrayBufferToBase64(buffer) {
@@ -545,7 +306,32 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["AgainstAdvanceReceipt", "UnderLC", "Sight", "Usancedays", "Usancefrom", "Usance", "WithScrutiny", "BuyerRemitterDifferent", "InvoiceReduction", "WithDiscount"]
+          YesButton: [
+            { name: 'AgainstAdvanceReceipt', status: true },
+            { name: 'UnderLC', status: false },
+            { name: 'Sight', status: true },
+            { name: 'Usancedays', status: true },
+            { name: 'Usancefrom', status: true },
+            { name: 'Usance', status: true },
+            { name: 'WithScrutiny', status: true },
+            { name: 'BuyerRemitterDifferent', status: true },
+            { name: 'InvoiceReduction', status: true },
+            { name: 'WithDiscount', status: true },
+            { name: 'UnderLCData', status: false },
+          ],
+          NoButton: [
+            { name: 'AgainstAdvanceReceipt', status: true },
+            { name: 'UnderLC', status: true },
+            { name: 'Sight', status: true },
+            { name: 'Usancedays', status: true },
+            { name: 'Usancefrom', status: true },
+            { name: 'Usance', status: true },
+            { name: 'WithScrutiny', status: true },
+            { name: 'BuyerRemitterDifferent', status: true },
+            { name: 'InvoiceReduction', status: true },
+            { name: 'WithDiscount', status: true },
+            { name: 'UnderLCData', status: true },
+          ],
         },
         Sight: {
           type: "yesnocheckbox",
@@ -555,7 +341,28 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Usance", "Usancedays", "Usancefrom"]
+          YesButton: [
+            { name: 'Usance', status: true },
+            { name: 'Usancedays', status: true },
+            { name: 'Usancefrom', status: true },
+          ],
+          NoButton: [
+            { name: 'Usance', status: false },
+            { name: 'Usancedays', status: false },
+            { name: 'Usancefrom', status: false },
+          ],
+          callback: (item: any) => {
+            console.log(item, "Sight")
+            if (item?.bool == false) {
+              item.field[5]['divhide'] = false;
+              item.field[6]['divhide'] = false;
+              item.field[7]['divhide'] = false;
+            } else {
+              item.field[5]['divhide'] = true;
+              item.field[6]['divhide'] = true;
+              item.field[7]['divhide'] = true;
+            }
+          }
         },
         Usance: {
           type: "yesnocheckbox",
@@ -565,7 +372,13 @@ export class NewExportBillLodgementComponent implements OnInit {
             required: true,
           },
           YesNo: '',
-          HideShowInput: ["Sight"]
+          YesButton: [
+            { name: 'Sight', status: true }
+          ],
+          NoButton: [
+            { name: 'Sight', status: false }
+          ],
+          divhide: true
         },
         Usancedays: {
           type: "text",
@@ -574,6 +387,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
+          divhide: true
         },
         Usancefrom: {
           type: "text",
@@ -582,6 +396,7 @@ export class NewExportBillLodgementComponent implements OnInit {
           rules: {
             required: true,
           },
+          divhide: true
         },
         WithScrutiny: {
           type: "yesnocheckbox",
@@ -601,9 +416,40 @@ export class NewExportBillLodgementComponent implements OnInit {
           },
           YesNo: ''
         },
+        YesNoUnderLCAsk: {
+          type: "yesnocheckbox",
+          value: '',
+          label: "Under LC?",
+          rules: {
+            required: true,
+          },
+          YesNo: '',
+          YesButton: [
+            { name: 'UnderLCData', status: true }
+          ],
+          NoButton: [
+            { name: 'UnderLCData', status: false }
+          ]
+        },
+        UnderLCData: {
+          type: "DropDown",
+          value: '',
+          items: [],
+          bindLabel: "letterOfCreditNumber",
+          label: "Select LC No.",
+          rules: {
+            required: true,
+          },
+          divhide: true,
+          ButtonId: "UPLOAD_LC",
+          Show: true,
+          innerHTML: `<i class="fa fa-upload" aria-hidden="true"></i>`,
+          style: ``
+        },
       }, 'EXPORT_BILL_OF_EXCHANGE');
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
+
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
 
@@ -635,6 +481,17 @@ export class NewExportBillLodgementComponent implements OnInit {
       } else {
         this.SINGLE_TAB_MULITIPLE_TAB = "2";
       }
+    } else if (value?.id == "YesNoUnderLCAsk") {
+      if (value?.bool == true) {
+        this.filteranytablepagination.PaginationfilterAnyTable({
+          buyerName: this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.BuyerName
+        }, { skip: 0, limit: 1000 }, 'LC').subscribe((res: any) => {
+          console.log(res, 'Beneficiary');
+          this.validator.DROP_DOWN_DATA = res?.data;
+        });
+      } else {
+        this.validator.DROP_DOWN_DATA = [];
+      }
     }
     console.log(value, "YesNoCheckBox")
   }
@@ -660,7 +517,8 @@ export class NewExportBillLodgementComponent implements OnInit {
     }
   }
 
-  AllCreateTransaction() {
+  AllCreateTransaction(panel: any) {
+    this.OTHER_DOCUMENTS = [];
     for (let index = 0; index < this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length; index++) {
       const element = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS[index];
       if (this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.length != 0) {
@@ -673,13 +531,20 @@ export class NewExportBillLodgementComponent implements OnInit {
           name: 'blCopy',
           pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.blCopyDoc
         }
-        this.OTHER_DOCUMENTS[2] = {
-          name: 'Commercial',
-          pdf: this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.commercialDoc
+        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.forEach((commercialdetailselement, j) => {
+          this.OTHER_DOCUMENTS[(2 + j)] = {
+            name: 'Commercial-' + (j + 1),
+            pdf: commercialdetailselement?.commercialDoc
+          }
+        });
+        if ((index + 1) == this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length) {
+          console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, this.OTHER_DOCUMENTS, "OTHER_DOCUMENTS")
+          this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]['ALL_RELATED_DOCUMENTS'] = this.OTHER_DOCUMENTS;
+          panel?.displayHidden
         }
-        this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]['ALL_RELATED_DOCUMENTS'] = this.OTHER_DOCUMENTS;
       } else {
         this.toastr.error("Please select atleast one commercial no.")
+        break;
       }
     }
   }
@@ -805,47 +670,111 @@ export class NewExportBillLodgementComponent implements OnInit {
     }
   }
 
+  TIMEOUT: any = ''
+  async fillForm(sbdata: any) {
+    console.log(sbdata, "sdfsdfsdfdsfd")
+    let formUrl: any = '';
+    this.VISIBLITY_PDF = false;
+    if (this.BankId != '') {
+      if (this.BankId == 'F_B_L_6') {
+        this.ExportBillLodgementControllerData.BankFormatLoad().
+          FedralNotANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then(async (res: any) => {
+            this.TIMEOUT = setTimeout(async () => {
+              if (sbdata != undefined && sbdata != null) {
+                this.exportbilllodgementdata.PREVIWES_URL = '';
+              }
+              this.PREVIWES_URL = res;
+              this.VISIBLITY_PDF = true;
+              if (sbdata != undefined && sbdata != null) {
+                this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+              }
+              this.LETTER_HEAD_URL = ''
+              await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
+                this.LETTER_HEAD_URL = letterhead;
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              })
+              console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+            }, 200);
+          })
+      } else if (this.BankId == 'H_B_L_7') {
+        this.PREVIWES_URL = ''
+        if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
+          this.ExportBillLodgementControllerData.BankFormatLoad().
+            HDFCExportRegularization(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+              this.TIMEOUT = setTimeout(async () => {
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = '';
+                }
+                this.PREVIWES_URL = res;
+                this.VISIBLITY_PDF = true;
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+                }
+                this.LETTER_HEAD_URL = ''
+                await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
+                  this.LETTER_HEAD_URL = letterhead;
+                  console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+                })
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              }, 200);
+            })
+        } else {
+          this.ExportBillLodgementControllerData.BankFormatLoad().
+            HDFCExportLODGEMENT(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+              this.TIMEOUT = setTimeout(async () => {
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = '';
+                }
+                this.PREVIWES_URL = res;
+                this.VISIBLITY_PDF = true;
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+                }
+                this.LETTER_HEAD_URL = ''
+                await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
+                  this.LETTER_HEAD_URL = letterhead;
+                  console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+                })
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              }, 200);
+            })
+        }
+      }
+    }
+  }
+
+
   PREVIOUD_BTN: boolean = true;
   async FormValueSingle(event: any, fromValue: any, sbdata: any, bool: any) {
-    console.log(fromValue, sbdata, "FormValue");
     if (fromValue?.status != "INVALID") {
       this.ExportBillLodgement_Form = fromValue?.value;
       if (bool == true) {
         this.PREVIEWS_URL_LIST = ''
         this.alldocuments = [];
-        if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-          await this.fillFormSingle(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION).then(async (res: any) => {
-            await this.getS3Url2().then(async (res: any) => {
-              await res?.forEach(element => {
-                this.alldocuments.push(element)
-              });
-              if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-                this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS = [];
-                this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(element => {
-                  sbdata[element]?.ALL_RELATED_DOCUMENTS?.forEach(sbelement => {
-                    this.alldocuments.push(sbelement?.pdf)
-                    this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS.push(sbelement);
-                  });
-                });
-              } else {
-                sbdata?.ALL_RELATED_DOCUMENTS?.forEach(element => {
-                  this.alldocuments.push(element?.pdf)
-                });
-              }
-              var fitertemp: any = this.alldocuments.filter(n => n);
-              await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-                  this.PREVIEWS_URL_LIST = merge?.pdfurl;
-                  this.SELECTED_PREVIEWS_URL = ''
-                  setTimeout(() => {
-                    this.SELECTED_PREVIEWS_URL = merge?.pdfurl
-                    this.PREVIOUD_BTN = false;
-                  }, 500);
-                }
+        console.log(fromValue, sbdata, "FormValueSingle");
+        await this.fillFormSingle(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION).then(async (res: any) => {
+          await this.getS3Url2().then(async (res: any) => {
+            await res?.forEach(element => {
+              this.alldocuments.push(element)
+            });
+            this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS = [];
+            this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(element => {
+              sbdata[element]?.ALL_RELATED_DOCUMENTS?.forEach(sbelement => {
+                this.alldocuments.push(sbelement?.pdf)
+                this.exportbilllodgementdata.ALL_RELATED_DOCUMENTS.push(sbelement);
               });
             });
+            var fitertemp: any = this.alldocuments.filter(n => n);
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+              this.PREVIEWS_URL_LIST = merge?.pdfurl;
+              this.SELECTED_PREVIEWS_URL = ''
+              setTimeout(() => {
+                this.SELECTED_PREVIEWS_URL = merge?.pdfurl
+                this.PREVIOUD_BTN = false;
+              }, 500);
+            });
           });
-        }
+        });
       }
       console.log(this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION, this.PREVIEWS_URL_LIST, 'FormValueSinglePreviewSlideToggle')
     }
@@ -876,307 +805,101 @@ export class NewExportBillLodgementComponent implements OnInit {
       this.VISIBLITY_PDF = false;
       if (this.BankId != '') {
         if (this.BankId == 'F_B_L_6') {
-          formUrl = './../../assets/pdf/FedralBank/Export_bill_submission_format.pdf'
-        }
-        const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-        const pdfDoc = await PDFDocument.load(formPdfBytes)
-        const form: any = pdfDoc?.getForm()
-        const getAllFields = form?.getFields();
-        getAllFields?.forEach(element => {
-          const elementvalue: any = element?.acroField?.dict?.values();
-          if (elementvalue[0]?.encodedName == '/Tx') {
-            element.setFontSize(8)
-            element?.enableReadOnly();
-            const [widget]: any = element?.acroField?.getWidgets();
-            widget?.getOrCreateBorderStyle()?.setWidth(0);
+          this.PREVIWES_URL = ''
+          this.ExportBillLodgementControllerData.BankFormatLoad().
+            FedralWithANNEXURE(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+              this.TIMEOUT = setTimeout(async () => {
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = '';
+                }
+                this.PREVIWES_URL = res;
+                this.VISIBLITY_PDF = true;
+                if (sbdata != undefined && sbdata != null) {
+                  this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+                }
+                this.LETTER_HEAD_URL = ''
+                await this.ExportletterheadService.createLetterHead().NewFederalMultiple(this.validator,this.exportbilllodgementdata, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
+                  this.LETTER_HEAD_URL = letterhead;
+                  console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+                })
+                resolve(this.PREVIWES_URL)
+                console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+              }, 200);
+            })
+        } else if (this.BankId == 'H_B_L_7') {
+          this.PREVIWES_URL = ''
+          if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
+            this.ExportBillLodgementControllerData.BankFormatLoad().
+              HDFCExportRegularization(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+                this.TIMEOUT = setTimeout(async () => {
+                  if (sbdata != undefined && sbdata != null) {
+                    this.exportbilllodgementdata.PREVIWES_URL = '';
+                  }
+                  this.PREVIWES_URL = res;
+                  this.VISIBLITY_PDF = true;
+                  if (sbdata != undefined && sbdata != null) {
+                    this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+                  }
+                  resolve(this.PREVIWES_URL)
+                  this.LETTER_HEAD_URL = ''
+                  await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
+                    this.LETTER_HEAD_URL = letterhead;
+                    console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+                  })
+                  console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+                }, 200);
+              })
+          } else {
+            this.ExportBillLodgementControllerData.BankFormatLoad().
+              HDFCExportLODGEMENT(this.validator, this.exportbilllodgementdata, sbdata, this.ExportBillLodgement_Form, this.SELECT_BUYER_DETAILS).then((res: any) => {
+                this.TIMEOUT = setTimeout(async () => {
+                  if (sbdata != undefined && sbdata != null) {
+                    this.exportbilllodgementdata.PREVIWES_URL = '';
+                  }
+                  this.PREVIWES_URL = res;
+                  this.VISIBLITY_PDF = true;
+                  if (sbdata != undefined && sbdata != null) {
+                    this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
+                  }
+                  resolve(this.PREVIWES_URL)
+                  this.LETTER_HEAD_URL = ''
+                  await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
+                    this.LETTER_HEAD_URL = letterhead;
+                    console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+                  })
+                  console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+                }, 200);
+              })
           }
-        });
-
-        getAllFields[0]?.setText('');
-        getAllFields[1]?.setText('');
-        getAllFields[2]?.setText('');
-        getAllFields[3]?.setText('');
-        getAllFields[4]?.setText('');
-        getAllFields[5]?.setText(this.validator.COMPANY_INFO[0]?.teamName);
-        getAllFields[6]?.setText(this.validator.COMPANY_INFO[0]?.adress);
-        getAllFields[7]?.setText('');
-        getAllFields[8]?.setText('');
-        getAllFields[8]?.setText('');
-        getAllFields[9]?.setText('');
-        getAllFields[10]?.setText('');
-        getAllFields[11]?.setText('');
-        getAllFields[12]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName);
-        getAllFields[13]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs);
-        getAllFields[14]?.setText('');
-        getAllFields[15]?.setText('');
-        getAllFields[16]?.setText('');
-        getAllFields[17]?.setText('');
-        getAllFields[18]?.setText('');
-        getAllFields[19]?.uncheck();
-        getAllFields[20]?.uncheck();
-        getAllFields[21]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-        getAllFields[22]?.uncheck()
-        getAllFields[23]?.uncheck()
-        console.log(sbdata, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
-        if (this.ExportBillLodgement_Form?.Sight?.bool == true) {
-          getAllFields[35]?.check();
-          getAllFields[36]?.uncheck();
-
-        } else if (this.ExportBillLodgement_Form?.Usance?.bool == true) {
-          getAllFields[35]?.uncheck();
-          getAllFields[36]?.check();
-          getAllFields[37]?.setText(this.ExportBillLodgement_Form?.Usancedays);
-          getAllFields[38]?.setText(this.ExportBillLodgement_Form?.Usancefrom);
         }
-        let CommercialNumberList: any = [];
-        let FIRX_DATE_NO: any = {
-          NUMBER: [],
-          DATE: [],
-          CURRENCY: [],
-          AMOUNT: [],
-          RECIVCED_AMOUNT: [],
-          USED_AMOUNT: [],
-          TOTAL_SB_NO: [],
-          TOTAL_SB_AMOUNT: [],
-          TOTAL_SB_CURRENCY: [],
-          TOTAL_SB_PORT_CODE: [],
-          TOTAL_SB_DATE: [],
-          TOTAL_SB_COUNTRY_FINAL_DESTINATION: [],
-          blcopydetails: []
-        };
-        let dataTable: any = []
-        let SbdataTable: any = []
-        if (this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length != 0) {
-          let hscodelist: any = [];
-          this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(sbelement => {
-            sbdata[sbelement]?.firxdetails?.forEach(element => {
-              element?.FirxUsed_Balance?.split(',').forEach(FirxUsed_Balance => {
-                FIRX_DATE_NO?.AMOUNT?.push(FirxUsed_Balance)
-              });
-            });
-            FIRX_DATE_NO?.TOTAL_SB_NO?.push(sbdata[sbelement]?.sbno);
-            FIRX_DATE_NO?.TOTAL_SB_AMOUNT?.push(sbdata[sbelement]?.fobValue);
-            FIRX_DATE_NO?.TOTAL_SB_CURRENCY?.push(sbdata[sbelement]?.fobCurrency);
-            FIRX_DATE_NO?.TOTAL_SB_PORT_CODE?.push(sbdata[sbelement]?.portCode);
-            FIRX_DATE_NO?.TOTAL_SB_DATE?.push(sbdata[sbelement]?.sbdate);
-            FIRX_DATE_NO?.TOTAL_SB_COUNTRY_FINAL_DESTINATION?.push(sbdata[sbelement]?.countryOfFinaldestination);
-            FIRX_DATE_NO?.blcopydetails?.push(sbdata[sbelement]['blcopydetails'][0]?.airwayBlCopyNumber);
-            hscodelist.push(sbdata[sbelement]?.pipo[0]?.HSCODE)
-            SbdataTable.push([sbdata[sbelement]?.sbdate, sbdata[sbelement]?.sbno, sbdata[sbelement]?.fobValue])
-          });
-
-          let TOTAL_SUM_FIREX: any = FIRX_DATE_NO?.AMOUNT?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-          let TOTAL_SB_SUM: any = FIRX_DATE_NO?.TOTAL_SB_AMOUNT?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-          this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(sbelement => {
-            sbdata[sbelement]?.COMMERICAIL_DATA?.forEach(element => {
-              CommercialNumberList.push(element?.commercialNumber)
-              element?.MatchOffData?.forEach(IRM_REF_Element => {
-                FIRX_DATE_NO?.NUMBER?.push(IRM_REF_Element?.billNo)
-                FIRX_DATE_NO?.DATE?.push(IRM_REF_Element?.date)
-                FIRX_DATE_NO?.CURRENCY?.push(IRM_REF_Element?.currency)
-                FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.amount)
-                FIRX_DATE_NO?.USED_AMOUNT?.push(IRM_REF_Element?.InputValue)
-                dataTable.push([IRM_REF_Element?.date, IRM_REF_Element?.billNo, IRM_REF_Element?.amount,
-                IRM_REF_Element?.InputValue, element?.commercialNumber, element?.sbNo])
-              });
-            });
-          });
-
-          getAllFields[24]?.setText(CommercialNumberList?.join(","));
-          getAllFields[25]?.setText(this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '' + this.exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-          getAllFields[26]?.uncheck()
-          getAllFields[27]?.uncheck()
-          getAllFields[28]?.setText("As per Annexure Attached");
-          getAllFields[29]?.setText("As per Annexure Attached");
-          getAllFields[30]?.setText("As per Annexure Attached");
-
-          getAllFields[39]?.setText('');
-
-          getAllFields[31]?.setText("As per Annexure Attached");
-          getAllFields[32]?.setText("As per Annexure Attached");
-          getAllFields[33]?.setText("As per Annexure Attached");
-          getAllFields[34]?.setText("As per Annexure Attached");
-
-          getAllFields[40]?.setText("As per Shiiping bill Attached");
-          getAllFields[41]?.setText('');
-          getAllFields[42]?.setText("Refer Shipping Bill attached");
-          getAllFields[43]?.setText("As per Annexure Attached");
-          getAllFields[44]?.setText("As per Annexure Attached");
-          getAllFields[45]?.setText("As per Annexure Attached");
-          getAllFields[46]?.setText("As per Annexure Attached");
-          getAllFields[47]?.setText('');
-          getAllFields[48]?.setText('');
-          getAllFields[49]?.setText('');
-          getAllFields[50]?.setText('');
-          getAllFields[51]?.setText('');
-          getAllFields[52]?.setText('');
-          getAllFields[53]?.setText('');
-          getAllFields[54]?.setText('');
-          getAllFields[55]?.setText('');
-          getAllFields[56]?.setText('');
-          getAllFields[57]?.setText('');
-          getAllFields[58]?.setText('');
-          getAllFields[59]?.setText('');
-          getAllFields[60]?.setText('');
-          getAllFields[61]?.setText('');
-          getAllFields[62]?.setText('');
-          getAllFields[63]?.setText('');
-          getAllFields[64]?.setText('');
-
-          // // OD/CC/CA
-          getAllFields[65]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[0]);
-          getAllFields[66]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[1]);
-          getAllFields[67]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[2]);
-          getAllFields[68]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[3]);
-          getAllFields[69]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[4]);
-          getAllFields[70]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[5]);
-          getAllFields[71]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[6]);
-          getAllFields[72]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[7]);
-          getAllFields[73]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[8]);
-          getAllFields[74]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[9]);
-          getAllFields[75]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[10]);
-          getAllFields[76]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[11]);
-          getAllFields[77]?.setText(this.SELECT_BUYER_DETAILS?.accNumber?.split('')[12]);
-
-          getAllFields[78]?.setText('');
-          getAllFields[79]?.uncheck();
-          getAllFields[80]?.uncheck();
-          getAllFields[81]?.uncheck();
-          getAllFields[82]?.uncheck();
-          getAllFields[83]?.uncheck();
-          getAllFields[84]?.setText("");
-          getAllFields[85]?.uncheck();
-          getAllFields[86]?.uncheck();
-          getAllFields[87]?.uncheck();
-          getAllFields[88]?.setText(this.getCurrentDate().toString());
-          getAllFields[89]?.uncheck();
-          getAllFields[90]?.uncheck();
-          getAllFields[91]?.uncheck();
-          getAllFields[92]?.uncheck();
-          getAllFields[93]?.uncheck();
-          getAllFields[94]?.uncheck();
-          getAllFields[95]?.setText(this.getCurrentDate().toString());
-          getAllFields[96]?.setText('');
-          getAllFields[97]?.setText('');
-          getAllFields[98]?.setText('');
-          getAllFields[99]?.setText('');
-          getAllFields[100]?.setText('');
-          // if (FIRX_DATE_NO?.DATE[0] != undefined) {
-          //   getAllFields[101]?.setText(FIRX_DATE_NO?.DATE[0]);
-          //   getAllFields[102]?.setText(FIRX_DATE_NO?.NUMBER[0]);
-          //   getAllFields[103]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[0]?.toString());
-          //   getAllFields[104]?.setText(FIRX_DATE_NO?.USED_AMOUNT[0]?.toString());
-          // }
-          // if (FIRX_DATE_NO?.DATE[1] != undefined) {
-          //   getAllFields[105]?.setText(FIRX_DATE_NO?.DATE[1]);
-          //   getAllFields[106]?.setText(FIRX_DATE_NO?.NUMBER[1]);
-          //   getAllFields[107]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[1]?.toString());
-          //   getAllFields[108]?.setText(FIRX_DATE_NO?.USED_AMOUNT[1]?.toString());
-          // }
-          // if (FIRX_DATE_NO?.DATE[2] != undefined) {
-          //   getAllFields[109]?.setText(FIRX_DATE_NO?.DATE[2]);
-          //   getAllFields[110]?.setText(FIRX_DATE_NO?.NUMBER[2]);
-          //   getAllFields[111]?.setText(FIRX_DATE_NO?.RECIVCED_AMOUNT[2]?.toString());
-          //   getAllFields[112]?.setText(FIRX_DATE_NO?.USED_AMOUNT[2]?.toString());
-          // }
-          getAllFields[113]?.setText('');
-        }
-        await pdfDoc.save();
-
-        const doc = new jsPDF()
-        let SBtext = "ANNEXURE – SHIPPING BILL RECEIVED";
-        var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-        doc.text(SBtext, pageWidth / 2, 20, { align: 'center' });
-
-        autoTable(doc, {
-          margin: { top: 30, left: 10, bottom: 30 },
-          head: [['SB Date', 'SB No.', 'SB Amount']],
-          body: SbdataTable,
-        })
-        let SBtableuri = doc.output("arraybuffer");
-        console.log(SBtableuri, "SBtableuri")
-        const SBloadmergedPdf = await PDFDocument.load(SBtableuri);
-        const doc1 = new jsPDF()
-        let text = "ANNEXURE – REMITTANCE RECEIVED";
-        var pageWidth = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
-        doc1.text(text, pageWidth / 2, 20, { align: 'center' });
-
-        autoTable(doc1, {
-          margin: { top: 30, left: 10, bottom: 30 },
-          head: [['Date', 'FIRX No.', 'Amount received', 'SB Setoff Amount', 'CI No.', 'SB No.']],
-          body: dataTable,
-        })
-        let tableuri = doc1.output("arraybuffer");
-        console.log(tableuri, "tableuri")
-        const loadmergedPdf = await PDFDocument.load(tableuri);
-
-        const mergedPdf = await PDFDocument.create();
-        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-        copiedPages.forEach((page, index) => {
-          if ((index + 1) != copiedPages?.length) {
-            mergedPdf.addPage(page);
-          }
-        });
-
-        const copiedPages2 = await mergedPdf.copyPages(SBloadmergedPdf, SBloadmergedPdf.getPageIndices());
-        copiedPages2.forEach((page) => {
-          mergedPdf.addPage(page);
-        });
-
-        if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
-          const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
-          copiedPages3.forEach((page) => {
-            mergedPdf.addPage(page);
-          });
-        }
-
-        const mergedPdfFile = await mergedPdf.save();
-        const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-        const mergedPdfFileload = await mergedPdfload.save();
-        var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-        const x1 = 'data:application/pdf;base64,' + base64String1;
-        this.PREVIWES_URL = ''
-        this.exportbilllodgementdata.PREVIWES_URL = '';
-        setTimeout(async () => {
-          this.PREVIWES_URL = x1;
-          this.exportbilllodgementdata.PREVIWES_URL = x1;
-          this.VISIBLITY_PDF = true;
-          console.log(x1, "ANNEXURE_REMITTANCE_RECEIVED")
-          await resolve(x1)
-        }, 200);
       }
     })
   }
 
   async SendApproval(Status: string, UniqueId: any, event: any) {
-    var UpdatedUrl: any = [];
     if (UniqueId != null) {
       var approval_data: any = {};
       delete this.USER_DATA?.members_list
       delete this.USER_DATA?.LoginToken
       let mergePdf_List: any = [];
-      if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
-        for (let index = 0; index < this.alldocuments.length; index++) {
-          const element = this.alldocuments[index];
-          mergePdf_List.push(element)
-        }
-      } else {
-        for (let index = 0; index < this.exportbilllodgementdata.SELECTED_SHIPPING_BILL?.FORM_URL_LIST.length; index++) {
-          const element = this.exportbilllodgementdata.SELECTED_SHIPPING_BILL?.FORM_URL_LIST[index];
-          mergePdf_List.push(element)
-        }
+      for (let index = 0; index < this.alldocuments.length; index++) {
+        const element = this.alldocuments[index];
+        mergePdf_List.push(element)
       }
       let extradata2: any = [];
+      let SB_ID: any = [];
       if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
         this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(element => {
           this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION[element]?.COMMERICAIL_DATA?.forEach(commercialelement => {
             extradata2.push(commercialelement?._id)
           });
+          SB_ID?.push({ id: element?._id, status: element?.balanceAvai == '0' ? 'Cleared' : 'Pending' })
         });
       } else {
         this.SELECTED_SB_DATA?.COMMERICAIL_DATA?.forEach(commercialelement => {
           extradata2.push(commercialelement?._id)
         });
+        SB_ID?.push({ id: this.SELECTED_SB_DATA?._id, status: this.SELECTED_SB_DATA?.balanceAvai == '0' ? 'Cleared' : 'Pending' })
       }
       if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
         approval_data = {
@@ -1252,6 +975,21 @@ export class NewExportBillLodgementComponent implements OnInit {
                 this.ExportBillLodgement_Form['Url_Redirect'] = ({ file: 'export', document: 'blCopyref', SbRef: Uniquekey })
               }
               this.ExportBillLodgement_Form['documents'] = (mergePdf_List);
+              delete this.ExportBillLodgement_Form?.SingleMultiple?.field
+              delete this.ExportBillLodgement_Form?.SingleMultiple?.form
+              delete this.ExportBillLodgement_Form?.DirectDispatch?.field
+              delete this.ExportBillLodgement_Form?.DirectDispatch?.form
+              delete this.ExportBillLodgement_Form?.Sight?.field
+              delete this.ExportBillLodgement_Form?.Sight?.form
+              delete this.ExportBillLodgement_Form?.Usance?.field
+              delete this.ExportBillLodgement_Form?.Usance?.form
+              delete this.ExportBillLodgement_Form?.WithScrutiny?.field
+              delete this.ExportBillLodgement_Form?.WithScrutiny?.form
+              delete this.ExportBillLodgement_Form?.InvoiceReduction?.field
+              delete this.ExportBillLodgement_Form?.InvoiceReduction?.form
+              delete this.ExportBillLodgement_Form?.YesNoUnderLCAsk?.field
+              delete this.ExportBillLodgement_Form?.YesNoUnderLCAsk?.form
+
               if (this.exportbilllodgementdata.IS_AGAINST_ADVANCE_YES_NO == true) {
                 var data: any = {
                   data: this.ExportBillLodgement_Form,
@@ -1287,11 +1025,15 @@ export class NewExportBillLodgementComponent implements OnInit {
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         if (this.ExportBillLodgement_Form?.SingleMultiple?.bool == true) {
                           this.router.navigate(['/home/dashboardTask']);
-                          this.toastr.success(`SB No. ${extradata?.join(',')} sent for for regularisation approval`);
+                          this.toastr.success(`SB No. ${extradata?.join(',')} sent for for lodgement approval`);
                         } else {
                           this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.filter((item: any) => item == this.BUTTON_INDEX)
-                          this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for regularisation approval`);
+                          this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for lodgement approval`);
                         }
+                        SB_ID?.forEach(SBElement => {
+                          this.documentService.updateMaster({ AMOUNT_STATUS: SBElement?.status }, SBElement?.id).subscribe((Res: any) => {
+                          })
+                        });
                         event?.displayHidden;
                       });
                     });
@@ -1338,6 +1080,10 @@ export class NewExportBillLodgementComponent implements OnInit {
                           this.exportbilllodgementdata.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS = this.exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.filter((item: any) => item == this.BUTTON_INDEX)
                           this.toastr.success(`SB No. ${this.SELECTED_SB_DATA?.sbno} sent for for regularisation approval`);
                         }
+                        SB_ID?.forEach(SBElement => {
+                          this.documentService.updateMaster({ AMOUNT_STATUS: SBElement?.status }, SBElement?.id).subscribe((Res: any) => {
+                          })
+                        });
                         event?.displayHidden;
                       });
                     });

@@ -19,6 +19,8 @@ import { ImportPIPOSComponent } from './import-pipos/import-pipos.component';
 import { ImportBilllodgementreferencenumberadvicecopyComponent } from './import-billlodgementreferencenumberadvicecopy/import-billlodgementreferencenumberadvicecopy.component';
 import { ImportRealisationCertificateComponent } from './import-realisation-certificate/import-realisation-certificate.component';
 import { ImportSwiftCopyDocumentComponent } from './import-swift-copy-document/import-swift-copy-document.component';
+import { OutwardUploadDocumentsComponent } from './outward-Remittance-Disposal/Outward-upload-doc.component';
+import { ImportCertificateOfOriginComponent } from './import-certificate-of-origin/import-certificate-of-origin.component';
 
 const routes: Routes = [
  // Import Upload
@@ -30,6 +32,7 @@ const routes: Routes = [
  { path: "AirwayBlCopy", component: ImportAirwayBlCopyComponent, canActivate: [MemberGuard] },
  { path: "BillOfExchanges", component: ImportBillOfExchangesComponent, canActivate: [MemberGuard] },
  { path: "DestructionCertificates", component: ImportDestructionCertificatesComponent, canActivate: [MemberGuard] },
+ { path: "Certificate-of-Origin", component: ImportCertificateOfOriginComponent, canActivate: [MemberGuard] },
  { path: "PackingListInvoices", component: ImportPackingListInvoicesComponent, canActivate: [MemberGuard] },
  { path: "CommercialInvoices", component: ImportCommercialInvoicesComponent, canActivate: [MemberGuard] },
  { path: "OpinionReports", component: ImportOpinionReportComponent, canActivate: [MemberGuard] },
@@ -40,7 +43,8 @@ const routes: Routes = [
  { path: "PIPO", component: ImportPIPOSComponent, canActivate: [MemberGuard] },
  { path: "Bill-Lodgement-Referance-AdviceCopy", component: ImportBilllodgementreferencenumberadvicecopyComponent, canActivate: [MemberGuard] },
  { path: "Realisation-Cretificate", component: ImportRealisationCertificateComponent, canActivate: [MemberGuard] },
- { path: "Swift-Copy-Documents", component: ImportSwiftCopyDocumentComponent, canActivate: [MemberGuard] }
+ { path: "Swift-Copy-Documents", component: ImportSwiftCopyDocumentComponent, canActivate: [MemberGuard] },
+ { path: "Upload-Outward-Remittance-Disposal", component: OutwardUploadDocumentsComponent, canActivate: [MemberGuard] },
 ];
 
 @NgModule({

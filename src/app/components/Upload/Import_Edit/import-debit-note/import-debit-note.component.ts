@@ -7,6 +7,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-import-debit-note',
@@ -43,19 +45,32 @@ export class EditImportDebitNotesComponent implements OnInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.data = JSON.parse(params["item"]);
       this.response(JSON.parse(params["item"]));
-      console.log(this.data, "EditDestructionCertificatesComponent")
+      console.log(this.data, "EditDebitNotesComponent")
     });
   }
 
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
+      this.changedCommercial(args?.pipo[0]?._id)
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         debitNoteNumber: {
@@ -81,22 +96,102 @@ export class EditImportDebitNotesComponent implements OnInit {
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'DebitNoteImport');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.changedCommercial(this.data?.pipo[0]?._id)
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        debitNoteNumber: {
+          type: "text",
+          value: this.data?.debitNoteNumber,
+          label: "Debit Note Number",
+          rules: {
+            required: true,
+          }
+        },
+        currency: {
+          type: "currency",
+          value: this.data?.currency,
+          label: "Currency",
+          rules: {
+            required: true,
+          }
+        },
+        totalDebitAmount: {
+          type: "text",
+          value: this.data?.totalDebitAmount,
+          label: "Debit Note Amount",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'DebitNoteImport');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'import';
-    e.value.currency = e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
-    e.value.commercialNumber = e.value?.commercialNumber?.value!=undefined?e.value?.commercialNumber?.value:e.value?.commercialNumber;
+    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
     console.log(e.value);
-    this.documentService.updateDebit(e.value,this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`debit Note Document Updated Successfully`);
-      this.router.navigate(['home/Summary/Import/Debit']);
-    });
+    if (this.data?.debitNoteNumber != e.value.debitNoteNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Debit Note Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            debitNoteNumber: e.value.debitNoteNumber
+          }, 'debitnotes').subscribe((resp: any) => {
+            console.log('debitNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.DebitNote = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateDebit(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`debit Note Document Updated Successfully`);
+                this.router.navigate(['home/Summary/Import/Debit']);
+              });
+            } else {
+              this.toastr.error(`Please check this Debit Note Number. : ${e.value.debitNoteNumber} already exit...`);
+            }
+          })
+        }
+      })
+    } else {
+      e.value.DebitNote = this.publicUrl?.changingThisBreaksApplicationSecurity;
+      this.documentService.updateDebit(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`debit Note Document Updated Successfully`);
+        this.router.navigate(['home/Summary/Import/Debit']);
+      });
+    }
+
   }
 
   clickPipo(event: any) {
@@ -104,12 +199,21 @@ export class EditImportDebitNotesComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
+      this.changedCommercial(this.pipoArr)
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
 
+  changedCommercial(pipo: any) {
+    this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
+      res?.data.forEach(element => {
+        this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0] });
+      });
+      console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
+    }, (err) => console.log(err));
+  }
 }

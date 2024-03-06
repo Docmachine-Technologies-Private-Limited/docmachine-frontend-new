@@ -7,6 +7,8 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 @Component({
   selector: 'edit-app-export-realisation-certificate',
@@ -42,6 +44,8 @@ export class EditExportRealisationCertificateComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public route: ActivatedRoute,
     public userService: UserService) { }
 
@@ -52,8 +56,18 @@ export class EditExportRealisationCertificateComponent implements OnInit {
       console.log(this.data, "EditInwardUploadDocumentsComponent")
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
@@ -66,19 +80,84 @@ export class EditExportRealisationCertificateComponent implements OnInit {
             required: true,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'exportrealisationcertificate');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        EbrcNumber: {
+          type: "text",
+          value: this.data?.EbrcNumber,
+          label: "EBRC Number*",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'exportrealisationcertificate');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
-    e.value.file = 'export';
-    this.documentService.updateEbrc(e.value,this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`ebrcs Added Successfully`);
-      this.router.navigate(['home/Summary/Export/Realisation-Cretificate']);
-    },(err) => console.log('Error adding ebrcs'));
+    if (this.data?.EbrcNumber != e.value.EbrcNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your ebrcs Number`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            EbrcNumber: e.value.EbrcNumber
+          }, 'ebrcs').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateEbrc(e.value,this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`ebrcs Added Successfully`);
+                this.router.navigate(['home/Summary/Export/Realisation-Cretificate']);
+              },(err) => console.log('Error adding ebrcs'));
+            }else{
+              this.toastr.error(`Please check this ebrcs Number : ${e.value.EbrcNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+      this.documentService.updateEbrc(e.value,this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`ebrcs Added Successfully`);
+        this.router.navigate(['home/Summary/Export/Realisation-Cretificate']);
+      },(err) => console.log('Error adding ebrcs'));
+    }
+   
   }
   
   clickPipo(event: any) {

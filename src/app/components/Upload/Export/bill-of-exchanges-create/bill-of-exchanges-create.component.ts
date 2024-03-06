@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 import moment from 'moment';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'format-bill-of-exchanges',
@@ -81,6 +82,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
     public toastr: ToastrService,
     public router: Router,
     public validator: UploadServiceValidatorService,
+    public filteranytablepagination: filterAnyTablePagination,
     public userService: UserService) { }
 
   ngOnInit(): void {
@@ -127,7 +129,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
       getAllFields[6]?.setText(moment(filldata?.CI_DATE)?.format("DD/MM/YYYY"));
       getAllFields[7]?.setText(filldata?.BLCopy?.value);
       getAllFields[8]?.setText('For ' + this.validator.COMPANY_INFO[0]?.teamName);
-      getAllFields[9]?.setText(this.BUYER_DETAILS?.buyerbank + this.BUYER_DETAILS?.buyerbankaddress);
+      getAllFields[9]?.setText(this.BUYER_DETAILS?.buyerbank + '' + this.BUYER_DETAILS?.buyerbankaddress);
     }
     const pdfBytes = await pdfDoc.save()
     var base64String = this._arrayBufferToBase64(pdfBytes)
@@ -136,11 +138,11 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
     const mergedPdf = await PDFDocument.create();
     let jpgImage: any = ''
     if (this.validator.COMPANY_INFO?.length != 0) {
-      jpgImage = await mergedPdf.embedJpg(this.validator.COMPANY_INFO[0]?.letterHead)
+      jpgImage = await mergedPdf.embedPng(this.validator.COMPANY_INFO[0]?.letterHead)
     }
     const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
     copiedPages.forEach((page) => {
-    page.setFontColor(rgb(0,0,0))
+      page.setFontColor(rgb(0, 0, 0))
       mergedPdf.addPage(page);
       if (this.validator.COMPANY_INFO?.length != 0) {
         const { width, height } = page.getSize();
@@ -310,7 +312,9 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
           label: "Select Bank",
           rules: {
             required: true,
-          }
+          },
+          TypeOfCurrency: 'INR',
+          ChargeLabelHide: null
         },
         sbNo: {
           type: "ShippingBill",
@@ -337,7 +341,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
             required: true,
           }
         },
-      }, 'EXPORT_BILL_OF_EXCHANGE');
+      }, 'EXPORT_BILL_OF_EXCHANGE').then((res) => this.validator.CHECK_BOX_BANK_LIST_CHARGES = []);
       console.log(this.UPLOAD_FORM, this.cicreate, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
@@ -379,19 +383,20 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.BUYER_DETAILS = this.validator.BUYER_DETAILS_MASTER.filter((item: any) => item?.buyerName?.includes(event?.id[1]))[0]
       this.response(null);
-      this.pipoDataService.getShippingNo(event?._id, 'export');
       this.validator.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
-        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
-        }
-      }
+      this.LoadShippingBill(this.pipoArr);
       this.COMMERCIAL_LIST = [];
       console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
     } else {
@@ -399,9 +404,30 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
+
+  LoadShippingBill(pipoArr: any) {
+    this.filteranytablepagination.PaginationfilterAnyTable({
+      pipo: pipoArr
+    }, { limit: 20 }, 'masterrecord').subscribe((res: any) => {
+      console.log(res, "LoadShippingBill")
+      this.validator.SHIPPING_BILL_MASTER_DATA = res?.data;
+      this.validator.origin = [];
+      this.validator.SHIPPING_BUNDEL = [];
+      this.validator.SHIPPING_BILL_LIST = [];
+      res?.data?.forEach((element, i) => {
+        if (element?.sbno != null && element?.sbno != undefined && element?.sbno != '') {
+          this.validator.SHIPPING_BUNDEL.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+          this.validator.SHIPPING_BILL_LIST.push({ pipo: element?.pipo[0], id: element?.pipo[0]?._id, sbno: element?.sbno, SB_ID: element?._id, amount: element?.fobValue });
+        }
+        this.validator.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
+      });
+      console.log('Master Country', this.validator.SHIPPING_BUNDEL, this.validator.origin);
+    })
+  }
+
   onChangeShippingBill(data: any) {
     console.log(data, "onChangeShippingBill")
-    this.validator.COMMERICAL_NO=[];
+    this.validator.COMMERICAL_NO = [];
     let fileterdata = this.validator.SHIPPING_BILL_MASTER_DATA.filter((item: any) => item?._id?.includes(data?.SB_ID))[0];
     fileterdata?.commercialdetails?.forEach(element => {
       let checkexit = this.validator.COMMERICAL_NO.filter((item: any) => item?.value?.includes(element?.commercialNumber))
@@ -416,7 +442,7 @@ export class FormatBillOfExchangesComponent implements OnInit, OnChanges {
         });
       }
     });
-    this.validator.BL_COPY_LIST=[];
+    this.validator.BL_COPY_LIST = [];
     fileterdata?.blcopydetails?.forEach(element => {
       let checkexit = this.validator.BL_COPY_LIST.filter((item: any) => item?.value?.includes(element?.airwayBlCopyNumber))
       if (checkexit?.length == 0) {

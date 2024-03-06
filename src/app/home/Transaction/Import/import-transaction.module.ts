@@ -18,6 +18,13 @@ import { NewCollectionImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-col
 import { NewDirectImportPaymentsComponent } from './Bank/FEDRAL_BANK/new-direct-import-payments/new-direct-import-payments.component';
 import { NewAdvanceOutwardRemittanceA2Component } from './Bank/FEDRAL_BANK/new-advance-outward-remittance-a2/new-advance-outward-remittance-a2.component';
 import { NewBuyerCreditTransactionComponent } from './Bank/FEDRAL_BANK/new-buyer-credit-transaction/new-buyer-credit-transaction.component';
+import { NewFLCApplicationComponent } from './Bank/FEDRAL_BANK/new-flc-application/new-flc-application.component';
+import { AdvanceOutwardRemittanceControllerData } from './Controller/Advance-Outward-Remittance-Controller';
+import { A2AdvanceOutwardRemittanceControllerData } from './Controller/A2-Advance-Outward-Remittance-Controller';
+import { DirectPaymentsControllerData } from './Controller/Direct-Payments-Controller';
+import { ImportBillLodgementComponent } from './Bank/FEDRAL_BANK/import-bill-lodgement/import-bill-lodgement.component';
+import { ImportHomeComponent } from './Bank/FEDRAL_BANK/import-home/import-home.component';
+import { NewImportHomeTransactionComponent } from './Bank/FEDRAL_BANK/import-home/new-import-home-transaction/new-import-home-transaction.component';
 
 @NgModule({
   declarations: [
@@ -34,9 +41,18 @@ import { NewBuyerCreditTransactionComponent } from './Bank/FEDRAL_BANK/new-buyer
     NewLCImportPaymentsComponent,
     NewDirectImportPaymentsComponent,
     NewAdvanceOutwardRemittanceA2Component,
-    NewBuyerCreditTransactionComponent
+    NewBuyerCreditTransactionComponent,
+    NewFLCApplicationComponent,
+    ImportBillLodgementComponent,
+    ImportHomeComponent,
+    NewImportHomeTransactionComponent
   ],
-  providers:[BOEORMMactchData],
+  providers: [
+    BOEORMMactchData,
+    AdvanceOutwardRemittanceControllerData,
+    A2AdvanceOutwardRemittanceControllerData,
+    DirectPaymentsControllerData
+  ],
   imports: [
     CommonModule,
     SharedHomeModule,

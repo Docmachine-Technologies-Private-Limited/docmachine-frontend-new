@@ -36,8 +36,8 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-  UPLOAD_STATUS:boolean=false;
-  
+  UPLOAD_STATUS: boolean = false;
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -53,10 +53,16 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
     if (temp_pipo?.length != 0) {
       this.btndisabled = false;
-      await this.documentService.getPipoListNo('export', temp_pipo);
-      this.UPLOAD_STATUS=this.route.snapshot.paramMap.get('upload')=='true'?true:false  
+      this.validator.documentService.PI_PO_NUMBER_LIST = {
+        PI_PO_BUYER_NAME: [],
+        PI_PO_BENNE_NAME: [],
+        PIPO_TRANSACTION: [],
+        PIPO_NO: []
+      };
+      this.validator.CommonLoadTransaction(temp_pipo);;
+      this.UPLOAD_STATUS = this.route.snapshot.paramMap.get('upload') == 'true' ? true : false
     }
-    console.log(temp_pipo,this.UPLOAD_STATUS, "temp_pipo")
+    console.log(temp_pipo, this.UPLOAD_STATUS, "temp_pipo")
   }
 
 
@@ -70,11 +76,12 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       this.validator.buildForm({
         TrackerRef: {
           type: "RemitterCheckBox",
-          value: res?.partyName,
+          value: {Remitter_Name:res?.partyName},
           label: "Select Remitter Name",
           rules: {
             required: true,
           },
+          Show: true,
           RemitterLabel: "Select Remitter Ref No.",
         },
         date: {
@@ -165,6 +172,17 @@ export class InwardRemittanceAdviceComponent implements OnInit {
             required: false,
           }
         },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'InwardRemittanceAdvice').then((res) => {
       });
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
@@ -180,13 +198,11 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     e.value.pipo = this.pipoArr;
     e.value.doc = this.pipourl1;
     e.value.buyerName = this.BUYER_LIST;
-    e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
     e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
-    e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
     e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
     e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
     e.value.origin = e.value.origin?.value != undefined ? e.value.origin.value : e.value.origin;
-
+    let Remitter_Name=e?.value?.TrackerRef?.Remitter_Name
     console.log('doc', temp, this.pipourl1);
     console.log('onSubmitIrAdvice', e.value);
     this.documentService.getInvoice_No({
@@ -196,8 +212,8 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       if (resp.data.length == 0) {
         this.CustomConfirmDialogModel.YesDialogModel(`You are updating remitter info in pipo no.</br>
         </br>
-        <p>PIPO Remitter info. : </br> ${this.PIPO_DATA?.RemitterName?.Remitter_Name}</p>
-        <p>New Remitter info. : </br> ${e?.value?.TrackerRef?.Remitter_Name}</p>
+        <p>PIPO Remitter info. : </br> ${this.PIPO_DATA[0]?.RemitterName?.Remitter_Name}</p>
+        <p>New Remitter info. : </br> ${Remitter_Name}</p>
         `, 'Comments', (CustomConfirmDialogRes: any) => {
           this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
             console.log('addIrAdvice', data);
@@ -208,7 +224,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
               "AdviceRef": [
                 data?.data._id,
               ],
-
             }
             this.documentService.UpdateInward_Remittance(e.value?.TrackerRef?._id, {
               "AdviceRef": [
@@ -240,13 +255,13 @@ export class InwardRemittanceAdviceComponent implements OnInit {
                     this.router.navigate(['home/Summary/Export/inward-remittance-advice']);
                   }
                 }, (error) => {
-                  console.log('error');
+                  console.log('error2');
                 });
               })
             }
           },
             (error) => {
-              console.log('error');
+              console.log('error1');
             }
           );
         });
@@ -259,12 +274,29 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   clickPipo(event: any) {
     if (event != undefined) {
       this.btndisabled = false;
-      this.pipoArr = [event?._id]
+      let PIPO_ID_ARRAY: any = [];
+      let PI_PO_BUYER_NAME_PI_PO_BENNE_NAME: any = [];
+      event?.forEach(element => {
+        PIPO_ID_ARRAY.push(element?._id)
+        PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
+      });
+      
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0] = (event?.id[1])
+      this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.documentService.getPipoById(event?._id).subscribe((res: any) => {
         this.PIPO_DATA = res?.data[0];
+      })
+      let PIPODATA: any = [];
+      this.documentService.getPipoByIdList(this.pipoArr).subscribe((res: any) => {
+        console.log(res, 'getPipoByIdList')
+        res?.forEach(element => {
+          let DATA: any = element?.data[0];
+          PIPODATA.push(DATA)
+        });
+        this.PIPO_DATA = PIPODATA;
+        console.log(res, "getPipoById")
       })
     } else {
       this.btndisabled = true;

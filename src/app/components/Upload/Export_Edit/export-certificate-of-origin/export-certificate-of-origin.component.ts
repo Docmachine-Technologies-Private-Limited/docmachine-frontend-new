@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { filterAnyTablePagination } from '../../../../service/v1/Api/filterAnyTablePagination';
 
 @Component({
   selector: 'edit-export-certificate-of-origin',
@@ -32,7 +32,6 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
   };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup: FormGroup;
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
@@ -52,6 +51,8 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
     public router: Router,
     public validator: UploadServiceValidatorService,
     public route: ActivatedRoute,
+    public filteranytablepagination: filterAnyTablePagination,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -61,17 +62,27 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
       console.log(this.data, "EditInwardUploadDocumentsComponent")
     });
   }
-
+  
   response(args: any) {
+    console.log(args, args?.length, "argsShippingbill")
+    if (args?.length == undefined) {
+      this.Edit(args);
+    } else {
+      this.ReUplod(args)
+    }
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+
+  Edit(args: any) {
     this.publicUrl = '';
     setTimeout(() => {
-      this.changedCommercial(args?.pipo[0]?._id)
+      this.changedCommercial(this.data?.pipo[0]?._id)
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args?.doc);
       this.validator.buildForm({
         CommercialNumber: {
           type: "CommericalNo",
           value: args?.CommercialNumber,
-          label: "Commerical Number*",
+          label: "Commerical Number",
           rules: {
             required: true,
           }
@@ -79,26 +90,99 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
         CertificateOriginNumber: {
           type: "text",
           value: args?.CertificateOriginNumber,
-          label: "Certificate of Origin Number*",
+          label: "Certificate of Origin Number",
           rules: {
             required: true,
           }
-        }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
       }, 'ExportCertificateofOrigin');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
 
+  ReUplod(args: any) {
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.changedCommercial(this.data?.pipo[0]?._id)
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1]?.publicUrl);
+      this.validator.buildForm({
+        CommercialNumber: {
+          type: "CommericalNo",
+          value: this.data?.CommercialNumber,
+          label: "Commerical Number",
+          rules: {
+            required: true,
+          }
+        },
+        CertificateOriginNumber: {
+          type: "text",
+          value: this.data?.CertificateOriginNumber,
+          label: "Certificate of Origin Number",
+          rules: {
+            required: true,
+          }
+        },
+        // AdditionalDocuments: {
+        //   type: "AdditionalDocuments",
+        //   value: [],
+        //   label: "Add More Documents",
+        //   rules: {
+        //     required: false,
+        //   },
+        //   id: "AdditionalDocuments",
+        //   url: "member/uploadImage",
+        //   items: [0]
+        // },
+      }, 'ExportCertificateofOrigin');
+      console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
+    }, 200);
+    console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
+  }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.CIRef = [this.CommercialFilter(e.value.CommercialNumber?.id)[0]?._id];
-    this.documentService.updateCertificateofOrigin(e.value, this.data?._id).subscribe((res: any) => {
-      this.toastr.success(`Certificate of Origin Updated Successfully`);
-      console.log('CertificateofOrigin Added Successfully');
-      this.router.navigate(['home/Summary/Export/export-certificate-of-origin']);
-    }, (err) => console.log('Error adding pipo')
-    );
+    if (this.data?.CertificateOriginNumber != e.value.CertificateOriginNumber) {
+      this.CustomConfirmDialogModel.YesDialogModel(`Are you sure update your Certificate of Origin`, 'Comments', (CustomConfirmDialogRes: any) => {
+        if (CustomConfirmDialogRes?.value == "Ok") {
+          this.documentService.getInvoice_No({
+            CertificateOriginNumber: e.value.CertificateOriginNumber
+          }, 'CertificateofOrigin').subscribe((resp: any) => {
+            console.log('creditNoteNumber Invoice_No', resp)
+            if (resp.data.length == 0) {
+              e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+              this.documentService.updateCertificateofOrigin(e.value, this.data?._id).subscribe((res: any) => {
+                this.toastr.success(`Certificate of Origin Updated Successfully`);
+                console.log('CertificateofOrigin Added Successfully');
+                this.router.navigate(['home/Summary/Export/export-certificate-of-origin']);
+              }, (err) => console.log('Error adding pipo'));
+            }else{
+              this.toastr.error(`Please check this Certificate of Origin Number : ${e.value.CertificateOriginNumber} already exit...`);
+            }
+          });
+        }
+      });
+    } else {
+      e.value.doc = this.publicUrl?.changingThisBreaksApplicationSecurity;
+      this.documentService.updateCertificateofOrigin(e.value, this.data?._id).subscribe((res: any) => {
+        this.toastr.success(`Certificate of Origin Updated Successfully`);
+        console.log('CertificateofOrigin Added Successfully');
+        this.router.navigate(['home/Summary/Export/export-certificate-of-origin']);
+      }, (err) => console.log('Error adding pipo'));
+    }
+   
   }
 
   clickPipo(event: any) {
@@ -118,16 +202,14 @@ export class EditExportCertificateOfOriginComponent implements OnInit {
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
       this.COMMERCIAL_LIST = res?.data;
+      this.validator.COMMERICAL_NO=[];
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], doc: element?.commercialDoc });
       });
       console.log('changedCommercial', res, this.validator.COMMERICAL_NO)
-    },
-      (err) => {
-        console.log(err)
-      }
-    );
+    },(err) => {console.log(err)});
   }
+  
   CommercialFilter(id: any) {
     return this.COMMERCIAL_LIST.filter((item: any) => item?._id?.includes(id) == true)
   }

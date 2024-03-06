@@ -1,20 +1,15 @@
 import { Injectable } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { DocumentService } from './document.service';
-import { UserService } from './user.service';
-import { WindowInformationService } from './window-information.service';
 import { CustomConfirmDialogModelComponent } from '../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AprrovalPendingRejectTransactionsService {
-  USER_DATA: any = [];
-
-  constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog,
-    public wininfo: WindowInformationService, public CustomConfirmDialogModel: CustomConfirmDialogModelComponent) { }
+  constructor(public documentService: DocumentService,
+  public dialog: MatDialog,
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent) { }
 
 
   deleteByRole_PI_PO_Type(RoleCheckbox: string, id: any, index: any, data: any, callback: any) {
@@ -32,6 +27,7 @@ export class AprrovalPendingRejectTransactionsService {
       });
     }
   }
+  
   DownloadByRole_Transaction_Type(roleType: string, data: any, callback: any) {
     console.log('DownloadByRole_Transaction_Type')
     if (roleType == 'Maker' || roleType == 'Checker') {
@@ -49,6 +45,7 @@ export class AprrovalPendingRejectTransactionsService {
         'You have not access send for download pdf <br> please login maker/checker email id...');
     }
   }
+  
   truefalse(condition) {
     if (condition) {
       return '';
