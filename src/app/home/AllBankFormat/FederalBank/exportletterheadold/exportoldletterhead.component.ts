@@ -3,6 +3,7 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
 import moment from 'moment';
+import { BlendMode, PDFDocument } from 'pdf-lib';
 
 @Injectable({ providedIn: 'root' })
 export class ExportletterheadService {
@@ -15,7 +16,7 @@ export class ExportletterheadService {
   createLetterHead() {
     return {
       Federal:(validator: any, data,sbdata: any)=>{
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
           const doc: any = new jsPDF()
           console.log(data,sbdata,"createLetterHead")
           this.addWaterMark(doc, validator.COMPANY_INFO[0]?.letterHead);
@@ -44,16 +45,28 @@ export class ExportletterheadService {
           })
           var strArr3 = doc.splitTextToSize(`Kindly have the same adjusted and close the pending EDPMS entries reflecting in our AD CODE.`, pageWidth - 10)
           doc.text(strArr3, 10, 190, { align: 'left' });
-          var strArr4 = doc.splitTextToSize(`Thanking You,\n${validator.COMPANY_INFO[0]?.teamName}\n${validator.COMPANY_INFO[0]?.adress}`, 200)
+          var strArr4 = doc.splitTextToSize(`Thanking You,`, 200)
           doc.text(strArr4, 10, 210, { align: 'left' });
           doc.text("Authorized Signatory", 10, 250, { align: 'left' });
           let tableuri = doc.output("arraybuffer");
           console.log('data:application/pdf;base64,' + tableuri, "tableuri")
-          resolve('data:application/pdf;base64,' + this._arrayBufferToBase64(tableuri))
+          const loadmergedPdf = await PDFDocument.load(tableuri);
+          loadmergedPdf.save();
+          this.addForSealWaterMark(loadmergedPdf, validator, [
+            {
+                index: 0,
+                x: 580,
+                y: 60
+            }]).then(async (res: any) => {
+                const pdfBytes = await res?.save()
+                var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                const x1 = 'data:application/pdf;base64,' + base64String1;
+                await resolve(x1);
+            })
         })
       },
       NewFederalSingle:(validator: any, data,sbdata: any)=>{
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
           const doc: any = new jsPDF()
           console.log(data,sbdata,"createLetterHead")
           this.addWaterMark(doc, validator.COMPANY_INFO[0]?.letterHead);
@@ -82,16 +95,28 @@ export class ExportletterheadService {
           })
           var strArr3 = doc.splitTextToSize(`Kindly have the same adjusted and close the pending EDPMS entries reflecting in our AD CODE.`, pageWidth - 10)
           doc.text(strArr3, 10, 190, { align: 'left' });
-          var strArr4 = doc.splitTextToSize(`Thanking You,\n${validator.COMPANY_INFO[0]?.teamName}\n${validator.COMPANY_INFO[0]?.adress}`, 200)
+          var strArr4 = doc.splitTextToSize(`Thanking You,`, 200)
           doc.text(strArr4, 10, 210, { align: 'left' });
           doc.text("Authorized Signatory", 10, 250, { align: 'left' });
           let tableuri = doc.output("arraybuffer");
           console.log('data:application/pdf;base64,' + tableuri, "tableuri")
-          resolve('data:application/pdf;base64,' + this._arrayBufferToBase64(tableuri))
+          const loadmergedPdf = await PDFDocument.load(tableuri);
+          loadmergedPdf.save();
+          this.addForSealWaterMark(loadmergedPdf, validator, [
+            {
+                index: 0,
+                x: 290,
+                y: 453
+            }]).then(async (res: any) => {
+                const pdfBytes = await res?.save()
+                var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                const x1 = 'data:application/pdf;base64,' + base64String1;
+                await resolve(x1);
+            })
         })
       },
       NewFederalMultiple:(validator: any, exportbilllodgementdata,data,sbdata: any)=>{
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
           const doc: any = new jsPDF()
           console.log(data,sbdata,"createLetterHead")
           this.addWaterMark(doc, validator.COMPANY_INFO[0]?.letterHead);
@@ -122,12 +147,24 @@ export class ExportletterheadService {
           })
           var strArr3 = doc.splitTextToSize(`Kindly have the same adjusted and close the pending EDPMS entries reflecting in our AD CODE.`, pageWidth - 10)
           doc.text(strArr3, 10, 190, { align: 'left' });
-          var strArr4 = doc.splitTextToSize(`Thanking You,\n${validator.COMPANY_INFO[0]?.teamName}\n${validator.COMPANY_INFO[0]?.adress}`, 200)
+          var strArr4 = doc.splitTextToSize(`Thanking You,`, 200)
           doc.text(strArr4, 10, 210, { align: 'left' });
           doc.text("Authorized Signatory", 10, 250, { align: 'left' });
           let tableuri = doc.output("arraybuffer");
           console.log('data:application/pdf;base64,' + tableuri, "tableuri")
-          resolve('data:application/pdf;base64,' + this._arrayBufferToBase64(tableuri))
+          const loadmergedPdf = await PDFDocument.load(tableuri);
+          loadmergedPdf.save();
+          this.addForSealWaterMark(loadmergedPdf, validator, [
+            {
+                index: 0,
+                x: 290,
+                y: 453
+            }]).then(async (res: any) => {
+                const pdfBytes = await res?.save()
+                var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                const x1 = 'data:application/pdf;base64,' + base64String1;
+                await resolve(x1);
+            })
         })
       }
     }
@@ -156,5 +193,36 @@ export class ExportletterheadService {
     }
     return window.btoa(binary);
   }
+  
+  addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+    return new Promise(async (resolve, reject) => {
+        let jpgImage: any = ''
+        const mergedPdf = await PDFDocument.create();
+        if (validator.COMPANY_INFO?.length != 0) {
+            jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+        }
+        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+        copiedPages.forEach((page, index) => {
+            const { width, height } = page.getSize();
+            let data = indexList?.filter((item: any) => item?.index == index);
+            if (data?.length != 0) {
+                data?.forEach(element => {
+                    page.drawImage(jpgImage, {
+                        x: width - element?.x,
+                        y: element?.y,
+                        width: 250,
+                        height: 250,
+                        opacity: 1,
+                        blendMode: BlendMode.Multiply
+                    });
+                });
+            }
+            mergedPdf.addPage(page);
+        });
+        const mergedPdfFile = await mergedPdf.save();
+        const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+        resolve(mergedPdfload)
+    })
+}
   
 }

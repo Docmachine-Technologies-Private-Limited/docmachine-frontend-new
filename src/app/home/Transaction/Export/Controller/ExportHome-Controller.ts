@@ -125,6 +125,9 @@ export class ExportHomeControllerData {
                     }
 
                     getAllFields[139].setText(this.CURRENT_DATE)
+                    if (getAllFields?.length!=0) {
+                        getAllFields[getAllFields.length-1].setText(this.CURRENT_DATE)
+                    }
                     await pdfDoc.save();
                     this.addForSealWaterMark(pdfDoc, this.validator, [
                         {
