@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
@@ -165,6 +165,14 @@ export class PIPOSComponent implements OnInit {
           label: "Consignee Name",
           rules: {
             required: false,
+          }
+        },
+        commodity: {
+          type: "commodity",
+          value: "",
+          label: "Choose commodity",
+          rules: {
+            required: true,
           }
         },
         RemitterName: {

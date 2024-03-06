@@ -19,7 +19,8 @@ export class EmailValidationService {
           if (this.WhiteListedEmail?.includes(email) == true) {
             return false;
           }
-          return ['gmail', 'gmail.com', 'gmail.co']?.indexOf(email?.split('@')[1]) != -1 ? true : false
+          // 'gmail', 'gmail.com', 'gmail.co'
+          return ['']?.indexOf(email?.split('@')[1]) != -1 ? true : false
         }
         return false;
       }

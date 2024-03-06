@@ -22,8 +22,8 @@ export class BusinessEmailValidatorDirective implements Validator {
                     valid = null;
                 } else {
                     if (control?.value != null && control?.value != undefined && control?.value != '') {
-                        valid = ['gmail', 'gmail.com', 'gmail.co', 'gmail.c',
-                            'rediff', 'rediff.com', 'rediff.co', 'rediff.c']?.indexOf(control?.value?.split('@')[1]) != -1 ? true : false;
+                    // 'gmail', 'gmail.com', 'gmail.co', 'gmail.c', 'rediff', 'rediff.com', 'rediff.co', 'rediff.c'
+                        valid = ['']?.indexOf(control?.value?.split('@')[1]) != -1 ? true : false;
                         if ((control?.dirty || control?.touched)) {
                             if (valid) {
                                 const icon = document.createElement('i');

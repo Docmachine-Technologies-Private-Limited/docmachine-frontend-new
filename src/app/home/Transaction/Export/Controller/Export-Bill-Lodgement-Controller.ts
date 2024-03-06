@@ -76,6 +76,7 @@ export class ExportBillLodgementControllerData {
                     };
                     let dataTable: any = []
                     if (sbdata != null) {
+                        let Commodity: any = [];
                         sbdata?.firxdetails?.forEach(element => {
                             element?.FirxUsed_Balance?.split(',').forEach(FirxUsed_Balance => {
                                 FIRX_DATE_NO?.AMOUNT?.push(FirxUsed_Balance)
@@ -109,7 +110,7 @@ export class ExportBillLodgementControllerData {
                         getAllFields[22]?.setText(BillAmount != undefined ? this.ConvertNumberToWords(BillAmount).toUpperCase() : '0');
                         getAllFields[23]?.setText(BillAmount?.toString());
                         
-                        getAllFields[28]?.setText('');
+                        getAllFields[28]?.setText(sbdata?.pipo[0]?.commodity?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
                         getAllFields[29]?.setText(sbdata?.pipo[0]?.HSCODE);
                         getAllFields[30]?.setText('');
                         getAllFields[31]?.setText(sbdata?.countryOfFinaldestination);
@@ -244,6 +245,7 @@ export class ExportBillLodgementControllerData {
                     let SbdataTable: any = []
                     if (exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length != 0) {
                         let hscodelist: any = [];
+                        let Commodity: any = [];
                         exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(sbelement => {
                             sbdata[sbelement]?.firxdetails?.forEach(element => {
                                 element?.FirxUsed_Balance?.split(',').forEach(FirxUsed_Balance => {
@@ -258,6 +260,7 @@ export class ExportBillLodgementControllerData {
                             FIRX_DATE_NO?.TOTAL_SB_COUNTRY_FINAL_DESTINATION?.push(sbdata[sbelement]?.countryOfFinaldestination);
                             FIRX_DATE_NO?.blcopydetails?.push(sbdata[sbelement]['blcopydetails'][0]?.airwayBlCopyNumber);
                             hscodelist.push(sbdata[sbelement]?.pipo[0]?.HSCODE)
+                            Commodity.push(sbdata[sbelement]?.pipo[0]?.commodity)
                             SbdataTable.push([sbdata[sbelement]?.sbdate, sbdata[sbelement]?.sbno, sbdata[sbelement]?.fobValue])
                         });
 
@@ -288,6 +291,7 @@ export class ExportBillLodgementControllerData {
                         getAllFields[23]?.setText("Refer Shipping Bill attached");
                         getAllFields[28]?.setText("As per Annexure Attached");
                         getAllFields[46]?.setText("As per Annexure Attached");
+                        getAllFields[28]?.setText(Commodity?.join(" ")?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
                         getAllFields[29]?.setText(hscodelist?.join(" ")?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
                         getAllFields[30]?.setText("As per Annexure Attached");
                         getAllFields[31]?.setText("As per Annexure Attached");
