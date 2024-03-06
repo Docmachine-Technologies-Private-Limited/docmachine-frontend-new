@@ -1,0 +1,222 @@
+<!-- Bharathexim.com -->
+
+<div class="top-panel">
+    <div class="left-panel">
+        <label for="" class="label-text">Total User :
+            <span>{{this.TradeAppUserData?.length}}</span></label>
+    </div>
+    <div class="right-panel col-7">
+        <div class="input-group mb-3">
+            <!-- <input type="text" class="form-control border-radius"
+                placeholder="Search customer by name or email" aria-label="Recipient's username"
+                aria-describedby="button-addon2"
+                (keypress)="SearchCompanyIdCollectionName($event.target)">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button> -->
+            <button class="btn btn-outline-secondary PopupOpen" popup-close="BHARATHEXIM_COUPON_CODE_APP" type="button"
+                id="button-addon2">Add Coupon</button>
+            <button class="btn btn-outline-secondary PopupOpen" popup-close="BHARATHEXIM_VIEW_COUPON_CODE_APP"
+                type="button" id="button-addon2" (click)="onclickCouponDetails()">View Coupon</button>
+            <button class="btn btn-outline-secondary PopupOpen" popup-close="BHARATHEXIM_PLAN_CREATE_APP" type="button"
+                id="button-addon2">Create Plan</button>
+            <button class="btn btn-outline-secondary PopupOpen" popup-close="BHARATHEXIM_VIEW_SUBSCRIPTION_PLAN"
+                type="button" id="button-addon2" (click)="onclickSubscriptionPlan()">View Plan</button>
+        </div>
+    </div>
+</div>
+<div class="center-panel">
+    <div class="card-table-data-2">
+        <table class="table">
+            <thead>
+                <tr class="table-tr">
+                    <th scope="col" class="col-td-th-3">#</th>
+                    <th scope="col" class="col-td-th-2">Company Name</th>
+                    <th scope="col" class="col-td-th-2">Name</th>
+                    <th scope="col" class="col-td-th-2">Email Id</th>
+                    <th scope="col" class="col-td-th-2">Mobile No.</th>
+                    <th scope="col" class="col-td-th-2">Start Date</th>
+                    <th scope="col" class="col-td-th-2">End Date</th>
+                    <th scope="col" class="col-td-th-2">Days</th>
+                    <th scope="col" class="col-td-th-2">User Id</th>
+                    <th scope="col" class="col-td-th-2">Last Login</th>
+                    <th scope="col" class="col-td-th-2">Total Login</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr" *ngFor="let collectionitem of this.TradeAppUserData;let i=index">
+                    <td scope="col" class="col-td-th-3" style="cursor: pointer;" (click)="EditTradeApp(collectionitem)">
+                        <i popup-close="TRADE_APP" style="cursor: pointer;" aria-hidden="true"
+                            class="fa fa-edit PopupOpen"></i>
+                    </td>
+                    <td class="col-td-th-2">{{collectionitem?.companyName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.fullName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.emailId}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.phone}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.StartDate}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.EndDate}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.Days}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.companyId}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.LastLogin}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.LoginCounter}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<app-custom-model
+    [customstyle]="{'margin':'auto !important','max-width': '620px !important','margin-top': '20px !important'}"
+    class="p-2" height="400px" id="BHARATHEXIM_APP" [name]="'Email Id : '+this.TRADE_APP_DATA?.emailId"
+    #BHARATHEXIM_APP_PANEL>
+    <div class="col-12">
+        <form [formGroup]="this.TRADE_APP_FORM">
+            <div class="col-12">
+                <label for="">Add Days</label>
+                <input type="number" class="form-control" placeholder="Enter days" formControlName="TrailDays">
+            </div>
+            <button class="btn btn-primary mb-5" (click)="UpdateTradeData(BHARATHEXIM_APP_PANEL)">Update</button>
+        </form>
+    </div>
+</app-custom-model>
+
+<app-custom-model
+    [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '20px !important'}"
+    class="p-2" height="450px" id="BHARATHEXIM_COUPON_CODE_APP" name="Add Coupon Code"
+    #BHARATHEXIM_COUPON_CODE_APP_PANEL>
+    <div class="col-12">
+        <bharathexim-generator-coupon-product
+            (SubmitButtonEvent)="ClosePopup($event,BHARATHEXIM_COUPON_CODE_APP_PANEL)"></bharathexim-generator-coupon-product>
+    </div>
+</app-custom-model>
+
+<app-custom-model
+    [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '20px !important'}"
+    class="p-2" height="450px" id="BHARATHEXIM_PLAN_CREATE_APP" name="Add Subscription Plan"
+    #BHARATHEXIM_PLAN_CREATE_APP_PANEL>
+    <div class="col-12">
+        <bharathexim-create-plan [EditCondition]="false"
+            (SubmitButtonEvent)="ClosePopup($event,BHARATHEXIM_PLAN_CREATE_APP_PANEL)"></bharathexim-create-plan>
+    </div>
+</app-custom-model>
+
+<app-custom-model
+    [customstyle]="{'margin':'auto !important','max-width': '85vw !important','margin-top': '20px !important'}"
+    class="p-2" height="650px" id="BHARATHEXIM_VIEW_COUPON_CODE_APP" name="View Coupon Code"
+    #BHARATHEXIM_VIEW_COUPON_CODE_APP_PANEL>
+    <div class="col-12 p-3">
+        <table class="table">
+            <thead>
+                <tr class="table-tr">
+                    <th scope="col" class="col-td-th-2">Coupon Name</th>
+                    <th scope="col" class="col-td-th-2">Trail Date</th>
+                    <th scope="col" class="col-td-th-2">Start Date</th>
+                    <th scope="col" class="col-td-th-2">End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr" *ngFor="let collectionitem of this.COUPON_CODE_DATA;let i=index">
+                    <td class="col-td-th-2">{{collectionitem?.couponCodeName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.TrailDays}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.StartDate}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.EndDate}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</app-custom-model>
+
+<app-custom-model
+    [customstyle]="{'margin':'auto !important','max-width': '85vw !important','margin-top': '20px !important'}"
+    class="p-2" height="650px" id="BHARATHEXIM_VIEW_SUBSCRIPTION_PLAN" name="View Subscription Plan"
+    #BHARATHEXIM_VIEW_SUBSCRIPTION_PLAN_APP_PANEL>
+    <div class="col-12 p-3">
+        <table class="table">
+            <thead>
+                <tr class="table-tr">
+                    <th scope="col" class="col-td-th-3">#</th>
+                    <th scope="col" class="col-td-th-2">Plan Name</th>
+                    <th scope="col" class="col-td-th-2">Company Name</th>
+                    <th scope="col" class="col-td-th-2">No. of Days</th>
+                    <th scope="col" class="col-td-th-2 width-th-controller">
+                        <p>Both</p>
+                        <div class="col-12 d-flex flex-row">
+                            <p scope="col" class="col-td-th-2">DMS</p>
+                            <p scope="col" class="col-td-th-2">ForwardContractManagement</p>
+                            <p scope="col" class="col-td-th-2">TransactionDMS</p>
+                            <p scope="col" class="col-td-th-2">DMS_Teasury</p>
+                            <p scope="col" class="col-td-th-2">ALL</p>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-td-th-2 width-th-controller">
+                        <p>Export</p>
+                        <div class="col-12 d-flex flex-row">
+                            <p scope="col" class="col-td-th-2">DMS</p>
+                            <p scope="col" class="col-td-th-2">ForwardContractManagement</p>
+                            <p scope="col" class="col-td-th-2">TransactionDMS</p>
+                            <p scope="col" class="col-td-th-2">DMS_Teasury</p>
+                            <p scope="col" class="col-td-th-2">ALL</p>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-td-th-2 width-th-controller">
+                        <p>Import</p>
+                        <div class="col-12 d-flex flex-row">
+                            <p scope="col" class="col-td-th-2">DMS</p>
+                            <p scope="col" class="col-td-th-2">ForwardContractManagement</p>
+                            <p scope="col" class="col-td-th-2">TransactionDMS</p>
+                            <p scope="col" class="col-td-th-2">DMS_Teasury</p>
+                            <p scope="col" class="col-td-th-2">ALL</p>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr" *ngFor="let collectionitem of this.VIEW_SUBSCRIPTION_PLAN_DATA;let i=index">
+                    <td scope="col" class="col-td-th-3" style="cursor: pointer;"
+                        (click)="EditSubsciptionPlan(collectionitem)">
+                        <i popup-close="BHARATHEXIM_EDIT_PLAN_CREATE_APP" style="cursor: pointer;" aria-hidden="true"
+                            class="fa fa-edit PopupOpen"></i>
+                    </td>
+                    <td class="col-td-th-2">{{collectionitem?.PlanName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.CompanyName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.TotalMonthDays}}</td>
+                    <td scope="col" class="col-td-th-2 width-th-controller">
+                        <div class="col-12 d-flex flex-row">
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.both?.DMS}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.both?.ForwardContractManagement}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.both?.TransactionDMS}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.both?.DMS_Teasury}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.both?.ALL}}</p>
+                        </div>
+                    </td>
+                    <td scope="col" class="col-td-th-2 width-th-controller">
+                        <div class="col-12 d-flex flex-row">
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Export?.DMS}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Export?.ForwardContractManagement}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Export?.TransactionDMS}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Export?.DMS_Teasury}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Export?.ALL}}</p>
+                        </div>
+                    </td>
+                    <td scope="col" class="col-td-th-2 width-th-controller">
+                        <div class="col-12 d-flex flex-row">
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Import?.DMS}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Import?.ForwardContractManagement}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Import?.TransactionDMS}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Import?.DMS_Teasury}}</p>
+                            <p scope="col" class="col-td-th-2">{{collectionitem?.Import?.ALL}}</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</app-custom-model>
+
+<app-custom-model [RemoveBgTop]="false"
+[customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '20px !important'}"
+class="p-2" height="450px" id="BHARATHEXIM_EDIT_PLAN_CREATE_APP" name="Edit Subscription Plan"
+#BHARATHEXIM_EDIT_PLAN_CREATE_APP_PANEL>
+<div class="col-12">
+    <bharathexim-create-plan [EditCondition]="true" [data]="this.EditSubsciptionPlan_DATA"
+        (SubmitButtonEvent)="ClosePopup($event,BHARATHEXIM_EDIT_PLAN_CREATE_APP_PANEL)"></bharathexim-create-plan>
+</div>
+</app-custom-model>

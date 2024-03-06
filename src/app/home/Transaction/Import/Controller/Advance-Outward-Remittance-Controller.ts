@@ -96,7 +96,7 @@ export class AdvanceOutwardRemittanceControllerData {
                         getAllFields[6]?.setText(today[1]?.split('')[1]);
                         getAllFields[7]?.setText(today[0]?.split('')[2]);
                         getAllFields[8]?.setText(today[0]?.split('')[3]);
-                        console.log(validator?.toWords(RemittanceAmount),"RemittanceAmount")
+                        console.log(validator?.toWords(RemittanceAmount), "RemittanceAmount")
                         getAllFields[9]?.setText(RemittanceAmount != undefined ? PIPO_DATA?.Currency[0] + ' ' + validator?.toWords(RemittanceAmount) : '-');
                         getAllFields[10]?.setText('');
                         getAllFields[13]?.setText('-');
@@ -194,28 +194,28 @@ export class AdvanceOutwardRemittanceControllerData {
                         getAllFields[78]?.setText(PIPO_DATA?.DATE_NO?.join('')?.match(/.{1,10}/g)?.join('\n'));
                         getAllFields[79]?.setText(PIPO_DATA?.CurrencyAmount?.join('')?.match(/.{1,10}/g)?.join('\n'));
                         getAllFields[80]?.setText(PIPO_DATA?.HSCODE?.join('')?.match(/.{1,15}/g)?.join('\n'));
-                        // getAllFields[81]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
-                        // getAllFields[82]?.setText(PIPO_DATA?.ORIGIN?.join('\n'));
                         getAllFields[83]?.setText(PIPO_DATA?.TRANSPORTER?.join('\n'));
                         getAllFields[84]?.setText(PIPO_DATA?.LASTDATE?.join('')?.match(/.{1,10}/g)?.join('\n'));
                         getAllFields[85]?.setText(moment(new Date()).format('DD-MM-YYYY'));
                         getAllFields[86]?.setText('');
-                        // getAllFields[87]?.uncheck();
-                        // getAllFields[88]?.uncheck()
-                        // getAllFields[89]?.uncheck();
-                        // getAllFields[90]?.uncheck();
-                        // getAllFields[91]?.uncheck();
-                        // getAllFields[92]?.uncheck();
                         getAllFields[94]?.setText(moment(new Date()).format('DD-MM-YYYY'));
-                        // getAllFields[94]?.setText('');
-                        // getAllFields[95]?.setText('');
-                        // getAllFields[96]?.setText('');
                     }
-                    const mergedPdfFile = await pdfDoc.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    console.log(x1, "base64String1")
-                    await resolve(x1);
+                    await pdfDoc.save();
+                    this.addForSealWaterMark(pdfDoc, validator, [
+                        {
+                            index: 1,
+                            x: 290,
+                            y: 410
+                        }, {
+                            index: 2,
+                            x: 290,
+                            y: 480
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             FBG: async (validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected) => {
@@ -336,6 +336,35 @@ export class AdvanceOutwardRemittanceControllerData {
                 })
             }
         }
+    }
+
+    addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            copiedPages.forEach((page, index) => {
+                const { width, height } = page.getSize();
+                let data = indexList?.filter((item: any) => item?.index == index);
+                if (data?.length != 0) {
+                    page.drawImage(jpgImage, {
+                        x: width - data[0]?.x,
+                        y: data[0]?.y,
+                        width: 250,
+                        height: 250,
+                        opacity: 1,
+                        blendMode: BlendMode.Multiply
+                    });
+                }
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
     }
 
     _arrayBufferToBase64(buffer) {

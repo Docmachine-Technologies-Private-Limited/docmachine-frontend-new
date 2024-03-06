@@ -99,6 +99,17 @@ import { ExportHomeControllerData } from "./Transaction/Export/Controller/Export
 import { SummaryPageHeaderComponent } from "../custom/summary-page-header/summary-page-header.component";
 import { ChildSummaryHeaderComponent } from "../custom/summary-page-header/child-summary-header/child-summary-header.component";
 import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/generator-coupon-product/generator-coupon-product.component";
+import { CreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/create-plan/create-plan.component";
+import { BusinessEmailValidatorDirective } from "../RegistrationPage/Controller/business-email-validator.directive";
+import { MaxMinValidationDirective } from "../RegistrationPage/Controller/MaxMinValidationService";
+import { PasswordValidationDirective } from "../RegistrationPage/Controller/PasswordValidation.directive";
+import { BharatheximCreatePlanComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/create-plan/bharathexim-create-plan.component";
+import { BharatheximGeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon/Bharathexim.com/generator-coupon-product/bharathexim-generator-coupon-product.component";
+import { BharatheximSubscriptionModuleComponent } from "./SuperAdminPanel/admin-panel/bharathexim-subscription-module/bharathexim-subscription-module.component";
+import { SubscriptionPageComponent } from "../components/subscription-page/subscription-page.component";
+import { FormControllerModule } from "../components/form-controller/form-controller.module";
+import { CheckboxComponent } from "../custom/Controller/checkbox.component";
+import { CheckboxGroupComponent } from "../custom/Controller/checkbox-group.component";
 
 @NgModule({
   declarations: [
@@ -166,7 +177,17 @@ import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon
     UploadPopUpLocalFileComponent,
     SummaryPageHeaderComponent,
     ChildSummaryHeaderComponent,
-    GeneratorCouponProductComponent
+    GeneratorCouponProductComponent,
+    CreatePlanComponent,
+    BusinessEmailValidatorDirective,
+    MaxMinValidationDirective,
+    PasswordValidationDirective,
+    BharatheximCreatePlanComponent,
+    BharatheximGeneratorCouponProductComponent,
+    BharatheximSubscriptionModuleComponent,
+    SubscriptionPageComponent,
+    CheckboxGroupComponent,
+    CheckboxComponent
   ],
   imports: [
     CommonModule,
@@ -205,7 +226,7 @@ import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon
     UploadServiceValidatorService,
     GlobalsAccessService,
     filterAnyTablePagination,
-    ExportHomeControllerData
+    ExportHomeControllerData,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
@@ -294,7 +315,17 @@ import { GeneratorCouponProductComponent } from "./SuperAdminPanel/ProductCoupon
     UploadPopUpLocalFileComponent,
     SummaryPageHeaderComponent,
     ChildSummaryHeaderComponent,
-    GeneratorCouponProductComponent
+    GeneratorCouponProductComponent,
+    CreatePlanComponent,
+    BharatheximCreatePlanComponent,
+    BharatheximGeneratorCouponProductComponent,
+    BharatheximSubscriptionModuleComponent,
+    BusinessEmailValidatorDirective,
+    MaxMinValidationDirective,
+    PasswordValidationDirective,
+    SubscriptionPageComponent,
+    CheckboxGroupComponent,
+    CheckboxComponent
   ],
 })
 export class SharedHomeModule { }

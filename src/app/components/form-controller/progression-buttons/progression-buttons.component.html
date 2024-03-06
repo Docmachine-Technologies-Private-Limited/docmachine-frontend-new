@@ -1,0 +1,8 @@
+<div class="container">
+        <button style="margin: auto;
+        margin-left: 0;" class="btn btn-next" *ngIf="activeStep$ > 1 && activeStep$ < (this.formService?.FORM_CREATE_LIST?.length+1)" (click)="goBack()">Go Back</button>
+        <button class="btn btn-next" *ngIf="activeStep$ < this.formService?.FORM_CREATE_LIST?.length" [disabled]="ButtonDisabled" (click)="nextStep()">Next
+                Step</button>
+        <button class="btn btn-confirm" *ngIf="activeStep$ === this.formService?.FORM_CREATE_LIST?.length" [disabled]="ButtonDisabled"
+                (click)="confirmAndSubmitForm()" type="button">Submit</button>
+</div>

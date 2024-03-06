@@ -8,5 +8,6 @@ export const AppConfig = {
   FRONT_END_URL:'https://staging.bharathexim.com/',
   S3_BUCKET_URL:'https://staging.bharathexim.com/',
   TALLY_API:"http://192.168.29.126:8083/",
+  ROLE_DELTA_TRADE_APP_API: "https://webapp.deltatradeglobal.com",
   appVersion: require('../../package.json').version,
 };

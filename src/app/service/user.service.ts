@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AppConfig } from '../../environments/environment';
 import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { Router } from "@angular/router";
+import { DeviceDetectorService } from 'ngx-device-detector';
 import { BehaviorSubjectListService } from "../home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
 
 @Injectable({ providedIn: "root" })
@@ -14,17 +15,23 @@ export class UserService implements OnInit {
   userData;
   USER_RESULT: any = [];
   public loginData = new BehaviorSubject({});
+  public UserData: any = null;
   public userDataListener$ = this.loginData.asObservable();
-  constructor(private http: HttpClient, public router: Router, public SubjectListService: BehaviorSubjectListService) {
+  constructor(private http: HttpClient, public router: Router, public SubjectListService: BehaviorSubjectListService, private deviceInformationService: DeviceDetectorService) {
     this.api_base = AppConfig.BASE_URL;
     console.log(this.api_base)
   }
   ngOnInit(): void {
     // this.SubjectListService.callAllCommonApi();
   }
+
   public addLoginData(data) {
     this.loginData.next(data);
     this.userData = data
+  }
+
+  public addUserData(data) {
+    this.UserData = data;
   }
 
   public addToken(token) {
@@ -32,6 +39,7 @@ export class UserService implements OnInit {
     sessionStorage.setItem("token", token);
     this.authToken = token;
   }
+
   public loadFromLocalStorage() {
     const token = sessionStorage.getItem("token");
     this.authToken = token;
@@ -42,6 +50,91 @@ export class UserService implements OnInit {
     return this.http.post(`${this.api_base}/authenticate/signup`, {
       user: user
     });
+  }
+
+  getDeviceInfo() {
+    return {
+      isMobile: this.deviceInformationService.isMobile(),
+      isTablet: this.deviceInformationService.isTablet(),
+      isDesktop: this.deviceInformationService.isDesktop(),
+      OsDeviceInfo: this.deviceInformationService.getDeviceInfo().os,
+      osVersion: this.deviceInformationService.getDeviceInfo().os_version,
+      browser: this.deviceInformationService.getDeviceInfo().browser,
+      browserVersion: this.deviceInformationService.getDeviceInfo().browser_version,
+      browserMajorVersion: this.deviceInformationService.getDeviceInfo().browser_version,
+      userAgent: this.deviceInformationService.getDeviceInfo().userAgent
+    }
+  }
+
+  UpdateUserPaymentDetails(updatedata: any, other: any) {
+    return new Promise((resolve, reject) => {
+      this.getUserDetail().then((res: any) => {
+        console.log(res, "CheckUserExit")
+        let InfoPaymentStatus = res?.result?.PaymentStatus;
+        InfoPaymentStatus.push(updatedata);
+        this.updateregister(res?.result?._id, { PaymentStatus: InfoPaymentStatus, ...other }).subscribe((updatedataRes) => {
+          resolve(updatedataRes);
+        }, (error) => resolve(error))
+      })
+    })
+  }
+
+  UpdateUserDetails(updatedata: any) {
+    return new Promise((resolve, reject) => {
+      this.getUserDetail().then((res: any) => {
+        console.log(res, "CheckUserExit")
+        this.updateregister(res?.result?._id, updatedata).subscribe((updatedataRes) => {
+          resolve(updatedataRes);
+        }, (error) => resolve(error))
+      })
+    })
+  }
+
+  checkUserExpired() {
+    return new Promise((resolve, reject) => {
+      this.getUserDetail().then((res: any) => {
+        if (res?.result?.FreeTrailPeroidEndDate != undefined && res?.result?.FreeTrailPeroidEndDate != null && res?.result?.FreeTrailPeroidEndDate != '') {
+          if (compareDates(res?.result?.FreeTrailPeroidEndDate) == true) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
+        } else {
+          resolve(false)
+        }
+      })
+      const compareDates = (d2: any) => {
+        var Enddate = new Date(d2)
+        var dateCheck = new Date()
+        return dateCheck.getTime() <= Enddate.getTime()
+      };
+    })
+  }
+
+  updateregister(id: any, user: any) {
+    return this.http.post(`${this.api_base}/authenticate/updateregister`, { id: id, user: user });
+  }
+
+  getRazorpayOrderById(id: any) {
+    return this.http.post(`${this.api_base}/authenticate/OrderById`, { id: id });
+  }
+
+  SendMobileOTP(emailId) {
+    return this.http.post(`${this.api_base}/authenticate/SendOtpMobile`, { emailId: emailId });
+  }
+
+  lastsignup(id: any, user: any) {
+    return this.http.post(`${this.api_base}/authenticate/lastsignup`, { id: id, user: user });
+  }
+
+  CreateUser(user) {
+    return this.http.post(`${this.api_base}/authenticate/UserCreate`, {
+      user: user
+    });
+  }
+
+  SendOTPEmail(email) {
+    return this.http.post(`${this.api_base}/authenticate/SendOtpEmail`, { emailId: email });
   }
 
   deleteUser(id) {
@@ -60,7 +153,6 @@ export class UserService implements OnInit {
     };
     console.log('httpOptions');
     console.log(httpOptions);
-
     return this.http.post(
       `${this.api_base}/authenticate/login`,
       null,
@@ -82,6 +174,21 @@ export class UserService implements OnInit {
     console.log('httpOptions');
     console.log(httpOptions);
     return this.http.post(`${this.api_base}/authenticate/SingIn`, null, httpOptions);
+  }
+
+  DeltaTradeAppLogin(data: any) {
+    let authToken: any = this.loadFromLocalStorage();
+    console.log(authToken, data);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer " + btoa(data.emailId + ":" + data.password),
+      }),
+    };
+    console.log('httpOptions');
+    console.log(httpOptions);
+    return this.http.post(`${this.api_base}/authenticate/DeltaTradeAppLogin`, null, httpOptions);
   }
 
   public getUserbyEmail(loginData) {
@@ -172,17 +279,16 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
+
   SingUpVerify(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      `${this.api_base}/otp/SingUpverify`, data,
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/otp/SingUpverify`, data, httpOptions);
   }
+
   loginVerfiy(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -685,14 +791,14 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/documents/uploadFiletoS3Bucket`, data, httpOptions);
   }
-  
+
   public UploadListS3Buket(UrlList: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    let API_CREATE:any=[];
+    let API_CREATE: any = [];
     for (let index = 0; index < UrlList.length; index++) {
       const element = UrlList[index];
       API_CREATE.push(this.http.post(`${this.api_base}/documents/uploadFiletoS3Bucket`, element, httpOptions))
@@ -763,7 +869,7 @@ export class UserService implements OnInit {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
+      headers: new HttpHeaders({ Authorization: this.authToken}),
     };
     return this.http.get(`${this.api_base}/user/profile`, httpOptions).toPromise();
   }
@@ -783,9 +889,15 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/user/getprofilebyId`, { email: id }, httpOptions).toPromise();
   }
+
   getEamilByIdUserMember(id: any) {
     return this.http.post(`${this.api_base}/authenticate/getEamilByIdUserMember`, { email: id }).toPromise();
   }
+
+  creareOrder(data: any) {
+    return this.http.post(`${this.api_base}/authenticate/createOrder`, { data: data }).toPromise();
+  }
+
   getEamilByIdUserMemberDetails(id: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -802,7 +914,7 @@ export class UserService implements OnInit {
     };
     return this.http.get(`${this.api_base}/user/getAllUserMember`, httpOptions).toPromise();
   }
-  
+
   getTradeAppUserData() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -811,14 +923,41 @@ export class UserService implements OnInit {
     };
     return this.http.get(`${AppConfig.COUPON_API}/LiveTradeApp/getUserDetails`, httpOptions);
   }
-  
-  UpdateTradeAppUserData(id,data) {
+
+  UpdateTradeAppUserData(id, data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${AppConfig.COUPON_API}/LiveTradeApp/update`,{id:id,data:data}, httpOptions);
+    return this.http.post(`${AppConfig.COUPON_API}/LiveTradeApp/update`, { id: id, data: data }, httpOptions);
+  }
+
+  getBharatheximAppUserData() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/LiveTradeApp/getUserDetails`, httpOptions);
+  }
+
+  UpdateBharatheximpUserData(id, data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/LiveTradeApp/update`, { id: id, data: data }, httpOptions);
+  }
+
+  BharatheximCouponValidation(couponCodeName) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/LiveTradeApp/CouponValidation`, { couponCodeName: couponCodeName }, httpOptions);
   }
 
   getAllCompanyId() {
@@ -885,6 +1024,19 @@ export class UserService implements OnInit {
       data: data,
       emailId: email,
     });
+  }
+
+  DeltaTradeAppAddUser(data: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/DeltaTradeApp/SingUp`, data, httpOptions);
+  }
+
+  public DeltaTradeAppLoginUpdate(data, email) {
+    return this.http.post(`${this.api_base}/authenticate/DeltaTradeAppUpdate`, { data: data, emailId: email });
   }
 
 }

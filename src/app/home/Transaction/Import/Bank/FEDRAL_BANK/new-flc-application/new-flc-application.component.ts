@@ -1215,7 +1215,7 @@ export class NewFLCApplicationComponent implements OnInit {
     }
   }
 
-  SaveAsDraft(Id: string, UniqueId: any) {
+  SaveAsDraft(Id: string, UniqueId: any,PREVIEWS_PANEL) {
     if (UniqueId != null) {
       var pipo_id: any = [];
       var pipo_name: any = [];
@@ -1225,6 +1225,9 @@ export class NewFLCApplicationComponent implements OnInit {
         pipo_name.push(element?.PIPO_LIST?.pipo_no)
       }
       let sumnewId: any = Id + '' + this.randomId(50)?.toUpperCase()
+      delete this.formvalue.SingleMultiple?.field;
+      delete this.formvalue.SingleMultiple?.form
+
       this.documentService.addLCTransaction({
         bundel: [this.formvalue],
         file: this.USER_DATA?.sideMenu,
@@ -1235,6 +1238,7 @@ export class NewFLCApplicationComponent implements OnInit {
         SendApproval: false
       }).subscribe((res2: any) => {
         this.router.navigate(['/home/dashboardTask'])
+        PREVIEWS_PANEL?.displayHidden;
       })
     }
     console.log(UniqueId, this.ExportBillLodgement_Form, 'uiiiiiiiiiiiiii')

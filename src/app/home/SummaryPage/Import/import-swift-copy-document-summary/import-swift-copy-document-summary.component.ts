@@ -331,7 +331,7 @@ export class ImportSwiftCopyDocumentSummaryComponent implements OnInit {
       }
     };
     this.router.navigate([`/home/Summary/Import/Edit/Swift-Copy-Documents`],navigationExtras);
-    this.toastr.warning('Swoft Copy Row Is In Edit Mode');
+    this.toastr.warning('Swift Copy Row Is In Edit Mode');
   }
 
   handleDelete(data: any) {

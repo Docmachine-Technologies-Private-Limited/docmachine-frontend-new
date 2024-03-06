@@ -1,7 +1,7 @@
 <div class="content-wrap pb-2 ml-0 scroll-bar-main">
     <div class="background-color">
-        <mat-tab-group>
-            <mat-tab label="Admin Panel">
+        <mat-tab-group (selectedTabChange)="onTabChanged($event);">
+            <mat-tab id="adminpanel" label="Admin Panel">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total Member :
@@ -59,7 +59,7 @@
                     </table>
                 </div>
             </mat-tab>
-            <mat-tab label="Member Panel">
+            <mat-tab id="memberpanel" label="Member Panel">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total Member :
@@ -111,7 +111,7 @@
                     </table>
                 </div>
             </mat-tab>
-            <mat-tab label="Approve_Reject_Delete Panel">
+            <mat-tab id="Approve_Reject_Deletepanle" label="Approve_Reject_Delete Panel">
                 <mat-tab-group (selectedTabChange)="ApprovalRejectDelete($event,'')" class="Approve_Reject_Delete">
                     <mat-tab id="approved" label="Approve Panel">
                         <div class="top-panel">
@@ -240,7 +240,7 @@
                     </mat-tab>
                 </mat-tab-group>
             </mat-tab>
-            <mat-tab label="Subcription Panel">
+            <mat-tab id="Subcriptionpanel" label="Subcription Panel">
                 <div class="subcription-panel">
                     <div class="col-12 p-0" style="height: 100%;"
                         *ngFor="let item of this.SUBCRIPTION_DATA;let i=index">
@@ -350,7 +350,7 @@
                     </table>
                 </div>
             </mat-tab> -->
-            <mat-tab label="Delete-Data-By-Table">
+            <mat-tab id="DeleteDataByTable" label="Delete-Data-By-Table">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total Table :
@@ -402,21 +402,27 @@
                     </div>
                 </div>
             </mat-tab>
-              <mat-tab label="Trade App Subscription">
+            <mat-tab id="TradeAppSubscription" label="Trade App Subscription">
                 <div class="top-panel">
                     <div class="left-panel">
                         <label for="" class="label-text">Total User :
                             <span>{{this.TradeAppUserData?.length}}</span></label>
                     </div>
-                    <div class="right-panel col-5">
+                    <div class="right-panel col-7">
                         <div class="input-group mb-3">
                             <input type="text" class="form-control border-radius"
                                 placeholder="Search customer by name or email" aria-label="Recipient's username"
                                 aria-describedby="button-addon2"
                                 (keypress)="SearchCompanyIdCollectionName($event.target)">
                             <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
-                            <button class="btn btn-outline-secondary PopupOpen" popup-close="COUPON_CODE" type="button" id="button-addon2">Add Coupon</button>
-                            <button class="btn btn-outline-secondary PopupOpen" popup-close="VIEW_COUPON_CODE" type="button" id="button-addon2">View Coupon</button>
+                            <button class="btn btn-outline-secondary PopupOpen" popup-close="COUPON_CODE" type="button"
+                                id="button-addon2">Add Coupon</button>
+                            <button class="btn btn-outline-secondary PopupOpen" popup-close="VIEW_COUPON_CODE"
+                                type="button" id="button-addon2" (click)="onclickCouponDetails()">View Coupon</button>
+                            <button class="btn btn-outline-secondary PopupOpen" popup-close="PLAN_CREATE_APP"
+                                type="button" id="button-addon2">Create Plan</button>
+                            <button class="btn btn-outline-secondary PopupOpen" popup-close="VIEW_SUBSCRIPTION_PLAN"
+                                type="button" id="button-addon2" (click)="onclickSubscriptionPlan()">View Plan</button>
                         </div>
                     </div>
                 </div>
@@ -433,6 +439,7 @@
                                     <th scope="col" class="col-td-th-2">Start Date</th>
                                     <th scope="col" class="col-td-th-2">End Date</th>
                                     <th scope="col" class="col-td-th-2">Days</th>
+                                    <th scope="col" class="col-td-th-2">Discount</th>
                                     <th scope="col" class="col-td-th-2">User Id</th>
                                     <th scope="col" class="col-td-th-2">Last Login</th>
                                     <th scope="col" class="col-td-th-2">Total Login</th>
@@ -441,9 +448,12 @@
                             <tbody>
                                 <tr class="table-tr" *ngFor="let collectionitem of this.TradeAppUserData;let i=index">
                                     <td scope="col" class="col-td-th-3" style="cursor: pointer;"
-                                        (click)="EditTradeApp(collectionitem)">
-                                        <i popup-close="TRADE_APP" style="cursor: pointer;" aria-hidden="true"
-                                            class="fa fa-edit PopupOpen"></i>
+                                        (click)="collectionitem.disabled=false" *ngIf="collectionitem.disabled==true">
+                                        <i style="cursor: pointer;" aria-hidden="true" class="fa fa-edit"></i>
+                                    </td>
+                                    <td scope="col" class="col-td-th-3" style="cursor: pointer;"
+                                        (click)="collectionitem.disabled=true;UpdateTradeAppSubscriptionUserInfo(collectionitem)" *ngIf="collectionitem.disabled==false">
+                                        <button type="button" class="btn btn-primary">Update</button>
                                     </td>
                                     <td class="col-td-th-2">{{collectionitem?.companyName}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.firstName}}</td>
@@ -451,7 +461,13 @@
                                     <td class="col-td-th-2">{{collectionitem?.mobileNo}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.StartDate}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.EndDate}}</td>
-                                    <td class="col-td-th-2">{{collectionitem?.Days}}</td>
+                                    <td class="col-td-th-2"><input type="number" [disabled]="collectionitem?.disabled"
+                                            style="width: 80px;" [(ngModel)]="collectionitem.Days" class="form-control">
+                                        Days</td>
+                                    <td class="col-td-th-2"> <input type="number" [disabled]="collectionitem?.disabled"
+                                            style="width: 80px;" [(ngModel)]="collectionitem.discount"
+                                            class="form-control"> %
+                                    </td>
                                     <td class="col-td-th-2">{{collectionitem?.userId}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.LastLogin}}</td>
                                     <td class="col-td-th-2">{{collectionitem?.LoginCounter}}</td>
@@ -460,6 +476,9 @@
                         </table>
                     </div>
                 </div>
+            </mat-tab>
+            <mat-tab id="BharatheximSubscription" label="Bharathexim Subscription">
+                <app-bharathexim-subscription-module></app-bharathexim-subscription-module>
             </mat-tab>
         </mat-tab-group>
         <div class="footer-panel"></div>
@@ -573,6 +592,7 @@
     </div>
 </app-custom-model>
 
+<!-- TradeGlobal -->
 <app-custom-model
     [customstyle]="{'margin':'auto !important','max-width': '620px !important','margin-top': '80px !important'}"
     class="p-2" height="400px" id="TRADE_APP" [name]="'Email Id : '+this.TRADE_APP_DATA?.emailId" #TRADE_APP_PANEL>
@@ -591,7 +611,17 @@
     [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
     class="p-2" height="450px" id="COUPON_CODE" name="Add Coupon Code" #COUPON_CODE_APP_PANEL>
     <div class="col-12">
-      <app-generator-coupon-product (SubmitButtonEvent)="ClosePopup($event,COUPON_CODE_APP_PANEL)"></app-generator-coupon-product>
+        <app-generator-coupon-product
+            (SubmitButtonEvent)="ClosePopup($event,COUPON_CODE_APP_PANEL)"></app-generator-coupon-product>
+    </div>
+</app-custom-model>
+
+<app-custom-model
+    [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
+    class="p-2" height="450px" id="PLAN_CREATE_APP" name="Add Subscription Plan" #PLAN_CREATE_APP_PANEL>
+    <div class="col-12">
+        <create-plan [EditCondition]="false"
+            (SubmitButtonEvent)="ClosePopup($event,PLAN_CREATE_APP_PANEL)"></create-plan>
     </div>
 </app-custom-model>
 
@@ -617,5 +647,46 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</app-custom-model>
+
+<app-custom-model
+    [customstyle]="{'margin':'auto !important','max-width': '85vw !important','margin-top': '80px !important'}"
+    class="p-2" height="650px" id="VIEW_SUBSCRIPTION_PLAN" name="View Subscription Plan"
+    #VIEW_SUBSCRIPTION_PLAN_APP_PANEL>
+    <div class="col-12 p-3">
+        <table class="table">
+            <thead>
+                <tr class="table-tr">
+                    <th scope="col" class="col-td-th-3">#</th>
+                    <th scope="col" class="col-td-th-2">Plan Name</th>
+                    <th scope="col" class="col-td-th-2">Plan Currency</th>
+                    <th scope="col" class="col-td-th-2">Plan Amount</th>
+                    <th scope="col" class="col-td-th-2">Plan Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-tr" *ngFor="let collectionitem of this.VIEW_SUBSCRIPTION_PLAN_DATA;let i=index">
+                    <td scope="col" class="col-td-th-3" style="cursor: pointer;"
+                        (click)="EditSubsciptionPlan(collectionitem)">
+                        <i popup-close="EDIT_PLAN_CREATE_APP" style="cursor: pointer;" aria-hidden="true"
+                            class="fa fa-edit PopupOpen"></i>
+                    </td>
+                    <td class="col-td-th-2">{{collectionitem?.PlanName}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.Currency}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.Amount}}</td>
+                    <td class="col-td-th-2">{{collectionitem?.Description}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <app-custom-model [RemoveBgTop]="false"
+            [customstyle]="{'margin':'auto !important','max-width': '760px !important','margin-top': '80px !important'}"
+            class="p-2" height="450px" id="EDIT_PLAN_CREATE_APP" name="Edit Subscription Plan"
+            #EDIT_PLAN_CREATE_APP_PANEL>
+            <div class="col-12">
+                <create-plan [EditCondition]="true" [data]="this.EditSubsciptionPlan_DATA"
+                    (SubmitButtonEvent)="ClosePopup($event,EDIT_PLAN_CREATE_APP_PANEL)"></create-plan>
+            </div>
+        </app-custom-model>
     </div>
 </app-custom-model>

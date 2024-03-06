@@ -212,7 +212,7 @@ export class EditAirwayBlCopyComponent implements OnInit {
             if (resp.data.length == 0) {
               e.value.blCopyDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
               this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
-                this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
+                this.toastr.success(`AirwayBlcopy Document Updated Successfully`);
                 this.router.navigate(['home/Summary/Export/airway-bl-copy']);
               }, (err) => console.log('Error adding pipo'));
             } else {
@@ -224,7 +224,7 @@ export class EditAirwayBlCopyComponent implements OnInit {
     } else {
       e.value.blCopyDoc = this.publicUrl?.changingThisBreaksApplicationSecurity;
       this.documentService.updateAirwayBlcopy(e.value, this.data?._id).subscribe((res: any) => {
-        this.toastr.success(`addAirwayBlcopy Document Updated Successfully`);
+        this.toastr.success(`AirwayBlcopy Document Updated Successfully`);
         this.router.navigate(['home/Summary/Export/airway-bl-copy']);
       }, (err) => console.log('Error adding pipo'));
     }

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
 import { DocumentService } from "../../../../service/document.service";
-import { PDFDocument } from "pdf-lib";
+import { BlendMode, PDFDocument } from "pdf-lib";
 import { Router } from "@angular/router";
 import moment from 'moment';
 
@@ -63,8 +63,8 @@ export class DirectPaymentsControllerData {
                             PIPO_DATA["Amount"].push(element?.RemittanceAmount)
                             PIPO_DATA["Commodity"].push(element?.PIPO_LIST?.commodity)
                             PIPO_DATA["HSCODE"].push(element?.PIPO_LIST?.HSCODE)
-                            PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.date+' | '+element?.PIPO_LIST?.pi_poNo)
-                            PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency+' | ' +element?.PIPO_LIST?.amount)
+                            PIPO_DATA["DATE_NO"].push(element?.PIPO_LIST?.date + ' | ' + element?.PIPO_LIST?.pi_poNo)
+                            PIPO_DATA["CurrencyAmount"].push(element?.PIPO_LIST?.currency + ' | ' + element?.PIPO_LIST?.amount)
                         });
                         let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
                         let paymentTermSum: any = filldata?.paymentTerm?.reduce((a, b) => parseFloat(a) + parseFloat(b?.RemittanceAmount), 0)
@@ -96,31 +96,32 @@ export class DirectPaymentsControllerData {
                             BOE_DETAIILS_FILTER['boeDate'].push(element?.BOE?.boeDate)
                             BOE_DETAIILS_FILTER['BOEAmount'].push(element?.BOE?.invoiceAmount)
                         });
-                        
-                        if (filldata?.Remittance == "FullFinalRemittance") {
-                            getAllFields[11]?.uncheck()
-                            getAllFields[12]?.check()
-                        } else if (filldata?.Remittance == "PartRemittance") {
+
+                        getAllFields[11]?.uncheck()
+                        getAllFields[12]?.uncheck();
+                        getAllFields[13]?.uncheck()
+                        getAllFields[14]?.uncheck();
+                        getAllFields[17]?.uncheck()
+                        getAllFields[18]?.uncheck();
+                        console.log(filldata?.Remittance, "filldata?.Remittance")
+                        if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
                             getAllFields[11]?.check()
-                            getAllFields[12]?.uncheck()
+                        } else if (filldata?.ForeignBankCharges == "OwnAccount") {
+                            getAllFields[12]?.check();
                         }
 
-                        if (filldata?.ForeignBankCharges == "BeneficiaryAccount") {
-                            getAllFields[13]?.uncheck();
-                            getAllFields[14]?.check();
-                        } else if (filldata?.ForeignBankCharges == "OwnAccount") {
-                            getAllFields[13]?.check();
-                            getAllFields[14]?.uncheck();
+                        if (filldata?.Remittance == "FullFinalRemittance") {
+                            getAllFields[13]?.check()
+                        } else if (filldata?.Remittance == "PartRemittance") {
+                            getAllFields[14]?.check()
                         }
 
                         if (filldata?.TypeofGoods == "Capital") {
                             getAllFields[17]?.check();
-                            getAllFields[18]?.uncheck();
                         } else if (filldata?.TypeofGoods == "NonCapital") {
-                            getAllFields[17]?.uncheck();
                             getAllFields[18]?.check();
                         }
-                        
+
                         getAllFields[19]?.setText(BOE_DETAIILS_FILTER['boeNumber']?.join(','));
                         getAllFields[20]?.setText(BOE_DETAIILS_FILTER['boeDate']?.join(','));
                         getAllFields[21]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.dischargePort);
@@ -202,16 +203,22 @@ export class DirectPaymentsControllerData {
                         getAllFields[97]?.setText('');
                     }
                     await pdfDoc.save()
-                    const mergedPdf = await PDFDocument.create();
-                    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-                    copiedPages.forEach((page) => {
-                        mergedPdf.addPage(page);
-                    });
-                    const mergedPdfFile = await pdfDoc.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    console.log(x1, "base64String1")
-                    await resolve(x1);
+                    this.addForSealWaterMark(pdfDoc, validator, [
+                        {
+                            index: 1,
+                            x: 300,
+                            y: 360
+                        },
+                        {
+                            index: 2,
+                            x: 290,
+                            y: 400
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             HDFC: async (validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected) => {
@@ -241,15 +248,15 @@ export class DirectPaymentsControllerData {
                     getAllFields[14]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs);
                     getAllFields[15]?.setText(`Swift Code: ${BENEFICIARY_DETAILS[0]?.beneBankSwiftCode} \nABA: \nRouting No: \nSort Code: ${BENEFICIARY_DETAILS[0]?.sortCode}`);
                     getAllFields[48]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
-                    
+
                     if (filldata != undefined && filldata != null && filldata != '') {
                         getAllFields[7]?.setText(`INR A/C No : NIL \n For: (CCY & AMT) NIL\n FCY A/C No : ${BENEFICIARY_DETAILS[0]?.beneAccNo}\n For: (CCY & AMT) ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount}/-\n (Remittance by SEZ units from INR accounts to beneficiaries within India not allowed)`);
                         getAllFields[12]?.setText(`${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + filldata?.paymentTerm[0]?.RemittanceAmount} /- (${filldata?.paymentTerm[0]?.PIPO_LIST?.currency + ' ' + this.ConvertNumberToWords(filldata?.paymentTerm[0]?.RemittanceAmount)}) - 30% ADVANCE PAYMENT.`);
                         getAllFields[19]?.setText(`Expected Date of Despatch / Download (software) – MID OF NOV 2022\n Name of the shipping company / airlines – (BY SEA)\n Port of Despatch - ANY PORT IN COLOMBIA\n Destination Port – CHENNAI, INDIA \nProforma Invoice details (In case the invoice is older than 6 months then a declaration\n to be provided stating the reason for delay)\n PROFORMA Invoice no - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} CO Dated ${filldata?.paymentTerm[0]?.PIPO_LIST?.date}, Amount - ${filldata?.paymentTerm[0]?.PIPO_LIST?.currency} ${filldata?.paymentTerm[0]?.RemittanceAmount}/-`);
                         getAllFields[20]?.setText(filldata?.paymentTerm[0]?.PIPO_LIST?.HSCODE);
-                        
-                        getAllFields[25]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.boeNumber+' & '+filldata?.BOE_DETAIILS[0]?.BOE?.boeDate);
-                        getAllFields[26]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.currency+' & '+filldata?.BOE_DETAIILS[0]?.BOE?.invoiceAmount);
+
+                        getAllFields[25]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.boeNumber + ' & ' + filldata?.BOE_DETAIILS[0]?.BOE?.boeDate);
+                        getAllFields[26]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.currency + ' & ' + filldata?.BOE_DETAIILS[0]?.BOE?.invoiceAmount);
                         getAllFields[27]?.setText(filldata?.BOE_DETAIILS[0]?.BOEAmount?.toString());
                         getAllFields[29]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.adCode);
                         getAllFields[30]?.setText(filldata?.BOE_DETAIILS[0]?.BOE?.dischargePort);
@@ -274,6 +281,34 @@ export class DirectPaymentsControllerData {
         return window.btoa(binary);
     }
 
+    addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            copiedPages.forEach((page, index) => {
+                const { width, height } = page.getSize();
+                let data = indexList?.filter((item: any) => item?.index == index);
+                if (data?.length != 0) {
+                    page.drawImage(jpgImage, {
+                        x: width - data[0]?.x,
+                        y: data[0]?.y,
+                        width: 250,
+                        height: 250,
+                        opacity: 1,
+                        blendMode: BlendMode.Multiply
+                    });
+                }
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
+    }
     ConvertNumberToWords(number: any) {
         var words = new Array();
         words[0] = '';

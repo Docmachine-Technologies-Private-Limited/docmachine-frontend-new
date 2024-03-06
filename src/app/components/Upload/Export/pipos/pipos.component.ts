@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
@@ -165,6 +165,14 @@ export class PIPOSComponent implements OnInit {
           label: "Consignee Name",
           rules: {
             required: false,
+          }
+        },
+        commodity: {
+          type: "commodity",
+          value: "",
+          label: "Choose commodity",
+          rules: {
+            required: true,
           }
         },
         RemitterName: {
@@ -345,17 +353,6 @@ export class PIPOSComponent implements OnInit {
             ]
           ]
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
       }, 'PIPO_EXPORT');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
@@ -394,7 +391,7 @@ export class PIPOSComponent implements OnInit {
             (err) => console.log("Error adding pipo")
           );
         } else {
-          this.toastr.error(`Please check this sb no. : ${e.value.pi_poNo} already exit...`);
+          this.toastr.error(`Please check this PI/PO no. : ${e.value.pi_poNo} already exit...`);
         }
       });
     } else {

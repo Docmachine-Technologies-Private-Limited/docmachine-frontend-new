@@ -102,6 +102,7 @@ import { AddBeneficiaryNameAdminMemberComponent } from "./manage-customer/add-be
 import { BackUpPanelMongoDBComponent } from "./BackUpModule/back-up-panel-mongo-db/back-up-panel-mongo-db.component";
 import { CAFormComponent } from "./15_CA_15_CB/ca-form/ca-form.component";
 import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.component";
+import { FormControllerModule } from "../components/form-controller/form-controller.module";
 
 @NgModule({
   declarations: [
@@ -175,6 +176,7 @@ import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.co
     ImportSummaryModule,
     ExportTransactionModule,
     ImportTransactionModule,
+    FormControllerModule,
     RouterModule.forChild([
       {
         path: "",
@@ -519,7 +521,6 @@ import { LiveTradeAppComponent } from "../RoleBased/LiveTradeApp/LiveTradeApp.co
   exports: [
     MatProgressBarModule,
     MatTabsModule,
-    SharedHomeModule,
   ],
 })
 export class HomeModule {

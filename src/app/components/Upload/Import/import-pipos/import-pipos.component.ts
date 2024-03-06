@@ -360,7 +360,7 @@ export class ImportPIPOSComponent implements OnInit {
             (err) => console.log("Error adding pipo")
           );
         } else {
-          this.toastr.error(`Please check this pipo no. : ${e.value.pi_poNo} already exit...`);
+          this.toastr.error(`Please check this PI/PO no. : ${e.value.pi_poNo} already exit...`);
         }
       });
     } else {

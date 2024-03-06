@@ -355,6 +355,14 @@ export class ImportInsuranceComponent implements OnInit {
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
+    let temp: any = [];
+    this.LIST_PIPO?.forEach(element => {
+      temp.push(element);
+    });
+    data['pipo'] = temp
+    data?.UtilizationAddition?.forEach(element => {
+      element["buyerName"] = data["buyerName"]
+    });
     this.documentService.updateInsurance(data, id).subscribe((data) => {
       console.log(data);
       this.toastr.success('Insurance Document Row Is Updated Successfully.');
@@ -440,12 +448,14 @@ export class ImportInsuranceComponent implements OnInit {
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'insurances.xlsx');
   }
-
+  
+  LIST_PIPO: any = [];
   clickPipo($event, index) {
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['pi_poNo'] = $event["pi_poNo"];
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['amount'] = $event["amount"];
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['UtilizationAmount'] = $event["UtilizationAmount"];
     this.EDIT_FORM_DATA["UtilizationAddition"][index]['buyerName'] = $event["buyerName"];
+    this.LIST_PIPO[index] = $event?.id;
   }
   AddMore() {
     this.EDIT_FORM_DATA?.UtilizationAddition.push({

@@ -1144,7 +1144,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
     }
   }
 
-  SendApproval(Status: string, UniqueId: any) {
+  SendApproval(Status: string, UniqueId: any,PREVIEWS_PANEL) {
     if (UniqueId != null) {
       var pipo_id: any = [];
       var boe_id: any = [];
@@ -1212,6 +1212,7 @@ export class NewAdvanceOutwardRemittanceA2Component implements OnInit {
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
+                        PREVIEWS_PANEL?.displayHidden;
                         this.toastr.success("Outward-Remittance-A2 transaction created successfully...")
                       });
                     }

@@ -73,7 +73,8 @@ export class UploadServiceValidatorService implements OnInit {
   USER_DATA: any = [];
   PIPO_TRANSCTION_LIST: any = [];
   DROP_DOWN_DATA: any = [];
-
+  ALL_DATA_PURPOSE_CODE:any='';
+  
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public authGuard: AuthGuard,
@@ -548,7 +549,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.dynamicFormGroup[id].get(fieldName).updateValueAndValidity();
     console.log(myForm, value, "myForm")
     if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
+      callback({ id: id, form: form, fieldName: fieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: this.FIELDS_DATA[id] });
     }
   }
 
@@ -578,7 +579,7 @@ export class UploadServiceValidatorService implements OnInit {
     this.dynamicFormGroup[id].get(FormArrayfieldName).updateValueAndValidity();
     console.log(myForm, value, "setValueFromChildArray")
     if (callback != undefined && callback != null) {
-      callback({ id: id, form: form, fieldName: FormArrayfieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: field });
+      callback({ id: id, form: form, fieldName: FormArrayfieldName, OptionfieldIndex: OptionfieldIndex, FormOptionfieldName: FormOptionfieldName, value: value, dynamicFormGroup: this.dynamicFormGroup[id], field: this.FIELDS_DATA[id] });
     }
   }
 
@@ -675,10 +676,13 @@ export class UploadServiceValidatorService implements OnInit {
       yesnocheckbox: rule?.required == true ? [Validators.required] : [],
       ArrayList: rule?.required == true ? [Validators.required] : [],
       ArrayList_Object: rule?.required == true ? [Validators.required] : [],
-      InputButton: rule?.required == true ? [Validators.required] : [],
+      InputButton:  rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)] :
+      [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(50)],
       BOE: rule?.required == true ? [Validators.required] : [],
       ORM_SELECTION: rule?.required == true ? [Validators.required] : [],
       LABLE_CHECKBOX: rule?.required == true ? [Validators.required] : [],
+      EmailButton: rule?.required == true ? [Validators.required] : [],
+      NumberButton: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       CallbackButton: [],

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
 import { DocumentService } from "../../../../service/document.service";
-import { PDFDocument, StandardFonts } from "pdf-lib";
+import { BlendMode, PDFDocument, StandardFonts } from "pdf-lib";
 import { Router } from "@angular/router";
 import moment from 'moment';
 import jsPDF from 'jspdf'
@@ -27,10 +27,9 @@ export class ExportBillLodgementControllerData {
                     let formUrl = './../../assets/pdf/FedralBank/Export_bill_submission_format.pdf'
                     const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
                     const pdfDoc = await PDFDocument.load(formPdfBytes)
-                    const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-                    const doc = new jsPDF()
+                    const doc:any = new jsPDF()
+
                     const form: any = pdfDoc?.getForm()
-                    form.updateFieldAppearances(timesRomanFont); // I could set font, but ...
                     const getAllFields = form?.getFields();
                     const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
                     getAllFields?.forEach(element => {
@@ -73,7 +72,8 @@ export class ExportBillLodgementControllerData {
                         CURRENCY: [],
                         AMOUNT: [],
                         RECIVCED_AMOUNT: [],
-                        USED_AMOUNT: []
+                        USED_AMOUNT: [],
+                        COMMISION_AMOUNT:[]
                     };
                     let dataTable: any = []
                     if (sbdata != null) {
@@ -91,6 +91,7 @@ export class ExportBillLodgementControllerData {
                                 FIRX_DATE_NO?.CURRENCY?.push(IRM_REF_Element?.currency)
                                 FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.amount)
                                 FIRX_DATE_NO?.USED_AMOUNT?.push(IRM_REF_Element?.InputValue)
+                                FIRX_DATE_NO?.COMMISION_AMOUNT?.push(IRM_REF_Element?.commision)
                                 dataTable.push([IRM_REF_Element?.date, IRM_REF_Element?.billNo, IRM_REF_Element?.amount,
                                 IRM_REF_Element?.InputValue, element?.commercialNumber, element?.sbNo])
                             });
@@ -110,7 +111,7 @@ export class ExportBillLodgementControllerData {
                         getAllFields[22]?.setText(BillAmount != undefined ? this.ConvertNumberToWords(BillAmount).toUpperCase() : '0');
                         getAllFields[23]?.setText(BillAmount?.toString());
                         
-                        getAllFields[28]?.setText('');
+                        getAllFields[28]?.setText(sbdata?.pipo[0]?.commodity?.join(",")?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
                         getAllFields[29]?.setText(sbdata?.pipo[0]?.HSCODE);
                         getAllFields[30]?.setText('');
                         getAllFields[31]?.setText(sbdata?.countryOfFinaldestination);
@@ -145,11 +146,20 @@ export class ExportBillLodgementControllerData {
                     var pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
                     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
                     doc.text(text, pageWidth / 2, 20, { align: 'center' });
+
                     autoTable(doc, {
                         margin: { top: 30, left: 10, bottom: 30 },
                         head: [['Date', 'FIRX No.', 'Amount received', 'SB Setoff Amount', 'CI No.', 'SB No.']],
                         body: dataTable,
                     })
+                    const sum1 =  FIRX_DATE_NO?.RECIVCED_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    const sum2 =  FIRX_DATE_NO?.COMMISION_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    const sum3 =  FIRX_DATE_NO?.USED_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    let BillAmount: any = parseFloat(sbdata?.fobValue)
+                    doc.text(`Total Sum Amount of IRM Received : ${sbdata?.fobCurrency} `+sum1, pageWidth-200, doc.lastAutoTable.finalY + 20, { align: 'left' });
+                    doc.text(`Total Sum Amount of Commision : ${sbdata?.fobCurrency} `+sum2, pageWidth-200, doc.lastAutoTable.finalY + 30, { align: 'left' });
+                    doc.text(`Total Sum Amount of SB : ${sbdata?.fobCurrency} `+BillAmount, pageWidth-200, doc.lastAutoTable.finalY + 40, { align: 'left' });
+
                     let tableuri = doc.output("arraybuffer");
                     console.log(tableuri, "tableuri")
                     const loadmergedPdf = await PDFDocument.load(tableuri);
@@ -164,12 +174,22 @@ export class ExportBillLodgementControllerData {
                     copiedPages3.forEach((page) => {
                         mergedPdf.addPage(page);
                     });
-                    const mergedPdfFile = await mergedPdf.save();
-                    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-                    const mergedPdfFileload = await mergedPdfload.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    await resolve(x1);
+                    await mergedPdf.save();
+                    this.addForSealWaterMark(mergedPdf, validator, [
+                        {
+                            index: 1,
+                            x: 290,
+                            y: 453
+                        }, {
+                            index: 1,
+                            x: 290,
+                            y: 66
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             FedralWithANNEXURE: async (validator, exportbilllodgementdata, sbdata, ExportBillLodgement_Form, SELECT_BUYER_DETAILS) => {
@@ -203,8 +223,6 @@ export class ExportBillLodgementControllerData {
                     getAllFields[5]?.setText((validator.COMPANY_INFO[0]?.teamName+'\n'+validator.COMPANY_INFO[0]?.adress)?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
                     getAllFields[6]?.setText((exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerName+'\n'+exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerAdrs)?.split(/((?:\w+ ){11})/g).filter(Boolean)?.join('\n'));
                     getAllFields[10]?.setText(exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbank + '\n' + exportbilllodgementdata?.SELECTED_BUYER_NAME?.buyerbankaddress);
-                    console.log(sbdata, ExportBillLodgement_Form,validator.COMPANY_INFO[0]?.teamName, "TRANSACTION_SELECTED_COMMERICAIL_DATA");
-
                     getAllFields[24]?.uncheck();
                     getAllFields[25]?.uncheck();
                     if (ExportBillLodgement_Form?.Sight?.bool == true) {
@@ -229,12 +247,14 @@ export class ExportBillLodgementControllerData {
                         TOTAL_SB_PORT_CODE: [],
                         TOTAL_SB_DATE: [],
                         TOTAL_SB_COUNTRY_FINAL_DESTINATION: [],
-                        blcopydetails: []
+                        blcopydetails: [],
+                        COMMISION_AMOUNT:[]
                     };
                     let dataTable: any = []
                     let SbdataTable: any = []
                     if (exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.length != 0) {
                         let hscodelist: any = [];
+                        let Commodity: any = [];
                         exportbilllodgementdata?.SELECTED_SHIPPING_BILL_TRANSACTION_OBEJCT_KEYS?.forEach(sbelement => {
                             sbdata[sbelement]?.firxdetails?.forEach(element => {
                                 element?.FirxUsed_Balance?.split(',').forEach(FirxUsed_Balance => {
@@ -249,6 +269,7 @@ export class ExportBillLodgementControllerData {
                             FIRX_DATE_NO?.TOTAL_SB_COUNTRY_FINAL_DESTINATION?.push(sbdata[sbelement]?.countryOfFinaldestination);
                             FIRX_DATE_NO?.blcopydetails?.push(sbdata[sbelement]['blcopydetails'][0]?.airwayBlCopyNumber);
                             hscodelist.push(sbdata[sbelement]?.pipo[0]?.HSCODE)
+                            Commodity.push(sbdata[sbelement]?.pipo[0]?.commodity[0])
                             SbdataTable.push([sbdata[sbelement]?.sbdate, sbdata[sbelement]?.sbno, sbdata[sbelement]?.fobValue])
                         });
 
@@ -261,6 +282,7 @@ export class ExportBillLodgementControllerData {
                                     FIRX_DATE_NO?.CURRENCY?.push(IRM_REF_Element?.currency)
                                     FIRX_DATE_NO?.RECIVCED_AMOUNT?.push(IRM_REF_Element?.amount)
                                     FIRX_DATE_NO?.USED_AMOUNT?.push(IRM_REF_Element?.InputValue)
+                                    FIRX_DATE_NO?.COMMISION_AMOUNT?.push(IRM_REF_Element?.commision)
                                     dataTable.push([IRM_REF_Element?.date, IRM_REF_Element?.billNo, IRM_REF_Element?.amount,
                                     IRM_REF_Element?.InputValue, element?.commercialNumber, element?.sbNo])
                                 });
@@ -279,6 +301,7 @@ export class ExportBillLodgementControllerData {
                         getAllFields[23]?.setText("Refer Shipping Bill attached");
                         getAllFields[28]?.setText("As per Annexure Attached");
                         getAllFields[46]?.setText("As per Annexure Attached");
+                        getAllFields[28]?.setText(Commodity?.join(" ")?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
                         getAllFields[29]?.setText(hscodelist?.join(" ")?.split(/((?:\w+ ){50})/g).filter(Boolean)?.join('\n'));
                         getAllFields[30]?.setText("As per Annexure Attached");
                         getAllFields[31]?.setText("As per Annexure Attached");
@@ -309,29 +332,40 @@ export class ExportBillLodgementControllerData {
                     }
                     await pdfDoc.save();
 
-                    const doc = new jsPDF()
+                    const doc:any = new jsPDF()
                     let SBtext = "ANNEXURE – SHIPPING BILL RECEIVED";
                     var pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
                     doc.text(SBtext, pageWidth / 2, 20, { align: 'center' });
-
+                  
                     autoTable(doc, {
                         margin: { top: 30, left: 10, bottom: 30 },
                         head: [['SB Date', 'SB No.', 'SB Amount']],
                         body: SbdataTable,
                     })
+                    const sum4 = FIRX_DATE_NO?.TOTAL_SB_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    doc.text(`Total SB Sum Amount : ${FIRX_DATE_NO?.TOTAL_SB_CURRENCY[0]} `+sum4, pageWidth-200, doc.lastAutoTable.finalY + 20, { align: 'left' });
+
                     let SBtableuri = doc.output("arraybuffer");
                     console.log(SBtableuri, "SBtableuri")
                     const SBloadmergedPdf = await PDFDocument.load(SBtableuri);
-                    const doc1 = new jsPDF()
+                    
+                    const doc1:any = new jsPDF()
                     let text = "ANNEXURE – REMITTANCE RECEIVED";
-                    var pageWidth = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
+                    var pageWidth:any = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
                     doc1.text(text, pageWidth / 2, 20, { align: 'center' });
-
                     autoTable(doc1, {
                         margin: { top: 30, left: 10, bottom: 30 },
                         head: [['Date', 'FIRX No.', 'Amount received', 'SB Setoff Amount', 'CI No.', 'SB No.']],
                         body: dataTable,
                     })
+                    const sum1 =  FIRX_DATE_NO?.RECIVCED_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    const sum2 =  FIRX_DATE_NO?.COMMISION_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    const sum3 =  FIRX_DATE_NO?.TOTAL_SB_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+
+                    doc1.text(`Total Sum Amount of IRM Received : ${FIRX_DATE_NO?.TOTAL_SB_CURRENCY[0]} `+sum1, pageWidth-200, doc1.lastAutoTable.finalY + 20, { align: 'left' });
+                    doc1.text(`Total Sum Amount of Commision : ${FIRX_DATE_NO?.TOTAL_SB_CURRENCY[0]} `+sum2, pageWidth-200, doc1.lastAutoTable.finalY + 30, { align: 'left' });
+                    doc1.text(`Total Sum Amount of SB : ${FIRX_DATE_NO?.TOTAL_SB_CURRENCY[0]} `+sum3, pageWidth-200, doc1.lastAutoTable.finalY + 40, { align: 'left' });
+                    
                     let tableuri = doc1.output("arraybuffer");
                     console.log(tableuri, "tableuri")
                     const loadmergedPdf = await PDFDocument.load(tableuri);
@@ -339,9 +373,7 @@ export class ExportBillLodgementControllerData {
                     const mergedPdf = await PDFDocument.create();
                     const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
                     copiedPages.forEach((page, index) => {
-                        if ((index + 1) != copiedPages?.length) {
-                            mergedPdf.addPage(page);
-                        }
+                        mergedPdf.addPage(page);
                     });
 
                     const copiedPages3 = await mergedPdf.copyPages(loadmergedPdf, loadmergedPdf.getPageIndices());
@@ -353,13 +385,22 @@ export class ExportBillLodgementControllerData {
                     copiedPages2.forEach((page) => {
                         mergedPdf.addPage(page);
                     });
-
-                    const mergedPdfFile = await mergedPdf.save();
-                    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-                    const mergedPdfFileload = await mergedPdfload.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    await resolve(x1);
+                    await mergedPdf.save();
+                    this.addForSealWaterMark(mergedPdf, validator, [
+                        {
+                            index: 1,
+                            x: 290,
+                            y: 453
+                        }, {
+                            index: 1,
+                            x: 290,
+                            y: 66
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             HDFCExportRegularization: async (charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected) => {
@@ -411,6 +452,37 @@ export class ExportBillLodgementControllerData {
                 })
             }
         }
+    }
+
+    addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            copiedPages.forEach((page, index) => {
+                const { width, height } = page.getSize();
+                let data = indexList?.filter((item: any) => item?.index == index);
+                if (data?.length != 0) {
+                    data?.forEach(element => {
+                        page.drawImage(jpgImage, {
+                            x: width - element?.x,
+                            y: element?.y,
+                            width: 250,
+                            height: 250,
+                            opacity: 1,
+                            blendMode: BlendMode.Multiply
+                        });
+                    });
+                }
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
     }
 
     _arrayBufferToBase64(buffer) {

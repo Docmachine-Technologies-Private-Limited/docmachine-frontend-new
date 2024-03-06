@@ -1,0 +1,5 @@
+<upload-components [HIDE_BACKGROUND]="false" *ngIf="EditCondition==false" FormStyle="display: grid;grid-template-columns: repeat(1,1fr);"  id="CREATE_PLAN"
+(SubmitEvent)="onSubmit($event,REST_FORM)" #REST_FORM></upload-components>
+
+<upload-components [HIDE_BACKGROUND]="false" *ngIf="EditCondition==true" SubmitName="Update" FormStyle="display: grid;grid-template-columns: repeat(1,1fr);"  id="EDIT_CREATE_PLAN"
+(SubmitEvent)="onUpdate($event,REST_FORM)" #REST_FORM></upload-components>

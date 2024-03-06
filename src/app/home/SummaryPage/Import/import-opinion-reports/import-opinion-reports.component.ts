@@ -194,39 +194,6 @@ export class ImportOpinionReportsComponent implements OnInit {
     this.ngOnInit()
   }
 
-  
-  OpinionReportTable(data: any) {
-    this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-    this.removeEmpty(data).then(async (newdata: any) => {
-      await newdata?.forEach(async (element) => {
-        await this.FILTER_VALUE_LIST_NEW['items'].push({
-          date: moment(element['date']).format("DD-MM-YYYY"),
-          opinionReportNumber: element['opinionReportNumber'],
-          ForeignPartyName: element['ForeignPartyName']?.value,
-          ReportDate: moment(element['ReportDate']).format("DD-MM-YYYY"),
-          ReportRatings: element['ReportRatings'],
-          buyerName: element['buyerName'],
-          AgeingDays:this.SubtractDates(new Date(element['ReportDate']),new Date()),
-          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
-          isExpand: false,
-          disabled: element['deleteflag'] != '-1' ? false : true,
-          RoleType: this.USER_DATA?.result?.RoleCheckbox
-        })
-      });
-      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
-      }
-    });
-  }
-  public SubtractDates(startDate: Date, endDate: Date): any {
-    let dateDiff = (endDate.getTime() - startDate.getTime()) / 1000;
-    var h: any = Math.floor(dateDiff / 3600);
-    return (h > 24 ? this.SplitTime(h)?.Days + 'days' :startDate.toDateString());
-  }
   SplitTime(numberOfHours) {
     var Days = Math.floor(numberOfHours / 24);
     var Remainder = numberOfHours % 24;
@@ -333,23 +300,13 @@ export class ImportOpinionReportsComponent implements OnInit {
     });
   }
 
-  SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    this.SELECTED_VALUE = '';
-    this.SELECTED_VALUE = this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index];
-    this.EDIT_FORM_DATA = {
-      date: this.SELECTED_VALUE['date'],
-      opinionReportNumber: this.SELECTED_VALUE['opinionReportNumber'],
-      opinionReportAmount: this.SELECTED_VALUE['opinionReportAmount'],
-      currency: this.SELECTED_VALUE['currency'],
-      buyerName: this.SELECTED_VALUE['buyerName'],
-    }
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: {
-    //       "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
-    //   }
-    // };
-    // this.router.navigate([`/home/Summary/Import/Edit/OpinionReports`],navigationExtras);
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
+      }
+    };
+    this.router.navigate([`/home/Summary/Import/Edit/OpinionReports`],navigationExtras);
     this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
 

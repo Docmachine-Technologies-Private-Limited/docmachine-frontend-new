@@ -1,12 +1,9 @@
-import { Component, OnInit, ViewChild, } from '@angular/core';
+import { Component, OnInit,} from '@angular/core';
 import { UserService } from "../../../../service/user.service";
 import { Router } from "@angular/router";
-import $ from 'jquery'
-declare var kendo: any;
-
 import {
   FormControl,
-  FormGroup, NgForm, Validators
+  FormGroup
 } from '@angular/forms';
 
 import { DocumentService } from "../../../../service/document.service";

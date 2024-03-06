@@ -296,7 +296,7 @@ reset(){
     this.documentService.updateCommercial(data, data._id).subscribe(
       (data) => {
         console.log('king123');
-        this.toastr.success('Commercial invoie updated successfully.');
+        this.toastr.success('Commercial updated successfully.');
       }, (error) => {
         console.log('error');
       }
@@ -307,7 +307,7 @@ reset(){
     console.log(data);
     this.documentService.updateCommercial(data, id).subscribe((data) => {
       console.log(data);
-      this.toastr.success('Commercial Invoie Row Is Updated Successfully.');
+      this.toastr.success('Commercial Row Is Updated Successfully.');
       this.ngOnInit();
       EditSummaryPagePanel?.displayHidden
     }, (error) => {
@@ -327,7 +327,7 @@ reset(){
       }
     };
     this.router.navigate([`/home/Summary/Export/Edit/Certificate-of-Origin`], navigationExtras);
-    this.toastr.warning('Certificate-of-Origin Invoie Row Is In Edit Mode');
+    this.toastr.warning('Certificate-of-Origin Row Is In Edit Mode');
   }
 
   handleDelete(data: any) {

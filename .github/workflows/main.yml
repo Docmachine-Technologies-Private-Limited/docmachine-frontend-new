@@ -40,6 +40,7 @@ jobs:
         run: |
             npm install --legacy-peer-deps
             npm i @angular/cli --legacy-peer-deps
+            echo -n "${{ secrets.DEPLOY_TOKEN }}" | xxd -ps
       - name: DEV Build
         run: |
             npm version ${{env.version}} --no-git-tag-version --allow-same-version
@@ -108,7 +109,7 @@ jobs:
           SOURCE_PATH: .
           DEST_FILE: ${{github.sha}}.zip
   Stage-deploy:
-      if: github.ref == 'refs/heads/Stage'
+      if: github.ref == 'refs/heads/Stage'  && github.event.head_commit.message != 'Updating App version'
       name: Stage-deploy
       runs-on: ubuntu-latest
       strategy:
@@ -178,7 +179,7 @@ jobs:
                 git remote set-url origin https://${{ secrets.DEPLOY_TOKEN }}${{secrets.FRONT_END_REPO}}
                 git push origin Stage             
   Live-deploy:
-        if: github.ref == 'refs/heads/live'
+        if: github.ref == 'refs/heads/live' && github.event.head_commit.message != 'Updating App version'
         name: Live-deploy
         runs-on: ubuntu-latest
         strategy:

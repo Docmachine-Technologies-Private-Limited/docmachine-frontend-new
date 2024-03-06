@@ -63,9 +63,16 @@
     max-height: 86vh;
     border-radius: 10px;
     margin: auto;
+    background-color: white;
 }
 
 .division-panel {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.formGroup-division-panel {
     box-shadow: 0px 0px 2px 2px #d5d0d0;
     padding: 10px;
     border-radius: 10px;
@@ -93,6 +100,7 @@
     float: right;
     justify-content: center;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .disbaled-h5 {
@@ -484,14 +492,6 @@
     margin: auto;
 }
 
-.division-panel {
-    box-shadow: 0px 0px 2px 2px #d5d0d0;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    background-color: white;
-}
-
 .custom {
     width: 300px;
 }
@@ -806,19 +806,97 @@
     gap: 10px;
 }
 
-.grid{
+.grid {
     display: grid;
     grid-template-columns: 90% auto;
 }
 
-.grid input{
+.grid input {
     border-radius: 0;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
 }
 
-.grid button{
+.grid button {
     border-radius: 0;
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
+}
+
+.button-disabled {
+    pointer-events: none;
+    opacity: .8;
+    background-color: #e9ecef;
+    padding: 5px !important;
+    border-radius: 5px;
+}
+
+#dropzone {
+    font-family: EuropaNuova-Regular, sans-serif !important;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.iframe i {
+    font-size: 35px;
+    color: #0003;
+    margin-bottom: 2%;
+}
+
+.iframe h5 {
+    color: #000c;
+    margin-bottom: 1px;
+}
+
+.iframe p {
+    font-family: Poppins, sans-serif !important;
+    text-align: center;
+    line-height: 30px;
+    color: #303030;
+}
+
+.iframe {
+    cursor: pointer;
+    width: 100%;
+    background-color: #fff;
+    border: 1px dashed #51AEE5;
+    display: flex;
+    background: #F2F9FD;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    padding: 40px 0;
+    margin-bottom: 30px;
+}
+
+.UploadLetterHead{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 2px dashed #439bc0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.UploadLetterHead img{
+    margin: auto;
+    width: 45px;
+}
+
+.UploadLetterHead-dropzone-container{
+    font-family: EuropaNuova-Regular,sans-serif!important;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    opacity: 0;
 }

@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
   selector: 'import-bill-of-exchanges',
   templateUrl: './import-bill-of-exchanges.component.html',
-  styleUrls: ['./import-bill-of-exchanges.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./import-bill-of-exchanges.component.scss', '../../commoncss/common.component.scss']
 })
 export class ImportBillOfExchangesComponent implements OnInit {
   publicUrl: any = '';
@@ -41,8 +40,8 @@ export class ImportBillOfExchangesComponent implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
-  SUBMIT_ERROR:boolean=false;
-  
+  SUBMIT_ERROR: boolean = false;
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -53,7 +52,7 @@ export class ImportBillOfExchangesComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-   
+
   }
 
   response(args: any) {
@@ -79,23 +78,12 @@ export class ImportBillOfExchangesComponent implements OnInit {
             required: true,
           }
         },
-        // AdditionalDocuments: {
-        //   type: "AdditionalDocuments",
-        //   value: [],
-        //   label: "Add More Documents",
-        //   rules: {
-        //     required: false,
-        //   },
-        //   id: "AdditionalDocuments",
-        //   url: "member/uploadImage",
-        //   items: [0]
-        // },
-      },'ImportBillOfExchange');
+      }, 'ImportBillOfExchange');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
-
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
+  
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'import';
@@ -117,12 +105,12 @@ export class ImportBillOfExchangesComponent implements OnInit {
               ],
             }
             this.userService.updateManyPipo(this.pipoArr, 'billOfExchange', this.pipourl1, updatedData).subscribe((data) => {
-                  console.log(data);
-                  this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
-                },(error) => {
-                  console.log('error');
-                }
-              );
+              console.log(data);
+              this.router.navigate(['home/Summary/Import/Bill-Of-Exchange']);
+            }, (error) => {
+              console.log('error');
+            }
+            );
           },
           (err) => console.log('Error adding pipo')
         );
@@ -141,8 +129,8 @@ export class ImportBillOfExchangesComponent implements OnInit {
         PIPO_ID_ARRAY.push(element?._id)
         PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
       });
-      
-      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
+
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
@@ -152,10 +140,10 @@ export class ImportBillOfExchangesComponent implements OnInit {
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
-  
+
   changedCommercial(pipo: any) {
     this.documentService.getCommercialByFiletype('import', pipo).subscribe((res: any) => {
-      this.validator.COMMERICAL_NO=[];
+      this.validator.COMMERICAL_NO = [];
       res?.data.forEach(element => {
         this.validator.COMMERICAL_NO.push({ value: element?.commercialNumber, id: element?._id, sbno: element?.sbNo, sbid: element?.sbRef[0], data: element });
       });

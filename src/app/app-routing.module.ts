@@ -16,11 +16,13 @@ import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { ResetOTPComponent } from "./forgot-password/reset-otp/reset-otp.component";
 import { RoleVerifyEmailComponent } from "./RoleVerifyEmail/role-verify-email/role-verify-email.component";
 import { SharedHomeModule } from "./home/shared-home.module";
-import { SigninComponent } from "./signIn/signin.component";
-import { SignupComponent } from "./signup/signup.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthorizationComponent } from "./authorization/authorization.component";
 import { AuthorizationTallyIntrgrationComponent } from "./authorization-tally-intrgration/authorization-tally-intrgration.component";
+import { SigninComponent } from "./RegistrationPage/signIn/signin.component";
+import { SignupComponent } from "./RegistrationPage/signup/signup.component";
+import { TearmsConditionComponent } from "./RegistrationPage/tearms-condition/tearms-condition.component";
+import { FormControllerModule } from "./components/form-controller/form-controller.module";
 
 const routes: Routes = [
   {
@@ -85,7 +87,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [SigninComponent, SignupComponent],
+  declarations: [SigninComponent, SignupComponent,TearmsConditionComponent],
   imports: [
     RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" }),
     MatDialogModule,
@@ -93,7 +95,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     SharedHomeModule
   ],
-  exports: [RouterModule],
+  exports: [RouterModule,TearmsConditionComponent],
 })
 export class AppRoutingModule {
 

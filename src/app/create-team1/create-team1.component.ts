@@ -23,7 +23,7 @@ export class CreateTeam1Component implements OnInit {
   IMAGE_SHOW: any = '';
 
   constructor(@Inject(PLATFORM_ID) public platformId,
-    private userService: UserService,
+    public userService: UserService,
     private router: Router,
     public docservice: DocumentService,
     public validator: UploadServiceValidatorService,
@@ -31,12 +31,9 @@ export class CreateTeam1Component implements OnInit {
     public leiRecords: LEIRecordsService) {
   }
 
-  ngOnInit(): void {
-    this.docservice.getBankNameList().then((res) => {
-      this.validator.BANK_NAME_LIST_GLOABL = res;
-
-    });
-    console.log(this.validator.BANK_NAME_LIST_GLOABL, 'BANK_NAME_LIST')
+  async ngOnInit() {
+    this.validator.BANK_NAME_LIST_GLOABL = await this.docservice.getBankNameList();
+    console.log(this.validator.BANK_NAME_LIST_GLOABL, this.userService.UserData, 'BANK_NAME_LIST')
   }
 
   onSubmit(e: any) {
@@ -93,209 +90,291 @@ export class CreateTeam1Component implements OnInit {
   loadForm() {
     setTimeout(() => {
       let Address: any = this.LEI_DATA?.entity?.legalAddress?.addressLines?.join(',') + ' ' + this.LEI_DATA?.entity?.legalAddress?.city + ' ' + this.LEI_DATA?.entity?.legalAddress?.country;
-      this.validator.buildForm({
-        teamName: {
-          type: "text",
-          value: this.LEI_DATA?.entity?.legalName?.name,
-          label: "Company Name",
-          rules: {
-            required: true,
-          }
-        },
-        adress: {
-          type: "text",
-          value: Address?.indexOf('undefined') == -1 ? Address : '',
-          label: "Company Address",
-          rules: {
-            required: true,
+      if ((this.userService.UserData?.Teasury == true || this.userService.UserData?.DMS == true) && this.userService.UserData?.Transaction == false) {
+        this.validator.buildForm({
+          teamName: {
+            type: "text",
+            value: this.LEI_DATA?.entity?.legalName?.name != undefined ? this.LEI_DATA?.entity?.legalName?.name : this.userService.UserData?.companyName,
+            label: "Company Name",
+            rules: {
+              required: true,
+            }
           },
-          maxLength: 1000,
-        },
-        iec: {
-          type: "text",
-          value: "",
-          label: "Importer Exporter code (IEC)",
-          rules: {
-            required: true,
-          }
-        },
-        phone: {
-          type: "text",
-          value: "",
-          label: "Contact Phone number",
-          rules: {
-            required: true,
-          }
-        },
-        gst: {
-          type: "text",
-          value: "",
-          label: "GSTIN",
-          rules: {
-            required: true,
-          }
-        },
-        AdCode: {
-          type: "formGroup",
-          label: "AD Code",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
+          adress: {
+            type: "text",
+            value: Address?.indexOf('undefined') == -1 ? Address : '',
+            label: "Company Address",
+            rules: {
+              required: true,
+            },
+            maxLength: 1000,
           },
-          formArray: [
-            [
-              {
-                type: "text",
-                value: "",
-                label: "AD Code",
-                name: 'AdCode',
-                rules: {
-                  required: true,
+          iec: {
+            type: "text",
+            value: "",
+            label: "Importer Exporter code (IEC)",
+            rules: {
+              required: true,
+            }
+          },
+          phone: {
+            type: "text",
+            value: this.userService.UserData?.mobileNo,
+            label: "Contact Phone number",
+            rules: {
+              required: true,
+            }
+          },
+          AdCode: {
+            type: "formGroup",
+            label: "AD Code",
+            GroupLabel: [''],
+            AddNewRequried: true,
+            rules: {
+              required: false,
+            },
+            formArray: [
+              [
+                {
+                  type: "text",
+                  value: "",
+                  label: "AD Code",
+                  name: 'AdCode',
+                  rules: {
+                    required: false,
+                  },
                 },
-              },
+              ]
             ]
-          ]
-        },
-        caEmail: {
-          type: "text",
-          value: "",
-          label: "CA email id",
-          rules: {
-            required: false,
-          }
-        },
-        chaEmail: {
-          type: "text",
-          value: "",
-          label: "CHA email id",
-          rules: {
-            required: false,
-          }
-        },
-        Location: {
-          type: "formGroup",
-          label: "Branch List",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
           },
-          formArray: [
-            [
-              {
-                type: "text",
-                value: "",
-                label: "Add Location",
-                name: 'loc',
-                rules: {
-                  required: false,
-                },
-              },
-            ]
-          ]
-        },
-        commodity: {
-          type: "formGroup",
-          label: "Commodity List",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
-          },
-          formArray: [
-            [
-              {
-                type: "text",
-                value: "",
-                label: "Add Commodity",
-                name: 'como',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "HSCODE",
-                value: "",
-                label: "Select HS Code",
-                name: "HSCODE",
-                rules: {
-                  required: true,
+          bankDetails: {
+            type: "formGroup",
+            label: "Bank Details",
+            GroupLabel: [''],
+            AddNewRequried: true,
+            rules: {
+              required: false,
+            },
+            formArray: [
+              [
+                {
+                  type: "BankList",
+                  value: "",
+                  label: "Bank Name",
+                  name: 'bank',
+                  rules: {
+                    required: true,
+                  },
                 }
-              },
+              ]
             ]
-          ]
-        },
-        bankDetails: {
-          type: "formGroup",
-          label: "Bank Details",
-          GroupLabel: [''],
-          AddNewRequried: true,
-          rules: {
-            required: false,
+          }
+        }, 'SetupCompanyDetails');
+      } else if (this.userService.UserData?.Transaction == true) {
+        this.validator.buildForm({
+          teamName: {
+            type: "text",
+            value: this.LEI_DATA?.entity?.legalName?.name != undefined ? this.LEI_DATA?.entity?.legalName?.name : this.userService.UserData?.companyName,
+            label: "Company Name",
+            rules: {
+              required: true,
+            }
           },
-          formArray: [
-            [
-              {
-                type: "BankList",
-                value: "",
-                label: "Bank Name",
-                name: 'bank',
-                rules: {
-                  required: true,
+          adress: {
+            type: "text",
+            value: Address?.indexOf('undefined') == -1 ? Address : '',
+            label: "Company Address",
+            rules: {
+              required: true,
+            },
+            maxLength: 1000,
+          },
+          iec: {
+            type: "text",
+            value: "",
+            label: "Importer Exporter code (IEC)",
+            rules: {
+              required: true,
+            }
+          },
+          phone: {
+            type: "text",
+            value: this.userService.UserData?.mobileNo,
+            label: "Contact Phone number",
+            rules: {
+              required: true,
+            }
+          },
+          gst: {
+            type: "text",
+            value: "",
+            label: "GSTIN",
+            rules: {
+              required: true,
+            }
+          },
+          AdCode: {
+            type: "formGroup",
+            label: "AD Code",
+            GroupLabel: [''],
+            AddNewRequried: true,
+            rules: {
+              required: false,
+            },
+            formArray: [
+              [
+                {
+                  type: "text",
+                  value: "",
+                  label: "AD Code",
+                  name: 'AdCode',
+                  rules: {
+                    required: true,
+                  },
                 },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Bank Swift Code",
-                name: 'SwiftCode',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Bank Address",
-                name: 'bicAddress',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "text",
-                value: "",
-                label: "Bank Account Number",
-                name: 'accNumber',
-                rules: {
-                  required: true,
-                },
-                
-              },
-              {
-                type: "AccountType",
-                value: "",
-                label: "Bank Account Type",
-                name: 'accType',
-                rules: {
-                  required: true,
-                },
-              },
-              {
-                type: "currency",
-                value: "",
-                label: "Bank Currency Type",
-                name: 'currency',
-                rules: {
-                  required: true,
-                },
-              },
+              ]
             ]
-          ],
-         
-        }
-      }, 'SetupCompanyDetails');
+          },
+          caEmail: {
+            type: "text",
+            value: "",
+            label: "CA email id",
+            rules: {
+              required: false,
+            }
+          },
+          chaEmail: {
+            type: "text",
+            value: "",
+            label: "CHA email id",
+            rules: {
+              required: false,
+            }
+          },
+          location: {
+            type: "formGroup",
+            label: "Branch List",
+            GroupLabel: [''],
+            AddNewRequried: true,
+            rules: {
+              required: false,
+            },
+            formArray: [
+              [
+                {
+                  type: "text",
+                  value: "",
+                  label: "Add Location",
+                  name: 'loc',
+                  rules: {
+                    required: false,
+                  },
+                },
+              ]
+            ]
+          },
+          commodity: {
+            type: "formGroup",
+            label: "Commodity List",
+            GroupLabel: [''],
+            AddNewRequried: true,
+            rules: {
+              required: false,
+            },
+            formArray: [
+              [
+                {
+                  type: "text",
+                  value: "",
+                  label: "Add Commodity",
+                  name: 'como',
+                  rules: {
+                    required: true,
+                  },
+                },
+                {
+                  type: "HSCODE",
+                  value: "",
+                  label: "Select HS Code",
+                  name: "HSCODE",
+                  rules: {
+                    required: true,
+                  }
+                },
+              ]
+            ]
+          },
+          bankDetails: {
+            type: "formGroup",
+            label: "Bank Details",
+            GroupLabel: [''],
+            AddNewRequried: true,
+            rules: {
+              required: false,
+            },
+            formArray: [
+              [
+                {
+                  type: "BankList",
+                  value: "",
+                  label: "Bank Name",
+                  name: 'bank',
+                  rules: {
+                    required: true,
+                  },
+                },
+                {
+                  type: "text",
+                  value: "",
+                  label: "Bank Swift Code",
+                  name: 'SwiftCode',
+                  rules: {
+                    required: true,
+                  },
+                },
+                {
+                  type: "text",
+                  value: "",
+                  label: "Bank Address",
+                  name: 'bicAddress',
+                  rules: {
+                    required: true,
+                  },
+                },
+                {
+                  type: "text",
+                  value: "",
+                  label: "Bank Account Number",
+                  name: 'accNumber',
+                  rules: {
+                    required: true,
+                  },
+
+                },
+                {
+                  type: "AccountType",
+                  value: "",
+                  label: "Bank Account Type",
+                  name: 'accType',
+                  rules: {
+                    required: true,
+                  },
+                },
+                {
+                  type: "currency",
+                  value: "",
+                  label: "Bank Currency Type",
+                  name: 'currency',
+                  rules: {
+                    required: true,
+                  },
+                },
+              ]
+            ],
+
+          }
+        }, 'SetupCompanyDetails');
+      }
     }, 200);
   }
 }

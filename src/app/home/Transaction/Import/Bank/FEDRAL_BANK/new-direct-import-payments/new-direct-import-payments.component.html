@@ -65,10 +65,7 @@
                     (PIPO_EVENT)="PIPO_CALLBACK($event,ORM_POPUP_PANEL)"
                     (SubmitEvent)="this.SubmitButton(RawValueEventPanel?.geForm)"
                     (AddButton)="FORWARD_CONTRACTPANEL?.displayShow" #RawValueEventPanel>
-                    <button class="btn btn-primary" style="position: absolute;
-                    bottom: 10px;
-                    right: 100px;
-                    height: 50px;" *ngIf="this.Send_for_Approval_button==true"
+                    <button class="btn btn-primary" *ngIf="this.Send_for_Approval_button==true"
                         (click)="PREVIEWS_PANEL?.displayShow">Previews</button>
                         <more-content>
                             <div class="label-name-amount">
@@ -147,7 +144,7 @@
     name="Document View" #PREVIEWS_PANEL>
     <custom-model-header>
         <button type="button" class="btn btn-primary"
-            (click)="SendApproval(this.GetDownloadStatus?.status,'SendApprover');">Send for
+            (click)="SendApproval(this.GetDownloadStatus?.status,'SendApprover',PREVIEWS_PANEL);">Send for
             Approval</button>
     </custom-model-header>
     <div class="col-12 mt-2 mb-2">

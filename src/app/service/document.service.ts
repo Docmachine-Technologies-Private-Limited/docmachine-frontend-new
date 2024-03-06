@@ -1290,7 +1290,6 @@ export class DocumentService {
     return this.http.post(`${AppConfig.COUPON_API}/product/Add`, { data: pipo }, httpOptions);
   }
 
-
   //get airway blcopy and advice copy api
   addCouponCode2(pipo) {
     this.loadFromLocalStorage();
@@ -1300,7 +1299,37 @@ export class DocumentService {
     };
     return this.http.post(`${AppConfig.COUPON_API}/product/AddCoupon`, { data: pipo }, httpOptions);
   }
-
+  
+  //get airway blcopy and advice copy api
+  addSubscriptionPlan(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/SubscriptionPlan/add`, { data: pipo }, httpOptions);
+  }
+  
+   //get airway blcopy and advice copy api
+   updateSubscriptionPlan(id,pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${AppConfig.COUPON_API}/SubscriptionPlan/update`, { id:id,data: pipo }, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  getSubscriptionPlan() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${AppConfig.COUPON_API}/SubscriptionPlan/get`, httpOptions);
+  }
+  
   //get airway blcopy and advice copy api
   GetCouponCodeDetails() {
     this.loadFromLocalStorage();
@@ -1309,6 +1338,55 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.get(`${AppConfig.COUPON_API}/product/getProduct`, httpOptions);
+  }
+  
+   //get airway blcopy and advice copy api
+   addBharatheximCouponCode2(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/product/AddCoupon`, { data: pipo }, httpOptions);
+  }
+   //get airway blcopy and advice copy api
+   addBharatheximSubscriptionPlan(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/SubscriptionPlan/add`, { data: pipo }, httpOptions);
+  }
+  
+   //get airway blcopy and advice copy api
+   updateBharatheximSubscriptionPlan(id,pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/SubscriptionPlan/update`, { id:id,data: pipo }, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  getBharatheximSubscriptionPlan() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/SubscriptionPlan/get`, httpOptions);
+  }
+  
+  //get airway blcopy and advice copy api
+  GetBharatheximCouponCodeDetails() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/product/getProduct`, httpOptions);
   }
 
   //get airway blcopy and advice copy api

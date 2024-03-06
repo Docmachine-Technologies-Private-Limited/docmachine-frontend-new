@@ -104,7 +104,7 @@ export class ImportMasterServiceAgreementsComponent implements OnInit {
         PartyName: {
           type: "benne",
           value: "",
-          label: "Overseas benne Name*",
+          label: "Overseas bene Name*",
           rules: {
             required: true,
           }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router';
+import { FormGroup } from '@angular/forms'
 import { UserService } from '../../service/user.service';
 import * as jwt_decode from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
@@ -16,19 +16,30 @@ export class RoleVerifyEmailComponent implements OnInit {
   token: any;
   email: any;
   toggle: boolean;
-  constructor(private formBuilder: FormBuilder, private userService: UserService,
-    private router: Router, private route: ActivatedRoute, private toastr: ToastrService) { }
+  UserData: any = []
+  constructor(private userService: UserService, private route: ActivatedRoute, private toastr: ToastrService) { }
   ngOnInit(): void {
     this.token = this.route.snapshot.params['id'];
     let val: any = jwt_decode.default(this.token);
-    console.log(val)
+    console.log(val, "jwt_decode")
     this.email = val['_id'];
-
+    this.UserData = val;
   }
+
   onSubmit() {
     console.log(this.token)
-    if (true) {
-      this.userService.RoleBaseSingUpupdateEmail('a', this.email).subscribe(data => {
+    if (this.UserData?.role == "TradeApp") {
+      this.userService.DeltaTradeAppLoginUpdate('a', this.UserData?._id).subscribe(data => {
+        console.log(data)
+        if (data) {
+          this.toggle = true;
+          this.toastr.success('Email Verification done');
+        }
+      }, error => {
+        console.log("error")
+      });
+    } else {
+      this.userService.RoleBaseSingUpupdateEmail('a', this.UserData?._id).subscribe(data => {
         console.log(data)
         if (data) {
           this.toggle = true;

@@ -287,6 +287,14 @@ export class EditPIPOSComponent implements OnInit {
             required: true,
           }
         },
+        commodity: {
+          type: "commodity",
+          value:args?.ConsigneeName,
+          label: "Choose commodity",
+          rules: {
+            required: true,
+          }
+        },
         RemitterName: {
           type: "RemitterName",
           value: args?.RemitterName,

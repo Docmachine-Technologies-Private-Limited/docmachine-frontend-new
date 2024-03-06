@@ -261,16 +261,26 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                 callback: (item: any) => {
                   const myForm: any = item?.form?.controls[item?.fieldName] as FormGroup;
                   let currentVal = item?.value;
-                  if (currentVal?.CI_REF[0]?.AirwayBillRef?.length != 0) {
-                    item['field']['NewformArray'][item?.OptionfieldIndex]["BOEAmount"]['value'] = currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount;
-                    myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
-                    myForm.controls[item?.OptionfieldIndex]?.controls["BOEAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
-                    myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
-                    myForm.controls[item?.OptionfieldIndex]?.controls["ActualBOEAmount"]?.setValue(currentVal?.invoiceAmount);
-                    myForm['touched'] = true;
-                    myForm['status'] = 'VALID';
-                  } else {
-                    this.toastr.error("You don't have any airway bill copy....")
+                  if (currentVal!=undefined) {
+                  console.log(AirwayBillRefExists(currentVal?.CI_REF),"AirwayBillRefExists")
+                    if (currentVal?.CI_REF?.length!=0) {
+                      if (AirwayBillRefExists(currentVal?.CI_REF)==true) {
+                        // item['field'][7]['NewformArray']["BOEAmount"]['value'] = currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount;
+                        myForm.controls[item?.OptionfieldIndex]?.controls["AvailableAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
+                        myForm.controls[item?.OptionfieldIndex]?.controls["BOEAmount"]?.setValue(currentVal?.balanceAmount != '-1' ? currentVal?.balanceAmount : currentVal?.invoiceAmount);
+                        myForm.controls[item?.OptionfieldIndex]?.controls["currency"]?.setValue(currentVal?.currency);
+                        myForm.controls[item?.OptionfieldIndex]?.controls["ActualBOEAmount"]?.setValue(currentVal?.invoiceAmount);
+                        myForm['touched'] = true;
+                        myForm['status'] = 'VALID';
+                      } else {
+                        this.toastr.error("You don't have any airway bill copy....")
+                      }
+                    }
+                  }
+                  function AirwayBillRefExists(arr) {
+                    return arr.some(function(el) {
+                      return el.AirwayBillRef?.length!=0;
+                    }); 
                   }
                   console.log(item, this.validator.FIELDS_DATA, "callback")
                 },
@@ -375,7 +385,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
           element['isDisabled'] = true;
         }
         let filterDirectImports = element?.paymentTerm?.filter((item: any) => item?.type?.value === "Direct Imports(Payment Against Bill of entry)")
-        filterDirectImports.forEach((paymentTermelement: any) => {
+        filterDirectImports?.forEach((paymentTermelement: any) => {
           paymentTermelement['BalanceAmount'] = paymentTermelement?.BalanceAmount != '-1' && paymentTermelement?.BalanceAmount != undefined ? paymentTermelement['BalanceAmount'] : paymentTermelement?.amount
         });
         element["paymentTerm"] = filterDirectImports;
@@ -745,7 +755,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
     }
   }
 
-  SendApproval(Status: string, UniqueId: any) {
+  SendApproval(Status: string, UniqueId: any,PREVIEWS_PANEL) {
     if (UniqueId != null) {
       var pipo_id: any = [];
       var boe_id: any = [];
@@ -835,6 +845,7 @@ export class NewDirectImportPaymentsComponent implements OnInit {
                       }
                       this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
+                        PREVIEWS_PANEL?.displayHidden;
                         this.toastr.success("Direct Import Payment transaction created successfully...")
                       });
                     }

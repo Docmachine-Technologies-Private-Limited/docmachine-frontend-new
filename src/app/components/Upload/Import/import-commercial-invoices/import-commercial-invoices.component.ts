@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
@@ -114,6 +113,16 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           NoButton: [
             { name: 'AdvanceInfo', status: false },
           ],
+          callback: (item: any) => {
+            if (item?.bool == true) {
+              item.field[5]['divhide'] = false;
+              item.form?.controls?.AdvanceInfo?.enable();
+            } else {
+              item.field[5]['divhide'] = true;
+              item.form?.controls?.AdvanceInfo?.disable();
+            }
+            console.log(item, "IfAdvancePaid")
+          }
         },
         AdvanceInfo: {
           type: "formGroup",
@@ -123,6 +132,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           rules: {
             required: false,
           },
+          divhide: true,
           formArray: [
             [
               {
@@ -239,6 +249,8 @@ export class ImportCommercialInvoicesComponent implements OnInit {
         this.documentService.getInvoice_No({
           commercialNumber: e.commercialNumber
         }, 'commercials').subscribe((resp: any) => {
+          delete e.IfAdvancePaid?.field
+          delete e.IfAdvancePaid?.form
           console.log('creditNoteNumber Invoice_No', resp)
           if (resp.data.length == 0) {
             this.documentService.addCommercial(e).subscribe((res: any) => {
@@ -257,7 +269,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
               }, (error) => {
                 console.log('error');
               });
-            },(err) => console.log('Error adding pipo'));
+            }, (err) => console.log('Error adding pipo'));
           } else {
             this.toastr.error(`Please check this Commerical no. : ${e.commercialNumber} already exit...`);
           }
@@ -277,13 +289,13 @@ export class ImportCommercialInvoicesComponent implements OnInit {
         PIPO_ID_ARRAY.push(element?._id)
         PI_PO_BUYER_NAME_PI_PO_BENNE_NAME.push(element?.id[1])
       });
-      this.pipoArr = PIPO_ID_ARRAY?.filter(function(item, pos) {return PIPO_ID_ARRAY.indexOf(item) == pos});
+      this.pipoArr = PIPO_ID_ARRAY?.filter(function (item, pos) { return PIPO_ID_ARRAY.indexOf(item) == pos });
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST = PI_PO_BUYER_NAME_PI_PO_BENNE_NAME
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'import');
-      let PIPODATA:any=[];
+      let PIPODATA: any = [];
       this.documentService.getPipoByIdList(this.pipoArr).subscribe((res: any) => {
         console.log(res, 'getPipoByIdList')
         res?.forEach(element => {

@@ -2,9 +2,10 @@ import { Injectable } from "@angular/core";
 import { UserService } from "../../../../service/user.service";
 import { ToastrService } from "ngx-toastr";
 import { DocumentService } from "../../../../service/document.service";
-import { PDFDocument } from "pdf-lib";
+import { BlendMode, PDFDocument } from "pdf-lib";
 import { Router } from "@angular/router";
 import moment from 'moment';
+import { UploadServiceValidatorService } from "../../../../components/Upload/service/upload-service-validator.service";
 
 @Injectable({ providedIn: 'root' })
 export class ExportHomeControllerData {
@@ -13,6 +14,7 @@ export class ExportHomeControllerData {
     constructor(public documentService: DocumentService,
         private router: Router,
         private toastr: ToastrService,
+        public validator:UploadServiceValidatorService,
         private userService: UserService) {
         this.userService.getTeam().subscribe((data: any) => { this.COMPANY_INFO = data?.data[0] }, error => { console.log("error", error) });
     }
@@ -123,11 +125,25 @@ export class ExportHomeControllerData {
                     }
 
                     getAllFields[139].setText(this.CURRENT_DATE)
-                    const mergedPdfFile = await pdfDoc.save();
-                    var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
-                    const x1 = 'data:application/pdf;base64,' + base64String1;
-                    console.log(x1,"base64String1")
-                    await resolve(x1);
+                    if (getAllFields?.length!=0) {
+                        getAllFields[getAllFields.length-1].setText(this.CURRENT_DATE)
+                    }
+                    await pdfDoc.save();
+                    this.addForSealWaterMark(pdfDoc, this.validator, [
+                        {
+                            index: 0,
+                            x: 290,
+                            y: -40
+                        }, {
+                            index: 1,
+                            x: 290,
+                            y: -50
+                        }]).then(async (res: any) => {
+                            const pdfBytes = await res?.save()
+                            var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                            const x1 = 'data:application/pdf;base64,' + base64String1;
+                            await resolve(x1);
+                        })
                 })
             },
             HDFC: async (charge, credit, Inward_Remittance_MT103, generatePurpose, ToForwardContract_Selected) => {
@@ -252,6 +268,37 @@ export class ExportHomeControllerData {
             binary += String.fromCharCode(bytes[i]);
         }
         return window.btoa(binary);
+    }
+    
+    addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            copiedPages.forEach((page, index) => {
+                const { width, height } = page.getSize();
+                let data = indexList?.filter((item: any) => item?.index == index);
+                if (data?.length != 0) {
+                    data?.forEach(element => {
+                        page.drawImage(jpgImage, {
+                            x: width - element?.x,
+                            y: element?.y,
+                            width: 250,
+                            height: 250,
+                            opacity: 1,
+                            blendMode: BlendMode.Multiply
+                        });
+                    });
+                }
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
     }
 
     ConvertNumberToWords(number: any) {
