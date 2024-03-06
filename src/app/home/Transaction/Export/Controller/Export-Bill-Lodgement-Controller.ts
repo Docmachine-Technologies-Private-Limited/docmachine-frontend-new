@@ -155,10 +155,10 @@ export class ExportBillLodgementControllerData {
                     const sum1 =  FIRX_DATE_NO?.RECIVCED_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     const sum2 =  FIRX_DATE_NO?.COMMISION_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     const sum3 =  FIRX_DATE_NO?.USED_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-
+                    let BillAmount: any = parseFloat(sbdata?.fobValue)
                     doc.text(`Total Sum Amount of IRM Received : ${sbdata?.fobCurrency} `+sum1, pageWidth-200, doc.lastAutoTable.finalY + 20, { align: 'left' });
                     doc.text(`Total Sum Amount of Commision : ${sbdata?.fobCurrency} `+sum2, pageWidth-200, doc.lastAutoTable.finalY + 30, { align: 'left' });
-                    doc.text(`Total Sum Amount of SB : ${sbdata?.fobCurrency} `+sum3, pageWidth-200, doc.lastAutoTable.finalY + 40, { align: 'left' });
+                    doc.text(`Total Sum Amount of SB : ${sbdata?.fobCurrency} `+BillAmount, pageWidth-200, doc.lastAutoTable.finalY + 40, { align: 'left' });
 
                     let tableuri = doc.output("arraybuffer");
                     console.log(tableuri, "tableuri")
@@ -360,7 +360,7 @@ export class ExportBillLodgementControllerData {
                     })
                     const sum1 =  FIRX_DATE_NO?.RECIVCED_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
                     const sum2 =  FIRX_DATE_NO?.COMMISION_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
-                    const sum3 =  FIRX_DATE_NO?.USED_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
+                    const sum3 =  FIRX_DATE_NO?.TOTAL_SB_AMOUNT?.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue), 0);
 
                     doc1.text(`Total Sum Amount of IRM Received : ${FIRX_DATE_NO?.TOTAL_SB_CURRENCY[0]} `+sum1, pageWidth-200, doc1.lastAutoTable.finalY + 20, { align: 'left' });
                     doc1.text(`Total Sum Amount of Commision : ${FIRX_DATE_NO?.TOTAL_SB_CURRENCY[0]} `+sum2, pageWidth-200, doc1.lastAutoTable.finalY + 30, { align: 'left' });

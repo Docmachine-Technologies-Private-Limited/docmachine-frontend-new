@@ -818,7 +818,7 @@ export class NewExportBillLodgementComponent implements OnInit {
                   this.exportbilllodgementdata.PREVIWES_URL = this.PREVIWES_URL;
                 }
                 this.LETTER_HEAD_URL = ''
-                await this.ExportletterheadService.createLetterHead().Federal(this.validator, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
+                await this.ExportletterheadService.createLetterHead().NewFederalMultiple(this.validator,this.exportbilllodgementdata, this.ExportBillLodgement_Form, sbdata).then(async (letterhead) => {
                   this.LETTER_HEAD_URL = letterhead;
                   console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
                 })
