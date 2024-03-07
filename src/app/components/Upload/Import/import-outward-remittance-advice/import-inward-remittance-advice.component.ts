@@ -133,11 +133,11 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
                 element['balanceAmount'] = element?.balanceAmount != '-1' ? element?.balanceAmount : element?.invoiceAmount
               });
               this.validator.BOE_LIST = boeRef;
-              this.validator.FIELDS_DATA[items?.id][2]['disabled'] = false;
+              items.field[2]['showhide'] = true;
               items?.FormGroup?.controls['BOE_DETAIILS']?.enable();
               console.log(boeRef, "boeRef")
             } else {
-              this.validator.FIELDS_DATA[items?.id][2]['disabled'] = true;
+              items.field[2]['showhide'] = false;
               items?.FormGroup?.controls['BOE_DETAIILS']?.disable();
               this.validator.BOE_LIST = [];
             }
@@ -153,6 +153,7 @@ export class ImportOutwardRemittanceAdviceComponent implements OnInit {
           rules: {
             required: false,
           },
+          showhide: false,
           formArray: [
             [
               {
