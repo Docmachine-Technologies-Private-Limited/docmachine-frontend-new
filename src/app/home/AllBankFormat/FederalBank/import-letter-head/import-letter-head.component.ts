@@ -66,14 +66,19 @@ export class ImportLetterHeadService {
           getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
           getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.iban);
           getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-          getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName)
+          // getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName)
           await pdfDoc.save()
-          await this.addWaterMark(pdfDoc, validator).then(async (Res: any) => {
-            const pdfBytes = await Res.save()
-            var base64String1 = this._arrayBufferToBase64(pdfBytes)
-            const x1 = 'data:application/pdf;base64,' + base64String1;
-            await resolve(x1);
-          })
+          await this.addNewWaterMarkAndSeal(pdfDoc, validator, [
+            {
+                index: 0,
+                x: 540,
+                y: 50
+            }]).then(async (res: any) => {
+                const pdfBytes = await res?.save()
+                var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                const x1 = 'data:application/pdf;base64,' + base64String1;
+                await resolve(x1);
+            })
         })
       },
       FedralAdvance: async (validator, BENEFICIARY_DETAILS, filldata) => {
@@ -126,14 +131,19 @@ export class ImportLetterHeadService {
           getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
           getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.iban);
           getAllFields[11]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-          getAllFields[12]?.setText(validator.COMPANY_INFO[0]?.teamName)
+          // getAllFields[12]?.setText(validator.COMPANY_INFO[0]?.teamName)
           await pdfDoc.save()
-          await this.addWaterMark(pdfDoc, validator).then(async (Res: any) => {
-            const pdfBytes = await Res.save()
-            var base64String1 = this._arrayBufferToBase64(pdfBytes)
-            const x1 = 'data:application/pdf;base64,' + base64String1;
-            await resolve(x1);
-          })
+          await this.addNewWaterMarkAndSeal(pdfDoc, validator, [
+            {
+                index: 0,
+                x: 540,
+                y: 50
+            }]).then(async (res: any) => {
+                const pdfBytes = await res?.save()
+                var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                const x1 = 'data:application/pdf;base64,' + base64String1;
+                await resolve(x1);
+            })
         })
       },
       FedralFLC: async (validator, BENEFICIARY_DETAILS, filldata) => {
@@ -185,14 +195,19 @@ export class ImportLetterHeadService {
           getAllFields[8]?.setText(BENEFICIARY_DETAILS[0]?.beneBankbranchName);
           getAllFields[9]?.setText(BENEFICIARY_DETAILS[0]?.iban);
           getAllFields[10]?.setText(BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
-          getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress)
+          // getAllFields[11]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress)
           await pdfDoc.save()
-          await this.addWaterMark(pdfDoc, validator).then(async (Res: any) => {
-            const pdfBytes = await Res.save()
-            var base64String1 = this._arrayBufferToBase64(pdfBytes)
-            const x1 = 'data:application/pdf;base64,' + base64String1;
-            await resolve(x1);
-          })
+          await this.addNewWaterMarkAndSeal(pdfDoc, validator, [
+            {
+                index: 0,
+                x: 540,
+                y: 50
+            }]).then(async (res: any) => {
+                const pdfBytes = await res?.save()
+                var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                const x1 = 'data:application/pdf;base64,' + base64String1;
+                await resolve(x1);
+            })
         })
       },
       // HDFC: async (validator, BENEFICIARY_DETAILS, filldata, ToForwardContract_Selected) => {
@@ -265,6 +280,75 @@ export class ImportLetterHeadService {
       resolve(mergedPdfload)
     })
   }
+  
+  addNewWaterMarkAndSeal(pdfDoc: any, validator,indexList:any=[]) {
+    return new Promise(async (resolve, reject) => {
+      let letterHead: any = ''
+      let forSeal:any=''
+      
+      const mergedPdf = await PDFDocument.create();
+      if (validator.COMPANY_INFO?.length != 0) {
+        letterHead = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.letterHead)
+        forSeal = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+      }
+      const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+      copiedPages.forEach((page,index) => {
+        const { width, height } = page.getSize();
+        page.drawImage(letterHead, {
+          x: 0,
+          y: 0,
+          width: width,
+          height: height,
+          opacity: 1,
+          blendMode: BlendMode.Multiply
+        });
+        let data = indexList?.filter((item: any) => item?.index == index);
+        if (data?.length != 0) {
+            page.drawImage(forSeal, {
+                x: width - data[0]?.x,
+                y: data[0]?.y,
+                width: 250,
+                height: 250,
+                opacity: 1,
+                blendMode: BlendMode.Multiply
+            });
+        }
+        mergedPdf.addPage(page);
+      });
+      const mergedPdfFile = await mergedPdf.save();
+      const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+      resolve(mergedPdfload)
+    })
+  }
+  
+  addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+    return new Promise(async (resolve, reject) => {
+        let jpgImage: any = ''
+        const mergedPdf = await PDFDocument.create();
+        if (validator.COMPANY_INFO?.length != 0) {
+            jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+        }
+        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+        copiedPages.forEach((page, index) => {
+            const { width, height } = page.getSize();
+            let data = indexList?.filter((item: any) => item?.index == index);
+            if (data?.length != 0) {
+                page.drawImage(jpgImage, {
+                    x: width - data[0]?.x,
+                    y: data[0]?.y,
+                    width: 250,
+                    height: 250,
+                    opacity: 1,
+                    blendMode: BlendMode.Multiply
+                });
+            }
+            mergedPdf.addPage(page);
+        });
+        const mergedPdfFile = await mergedPdf.save();
+        const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+        resolve(mergedPdfload)
+    })
+}
 
   _arrayBufferToBase64(buffer) {
     var binary = '';

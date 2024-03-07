@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { UserService } from "../../../../service/user.service";
 import { DocumentService } from "../../../../service/document.service";
-import { PDFDocument } from "pdf-lib";
+import { BlendMode, PDFDocument } from "pdf-lib";
 import moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
@@ -59,18 +59,29 @@ export class A1WIthFEMAControllerData {
                                 });
                                 let RemittanceAmount: any = PIPO_DATA["Amount"]?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
                                 getAllFields[2]?.setText(PIPO_DATA?.Currency[0]);
-                                getAllFields[3]?.setText(RemittanceAmount?.toString()+' '+this.ConvertNumberToWords(RemittanceAmount));
+                                getAllFields[3]?.setText(RemittanceAmount?.toString() + ' ' + this.ConvertNumberToWords(RemittanceAmount));
                             }
                             getAllFields[4]?.setText(BENEFICIARY_DETAILS[0]?.benneName + '\n' + BENEFICIARY_DETAILS[0]?.beneAdrs + '\n' + BENEFICIARY_DETAILS[0]?.beneAccNo);
                             getAllFields[5]?.setText(BENEFICIARY_DETAILS[0]?.beneBankName + '\n' + BENEFICIARY_DETAILS[0]?.beneBankAdress + '\n' + BENEFICIARY_DETAILS[0]?.iban + '\n' + BENEFICIARY_DETAILS[0]?.beneBankSwiftCode);
                             getAllFields[8]?.setText(this.CURRENT_DATE);
-                            getAllFields[9]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+                            // getAllFields[9]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+                            await pdfDoc.save();
 
-                            const mergedPdfFile = await pdfDoc.save();
-                            var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
-                            const x1 = 'data:application/pdf;base64,' + base64String1;
-                            console.log(x1, "base64String1")
-                            await resolve(x1);
+                            this.addForSealWaterMark(pdfDoc, validator, [
+                                {
+                                    index: 1,
+                                    x: 350,
+                                    y: 120
+                                }]).then(async (res: any) => {
+                                    const pdfBytes = await res?.save()
+                                    var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                                    const x1 = 'data:application/pdf;base64,' + base64String1;
+                                    await resolve(x1);
+                                })
+                            // var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
+                            // const x1 = 'data:application/pdf;base64,' + base64String1;
+                            // console.log(x1, "base64String1")
+                            // await resolve(x1);
                         })
                     },
                     FEMAPDF: async () => {
@@ -92,13 +103,26 @@ export class A1WIthFEMAControllerData {
                                 }
                             });
 
-                            getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
+                            // getAllFields[0]?.setText(validator.COMPANY_INFO[0]?.teamName + '\n' + validator.COMPANY_INFO[0]?.adress);
                             getAllFields[1]?.setText(this.CURRENT_DATE);
-                            const mergedPdfFile = await pdfDoc.save();
-                            var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
-                            const x1 = 'data:application/pdf;base64,' + base64String1;
-                            console.log(x1, "base64String1")
-                            await resolve(x1);
+                            // const mergedPdfFile = await pdfDoc.save();
+                            // var base64String1 = this._arrayBufferToBase64(mergedPdfFile)
+                            // const x1 = 'data:application/pdf;base64,' + base64String1;
+                            // console.log(x1, "base64String1")
+                            // await resolve(x1);
+                            await pdfDoc.save();
+
+                            this.addForSealWaterMark(pdfDoc, validator, [
+                                {
+                                    index: 0,
+                                    x: 580,
+                                    y: 25
+                                }]).then(async (res: any) => {
+                                    const pdfBytes = await res?.save()
+                                    var base64String1 = this._arrayBufferToBase64(pdfBytes)
+                                    const x1 = 'data:application/pdf;base64,' + base64String1;
+                                    await resolve(x1);
+                                })
                         })
                     }
                 }
@@ -156,6 +180,35 @@ export class A1WIthFEMAControllerData {
             binary += String.fromCharCode(bytes[i]);
         }
         return window.btoa(binary);
+    }
+
+    addForSealWaterMark(pdfDoc: any, validator, indexList: any = []) {
+        return new Promise(async (resolve, reject) => {
+            let jpgImage: any = ''
+            const mergedPdf = await PDFDocument.create();
+            if (validator.COMPANY_INFO?.length != 0) {
+                jpgImage = await mergedPdf.embedPng(validator.COMPANY_INFO[0]?.forSeal)
+            }
+            const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+            copiedPages.forEach((page, index) => {
+                const { width, height } = page.getSize();
+                let data = indexList?.filter((item: any) => item?.index == index);
+                if (data?.length != 0) {
+                    page.drawImage(jpgImage, {
+                        x: width - data[0]?.x,
+                        y: data[0]?.y,
+                        width: 250,
+                        height: 250,
+                        opacity: 1,
+                        blendMode: BlendMode.Multiply
+                    });
+                }
+                mergedPdf.addPage(page);
+            });
+            const mergedPdfFile = await mergedPdf.save();
+            const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+            resolve(mergedPdfload)
+        })
     }
 
     ConvertNumberToWords(number: any) {
