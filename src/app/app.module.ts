@@ -54,6 +54,7 @@ import { FormControllerService } from "./components/form-controller/form/form.se
 import { FormControllerModule } from "./components/form-controller/form-controller.module";
 import { SharedHomeModule } from "./home/shared-home.module";
 import { UploadServiceValidatorService } from "./components/Upload/service/upload-service-validator.service";
+import { NgEventBus } from "ng-event-bus";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -96,6 +97,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     TallyAuthorizationService,
     UploadServiceValidatorService,
     LEIRecordsService,
+    NgEventBus,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     IdleService,
     FormControllerService,
