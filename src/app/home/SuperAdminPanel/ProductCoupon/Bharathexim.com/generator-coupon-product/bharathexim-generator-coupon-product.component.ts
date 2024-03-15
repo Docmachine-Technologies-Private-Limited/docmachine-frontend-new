@@ -36,8 +36,8 @@ export class BharatheximGeneratorCouponProductComponent implements OnInit {
           rules: {
             required: true,
           },
-          minLength: 15,
-          maxLength: 15,
+          minLength: 6,
+          maxLength: 6,
           ButtonText: 'Generator',
           callback: (item: any) => {
             item?.form?.controls['couponCodeName']?.setValue(this.generateId())
@@ -68,7 +68,7 @@ export class BharatheximGeneratorCouponProductComponent implements OnInit {
             required: true,
           }
         },
-      }, 'AirwayBlCopy');
+      }, 'BHARATHEXIM_ADD_COUPON_CODE');
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
