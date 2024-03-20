@@ -14,6 +14,12 @@
                             <div class="d-flex flex-column">
                                 <mat-panel-title>
                                     SB DETAILS
+                                    <button style="margin: auto;
+                                    margin-right: 10px;
+                                    position: absolute;
+                                    right: 80px;"
+                                    class="btn btn-primary Transaction-btn"
+                                    (click)="this.download(data)">.pdf</button>
                                     <button style="margin: auto;margin-right: 10px;"
                                         class="btn btn-primary Transaction-btn"
                                         (click)="this.exportbilllodgementdata?.dselect(data)">D-Select</button>

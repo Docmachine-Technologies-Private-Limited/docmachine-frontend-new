@@ -25,6 +25,7 @@ import { DirectPaymentsControllerData } from './Controller/Direct-Payments-Contr
 import { ImportBillLodgementComponent } from './Bank/FEDRAL_BANK/import-bill-lodgement/import-bill-lodgement.component';
 import { ImportHomeComponent } from './Bank/FEDRAL_BANK/import-home/import-home.component';
 import { NewImportHomeTransactionComponent } from './Bank/FEDRAL_BANK/import-home/new-import-home-transaction/new-import-home-transaction.component';
+import { ImportTransactionReportComponent } from './transaction-report/import-transaction-report.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { NewImportHomeTransactionComponent } from './Bank/FEDRAL_BANK/import-hom
     NewFLCApplicationComponent,
     ImportBillLodgementComponent,
     ImportHomeComponent,
-    NewImportHomeTransactionComponent
+    NewImportHomeTransactionComponent,
+    ImportTransactionReportComponent,
   ],
   providers: [
     BOEORMMactchData,

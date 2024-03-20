@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   OnInit,
-  resolveForwardRef,
   ViewChild,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +10,6 @@ import { UserService } from '../../../../service/user.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { SharedDataService } from '../../../shared-Data-Servies/shared-data.service';
 import * as xlsx from 'xlsx';
-import * as data1 from '../../../../currency.json';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WindowInformationService } from '../../../../service/window-information.service';
@@ -380,18 +378,6 @@ export class InwardRemittanceAdviceSummaryComponent implements OnInit {
 
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
-    // this.SELECTED_VALUE = '';
-    // this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
-    // this.EDIT_FORM_DATA = {
-    //   date: this.SELECTED_VALUE['date'],
-    //   sbno: this.SELECTED_VALUE['sbno'],
-    //   buyerName: this.SELECTED_VALUE['buyerName'],
-    //   BankName: this.SELECTED_VALUE['BankName'],
-    //   currency: this.SELECTED_VALUE['currency'],
-    //   amount: this.SELECTED_VALUE['amount'],
-    //   billNo: this.SELECTED_VALUE['billNo'],
-    //   BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
-    // }
     let navigationExtras: NavigationExtras = {
       queryParams: {
         "item": JSON.stringify(this.filteranytablepagination?.TABLE_CONTROLLER_DATA[data?.index])
@@ -464,7 +450,8 @@ class ForexAdviceFormat {
       temp.push({
         PipoNo: this.getPipoNumber(element['pipo']),
         date: element['date'],
-        sbno: element['sbno'],
+        sbno: element['sbno']!='NF'?element['sbno']?.join(","):"",
+        SBAmount: element['sbno']!='NF'?element['sbno']?.join(","):"",
         buyerName: this.getBuyerName(element['buyerName']),
         BankName: element['BankName']?.value,
         currency: element['currency'],
@@ -473,12 +460,7 @@ class ForexAdviceFormat {
         From: element['origin'],
         Branch: element['location'],
         Description: element['commodity'],
-        RecievedDate: element['recievedDate'],
-        CommissionBankCharges: element['commision'],
-        RecievedAmountUSD: element['recUSD'],
-        ConversionDate: element['conversionDate'],
-        ConversionRate: element['exchangeRate'],
-        ConvertedAmount: element['convertedAmount'],
+        CommissionBankCharges: element['commision'],        
         PaymentType: element['PaymentType'],
         BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
       })

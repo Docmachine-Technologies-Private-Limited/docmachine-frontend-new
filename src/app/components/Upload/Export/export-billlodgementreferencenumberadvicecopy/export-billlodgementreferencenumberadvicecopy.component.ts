@@ -151,15 +151,16 @@ export class ExportBilllodgementreferencenumberadvicecopyComponent implements On
               res.data._id,
             ],
           }
-          this.documentService.updateBlCopyRef(
-            e?.value?.sbNo,
-            updatedData
-          ).subscribe((data) => {
-            console.log('updateBlCopyRef', data);
-          }, (error) => {
-            console.log('error');
-          })
-
+          temp?.forEach(element => {
+            this.documentService.updateBlCopyRef(
+              element,
+              updatedData
+            ).subscribe((data) => {
+              console.log('updateBlCopyRef', data);
+            }, (error) => {
+              console.log('error');
+            })
+          });
           this.userService.updateManyPipo(res?.data?.pipo, 'export', this.pipourl1, updatedData)
             .subscribe((dataresp) => {
               console.log('king123');

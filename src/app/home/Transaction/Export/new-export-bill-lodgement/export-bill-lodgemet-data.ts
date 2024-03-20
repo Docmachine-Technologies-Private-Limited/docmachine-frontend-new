@@ -140,12 +140,12 @@ export class ExportBillLodgementData {
                 query: { pipo: { $eq: element } }, tableName: "iradvices", filterPage: { limit: 20 }
             })
         });
-        console.log(pipoId,API_DATA, "API_DATA");
+        console.log(pipoId, API_DATA, "API_DATA");
         this.filteranytablepagination.PaginationfilterAnyTableList(API_DATA).subscribe((res: any) => {
             let DATA_WRAP: any = []
             res?.forEach(element => {
                 element?.data?.forEach(WrapElement => {
-                    if (DATA_WRAP?.filter((item:any)=>item?._id==WrapElement?._id)?.length==0) {
+                    if (DATA_WRAP?.filter((item: any) => item?._id == WrapElement?._id)?.length == 0) {
                         DATA_WRAP.push(WrapElement);
                     }
                 });
@@ -167,7 +167,7 @@ export class ExportBillLodgementData {
             console.log(res, "getbyFIRXPartyName")
         });
     }
- async setSelectedShippingBill($event, data: any) {
+    async setSelectedShippingBill($event, data: any) {
         if (data?.blCopyDoc) {
             if (data.commercialDoc) {
                 if ($event?.target?.checked == true) {
@@ -214,11 +214,11 @@ export class ExportBillLodgementData {
                     }
                     this.SELECTED_COMMERICAIL_DATA = [];
                     data['CheckBoxEnabled'] = true;
-                    let PIPO_ID:any=[];
+                    let PIPO_ID: any = [];
                     data?.pipo?.forEach(element => {
                         PIPO_ID?.push(element?._id)
                     });
-                   await this.getbyFIRXPartyNamebyPipo(PIPO_ID)
+                    await this.getbyFIRXPartyNamebyPipo(PIPO_ID)
                 } else {
                     this.FIREX_DETAILS?.forEach(element => {
                         element['isChecked'] = false;
@@ -497,7 +497,8 @@ export class ExportBillLodgementData {
                         BalanceAvail: amount,
                         CommissionUsed: true,
                         MatchOffData: element,
-                        UsedAmount: element?.InputValue
+                        UsedAmount: element?.InputValue,
+                        SB_REF: [data?._id]
                     }
                 }).subscribe((list: any) => {
 
@@ -626,7 +627,8 @@ export class ExportBillLodgementData {
                                         CommissionUsed: false,
                                         MatchOffData: {},
                                         UsedAmount: 0,
-                                        CI_REF: []
+                                        CI_REF: [],
+                                        SB_REF: []
                                     }
                                 }).subscribe(async (list: any) => {
                                 })

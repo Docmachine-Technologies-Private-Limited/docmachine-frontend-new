@@ -10,6 +10,7 @@ import { NewBuyerCreditTransactionComponent } from './Bank/FEDRAL_BANK/new-buyer
 import { NewFLCApplicationComponent } from './Bank/FEDRAL_BANK/new-flc-application/new-flc-application.component';
 import { ImportBillLodgementComponent } from './Bank/FEDRAL_BANK/import-bill-lodgement/import-bill-lodgement.component';
 import { NewImportHomeTransactionComponent } from './Bank/FEDRAL_BANK/import-home/new-import-home-transaction/new-import-home-transaction.component';
+import { ImportTransactionReportComponent } from './transaction-report/import-transaction-report.component';
 
 const routes: Routes = [
   {
@@ -42,12 +43,14 @@ const routes: Routes = [
     pathMatch: "full",
     canActivate: [MemberGuard]
   },
-  { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },     
-  { path: "Transaction-Dashboard", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },          
+  { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "Transaction-Dashboard", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "lc-isurance", component: NewFLCApplicationComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Import-Bill-Lodgement", component: ImportBillLodgementComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Transaction/:file", component: NewAdvanceImportPaymentsComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "import-home", component: NewImportHomeTransactionComponent, canActivate: [MemberGuard] },
+  { path: "TransactionReport", component: ImportTransactionReportComponent, canActivate: [MemberGuard] },
+
 ];
 
 @NgModule({

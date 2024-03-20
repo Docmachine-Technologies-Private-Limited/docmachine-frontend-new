@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../../../components/Upload/service/upload-service-validator.service';
 import { ExportBillLodgementData } from '../../../Transaction/Export/new-export-bill-lodgement/export-bill-lodgemet-data';
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 @Component({
   selector: 'app-sbirmmatch-off',
@@ -158,6 +161,104 @@ export class SBIRMMatchOffComponent implements OnInit {
   YesNoCheckBox(value: any) {
     console.log("YesNoCheckBoxEvent", value)
   }
-  
- 
+
+
+  exportToExcel(data) {
+    console.log(data, "jhghjgjgjgjh")
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ForexAdviceFormat(data).get());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, `ExportLodgement_${new Date().getTime()}.xlsx`);
+  }
+
+  download(SummaryDetails: any) {
+    let dataTable: any = []
+    const doc1: any = new jsPDF('l', 'mm', 'a3')
+    let text = "Bill Lodgement details";
+    var pageWidth: any = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
+    doc1.text(text, pageWidth / 2, 20, { align: 'center' });
+    let blcopyRef: any = [];
+    for (let i = 0; i < SummaryDetails?.blcopyRef?.length; i++) {
+      blcopyRef.push(SummaryDetails?.blcopyRef[i]?.blcopyrefNumber)
+    }
+    for (let i = 0; i < SummaryDetails?.commercialdetails?.length; i++) {
+      let element = SummaryDetails?.commercialdetails[i];
+      for (let j = 0; j < element?.MatchOffData?.length; j++) {
+        let element2 = element?.MatchOffData[j];
+        dataTable.push([
+          SummaryDetails?.sbdate,
+          SummaryDetails?.sbno,
+          SummaryDetails?.fobValue,
+          SummaryDetails?.balanceAvai,
+          element?.commercialNumber,
+          element?.commercialDate,
+          element?.amount,
+          element2?.billNo,
+          element2?.amount,
+          element2?.InputValue,
+          element2?.AvailableAmount,
+          blcopyRef?.join(",")
+        ]);
+      }
+    }
+    console.log(dataTable)
+    autoTable(doc1, {
+      margin: { top: 30, left: 10, bottom: 30 },
+      head: [['Sb Dt.', 'Sb No.', 'Sb Amt', 'BalAvai', 'CI Date', 'CI No.', 'CI Amt', 'FIRX No.', 'FIRX Amt', 'FIRX Amt Used', 'FIRX BalAvai', 'BlAdvice Ref No.']],
+      body: dataTable,
+    })
+    doc1.save(`ExportLodgement_${new Date().getTime()}.pdf`);
+  }
+
+}
+
+class ForexAdviceFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        date: element['date'],
+        sbno: element['sbno'] != 'NF' ? element['sbno']?.join(",") : "",
+        SBAmount: element['sbno'] != 'NF' ? element['sbno']?.join(",") : "",
+        buyerName: this.getBuyerName(element['buyerName']),
+        BankName: element['BankName']?.value,
+        currency: element['currency'],
+        amount: element['amount'],
+        billNo: element['billNo'],
+        From: element['origin'],
+        Branch: element['location'],
+        Description: element['commodity'],
+        CommissionBankCharges: element['commision'],
+        PaymentType: element['PaymentType'],
+        BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
+  }
+
 }

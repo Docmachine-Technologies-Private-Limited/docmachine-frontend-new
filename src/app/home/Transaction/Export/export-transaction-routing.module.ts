@@ -9,6 +9,7 @@ import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-
 import { TransactionDashboardComponent } from './transaction-dashboard/transaction-dashboard.component';
 import { NewExportHomeTransactionComponent } from './export-home/new-export-home-transaction/new-export-home-transaction.component';
 import { NewExportBillLodgementComponent } from './new-export-bill-lodgement/new-export-bill-lodgement.component';
+import { ExportTransactionReportComponent } from './transaction-report/export-transaction-report.component';
 
 const routes: Routes = [
   { path: "bill-lodgement", component: BillLodgementComponent, canActivate: [MemberGuard] },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: "Pdf-Upload", component: UploadDocComponent },
   { path: "Transaction-Dashboard/:id", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },
   { path: "Transaction-Dashboard", component: TransactionDashboardComponent, pathMatch: "full", canActivate: [MemberGuard] },
+  { path: "TransactionReport", component: ExportTransactionReportComponent, canActivate: [MemberGuard] },
 ];
 
 @NgModule({
