@@ -196,7 +196,7 @@ export class SBIRMMatchOffComponent implements OnInit {
           element2?.billNo,
           element2?.amount,
           element2?.InputValue,
-          element2?.AvailableAmount,
+          element2?.BalanceAvail,
           blcopyRef?.join(",")
         ]);
       }
@@ -238,7 +238,7 @@ export class SBIRMMatchOffComponent implements OnInit {
             element2?.billNo,
             element2?.amount,
             element2?.InputValue,
-            element2?.AvailableAmount,
+            element2?.BalanceAvail,
             blcopyRef?.join(",")
           ]);
         }
