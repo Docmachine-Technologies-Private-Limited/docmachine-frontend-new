@@ -1,11 +1,19 @@
 <mat-tab-group>
     <mat-tab label="Summary">
         <div class="p-2 SHIPING_BILL_POPUP" style="height: 84vh;">
-            <app-ng-dropdown-custom placeHolderText="Select Buyer Name"
-                [items]="this.exportbilllodgementdata?.BUYER_LIST"
-                (modelChanges)="this.exportbilllodgementdata?.getShippingBill($event,'MatchOff')" bindLabel="buyerName"
-                [multiple]="false">
-            </app-ng-dropdown-custom>
+            <div class="col-12" style="display: grid;
+            grid-template-columns: 90% 10%;">
+                <app-ng-dropdown-custom placeHolderText="Select Buyer Name"
+                    [items]="this.exportbilllodgementdata?.BUYER_LIST"
+                    (modelChanges)="this.exportbilllodgementdata?.getShippingBill($event,'MatchOff')"
+                    bindLabel="buyerName" [multiple]="false">
+                </app-ng-dropdown-custom>
+                <button style="margin: auto;
+        margin-right: 10px;" class="btn btn-primary"
+                    [disabled]="this.exportbilllodgementdata?.SHIPPING_BILL_DATA_LINKAGE?.length!=0?false:true"
+                    (click)="this.downloadAll(this.exportbilllodgementdata?.SHIPPING_BILL_DATA_LINKAGE)">.pdf</button>
+            </div>
+
             <mat-accordion>
                 <mat-expansion-panel
                     *ngFor='let data of this.exportbilllodgementdata?.SHIPPING_BILL_DATA_LINKAGE;let i = index'>
@@ -17,9 +25,8 @@
                                     <button style="margin: auto;
                                     margin-right: 10px;
                                     position: absolute;
-                                    right: 80px;"
-                                    class="btn btn-primary Transaction-btn"
-                                    (click)="this.download(data)">.pdf</button>
+                                    right: 80px;" class="btn btn-primary Transaction-btn"
+                                        (click)="this.download(data)">.pdf</button>
                                     <button style="margin: auto;margin-right: 10px;"
                                         class="btn btn-primary Transaction-btn"
                                         (click)="this.exportbilllodgementdata?.dselect(data)">D-Select</button>
@@ -451,9 +458,11 @@
                                     <td class="col-td-th-2">
                                         <div class="d-flex">
                                             <button class="btn-primary yes-btn btn remove-no-button"
-                                               (click)="data.YesNo='true';this.exportbilllodgementdata?.BankChargesAmount(data,'Yes')"
+                                                (click)="data.YesNo='true';this.exportbilllodgementdata?.BankChargesAmount(data,'Yes')"
                                                 [ngClass]="{'yes-button':data?.YesNo=='true','remove-no-button-1':data?.YesNo=='false'}">YES</button>
-                                            <button (click)="data.YesNo='false';this.exportbilllodgementdata?.BankChargesAmount(data,'No')" class="btn-primary btn no-btn remove-no-button"
+                                            <button
+                                                (click)="data.YesNo='false';this.exportbilllodgementdata?.BankChargesAmount(data,'No')"
+                                                class="btn-primary btn no-btn remove-no-button"
                                                 [ngClass]="{'no-button':data?.YesNo=='false','remove-no-button-2':data?.YesNo=='true'}">NO</button>
                                         </div>
                                     </td>

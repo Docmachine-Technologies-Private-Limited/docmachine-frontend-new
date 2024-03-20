@@ -210,6 +210,48 @@ export class SBIRMMatchOffComponent implements OnInit {
     doc1.save(`ExportLodgement_${new Date().getTime()}.pdf`);
   }
 
+  downloadAll(SummaryDetails: any) {
+    let dataTable: any = []
+    const doc1: any = new jsPDF('l', 'mm', 'a3')
+    let text = "Bill Lodgement details";
+    var pageWidth: any = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
+    doc1.text(text, pageWidth / 2, 20, { align: 'center' });
+    let blcopyRef: any = [];
+    console.log(SummaryDetails,"SummaryDetails")
+    for (let index = 0; index < SummaryDetails.length; index++) {
+      const elementSummaryDetails:any = SummaryDetails[index];
+      for (let i = 0; i < elementSummaryDetails?.blcopyRef?.length; i++) {
+        blcopyRef.push(elementSummaryDetails?.blcopyRef[i]?.blcopyrefNumber)
+      }
+      for (let i = 0; i < elementSummaryDetails?.commercialdetails?.length; i++) {
+        let element = elementSummaryDetails?.commercialdetails[i];
+        for (let j = 0; j < element?.MatchOffData?.length; j++) {
+          let element2 = element?.MatchOffData[j];
+          dataTable.push([
+            elementSummaryDetails?.sbdate,
+            elementSummaryDetails?.sbno,
+            elementSummaryDetails?.fobValue,
+            elementSummaryDetails?.balanceAvai,
+            element?.commercialNumber,
+            element?.commercialDate,
+            element?.amount,
+            element2?.billNo,
+            element2?.amount,
+            element2?.InputValue,
+            element2?.AvailableAmount,
+            blcopyRef?.join(",")
+          ]);
+        }
+      }
+    }
+    autoTable(doc1, {
+      margin: { top: 30, left: 10, bottom: 30 },
+      head: [['Sb Dt.', 'Sb No.', 'Sb Amt', 'BalAvai', 'CI Date', 'CI No.', 'CI Amt', 'FIRX No.', 'FIRX Amt', 'FIRX Amt Used', 'FIRX BalAvai', 'BlAdvice Ref No.']],
+      body: dataTable,
+    })
+    doc1.save(`ExportLodgement_${new Date().getTime()}.pdf`);
+    console.log(dataTable)
+  }
 }
 
 class ForexAdviceFormat {
