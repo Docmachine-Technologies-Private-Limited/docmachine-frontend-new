@@ -166,7 +166,8 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
-                    (click)="navigationByUrl($event,'Summary/Import/Outward-Remittance-Disposal')">Outward-Remittance-Disposal Tracker</h6>
+                    (click)="navigationByUrl($event,'Summary/Import/Outward-Remittance-Disposal')">
+                    Outward-Remittance-Disposal Tracker</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'Summary/Import/TripartyAgreements')">Tri
@@ -245,7 +246,7 @@
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/Import-Direct-Payment')">DIRECT BILL</h6>
                 </li>
-               
+
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="navigationByUrl($event,'/Transaction/Import/add-advance-outward-remittance-a2')">
@@ -521,6 +522,11 @@
                     (click)="navigationByUrlParam($event,'/Transaction/Export/Transaction-Dashboard',item)">{{item}}
                   </h6>
                 </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0"
+                    (click)="navigationByUrl($event,'/Transaction/Export/TransactionReport','TransactionReport')">
+                    Reports</h6>
+                </li>
               </ul>
             </li>
             <li
@@ -624,11 +630,13 @@
               </h6>
             </li>
             <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
-              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/LiveTradeApp')">Role Panel 2
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/LiveTradeApp')">Role
+                Panel 2
               </h6>
             </li>
             <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
-              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/LiveTradeApp')">Live Trade App
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/LiveTradeApp')">Live
+                Trade App
               </h6>
             </li>
             <li class="nav-item"

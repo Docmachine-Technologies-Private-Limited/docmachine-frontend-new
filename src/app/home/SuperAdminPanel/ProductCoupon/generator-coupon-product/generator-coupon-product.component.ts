@@ -23,11 +23,7 @@ export class GeneratorCouponProductComponent implements OnInit {
 
   CouponCodeDetails: any = []
   ngOnInit(): void {
-    // this.documentService.GetCouponCodeDetails().subscribe((res: any) => {
-    //   console.log(res, "GetCouponCodeDetails")
-    //   this.CouponCodeDetails = res?.data;
-    // })
-          this.response(null)
+    this.response(null)
   }
 
   response(args: any) {
@@ -36,13 +32,14 @@ export class GeneratorCouponProductComponent implements OnInit {
         couponCodeName: {
           type: "InputButton",
           value: "",
+          InputType:"text",
           label: "Coupon Code Name",
           rules: {
             required: true,
           },
-          ButtonText: 'Generator',
+          minLength: 6,
+          maxLength: 6,
           callback: (item: any) => {
-            item?.form?.controls['couponCodeName']?.setValue(this.generateId())
             console.log(item, "dsfdsfdshfgfjsgjgdhjdfgdjf")
           }
         },
@@ -70,12 +67,12 @@ export class GeneratorCouponProductComponent implements OnInit {
             required: true,
           }
         },
-      }, 'AirwayBlCopy');
+      }, 'DELTATRADEGLOBAL_ADD_COUPON_CODE');
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
 
-  AddCoupon(e: any,REST_FORM) {
+  AddCoupon(e: any, REST_FORM) {
     this.documentService.getInvoice_No({
       couponCodeName: e.value.couponCodeName
     }, 'CouponCodeProduct').subscribe((resp: any) => {
@@ -85,10 +82,10 @@ export class GeneratorCouponProductComponent implements OnInit {
         e.value.EndDate = moment(e.value.date2).format('dddd, MMMM DD, YYYY h:mm A')
         this.documentService.addCouponCode2(e.value).subscribe((res: any) => {
           if (res?.status == true) {
-            this.SubmitButtonEvent.emit({status:true,REST_FORM:REST_FORM})
+            this.SubmitButtonEvent.emit({ status: true, REST_FORM: REST_FORM })
             this.toastr.success("Added Successfully")
-          }else{
-            this.SubmitButtonEvent.emit({status:false,REST_FORM:REST_FORM})
+          } else {
+            this.SubmitButtonEvent.emit({ status: false, REST_FORM: REST_FORM })
           }
         });
       }

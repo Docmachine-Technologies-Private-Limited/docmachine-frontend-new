@@ -1,0 +1,31 @@
+<custom-mat-stepper [BUTTON_PANEL_HIDE]="false">
+    <custom-mat-step MATSTEP_LABEL="Inward remittance received with utilisation" [NextTrue]="true">
+        <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  This is the expansion title
+                </mat-panel-title>
+                <mat-panel-description>
+                  This is a summary of the content
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>This is the primary content of the panel.</p>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Self aware panel
+                </mat-panel-title>
+                <mat-panel-description>
+                  Currently I am
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>I'm visible because I am open</p>
+            </mat-expansion-panel>
+          </mat-accordion>
+          
+    </custom-mat-step>
+    <custom-mat-step MATSTEP_LABEL="Export bill lodged against inward remittance" [NextTrue]="true">
+    </custom-mat-step>
+</custom-mat-stepper>

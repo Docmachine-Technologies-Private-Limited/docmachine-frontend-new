@@ -257,7 +257,6 @@ export class UploadComponentsComponent implements OnInit, AfterViewInit {
         }
       });
       this.LOGIN_TOEKN = 'asdasasddasds'
-      console.log('sdasjdasdkjagsdkjasdgaskdjagsdasdaskjdgasdkasdgaskdgasds', this.BuyerNotFound, this.BeneficiaryNotFound)
     } else {
       this.LOGIN_TOEKN = ''
     }
