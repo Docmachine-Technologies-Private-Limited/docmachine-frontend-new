@@ -13,6 +13,7 @@ import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-
 import { NewExportHomeTransactionComponent } from './export-home/new-export-home-transaction/new-export-home-transaction.component';
 import { NewExportBillLodgementComponent } from './new-export-bill-lodgement/new-export-bill-lodgement.component';
 import { ExportBillLodgementControllerData } from './Controller/Export-Bill-Lodgement-Controller';
+import { ExportTransactionReportComponent } from './transaction-report/export-transaction-report.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ExportBillLodgementControllerData } from './Controller/Export-Bill-Lodg
     PackingCreditRequestComponent,
     NewExportHomeTransactionComponent,
     NewExportBillLodgementComponent,
+    ExportTransactionReportComponent
   ],
   providers:[ExportBillLodgementControllerData],
   imports: [

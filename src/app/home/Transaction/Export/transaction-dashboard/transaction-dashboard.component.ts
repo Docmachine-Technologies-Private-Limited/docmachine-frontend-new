@@ -9,6 +9,7 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MergePdfService } from '../../../../service/MergePdf/merge-pdf.service';
 import { MergePdfListService } from '../../../merge-pdf-list.service';
+import * as xlsx from 'xlsx';
 
 @Component({
   selector: 'export-transaction-dashboard',
@@ -137,4 +138,108 @@ export class TransactionDashboardComponent implements OnInit {
     return temp.join(',')
   }
 
+  exportToExcel() {
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new DataFormat(this.TRANSACTION_DATA).get());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, `${this.TRANSACTION_NAME}_${new Date().getTime()}.xlsx`);
+  }
+
+}
+
+class DataFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element?.pipo),
+        currency: this.getShippingBillCuurency(element?.SBRef),
+        Amount: this.getPipoAmountSum(element?.pipo),
+        SbNo: this.getSbNo(element?.SBRef),
+        IRMDate: this.getFIRX_DETAILS(element?.SBRef)?.FIRX_DATE,
+        FIRXNo: this.getFIRX_DETAILS(element?.SBRef)?.FIRX_NO,
+        IRMAmount:this.getFIRX_DETAILS(element?.SBRef)?.FIRX_AMOUNT,
+        LodgementRefno: element?.Ref_Data?.blCopyRef?.blcopyrefNumber,
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
+  }
+
+  getShippingBillCuurency(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.fobCurrency);
+    });
+    return temp.join(',')
+  }
+
+  getShippingBill_Details(pipo: any) {
+    let temp1: any = [];
+    let temp2: any = [];
+    let temp3: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp1.push(element?.sbdate);
+      temp2.push(element?.sbno);
+      temp3.push(element?.fobValue);
+    });
+    return { SB_DATE: temp1.join(','), SB_NO: temp2.join(','), SB_AMOUNT: temp3.join(',') }
+  }
+
+  getFIRX_DETAILS(pipo: any) {
+    let temp1: any = [];
+    let temp2: any = [];
+    let temp3: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      element?.firxdetails?.forEach(Firxelement => {
+        temp1.push(Firxelement?.firxDate);
+        temp2.push(Firxelement?.firxNumber);
+        temp3.push(Firxelement?.FirxUsed_Balance);
+      });
+    });
+    return { FIRX_DATE: temp1.join(','), FIRX_NO: temp2.join(','), FIRX_AMOUNT: temp3.join(',') }
+  }
+
+  getPipoAmountSum(pipo: any) {
+    return pipo?.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0);
+  }
+
+  getPipoId(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?._id);
+    });
+    return temp.join(',')
+  }
+  
+  getSbNo(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.sbno);
+    });
+    return temp.join(',')
+  }
 }
