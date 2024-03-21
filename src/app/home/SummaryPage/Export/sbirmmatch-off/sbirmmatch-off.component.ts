@@ -12,6 +12,7 @@ import { ExportBillLodgementData } from '../../../Transaction/Export/new-export-
 import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import moment from 'moment/moment';
 
 @Component({
   selector: 'app-sbirmmatch-off',
@@ -177,14 +178,36 @@ export class SBIRMMatchOffComponent implements OnInit {
     let text = "Bill Lodgement details";
     var pageWidth: any = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
     doc1.text(text, pageWidth / 2, 20, { align: 'center' });
+    
+    let text1 = `Buyer Name : ${this.exportbilllodgementdata.SELECTED_BUYER_NAME?.buyerName}                          Date : ${moment().format('hh:mm:ss a, Do MMM  YY')}`;
+    var pageWidth: any = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
+    doc1.text(text1, pageWidth / 2, 30, { align: 'center' });
+    
     let blcopyRef: any = [];
     for (let i = 0; i < SummaryDetails?.blcopyRef?.length; i++) {
       blcopyRef.push(SummaryDetails?.blcopyRef[i]?.blcopyrefNumber)
     }
     for (let i = 0; i < SummaryDetails?.commercialdetails?.length; i++) {
       let element = SummaryDetails?.commercialdetails[i];
-      for (let j = 0; j < element?.MatchOffData?.length; j++) {
-        let element2 = element?.MatchOffData[j];
+      if (element?.IRM_REF?.length != 0) {
+        for (let j = 0; j < element?.MatchOffData?.length; j++) {
+          let element2 = element?.MatchOffData[j];
+          dataTable.push([
+            SummaryDetails?.sbdate,
+            SummaryDetails?.sbno,
+            SummaryDetails?.fobValue,
+            SummaryDetails?.balanceAvai,
+            element?.commercialNumber,
+            element?.commercialDate,
+            element?.amount,
+            element2?.billNo,
+            element2?.amount,
+            element2?.InputValue,
+            element2?.BalanceAvail,
+            blcopyRef?.join(",")
+          ]);
+        }
+      } else {
         dataTable.push([
           SummaryDetails?.sbdate,
           SummaryDetails?.sbno,
@@ -193,17 +216,17 @@ export class SBIRMMatchOffComponent implements OnInit {
           element?.commercialNumber,
           element?.commercialDate,
           element?.amount,
-          element2?.billNo,
-          element2?.amount,
-          element2?.InputValue,
-          element2?.BalanceAvail,
+          "NA",
+          "NA",
+          "NA",
+          "NA",
           blcopyRef?.join(",")
         ]);
       }
     }
     console.log(dataTable)
     autoTable(doc1, {
-      margin: { top: 30, left: 10, bottom: 30 },
+      margin: { top: 40, left: 10, bottom: 30 },
       head: [['Sb Dt.', 'Sb No.', 'Sb Amt', 'BalAvai', 'CI Date', 'CI No.', 'CI Amt', 'FIRX No.', 'FIRX Amt', 'FIRX Amt Used', 'FIRX BalAvai', 'BlAdvice Ref No.']],
       body: dataTable,
     })
@@ -216,17 +239,40 @@ export class SBIRMMatchOffComponent implements OnInit {
     let text = "Bill Lodgement details";
     var pageWidth: any = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
     doc1.text(text, pageWidth / 2, 20, { align: 'center' });
+    
+    let text1 = `Buyer Name : ${this.exportbilllodgementdata.SELECTED_BUYER_NAME?.buyerName}                          Date : ${moment().format('hh:mm:ss a, Do MMM  YY')}`;
+    var pageWidth: any = doc1.internal.pageSize.width || doc1.internal.pageSize.getWidth();
+    doc1.text(text1, pageWidth / 2, 30, { align: 'center' });
+    
     let blcopyRef: any = [];
-    console.log(SummaryDetails,"SummaryDetails")
+    console.log(SummaryDetails, "SummaryDetails")
     for (let index = 0; index < SummaryDetails.length; index++) {
-      const elementSummaryDetails:any = SummaryDetails[index];
+      const elementSummaryDetails: any = SummaryDetails[index];
       for (let i = 0; i < elementSummaryDetails?.blcopyRef?.length; i++) {
         blcopyRef.push(elementSummaryDetails?.blcopyRef[i]?.blcopyrefNumber)
       }
       for (let i = 0; i < elementSummaryDetails?.commercialdetails?.length; i++) {
         let element = elementSummaryDetails?.commercialdetails[i];
-        for (let j = 0; j < element?.MatchOffData?.length; j++) {
-          let element2 = element?.MatchOffData[j];
+        if (element?.IRM_REF?.length != 0) {
+          for (let j = 0; j < element?.MatchOffData?.length; j++) {
+            let element2 = element?.MatchOffData[j];
+            dataTable.push([
+              elementSummaryDetails?.sbdate,
+              elementSummaryDetails?.sbno,
+              elementSummaryDetails?.fobValue,
+              elementSummaryDetails?.balanceAvai,
+              element?.commercialNumber,
+              element?.commercialDate,
+              element?.amount,
+              element2?.billNo,
+              element2?.amount,
+              element2?.InputValue,
+              element2?.BalanceAvail,
+              blcopyRef?.join(","),
+              "Bill-Regularization"
+            ]);
+          }
+        }else{
           dataTable.push([
             elementSummaryDetails?.sbdate,
             elementSummaryDetails?.sbno,
@@ -235,18 +281,20 @@ export class SBIRMMatchOffComponent implements OnInit {
             element?.commercialNumber,
             element?.commercialDate,
             element?.amount,
-            element2?.billNo,
-            element2?.amount,
-            element2?.InputValue,
-            element2?.BalanceAvail,
-            blcopyRef?.join(",")
+            "NA",
+            "NA",
+            "NA",
+            "NA",
+            blcopyRef?.join(","),
+            "Bill-Lodgement"
           ]);
         }
+       
       }
     }
     autoTable(doc1, {
-      margin: { top: 30, left: 10, bottom: 30 },
-      head: [['Sb Dt.', 'Sb No.', 'Sb Amt', 'BalAvai', 'CI Date', 'CI No.', 'CI Amt', 'FIRX No.', 'FIRX Amt', 'FIRX Amt Used', 'FIRX BalAvai', 'BlAdvice Ref No.']],
+      margin: { top: 40, left: 10, bottom: 30 },
+      head: [['Sb Dt.', 'Sb No.', 'Sb Amt', 'BalAvai', 'CI Date', 'CI No.', 'CI Amt', 'FIRX No.', 'FIRX Amt', 'FIRX Amt Used', 'FIRX BalAvai', 'BlAdvice Ref No.',"Trns. type"]],
       body: dataTable,
     })
     doc1.save(`ExportLodgement_${new Date().getTime()}.pdf`);
