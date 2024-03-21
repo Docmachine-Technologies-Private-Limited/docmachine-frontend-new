@@ -6,7 +6,6 @@
   <custom-mat-stepper [BUTTON_PANEL_HIDE]="false" *ngIf="this.TRANSACTION_NAME=='Export-Bill-Regularisation'"
     (TabEvent)="onTabChanges($event)">
     <custom-mat-step MATSTEP_LABEL="Export Bill Regularisation" [NextTrue]="true">
-      <button type="submit" (click)="exportToExcel()">Export</button>
       <table class="table table-striped">
         <thead>
           <tr class="table-tr">
