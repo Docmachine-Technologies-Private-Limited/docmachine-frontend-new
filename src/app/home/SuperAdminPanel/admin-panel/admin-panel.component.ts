@@ -135,7 +135,8 @@ export class SuperAdminPanelComponent implements OnInit {
         FreeTrailPeroidStratDate: moment().format('dddd, MMMM DD, YYYY h:mm A'),
         FreeTrailPeroidEndDate: moment(this.addDays(new Date(),value?.Days)).format('dddd, MMMM DD, YYYY h:mm A'),
         TrailDays: value?.Days,
-        discount:value?.discount
+        discount:value?.discount,
+        ExpiredTimeStamp: moment(this.addDays(new Date(), value?.Days)).unix()
       }).subscribe((res: any) => {
         console.log(res, "UpdateTradeAppUserData")
         if (res?.status == true) {
